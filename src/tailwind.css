@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" prefix(ds);
 
 /*
  * Primitive theme variables.
@@ -183,26 +183,26 @@
 @layer components {
   /* Label */
   .label {
-    @apply font-sans font-semibold leading-[1.2] uppercase tracking-wide;
+    @apply ds:font-sans ds:font-semibold ds:leading-[1.2] ds:uppercase ds:tracking-wide;
   }
-  .label-text-l { @apply text-[17px] }
-  .label-text-m { @apply text-sm }
-  .label-text-s { @apply text-[11px] min-sm:text-xs tracking-wider }
+  .label-text-l { @apply ds:text-[17px] }
+  .label-text-m { @apply ds:text-sm }
+  .label-text-s { @apply ds:text-[11px] ds:min-sm:text-xs ds:tracking-wider }
   /* Remove the browser default underline style. */
   a u {
-    @apply no-underline;
+    @apply ds:no-underline;
   }
 
   .swiper-bullet {
-    @apply inline-block rounded-full w-1.5 h-1.5 bg-neutral-300 mx-0.5;
+    @apply ds:inline-block ds:rounded-full ds:w-1.5 ds:h-1.5 ds:bg-neutral-300 ds:mx-0.5;
   }
 
   .swiper-bullet-active {
-    @apply bg-base-black w-5;
+    @apply ds:bg-base-black ds:w-5;
   }
 
   .site-header-circle-icon-button {
-    @apply flex items-center justify-center w-8 h-8 border-1 rounded-full p-1 border-neutral-300 bg-base-black hover:bg-neutral-800 cursor-pointer focus:outline-1 focus-within:outline-1;
+    @apply ds:flex ds:items-center ds:justify-center ds:w-8 ds:h-8 ds:border-1 ds:rounded-full ds:p-1 ds:border-neutral-300 ds:bg-base-black ds:hover:bg-neutral-800 ds:cursor-pointer ds:focus:outline-1 ds:focus-within:outline-1;
   }
 }
 
@@ -212,7 +212,7 @@
  */
 @layer base {
   body {
-    @apply font-sans text-text-primary selection:bg-lime-300 selection:text-text-primary;
+    @apply ds:font-sans ds:text-text-primary ds:selection:bg-lime-300 ds:selection:text-text-primary;
   }
 }
 

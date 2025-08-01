@@ -6,4 +6,7 @@ module.exports = {
   ],
   theme: { extend: {} },
   plugins: [],
+  corePlugins: {
+    preflight: false, // disables Tailwind's global reset
+  },
 };

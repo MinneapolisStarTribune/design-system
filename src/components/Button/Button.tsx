@@ -40,14 +40,31 @@ export const Button = ({
   href,
 }: ButtonProps) => {
   const classList = twMerge(
-    ['inline-flex', 'items-center', 'gap-1', 'cursor-pointer'],
-    (variant === 'primary' || variant === 'secondary') && ['rounded-full', 'px-5', 'py-2', 'font-semibold', 'uppercase'],
-    variant === 'primary' && ['bg-base-black', 'hover:bg-gray-700', 'text-base-white', 'max-xl:text-xs', 'max-xl:px-4'],
-    variant === 'secondary' && ['border'],
-    color === 'green' && ['bg-linear-to-r from-lime-300 to-spring-400 text-base-black border-1 border-transparent', 'hover:bg-none hover:border-1 hover:border-bright-green hover:text-base-white'],
-    size === 'sm' && 'text-xs',
-    size === 'md' && ['text-sm', 'px-6', 'py-3'],
-    size === 'lg' && ['text-base', 'px-6', 'py-4'],
+    ['ds:inline-flex', 'ds:items-center', 'ds:gap-1', 'ds:cursor-pointer'],
+    (variant === 'primary' || variant === 'secondary') && [
+      'ds:rounded-full', 
+      'ds:px-5', 
+      'ds:py-2', 
+      'ds:font-semibold', 
+      'ds:uppercase'
+    ],
+    variant === 'primary' && [
+      'ds:bg-base-black', 
+      'ds:hover:bg-gray-700', 
+      'ds:text-base-white', 
+      'ds:max-xl:text-xs', 
+      'ds:max-xl:px-4'
+    ],
+    variant === 'secondary' && [
+      'ds:border'
+    ],
+    color === 'green' && [
+      'ds:bg-linear-to-r ds:from-lime-300 ds:to-spring-400 ds:text-base-black ds:border-1 ds:border-transparent', 
+      'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white'
+    ],
+    size === 'sm' && 'ds:text-xs',
+    size === 'md' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
+    size === 'lg' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
     className,
   );
 
@@ -56,11 +73,11 @@ export const Button = ({
       {label}
       {icon && (
         <span className={twMerge(
-          'flex',
-          'flex-col',
-          size === 'sm' && ['w-[12px]', 'h-[12px]'],
-          (size === 'lg' || size === 'md') && ['w-[1em]', 'h-[1em]'],
-          iconPosition === 'start' && 'order-first',
+          'ds:flex',
+          'ds:flex-col',
+          size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
+          (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
+          iconPosition === 'start' && 'ds:order-first',
           iconClassName,
         )}>
           {icon}
