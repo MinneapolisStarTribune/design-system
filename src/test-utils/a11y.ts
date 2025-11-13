@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import type { RenderResult } from '@testing-library/react';
+import type { RunOptions } from 'axe-core';
 
 /**
  * Test a component for accessibility violations
@@ -21,7 +22,7 @@ export async function expectNoA11yViolations(ui: React.ReactElement) {
  */
 export async function expectNoA11yViolationsWithOptions(
   ui: React.ReactElement,
-  options: any
+  options: RunOptions
 ) {
   const { container } = render(ui);
   const results = await axe(container, options);
@@ -37,7 +38,7 @@ export async function renderAndCheckA11y(ui: React.ReactElement): Promise<{
   checkA11y: () => Promise<void>;
 }> {
   const renderResult = render(ui);
-  
+
   const checkA11y = async () => {
     const results = await axe(renderResult.container);
     expect(results).toHaveNoViolations();
@@ -45,4 +46,3 @@ export async function renderAndCheckA11y(ui: React.ReactElement): Promise<{
 
   return { renderResult, checkA11y };
 }
-

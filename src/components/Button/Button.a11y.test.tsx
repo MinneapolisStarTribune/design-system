@@ -8,24 +8,26 @@ describe('Button Accessibility', () => {
       await expectNoA11yViolations(
         <Button label="Text Button" onClick={() => {}} variant="text" />
       );
-      
+
       await expectNoA11yViolations(
         <Button label="Primary Button" onClick={() => {}} variant="primary" />
       );
-      
+
       await expectNoA11yViolations(
         <Button label="Secondary Button" onClick={() => {}} variant="secondary" />
       );
     });
 
     it('has no violations when disabled', async () => {
-      await expectNoA11yViolations(
-        <Button label="Disabled Button" onClick={() => {}} disabled />
-      );
+      await expectNoA11yViolations(<Button label="Disabled Button" onClick={() => {}} disabled />);
     });
 
     it('has no violations as a link', async () => {
-      const MockLink = ({ href, children, ...rest }: any) => (
+      const MockLink = ({
+        href,
+        children,
+        ...rest
+      }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
         <a href={href} {...rest}>
           {children}
         </a>
@@ -80,4 +82,3 @@ describe('Button Accessibility', () => {
     });
   });
 });
-
