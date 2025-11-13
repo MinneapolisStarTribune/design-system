@@ -22,7 +22,10 @@
 
     // Paths
     "baseUrl": ".",
-    "rootDir": "src"
+    "rootDir": "src",
+
+    // Types
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", ".storybook"]
