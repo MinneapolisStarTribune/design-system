@@ -12,17 +12,18 @@ export type ButtonProps = {
   label: string;
   disabled?: boolean;
 } & (
-  {
-    // External link — consumer must pass an element
-    as: React.ElementType;
-    href: string;
-    onClick?: never;
-  } | {
-    // Regular button
-    as?: never;
-    href?: never;
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  }
+  | {
+      // External link — consumer must pass an element
+      as: React.ElementType;
+      href: string;
+      onClick?: never;
+    }
+  | {
+      // Regular button
+      as?: never;
+      href?: never;
+      onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    }
 );
 
 export const Button = ({
@@ -42,44 +43,44 @@ export const Button = ({
   const classList = twMerge(
     ['ds:inline-flex', 'ds:items-center', 'ds:gap-1', 'ds:cursor-pointer'],
     (variant === 'primary' || variant === 'secondary') && [
-      'ds:rounded-full', 
-      'ds:px-5', 
-      'ds:py-2', 
-      'ds:font-semibold', 
-      'ds:uppercase'
+      'ds:rounded-full',
+      'ds:px-5',
+      'ds:py-2',
+      'ds:font-semibold',
+      'ds:uppercase',
     ],
     variant === 'primary' && [
-      'ds:bg-base-black', 
-      'ds:hover:bg-gray-700', 
-      'ds:text-base-white', 
-      'ds:max-xl:text-xs', 
-      'ds:max-xl:px-4'
+      'ds:bg-base-black',
+      'ds:hover:bg-gray-700',
+      'ds:text-base-white',
+      'ds:max-xl:text-xs',
+      'ds:max-xl:px-4',
     ],
-    variant === 'secondary' && [
-      'ds:border'
-    ],
+    variant === 'secondary' && ['ds:border'],
     color === 'green' && [
-      'ds:bg-linear-to-r ds:from-lime-300 ds:to-spring-400 ds:text-base-black ds:border-1 ds:border-transparent', 
-      'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white'
+      'ds:bg-linear-to-r ds:from-lime-300 ds:to-spring-400 ds:text-base-black ds:border-1 ds:border-transparent',
+      'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white',
     ],
     size === 'sm' && 'ds:text-xs',
     size === 'md' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
     size === 'lg' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
-    className,
+    className
   );
 
   const inners = (
     <>
       {label}
       {icon && (
-        <span className={twMerge(
-          'ds:flex',
-          'ds:flex-col',
-          size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
-          (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
-          iconPosition === 'start' && 'ds:order-first',
-          iconClassName,
-        )}>
+        <span
+          className={twMerge(
+            'ds:flex',
+            'ds:flex-col',
+            size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
+            (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
+            iconPosition === 'start' && 'ds:order-first',
+            iconClassName
+          )}
+        >
           {icon}
         </span>
       )}
@@ -111,4 +112,4 @@ export const Button = ({
   }
 
   return null;
-}
+};

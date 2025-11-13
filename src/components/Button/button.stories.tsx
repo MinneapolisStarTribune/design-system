@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import {Button} from './Button';
+import { Button } from './Button';
 
 // Simple anchor component for Storybook links
 const Anchor = (props: React.ComponentProps<'a'>) => <a {...props} />;
@@ -35,7 +35,7 @@ export const PrimaryButtonIconStart: Story = {
 export const PrimaryLink: Story = {
   args: {
     label: 'See More',
-    as: Anchor,          // <-- pass 'a' as Link component
+    as: Anchor, // <-- pass 'a' as Link component
     href: '#',
     variant: 'primary',
     size: 'lg',

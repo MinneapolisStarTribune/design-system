@@ -1,4 +1,4 @@
-@import "tailwindcss" prefix(ds);
+@import 'tailwindcss' prefix(ds);
 
 /*
  * Primitive theme variables.
@@ -185,9 +185,15 @@
   .label {
     @apply ds:font-sans ds:font-semibold ds:leading-[1.2] ds:uppercase ds:tracking-wide;
   }
-  .label-text-l { @apply ds:text-[17px] }
-  .label-text-m { @apply ds:text-sm }
-  .label-text-s { @apply ds:text-[11px] ds:min-sm:text-xs ds:tracking-wider }
+  .label-text-l {
+    @apply ds:text-[17px];
+  }
+  .label-text-m {
+    @apply ds:text-sm;
+  }
+  .label-text-s {
+    @apply ds:text-[11px] ds:min-sm:text-xs ds:tracking-wider;
+  }
   /* Remove the browser default underline style. */
   a u {
     @apply ds:no-underline;
@@ -222,7 +228,7 @@
  */
 
 .Toastify__progress-bar {
-  background: #0064CF !important;
+  background: #0064cf !important;
 }
 
 /* Remove the blue background from the icon circle */
@@ -234,25 +240,25 @@
 
 /* Make the checkmark icon itself blue */
 .Toastify__toast-icon svg {
-  fill: #0064CF !important;
-  color: #0064CF !important;
+  fill: #0064cf !important;
+  color: #0064cf !important;
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg {
-  fill: #0064CF !important;
-  color: #0064CF !important;
+  fill: #0064cf !important;
+  color: #0064cf !important;
 }
 
 .Toastify__toast--success .Toastify__toast-icon svg path {
-  fill: #0064CF !important;
-  stroke: #0064CF !important;
+  fill: #0064cf !important;
+  stroke: #0064cf !important;
 }
 
 /* Target all SVG elements to ensure blue checkmark */
 .Toastify__toast-icon svg,
 .Toastify__toast-icon svg path,
 .Toastify__toast-icon svg circle {
-  fill: #0064CF !important;
-  stroke: #0064CF !important;
-  color: #0064CF !important;
+  fill: #0064cf !important;
+  stroke: #0064cf !important;
+  color: #0064cf !important;
 }
