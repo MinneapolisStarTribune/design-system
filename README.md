@@ -2,6 +2,28 @@
 
 A React component library built with TypeScript and Tailwind CSS.
 
+## Development
+
+### Linting & Formatting
+
+This project uses ESLint for linting and Prettier for code formatting.
+
+```bash
+# Lint code
+yarn lint
+
+# Fix linting issues
+yarn lint:fix
+
+# Format code
+yarn format
+
+# Check formatting
+yarn format:check
+```
+
+**Pre-commit hooks:** Linting and formatting run automatically on staged files before each commit.
+
 ## Testing
 
 This project uses [Vitest](https://vitest.dev/) for testing, along with [React Testing Library](https://testing-library.com/react) for component testing and [axe](https://github.com/dequelabs/axe-core) for accessibility testing.
@@ -28,6 +50,7 @@ yarn test:coverage
 ### Test Organization
 
 Tests are colocated alongside components:
+
 - `*.test.tsx` - Unit tests for component logic and behavior
 - `*.a11y.test.tsx` - Accessibility tests using axe-core
 

@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+test-coverage
+reports
+.storybook-static
+*.config.js
+*.config.ts
+!vitest.config.ts
+vitest.setup.ts
+
