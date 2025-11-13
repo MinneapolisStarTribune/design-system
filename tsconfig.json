@@ -22,7 +22,9 @@
 
     // Paths
     "baseUrl": ".",
-    "rootDir": "src",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     // Types
     "types": ["vitest/globals", "@testing-library/jest-dom"]
