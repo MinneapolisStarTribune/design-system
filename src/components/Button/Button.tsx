@@ -95,6 +95,7 @@ export const Button = ({
         type="button"
         onClick={onClick}
         disabled={disabled}
+        data-testid="button"
       >
         {inners}
       </button>
@@ -103,7 +104,7 @@ export const Button = ({
 
   if (LinkComponent && href) {
     return (
-      <LinkComponent className={classList} href={href}>
+      <LinkComponent className={classList} href={href} data-testid="button">
         {inners}
       </LinkComponent>
     );
