@@ -26,6 +26,9 @@ coverage
 test-coverage
 reports
 
+# Style Dictionary build output (use dist/ for distribution)
+build/
+
 # nyc test coverage
 .nyc_output
 
