@@ -1,0 +1,43 @@
+name: Visual Regression
+
+on:
+  workflow_call:
+  pull_request:
+    branches: [main]
+
+jobs:
+  changes:
+    name: Check for component changes
+    runs-on: ubuntu-latest
+    outputs:
+      uiChanged: ${{ steps.changes.outputs.ui }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            ui:
+              - 'src/**/*.stories.ts'
+              - 'src/**/*.stories.tsx'
+              - '.storybook/**/*'
+
+  chromatic:
+    name: Run visual tests
+    needs: changes
+    if: needs.changes.outputs.uiChanged == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+      - name: Run Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          onlyChanged: true
+          exitZeroOnChanges: true
+          autoAcceptChanges: "main"
