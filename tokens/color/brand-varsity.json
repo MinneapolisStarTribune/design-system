@@ -1,0 +1,10 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "sv-black": { "value": "{color.base.black}" },
+        "sv-white": { "value": "{color.base.white}" }
+      }
+    }
+  }
+}

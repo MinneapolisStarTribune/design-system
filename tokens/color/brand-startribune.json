@@ -1,0 +1,23 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "strib-black": { "value": "{color.base.black}" },
+        "strib-white": { "value": "{color.base.white}" },
+        "strib-grey": { "value": "#F5F6F7" },
+        "strib-emerald-green": { "value": "{color.emerald.600}" },
+        "strib-spring-green": { "value": "{color.spring.500}" },
+        "strib-forest-green": { "value": "{color.forest.900}" },
+        "strib-bright-green": { "value": "{color.bright-green.400}" }
+      },
+      "secondary": {
+        "core-yellow": { "value": "{color.yellow.400}" },
+        "core-light-blue": { "value": "{color.sky-blue.400}" },
+        "core-navy": { "value": "{color.navy-blue.800}" },
+        "core-purple": { "value": "{color.purple.600}" },
+        "core-red": { "value": "{color.red.600}" },
+        "core-orange": { "value": "{color.orange.500}" }
+      }
+    }
+  }
+}

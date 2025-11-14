@@ -1,7 +1,8 @@
 @import 'tailwindcss' prefix(ds);
 
-/* Import generated design tokens */
-@import '../build/css/_variables.css';
+/* Import generated design tokens - Default to Star Tribune theme */
+/* Consumers can override by importing a different theme first */
+@import '../dist/themes/startribune.css';
 
 /*
  * Additional theme variables.

@@ -4,11 +4,96 @@ A React component library built with TypeScript and Tailwind CSS, with a compreh
 
 ## Design Tokens
 
-This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens. Tokens are defined in `/tokens` and automatically generate multiple output formats for different use cases.
+This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands.
 
-### Using Tokens
+### Available Themes
 
-**In your Tailwind config:**
+- **Star Tribune** - `dist/themes/startribune.css`
+- **Varsity** - `dist/themes/varsity.css`
+
+### Using Themes
+
+**Import the theme for your brand:**
+
+```css
+/* In your main CSS file */
+@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
+/* or */
+@import '@minneapolisstartribune/design-system/dist/themes/varsity.css';
+```
+
+**Use brand tokens in your CSS:**
+
+```css
+.my-component {
+  background: var(--color-brand-primary); /* Changes per theme! */
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-brand-secondary);
+}
+```
+
+**All themes include the same token names:**
+
+- `--color-brand-primary-*` (e.g., `strib-emerald-green`, `sv-black`)
+- `--color-brand-secondary-*` (e.g., `core-yellow`, `core-navy`)
+- `--color-text-primary`, `--color-bg-primary`, `--color-border-subtle`
+- Full primitive palettes (`--color-emerald-500`, `--color-lime-300`, etc.)
+
+### Integration Examples
+
+#### Using with Tailwind CSS v4
+
+Tailwind v4 has native CSS variable support. Just import the theme:
+
+```css
+/* app.css */
+@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
+@import 'tailwindcss';
+```
+
+Use design tokens directly as Tailwind utilities (v4 auto-generates utilities from CSS variables):
+
+```jsx
+// All design system tokens are available as utilities!
+<div className="bg-brand-primary-strib-emerald-green text-base-white">
+  Star Tribune branded content
+</div>
+
+<button className="bg-brand-secondary-core-yellow
+                   hover:bg-brand-primary-strib-spring-green
+                   px-4 py-2 rounded">
+  Call to Action
+</button>
+```
+
+That's it! No config needed. Tailwind v4 automatically creates utilities from all `--color-*` CSS variables.
+
+#### Using with Tailwind CSS v3
+
+For v3, use arbitrary value syntax with CSS variables:
+
+```css
+/* app.css */
+@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+```jsx
+// Use CSS variables with arbitrary values
+<div className="bg-[var(--color-brand-primary-strib-emerald-green)] text-white">
+  Star Tribune branded content
+</div>
+
+<button className="bg-[var(--color-brand-secondary-core-yellow)]
+                   hover:bg-[var(--color-brand-primary-strib-spring-green)]
+                   px-4 py-2 rounded">
+  Call to Action
+</button>
+```
+
+**Or add to your Tailwind config** for shorter class names:
 
 ```javascript
 // tailwind.config.js
@@ -16,34 +101,66 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Import Star Tribune brand colors
-        'brand-emerald': '#00ac63',
-        'brand-spring': '#65cc5c',
+        'brand-primary': 'var(--color-brand-primary-strib-emerald-green)',
+        'brand-secondary': 'var(--color-brand-secondary-core-yellow)',
+        'brand-accent': 'var(--color-brand-primary-strib-spring-green)',
       },
     },
   },
 };
 ```
 
-**As CSS variables:**
-
-```css
-@import '@minneapolisstartribune/design-system/dist/tokens/variables.css';
-
-.my-component {
-  background: var(--color-brand-emerald-green);
-  color: var(--color-text-primary);
-}
+```jsx
+// Now use like regular Tailwind utilities
+<div className="bg-brand-primary text-white">Much cleaner!</div>
 ```
 
-**As JavaScript/TypeScript:**
+#### Using with Svelte (or any other framework)
 
-```tsx
-import { tokens } from '@minneapolisstartribune/design-system/tokens';
+Import the theme CSS and use CSS variables directly:
 
-const MyComponent = () => (
-  <div style={{ color: tokens.color.brand.emeraldGreen }}>Themed content</div>
-);
+```svelte
+<!-- App.svelte -->
+<script>
+  import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
+</script>
+
+<div class="hero">
+  <h1>Welcome to Star Tribune</h1>
+  <button class="cta-button">Get Started</button>
+</div>
+
+<style>
+  .hero {
+    background: var(--color-brand-primary-strib-emerald-green);
+    color: var(--color-base-white);
+    padding: 2rem;
+  }
+
+  .cta-button {
+    background: var(--color-brand-secondary-core-yellow);
+    color: var(--color-base-black);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .cta-button:hover {
+    background: var(--color-brand-primary-strib-spring-green);
+  }
+</style>
+```
+
+**Switching brands:** Just change the import path:
+
+```javascript
+// Star Tribune
+import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
+
+// Varsity
+import '@minneapolisstartribune/design-system/dist/themes/varsity.css';
 ```
 
 ### Token Categories
