@@ -75,7 +75,7 @@ export const Button = ({
           className={twMerge(
             'ds:flex',
             'ds:flex-col',
-            size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
+            size === 'sm' && ['ds:w-[14px]', 'ds:h-[12px]'],
             (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
             iconPosition === 'start' && 'ds:order-first',
             iconClassName
