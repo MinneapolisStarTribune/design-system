@@ -2,6 +2,39 @@
 
 A React component library built with TypeScript and Tailwind CSS.
 
+## Releases
+
+This project uses [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) for versioning and publishing.
+
+### Creating a Release
+
+1. **Merge your PRs to `main`** - All changes you want in the release
+2. **Go to GitHub** → Releases → **"Draft a new release"**
+3. **Create a new tag** following [semver](https://semver.org/):
+   - `v1.0.0` - Major version (breaking changes)
+   - `v0.1.0` - Minor version (new features)
+   - `v0.0.8` - Patch version (bug fixes)
+4. **Write release notes** - Describe what changed
+5. **Click "Publish release"**
+
+### Storybook Deployments
+
+This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
+
+**Production Deployment** (main branch):
+
+- Located at [design-system-8bmbp4q1g-startribune-team-one.vercel.app](design-system-8bmbp4q1g-startribune-team-one.vercel.app)
+- Deploys automatically when code is merged to `main`
+- Stable, always-available URL for the latest components
+- Share this URL with your team and stakeholders
+
+**Preview Deployments** (pull requests):
+
+- Every PR gets a unique preview URL posted as a comment
+- Test changes before merging
+- Perfect for designer/stakeholder review
+- Auto-updates on every commit
+
 ## Development
 
 ### Linting & Formatting
@@ -47,25 +80,6 @@ VITEST_JUNIT_OUTPUT=./reports/my-test-report.xml yarn test
 VITEST_JUNIT_OUTPUT=./reports/unit-junit.xml yarn test -- --exclude "**/*.a11y.test.tsx"
 VITEST_JUNIT_OUTPUT=./reports/a11y-junit.xml yarn test:a11y
 ```
-
-### Storybook Deployments
-
-This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
-
-**Production Deployment** (main branch):
-
-- Deploys automatically when code is merged to `main`
-- Stable, always-available URL for the latest components
-- Share this URL with your team and stakeholders
-
-**Preview Deployments** (pull requests):
-
-- Every PR gets a unique preview URL posted as a comment
-- Test changes before merging
-- Perfect for designer/stakeholder review
-- Auto-updates on every commit
-
-To set up, install the [Vercel GitHub App](https://vercel.com/integrations/github) and connect this repository.
 
 ## Testing
 
