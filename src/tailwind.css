@@ -1,153 +1,23 @@
 @import 'tailwindcss' prefix(ds);
 
+/* Import generated design tokens */
+@import '../build/css/_variables.css';
+
 /*
- * Primitive theme variables.
+ * Additional theme variables.
  *
  * Note: The CSS custom property will only appear in the DOM when they are used.
  * @see https://tailwindcss.com/docs/theme
  */
 @theme {
+  /* Note: Color tokens are now imported from build/css/_variables.css */
+  /* Only non-color theme customizations go here */
   --breakpoint-lg: 72.5rem;
 
-  /* Reset default theme colors. */
-  --color-*: initial;
-  /* Primitive Colors */
-  --color-base-black: #000000;
-  --color-base-white: #ffffff;
-  --color-cobalt-blue-cobalt-100: #beddff;
-  --color-cobalt-blue-cobalt-200: #94c8ff;
-  --color-cobalt-blue-cobalt-300: #6ab2ff;
-  --color-cobalt-blue-cobalt-400: #409cff;
-  --color-cobalt-blue-cobalt-50: #e8f3ff;
-  --color-cobalt-blue-cobalt-500: #1683f8;
-  --color-cobalt-blue-cobalt-600: #0064cf;
-  --color-cobalt-blue-cobalt-700: #0050a6;
-  --color-cobalt-blue-cobalt-800: #003d7d;
-  --color-cobalt-blue-cobalt-900: #002955;
-  --color-dark-blue-100: #c1d6e6;
-  --color-dark-blue-200: #9bbbd4;
-  --color-dark-blue-300: #7ca6c5;
-  --color-dark-blue-400: #5489b2;
-  --color-dark-blue-50: #dbeaf5;
-  --color-dark-blue-500: #3e75a2;
-  --color-dark-blue-600: #1b5a8b;
-  --color-dark-blue-700: #0d4673;
-  --color-dark-blue-800: #003966;
-  --color-dark-blue-900: #002d52;
-  --color-emerald-100: #aae3cb;
-  --color-emerald-200: #91d4b7;
-  --color-emerald-300: #66c29b;
-  --color-emerald-400: #32b87f;
-  --color-emerald-50: #e5f7ef;
-  --color-emerald-500: #00ac63;
-  --color-emerald-600: #009958;
-  --color-emerald-700: #00854b;
-  --color-emerald-800: #006b3d;
-  --color-emerald-900: #004a2b;
-  --color-forest-100: #c4e3d7;
-  --color-forest-200: #a6d4c3;
-  --color-forest-300: #8ec1af;
-  --color-forest-400: #75af9b;
-  --color-forest-50: #e1f0eb;
-  --color-forest-500: #50927b;
-  --color-forest-600: #2e725b;
-  --color-forest-700: #165a42;
-  --color-forest-800: #05442e;
-  --color-forest-900: #002e1d;
-  --color-light-blue-100: #afe1f8;
-  --color-light-blue-200: #78cdf2;
-  --color-light-blue-300: #4fbded;
-  --color-light-blue-400: #26ade8;
-  --color-light-blue-50: #e5f5fb;
-  --color-light-blue-500: #0098db;
-  --color-light-blue-600: #0089c5;
-  --color-light-blue-700: #0075a8;
-  --color-light-blue-800: #00608a;
-  --color-light-blue-900: #004666;
-  --color-lime-100: #e4fd98;
-  --color-lime-200: #d6fb65;
-  --color-lime-300: #c8fa31;
-  --color-lime-400: #b6e32b;
-  --color-lime-50: #f1fecc;
-  --color-lime-500: #a4cf26;
-  --color-lime-600: #8fb323;
-  --color-lime-700: #7a991e;
-  --color-lime-800: #647d19;
-  --color-lime-900: #3c4b0f;
-  --color-neutral-100: #e1e1e1;
-  --color-neutral-200: #cfcfcf;
-  --color-neutral-300: #afafaf;
-  --color-neutral-400: #969696;
-  --color-neutral-50: #f2f2f2;
-  --color-neutral-500: #7e7e7e;
-  --color-neutral-600: #666666;
-  --color-neutral-700: #434343;
-  --color-neutral-800: #282828;
-  --color-neutral-900: #0d0d0d;
-  --color-orange-100: #f8d0b9;
-  --color-orange-200: #f6ba98;
-  --color-orange-300: #f3a87c;
-  --color-orange-400: #f19865;
-  --color-orange-50: #fae4d1;
-  --color-orange-500: #ec8244;
-  --color-orange-600: #dd7031;
-  --color-orange-700: #b95d27;
-  --color-orange-800: #944314;
-  --color-orange-900: #673112;
-  --color-purple-100: #c8b9df;
-  --color-purple-200: #baa8d7;
-  --color-purple-300: #9d86c6;
-  --color-purple-400: #7f61b3;
-  --color-purple-50: #e3dbf0;
-  --color-purple-500: #6e4baa;
-  --color-purple-600: #5e3e94;
-  --color-purple-700: #513286;
-  --color-purple-800: #482b78;
-  --color-purple-900: #3a2263;
-  --color-red-100: #f4bcbc;
-  --color-red-200: #ea8b8b;
-  --color-red-300: #e36363;
-  --color-red-400: #d65353;
-  --color-red-50: #fbe7e7;
-  --color-red-500: #cd2e2e;
-  --color-red-600: #bb2020;
-  --color-red-700: #a01c1c;
-  --color-red-800: #851414;
-  --color-red-900: #700000;
-  --color-spring-100: #b7efb3;
-  --color-spring-200: #9fe798;
-  --color-spring-300: #76d86e;
-  --color-spring-400: #65cc5c;
-  --color-spring-50: #dcf7d9;
-  --color-spring-500: #4dc044;
-  --color-spring-600: #40a937;
-  --color-spring-700: #3a8f32;
-  --color-spring-800: #2e6c28;
-  --color-spring-900: #22441f;
-  --color-yellow-100: #fff2a3;
-  --color-yellow-200: #ffec74;
-  --color-yellow-300: #fae24b;
-  --color-yellow-400: #f3d620;
-  --color-yellow-50: #fff9d1;
-  --color-yellow-500: #dec737;
-  --color-yellow-600: #c6b12e;
-  --color-yellow-700: #ac9928;
-  --color-yellow-800: #837520;
-  --color-yellow-900: #4e4613;
-  /* Background colors */
-  --color-bg-primary: var(--color-base-white);
-  /* Typography colors */
-  --color-text-primary: var(--color-neutral-900);
-  --color-text-secondary: var(--color-neutral-700);
-  --color-text-tertiary: var(--color-neutral-600);
-  --color-text-disabled: var(--color-neutral-300);
-  --color-text-accent-brand: var(--color-cobalt-blue-cobalt-600);
-  --color-text-thick-underline: rgba(200, 250, 49, 0.5); /* lime-100 / 50% */
-  /* Border colors */
-  --color-border-subtle: var(--color-neutral-100);
   /* Spacing */
   --spacing-site: 67.5rem;
-  /* Typography size */
+
+  /* Typography size (TODO: Move these to tokens/text.json) */
   --text-1xl: 1.375rem; /* 22px */
   --text-2xxl: 1.75rem; /* 28px */
 }
@@ -157,18 +27,6 @@
  * https://tailwindcss.com/docs/theme#referencing-other-variables
 */
 @theme inline {
-  /* Primary brand colors */
-  --color-emerald-green: var(--color-emerald-500);
-  --color-spring-green: var(--color-spring-400);
-  --color-forest-green: var(--color-forest-800);
-  --color-bright-green: var(--color-lime-300);
-  /*  Secondary brand colors */
-  --color-yellow: var(--color-yellow-300);
-  --color-light-blue: var(--color-light-blue-500);
-  --color-dark-blue: var(--color-dark-blue-700);
-  --color-purple: var(--color-purple-600);
-  --color-red: var(--color-red-500);
-  --color-orange: var(--color-orange-500);
   /* Fonts */
   --font-sans: var(--font-graphik);
   --font-condensed: var(--font-graphikCondensed);

@@ -1,39 +1,64 @@
 # design-system
 
-A React component library built with TypeScript and Tailwind CSS.
+A React component library built with TypeScript and Tailwind CSS, with a comprehensive design token system.
 
-## Releases
+## Design Tokens
 
-This project uses [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) for versioning and publishing.
+This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens. Tokens are defined in `/tokens` and automatically generate multiple output formats for different use cases.
 
-### Creating a Release
+### Using Tokens
 
-1. **Merge your PRs to `main`** - All changes you want in the release
-2. **Go to GitHub** → Releases → **"Draft a new release"**
-3. **Create a new tag** following [semver](https://semver.org/):
-   - `v1.0.0` - Major version (breaking changes)
-   - `v0.1.0` - Minor version (new features)
-   - `v0.0.8` - Patch version (bug fixes)
-4. **Write release notes** - Describe what changed
-5. **Click "Publish release"**
+**In your Tailwind config:**
 
-### Storybook Deployments
+```javascript
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Import Star Tribune brand colors
+        'brand-emerald': '#00ac63',
+        'brand-spring': '#65cc5c',
+      },
+    },
+  },
+};
+```
 
-This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
+**As CSS variables:**
 
-**Production Deployment** (main branch):
+```css
+@import '@minneapolisstartribune/design-system/dist/tokens/variables.css';
 
-- Located at [design-system-8bmbp4q1g-startribune-team-one.vercel.app](design-system-8bmbp4q1g-startribune-team-one.vercel.app)
-- Deploys automatically when code is merged to `main`
-- Stable, always-available URL for the latest components
-- Share this URL with your team and stakeholders
+.my-component {
+  background: var(--color-brand-emerald-green);
+  color: var(--color-text-primary);
+}
+```
 
-**Preview Deployments** (pull requests):
+**As JavaScript/TypeScript:**
 
-- Every PR gets a unique preview URL posted as a comment
-- Test changes before merging
-- Perfect for designer/stakeholder review
-- Auto-updates on every commit
+```tsx
+import { tokens } from '@minneapolisstartribune/design-system/tokens';
+
+const MyComponent = () => (
+  <div style={{ color: tokens.color.brand.emeraldGreen }}>Themed content</div>
+);
+```
+
+### Token Categories
+
+- **Primitives** (`tokens/color/primitives.json`) - Base color palettes (cobalt-blue, emerald, lime, etc.)
+- **Brand Colors** (`tokens/color/brand.json`) - Star Tribune brand colors
+- **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
+- **Typography** (`tokens/text.json`) - Font families and text sizes
+
+### Modifying Tokens
+
+1. Edit JSON files in `/tokens`
+2. Run `yarn tokens` to regenerate outputs
+3. Generated files go to `/build` (development)
+4. Run `yarn build` to include in `/dist` (published package)
 
 ## Development
 
@@ -80,6 +105,51 @@ VITEST_JUNIT_OUTPUT=./reports/my-test-report.xml yarn test
 VITEST_JUNIT_OUTPUT=./reports/unit-junit.xml yarn test -- --exclude "**/*.a11y.test.tsx"
 VITEST_JUNIT_OUTPUT=./reports/a11y-junit.xml yarn test:a11y
 ```
+
+### Storybook Deployments
+
+This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
+
+**Production Deployment** (main branch):
+
+- Located at [design-system-8bmbp4q1g-startribune-team-one.vercel.app](design-system-8bmbp4q1g-startribune-team-one.vercel.app)
+- Deploys automatically when code is merged to `main`
+- Stable, always-available URL for the latest components
+- Share this URL with your team and stakeholders
+
+**Preview Deployments** (pull requests):
+
+- Every PR gets a unique preview URL posted as a comment
+- Test changes before merging
+- Perfect for designer/stakeholder review
+- Auto-updates on every commit
+
+## Releases
+
+This project uses [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) for versioning and publishing.
+
+### Creating a Release
+
+1. **Merge your PRs to `main`** - All changes you want in the release
+2. **Go to GitHub** → Releases → **"Draft a new release"**
+3. **Create a new tag** following [semver](https://semver.org/):
+   - `v1.0.0` - Major version (breaking changes)
+   - `v0.1.0` - Minor version (new features)
+   - `v0.0.8` - Patch version (bug fixes)
+4. **Write release notes** - Describe what changed
+5. **Click "Publish release"**
+
+### What Happens Automatically
+
+When you publish a release, GitHub Actions will:
+
+1. ✅ Extract version from your tag (e.g., `v0.1.0` → `0.1.0`)
+2. ✅ Update `package.json` with the new version
+3. ✅ Build the package (includes token generation)
+4. ✅ Publish to GitHub Packages
+5. ✅ Commit the version bump back to `main`
+
+**No local `yarn publish` needed!** Everything happens in CI/CD.
 
 ## Testing
 
