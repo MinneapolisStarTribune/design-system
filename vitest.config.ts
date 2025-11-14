@@ -23,7 +23,7 @@ export default defineConfig({
     },
     reporters: ['default', 'junit'],
     outputFile: {
-      junit: './reports/junit.xml',
+      junit: process.env.VITEST_JUNIT_OUTPUT || './reports/junit.xml',
     },
   },
 });
