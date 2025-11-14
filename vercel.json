@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "yarn build-storybook",
+  "outputDirectory": "storybook-static",
+  "framework": null,
+  "installCommand": "yarn install",
+  "github": {
+    "enabled": true,
+    "silent": false,
+    "autoAlias": true
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}

@@ -48,6 +48,25 @@ VITEST_JUNIT_OUTPUT=./reports/unit-junit.xml yarn test -- --exclude "**/*.a11y.t
 VITEST_JUNIT_OUTPUT=./reports/a11y-junit.xml yarn test:a11y
 ```
 
+### Storybook Deployments
+
+This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
+
+**Production Deployment** (main branch):
+
+- Deploys automatically when code is merged to `main`
+- Stable, always-available URL for the latest components
+- Share this URL with your team and stakeholders
+
+**Preview Deployments** (pull requests):
+
+- Every PR gets a unique preview URL posted as a comment
+- Test changes before merging
+- Perfect for designer/stakeholder review
+- Auto-updates on every commit
+
+To set up, install the [Vercel GitHub App](https://vercel.com/integrations/github) and connect this repository.
+
 ## Testing
 
 This project uses [Vitest](https://vitest.dev/) for testing, along with [React Testing Library](https://testing-library.com/react) for component testing and [axe](https://github.com/dequelabs/axe-core) for accessibility testing.
