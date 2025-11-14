@@ -9,4 +9,5 @@ reports
 *.config.ts
 !vitest.config.ts
 vitest.setup.ts
+vitest-axe.d.ts
 
