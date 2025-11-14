@@ -1,34 +1,57 @@
 name: Publish Design System
 
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PUBLISH_TOKEN }}
 
-      - name: Set up Node
+      - name: Set up Node with authentication
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version-file: .nvmrc
           registry-url: 'https://npm.pkg.github.com/'
+          scope: '@minneapolisstartribune'
 
       - name: Install dependencies
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
-          yarn install
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+        run: yarn install
 
-      - name: Build
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing version: $VERSION"
+
+      - name: Update package.json version
+        env:
+          HUSKY: 0
+        run: |
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit --no-verify -m "chore: bump version to ${{ steps.version.outputs.version }}"
+          echo "After commit:"
+          git branch -v
+          git push origin main
+
+      - name: Build package
         run: yarn build
 
-      - name: Publish
+      - name: Publish to GitHub Packages
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
-          yarn publish
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+        run: yarn publish --non-interactive
