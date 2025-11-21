@@ -1,5 +1,5 @@
 import baseColorsJson from '../../../../tokens/color/base.json';
-import primitivesColorsJson from '../../../../tokens/color/primitives.json';
+import primitivesColorsJson from '../../../../tokens/color/global.json';
 
 export interface ColorData {
   name: string;

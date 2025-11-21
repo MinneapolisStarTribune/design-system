@@ -165,7 +165,7 @@ import '@minneapolisstartribune/design-system/dist/themes/varsity.css';
 
 ### Token Categories
 
-- **Primitives** (`tokens/color/primitives.json`) - Base color palettes (cobalt-blue, emerald, lime, etc.)
+- **Global Colors** (`tokens/color/global.json`) - Base color palettes (cobalt-blue, emerald, lime, etc.)
 - **Brand Colors** (`tokens/color/brand.json`) - Star Tribune brand colors
 - **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
 - **Typography** (`tokens/text.json`) - Font families and text sizes

@@ -17,7 +17,7 @@ function getStyleDictionaryConfig(brand) {
     log: { verbosity: 'verbose' },
     source: [
       'tokens/color/base.json',
-      'tokens/color/primitives.json',
+      'tokens/color/global.json',
       `tokens/color/brand-${brand}.json`,
       'tokens/color/semantic.json',
       'tokens/text.json',
