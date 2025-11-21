@@ -1,0 +1,34 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { baseColors } from './colorsData';
+import { primitivesColors } from './colorsData';
+
+<Meta title="Foundations/Colors/Global Colors" />
+
+# Base Colors
+
+Base colors are the fundamental colors used across the design system. These include pure black and white.
+
+<ColorPalette>
+  {baseColors.map((color) => (
+    <ColorItem
+      key={color.name}
+      title={color.name}
+      subtitle={color.value}
+      colors={{ [color.name]: color.value }}
+    />
+  ))}
+</ColorPalette>
+
+# Global Colors
+
+Global colors are the colors used across the design system, regardless of the brand. These include colors like yellow, red, orange, green, blue, and purple.
+
+<ColorPalette>
+  {primitivesColors.map((colorFamily) => (
+    <ColorItem
+      key={colorFamily.name}
+      title={colorFamily.name}
+      colors={colorFamily.shades}
+    />
+  ))}
+</ColorPalette>
