@@ -4,7 +4,13 @@ const StyleDictionary = require('style-dictionary').default;
 const tailwindThemeFormat = ({ dictionary }) => {
   const tokens = dictionary.allTokens
     .map((token) => {
-      const varName = token.name.startsWith('--') ? token.name : `--${token.name}`;
+      let varName = token.name.startsWith('--') ? token.name : `--${token.name}`;
+      
+      // Remove duplicate "color-" prefix if it exists
+      if (varName.startsWith('--color-color-')) {
+        varName = varName.replace('--color-color-', '--color-');
+      }
+      
       return `  ${varName}: ${token.value};`;
     })
     .join('\n');
