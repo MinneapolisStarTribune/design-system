@@ -77,7 +77,7 @@
  */
 @layer base {
   body {
-    @apply ds:font-sans ds:text-text-primary ds:selection:bg-lime-300 ds:selection:text-text-primary;
+    @apply ds:font-sans ds:text-text-on-light-primary ds:selection:bg-lime-300 ds:selection:text-text-on-light-primary;
   }
 }
 

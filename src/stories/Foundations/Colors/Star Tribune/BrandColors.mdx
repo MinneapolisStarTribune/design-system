@@ -1,0 +1,32 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { startribuneColorCategories } from '../brandColorsData';
+
+<Meta title="Foundations/Colors/Star Tribune/Brand Colors" />
+
+{startribuneColorCategories
+  .filter((category) => category.name === 'Brand')
+  .map((category) => (
+    <div key={category.name}>
+      <h1>{category.name}</h1>
+      {category.description && <p>{category.description}</p>}
+      <h2>Overview</h2>
+      {category.overview && category.overview.length > 0 && (
+        <ul>
+          {category.overview.map((bullet, index) => (
+            <li key={index}>{bullet}</li>
+          ))}
+        </ul>
+      )}
+      <ColorPalette>
+        {category.colors.map((color) => (
+          <ColorItem
+            key={color.name}
+            title={color.name}
+            subtitle={color.description}
+            colors={{ [color.tokenName]: color.value }}
+          />
+        ))}
+      </ColorPalette>
+    </div>
+  ))}
+
