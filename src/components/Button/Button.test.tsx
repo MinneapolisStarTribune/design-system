@@ -53,7 +53,7 @@ describe('Button', () => {
   });
 
   it('has correct size when passing in a size prop', () => {
-    const { getByTestId } = render(<Button label="Small" onClick={vi.fn()} size="sm" />);
+    const { getByTestId } = render(<Button label="Small" onClick={vi.fn()} size="small" />);
 
     const component = getByTestId('button');
 
@@ -73,10 +73,11 @@ describe('Button', () => {
   });
 
   it('renders with an icon', () => {
-    const icon = <svg data-testid="test-icon" />;
-    const { getByTestId } = render(<Button label="With Icon" onClick={vi.fn()} icon={icon} />);
+    const { container } = render(
+      <Button label="With Icon" onClick={vi.fn()} icon="camera-filled" />
+    );
 
-    expect(getByTestId('test-icon')).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
   it('is disabled when disabled prop is true', () => {

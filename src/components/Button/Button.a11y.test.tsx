@@ -39,14 +39,8 @@ describe('Button Accessibility', () => {
     });
 
     it('has no violations with an icon', async () => {
-      const icon = (
-        <svg role="img" aria-label="Arrow icon">
-          <path d="M10 10" />
-        </svg>
-      );
-
       await expectNoA11yViolations(
-        <Button label="Button with Icon" onClick={() => {}} icon={icon} />
+        <Button label="Button with Icon" onClick={() => {}} icon="camera-filled" />
       );
     });
   });
