@@ -14,9 +14,25 @@
         "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})",
         "description": "Primary brand accent in marketing and high-visibility CTA elements like the \"Subscribe\" button."
       },
+      "03-from": {
+        "value": "{color.lime.300}",
+        "description": "Start color for brand-03 gradient. Use with Tailwind's from- utility."
+      },
+      "03-to": {
+        "value": "{color.spring-green.400}",
+        "description": "End color for brand-03 gradient. Use with Tailwind's to- utility."
+      },
       "04": {
         "value": "linear-gradient(to right, {color.cobalt-blue.600}, {color.cobalt-blue.800})",
         "description": "Blue gradient used as a grounding background color."
+      },
+      "04-from": {
+        "value": "{color.cobalt-blue.600}",
+        "description": "Start color for brand-04 gradient. Use with Tailwind's from- utility."
+      },
+      "04-to": {
+        "value": "{color.cobalt-blue.800}",
+        "description": "End color for brand-04 gradient. Use with Tailwind's to- utility."
       }
     },
     "background": {
