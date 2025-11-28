@@ -1,0 +1,125 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { spacingTokens } from './spacingData';
+
+<Meta title="Foundations/Layout & Spacing/Spacing" />
+
+# Spacing
+
+Spacing tokens define consistent spacing values used throughout the design system. These tokens are available as CSS custom properties and can be used with Tailwind CSS utilities.
+
+## Usage
+
+Spacing tokens can be used in several ways:
+
+### CSS Custom Properties
+
+```css
+.my-element {
+  padding: var(--spacing-16);
+  margin: var(--spacing-24);
+  gap: var(--spacing-8);
+}
+```
+
+### Tailwind CSS Utilities
+
+Tailwind v4 automatically generates utilities from spacing tokens. Simply use the numeric value - Tailwind will automatically use the corresponding CSS custom property:
+
+```jsx
+<div className="ds:p-16 ds:m-24 ds:gap-8">
+  {/* Automatically uses var(--spacing-16), var(--spacing-24), var(--spacing-8) */}
+</div>
+```
+
+**How it works:** When you write `ds:p-16`, Tailwind automatically maps it to `var(--spacing-16)`. This happens automatically - no need to write `p-[var(--spacing-16)]` or reference the CSS variable directly.
+
+**Note:** This project uses the `ds:` prefix for all Tailwind utilities.
+
+## Spacing Scale
+
+The spacing scale ranges from `0` to `96px`, providing a comprehensive set of spacing values for all use cases.
+
+<div style={{ marginTop: '2rem' }}>
+  {spacingTokens.map((spacing) => (
+    <div
+      key={spacing.name}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '2rem',
+        padding: '1rem',
+        border: '1px solid #e1e1e1',
+        borderRadius: '4px',
+        backgroundColor: '#fafafa',
+      }}
+    >
+      <div style={{ minWidth: '120px', fontWeight: '600', marginRight: '1rem' }}>
+        {spacing.name}
+      </div>
+      <div style={{ minWidth: '150px', fontFamily: 'monospace', color: '#666', fontSize: '0.875rem', marginRight: '1rem' }}>
+        {spacing.tokenName}
+      </div>
+      <div style={{ minWidth: '80px', fontFamily: 'monospace', color: '#666', fontSize: '0.875rem', marginRight: '2rem' }}>
+        {spacing.value}
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flex: 1,
+          padding: '1rem',
+          backgroundColor: 'white',
+          borderRadius: '4px',
+          border: '1px dashed #d4d4d4',
+        }}
+      >
+        <div
+          style={{
+            width: '60px',
+            height: '60px',
+            backgroundColor: '#1683F8',
+            borderRadius: '4px',
+            flexShrink: 0,
+          }}
+        />
+        <div
+          style={{
+            width: spacing.value,
+            height: '4px',
+            backgroundColor: '#e1e1e1',
+            margin: `0 ${spacing.value === '0px' ? '0' : '8px'}`,
+            position: 'relative',
+          }}
+          title={`${spacing.value} spacing`}
+        >
+          {spacing.value !== '0px' && (
+            <div
+              style={{
+                position: 'absolute',
+                top: '-20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                fontSize: '0.75rem',
+                color: '#666',
+                whiteSpace: 'nowrap',
+                fontFamily: 'monospace',
+              }}
+            >
+              {spacing.value}
+            </div>
+          )}
+        </div>
+        <div
+          style={{
+            width: '60px',
+            height: '60px',
+            backgroundColor: '#1683F8',
+            borderRadius: '4px',
+            flexShrink: 0,
+          }}
+        />
+      </div>
+    </div>
+  ))}
+</div>
+
