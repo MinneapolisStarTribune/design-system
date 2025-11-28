@@ -28,6 +28,8 @@ function getStyleDictionaryConfig(brand) {
       'tokens/color/semantic.json',
       'tokens/text.json',
       'tokens/border-radius.json',
+      'tokens/spacing.json',
+      'tokens/breakpoint.json',
     ],
     hooks: {
       formats: {
