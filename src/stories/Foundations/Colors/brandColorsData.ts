@@ -16,8 +16,8 @@ export interface BrandColorCategory {
   colors: BrandColorData[];
 }
 
-// Helper function to resolve token references like "{color.base.white}" to actual values
-function resolveTokenReference(ref: string): string {
+// Helper function to resolve a single token reference like "{color.base.white}" to actual value
+function resolveSingleTokenReference(ref: string): string {
   if (!ref.startsWith('{') || !ref.endsWith('}')) {
     return ref; // Not a token reference, return as-is
   }
@@ -40,12 +40,29 @@ function resolveTokenReference(ref: string): string {
   if (current && typeof current === 'object' && 'value' in current) {
     // If the value is another reference, resolve it recursively
     if (typeof current.value === 'string' && current.value.startsWith('{')) {
-      return resolveTokenReference(current.value);
+      return resolveSingleTokenReference(current.value);
     }
     return current.value;
   }
 
   return ref; // Fallback to original reference
+}
+
+// Helper function to resolve token references like "{color.base.white}" to actual values
+// Also handles token references embedded in strings (e.g., gradients)
+function resolveTokenReference(ref: string): string {
+  // If it's a simple token reference (starts and ends with braces), resolve it directly
+  if (ref.startsWith('{') && ref.endsWith('}')) {
+    return resolveSingleTokenReference(ref);
+  }
+
+  // Otherwise, look for token references within the string (e.g., in gradients)
+  // Pattern: {word.word.word} or {word.word.word.number}
+  const tokenPattern = /\{([^}]+)\}/g;
+
+  return ref.replace(tokenPattern, (match) => {
+    return resolveSingleTokenReference(match);
+  });
 }
 
 // Helper function to format a key name (e.g., "light-default" -> "Light Default")
@@ -176,3 +193,4 @@ export function getBrandColors(brandName: string): BrandColorCategory[] {
 
 // Export processed colors for startribune (for backward compatibility)
 export const startribuneColorCategories = processBrandColors(startribuneBrandJson);
+export const varsityColorCategories = processBrandColors(varsityBrandJson);
