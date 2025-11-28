@@ -76,6 +76,15 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
       },
     },
+    {
+      // Ignore brandColorsData.ts
+      files: ['**/brandColorsData.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        'unused-imports/no-unused-imports': 'off',
+      },
+    },
   ],
 };
 
