@@ -1,3 +1,3 @@
-<svg id="strib-weather-day-sunny" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-weather-day-sunny" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-weather-day-sunny" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-weather-day-sunny" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M8 6a2 2 0 0 1 1.848 1.235A2.002 2.002 0 0 1 8.39 9.962 2.002 2.002 0 0 1 6 8a2.006 2.006 0 0 1 2-2m0-1a3 3 0 1 0 .001 6.002A3 3 0 0 0 8 5M2.697 3.404l.708-.707L5.158 4.45l-.708.707zM1 7.5h2.5v1H1zm1.697 5.096 1.753-1.753.707.707-1.752 1.753zM7.5 12.5h1V15h-1zm3.344-.95.707-.707 1.753 1.753-.707.707zM12.5 7.5H15v1h-2.5zm-1.656-3.051 1.753-1.753.707.707-1.753 1.753zM7.5 1h1v2.5h-1z"/>
 </svg>

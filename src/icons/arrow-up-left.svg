@@ -1,3 +1,3 @@
-<svg id="strib-arrow-up-left" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-arrow-up-left" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-arrow-up-left" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-arrow-up-left" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M13.97 13.03 13 14 3.372 4.372l-.003 5.973H2V2.03h8.316v1.369l-5.973.003z"/>
 </svg>

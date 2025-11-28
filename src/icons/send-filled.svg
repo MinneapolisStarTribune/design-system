@@ -1,3 +1,3 @@
-<svg id="strib-send-filled" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-send-filled" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-send-filled" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-send-filled" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M14.83 1.17a.59.59 0 0 0-.612-.135L1.385 5.702a.57.57 0 0 0-.273.213.587.587 0 0 0 .273.877l5.011 2.002 3.699-3.711.822.822-3.716 3.717 2.007 5.01a.58.58 0 0 0 .541.368.6.6 0 0 0 .33-.109.6.6 0 0 0 .208-.276l4.665-12.833a.57.57 0 0 0-.122-.612"/>
 </svg>

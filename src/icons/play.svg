@@ -1,3 +1,3 @@
-<svg id="strib-play" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-play" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-play" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-play" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M2.167 15a.585.585 0 0 1-.584-.583V1.583a.59.59 0 0 1 .287-.502.58.58 0 0 1 .578-.009l11.666 6.417a.582.582 0 0 1 0 1.022L2.448 14.927a.6.6 0 0 1-.281.073M2.75 2.569v10.862L12.623 8z"/>
 </svg>

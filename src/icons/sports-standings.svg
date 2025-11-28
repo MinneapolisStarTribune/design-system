@@ -1,3 +1,3 @@
-<svg id="strib-sports-standings" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-sports-standings" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-sports-standings" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-sports-standings" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M10.662 3.034v1.584h3.848a.49.49 0 0 1 .49.489v8.679a.49.49 0 0 1-.49.49h-4.339l-.021-.001H1.49a.49.49 0 0 1-.49-.49V7.999a.49.49 0 0 1 .49-.489h3.853V3.034h.979v10.262h3.359V5.107l.001-.032V3.034zm0 10.262h3.359V5.597h-3.359zM1.979 8.489v4.807h3.36V8.489zm3.364-5.455v-.82a.49.49 0 0 1 .49-.49h4.339c.27 0 .49.219.49.49v.82h-.98v-.33h-3.36v.33z"/>
 </svg>

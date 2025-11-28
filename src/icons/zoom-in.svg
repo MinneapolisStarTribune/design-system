@@ -1,4 +1,4 @@
-<svg id="strib-zoom-in" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-zoom-in" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-zoom-in" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-zoom-in" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M9.296 6.186H7.222V4.111H6.186v2.075H4.111v1.036h2.075v2.074h1.036V7.222h2.074z"/>
   <path d="M11.084 10.333a5.62 5.62 0 0 0 1.323-3.629 5.7 5.7 0 0 0-3.52-5.27 5.7 5.7 0 0 0-6.216 1.237 5.7 5.7 0 0 0 .864 8.775 5.7 5.7 0 0 0 3.169.961 5.62 5.62 0 0 0 3.629-1.323L14.266 15l.734-.734zm-4.38 1.037a4.665 4.665 0 0 1-.91-9.244 4.67 4.67 0 0 1 5.576 4.578 4.67 4.67 0 0 1-4.666 4.666"/>
 </svg>

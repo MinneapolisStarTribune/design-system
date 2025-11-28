@@ -1,3 +1,3 @@
-<svg id="strib-event" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-event" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-event" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-event" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M13.457 2.293A1 1 0 0 1 13.75 3v3h-1V3h-2v1h-1V3h-4v1h-1V3h-2v10h2v1h-2a.997.997 0 0 1-1-1V3a.997.997 0 0 1 1-1h2V1h1v1h4V1h1v1h2c.265 0 .52.105.707.293m-1.933 7.676L10.25 7.5l-1.2 2.469-2.8.395 2 1.923L7.75 15l2.5-1.281L12.75 15l-.5-2.713 2-1.923z"/>
 </svg>

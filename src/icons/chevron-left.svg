@@ -1,3 +1,3 @@
-<svg id="strib-chevron-left" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-chevron-left" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-chevron-left" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-chevron-left" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="m10.875 1 1.25 1.251L6.377 8l5.748 5.749L10.875 15l-7-7z"/>
 </svg>

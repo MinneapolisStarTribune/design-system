@@ -1,0 +1,4 @@
+<svg id="strib-social-youtube" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-social-youtube" xmlns="http://www.w3.org/2000/svg">
+  <path fill="var(--social-youtube-red, #ff0302)" d="M14.707 4.608a1.76 1.76 0 0 0-1.237-1.246C12.375 3.068 8 3.068 8 3.068s-4.375 0-5.47.294a1.77 1.77 0 0 0-1.237 1.246C1 5.707 1 8 1 8s0 2.293.293 3.392a1.75 1.75 0 0 0 1.237 1.245c1.095.295 5.47.295 5.47.295s4.375 0 5.47-.295a1.75 1.75 0 0 0 1.237-1.245C15 10.293 15 8 15 8s0-2.293-.293-3.392"/>
+  <path fill="var(--social-youtube-white, #ffffff)" d="M6.568 10.082V5.918L10.227 8z"/>
+</svg>
