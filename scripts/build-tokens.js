@@ -29,6 +29,7 @@ function getStyleDictionaryConfig(brand) {
       'tokens/text.json',
       'tokens/border-radius.json',
       'tokens/spacing.json',
+      'tokens/breakpoint.json',
     ],
     hooks: {
       formats: {
