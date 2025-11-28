@@ -1,0 +1,4 @@
+<svg id="strib-error" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-error" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 12a.74.74 0 0 0 .416-.127.74.74 0 0 0 .319-.77.746.746 0 0 0-1.358-.269.75.75 0 0 0 .093.946c.141.141.331.22.53.22m-.666-8h1.334v5H7.334z"/>
+  <path d="M8 15a7.005 7.005 0 0 1-6.467-4.321A7 7 0 1 1 15 8a7 7 0 0 1-2.051 4.949A7 7 0 0 1 8 15M8 2a6 6 0 1 0-.001 12.002A6 6 0 0 0 8 2"/>
+</svg>

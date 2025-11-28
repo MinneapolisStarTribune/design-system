@@ -1,0 +1,4 @@
+<svg id="strib-clock" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-clock" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 15a7.005 7.005 0 0 1-6.467-4.321 7 7 0 0 1-.399-4.045 7.004 7.004 0 0 1 9.545-5.101A7 7 0 0 1 8 15M8 2a6 6 0 1 0-.001 12.002A6 6 0 0 0 8 2"/>
+  <path d="M10.295 11 7.5 8.205V3.5h1v4.29l2.5 2.505z"/>
+</svg>
