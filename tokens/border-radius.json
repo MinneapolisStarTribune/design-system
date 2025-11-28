@@ -1,0 +1,14 @@
+{
+  "radius": {
+    "full": { "value": "999px" },
+    "64": { "value": "64px" },
+    "40": { "value": "40px" },
+    "24": { "value": "24px" },
+    "16": { "value": "16px" },
+    "12": { "value": "12px" },
+    "8": { "value": "8px" },
+    "6": { "value": "6px" },
+    "4": { "value": "4px" },
+    "2": { "value": "2px" }
+  }
+}
