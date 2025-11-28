@@ -1,9 +1,318 @@
 {
   "color": {
     "brand": {
-      "primary": {
-        "sv-black": { "value": "{color.base.black}" },
-        "sv-white": { "value": "{color.base.white}" }
+      "description": "Brand colors establish the core visual identity to express the brand across digital and print materials. Brand colors are intended for expressive, marketing, and creative applications, but are not tied to specific UI functions or component usage.",
+      "01": {
+        "value": "{color.lime.400}",
+        "description": "Core brand color used across brand and marketing materials. Represents the main identity color."
+      },
+      "02": {
+        "value": "{color.cobalt-blue.700}",
+        "description": "Secondary brand color used across brand and marketing materials. Primarily used when our brand is displayed on light backgrounds and printed material."
+      },
+      "03": {
+        "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})",
+        "description": "Primary brand accent in marketing and high-visibility CTA elements like the \"Subscribe\" button."
+      },
+      "04": {
+        "value": "linear-gradient(to right, {color.cobalt-blue.600}, {color.cobalt-blue.800})",
+        "description": "Blue gradient used as a grounding background color."
+      }
+    },
+    "background": {
+      "description": "Background tokens define the core surface layers across the system. They establish depth, contrast, and tone — from foundational page backgrounds to elevated components and brand-driven sections.",
+      "overview": [
+        "Light and dark backgrounds represent tonal environments, not themes, providing flexibility for both product and marketing layouts.",
+        "Brand backgrounds introduce expressive color into surfaces such as CTAs, banners, or branded panels, while accent backgrounds draw attention to high-priority or urgent content.",
+        "Use higher elevation tokens (-01, -02, or -dark) for raised, interactive, or nested surfaces, ensuring clear visual hierarchy without overpowering content."
+      ],
+      "light-default": {
+        "value": "{color.base.white}",
+        "description": "The foundational surface for light sections — used for page backgrounds and primary content areas."
+      },
+      "light-gray-01": {
+        "value": "{color.neutral.100}",
+        "description": "A raised surface on light backgrounds — ideal for cards, containers, and UI elements sitting above the base layer."
+      },
+      "light-gray-02": {
+        "value": "{color.neutral.200}",
+        "description": "A higher elevation surface for light environments — applied to interactive or nested elements like hovers or secondary layers."
+      },
+      "dark-default": {
+        "value": "{color.neutral.950}",
+        "description": "The foundational surface for dark-toned sections — provides contrast for light text and imagery."
+      },
+      "dark-gray-01": {
+        "value": "{color.neutral.900}",
+        "description": "A raised surface within dark sections — used for containers, cards, or UI areas sitting above the dark base."
+      },
+      "dark-gray-02": {
+        "value": "{color.neutral.800}",
+        "description": "A higher elevation surface for dark environments — applied to interactive or nested elements like hovers or secondary layers."
+      },
+      "brand": {
+        "value": "{color.cobalt-blue.700}",
+        "description": "Core brand surface — used for high-visibility elements such as CTAs, banners, or branded sections."
+      },
+      "brand-dark": {
+        "value": "{color.cobalt-blue.900}",
+        "description": "Darker brand tone for hover or elevated surfaces — reinforces brand color with stronger contrast."
+      },
+      "brand-subtle": {
+        "value": "{color.cobalt-blue.50}",
+        "description": "Gentle brand tint used as a soft highlight or background accent — maintains brand presence without dominating content."
+      },
+      "state-attention": {
+        "value": "{color.red.600}",
+        "description": "High-impact background color used for attention states like live content, breaking news, or errors — conveys urgency and energy across contexts."
+      }
+    },
+    "text": {
+      "description": "Text tokens define the hierarchy and tone of all written content across the system. They adapt to tonal environments (on-light or on-dark) to ensure readability and consistent contrast.",
+      "overview": [
+        "Primary, secondary, and tertiary tokens establish clear emphasis levels, guiding typographic hierarchy across layouts.",
+        "State tokens such as attention and disabled communicate interaction or status changes, aligning with system-wide semantics.",
+        "Brand text tokens apply brand colors expressively in marketing, CTA, or campaign contexts — 01, 02, and 03 represent primary, secondary, and tertiary brand colors, providing flexibility for visual balance."
+      ],
+      "on-light-primary": {
+        "value": "{color.neutral.950}",
+        "description": "Primary text color for use on light backgrounds — used for high-emphasis content such as body copy, headlines, and titles."
+      },
+      "on-light-secondary": {
+        "value": "{color.neutral.800}",
+        "description": "Secondary text color for use on light backgrounds — used for supporting content, subheadings, or secondary information."
+      },
+      "on-light-tertiary": {
+        "value": "{color.neutral.600}",
+        "description": "Tertiary text color for use on light backgrounds — used for low-emphasis content such as labels, metadata, or helper text."
+      },
+      "on-dark-primary": {
+        "value": "{color.base.white}",
+        "description": "Primary text color for use on dark backgrounds — provides maximum legibility for body copy, headlines, and titles."
+      },
+      "on-dark-secondary": {
+        "value": "{color.neutral.50}",
+        "description": "Secondary text color for use on dark backgrounds — used for supporting content, subheadings, or secondary information."
+      },
+      "on-dark-tertiary": {
+        "value": "{color.neutral.200}",
+        "description": "Tertiary text color for use on dark backgrounds — used for low-emphasis content such as labels, metadata, or helper text."
+      },
+      "state-attention-on-light": {
+        "value": "{color.red.600}",
+        "description": "Attention text color used on light backgrounds to highlight breaking, live, or alert content"
+      },
+      "state-attention-on-dark": {
+        "value": "{color.red.400}",
+        "description": "Attention text color used on dark backgrounds to highlight breaking, live, or alert content"
+      },
+      "state-disabled-on-light": {
+        "value": "{color.neutral.400}",
+        "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs."
+      },
+      "state-disabled-on-dark": {
+        "value": "{color.neutral.600}",
+        "description": "Disabled text color for use on dark backgrounds — provides low-contrast indication of inactive or unavailable content."
+      },
+      "brand-01": {
+        "value": "{color.lime.400}",
+        "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography."
+      },
+      "brand-02": {
+        "value": "{color.cobalt-blue.700}",
+        "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast."
+      },
+      "brand-03": {
+        "value": "{color.cobalt-blue.900}",
+        "description": "Tertiary brand text color used in marketing and promotional content — applies the tertiary brand color to support balance and brand richness."
+      }
+    },
+    "icon": {
+      "description": "Icon tokens ensure clarity, hierarchy, and brand consistency across all tonal environments. They adapt to the surface tone (on-light or on-dark) to maintain visibility and balance with surrounding text and components.",
+      "overview": [
+        "Primary, secondary, and tertiary tokens define emphasis levels, supporting clear visual hierarchy in iconography.",
+        "State tokens such as attention and disabled align with system-wide semantics to communicate status and interaction.",
+        "Brand icon tokens apply brand colors expressively or for active states — 01, 02, and 03 represent the primary, secondary, and tertiary brand hues, allowing designers to select the tone that best fits the visual context."
+      ],
+      "on-light-primary": {
+        "value": "{color.neutral.950}",
+        "description": "Primary icon color for use on light backgrounds — used for key actions, navigation icons, or high-emphasis visuals."
+      },
+      "on-light-secondary": {
+        "value": "{color.neutral.800}",
+        "description": "Secondary icon color for use on light backgrounds — used for supportive icons or secondary actions that complement primary content."
+      },
+      "on-light-tertiary": {
+        "value": "{color.neutral.600}",
+        "description": "Tertiary icon color for use on light backgrounds — used for low-emphasis icons, decorative elements, or background indicators."
+      },
+      "on-dark-primary": {
+        "value": "{color.base.white}",
+        "description": "Primary icon color for use on dark backgrounds — provides maximum visibility for key actions and navigation icons."
+      },
+      "on-dark-secondary": {
+        "value": "{color.neutral.50}",
+        "description": "Secondary icon color for use on dark backgrounds — used for supportive or secondary actions that maintain clear visual hierarchy."
+      },
+      "on-dark-tertiary": {
+        "value": "{color.neutral.200}",
+        "description": "Tertiary icon color for use on dark backgrounds — used for low-emphasis icons or background details within dark environments."
+      },
+      "state-attention-on-light": {
+        "value": "{color.red.600}",
+        "description": "Attention icon color for use on light backgrounds — draws focus to breaking, live, or high-urgency actions."
+      },
+      "state-attention-on-dark": {
+        "value": "{color.red.400}",
+        "description": "Attention icon color for use on dark backgrounds — draws focus to breaking, live, or high-urgency actions."
+      },
+      "state-disabled-on-light": {
+        "value": "{color.neutral.400}",
+        "description": "Disabled icon color for use on light backgrounds — indicates inactive states through low contrast and reduced emphasis."
+      },
+      "state-disabled-on-dark": {
+        "value": "{color.neutral.600}",
+        "description": "Disabled icon color for use on dark backgrounds — indicates inactive states through low contrast and reduced emphasis."
+      },
+      "brand-01": {
+        "value": "{color.lime.400}",
+        "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
+      },
+      "brand-02": {
+        "value": "{color.cobalt-blue.700}",
+        "description": "Brand icon color using the secondary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
+      },
+      "brand-03": {
+        "value": "{color.cobalt-blue.900}",
+        "description": "Brand icon color using the tertiary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
+      }
+    },
+    "border": {
+      "description": "Border tokens provide structure, separation, and emphasis across all tonal environments. They adapt to the surface tone (on-light or on-dark) to ensure consistent visibility and contrast.",
+      "overview": [
+        "Subtle borders are used to separate related content or elements within a shared surface.",
+        "Strong borders define clear boundaries between distinct sections or components.",
+        "State borders such as disabled, focus, and red communicate interaction or status changes.",
+        "Brand borders reflect the brand's visual identity — 01 represents the primary brand color, and 02 represents the secondary brand color — adding personality without overwhelming content."
+      ],
+      "on-light-subtle-01": {
+        "value": "{color.neutral.200}",
+        "description": "Used on light backgrounds to separate related content or elements within the same group — provides gentle visual distinction."
+      },
+      "on-light-subtle-02": {
+        "value": "{color.neutral.400}",
+        "description": "Used on light backgrounds for slightly stronger separation between related elements — maintains subtle contrast without drawing attention."
+      },
+      "on-light-strong-01": {
+        "value": "{color.neutral.800}",
+        "description": "Used on light backgrounds to define boundaries between distinct components or layout sections — provides clear structural separation."
+      },
+      "on-light-strong-02": {
+        "value": "{color.neutral.950}",
+        "description": "Used on light backgrounds for strong emphasis or container outlines — ideal for high-contrast boundaries or interactive components."
+      },
+      "on-dark-subtle-01": {
+        "value": "{color.neutral.800}",
+        "description": "Used on dark backgrounds to separate related content or elements within the same group — provides gentle contrast without disrupting the tone."
+      },
+      "on-dark-subtle-02": {
+        "value": "{color.neutral.700}",
+        "description": "Used on dark backgrounds to separate related content or elements within the same group — provides gentle contrast without disrupting the tone."
+      },
+      "on-dark-strong-01": {
+        "value": "{color.neutral.400}",
+        "description": "Used on dark backgrounds to define boundaries between distinct components or layout sections — offers clear separation."
+      },
+      "on-dark-strong-02": {
+        "value": "{color.base.white}",
+        "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
+      },
+      "state-focus": {
+        "value": "{color.cobalt-blue.600}",
+        "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
+      },
+      "state-disabled-on-light": {
+        "value": "{color.neutral.300}",
+        "description": "Used on light backgrounds for disabled components — provides a muted outline that communicates inactive state."
+      },
+      "state-disabled-on-dark": {
+        "value": "{color.neutral.800}",
+        "description": "Used on dark backgrounds for disabled components — provides a low-contrast outline to indicate inactive state."
+      },
+      "state-attention-on-light": {
+        "value": "{color.red.600}",
+        "description": "Attention border used on light backgrounds to indicate urgency or alert states such as errors, live content, or breaking news."
+      },
+      "state-attention-on-dark": {
+        "value": "{color.red.400}",
+        "description": "Attention border used on dark backgrounds to indicate urgency or alert states such as errors, live content, or breaking news."
+      },
+      "brand-01": {
+        "value": "{color.lime.400}",
+        "description": "Primary brand border used to introduce subtle brand presence — applies the main brand color in decorative or accent details."
+      },
+      "brand-02": {
+        "value": "{color.cobalt-blue.700}",
+        "description": "Secondary brand border used to introduce subtle brand presence — applies the secondary brand color in decorative or accent details."
+      }
+    },
+    "semantic": {
+      "description": "Semantic tokens communicate meaning and feedback across the interface. They represent universal states — such as information, success, warning, and error — and are used across multiple components including alerts, banners, toasts, and badges. Each semantic pair (background and foreground) is designed for clear contrast and accessibility, ensuring legibility across different tonal environments.",
+      "info-background": {
+        "value": "{color.sky-blue.50}",
+        "description": "Background color for informational messages and neutral alerts — used to indicate general updates or contextual information."
+      },
+      "info-foreground": {
+        "value": "{color.sky-blue.700}",
+        "description": "Foreground color for informational messages — used for text or icons that appear on info backgrounds to maintain clarity and contrast."
+      },
+      "success-background": {
+        "value": "{color.spring-green.50}",
+        "description": "Background color for positive or successful outcomes — used to indicate completion, confirmation, or resolved states."
+      },
+      "success-foreground": {
+        "value": "{color.spring-green.900}",
+        "description": "Foreground color for success messages — used for text or icons displayed on success backgrounds to ensure strong contrast and visibility."
+      },
+      "error-background": {
+        "value": "{color.red.50}",
+        "description": "Background color for critical or error messages — used to indicate failure, blocking issues, or urgent errors requiring attention."
+      },
+      "error-foreground": {
+        "value": "{color.red.700}",
+        "description": "Foreground color for error messages — used for text or icons on error backgrounds to maintain legibility and emphasis."
+      },
+      "warning-background": {
+        "value": "{color.orange.50}",
+        "description": "Background color for cautionary or warning messages — used to signal potential issues, risks, or required user awareness."
+      },
+      "warning-foreground": {
+        "value": "{color.orange.700}",
+        "description": "Foreground color for warning messages — used for text or icons on warning backgrounds to ensure readable contrast."
+      }
+    },
+    "overlay": {
+      "description": "Overlays provide tonal flexibility and visual depth across the interface. They are used both functionally—to dim content behind modals, drawers, or other elevated layers—and visually, to enhance contrast or readability over imagery, video, or brand surfaces.",
+      "overview": [
+        "Use darker overlays on light backgrounds to reduce distraction and direct attention to the active layer.",
+        "Use lighter overlays on dark or saturated backgrounds to ensure legibility and maintain clarity.",
+        "Choose “subtle” variants for lightweight layering or when background content should remain partially visible."
+      ],
+      "black": {
+        "value": "rgb(0 0 0 / 60%)",
+        "description": "Primary dark overlay used behind modals, drawers, or high-emphasis layers — creates strong contrast and draws attention to the active surface."
+      },
+      "black-subtle": {
+        "value": "rgb(0 0 0 / 30%)",
+        "description": "Lighter dark overlay used for less intrusive layering — ideal for tooltips, media overlays, or subtle depth effects."
+      },
+      "white": {
+        "value": "rgb(255 255 255 / 60%)",
+        "description": "Primary light overlay used on dark or vivid backgrounds — improves legibility and contrast for UI elements like buttons, icons, or text over imagery."
+      },
+      "white-subtle": {
+        "value": "rgb(255 255 255 / 30%)",
+        "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media."
       }
     }
   }

@@ -1,0 +1,42 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { varsityColorCategories } from '../brandColorsData';
+
+<Meta title="Foundations/Colors/Varsity/Brand Colors" />
+
+{varsityColorCategories
+  .filter((category) => category.name === 'Brand')
+  .map((category) => (
+    <div key={category.name}>
+      <h1>{category.name}</h1>
+      {category.description && <p>{category.description}</p>}
+      <h2>Overview</h2>
+      {category.overview && category.overview.length > 0 && (
+        <ul>
+          {category.overview.map((bullet, index) => (
+            <li key={index}>{bullet}</li>
+          ))}
+        </ul>
+      )}
+      <ColorPalette>
+        {category.colors.map((color) => {
+          const isGradient = color.value.startsWith('linear-gradient');
+          return (
+            <ColorItem
+              key={color.name}
+              title={color.name}
+              subtitle={color.description}
+              colors={{ [color.tokenName]: color.value }}
+              style={
+                isGradient
+                  ? {
+                      '--color-swatch-background': color.value,
+                    }
+                  : undefined
+              }
+            />
+          );
+        })}
+      </ColorPalette>
+    </div>
+  ))}
+
