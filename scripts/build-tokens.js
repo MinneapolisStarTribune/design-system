@@ -27,6 +27,7 @@ function getStyleDictionaryConfig(brand) {
       `tokens/color/brand-${brand}.json`,
       'tokens/color/semantic.json',
       'tokens/text.json',
+      'tokens/border-radius.json',
     ],
     hooks: {
       formats: {
