@@ -1,3 +1,3 @@
-<svg id="strib-redo" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-redo" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-redo" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-redo" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M5.667 4.792h7.108l-2.093-2.093.818-.824 3.5 3.5-3.5 3.5-.818-.826 2.091-2.091H5.667a3.5 3.5 0 0 0 0 7h4.666v1.167H5.667a4.67 4.67 0 0 1-3.301-1.367 4.67 4.67 0 0 1 0-6.6 4.67 4.67 0 0 1 3.301-1.366"/>
 </svg>

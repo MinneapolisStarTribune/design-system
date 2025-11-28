@@ -1,3 +1,3 @@
-<svg id="strib-device-mobile" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-device-mobile" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-device-mobile" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-device-mobile" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M3.539 11.506h.943v.012h7.036v-.012h.943v3.023a.473.473 0 0 1-.471.471H4.01a.473.473 0 0 1-.471-.471zM8 12.533a.73.73 0 0 0-.725.725v.008c0 .398.327.725.725.725a.73.73 0 0 0 .725-.725v-.008A.73.73 0 0 0 8 12.533m4.461-1.027h-.943V1.943H4.482v9.563h-.943V1.471c0-.26.211-.471.471-.471h7.98c.26 0 .471.211.471.471z"/>
 </svg>

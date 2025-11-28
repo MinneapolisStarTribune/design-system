@@ -1,4 +1,4 @@
-<svg id="strib-reply-all" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-reply-all" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-reply-all" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-reply-all" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M9.4 14.067a.47.47 0 0 1-.358-.168l-4.667-5.6a.47.47 0 0 1 0-.598l4.667-5.6a.465.465 0 0 1 .74.031.47.47 0 0 1 .085.268v3.282C13.137 5.897 15 8.416 15 12.667a.465.465 0 0 1-.606.445.47.47 0 0 1-.234-.165c-1.317-1.756-2.515-2.495-4.293-2.601V13.6a.467.467 0 0 1-.467.467M5.341 8l3.592 4.311V9.867A.467.467 0 0 1 9.4 9.4a5.93 5.93 0 0 1 4.593 1.909C13.64 8.259 12.041 6.6 9.4 6.6a.466.466 0 0 1-.467-.467V3.689z"/>
   <path d="M5.883 14.028 1.108 8.299a.47.47 0 0 1 0-.598l4.775-5.73.717.597L2.074 8 6.6 13.431z"/>
 </svg>

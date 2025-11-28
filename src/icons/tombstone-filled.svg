@@ -1,3 +1,3 @@
-<svg id="strib-tombstone-filled" viewBox="0 0 16 16" width="16" height="16" fill="currentcolor" class="strib-icon strib-tombstone-filled" xmlns="http://www.w3.org/2000/svg">
+<svg id="strib-tombstone-filled" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-tombstone-filled" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
   <path d="M4.42 1h7.159c.557 0 .955.318.955.875v9.704H3.545V1.875c0-.477.398-.875.875-.875m4.137 4.932h1.591v-.955H8.557V3.386H7.523v1.591H5.932v.955h1.591v2.386h1.034zM1.875 15h12.25v-1.352c0-.796-.636-1.432-1.432-1.432H3.307c-.796 0-1.432.636-1.432 1.432z"/>
 </svg>
