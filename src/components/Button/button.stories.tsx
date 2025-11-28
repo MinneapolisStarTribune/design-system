@@ -16,18 +16,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const PrimaryButton: Story = {
+export const ConfigurableButton: Story = {
   args: {
     label: 'See More',
     onClick: () => alert('Hello'),
     variant: 'primary',
-    size: 'lg',
+    size: 'large',
   },
 };
 
-export const PrimaryButtonIconStart: Story = {
+export const WithIcon: Story = {
   args: {
-    ...PrimaryButton.args,
+    ...ConfigurableButton.args,
+    icon: 'camera-filled',
     iconPosition: 'start',
   },
 };
@@ -38,7 +39,7 @@ export const PrimaryLink: Story = {
     as: Anchor, // <-- pass 'a' as Link component
     href: '#',
     variant: 'primary',
-    size: 'lg',
+    size: 'large',
   },
 };
 
@@ -65,5 +66,15 @@ export const TextLink: Story = {
     as: Anchor,
     href: '#',
     variant: 'text',
+  },
+};
+
+export const ButtonWithIcon: Story = {
+  args: {
+    label: 'View All Sports Hubs',
+    onClick: () => alert('Clicked'),
+    variant: 'text',
+    icon: 'camera-filled',
+    iconPosition: 'start',
   },
 };

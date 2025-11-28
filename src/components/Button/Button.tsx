@@ -1,45 +1,66 @@
 import { twMerge } from 'tailwind-merge';
 import React from 'react';
+import { Icon } from '../Icon/Icon';
+import { IconName } from '../Icon/iconNames';
+import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
 
-export type ButtonProps = {
-  className?: string | string[];
-  variant?: 'primary' | 'secondary' | 'text';
-  color?: 'black' | 'green';
-  size?: 'sm' | 'md' | 'lg';
-  icon?: React.ReactNode;
-  iconClassName?: string | string[];
-  iconPosition?: 'start' | 'end';
-  label: string;
-  disabled?: boolean;
-} & (
-  | {
-      // External link — consumer must pass an element
-      as: React.ElementType;
-      href: string;
-      onClick?: never;
-    }
-  | {
-      // Regular button
-      as?: never;
-      href?: never;
-      onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    }
-);
+export type ButtonColor = 'black' | 'green';
+export type ButtonVariant = 'primary' | 'secondary' | 'text';
+
+export type ButtonProps = BaseProps &
+  VariantProps<ButtonColor, ButtonVariant> &
+  AccessibilityProps & {
+    icon?: IconName;
+    iconColor?: IconColor;
+    iconPosition?: 'start' | 'end';
+    label: string;
+    disabled?: boolean; // Using disabled instead of isDisabled for HTML standard
+    linkProps?: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
+  } & (
+    | {
+        // External link — consumer must pass an element
+        as: React.ElementType;
+        href: string;
+        onClick?: never;
+        linkProps?: never;
+      }
+    | {
+        // Regular button
+        as?: never;
+        href?: never;
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+        linkProps?: never;
+      }
+    | {
+        // Link using linkProps
+        as?: never;
+        href?: never;
+        onClick?: never;
+        linkProps: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
+      }
+  );
 
 export const Button = ({
   className = '',
   variant = 'text',
   color = 'black',
-  size = 'md',
+  size = 'medium',
   icon,
-  iconClassName = '',
+  iconColor,
   iconPosition = 'end',
   label,
-  disabled = false,
+  disabled,
+  isDisabled,
   onClick,
   as: LinkComponent,
   href,
+  linkProps,
+  dataTestId = 'button',
+  'aria-label': ariaLabel,
+  'aria-describedby': ariaDescribedBy,
 }: ButtonProps) => {
+  // Use disabled prop if provided, otherwise fall back to isDisabled from VariantProps
+  const isButtonDisabled = disabled ?? isDisabled ?? false;
   const classList = twMerge(
     ['ds:inline-flex', 'ds:items-center', 'ds:gap-1', 'ds:cursor-pointer'],
     (variant === 'primary' || variant === 'secondary') && [
@@ -62,29 +83,28 @@ export const Button = ({
       'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white',
     ],
     color === 'black' && ['ds:bg-[var(--color-brand-01)]'],
-    size === 'sm' && 'ds:text-xs',
-    size === 'md' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
-    size === 'lg' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
+    size === 'small' && 'ds:text-xs',
+    size === 'medium' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
+    size === 'large' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
     className
   );
 
+  // Icon is always decorative (aria-hidden) when using the simple icon prop
+  const iconElement = icon ? (
+    <Icon
+      name={icon}
+      color={iconColor}
+      size={size}
+      aria-hidden={true}
+      className={iconPosition === 'start' ? 'ds:order-first' : undefined}
+    />
+  ) : null;
+
   const inners = (
     <>
+      {iconPosition === 'start' && iconElement}
       {label}
-      {icon && (
-        <span
-          className={twMerge(
-            'ds:flex',
-            'ds:flex-col',
-            size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
-            (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
-            iconPosition === 'start' && 'ds:order-first',
-            iconClassName
-          )}
-        >
-          {icon}
-        </span>
-      )}
+      {iconPosition === 'end' && iconElement}
     </>
   );
 
@@ -96,8 +116,10 @@ export const Button = ({
         className={classList}
         type="button"
         onClick={onClick}
-        disabled={disabled}
-        data-testid="button"
+        disabled={isButtonDisabled}
+        data-testid={dataTestId}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
       >
         {inners}
       </button>
@@ -106,9 +128,29 @@ export const Button = ({
 
   if (LinkComponent && href) {
     return (
-      <LinkComponent className={classList} href={href} data-testid="button">
+      <LinkComponent
+        className={classList}
+        href={href}
+        data-testid={dataTestId}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
+      >
         {inners}
       </LinkComponent>
+    );
+  }
+
+  if (linkProps) {
+    return (
+      <a
+        className={classList}
+        {...linkProps}
+        data-testid={dataTestId}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
+      >
+        {inners}
+      </a>
     );
   }
 
