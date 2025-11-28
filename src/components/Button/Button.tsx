@@ -58,9 +58,10 @@ export const Button = ({
     ],
     variant === 'secondary' && ['ds:border'],
     color === 'green' && [
-      'ds:bg-linear-to-r ds:from-lime-300 ds:to-spring-400 ds:text-base-black ds:border-1 ds:border-transparent',
+      'ds:bg-linear-to-r ds:from-[var(--color-brand-03-from)] ds:to-[var(--color-brand-03-to)] ds:text-base-black ds:border-1 ds:border-transparent',
       'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white',
     ],
+    color === 'black' && ['ds:bg-[var(--color-brand-01)]'],
     size === 'sm' && 'ds:text-xs',
     size === 'md' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
     size === 'lg' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
