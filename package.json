@@ -74,7 +74,7 @@
     "tokens": "node scripts/build-tokens.js",
     "build": "npm run tokens && NODE_ENV=production vite build",
     "storybook": "npm run tokens && storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "npm run tokens && storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
