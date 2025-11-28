@@ -1,6 +1,6 @@
 const StyleDictionary = require('style-dictionary').default;
 
-// Custom format for Tailwind v4 @theme syntax
+// Custom format for Tailwind v4 @theme syntax + :root for DOM access
 const tailwindThemeFormat = ({ dictionary }) => {
   const tokens = dictionary.allTokens
     .map((token) => {
@@ -15,7 +15,7 @@ const tailwindThemeFormat = ({ dictionary }) => {
     })
     .join('\n');
 
-  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n\n@theme {\n  /* Reset default theme colors */\n  --color-*: initial;\n\n${tokens}\n}\n`;
+  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n\n/* Tailwind v4 @theme block */\n@theme {\n  /* Reset default theme colors */\n  --color-*: initial;\n\n${tokens}\n}\n\n/* :root block for DOM access and non-Tailwind usage */\n:root {\n${tokens}\n}\n`;
 };
 
 function getStyleDictionaryConfig(brand) {
