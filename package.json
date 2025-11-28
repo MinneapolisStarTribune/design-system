@@ -31,6 +31,7 @@
     "@storybook/addon-onboarding": "^9.0.18",
     "@storybook/addon-vitest": "^9.0.18",
     "@storybook/react-vite": "^9.0.18",
+    "@svgr/core": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -64,6 +65,7 @@
     "typescript": "^5.8.3",
     "vite-plugin-css-injected-by-js": "^3.5.2",
     "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-svgr": "^4.5.0",
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
@@ -72,9 +74,10 @@
   },
   "scripts": {
     "tokens": "node scripts/build-tokens.js",
-    "build": "npm run tokens && NODE_ENV=production vite build",
-    "storybook": "npm run tokens && storybook dev -p 6006",
-    "build-storybook": "npm run tokens && storybook build",
+    "icons": "node scripts/build-icon-mapping.js",
+    "build": "npm run tokens && npm run icons && NODE_ENV=production vite build",
+    "storybook": "npm run tokens && npm run icons && storybook dev -p 6006",
+    "build-storybook": "npm run tokens && npm run icons && storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
