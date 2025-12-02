@@ -11,6 +11,53 @@ export interface PrimitiveColorFamily {
   shades: Record<string, string>;
 }
 
+// Helper function to resolve a single token reference like "{color.base.white}" to actual value
+function resolveSingleTokenReference(ref: string): string {
+  if (!ref.startsWith('{') || !ref.endsWith('}')) {
+    return ref; // Not a token reference, return as-is
+  }
+
+  // Remove braces: "{color.base.white}" -> "color.base.white"
+  const path = ref.slice(1, -1).split('.');
+
+  // Navigate through the JSON structure
+  let current: any = { color: { ...baseColorsJson.color, ...primitivesColorsJson.color } };
+
+  for (const segment of path) {
+    if (current && typeof current === 'object' && segment in current) {
+      current = current[segment];
+    } else {
+      return ref; // Path not found, return original reference
+    }
+  }
+
+  // If we found a token object with a value, return it
+  if (current && typeof current === 'object' && 'value' in current) {
+    // If the value is another reference, resolve it recursively
+    if (typeof current.value === 'string' && current.value.startsWith('{')) {
+      return resolveSingleTokenReference(current.value);
+    }
+    return current.value;
+  }
+
+  return ref; // Fallback to original reference
+}
+
+// Helper function to resolve token references like "{color.base.white}" to actual values
+function resolveTokenReference(ref: string): string {
+  // If it's a simple token reference (starts and ends with braces), resolve it directly
+  if (ref.startsWith('{') && ref.endsWith('}')) {
+    return resolveSingleTokenReference(ref);
+  }
+
+  // Otherwise, look for token references within the string (e.g., in gradients)
+  const tokenPattern = /\{([^}]+)\}/g;
+
+  return ref.replace(tokenPattern, (match) => {
+    return resolveSingleTokenReference(match);
+  });
+}
+
 // Validate JSON structure before processing
 if (!baseColorsJson?.color?.base) {
   console.error('baseColorsJson structure is invalid:', baseColorsJson);
@@ -33,8 +80,8 @@ export const primitivesColors: PrimitiveColorFamily[] = primitivesColorsJson?.co
       const shadesObj: Record<string, string> = {};
 
       shadeEntries.forEach(([shade, token]) => {
-        const displayName = `${colorName.replace(/-/g, ' ')} ${shade}`;
-        shadesObj[displayName] = token.value;
+        // Use shade number as key for ColorItem compatibility
+        shadesObj[shade] = token.value;
       });
 
       return {
@@ -45,4 +92,24 @@ export const primitivesColors: PrimitiveColorFamily[] = primitivesColorsJson?.co
         shades: shadesObj,
       };
     })
+  : [];
+
+export interface ButtonColorData extends ColorData {
+  tokenName: string;
+}
+
+export const buttonColors: ButtonColorData[] = baseColorsJson?.color?.button
+  ? Object.entries(baseColorsJson.color.button).map(
+      ([name, token]: [string, { value: string }]) => {
+        const resolvedValue = resolveTokenReference(token.value);
+        return {
+          name: name
+            .split('-')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' '),
+          tokenName: name,
+          value: resolvedValue,
+        };
+      }
+    )
   : [];

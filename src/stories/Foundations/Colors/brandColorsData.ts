@@ -17,7 +17,7 @@ export interface BrandColorCategory {
 }
 
 // Helper function to resolve a single token reference like "{color.base.white}" to actual value
-function resolveSingleTokenReference(ref: string): string {
+function resolveSingleTokenReference(ref: string, brandJson?: any): string {
   if (!ref.startsWith('{') || !ref.endsWith('}')) {
     return ref; // Not a token reference, return as-is
   }
@@ -25,8 +25,11 @@ function resolveSingleTokenReference(ref: string): string {
   // Remove braces: "{color.base.white}" -> "color.base.white"
   const path = ref.slice(1, -1).split('.');
 
-  // Navigate through the JSON structure
-  let current: any = { color: { ...baseColorsJson.color, ...globalColorsJson.color } };
+  // Navigate through the JSON structure, including brand colors if available
+  const brandColorData = brandJson?.color || {};
+  let current: any = {
+    color: { ...baseColorsJson.color, ...globalColorsJson.color, ...brandColorData },
+  };
 
   for (const segment of path) {
     if (current && typeof current === 'object' && segment in current) {
@@ -38,9 +41,9 @@ function resolveSingleTokenReference(ref: string): string {
 
   // If we found a token object with a value, return it
   if (current && typeof current === 'object' && 'value' in current) {
-    // If the value is another reference, resolve it recursively
-    if (typeof current.value === 'string' && current.value.startsWith('{')) {
-      return resolveSingleTokenReference(current.value);
+    // If the value is another reference or contains references (like gradients), resolve it recursively
+    if (typeof current.value === 'string') {
+      return resolveTokenReference(current.value, brandJson);
     }
     return current.value;
   }
@@ -50,10 +53,10 @@ function resolveSingleTokenReference(ref: string): string {
 
 // Helper function to resolve token references like "{color.base.white}" to actual values
 // Also handles token references embedded in strings (e.g., gradients)
-function resolveTokenReference(ref: string): string {
+function resolveTokenReference(ref: string, brandJson?: any): string {
   // If it's a simple token reference (starts and ends with braces), resolve it directly
   if (ref.startsWith('{') && ref.endsWith('}')) {
-    return resolveSingleTokenReference(ref);
+    return resolveSingleTokenReference(ref, brandJson);
   }
 
   // Otherwise, look for token references within the string (e.g., in gradients)
@@ -61,7 +64,7 @@ function resolveTokenReference(ref: string): string {
   const tokenPattern = /\{([^}]+)\}/g;
 
   return ref.replace(tokenPattern, (match) => {
-    return resolveSingleTokenReference(match);
+    return resolveSingleTokenReference(match, brandJson);
   });
 }
 
@@ -85,7 +88,8 @@ function formatCategoryName(key: string): string {
 function processColorCategory(
   categoryName: string,
   categoryData: Record<string, any>,
-  skipKeys: string[] = []
+  skipKeys: string[] = [],
+  brandJson?: any
 ): BrandColorData[] {
   const colors: BrandColorData[] = [];
 
@@ -95,7 +99,7 @@ function processColorCategory(
       return;
     }
 
-    const resolvedValue = resolveTokenReference(token.value);
+    const resolvedValue = resolveTokenReference(token.value, brandJson);
     colors.push({
       name: formatColorName(key),
       tokenName: `${categoryName}-${key}`, // Prepend category name (e.g., "text-on-light-primary")
@@ -136,7 +140,7 @@ export function processBrandColors(brandJson: any): BrandColorCategory[] {
     if (categoryOverview) {
       skipKeys.push('overview');
     }
-    const colors = processColorCategory(categoryKey, categoryValue, skipKeys);
+    const colors = processColorCategory(categoryKey, categoryValue, skipKeys, brandJson);
 
     if (colors.length > 0) {
       categories.push({
@@ -149,7 +153,12 @@ export function processBrandColors(brandJson: any): BrandColorCategory[] {
 
     // Process dark-mode colors if they exist
     if (hasDarkMode && categoryValue['dark-mode']) {
-      const darkModeColors = processColorCategory(categoryKey, categoryValue['dark-mode'], []);
+      const darkModeColors = processColorCategory(
+        categoryKey,
+        categoryValue['dark-mode'],
+        [],
+        brandJson
+      );
 
       if (darkModeColors.length > 0) {
         // Dark mode categories can have their own description/overview or inherit from parent
