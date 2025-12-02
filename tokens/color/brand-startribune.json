@@ -314,6 +314,22 @@
         "value": "rgb(255 255 255 / 30%)",
         "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media."
       }
+    },
+    "button": {
+      "description": "Button tokens define the color palette for interactive button components. Brand buttons use expressive brand colors, while shared button styles (filled, outlined, ghost, utility) are available in the base color tokens.",
+      "overview": [
+        "Brand buttons use the primary brand colors to create expressive, branded call-to-action buttons.",
+        "Brand-accent buttons provide a secondary branded option with higher contrast or alternative styling, including border styles where applicable.",
+        "Shared button styles (filled, outlined, ghost, utility) are defined in base colors and work across all brands."
+      ],
+      "brand-background": { "value": "{color.emerald-green.800}" },
+      "brand-text": { "value": "{color.base.white}" },
+      "brand-hover-background": { "value": "{color.forest-green.900}" },
+      "brand-hover-text": { "value": "{color.base.white}" },
+      "brand-accent-background": { "value": "{color.lime.400}" },
+      "brand-accent-text": { "value": "{color.forest-green.900}" },
+      "brand-accent-hover-background": { "value": "{color.lime.200}" },
+      "brand-accent-hover-text": { "value": "{color.forest-green.900}" }
     }
   }
 }
