@@ -10,11 +10,7 @@ describe('Button Accessibility', () => {
       );
 
       await expectNoA11yViolations(
-        <Button label="Primary Button" onClick={() => {}} variant="primary" />
-      );
-
-      await expectNoA11yViolations(
-        <Button label="Secondary Button" onClick={() => {}} variant="secondary" />
+        <Button label="Primary Button" onClick={() => {}} variant="filled" />
       );
     });
 

@@ -43,13 +43,14 @@ describe('Button', () => {
 
   it('has correct color when passing in a color prop', () => {
     const { getByTestId } = render(
-      <Button label="Green" onClick={vi.fn()} variant="primary" color="green" />
+      <Button label="Neutral" onClick={vi.fn()} variant="filled" color="neutral" />
     );
 
     const component = getByTestId('button');
 
     expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:text-base-black');
+    expect(component).toHaveClass('ds:bg-[var(--color-button-filled-background)]');
+    expect(component).toHaveClass('ds:text-[var(--color-button-filled-text)]');
   });
 
   it('has correct size when passing in a size prop', () => {
@@ -58,7 +59,8 @@ describe('Button', () => {
     const component = getByTestId('button');
 
     expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:text-xs');
+    expect(component).toHaveClass('ds:text-[12px]');
+    expect(component).toHaveClass('ds:h-button-sm');
   });
 
   it('applies custom className', () => {
@@ -80,8 +82,8 @@ describe('Button', () => {
     expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
-  it('is disabled when disabled prop is true', () => {
-    const { getByTestId } = render(<Button label="Disabled" onClick={vi.fn()} disabled />);
+  it('is disabled when isDisabled prop is true', () => {
+    const { getByTestId } = render(<Button label="Disabled" onClick={vi.fn()} isDisabled />);
 
     const component = getByTestId('button');
 
