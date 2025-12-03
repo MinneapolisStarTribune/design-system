@@ -4,8 +4,8 @@ import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
 
-export type ButtonColor = 'black' | 'green';
-export type ButtonVariant = 'primary' | 'secondary' | 'text';
+export type ButtonColor = 'neutral' | 'green';
+export type ButtonVariant = 'filled' | 'secondary' | 'text';
 
 export type ButtonProps = BaseProps &
   VariantProps<ButtonColor, ButtonVariant> &
@@ -42,14 +42,13 @@ export type ButtonProps = BaseProps &
 
 export const Button = ({
   className = '',
-  variant = 'text',
-  color = 'black',
+  variant = 'filled',
+  color = 'neutral',
   size = 'medium',
   icon,
   iconColor,
   iconPosition = 'end',
   label,
-  disabled,
   isDisabled,
   onClick,
   as: LinkComponent,
@@ -59,8 +58,6 @@ export const Button = ({
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
 }: ButtonProps) => {
-  // Use disabled prop if provided, otherwise fall back to isDisabled from VariantProps
-  const isButtonDisabled = disabled ?? isDisabled ?? false;
   const classList = twMerge(
     [
       'ds:flex',
@@ -77,7 +74,13 @@ export const Button = ({
     size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm'],
     size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md'],
     size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg'],
-    color === 'black' && ['ds:bg-[var(--color-brand-01)]'],
+    color === 'neutral' &&
+      variant === 'filled' && [
+        'ds:bg-[var(--color-button-filled-background)]',
+        'ds:text-[var(--color-button-filled-text)]',
+        'ds:hover:bg-[var(--color-button-filled-hover-background)]',
+        'ds:hover:text-[var(--color-button-filled-hover-text)]',
+      ],
     className
   );
 
@@ -115,7 +118,7 @@ export const Button = ({
         className={classList}
         type="button"
         onClick={onClick}
-        disabled={isButtonDisabled}
+        disabled={isDisabled}
         data-testid={dataTestId}
         aria-label={ariaLabel}
         aria-describedby={ariaDescribedBy}

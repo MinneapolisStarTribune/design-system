@@ -20,8 +20,9 @@ export const ConfigurableButton: Story = {
   args: {
     label: 'See More',
     onClick: () => alert('Hello'),
-    variant: 'primary',
+    variant: 'filled',
     size: 'large',
+    color: 'neutral',
   },
 };
 
