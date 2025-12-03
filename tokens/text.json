@@ -1,0 +1,16 @@
+{
+  "text": {
+    "size": {
+      "1xl": { "value": "1.375rem" },
+      "2xxl": { "value": "1.75rem" }
+    }
+  },
+  "font": {
+    "family": {
+      "graphik": { "value": "Graphik, sans-serif" },
+      "graphik-condensed": { "value": "Graphik Condensed, sans-serif" },
+      "nohemi": { "value": "Nohemi, sans-serif" },
+      "publico-text": { "value": "Publico Text, serif" }
+    }
+  }
+}
