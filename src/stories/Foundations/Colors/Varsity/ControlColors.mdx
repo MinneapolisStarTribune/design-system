@@ -1,10 +1,10 @@
 import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
 import { varsityColorCategories } from '../brandColorsData';
 
-<Meta title="Foundations/Colors/Varsity/Button Colors" />
+<Meta title="Foundations/Colors/Varsity/Control Colors" />
 
 {varsityColorCategories
-  .filter((category) => category.name === 'Button')
+  .filter((category) => category.name === 'Control')
   .map((category) => (
     <div key={category.name}>
       <h1>{category.name}</h1>
@@ -22,7 +22,7 @@ import { varsityColorCategories } from '../brandColorsData';
           <ColorItem
             key={color.name}
             title={`${category.name}: ${color.name}`}
-            subtitle={JSON.stringify(color.value)}
+            subtitle={color.description}
             colors={{ [color.tokenName]: color.value }}
           />
         ))}
