@@ -2,9 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from './Button';
 
-// Simple anchor component for Storybook links
-const Anchor = (props: React.ComponentProps<'a'>) => <a {...props} />;
-
 const meta = {
   title: 'Components/Button',
   component: Button,
