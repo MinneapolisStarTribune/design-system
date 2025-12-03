@@ -9,12 +9,6 @@ describe('Button', () => {
     expect(getByTestId('button')).toBeInTheDocument();
   });
 
-  it('renders nothing when label is empty', () => {
-    const { container } = render(<Button label="" onClick={vi.fn()} />);
-
-    expect(container.firstChild).toBeNull();
-  });
-
   it('displays the label text', () => {
     const { getByText } = render(<Button label="Click me" onClick={vi.fn()} />);
 

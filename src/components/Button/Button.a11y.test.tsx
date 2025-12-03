@@ -15,7 +15,9 @@ describe('Button Accessibility', () => {
     });
 
     it('has no violations when disabled', async () => {
-      await expectNoA11yViolations(<Button label="Disabled Button" onClick={() => {}} disabled />);
+      await expectNoA11yViolations(
+        <Button label="Disabled Button" onClick={() => {}} isDisabled />
+      );
     });
 
     it('has no violations with an icon', async () => {

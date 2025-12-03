@@ -14,8 +14,7 @@ export type ButtonProps = BaseProps &
     iconColor?: IconColor;
     iconPosition?: 'start' | 'end';
     label: string;
-    disabled?: boolean; // Using disabled instead of isDisabled for HTML standard
-    linkProps?: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
+    isDisabled?: boolean;
   } & {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
@@ -79,14 +78,6 @@ export const Button = ({
     />
   ) : null;
 
-  const inners = (
-    <>
-      {iconPosition === 'start' && iconElement}
-      <span className={labelClassName}>{label}</span>
-      {iconPosition === 'end' && iconElement}
-    </>
-  );
-
   return (
     <button
       className={classList}
@@ -97,7 +88,9 @@ export const Button = ({
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
     >
-      {inners}
+      {iconPosition === 'start' && iconElement}
+      <span className={labelClassName}>{label}</span>
+      {iconPosition === 'end' && iconElement}
     </button>
   );
 };
