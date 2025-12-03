@@ -41,7 +41,7 @@ export const Button = ({
       'ds:flex',
       'ds:items-center',
       'ds:justify-center',
-      'ds:gap-4',
+      icon && label && 'ds:gap-4',
       'ds:cursor-pointer',
       'ds:font-[var(--font-family-graphik)]',
       'ds:rounded-full',
