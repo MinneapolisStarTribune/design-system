@@ -7,6 +7,7 @@
     "64": { "value": "64px" },
     "56": { "value": "56px" },
     "48": { "value": "48px" },
+    "44": { "value": "44px" },
     "40": { "value": "40px" },
     "36": { "value": "36px" },
     "32": { "value": "32px" },
@@ -18,6 +19,9 @@
     "6": { "value": "6px" },
     "4": { "value": "4px" },
     "2": { "value": "2px" },
-    "0": { "value": "0px" }
+    "0": { "value": "0px" },
+    "button-lg": { "value": "{spacing.44}" },
+    "button-md": { "value": "{spacing.40}" },
+    "button-sm": { "value": "{spacing.32}" }
   }
 }

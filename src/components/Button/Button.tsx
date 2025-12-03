@@ -62,31 +62,30 @@ export const Button = ({
   // Use disabled prop if provided, otherwise fall back to isDisabled from VariantProps
   const isButtonDisabled = disabled ?? isDisabled ?? false;
   const classList = twMerge(
-    ['ds:inline-flex', 'ds:items-center', 'ds:gap-1', 'ds:cursor-pointer'],
-    (variant === 'primary' || variant === 'secondary') && [
+    [
+      'ds:flex',
+      'ds:items-center',
+      'ds:justify-center',
+      'ds:gap-4',
+      'ds:cursor-pointer',
+      'ds:font-[var(--font-family-graphik)]',
       'ds:rounded-full',
-      'ds:px-5',
-      'ds:py-2',
       'ds:font-semibold',
-      'ds:uppercase',
+      'ds:py-8',
+      'ds:px-16',
     ],
-    variant === 'primary' && [
-      'ds:bg-base-black',
-      'ds:hover:bg-gray-700',
-      'ds:text-base-white',
-      'ds:max-xl:text-xs',
-      'ds:max-xl:px-4',
-    ],
-    variant === 'secondary' && ['ds:border'],
-    color === 'green' && [
-      'ds:bg-linear-to-r ds:from-[var(--color-brand-03-from)] ds:to-[var(--color-brand-03-to)] ds:text-base-black ds:border-1 ds:border-transparent',
-      'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white',
-    ],
+    size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm'],
+    size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md'],
+    size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg'],
     color === 'black' && ['ds:bg-[var(--color-brand-01)]'],
-    size === 'small' && 'ds:text-xs',
-    size === 'medium' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
-    size === 'large' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
     className
+  );
+
+  // Text styles for the label - line-height: 120% based on font size
+  const labelClassName = twMerge(
+    size === 'small' && 'ds:leading-[120%]', // 12px * 1.2 = 14.4px
+    size === 'medium' && 'ds:leading-[120%]', // 14px * 1.2 = 16.8px
+    size === 'large' && 'ds:leading-[120%]' // 16px * 1.2 = 19.2px
   );
 
   // Icon is always decorative (aria-hidden) when using the simple icon prop
@@ -103,7 +102,7 @@ export const Button = ({
   const inners = (
     <>
       {iconPosition === 'start' && iconElement}
-      {label}
+      <span className={labelClassName}>{label}</span>
       {iconPosition === 'end' && iconElement}
     </>
   );
