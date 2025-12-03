@@ -46,12 +46,12 @@ export const Button = ({
       'ds:font-[var(--font-family-graphik)]',
       'ds:rounded-full',
       'ds:font-semibold',
-      'ds:py-8',
-      'ds:px-16',
+      !icon || label ? 'ds:py-8' : '',
+      !icon || label ? 'ds:px-16' : '',
     ],
-    size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm'],
-    size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md'],
-    size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg'],
+    size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm', icon && !label && 'ds:w-button-sm'],
+    size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md', icon && !label && 'ds:w-button-md'],
+    size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg', icon && !label && 'ds:w-button-lg'],
     color === 'neutral' &&
       variant === 'filled' && [
         'ds:bg-[var(--color-button-filled-background)]',
