@@ -21,12 +21,30 @@ jobs:
       - name: Get previous release tag
         id: get-previous-tag
         run: |
-          # Get the previous release tag
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 ${{ github.event.release.tag_name }}^ 2>/dev/null || echo "")
+          # Get all tags sorted by version, then find the one before current tag
+          CURRENT_TAG="${{ github.event.release.tag_name }}"
+          PREVIOUS_TAG=""
+          
+          # Get all tags sorted by version (newest first)
+          ALL_TAGS=$(git tag --sort=-version:refname)
+          
+          # Find the tag that comes before the current tag
+          FOUND_CURRENT=false
+          for tag in $ALL_TAGS; do
+            if [ "$FOUND_CURRENT" = true ]; then
+              PREVIOUS_TAG="$tag"
+              break
+            fi
+            if [ "$tag" = "$CURRENT_TAG" ]; then
+              FOUND_CURRENT=true
+            fi
+          done
+          
+          # If no previous tag found, get the first commit of main branch
           if [ -z "$PREVIOUS_TAG" ]; then
-            # If no previous tag, get the first commit of main branch
             PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
           fi
+          
           echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
           echo "Previous tag: $PREVIOUS_TAG"
 
