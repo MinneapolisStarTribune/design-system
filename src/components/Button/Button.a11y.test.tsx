@@ -6,15 +6,15 @@ describe('Button Accessibility', () => {
   describe('static rendering', () => {
     it('has no violations with all variants', async () => {
       await expectNoA11yViolations(
-        <Button label="Text Button" onClick={() => {}} variant="text" />
-      );
-
-      await expectNoA11yViolations(
         <Button label="Primary Button" onClick={() => {}} variant="filled" />
       );
 
       await expectNoA11yViolations(
         <Button label="Primary Button" onClick={() => {}} variant="outlined" />
+      );
+
+      await expectNoA11yViolations(
+        <Button label="Primary Button" onClick={() => {}} variant="ghost" />
       );
     });
 
