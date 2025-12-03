@@ -5,7 +5,8 @@ import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
 
 export type ButtonColor = 'neutral' | 'green';
-export type ButtonVariant = 'filled' | 'outlined' | 'text';
+export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
+export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 
 export type ButtonProps = BaseProps &
   VariantProps<ButtonColor, ButtonVariant> &
@@ -63,6 +64,13 @@ export const Button = ({
         'ds:border-[var(--color-button-outlined-border)]',
         'ds:text-[var(--color-button-outlined-text)]',
         'ds:hover:bg-[var(--color-button-outlined-hover-background)]',
+      ],
+    color === 'neutral' &&
+      variant === 'ghost' && [
+        'ds:bg-[var(--color-button-ghost-background)]',
+        'ds:text-[var(--color-button-ghost-text)]',
+        'ds:hover:bg-[var(--color-button-ghost-hover-background)]',
+        'ds:hover:text-[var(--color-button-ghost-hover-text)]',
       ],
     className
   );

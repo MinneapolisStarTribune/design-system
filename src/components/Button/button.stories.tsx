@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from './Button';
+import { Button, BUTTON_VARIANTS } from './Button';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   parameters: {},
   tags: ['autodocs'],
-  argTypes: {},
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: [...BUTTON_VARIANTS] as string[],
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -35,7 +40,7 @@ export const ButtonWithIcon: Story = {
   args: {
     label: 'View All Sports Hubs',
     onClick: () => alert('Clicked'),
-    variant: 'text',
+    variant: 'filled',
     icon: 'camera-filled',
     iconPosition: 'start',
   },
