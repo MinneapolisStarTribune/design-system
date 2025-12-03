@@ -25,21 +25,6 @@ const meta = {
       options: ['small', 'medium', 'large'],
       description: 'The size of the icon (small: 14x14, medium: 16x16, large: 24x24)',
     },
-    className: {
-      table: { disable: true },
-    },
-    dataTestId: {
-      table: { disable: true },
-    },
-    'aria-label': {
-      table: { disable: true },
-    },
-    'aria-describedby': {
-      table: { disable: true },
-    },
-    'aria-hidden': {
-      table: { disable: true },
-    },
   },
 } satisfies Meta<typeof Icon>;
 

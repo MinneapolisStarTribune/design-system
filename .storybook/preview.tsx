@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react';
+import React from 'react';
 import { ThemeWrapper } from './theme-wrapper';
 
 import '../src/tailwind.css';
@@ -31,6 +32,23 @@ const preview: Preview = {
       );
     },
   ],
+  argTypes: {
+    className: {
+      table: { disable: true },
+    },
+    dataTestId: {
+      table: { disable: true },
+    },
+    'aria-label': {
+      table: { disable: true },
+    },
+    'aria-describedby': {
+      table: { disable: true },
+    },
+    'aria-hidden': {
+      table: { disable: true },
+    },
+  },
   parameters: {
     controls: {
       matchers: {
