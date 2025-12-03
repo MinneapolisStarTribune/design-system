@@ -12,6 +12,10 @@ describe('Button Accessibility', () => {
       await expectNoA11yViolations(
         <Button label="Primary Button" onClick={() => {}} variant="filled" />
       );
+
+      await expectNoA11yViolations(
+        <Button label="Primary Button" onClick={() => {}} variant="outlined" />
+      );
     });
 
     it('has no violations when disabled', async () => {
