@@ -21,6 +21,7 @@ function resolveSingleTokenReference(ref: string): string {
   const path = ref.slice(1, -1).split('.');
 
   // Navigate through the JSON structure
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let current: any = { color: { ...baseColorsJson.color, ...primitivesColorsJson.color } };
 
   for (const segment of path) {
