@@ -16,29 +16,9 @@ export type ButtonProps = BaseProps &
     label: string;
     disabled?: boolean; // Using disabled instead of isDisabled for HTML standard
     linkProps?: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
-  } & (
-    | {
-        // External link — consumer must pass an element
-        as: React.ElementType;
-        href: string;
-        onClick?: never;
-        linkProps?: never;
-      }
-    | {
-        // Regular button
-        as?: never;
-        href?: never;
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-        linkProps?: never;
-      }
-    | {
-        // Link using linkProps
-        as?: never;
-        href?: never;
-        onClick?: never;
-        linkProps: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
-      }
-  );
+  } & {
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  };
 
 export const Button = ({
   className = '',
@@ -51,9 +31,6 @@ export const Button = ({
   label,
   isDisabled,
   onClick,
-  as: LinkComponent,
-  href,
-  linkProps,
   dataTestId = 'button',
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
@@ -110,51 +87,17 @@ export const Button = ({
     </>
   );
 
-  if (!label) return null;
-
-  if (onClick) {
-    return (
-      <button
-        className={classList}
-        type="button"
-        onClick={onClick}
-        disabled={isDisabled}
-        data-testid={dataTestId}
-        aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
-      >
-        {inners}
-      </button>
-    );
-  }
-
-  if (LinkComponent && href) {
-    return (
-      <LinkComponent
-        className={classList}
-        href={href}
-        data-testid={dataTestId}
-        aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
-      >
-        {inners}
-      </LinkComponent>
-    );
-  }
-
-  if (linkProps) {
-    return (
-      <a
-        className={classList}
-        {...linkProps}
-        data-testid={dataTestId}
-        aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
-      >
-        {inners}
-      </a>
-    );
-  }
-
-  return null;
+  return (
+    <button
+      className={classList}
+      type="button"
+      onClick={onClick}
+      disabled={isDisabled}
+      data-testid={dataTestId}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
+    >
+      {inners}
+    </button>
+  );
 };
