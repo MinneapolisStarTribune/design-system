@@ -34,42 +34,6 @@ export const WithIcon: Story = {
   },
 };
 
-export const PrimaryLink: Story = {
-  args: {
-    label: 'See More',
-    as: Anchor, // <-- pass 'a' as Link component
-    href: '#',
-    variant: 'primary',
-    size: 'large',
-  },
-};
-
-export const SecondaryButton: Story = {
-  args: {
-    label: 'See More',
-    onClick: () => alert('Hello'),
-    variant: 'secondary',
-  },
-};
-
-export const SecondaryLink: Story = {
-  args: {
-    label: 'See More',
-    as: Anchor,
-    href: '#',
-    variant: 'secondary',
-  },
-};
-
-export const TextLink: Story = {
-  args: {
-    label: 'See More',
-    as: Anchor,
-    href: '#',
-    variant: 'text',
-  },
-};
-
 export const ButtonWithIcon: Story = {
   args: {
     label: 'View All Sports Hubs',

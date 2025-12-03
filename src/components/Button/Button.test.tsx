@@ -15,26 +15,6 @@ describe('Button', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders as a link when as and href are provided', () => {
-    const MockLink = ({
-      href,
-      children,
-      ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-      <a href={href} {...rest}>
-        {children}
-      </a>
-    );
-    const { getByTestId } = render(
-      <Button label="Link Button" as={MockLink} href="https://example.com" />
-    );
-
-    const component = getByTestId('button');
-
-    expect(component).toBeInTheDocument();
-    expect(component).toHaveAttribute('href', 'https://example.com');
-  });
-
   it('displays the label text', () => {
     const { getByText } = render(<Button label="Click me" onClick={vi.fn()} />);
 

@@ -18,22 +18,6 @@ describe('Button Accessibility', () => {
       await expectNoA11yViolations(<Button label="Disabled Button" onClick={() => {}} disabled />);
     });
 
-    it('has no violations as a link', async () => {
-      const MockLink = ({
-        href,
-        children,
-        ...rest
-      }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-          {children}
-        </a>
-      );
-
-      await expectNoA11yViolations(
-        <Button label="Link Button" as={MockLink} href="https://example.com" />
-      );
-    });
-
     it('has no violations with an icon', async () => {
       await expectNoA11yViolations(
         <Button label="Button with Icon" onClick={() => {}} icon="camera-filled" />
