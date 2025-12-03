@@ -4,7 +4,8 @@ import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
 
-export type ButtonColor = 'neutral' | 'green';
+export const BUTTON_COLORS = ['neutral', 'green'] as const;
+export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 
