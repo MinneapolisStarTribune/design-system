@@ -3,6 +3,7 @@ import React from 'react';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
+import { getIconLabel } from '../../utils/accessibilityHelpers';
 
 export const BUTTON_COLORS = ['neutral', 'green'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -15,7 +16,7 @@ export type ButtonProps = BaseProps &
     icon?: IconName;
     iconColor?: IconColor;
     iconPosition?: 'start' | 'end';
-    label: string;
+    label?: string;
     isDisabled?: boolean;
   } & {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -94,6 +95,9 @@ export const Button = ({
     />
   ) : null;
 
+  // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
+  const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
+
   return (
     <button
       className={classList}
@@ -101,11 +105,11 @@ export const Button = ({
       onClick={onClick}
       disabled={isDisabled}
       data-testid={dataTestId}
-      aria-label={ariaLabel}
+      aria-label={buttonAriaLabel}
       aria-describedby={ariaDescribedBy}
     >
       {iconPosition === 'start' && iconElement}
-      <span className={labelClassName}>{label}</span>
+      {label && <span className={labelClassName}>{label}</span>}
       {iconPosition === 'end' && iconElement}
     </button>
   );
