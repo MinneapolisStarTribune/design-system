@@ -24,10 +24,14 @@ describe('Button Accessibility', () => {
       );
     });
 
-    it('has no violations with an icon', async () => {
+    it('has no violations with an icon and text', async () => {
       await expectNoA11yViolations(
         <Button label="Button with Icon" onClick={() => {}} icon="camera-filled" />
       );
+    });
+
+    it('has no violations with an icon', async () => {
+      await expectNoA11yViolations(<Button onClick={() => {}} icon="camera-filled" />);
     });
   });
 
