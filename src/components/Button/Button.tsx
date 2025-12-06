@@ -50,6 +50,11 @@ export const Button = ({
       'ds:focus:outline-none',
       'ds:focus:shadow-[0_0_0_2px_var(--color-background-light-default),0_0_0_4px_var(--color-border-state-focus)]',
     ],
+    isDisabled && [
+      'ds:cursor-not-allowed',
+      'ds:opacity-30',
+      'ds:text-[var(--color-text-state-disabled-on-light)]',
+    ],
     size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm', icon && !label && 'ds:w-button-sm'],
     size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md', icon && !label && 'ds:w-button-md'],
     size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg', icon && !label && 'ds:w-button-lg'],
