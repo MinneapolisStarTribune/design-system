@@ -89,8 +89,8 @@ export const Button = ({
     size === 'large' && 'ds:leading-[120%]' // 16px * 1.2 = 19.2px
   );
 
-  // Icon color: use iconColor prop if provided, otherwise default to 'on-light-primary' for neutral buttons
-  const iconColorValue = color === 'neutral' ? 'on-light-primary' : undefined;
+  const iconColorValue =
+    color === 'neutral' && variant === 'filled' ? 'on-dark-primary' : 'on-light-primary';
 
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   const iconElement = icon ? (
