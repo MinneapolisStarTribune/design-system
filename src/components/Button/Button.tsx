@@ -47,6 +47,8 @@ export const Button = ({
       'ds:font-semibold',
       !icon || label ? 'ds:py-8' : '',
       !icon || label ? 'ds:px-16' : '',
+      'ds:focus:outline-none',
+      'ds:focus:shadow-[0_0_0_2px_var(--color-background-light-default),0_0_0_4px_var(--color-border-state-focus)]',
     ],
     size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm', icon && !label && 'ds:w-button-sm'],
     size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md', icon && !label && 'ds:w-button-md'],
