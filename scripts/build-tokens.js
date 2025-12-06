@@ -1,7 +1,7 @@
 const StyleDictionary = require('style-dictionary').default;
 
-// Custom format for Tailwind v4 @theme syntax + :root for DOM access
-const tailwindThemeFormat = ({ dictionary }) => {
+// Custom format for CSS variables in :root
+const cssVariablesFormat = ({ dictionary }) => {
   const tokens = dictionary.allTokens
     .map((token) => {
       let varName = token.name.startsWith('--') ? token.name : `--${token.name}`;
@@ -15,7 +15,7 @@ const tailwindThemeFormat = ({ dictionary }) => {
     })
     .join('\n');
 
-  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n\n/* Tailwind v4 @theme block */\n@theme {\n  /* Reset default theme colors */\n  --color-*: initial;\n\n${tokens}\n}\n\n/* :root block for DOM access and non-Tailwind usage */\n:root {\n${tokens}\n}\n`;
+  return `/**\n * Do not edit directly, this file was auto-generated.\n`;
 };
 
 function getStyleDictionaryConfig(brand) {
@@ -33,7 +33,7 @@ function getStyleDictionaryConfig(brand) {
     ],
     hooks: {
       formats: {
-        'css/tailwind-theme': tailwindThemeFormat,
+        'css/variables': cssVariablesFormat,
       },
     },
     platforms: {
@@ -43,7 +43,7 @@ function getStyleDictionaryConfig(brand) {
         files: [
           {
             destination: `${brand}.css`,
-            format: 'css/tailwind-theme',
+            format: 'css/variables',
           },
         ],
       },

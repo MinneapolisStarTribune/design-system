@@ -2,8 +2,6 @@ import type { Preview } from '@storybook/react';
 import React from 'react';
 import { ThemeWrapper } from './theme-wrapper';
 
-import '../src/tailwind.css';
-
 const preview: Preview = {
   globalTypes: {
     brand: {
