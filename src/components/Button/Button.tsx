@@ -5,7 +5,7 @@ import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps } from '../../types/globalTypes';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 
-export const BUTTON_COLORS = ['neutral', 'green'] as const;
+export const BUTTON_COLORS = ['neutral', 'brand'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
@@ -58,6 +58,7 @@ export const Button = ({
     size === 'small' && ['ds:text-[12px]', 'ds:h-button-sm', icon && !label && 'ds:w-button-sm'],
     size === 'medium' && ['ds:text-[14px]', 'ds:h-button-md', icon && !label && 'ds:w-button-md'],
     size === 'large' && ['ds:text-[16px]', 'ds:h-button-lg', icon && !label && 'ds:w-button-lg'],
+    // Neutral button styles
     color === 'neutral' &&
       variant === 'filled' && [
         'ds:bg-[var(--color-button-filled-background)]',
@@ -78,6 +79,14 @@ export const Button = ({
         'ds:text-[var(--color-button-ghost-text)]',
         'ds:hover:bg-[var(--color-button-ghost-hover-background)]',
         'ds:hover:text-[var(--color-button-ghost-hover-text)]',
+      ],
+    // Brand button styles
+    color === 'brand' &&
+      variant === 'filled' && [
+        'ds:bg-[var(--color-control-brand-background)]',
+        'ds:text-[var(--color-control-brand-text)]',
+        'ds:hover:bg-[var(--color-control-brand-hover-background)]',
+        'ds:hover:text-[var(--color-control-brand-hover-text)]',
       ],
     className
   );
