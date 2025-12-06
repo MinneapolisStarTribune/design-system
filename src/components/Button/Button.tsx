@@ -5,7 +5,7 @@ import { IconName } from '../Icon/iconNames';
 import { BaseProps, VariantProps, AccessibilityProps } from '../../types/globalTypes';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 
-export const BUTTON_COLORS = ['neutral', 'brand'] as const;
+export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
@@ -87,6 +87,13 @@ export const Button = ({
         'ds:text-[var(--color-control-brand-text)]',
         'ds:hover:bg-[var(--color-control-brand-hover-background)]',
         'ds:hover:text-[var(--color-control-brand-hover-text)]',
+      ],
+    // Brand-accent button styles
+    color === 'brand-accent' &&
+      variant === 'filled' && [
+        'button-brand-accent-filled', // See tailwind.css for the implementation. Varsity uses a gradient for the background, so we need to use a class to override the background color to keep this component agnostic of the brand.
+        'ds:text-[var(--color-control-brand-accent-text)]',
+        'ds:hover:text-[var(--color-control-brand-accent-hover-text)]',
       ],
     className
   );

@@ -69,6 +69,15 @@
   .site-header-circle-icon-button {
     @apply ds:flex ds:items-center ds:justify-center ds:w-8 ds:h-8 ds:border-1 ds:rounded-full ds:p-1 ds:border-neutral-300 ds:bg-base-black ds:hover:bg-neutral-800 ds:cursor-pointer ds:focus:outline-1 ds:focus-within:outline-1;
   }
+
+  /* Brand-accent button - works for both solid colors and gradients */
+  .button-brand-accent-filled {
+    background: var(--color-control-brand-accent-background) !important;
+  }
+
+  .button-brand-accent-filled:hover:not(:disabled) {
+    background: var(--color-control-brand-accent-hover-background) !important;
+  }
 }
 
 /*
