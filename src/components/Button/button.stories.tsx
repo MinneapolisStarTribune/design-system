@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button, BUTTON_VARIANTS } from './Button';
+import { Button, BUTTON_VARIANTS, BUTTON_COLORS } from './Button';
 
 const meta = {
   title: 'Components/Button',
@@ -11,6 +11,11 @@ const meta = {
     variant: {
       control: 'select',
       options: [...BUTTON_VARIANTS] as string[],
+    },
+    color: {
+      control: 'select',
+      options: [...BUTTON_COLORS] as string[],
+      description: 'The color token for the button',
     },
   },
 } satisfies Meta<typeof Button>;
