@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import React from 'react';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
-import { BaseProps, VariantProps, AccessibilityProps, IconColor } from '../../types/globalTypes';
+import { BaseProps, VariantProps, AccessibilityProps } from '../../types/globalTypes';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 
 export const BUTTON_COLORS = ['neutral', 'green'] as const;
@@ -14,7 +14,6 @@ export type ButtonProps = BaseProps &
   VariantProps<ButtonColor, ButtonVariant> &
   AccessibilityProps & {
     icon?: IconName;
-    iconColor?: IconColor;
     iconPosition?: 'start' | 'end';
     label?: string;
     isDisabled?: boolean;
@@ -28,7 +27,6 @@ export const Button = ({
   color = 'neutral',
   size = 'medium',
   icon,
-  iconColor,
   iconPosition = 'end',
   label,
   isDisabled,
@@ -84,11 +82,14 @@ export const Button = ({
     size === 'large' && 'ds:leading-[120%]' // 16px * 1.2 = 19.2px
   );
 
+  // Icon color: use iconColor prop if provided, otherwise default to 'on-light-primary' for neutral buttons
+  const iconColorValue = color === 'neutral' ? 'on-light-primary' : undefined;
+
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   const iconElement = icon ? (
     <Icon
       name={icon}
-      color={iconColor}
+      color={iconColorValue}
       size={size}
       aria-hidden={true}
       className={iconPosition === 'start' ? 'ds:order-first' : undefined}
