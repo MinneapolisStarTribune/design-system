@@ -1,6 +1,10 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
+import { ColorSchemeScript } from '@mantine/core';
+import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
+
+// Theme CSS is loaded dynamically by ThemeWrapper based on brand selection
 
 const preview: Preview = {
   globalTypes: {
@@ -16,16 +20,34 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    theme: {
+      name: 'Theme',
+      description: 'Mantine color scheme',
+      defaultValue: 'light',
+      toolbar: {
+        icon: 'mirror',
+        items: [
+          { value: 'light', title: 'Light' },
+          { value: 'dark', title: 'Dark' },
+        ],
+      },
+    },
   },
   initialGlobals: {
     brand: 'startribune',
+    theme: 'light',
   },
   decorators: [
     (Story, context) => {
-      const brand = context.globals.brand || 'startribune';
+      const brand = (context.globals.brand || 'startribune') as Brand;
+      const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
+      
       return (
         <ThemeWrapper brand={brand}>
-          <Story />
+          <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
+            <ColorSchemeScript />
+            <Story />
+          </DesignSystemProvider>
         </ThemeWrapper>
       );
     },
