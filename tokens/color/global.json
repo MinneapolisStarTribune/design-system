@@ -1,5 +1,9 @@
 {
   "color": {
+    "base": {
+      "black": { "value": "#000000" },
+      "white": { "value": "#ffffff" }
+    },
     "neutral": {
       "50": { "value": "#f7f7f7" },
       "100": { "value": "#f2f2f2" },

@@ -1,9 +1,5 @@
 {
   "color": {
-    "base": {
-      "black": { "value": "#000000" },
-      "white": { "value": "#ffffff" }
-    },
     "button": {
       "filled-background": { "value": "{color.neutral.950}" },
       "filled-text": { "value": "{color.base.white}" },
