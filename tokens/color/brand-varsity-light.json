@@ -345,6 +345,7 @@
       "brand-accent-background": { "value": "{color.brand.03}" },
       "brand-accent-border": { "value": "{color.brand.03}" },
       "brand-accent-text": { "value": "{color.neutral.950}" },
+      "brand-accent-hover-background": { "value": "{color.brand.03}" },
       "brand-accent-hover-border": { "value": "{color.brand.03}" },
       "brand-accent-hover-text": { "value": "{color.base.white}" }
     }

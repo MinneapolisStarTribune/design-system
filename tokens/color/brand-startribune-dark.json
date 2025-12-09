@@ -27,7 +27,7 @@
         "Use higher elevation tokens (-01, -02, or -dark) for raised, interactive, or nested surfaces, ensuring clear visual hierarchy without overpowering content."
       ],
       "light-default": {
-        "value": "{neutral.950}",
+        "value": "{color.neutral.950}",
         "description": "The foundational surface for light sections — used for page backgrounds and primary content areas."
       },
       "light-gray-01": {
