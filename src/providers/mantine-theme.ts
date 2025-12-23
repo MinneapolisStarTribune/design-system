@@ -4,8 +4,9 @@ import {
   colorsTuple,
   defaultVariantColorsResolver,
   VariantColorsResolver,
+  Button,
 } from '@mantine/core';
-import { getBrandColors, Brand, ColorScheme } from './theme-helpers';
+import { getBrandColors, Brand, ColorScheme, getSpacing } from './theme-helpers';
 
 // Constants
 const COLOR_PALETTES = [
@@ -212,13 +213,46 @@ export function createMantineTheme(
 
   const whiteColor = colorsRecord['base-white']?.[0] || '#ffffff';
   const blackColor = colorsRecord['base-black']?.[0] || '#000000';
+  const spacing = getSpacing();
 
   return createTheme({
     defaultRadius: 'md',
     colors: themeColors as any,
     white: whiteColor,
     black: blackColor,
+    spacing: spacing as any,
     variantColorResolver: createButtonVariantResolver(semanticColors),
+    components: {
+      Button: Button.extend({
+        vars: (theme, props) => {
+          if (props.size === 'small') {
+            return {
+              root: {
+                '--button-padding-x': theme.spacing['12'],
+              },
+            };
+          }
+
+          if (props.size === 'medium') {
+            return {
+              root: {
+                '--button-padding-x': theme.spacing['16'],
+              },
+            };
+          }
+
+          if (props.size === 'large') {
+            return {
+              root: {
+                '--button-padding-x': theme.spacing['24'],
+              },
+            };
+          }
+
+          return { root: {} };
+        },
+      }),
+    },
   });
 }
 
