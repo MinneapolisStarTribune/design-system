@@ -4,8 +4,6 @@ import {
   colorsTuple,
   defaultVariantColorsResolver,
   VariantColorsResolver,
-  Button,
-  MantineTheme,
 } from '@mantine/core';
 import { getBrandColors, Brand, ColorScheme } from './theme-helpers';
 
@@ -109,6 +107,9 @@ function findBrandKey(
 
 /**
  * Map brand colors to convenient theme names
+ * Brand colors use the first 4 colors, then pad to 10 with brand-04 duplicates
+ * Note: We can't use ensureMantineColorArray directly because it generates shades,
+ * but we want duplicates of brand-04 instead.
  */
 function mapBrandColors(
   themeColors: Record<string, string[]>,
@@ -117,26 +118,23 @@ function mapBrandColors(
   brand: Brand,
   colorScheme: ColorScheme
 ) {
-  const brandBackgroundKey = findBrandKey(colorsRecord, [
-    'control-brand-background',
-    'control-brandBackground',
-    'brand-background',
-  ]);
+  // Process brand palette: take first 4 colors and pad to 10 with duplicates
+  if (themeColors.brand && Array.isArray(themeColors.brand) && themeColors.brand.length > 0) {
+    const firstFour = themeColors.brand.slice(0, 4);
+    if (firstFour.length < 10) {
+      const lastColor = firstFour[firstFour.length - 1];
+      const paddingCount = 10 - firstFour.length;
+      themeColors.brand = [...firstFour, ...Array(paddingCount).fill(lastColor)];
+    } else {
+      themeColors.brand = firstFour.slice(0, 10);
+    }
+  }
 
   const brandAccentKey = findBrandKey(colorsRecord, [
     'control-brand-accent-background',
     'control-brandAccentBackground',
     'brand-accent-background',
   ]);
-
-  if (brandBackgroundKey && semanticColors[brandBackgroundKey]) {
-    themeColors.brand = semanticColors[brandBackgroundKey];
-  } else if (brandBackgroundKey) {
-    console.warn(
-      `⚠️  Warning: "control-brand-background" not found in ${brand}-${colorScheme} tokens. ` +
-        `Brand button color will not be available.`
-    );
-  }
 
   if (brandAccentKey && semanticColors[brandAccentKey]) {
     themeColors['brand-accent'] = semanticColors[brandAccentKey];
