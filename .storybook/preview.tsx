@@ -1,11 +1,11 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import { ColorSchemeScript } from '@mantine/core';
+import '@mantine/core/styles.css';
 import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
 
 // Theme CSS is loaded dynamically by ThemeWrapper based on brand selection
-
 const preview: Preview = {
   globalTypes: {
     brand: {
@@ -46,7 +46,11 @@ const preview: Preview = {
         <ThemeWrapper brand={brand}>
           <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
             <ColorSchemeScript />
-            <Story />
+            <div style={{ 
+              padding: '1rem'
+            }}>
+              <Story />
+            </div>
           </DesignSystemProvider>
         </ThemeWrapper>
       );
@@ -81,6 +85,11 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: 'todo',
+    },
+    docs: {
+      source: {
+        type: 'code',
+      },
     },
   },
 };
