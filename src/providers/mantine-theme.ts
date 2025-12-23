@@ -6,7 +6,7 @@ import {
   VariantColorsResolver,
   Button,
 } from '@mantine/core';
-import { getBrandColors, Brand, ColorScheme, getSpacing } from './theme-helpers';
+import { getBrandColors, Brand, ColorScheme, getSpacing, getBorderRadius } from './theme-helpers';
 
 // Constants
 const COLOR_PALETTES = [
@@ -214,6 +214,7 @@ export function createMantineTheme(
   const whiteColor = colorsRecord['base-white']?.[0] || '#ffffff';
   const blackColor = colorsRecord['base-black']?.[0] || '#000000';
   const spacing = getSpacing();
+  const radius = getBorderRadius();
 
   return createTheme({
     defaultRadius: 'md',
@@ -221,35 +222,26 @@ export function createMantineTheme(
     white: whiteColor,
     black: blackColor,
     spacing: spacing as any,
+    radius: radius as any,
     variantColorResolver: createButtonVariantResolver(semanticColors),
     components: {
       Button: Button.extend({
         vars: (theme, props) => {
+          const vars: Record<string, string> = {};
+
+          // Set padding based on size
           if (props.size === 'small') {
-            return {
-              root: {
-                '--button-padding-x': theme.spacing['12'],
-              },
-            };
+            vars['--button-padding-x'] = theme.spacing['12'];
+          } else if (props.size === 'medium') {
+            vars['--button-padding-x'] = theme.spacing['16'];
+          } else if (props.size === 'large') {
+            vars['--button-padding-x'] = theme.spacing['24'];
           }
 
-          if (props.size === 'medium') {
-            return {
-              root: {
-                '--button-padding-x': theme.spacing['16'],
-              },
-            };
-          }
+          // Styles that apply to all buttons
+          vars['--button-radius'] = theme.radius['full'];
 
-          if (props.size === 'large') {
-            return {
-              root: {
-                '--button-padding-x': theme.spacing['24'],
-              },
-            };
-          }
-
-          return { root: {} };
+          return { root: vars };
         },
       }),
     },

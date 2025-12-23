@@ -3,6 +3,7 @@ import * as startribuneDark from '../generated/themes/startribune.dark';
 import * as varsityLight from '../generated/themes/varsity.light';
 import * as varsityDark from '../generated/themes/varsity.dark';
 import spacingJson from '../../tokens/spacing.json';
+import borderRadiusJson from '../../tokens/border-radius.json';
 
 export type Brand = 'startribune' | 'varsity';
 export type ColorScheme = 'light' | 'dark';
@@ -38,5 +39,24 @@ export function getSpacing(): Record<string, string> {
   });
 
   return spacingMap;
+}
+
+/**
+ * Get border radius tokens as an object accessible by key (e.g., radius['full'] = '999px')
+ */
+export function getBorderRadius(): Record<string, string> {
+  const radius = (borderRadiusJson as any).radius;
+  if (!radius) {
+    return {};
+  }
+
+  const radiusMap: Record<string, string> = {};
+  Object.entries(radius).forEach(([key, token]: [string, any]) => {
+    if (token?.value) {
+      radiusMap[key] = token.value;
+    }
+  });
+
+  return radiusMap;
 }
 
