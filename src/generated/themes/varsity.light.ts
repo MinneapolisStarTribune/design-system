@@ -1,28 +1,15 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2025-12-09T05:48:42.922Z
+ * Date: 2025-12-23T22:18:42.991Z
  */
 
 export const colors = {
   'brand': [
-    '#b6e32b',
-    '#0064CF',
-    'linear-gradient(to right, #c8fa31, #76D86E)',
-    'linear-gradient(to right, #1683F8, #0050A6)'
-  ],
-  'bright-green': [
-    '#f7fee7',
-    '#F1FECC',
-    '#E5FD9D',
-    '#DBFA7D',
     '#C8FA31',
-    '#B6E32B',
-    '#96BE23',
-    '#88AB21',
-    '#668019',
-    '#445511',
-    '#38470D'
+    '#0064CF',
+    'linear-gradient(to right, #DBFA7D, #76D86E)',
+    'linear-gradient(to right, #1683F8, #0050A6)'
   ],
   'cobalt-blue': [
     '#F0F7FF',
@@ -64,16 +51,17 @@ export const colors = {
     '#003320'
   ],
   'lime': [
-    '#f1fecc',
-    '#e4fd98',
-    '#d6fb65',
-    '#c8fa31',
-    '#b6e32b',
-    '#a4cf26',
-    '#8fb323',
-    '#7a991e',
-    '#647d19',
-    '#3c4b0f'
+    '#f7fee7',
+    '#F1FECC',
+    '#E5FD9D',
+    '#DBFA7D',
+    '#C8FA31',
+    '#B6E32B',
+    '#96BE23',
+    '#88AB21',
+    '#668019',
+    '#445511',
+    '#38470D'
   ],
   'navy-blue': [
     '#EBF3F9',
@@ -89,16 +77,16 @@ export const colors = {
     '#002D52'
   ],
   'neutral': [
-    '#f7f7f7',
-    '#f2f2f2',
-    '#e1e1e1',
-    '#d4d4d4',
-    '#AFAFAF',
-    '#969696',
-    '#666666',
-    '#525252',
-    '#434343',
-    '#282828',
+    '#F9FAFA',
+    '#F5F6F7',
+    '#E3E5E8',
+    '#C8CCD0',
+    '#A7ADB4',
+    '#888F96',
+    '#737A82',
+    '#585C5F',
+    '#45474A',
+    '#27292A',
     '#0D0D0D'
   ],
   'orange': [
@@ -192,19 +180,19 @@ export const colors = {
     '#0D0D0D'
   ],
   'background-dark-gray-01': [
-    '#282828'
+    '#27292A'
   ],
   'background-dark-gray-02': [
-    '#434343'
+    '#45474A'
   ],
   'background-light-default': [
     '#ffffff'
   ],
   'background-light-gray-01': [
-    '#f2f2f2'
+    '#F5F6F7'
   ],
   'background-light-gray-02': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'background-state-attention': [
     '#D63129'
@@ -216,34 +204,34 @@ export const colors = {
     '#ffffff'
   ],
   'border-brand-01': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'border-brand-02': [
     '#0064CF'
   ],
   'border-on-dark-strong-01': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'border-on-dark-strong-02': [
     '#ffffff'
   ],
   'border-on-dark-subtle-01': [
-    '#434343'
+    '#45474A'
   ],
   'border-on-dark-subtle-02': [
-    '#525252'
+    '#585C5F'
   ],
   'border-on-light-strong-01': [
-    '#434343'
+    '#45474A'
   ],
   'border-on-light-strong-02': [
     '#0D0D0D'
   ],
   'border-on-light-subtle-01': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'border-on-light-subtle-02': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'border-state-attention-on-dark': [
     '#F87171'
@@ -252,16 +240,16 @@ export const colors = {
     '#D63129'
   ],
   'border-state-disabled-on-dark': [
-    '#434343'
+    '#45474A'
   ],
   'border-state-disabled-on-light': [
-    '#d4d4d4'
+    '#C8CCD0'
   ],
   'border-state-focus': [
-    '#1683F8'
+    '#0D0D0D'
   ],
   'brand-03-from': [
-    '#c8fa31'
+    '#DBFA7D'
   ],
   'brand-03-to': [
     '#76D86E'
@@ -276,7 +264,7 @@ export const colors = {
     '#0D0D0D'
   ],
   'button-filled-hover-background': [
-    '#434343'
+    '#45474A'
   ],
   'button-filled-hover-text': [
     '#ffffff'
@@ -288,7 +276,7 @@ export const colors = {
     '#ffffff'
   ],
   'button-ghost-hover-background': [
-    '#f2f2f2'
+    '#F5F6F7'
   ],
   'button-ghost-hover-text': [
     '#0D0D0D'
@@ -303,7 +291,7 @@ export const colors = {
     '#0D0D0D'
   ],
   'button-outlined-hover-background': [
-    '#f2f2f2'
+    '#F5F6F7'
   ],
   'button-outlined-hover-border': [
     '#0D0D0D'
@@ -315,7 +303,7 @@ export const colors = {
     '#0D0D0D'
   ],
   'button-utility-border': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'button-utility-hover-border': [
     '#0D0D0D'
@@ -324,19 +312,19 @@ export const colors = {
     '#0D0D0D'
   ],
   'button-utility-text': [
-    '#434343'
+    '#45474A'
   ],
   'control-brand-accent-background': [
-    'linear-gradient(to right, #c8fa31, #76D86E)'
+    'linear-gradient(to right, #DBFA7D, #76D86E)'
   ],
   'control-brand-accent-border': [
-    'linear-gradient(to right, #c8fa31, #76D86E)'
+    'linear-gradient(to right, #DBFA7D, #76D86E)'
   ],
   'control-brand-accent-hover-background': [
-    'linear-gradient(to right, #c8fa31, #76D86E)'
+    'linear-gradient(to right, #DBFA7D, #76D86E)'
   ],
   'control-brand-accent-hover-border': [
-    'linear-gradient(to right, #c8fa31, #76D86E)'
+    'linear-gradient(to right, #DBFA7D, #76D86E)'
   ],
   'control-brand-accent-hover-text': [
     '#ffffff'
@@ -357,7 +345,7 @@ export const colors = {
     '#ffffff'
   ],
   'icon-brand-01': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'icon-brand-02': [
     '#0064CF'
@@ -369,19 +357,19 @@ export const colors = {
     '#ffffff'
   ],
   'icon-on-dark-secondary': [
-    '#f7f7f7'
+    '#F9FAFA'
   ],
   'icon-on-dark-tertiary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'icon-on-light-primary': [
     '#0D0D0D'
   ],
   'icon-on-light-secondary': [
-    '#434343'
+    '#45474A'
   ],
   'icon-on-light-tertiary': [
-    '#666666'
+    '#737A82'
   ],
   'icon-state-attention-on-dark': [
     '#F87171'
@@ -390,10 +378,10 @@ export const colors = {
     '#D63129'
   ],
   'icon-state-disabled-on-dark': [
-    '#666666'
+    '#737A82'
   ],
   'icon-state-disabled-on-light': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'overlay-black': [
     'rgb(0 0 0 / 60%)'
@@ -405,7 +393,7 @@ export const colors = {
     'rgb(255 255 255 / 60%)'
   ],
   'overlay-white-subtle': [
-    'rgb(255 255 255 / 30%)'
+    'rgb(255 255 255 / 35%)'
   ],
   'semantic-error-background': [
     '#fef2f2'
@@ -432,7 +420,7 @@ export const colors = {
     '#B2480B'
   ],
   'text-brand-01': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'text-brand-02': [
     '#0064CF'
@@ -444,19 +432,19 @@ export const colors = {
     '#ffffff'
   ],
   'text-on-dark-secondary': [
-    '#f7f7f7'
+    '#F9FAFA'
   ],
   'text-on-dark-tertiary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'text-on-light-primary': [
     '#0D0D0D'
   ],
   'text-on-light-secondary': [
-    '#434343'
+    '#45474A'
   ],
   'text-on-light-tertiary': [
-    '#666666'
+    '#737A82'
   ],
   'text-state-attention-on-dark': [
     '#F87171'
@@ -465,10 +453,10 @@ export const colors = {
     '#D63129'
   ],
   'text-state-disabled-on-dark': [
-    '#666666'
+    '#737A82'
   ],
   'text-state-disabled-on-light': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
 } as const;
 

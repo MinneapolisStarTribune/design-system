@@ -244,7 +244,7 @@
         "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
       },
       "state-focus": {
-        "value": "{color.cobalt-blue.600}",
+        "value": "{color.neutral.950}",
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
       },
       "state-disabled-on-light": {
@@ -327,7 +327,7 @@
         "description": "Primary light overlay used on dark or vivid backgrounds — improves legibility and contrast for UI elements like buttons, icons, or text over imagery."
       },
       "white-subtle": {
-        "value": "rgb(255 255 255 / 30%)",
+        "value": "rgb(255 255 255 / 35%)",
         "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media."
       }
     },

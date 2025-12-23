@@ -119,7 +119,7 @@
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography."
       },
       "brand-02": {
-        "value": "{color.emerald-green.900}",
+        "value": "{color.forest-green.900}",
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast."
       },
       "brand-03": {
@@ -179,7 +179,7 @@
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       },
       "brand-02": {
-        "value": "{color.emerald-green.900}",
+        "value": "{color.forest-green.900}",
         "description": "Brand icon color using the secondary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       },
       "brand-03": {
@@ -228,7 +228,7 @@
         "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
       },
       "state-focus": {
-        "value": "{color.cobalt-blue.600}",
+        "value": "{color.neutral.950}",
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
       },
       "state-disabled-on-light": {
@@ -252,7 +252,7 @@
         "description": "Primary brand border used to introduce subtle brand presence — applies the main brand color in decorative or accent details."
       },
       "brand-02": {
-        "value": "{color.emerald-green.500}",
+        "value": "{color.spring-green.500}",
         "description": "Secondary brand border used to introduce subtle brand presence — applies the secondary brand color in decorative or accent details."
       }
     },
@@ -311,7 +311,7 @@
         "description": "Primary light overlay used on dark or vivid backgrounds — improves legibility and contrast for UI elements like buttons, icons, or text over imagery."
       },
       "white-subtle": {
-        "value": "rgb(255 255 255 / 30%)",
+        "value": "rgb(255 255 255 / 35%)",
         "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media."
       }
     },

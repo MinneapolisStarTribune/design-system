@@ -107,7 +107,7 @@
         "description": "Attention text color used on dark backgrounds to highlight breaking, live, or alert content"
       },
       "state-disabled-on-light": {
-        "value": "{color.neutral.400}",
+        "value": "{color.neutral.600}",
         "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs."
       },
       "state-disabled-on-dark": {
@@ -119,7 +119,7 @@
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography."
       },
       "brand-02": {
-        "value": "{color.emerald-green.900}",
+        "value": "{color.forest-green.900}",
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast."
       },
       "brand-03": {
@@ -228,7 +228,7 @@
         "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
       },
       "state-focus": {
-        "value": "{color.cobalt-blue.600}",
+        "value": "{color.base.white}",
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
       },
       "state-disabled-on-light": {

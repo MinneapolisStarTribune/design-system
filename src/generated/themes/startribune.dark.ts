@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: startribune-dark tokens
- * Date: 2025-12-09T05:48:42.893Z
+ * Date: 2025-12-23T22:18:42.966Z
  */
 
 export const colors = {
@@ -9,20 +9,7 @@ export const colors = {
     '#00AC63',
     '#65CC5C',
     '#05442E',
-    '#b6e32b'
-  ],
-  'bright-green': [
-    '#f7fee7',
-    '#F1FECC',
-    '#E5FD9D',
-    '#DBFA7D',
-    '#C8FA31',
-    '#B6E32B',
-    '#96BE23',
-    '#88AB21',
-    '#668019',
-    '#445511',
-    '#38470D'
+    '#C8FA31'
   ],
   'cobalt-blue': [
     '#F0F7FF',
@@ -64,16 +51,17 @@ export const colors = {
     '#003320'
   ],
   'lime': [
-    '#f1fecc',
-    '#e4fd98',
-    '#d6fb65',
-    '#c8fa31',
-    '#b6e32b',
-    '#a4cf26',
-    '#8fb323',
-    '#7a991e',
-    '#647d19',
-    '#3c4b0f'
+    '#f7fee7',
+    '#F1FECC',
+    '#E5FD9D',
+    '#DBFA7D',
+    '#C8FA31',
+    '#B6E32B',
+    '#96BE23',
+    '#88AB21',
+    '#668019',
+    '#445511',
+    '#38470D'
   ],
   'navy-blue': [
     '#EBF3F9',
@@ -89,16 +77,16 @@ export const colors = {
     '#002D52'
   ],
   'neutral': [
-    '#f7f7f7',
-    '#f2f2f2',
-    '#e1e1e1',
-    '#d4d4d4',
-    '#AFAFAF',
-    '#969696',
-    '#666666',
-    '#525252',
-    '#434343',
-    '#282828',
+    '#F9FAFA',
+    '#F5F6F7',
+    '#E3E5E8',
+    '#C8CCD0',
+    '#A7ADB4',
+    '#888F96',
+    '#737A82',
+    '#585C5F',
+    '#45474A',
+    '#27292A',
     '#0D0D0D'
   ],
   'orange': [
@@ -192,19 +180,19 @@ export const colors = {
     '#0D0D0D'
   ],
   'background-dark-gray-01': [
-    '#282828'
+    '#27292A'
   ],
   'background-dark-gray-02': [
-    '#434343'
+    '#45474A'
   ],
   'background-light-default': [
     '#0D0D0D'
   ],
   'background-light-gray-01': [
-    '#282828'
+    '#27292A'
   ],
   'background-light-gray-02': [
-    '#434343'
+    '#45474A'
   ],
   'background-state-attention': [
     '#F87171'
@@ -222,28 +210,28 @@ export const colors = {
     '#76D86E'
   ],
   'border-on-dark-strong-01': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'border-on-dark-strong-02': [
     '#ffffff'
   ],
   'border-on-dark-subtle-01': [
-    '#434343'
+    '#45474A'
   ],
   'border-on-dark-subtle-02': [
-    '#525252'
+    '#585C5F'
   ],
   'border-on-light-strong-01': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'border-on-light-strong-02': [
     '#ffffff'
   ],
   'border-on-light-subtle-01': [
-    '#282828'
+    '#27292A'
   ],
   'border-on-light-subtle-02': [
-    '#525252'
+    '#585C5F'
   ],
   'border-state-attention-on-dark': [
     '#F87171'
@@ -252,19 +240,19 @@ export const colors = {
     '#F87171'
   ],
   'border-state-disabled-on-dark': [
-    '#434343'
+    '#45474A'
   ],
   'border-state-disabled-on-light': [
-    '#434343'
+    '#45474A'
   ],
   'border-state-focus': [
-    '#1683F8'
+    '#ffffff'
   ],
   'button-filled-background': [
     '#ffffff'
   ],
   'button-filled-hover-background': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'button-filled-hover-text': [
     '#0D0D0D'
@@ -276,7 +264,7 @@ export const colors = {
     '#000000'
   ],
   'button-ghost-hover-background': [
-    '#434343'
+    '#45474A'
   ],
   'button-ghost-hover-text': [
     '#ffffff'
@@ -291,7 +279,7 @@ export const colors = {
     '#ffffff'
   ],
   'button-outlined-hover-background': [
-    '#434343'
+    '#45474A'
   ],
   'button-outlined-hover-border': [
     '#ffffff'
@@ -303,7 +291,7 @@ export const colors = {
     '#ffffff'
   ],
   'button-utility-border': [
-    '#525252'
+    '#585C5F'
   ],
   'button-utility-hover-border': [
     '#ffffff'
@@ -312,13 +300,13 @@ export const colors = {
     '#ffffff'
   ],
   'button-utility-text': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'control-brand-accent-background': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'control-brand-accent-hover-background': [
-    '#d6fb65'
+    '#E5FD9D'
   ],
   'control-brand-accent-hover-text': [
     '#05442E'
@@ -345,25 +333,25 @@ export const colors = {
     '#006B3D'
   ],
   'icon-brand-03': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'icon-on-dark-primary': [
     '#ffffff'
   ],
   'icon-on-dark-secondary': [
-    '#f7f7f7'
+    '#F9FAFA'
   ],
   'icon-on-dark-tertiary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'icon-on-light-primary': [
     '#ffffff'
   ],
   'icon-on-light-secondary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'icon-on-light-tertiary': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'icon-state-attention-on-dark': [
     '#F87171'
@@ -372,10 +360,10 @@ export const colors = {
     '#F87171'
   ],
   'icon-state-disabled-on-dark': [
-    '#666666'
+    '#737A82'
   ],
   'icon-state-disabled-on-light': [
-    '#666666'
+    '#737A82'
   ],
   'overlay-black': [
     'rgb(0 0 0 / 60%)'
@@ -417,28 +405,28 @@ export const colors = {
     '#00AC63'
   ],
   'text-brand-02': [
-    '#006B3D'
+    '#05442E'
   ],
   'text-brand-03': [
-    '#b6e32b'
+    '#C8FA31'
   ],
   'text-on-dark-primary': [
     '#ffffff'
   ],
   'text-on-dark-secondary': [
-    '#f7f7f7'
+    '#F9FAFA'
   ],
   'text-on-dark-tertiary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'text-on-light-primary': [
     '#ffffff'
   ],
   'text-on-light-secondary': [
-    '#e1e1e1'
+    '#E3E5E8'
   ],
   'text-on-light-tertiary': [
-    '#AFAFAF'
+    '#A7ADB4'
   ],
   'text-state-attention-on-dark': [
     '#F87171'
@@ -447,10 +435,10 @@ export const colors = {
     '#F87171'
   ],
   'text-state-disabled-on-dark': [
-    '#666666'
+    '#737A82'
   ],
   'text-state-disabled-on-light': [
-    '#AFAFAF'
+    '#737A82'
   ],
 } as const;
 
