@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button, BUTTON_VARIANTS, BUTTON_COLORS } from './Button';
+import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
 
 const meta = {
   title: 'Components/Button',
@@ -17,6 +17,11 @@ const meta = {
       options: [...BUTTON_COLORS] as string[],
       description: 'The color token for the button',
     },
+    size: {
+      control: 'select',
+      options: [...BUTTON_SIZES] as string[],
+      description: 'The size of the button',
+    },
   },
 } satisfies Meta<typeof Button>;
 
@@ -29,7 +34,7 @@ export const ConfigurableButton: Story = {
     onClick: () => alert('Hello'),
     variant: 'filled',
     size: 'large',
-    color: 'neutral',
+    color: 'brand',
   },
 };
 
