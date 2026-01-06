@@ -328,7 +328,7 @@
       "brand-hover-text": { "value": "{color.base.white}" },
       "brand-accent-background": { "value": "{color.lime.400}" },
       "brand-accent-text": { "value": "{color.forest-green.900}" },
-      "brand-accent-hover-background": { "value": "{color.lime.400}" },
+      "brand-accent-hover-background": { "value": "{color.lime.200}" },
       "brand-accent-hover-text": { "value": "{color.forest-green.900}" }
     }
   }
