@@ -14,6 +14,7 @@ export interface ButtonProps extends Omit<MantineButtonProps, 'color' | 'variant
   size?: ButtonSize;
 }
 
+// Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
 export const Button: React.FC<ButtonProps> = ({ 
   color = 'neutral', 
   variant = 'filled',
