@@ -1,6 +1,6 @@
 # design-system
 
-A React component library built with TypeScript and Tailwind CSS, with a comprehensive design token system.
+A React component library built with TypeScript and Mantine, with a comprehensive design token system.
 
 ## Design Tokens
 
@@ -8,165 +8,163 @@ This design system uses [Style Dictionary](https://amzn.github.io/style-dictiona
 
 ### Available Themes
 
-- **Star Tribune** - `dist/themes/startribune.css`
-- **Varsity** - `dist/themes/varsity.css`
+Theme files are organized by brand and color scheme:
+
+- **Star Tribune Light** - `dist/themes/startribune-light.css`
+- **Star Tribune Dark** - `dist/themes/startribune-dark.css`
+- **Varsity Light** - `dist/themes/varsity-light.css`
+- **Varsity Dark** - `dist/themes/varsity-dark.css`
 
 ### Using Themes
 
-**Import the theme for your brand:**
+#### Step 1: Choose Your Brand and Color Scheme
 
-```css
-/* In your main CSS file */
-@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
-/* or */
-@import '@minneapolisstartribune/design-system/dist/themes/varsity.css';
-```
+You need to load the correct CSS file based on your brand and whether you're using light or dark mode, then wrap your app with `DesignSystemProvider`.
 
-**Use brand tokens in your CSS:**
+**Option A: Static import (if you know the brand/theme at build time)**
 
-```css
-.my-component {
-  background: var(--color-brand-primary); /* Changes per theme! */
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-brand-secondary);
+```tsx
+// In your main entry file (e.g., main.tsx or App.tsx)
+import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+// or
+import '@minneapolisstartribune/design-system/dist/themes/startribune-dark.css';
+
+// Then wrap your app with DesignSystemProvider
+import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
+
+function App() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      {/* Your app */}
+    </DesignSystemProvider>
+  );
 }
 ```
 
-**All themes include the same token names:**
+**Option B: Dynamic loading (if you need to switch themes at runtime)**
 
-- `--color-brand-primary-*` (e.g., `strib-emerald-green`, `sv-black`)
-- `--color-brand-secondary-*` (e.g., `core-yellow`, `core-navy`)
-- `--color-text-primary`, `--color-bg-primary`, `--color-border-subtle`
+```tsx
+import { useEffect, useState } from 'react';
+import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
+
+function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const brand = 'startribune'; // or 'varsity'
+
+  useEffect(() => {
+    // Remove any existing theme link
+    const existingLink = document.getElementById('design-system-theme');
+    if (existingLink) {
+      existingLink.remove();
+    }
+
+    // Load the correct theme CSS
+    // Note: Adjust this path based on how your bundler resolves node_modules
+    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`
+    // For Webpack/CRA: You may need to use a dynamic import or copy files to public folder
+    const link = document.createElement('link');
+    link.id = 'design-system-theme';
+    link.rel = 'stylesheet';
+    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`;
+    document.head.appendChild(link);
+
+    // Cleanup on unmount
+    return () => {
+      const linkToRemove = document.getElementById('design-system-theme');
+      if (linkToRemove) {
+        linkToRemove.remove();
+      }
+    };
+  }, [brand, theme]);
+
+  return (
+    <DesignSystemProvider brand={brand} forceColorScheme={theme}>
+      {/* Your app with theme switcher */}
+      <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </button>
+    </DesignSystemProvider>
+  );
+}
+```
+
+**Using CSS variables in your styles:**
+
+All themes include the same token names, so you can use CSS variables in your CSS modules or inline styles:
+
+```css
+/* In your CSS module or stylesheet */
+.my-component {
+  background: var(--color-brand-primary-strib-emerald-green);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-subtle);
+}
+```
+
+**Available token categories:**
+
+- `--color-icon-*` - Icon colors (e.g., `--color-icon-on-light-primary`)
+- `--color-text-*` - Text colors
+- `--color-background-*` - Background colors
+- `--color-border-*` - Border colors
+- `--color-button-*` - Button-specific colors
+- `--color-control-*` - Control component colors
 - Full primitive palettes (`--color-emerald-500`, `--color-lime-300`, etc.)
 
-### Integration Examples
+### Using React Components with Mantine
 
-#### Using with Tailwind CSS v4
+If you're using the design system's React components (Button, Icon, etc.), you need to:
 
-Tailwind v4 has native CSS variable support. Just import the theme:
+1. **Load the theme CSS file** (see above)
+2. **Wrap your app with `DesignSystemProvider`**
 
-```css
-/* app.css */
-@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
-@import 'tailwindcss';
+```tsx
+import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
+import { Button } from '@minneapolisstartribune/design-system';
+import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+
+function App() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      <Button label="Click me" onClick={() => {}} />
+    </DesignSystemProvider>
+  );
+}
 ```
 
-Use design tokens directly as Tailwind utilities (v4 auto-generates utilities from CSS variables):
+**Important notes:**
+- The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
+- The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
+- If you want to switch themes dynamically, use the dynamic loading approach shown above
+- The CSS file must be loaded **before** components render, or CSS variables will be undefined
 
-```jsx
-// All design system tokens are available as utilities!
-<div className="bg-brand-primary-strib-emerald-green text-base-white">
-  Star Tribune branded content
-</div>
+### Quick Reference: Setup Checklist
 
-<button className="bg-brand-secondary-core-yellow
-                   hover:bg-brand-primary-strib-spring-green
-                   px-4 py-2 rounded">
-  Call to Action
-</button>
-```
+**For React apps using Mantine components:**
 
-That's it! No config needed. Tailwind v4 automatically creates utilities from all `--color-*` CSS variables.
+- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
+- [ ] Wrap your app with `<DesignSystemProvider brand="..." forceColorScheme="...">`
+- [ ] Ensure `brand` prop matches the CSS file brand (`'startribune'` or `'varsity'`)
+- [ ] Ensure `forceColorScheme` prop matches the CSS file (`'light'` or `'dark'`)
+- [ ] Load CSS **before** components render (import at top of entry file)
 
-#### Using with Tailwind CSS v3
+**For CSS-only usage:**
 
-For v3, use arbitrary value syntax with CSS variables:
+- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
+- [ ] Use CSS variables in your styles: `var(--color-*)`
+- [ ] Switch themes by changing the import path
 
-```css
-/* app.css */
-@import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+**Verifying it works:**
 
-```jsx
-// Use CSS variables with arbitrary values
-<div className="bg-[var(--color-brand-primary-strib-emerald-green)] text-white">
-  Star Tribune branded content
-</div>
-
-<button className="bg-[var(--color-brand-secondary-core-yellow)]
-                   hover:bg-[var(--color-brand-primary-strib-spring-green)]
-                   px-4 py-2 rounded">
-  Call to Action
-</button>
-```
-
-**Or add to your Tailwind config** for shorter class names:
-
-```javascript
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        'brand-primary': 'var(--color-brand-primary-strib-emerald-green)',
-        'brand-secondary': 'var(--color-brand-secondary-core-yellow)',
-        'brand-accent': 'var(--color-brand-primary-strib-spring-green)',
-      },
-    },
-  },
-};
-```
-
-```jsx
-// Now use like regular Tailwind utilities
-<div className="bg-brand-primary text-white">Much cleaner!</div>
-```
-
-#### Using with Svelte (or any other framework)
-
-Import the theme CSS and use CSS variables directly:
-
-```svelte
-<!-- App.svelte -->
-<script>
-  import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
-</script>
-
-<div class="hero">
-  <h1>Welcome to Star Tribune</h1>
-  <button class="cta-button">Get Started</button>
-</div>
-
-<style>
-  .hero {
-    background: var(--color-brand-primary-strib-emerald-green);
-    color: var(--color-base-white);
-    padding: 2rem;
-  }
-
-  .cta-button {
-    background: var(--color-brand-secondary-core-yellow);
-    color: var(--color-base-black);
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .cta-button:hover {
-    background: var(--color-brand-primary-strib-spring-green);
-  }
-</style>
-```
-
-**Switching brands:** Just change the import path:
-
-```javascript
-// Star Tribune
-import '@minneapolisstartribune/design-system/dist/themes/startribune.css';
-
-// Varsity
-import '@minneapolisstartribune/design-system/dist/themes/varsity.css';
-```
+1. Open browser DevTools
+2. Check that CSS variables exist: `getComputedStyle(document.documentElement).getPropertyValue('--color-icon-on-light-primary')`
+3. Should return a color value (not empty string)
+4. For React apps, check that Mantine components render with correct colors
 
 ### Token Categories
 
 - **Global Colors** (`tokens/color/global.json`) - Base color palettes (cobalt-blue, emerald, lime, etc.)
-- **Brand Colors** (`tokens/color/brand.json`) - Star Tribune brand colors
+- **Brand Colors** (`tokens/color/brand-{brand}-{scheme}.json`) - Brand-specific colors for each brand and color scheme
 - **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
 - **Typography** (`tokens/text.json`) - Font families and text sizes
 
