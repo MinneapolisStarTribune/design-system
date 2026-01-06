@@ -1,6 +1,5 @@
 import { iconOptions } from './iconOptions';
 import { IconName } from './iconNames';
-import { twMerge } from 'tailwind-merge';
 import {
   BaseProps,
   AccessibilityProps,
@@ -8,6 +7,7 @@ import {
   IconColor,
   ICON_COLORS,
 } from '../../types/globalTypes';
+import styles from './Icon.module.css';
 
 export type IconProps = BaseProps & AccessibilityProps & IconSpecificProps<IconName>;
 
@@ -45,11 +45,16 @@ export const Icon = ({
   };
   const sizeValue = sizeMap[size];
 
+  // Combine CSS module class with any additional className
+  const combinedClassName = className 
+    ? `${styles.icon} ${className}`.trim()
+    : styles.icon;
+
   return (
     <IconComponent
       width={sizeValue}
       height={sizeValue}
-      className={twMerge('ds:inline-flex ds:items-center ds:justify-center', className)}
+      className={combinedClassName}
       fill={color ? `var(--color-icon-${color})` : 'currentColor'}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
