@@ -22,6 +22,7 @@
     "axe-core": "^4.11.0",
     "eslint-plugin-react": "^7.37.5",
     "path": "^0.12.7",
+    "sass": "^1.97.2",
     "vitest-axe": "^0.1.0"
   },
   "devDependencies": {

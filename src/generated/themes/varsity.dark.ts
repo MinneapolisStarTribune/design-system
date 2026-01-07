@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-dark tokens
- * Date: 2025-12-23T22:18:43.015Z
+ * Date: 2026-01-07T04:46:52.312Z
  */
 
 export const colors = {
@@ -330,7 +330,7 @@ export const colors = {
     '#ffffff'
   ],
   'control-brand-accent-text': [
-    '#ffffff'
+    '#0D0D0D'
   ],
   'control-brand-background': [
     '#48A0FF'

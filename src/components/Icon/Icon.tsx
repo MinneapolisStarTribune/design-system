@@ -7,7 +7,7 @@ import {
   IconColor,
   ICON_COLORS,
 } from '../../types/globalTypes';
-import styles from './Icon.module.css';
+import styles from './Icon.module.scss';
 
 export type IconProps = BaseProps & AccessibilityProps & IconSpecificProps<IconName>;
 
