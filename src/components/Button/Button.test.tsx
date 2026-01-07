@@ -4,7 +4,9 @@ import { renderWithProvider } from '../../test-utils/render';
 
 describe('Button', () => {
   it('renders', () => {
-    const { getByTestId } = renderWithProvider(<Button label="Button Label" onClick={vi.fn()} data-testid="button" />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Button Label" onClick={vi.fn()} data-testid="button" />
+    );
 
     expect(getByTestId('button')).toBeInTheDocument();
   });
@@ -16,7 +18,9 @@ describe('Button', () => {
   });
 
   it('has correct size when passing in a size prop', () => {
-    const { getByTestId } = renderWithProvider(<Button label="Small" onClick={vi.fn()} size="small" data-testid="button" />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Small" onClick={vi.fn()} size="small" data-testid="button" />
+    );
 
     const component = getByTestId('button');
 
@@ -47,7 +51,9 @@ describe('Button', () => {
   });
 
   it('is disabled when isDisabled prop is true', () => {
-    const { getByTestId } = renderWithProvider(<Button label="Disabled" onClick={vi.fn()} isDisabled data-testid="button" />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Disabled" onClick={vi.fn()} isDisabled data-testid="button" />
+    );
 
     const component = getByTestId('button');
 
@@ -56,7 +62,9 @@ describe('Button', () => {
 
   it('calls onClick handler when clicked', () => {
     const handleClick = vi.fn();
-    const { getByTestId } = renderWithProvider(<Button label="Clickable" onClick={handleClick} data-testid="button" />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Clickable" onClick={handleClick} data-testid="button" />
+    );
 
     const component = getByTestId('button');
     component.click();

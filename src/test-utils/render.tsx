@@ -30,4 +30,3 @@ export function renderWithProvider(
 
   return render(ui, { wrapper: Wrapper, ...renderOptions });
 }
-

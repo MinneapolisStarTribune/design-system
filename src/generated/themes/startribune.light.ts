@@ -5,12 +5,7 @@
  */
 
 export const colors = {
-  'brand': [
-    '#00AC63',
-    '#65CC5C',
-    '#05442E',
-    '#C8FA31'
-  ],
+  brand: ['#00AC63', '#65CC5C', '#05442E', '#C8FA31'],
   'cobalt-blue': [
     '#F0F7FF',
     '#E6F2FF',
@@ -22,7 +17,7 @@ export const colors = {
     '#0064CF',
     '#0050A6',
     '#003D7D',
-    '#002955'
+    '#002955',
   ],
   'emerald-green': [
     '#EBF9F3',
@@ -35,7 +30,7 @@ export const colors = {
     '#009958',
     '#00854B',
     '#006B3D',
-    '#004A2B'
+    '#004A2B',
   ],
   'forest-green': [
     '#EEF6F4',
@@ -48,9 +43,9 @@ export const colors = {
     '#2E725B',
     '#165A42',
     '#05442E',
-    '#003320'
+    '#003320',
   ],
-  'lime': [
+  lime: [
     '#f7fee7',
     '#F1FECC',
     '#E5FD9D',
@@ -61,7 +56,7 @@ export const colors = {
     '#88AB21',
     '#668019',
     '#445511',
-    '#38470D'
+    '#38470D',
   ],
   'navy-blue': [
     '#EBF3F9',
@@ -74,9 +69,9 @@ export const colors = {
     '#1B5A8B',
     '#0D4673',
     '#003966',
-    '#002D52'
+    '#002D52',
   ],
-  'neutral': [
+  neutral: [
     '#F9FAFA',
     '#F5F6F7',
     '#E3E5E8',
@@ -87,9 +82,9 @@ export const colors = {
     '#585C5F',
     '#45474A',
     '#27292A',
-    '#0D0D0D'
+    '#0D0D0D',
   ],
-  'orange': [
+  orange: [
     '#fff7ed',
     '#FFE1CC',
     '#FEC49A',
@@ -100,9 +95,9 @@ export const colors = {
     '#B2480B',
     '#953404',
     '#7D2D12',
-    '#5C1C0A'
+    '#5C1C0A',
   ],
-  'purple': [
+  purple: [
     '#F1EDF7',
     '#E3DBF0',
     '#C8B9DF',
@@ -113,9 +108,9 @@ export const colors = {
     '#5B3C90',
     '#513286',
     '#38225E',
-    '#2A1947'
+    '#2A1947',
   ],
-  'red': [
+  red: [
     '#fef2f2',
     '#fee2e2',
     '#FECACA',
@@ -126,7 +121,7 @@ export const colors = {
     '#B11B1B',
     '#8F1919',
     '#700000',
-    '#5B0B0B'
+    '#5B0B0B',
   ],
   'sky-blue': [
     '#ECF8FE',
@@ -139,7 +134,7 @@ export const colors = {
     '#056394',
     '#04547C',
     '#034363',
-    '#02324A'
+    '#02324A',
   ],
   'spring-green': [
     '#ECFBEA',
@@ -152,9 +147,9 @@ export const colors = {
     '#3A9932',
     '#34802D',
     '#2B6626',
-    '#244721'
+    '#244721',
   ],
-  'yellow': [
+  yellow: [
     '#fefce8',
     '#FFF9D1',
     '#FFF2A3',
@@ -165,281 +160,99 @@ export const colors = {
     '#ca8a04',
     '#a16207',
     '#713f12',
-    '#5C3508'
-  ],
-  'background-brand': [
-    '#00854B'
-  ],
-  'background-brand-dark': [
-    '#05442E'
-  ],
-  'background-brand-subtle': [
-    '#EBF9F3'
-  ],
-  'background-dark-default': [
-    '#0D0D0D'
-  ],
-  'background-dark-gray-01': [
-    '#27292A'
-  ],
-  'background-dark-gray-02': [
-    '#45474A'
-  ],
-  'background-light-default': [
-    '#ffffff'
-  ],
-  'background-light-gray-01': [
-    '#F5F6F7'
-  ],
-  'background-light-gray-02': [
-    '#E3E5E8'
-  ],
-  'background-state-attention': [
-    '#D63129'
-  ],
-  'base-black': [
-    '#000000'
-  ],
-  'base-white': [
-    '#ffffff'
-  ],
-  'border-brand-01': [
-    '#00854B'
-  ],
-  'border-brand-02': [
-    '#65CC5C'
-  ],
-  'border-on-dark-strong-01': [
-    '#A7ADB4'
-  ],
-  'border-on-dark-strong-02': [
-    '#ffffff'
-  ],
-  'border-on-dark-subtle-01': [
-    '#45474A'
-  ],
-  'border-on-dark-subtle-02': [
-    '#585C5F'
-  ],
-  'border-on-light-strong-01': [
-    '#45474A'
-  ],
-  'border-on-light-strong-02': [
-    '#0D0D0D'
-  ],
-  'border-on-light-subtle-01': [
-    '#E3E5E8'
-  ],
-  'border-on-light-subtle-02': [
-    '#A7ADB4'
-  ],
-  'border-state-attention-on-dark': [
-    '#F87171'
-  ],
-  'border-state-attention-on-light': [
-    '#D63129'
-  ],
-  'border-state-disabled-on-dark': [
-    '#45474A'
-  ],
-  'border-state-disabled-on-light': [
-    '#C8CCD0'
-  ],
-  'border-state-focus': [
-    '#0D0D0D'
-  ],
-  'button-filled-background': [
-    '#0D0D0D'
-  ],
-  'button-filled-hover-background': [
-    '#45474A'
-  ],
-  'button-filled-hover-text': [
-    '#ffffff'
-  ],
-  'button-filled-text': [
-    '#ffffff'
-  ],
-  'button-ghost-background': [
-    '#ffffff'
-  ],
-  'button-ghost-hover-background': [
-    '#F5F6F7'
-  ],
-  'button-ghost-hover-text': [
-    '#0D0D0D'
-  ],
-  'button-ghost-text': [
-    '#0D0D0D'
-  ],
-  'button-outlined-background': [
-    '#ffffff'
-  ],
-  'button-outlined-border': [
-    '#0D0D0D'
-  ],
-  'button-outlined-hover-background': [
-    '#F5F6F7'
-  ],
-  'button-outlined-hover-border': [
-    '#0D0D0D'
-  ],
-  'button-outlined-hover-text': [
-    '#0D0D0D'
-  ],
-  'button-outlined-text': [
-    '#0D0D0D'
-  ],
-  'button-utility-border': [
-    '#E3E5E8'
-  ],
-  'button-utility-hover-border': [
-    '#0D0D0D'
-  ],
-  'button-utility-hover-text': [
-    '#0D0D0D'
-  ],
-  'button-utility-text': [
-    '#45474A'
-  ],
-  'control-brand-accent-background': [
-    '#C8FA31'
-  ],
-  'control-brand-accent-hover-background': [
-    '#C8FA31'
-  ],
-  'control-brand-accent-hover-text': [
-    '#05442E'
-  ],
-  'control-brand-accent-text': [
-    '#05442E'
-  ],
-  'control-brand-background': [
-    '#00854B'
-  ],
-  'control-brand-hover-background': [
-    '#05442E'
-  ],
-  'control-brand-hover-text': [
-    '#ffffff'
-  ],
-  'control-brand-text': [
-    '#ffffff'
-  ],
-  'icon-brand-01': [
-    '#00854B'
-  ],
-  'icon-brand-02': [
-    '#05442E'
-  ],
-  'icon-brand-03': [
-    '#C8FA31'
-  ],
-  'icon-on-dark-primary': [
-    '#ffffff'
-  ],
-  'icon-on-dark-secondary': [
-    '#F9FAFA'
-  ],
-  'icon-on-dark-tertiary': [
-    '#E3E5E8'
-  ],
-  'icon-on-light-primary': [
-    '#0D0D0D'
-  ],
-  'icon-on-light-secondary': [
-    '#45474A'
-  ],
-  'icon-on-light-tertiary': [
-    '#737A82'
-  ],
-  'icon-state-attention-on-dark': [
-    '#F87171'
-  ],
-  'icon-state-attention-on-light': [
-    '#D63129'
-  ],
-  'icon-state-disabled-on-dark': [
-    '#737A82'
-  ],
-  'icon-state-disabled-on-light': [
-    '#A7ADB4'
-  ],
-  'overlay-black': [
-    'rgb(0 0 0 / 60%)'
-  ],
-  'overlay-black-subtle': [
-    'rgb(0 0 0 / 30%)'
-  ],
-  'overlay-white': [
-    'rgb(255 255 255 / 60%)'
-  ],
-  'overlay-white-subtle': [
-    'rgb(255 255 255 / 35%)'
-  ],
-  'semantic-error-background': [
-    '#fef2f2'
-  ],
-  'semantic-error-foreground': [
-    '#B11B1B'
-  ],
-  'semantic-info-background': [
-    '#ECF8FE'
-  ],
-  'semantic-info-foreground': [
-    '#056394'
-  ],
-  'semantic-success-background': [
-    '#ECFBEA'
-  ],
-  'semantic-success-foreground': [
-    '#2B6626'
-  ],
-  'semantic-warning-background': [
-    '#fff7ed'
-  ],
-  'semantic-warning-foreground': [
-    '#B2480B'
-  ],
-  'text-brand-01': [
-    '#00854B'
-  ],
-  'text-brand-02': [
-    '#05442E'
-  ],
-  'text-brand-03': [
-    '#C8FA31'
-  ],
-  'text-on-dark-primary': [
-    '#ffffff'
-  ],
-  'text-on-dark-secondary': [
-    '#F9FAFA'
-  ],
-  'text-on-dark-tertiary': [
-    '#E3E5E8'
-  ],
-  'text-on-light-primary': [
-    '#0D0D0D'
-  ],
-  'text-on-light-secondary': [
-    '#45474A'
-  ],
-  'text-on-light-tertiary': [
-    '#737A82'
-  ],
-  'text-state-attention-on-dark': [
-    '#F87171'
-  ],
-  'text-state-attention-on-light': [
-    '#D63129'
-  ],
-  'text-state-disabled-on-dark': [
-    '#737A82'
-  ],
-  'text-state-disabled-on-light': [
-    '#A7ADB4'
-  ],
+    '#5C3508',
+  ],
+  'background-brand': ['#00854B'],
+  'background-brand-dark': ['#05442E'],
+  'background-brand-subtle': ['#EBF9F3'],
+  'background-dark-default': ['#0D0D0D'],
+  'background-dark-gray-01': ['#27292A'],
+  'background-dark-gray-02': ['#45474A'],
+  'background-light-default': ['#ffffff'],
+  'background-light-gray-01': ['#F5F6F7'],
+  'background-light-gray-02': ['#E3E5E8'],
+  'background-state-attention': ['#D63129'],
+  'base-black': ['#000000'],
+  'base-white': ['#ffffff'],
+  'border-brand-01': ['#00854B'],
+  'border-brand-02': ['#65CC5C'],
+  'border-on-dark-strong-01': ['#A7ADB4'],
+  'border-on-dark-strong-02': ['#ffffff'],
+  'border-on-dark-subtle-01': ['#45474A'],
+  'border-on-dark-subtle-02': ['#585C5F'],
+  'border-on-light-strong-01': ['#45474A'],
+  'border-on-light-strong-02': ['#0D0D0D'],
+  'border-on-light-subtle-01': ['#E3E5E8'],
+  'border-on-light-subtle-02': ['#A7ADB4'],
+  'border-state-attention-on-dark': ['#F87171'],
+  'border-state-attention-on-light': ['#D63129'],
+  'border-state-disabled-on-dark': ['#45474A'],
+  'border-state-disabled-on-light': ['#C8CCD0'],
+  'border-state-focus': ['#0D0D0D'],
+  'button-filled-background': ['#0D0D0D'],
+  'button-filled-hover-background': ['#45474A'],
+  'button-filled-hover-text': ['#ffffff'],
+  'button-filled-text': ['#ffffff'],
+  'button-ghost-background': ['#ffffff'],
+  'button-ghost-hover-background': ['#F5F6F7'],
+  'button-ghost-hover-text': ['#0D0D0D'],
+  'button-ghost-text': ['#0D0D0D'],
+  'button-outlined-background': ['#ffffff'],
+  'button-outlined-border': ['#0D0D0D'],
+  'button-outlined-hover-background': ['#F5F6F7'],
+  'button-outlined-hover-border': ['#0D0D0D'],
+  'button-outlined-hover-text': ['#0D0D0D'],
+  'button-outlined-text': ['#0D0D0D'],
+  'button-utility-border': ['#E3E5E8'],
+  'button-utility-hover-border': ['#0D0D0D'],
+  'button-utility-hover-text': ['#0D0D0D'],
+  'button-utility-text': ['#45474A'],
+  'control-brand-accent-background': ['#C8FA31'],
+  'control-brand-accent-hover-background': ['#C8FA31'],
+  'control-brand-accent-hover-text': ['#05442E'],
+  'control-brand-accent-text': ['#05442E'],
+  'control-brand-background': ['#00854B'],
+  'control-brand-hover-background': ['#05442E'],
+  'control-brand-hover-text': ['#ffffff'],
+  'control-brand-text': ['#ffffff'],
+  'icon-brand-01': ['#00854B'],
+  'icon-brand-02': ['#05442E'],
+  'icon-brand-03': ['#C8FA31'],
+  'icon-on-dark-primary': ['#ffffff'],
+  'icon-on-dark-secondary': ['#F9FAFA'],
+  'icon-on-dark-tertiary': ['#E3E5E8'],
+  'icon-on-light-primary': ['#0D0D0D'],
+  'icon-on-light-secondary': ['#45474A'],
+  'icon-on-light-tertiary': ['#737A82'],
+  'icon-state-attention-on-dark': ['#F87171'],
+  'icon-state-attention-on-light': ['#D63129'],
+  'icon-state-disabled-on-dark': ['#737A82'],
+  'icon-state-disabled-on-light': ['#A7ADB4'],
+  'overlay-black': ['rgb(0 0 0 / 60%)'],
+  'overlay-black-subtle': ['rgb(0 0 0 / 30%)'],
+  'overlay-white': ['rgb(255 255 255 / 60%)'],
+  'overlay-white-subtle': ['rgb(255 255 255 / 35%)'],
+  'semantic-error-background': ['#fef2f2'],
+  'semantic-error-foreground': ['#B11B1B'],
+  'semantic-info-background': ['#ECF8FE'],
+  'semantic-info-foreground': ['#056394'],
+  'semantic-success-background': ['#ECFBEA'],
+  'semantic-success-foreground': ['#2B6626'],
+  'semantic-warning-background': ['#fff7ed'],
+  'semantic-warning-foreground': ['#B2480B'],
+  'text-brand-01': ['#00854B'],
+  'text-brand-02': ['#05442E'],
+  'text-brand-03': ['#C8FA31'],
+  'text-on-dark-primary': ['#ffffff'],
+  'text-on-dark-secondary': ['#F9FAFA'],
+  'text-on-dark-tertiary': ['#E3E5E8'],
+  'text-on-light-primary': ['#0D0D0D'],
+  'text-on-light-secondary': ['#45474A'],
+  'text-on-light-tertiary': ['#737A82'],
+  'text-state-attention-on-dark': ['#F87171'],
+  'text-state-attention-on-light': ['#D63129'],
+  'text-state-disabled-on-dark': ['#737A82'],
+  'text-state-disabled-on-light': ['#A7ADB4'],
 } as const;
 
 export type Colors = typeof colors;

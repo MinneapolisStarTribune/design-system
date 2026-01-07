@@ -60,4 +60,3 @@ export async function renderAndCheckA11y(ui: React.ReactElement): Promise<{
 
   return { renderResult, checkA11y };
 }
-

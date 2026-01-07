@@ -1,10 +1,10 @@
 // @ts-nocheck
 /**
  * ⚠️ IMPORTANT: This file is ONLY for displaying colors in Storybook documentation.
- * 
+ *
  * This file is NOT used in production code. It processes color tokens from JSON files
  * to create data structures used by Storybook stories for displaying color palettes.
- * 
+ *
  * For production code, colors should be accessed through the Mantine theme system
  * via useMantineTheme() or the DesignSystemProvider, which properly handles
  * brand-specific and theme-aware color resolution.
@@ -19,7 +19,16 @@ import startribuneDarkJson from '../../../../tokens/color/brand-startribune-dark
 import varsityLightJson from '../../../../tokens/color/brand-varsity-light.json';
 import varsityDarkJson from '../../../../tokens/color/brand-varsity-dark.json';
 
-export type ColorCategory = 'background' | 'text' | 'brand' | 'border' | 'control' | 'icon' | 'overlay' | 'semantic' | 'button';
+export type ColorCategory =
+  | 'background'
+  | 'text'
+  | 'brand'
+  | 'border'
+  | 'control'
+  | 'icon'
+  | 'overlay'
+  | 'semantic'
+  | 'button';
 
 interface ColorDisplay {
   name: string;
@@ -51,7 +60,7 @@ function getCategoryMetadata(
   category: string
 ): { description?: string; overview?: string[] } {
   let brandJson: any;
-  
+
   if (brand === 'startribune') {
     brandJson = colorScheme === 'light' ? startribuneLightJson : startribuneDarkJson;
   } else if (brand === 'varsity') {
@@ -80,7 +89,7 @@ function getColorDescriptions(
   category: string
 ): Record<string, string> {
   let brandJson: any;
-  
+
   if (brand === 'startribune') {
     brandJson = colorScheme === 'light' ? startribuneLightJson : startribuneDarkJson;
   } else if (brand === 'varsity') {
@@ -95,13 +104,18 @@ function getColorDescriptions(
   }
 
   const descriptions: Record<string, string> = {};
-  
+
   Object.entries(categoryData).forEach(([key, token]: [string, any]) => {
     // Skip metadata fields
-    if (key === '$description' || key === 'description' || key === 'overview' || key === 'dark-mode') {
+    if (
+      key === '$description' ||
+      key === 'description' ||
+      key === 'overview' ||
+      key === 'dark-mode'
+    ) {
       return;
     }
-    
+
     if (token && typeof token === 'object' && token.description) {
       descriptions[key] = token.description;
     }
@@ -117,7 +131,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
 }) => {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
-  
+
   // Read brand from Storybook's globals synchronously on mount, then poll for changes
   const getBrandFromGlobals = (): Brand => {
     try {
@@ -138,9 +152,9 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     }
     return 'startribune'; // Default fallback
   };
-  
+
   const [brand, setBrand] = useState<Brand>(getBrandFromGlobals);
-  
+
   // Poll for brand changes (Storybook updates globals when toolbar changes)
   useEffect(() => {
     const interval = setInterval(() => {
@@ -187,7 +201,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
         if (key.startsWith(prefix) && Array.isArray(colorArray) && colorArray.length > 0) {
           const colorKey = key.replace(prefix, '');
           const colorValue = colorArray[0];
-          
+
           colorList.push({
             name: formatColorName(colorKey),
             tokenName: key,
@@ -231,9 +245,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
       <div style={{ marginBottom: '2rem' }}>
         <h1>{displayName} Colors</h1>
         {categoryMetadata.description && (
-          <p style={{ marginTop: '0.5rem' }}>
-            {categoryMetadata.description}
-          </p>
+          <p style={{ marginTop: '0.5rem' }}>{categoryMetadata.description}</p>
         )}
         {categoryMetadata.overview && categoryMetadata.overview.length > 0 && (
           <>
@@ -247,11 +259,13 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
         )}
       </div>
       <p style={{ marginBottom: '1rem' }}>
-        Showing {category} colors for <strong>{brand}</strong> in <strong>{colorScheme}</strong> theme.
-        Use the toolbar controls above to switch themes and brands.
+        Showing {category} colors for <strong>{brand}</strong> in <strong>{colorScheme}</strong>{' '}
+        theme. Use the toolbar controls above to switch themes and brands.
       </p>
       {colorsWithDescriptions.length === 0 ? (
-        <p>No {category} colors found for {colorScheme} theme.</p>
+        <p>
+          No {category} colors found for {colorScheme} theme.
+        </p>
       ) : (
         (() => {
           // Render color card component
@@ -282,12 +296,16 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
                       {color.description}
                     </div>
                   )}
-                  <div style={{ fontSize: '0.875rem', fontFamily: 'monospace', wordBreak: 'break-all' }}>
+                  <div
+                    style={{
+                      fontSize: '0.875rem',
+                      fontFamily: 'monospace',
+                      wordBreak: 'break-all',
+                    }}
+                  >
                     {color.value}
                   </div>
-                  <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                    {color.tokenName}
-                  </div>
+                  <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>{color.tokenName}</div>
                 </div>
               </div>
             );
@@ -325,13 +343,21 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
                   if (groups[groupName].length === 0) return null;
                   return (
                     <div key={groupName} style={{ marginBottom: '2rem' }}>
-                      <h3 style={{ 
-                        marginBottom: '1rem', 
-                        textTransform: 'capitalize',
-                      }}>
+                      <h3
+                        style={{
+                          marginBottom: '1rem',
+                          textTransform: 'capitalize',
+                        }}
+                      >
                         {groupName}
                       </h3>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                          gap: '1rem',
+                        }}
+                      >
                         {groups[groupName].map(renderColorCard)}
                       </div>
                     </div>
@@ -343,7 +369,13 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
 
           // No grouping - render all colors in one grid
           return (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                gap: '1rem',
+              }}
+            >
               {colorsWithDescriptions.map(renderColorCard)}
             </div>
           );
@@ -352,4 +384,3 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     </div>
   );
 };
-

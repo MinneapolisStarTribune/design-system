@@ -21,4 +21,3 @@ const groupButtonColors = (colorKey: string): string | null => {
 export const Default: Story = {
   render: () => <ThemeAwareColorCategory category="button" groupBy={groupButtonColors} />,
 };
-

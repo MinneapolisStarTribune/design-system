@@ -46,9 +46,7 @@ export const Icon = ({
   const sizeValue = sizeMap[size];
 
   // Combine CSS module class with any additional className
-  const combinedClassName = className 
-    ? `${styles.icon} ${className}`.trim()
-    : styles.icon;
+  const combinedClassName = className ? `${styles.icon} ${className}`.trim() : styles.icon;
 
   return (
     <IconComponent

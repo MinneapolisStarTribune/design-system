@@ -1,5 +1,9 @@
 import React from 'react';
-import { Button as MantineButton, ButtonProps as MantineButtonProps, useMantineTheme } from '@mantine/core';
+import {
+  Button as MantineButton,
+  ButtonProps as MantineButtonProps,
+  useMantineTheme,
+} from '@mantine/core';
 import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
@@ -13,7 +17,8 @@ export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
 
-export interface ButtonProps extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
+export interface ButtonProps
+  extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
   color?: ButtonColor;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -25,8 +30,8 @@ export interface ButtonProps extends Omit<MantineButtonProps, 'color' | 'variant
 }
 
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
-export const Button: React.FC<ButtonProps> = ({ 
-  color = 'neutral', 
+export const Button: React.FC<ButtonProps> = ({
+  color = 'neutral',
   variant = 'filled',
   size = 'medium',
   icon,
@@ -35,7 +40,7 @@ export const Button: React.FC<ButtonProps> = ({
   children: _children,
   className,
   isDisabled,
-  ...props 
+  ...props
 }) => {
   let mantineVariant;
   if (variant === 'ghost') {
@@ -50,17 +55,12 @@ export const Button: React.FC<ButtonProps> = ({
     color === 'neutral' && variant === 'filled' ? 'on-dark-primary' : 'on-light-primary';
 
   const iconElement = icon ? (
-    <Icon
-      name={icon}
-      color={iconColorValue}
-      size={size}
-      aria-hidden={true}
-    />
+    <Icon name={icon} color={iconColorValue} size={size} aria-hidden={true} />
   ) : null;
 
   // Extract aria-label from props if provided (using type assertion for HTML attributes)
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  
+
   // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
   const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
 
@@ -73,21 +73,18 @@ export const Button: React.FC<ButtonProps> = ({
   const theme = useMantineTheme();
   const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
   const brandAccentHoverBorder = theme.colors['control-brand-accent-hover-border']?.[0];
-  const hasGradientBorder = isBrandAccentFilled && 
-    brandAccentHoverBorder?.includes('gradient');
-  
+  const hasGradientBorder = isBrandAccentFilled && brandAccentHoverBorder?.includes('gradient');
+
   // Apply special hover styles for brand-accent filled button with gradient border
-  const brandAccentFilledClass = 
-    isBrandAccentFilled && hasGradientBorder
-      ? styles.brandAccentFilled 
-      : undefined;
-  
+  const brandAccentFilledClass =
+    isBrandAccentFilled && hasGradientBorder ? styles.brandAccentFilled : undefined;
+
   // Combine class names using classnames utility
   const combinedClassNames = classNames(className, brandAccentFilledClass);
-  
+
   return (
-    <MantineButton 
-      variant={mantineVariant} 
+    <MantineButton
+      variant={mantineVariant}
       color={color}
       size={size}
       leftSection={leftSection}

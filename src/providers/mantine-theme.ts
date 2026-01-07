@@ -39,7 +39,12 @@ const BUTTON_VARIANT_CONFIGS: ButtonVariantConfig[] = [
   { color: 'neutral', variant: 'outlined', tokenPrefix: 'button-outlined', includeBorder: true },
   { color: 'neutral', variant: 'ghost', tokenPrefix: 'button-ghost' },
   { color: 'brand', variant: 'filled', tokenPrefix: 'control-brand' },
-  { color: 'brand-accent', variant: 'filled', tokenPrefix: 'control-brand-accent', includeBorder: true },
+  {
+    color: 'brand-accent',
+    variant: 'filled',
+    tokenPrefix: 'control-brand-accent',
+    includeBorder: true,
+  },
 ];
 
 /**
@@ -52,9 +57,7 @@ function ensureMantineColorArray(
   colorScheme: ColorScheme
 ): string[] {
   if (colors.length === 0) {
-    console.warn(
-      `⚠️  Warning: "${key}" is an empty array in ${brand}-${colorScheme} tokens.`
-    );
+    console.warn(`⚠️  Warning: "${key}" is an empty array in ${brand}-${colorScheme} tokens.`);
     return [];
   }
 
@@ -181,7 +184,7 @@ function createButtonVariantResolver(
     // Add border for outlined variant (solid colors only - gradients handled via component styles)
     if (config.includeBorder) {
       const borderColor = getButtonColor(`${config.tokenPrefix}-border`);
-      
+
       if (borderColor && !borderColor.includes('gradient')) {
         // Use standard border for solid colors only
         // Gradients are handled via Button component styles below
@@ -196,10 +199,7 @@ function createButtonVariantResolver(
 /**
  * Create a Mantine theme for a specific brand and color scheme
  */
-export function createMantineTheme(
-  brand: Brand,
-  colorScheme: ColorScheme
-): MantineThemeOverride {
+export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): MantineThemeOverride {
   const brandColors = getBrandColors(brand, colorScheme);
   const colorsRecord = brandColors as Record<string, readonly string[]>;
 
@@ -248,4 +248,3 @@ export function createMantineTheme(
     },
   });
 }
-

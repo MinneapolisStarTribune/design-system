@@ -21,11 +21,10 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     () => createMantineTheme(brand, forceColorScheme),
     [brand, forceColorScheme]
   );
-  
+
   return (
     <MantineProviderBase theme={theme} forceColorScheme={forceColorScheme}>
       {children}
     </MantineProviderBase>
   );
 };
-
