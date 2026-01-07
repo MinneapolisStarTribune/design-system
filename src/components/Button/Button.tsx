@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button as MantineButton, ButtonProps as MantineButtonProps } from '@mantine/core';
+import { Button as MantineButton, ButtonProps as MantineButtonProps, useMantineTheme } from '@mantine/core';
+import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
+import styles from './Button.module.scss';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -62,13 +64,27 @@ export const Button: React.FC<ButtonProps> = ({
   // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
   const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
 
-  // Determine content - prefer children over label for flexibility
-  const buttonContent = children || label;
-
   // Use Mantine's leftSection/rightSection for icon positioning
   const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
   const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
 
+  // Check if brand-accent filled button should have gradient border
+  // Check the theme colors directly to see if the hover-border token is a gradient
+  const theme = useMantineTheme();
+  const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
+  const brandAccentHoverBorder = theme.colors['control-brand-accent-hover-border']?.[0];
+  const hasGradientBorder = isBrandAccentFilled && 
+    brandAccentHoverBorder?.includes('gradient');
+  
+  // Apply special hover styles for brand-accent filled button with gradient border
+  const brandAccentFilledClass = 
+    isBrandAccentFilled && hasGradientBorder
+      ? styles.brandAccentFilled 
+      : undefined;
+  
+  // Combine class names using classnames utility
+  const combinedClassNames = classNames(className, brandAccentFilledClass);
+  
   return (
     <MantineButton 
       variant={mantineVariant} 
@@ -78,9 +94,10 @@ export const Button: React.FC<ButtonProps> = ({
       rightSection={rightSection}
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
+      className={combinedClassNames || undefined}
       {...props}
     >
-      {buttonContent}
+      {label}
     </MantineButton>
   );
 };
