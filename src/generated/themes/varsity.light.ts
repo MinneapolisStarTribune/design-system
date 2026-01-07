@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2026-01-07T04:46:52.278Z
+ * Date: 2026-01-07T05:06:23.159Z
  */
 
 export const colors = {
@@ -327,7 +327,7 @@ export const colors = {
     'linear-gradient(to right, #DBFA7D, #76D86E)'
   ],
   'control-brand-accent-hover-text': [
-    '#ffffff'
+    '#0D0D0D'
   ],
   'control-brand-accent-text': [
     '#0D0D0D'
