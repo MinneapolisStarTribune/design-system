@@ -61,7 +61,6 @@ function getCategoryMetadata(
   }
 
   const categoryData = brandJson?.color?.[category];
-  console.log('categoryData', categoryData);
   if (!categoryData || typeof categoryData !== 'object') {
     return {};
   }

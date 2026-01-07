@@ -117,8 +117,8 @@ function mapBrandColors(
   themeColors: Record<string, string[]>,
   semanticColors: Record<string, string[]>,
   colorsRecord: Record<string, readonly string[]>,
-  brand: Brand,
-  colorScheme: ColorScheme
+  _brand: Brand,
+  _colorScheme: ColorScheme
 ) {
   // Process brand palette: take first 4 colors and pad to 10 with duplicates
   if (themeColors.brand && Array.isArray(themeColors.brand) && themeColors.brand.length > 0) {

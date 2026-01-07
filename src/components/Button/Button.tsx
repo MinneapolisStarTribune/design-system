@@ -32,7 +32,7 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   iconPosition = 'end',
   label,
-  children,
+  children: _children,
   className,
   isDisabled,
   ...props 
