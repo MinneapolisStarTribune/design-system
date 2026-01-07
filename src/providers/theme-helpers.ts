@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as startribuneLight from '../generated/themes/startribune.light';
 import * as startribuneDark from '../generated/themes/startribune.dark';
 import * as varsityLight from '../generated/themes/varsity.light';

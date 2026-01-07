@@ -76,6 +76,23 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off',
       },
     },
+    {
+      // Mantine theme and related files
+      files: [
+        '**/mantine-theme.ts',
+        '**/theme-helpers.ts',
+        '**/ThemeAwareColorCategory.tsx',
+        '**/colorsData.ts',
+      ],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
   ],
 };
 

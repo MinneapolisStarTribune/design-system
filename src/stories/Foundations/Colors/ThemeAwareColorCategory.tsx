@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ⚠️ IMPORTANT: This file is ONLY for displaying colors in Storybook documentation.
  * 

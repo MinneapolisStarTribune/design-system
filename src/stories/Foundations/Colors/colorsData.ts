@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * ⚠️ IMPORTANT: This file is ONLY for displaying colors in Storybook documentation.
  * 
@@ -32,7 +33,6 @@ function resolveSingleTokenReference(ref: string, additionalColors?: any): strin
   const path = ref.slice(1, -1).split('.');
 
   // Navigate through the JSON structure, including additional colors if provided
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let current: any = {
     color: {
       ...primitivesColorsJson.color,

@@ -18,6 +18,8 @@ export interface ButtonProps extends Omit<MantineButtonProps, 'color' | 'variant
   icon?: IconName;
   iconPosition?: 'start' | 'end';
   label?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  isDisabled?: boolean;
 }
 
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
@@ -30,6 +32,7 @@ export const Button: React.FC<ButtonProps> = ({
   label,
   children,
   className,
+  isDisabled,
   ...props 
 }) => {
   let mantineVariant;
@@ -74,6 +77,7 @@ export const Button: React.FC<ButtonProps> = ({
       leftSection={leftSection}
       rightSection={rightSection}
       aria-label={buttonAriaLabel}
+      disabled={isDisabled}
       {...props}
     >
       {buttonContent}
