@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Icon, type IconProps } from './Icon';
 import { iconOptions } from './iconOptions';
