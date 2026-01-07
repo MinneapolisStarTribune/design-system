@@ -1,0 +1,30 @@
+{
+    "color": {
+      "button": {
+        "filled-background": { "value": "{color.base.white}" },
+        "filled-text": { "value": "{color.neutral.950}" },
+        "filled-hover-background": { "value": "{color.neutral.200}" },
+        "filled-hover-text": { "value": "{color.neutral.950}" },
+        "neutral-filled-button-icon": { "value": "{color.neutral.950}" },
+        "outlined-background": { "value": "{color.base.black}" },
+        "outlined-border": { "value": "{color.base.white}" },
+        "outlined-text": { "value": "{color.base.white}" },
+        "neutral-outlined-button-icon": { "value": "{color.base.white}" },
+        "outlined-hover-background": { "value": "{color.neutral.800}" },
+        "outlined-hover-border": { "value": "{color.base.white}" },
+        "outlined-hover-text": { "value": "{color.base.white}" },
+        "neutral-outlined-hover-button-icon": { "value": "{color.base.white}" },
+        "ghost-background": { "value": "{color.base.black}" },
+        "ghost-text": { "value": "{color.base.white}" },
+        "ghost-hover-background": { "value": "{color.neutral.800}" },
+        "ghost-hover-text": { "value": "{color.base.white}" },
+        "neutral-ghost-hover-button-icon": { "value": "{color.base.white}" },
+        "utility-border": { "value": "{color.neutral.700}" },
+        "utility-text": { "value": "{color.neutral.200}" },
+        "utility-hover-border": { "value": "{color.base.white}" },
+        "utility-hover-text": { "value": "{color.base.white}" },
+        "neutral-utility-hover-button-icon": { "value": "{color.base.white}" }
+      }
+    }
+  }
+  

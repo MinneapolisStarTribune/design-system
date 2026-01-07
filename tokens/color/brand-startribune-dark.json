@@ -27,15 +27,15 @@
         "Use higher elevation tokens (-01, -02, or -dark) for raised, interactive, or nested surfaces, ensuring clear visual hierarchy without overpowering content."
       ],
       "light-default": {
-        "value": "{color.base.white}",
+        "value": "{color.neutral.950}",
         "description": "The foundational surface for light sections — used for page backgrounds and primary content areas."
       },
       "light-gray-01": {
-        "value": "{color.neutral.100}",
+        "value": "{color.neutral.900}",
         "description": "A raised surface on light backgrounds — ideal for cards, containers, and UI elements sitting above the base layer."
       },
       "light-gray-02": {
-        "value": "{color.neutral.200}",
+        "value": "{color.neutral.800}",
         "description": "A higher elevation surface for light environments — applied to interactive or nested elements like hovers or secondary layers."
       },
       "dark-default": {
@@ -51,7 +51,7 @@
         "description": "A higher elevation surface for dark environments — applied to interactive or nested elements like hovers or secondary layers."
       },
       "brand": {
-        "value": "{color.emerald-green.800}",
+        "value": "{color.emerald-green.600}",
         "description": "Core brand surface — used for high-visibility elements such as CTAs, banners, or branded sections."
       },
       "brand-dark": {
@@ -63,7 +63,7 @@
         "description": "Gentle brand tint used as a soft highlight or background accent — maintains brand presence without dominating content."
       },
       "state-attention": {
-        "value": "{color.red.600}",
+        "value": "{color.red.400}",
         "description": "High-impact background color used for attention states like live content, breaking news, or errors — conveys urgency and energy across contexts."
       }
     },
@@ -75,15 +75,15 @@
         "Brand text tokens apply brand colors expressively in marketing, CTA, or campaign contexts — 01, 02, and 03 represent primary, secondary, and tertiary brand colors, providing flexibility for visual balance."
       ],
       "on-light-primary": {
-        "value": "{color.neutral.950}",
+        "value": "{color.base.white}",
         "description": "Primary text color for use on light backgrounds — used for high-emphasis content such as body copy, headlines, and titles."
       },
       "on-light-secondary": {
-        "value": "{color.neutral.800}",
+        "value": "{color.neutral.200}",
         "description": "Secondary text color for use on light backgrounds — used for supporting content, subheadings, or secondary information."
       },
       "on-light-tertiary": {
-        "value": "{color.neutral.600}",
+        "value": "{color.neutral.400}",
         "description": "Tertiary text color for use on light backgrounds — used for low-emphasis content such as labels, metadata, or helper text."
       },
       "on-dark-primary": {
@@ -99,7 +99,7 @@
         "description": "Tertiary text color for use on dark backgrounds — used for low-emphasis content such as labels, metadata, or helper text."
       },
       "state-attention-on-light": {
-        "value": "{color.red.600}",
+        "value": "{color.red.400}",
         "description": "Attention text color used on light backgrounds to highlight breaking, live, or alert content"
       },
       "state-attention-on-dark": {
@@ -107,7 +107,7 @@
         "description": "Attention text color used on dark backgrounds to highlight breaking, live, or alert content"
       },
       "state-disabled-on-light": {
-        "value": "{color.neutral.400}",
+        "value": "{color.neutral.600}",
         "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs."
       },
       "state-disabled-on-dark": {
@@ -115,11 +115,11 @@
         "description": "Disabled text color for use on dark backgrounds — provides low-contrast indication of inactive or unavailable content."
       },
       "brand-01": {
-        "value": "{color.emerald-green.800}",
+        "value": "{color.emerald-green.600}",
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography."
       },
       "brand-02": {
-        "value": "{color.emerald-green.900}",
+        "value": "{color.forest-green.900}",
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast."
       },
       "brand-03": {
@@ -135,15 +135,15 @@
         "Brand icon tokens apply brand colors expressively or for active states — 01, 02, and 03 represent the primary, secondary, and tertiary brand hues, allowing designers to select the tone that best fits the visual context."
       ],
       "on-light-primary": {
-        "value": "{color.neutral.950}",
+        "value": "{color.base.white}",
         "description": "Primary icon color for use on light backgrounds — used for key actions, navigation icons, or high-emphasis visuals."
       },
       "on-light-secondary": {
-        "value": "{color.neutral.800}",
+        "value": "{color.neutral.200}",
         "description": "Secondary icon color for use on light backgrounds — used for supportive icons or secondary actions that complement primary content."
       },
       "on-light-tertiary": {
-        "value": "{color.neutral.600}",
+        "value": "{color.neutral.400}",
         "description": "Tertiary icon color for use on light backgrounds — used for low-emphasis icons, decorative elements, or background indicators."
       },
       "on-dark-primary": {
@@ -159,7 +159,7 @@
         "description": "Tertiary icon color for use on dark backgrounds — used for low-emphasis icons or background details within dark environments."
       },
       "state-attention-on-light": {
-        "value": "{color.red.600}",
+        "value": "{color.red.400}",
         "description": "Attention icon color for use on light backgrounds — draws focus to breaking, live, or high-urgency actions."
       },
       "state-attention-on-dark": {
@@ -167,7 +167,7 @@
         "description": "Attention icon color for use on dark backgrounds — draws focus to breaking, live, or high-urgency actions."
       },
       "state-disabled-on-light": {
-        "value": "{color.neutral.400}",
+        "value": "{color.neutral.600}",
         "description": "Disabled icon color for use on light backgrounds — indicates inactive states through low contrast and reduced emphasis."
       },
       "state-disabled-on-dark": {
@@ -175,7 +175,7 @@
         "description": "Disabled icon color for use on dark backgrounds — indicates inactive states through low contrast and reduced emphasis."
       },
       "brand-01": {
-        "value": "{color.emerald-green.800}",
+        "value": "{color.emerald-green.600}",
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       },
       "brand-02": {
@@ -196,19 +196,19 @@
         "Brand borders reflect the brand's visual identity — 01 represents the primary brand color, and 02 represents the secondary brand color — adding personality without overwhelming content."
       ],
       "on-light-subtle-01": {
-        "value": "{color.neutral.200}",
+        "value": "{color.neutral.900}",
         "description": "Used on light backgrounds to separate related content or elements within the same group — provides gentle visual distinction."
       },
       "on-light-subtle-02": {
-        "value": "{color.neutral.400}",
+        "value": "{color.neutral.700}",
         "description": "Used on light backgrounds for slightly stronger separation between related elements — maintains subtle contrast without drawing attention."
       },
       "on-light-strong-01": {
-        "value": "{color.neutral.800}",
+        "value": "{color.neutral.400}",
         "description": "Used on light backgrounds to define boundaries between distinct components or layout sections — provides clear structural separation."
       },
       "on-light-strong-02": {
-        "value": "{color.neutral.950}",
+        "value": "{color.base.white}",
         "description": "Used on light backgrounds for strong emphasis or container outlines — ideal for high-contrast boundaries or interactive components."
       },
       "on-dark-subtle-01": {
@@ -228,11 +228,11 @@
         "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
       },
       "state-focus": {
-        "value": "{color.cobalt-blue.600}",
+        "value": "{color.base.white}",
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
       },
       "state-disabled-on-light": {
-        "value": "{color.neutral.300}",
+        "value": "{color.neutral.800}",
         "description": "Used on light backgrounds for disabled components — provides a muted outline that communicates inactive state."
       },
       "state-disabled-on-dark": {
@@ -240,7 +240,7 @@
         "description": "Used on dark backgrounds for disabled components — provides a low-contrast outline to indicate inactive state."
       },
       "state-attention-on-light": {
-        "value": "{color.red.600}",
+        "value": "{color.red.400}",
         "description": "Attention border used on light backgrounds to indicate urgency or alert states such as errors, live content, or breaking news."
       },
       "state-attention-on-dark": {
@@ -248,46 +248,46 @@
         "description": "Attention border used on dark backgrounds to indicate urgency or alert states such as errors, live content, or breaking news."
       },
       "brand-01": {
-        "value": "{color.emerald-green.800}",
+        "value": "{color.emerald-green.600}",
         "description": "Primary brand border used to introduce subtle brand presence — applies the main brand color in decorative or accent details."
       },
       "brand-02": {
-        "value": "{color.emerald-green.500}",
+        "value": "{color.spring-green.400}",
         "description": "Secondary brand border used to introduce subtle brand presence — applies the secondary brand color in decorative or accent details."
       }
     },
     "semantic": {
       "description": "Semantic tokens communicate meaning and feedback across the interface. They represent universal states — such as information, success, warning, and error — and are used across multiple components including alerts, banners, toasts, and badges. Each semantic pair (background and foreground) is designed for clear contrast and accessibility, ensuring legibility across different tonal environments.",
       "info-background": {
-        "value": "{color.sky-blue.50}",
+        "value": "{color.sky-blue.800}",
         "description": "Background color for informational messages and neutral alerts — used to indicate general updates or contextual information."
       },
       "info-foreground": {
-        "value": "{color.sky-blue.700}",
+        "value": "{color.sky-blue.300}",
         "description": "Foreground color for informational messages — used for text or icons that appear on info backgrounds to maintain clarity and contrast."
       },
       "success-background": {
-        "value": "{color.spring-green.50}",
+        "value": "{color.spring-green.900}",
         "description": "Background color for positive or successful outcomes — used to indicate completion, confirmation, or resolved states."
       },
       "success-foreground": {
-        "value": "{color.spring-green.900}",
+        "value": "{color.spring-green.200}",
         "description": "Foreground color for success messages — used for text or icons displayed on success backgrounds to ensure strong contrast and visibility."
       },
       "error-background": {
-        "value": "{color.red.50}",
+        "value": "{color.red.900}",
         "description": "Background color for critical or error messages — used to indicate failure, blocking issues, or urgent errors requiring attention."
       },
       "error-foreground": {
-        "value": "{color.red.700}",
+        "value": "{color.red.200}",
         "description": "Foreground color for error messages — used for text or icons on error backgrounds to maintain legibility and emphasis."
       },
       "warning-background": {
-        "value": "{color.orange.50}",
+        "value": "{color.orange.900}",
         "description": "Background color for cautionary or warning messages — used to signal potential issues, risks, or required user awareness."
       },
       "warning-foreground": {
-        "value": "{color.orange.700}",
+        "value": "{color.orange.200}",
         "description": "Foreground color for warning messages — used for text or icons on warning backgrounds to ensure readable contrast."
       }
     },
@@ -322,12 +322,14 @@
         "Brand-accent controls provide a secondary branded option with higher contrast or alternative styling, including border styles where applicable.",
         "Shared control styles (filled, outlined, ghost, utility) are defined in base colors and work across all brands and component types."
       ],
-      "brand-background": { "value": "{color.emerald-green.800}" },
-      "brand-text": { "value": "{color.base.white}" },
-      "brand-hover-background": { "value": "{color.forest-green.900}" },
-      "brand-hover-text": { "value": "{color.base.white}" },
+      "brand-background": { "value": "{color.spring-green.400}" },
+      "brand-text": { "value": "{color.neutral.950}" },
+      "brand-button-icon": { "value": "{color.neutral.950}" },
+      "brand-hover-background": { "value": "{color.spring-green.300}" },
+      "brand-hover-text": { "value": "{color.neutral.950}" },
       "brand-accent-background": { "value": "{color.lime.400}" },
       "brand-accent-text": { "value": "{color.forest-green.900}" },
+      "brand-accent-button-icon": { "value": "{color.forest-green.900}" },
       "brand-accent-hover-background": { "value": "{color.lime.200}" },
       "brand-accent-hover-text": { "value": "{color.forest-green.900}" }
     }

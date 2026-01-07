@@ -1,7 +1,9 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import type { RenderResult } from '@testing-library/react';
 import type { RunOptions } from 'axe-core';
+import { DesignSystemProvider } from '../providers/MantineProvider';
 
 /**
  * Test a component for accessibility violations
@@ -9,7 +11,11 @@ import type { RunOptions } from 'axe-core';
  * @returns Promise that resolves when test completes
  */
 export async function expectNoA11yViolations(ui: React.ReactElement) {
-  const { container } = render(ui);
+  const { container } = render(
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      {ui}
+    </DesignSystemProvider>
+  );
   const results = await axe(container);
   expect(results).toHaveNoViolations();
 }
@@ -24,7 +30,11 @@ export async function expectNoA11yViolationsWithOptions(
   ui: React.ReactElement,
   options: RunOptions
 ) {
-  const { container } = render(ui);
+  const { container } = render(
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      {ui}
+    </DesignSystemProvider>
+  );
   const results = await axe(container, options);
   expect(results).toHaveNoViolations();
 }
@@ -37,7 +47,11 @@ export async function renderAndCheckA11y(ui: React.ReactElement): Promise<{
   renderResult: RenderResult;
   checkA11y: () => Promise<void>;
 }> {
-  const renderResult = render(ui);
+  const renderResult = render(
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      {ui}
+    </DesignSystemProvider>
+  );
 
   const checkA11y = async () => {
     const results = await axe(renderResult.container);

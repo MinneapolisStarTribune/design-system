@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Icon } from './Icon';
+import { Icon, type IconProps } from './Icon';
 import { iconOptions } from './iconOptions';
 import { IconName } from './iconNames';
 import { ICON_COLORS } from '../../types/globalTypes';
@@ -41,7 +41,7 @@ export const AllSizes: Story = {
   args: {
     name: 'camera-filled',
   },
-  render: (args) => (
+  render: (args: IconProps) => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         <Icon name={args.name} size="small" />
@@ -64,7 +64,7 @@ export const ColorVariants: Story = {
     name: 'camera-filled',
     size: 'large',
   },
-  render: (args) => (
+  render: (args: IconProps) => (
     <div
       style={{
         display: 'grid',

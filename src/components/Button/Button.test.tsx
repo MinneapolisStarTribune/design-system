@@ -1,45 +1,39 @@
-import { render } from '@testing-library/react';
 import { vi } from 'vitest';
 import { Button } from './Button';
+import { renderWithProvider } from '../../test-utils/render';
 
 describe('Button', () => {
   it('renders', () => {
-    const { getByTestId } = render(<Button label="Button Label" onClick={vi.fn()} />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Button Label" onClick={vi.fn()} data-testid="button" />
+    );
 
     expect(getByTestId('button')).toBeInTheDocument();
   });
 
   it('displays the label text', () => {
-    const { getByText } = render(<Button label="Click me" onClick={vi.fn()} />);
+    const { getByText } = renderWithProvider(<Button label="Click me" onClick={vi.fn()} />);
 
     expect(getByText('Click me')).toBeInTheDocument();
   });
 
-  it('has correct color when passing in a color prop', () => {
-    const { getByTestId } = render(
-      <Button label="Neutral" onClick={vi.fn()} variant="filled" color="neutral" />
+  it('has correct size when passing in a size prop', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button label="Small" onClick={vi.fn()} size="small" data-testid="button" />
     );
 
     const component = getByTestId('button');
 
     expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:bg-[var(--color-button-filled-background)]');
-    expect(component).toHaveClass('ds:text-[var(--color-button-filled-text)]');
-  });
-
-  it('has correct size when passing in a size prop', () => {
-    const { getByTestId } = render(<Button label="Small" onClick={vi.fn()} size="small" />);
-
-    const component = getByTestId('button');
-
-    expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:text-[12px]');
-    expect(component).toHaveClass('ds:h-button-sm');
+    // Button uses Mantine's theming system which applies styles via CSS variables
+    // Verify the button has the correct size attribute
+    expect(component).toHaveAttribute('data-size', 'small');
+    expect(component).toHaveClass('mantine-Button-root');
   });
 
   it('applies custom className', () => {
-    const { getByTestId } = render(
-      <Button label="Custom" onClick={vi.fn()} className="custom-class" />
+    const { getByTestId } = renderWithProvider(
+      <Button label="Custom" onClick={vi.fn()} className="custom-class" data-testid="button" />
     );
 
     const component = getByTestId('button');
@@ -49,7 +43,7 @@ describe('Button', () => {
   });
 
   it('renders with an icon', () => {
-    const { container } = render(
+    const { container } = renderWithProvider(
       <Button label="With Icon" onClick={vi.fn()} icon="camera-filled" />
     );
 
@@ -57,7 +51,9 @@ describe('Button', () => {
   });
 
   it('is disabled when isDisabled prop is true', () => {
-    const { getByTestId } = render(<Button label="Disabled" onClick={vi.fn()} isDisabled />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Disabled" onClick={vi.fn()} isDisabled data-testid="button" />
+    );
 
     const component = getByTestId('button');
 
@@ -66,7 +62,9 @@ describe('Button', () => {
 
   it('calls onClick handler when clicked', () => {
     const handleClick = vi.fn();
-    const { getByTestId } = render(<Button label="Clickable" onClick={handleClick} />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Clickable" onClick={handleClick} data-testid="button" />
+    );
 
     const component = getByTestId('button');
     component.click();

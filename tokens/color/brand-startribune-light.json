@@ -3,36 +3,20 @@
     "brand": {
       "description": "Brand colors establish the core visual identity to express the brand across digital and print materials. Brand colors are intended for expressive, marketing, and creative applications, but are not tied to specific UI functions or component usage.",
       "01": {
-        "value": "{color.lime.400}",
-        "description": "Core brand color used across brand and marketing materials. Represents the main identity color."
+        "value": "{color.emerald-green.600}",
+        "description": "Primary brand color representing the core Strib identity."
       },
       "02": {
-        "value": "{color.cobalt-blue.700}",
-        "description": "Secondary brand color used across brand and marketing materials. Primarily used when our brand is displayed on light backgrounds and printed material."
+        "value": "{color.spring-green.500}",
+        "description": "Supporting brand color used for balance and variation in brand materials."
       },
       "03": {
-        "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})",
-        "description": "Primary brand accent in marketing and high-visibility CTA elements like the \"Subscribe\" button."
-      },
-      "03-from": {
-        "value": "{color.lime.300}",
-        "description": "Start color for brand-03 gradient. Use with Tailwind's from- utility."
-      },
-      "03-to": {
-        "value": "{color.spring-green.400}",
-        "description": "End color for brand-03 gradient. Use with Tailwind's to- utility."
+        "value": "{color.forest-green.900}",
+        "description": "Deep secondary brand color used for depth and contrast in marketing visuals."
       },
       "04": {
-        "value": "linear-gradient(to right, {color.cobalt-blue.600}, {color.cobalt-blue.800})",
-        "description": "Blue gradient used as a grounding background color."
-      },
-      "04-from": {
-        "value": "{color.cobalt-blue.600}",
-        "description": "Start color for brand-04 gradient. Use with Tailwind's from- utility."
-      },
-      "04-to": {
-        "value": "{color.cobalt-blue.800}",
-        "description": "End color for brand-04 gradient. Use with Tailwind's to- utility."
+        "value": "{color.lime.400}",
+        "description": "Accent brand color adding vibrancy and energy to brand compositions."
       }
     },
     "background": {
@@ -67,15 +51,15 @@
         "description": "A higher elevation surface for dark environments — applied to interactive or nested elements like hovers or secondary layers."
       },
       "brand": {
-        "value": "{color.cobalt-blue.700}",
+        "value": "{color.emerald-green.800}",
         "description": "Core brand surface — used for high-visibility elements such as CTAs, banners, or branded sections."
       },
       "brand-dark": {
-        "value": "{color.cobalt-blue.900}",
+        "value": "{color.forest-green.900}",
         "description": "Darker brand tone for hover or elevated surfaces — reinforces brand color with stronger contrast."
       },
       "brand-subtle": {
-        "value": "{color.cobalt-blue.50}",
+        "value": "{color.emerald-green.50}",
         "description": "Gentle brand tint used as a soft highlight or background accent — maintains brand presence without dominating content."
       },
       "state-attention": {
@@ -131,15 +115,15 @@
         "description": "Disabled text color for use on dark backgrounds — provides low-contrast indication of inactive or unavailable content."
       },
       "brand-01": {
-        "value": "{color.lime.400}",
+        "value": "{color.emerald-green.800}",
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography."
       },
       "brand-02": {
-        "value": "{color.cobalt-blue.700}",
+        "value": "{color.forest-green.900}",
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast."
       },
       "brand-03": {
-        "value": "{color.cobalt-blue.900}",
+        "value": "{color.lime.400}",
         "description": "Tertiary brand text color used in marketing and promotional content — applies the tertiary brand color to support balance and brand richness."
       }
     },
@@ -191,15 +175,15 @@
         "description": "Disabled icon color for use on dark backgrounds — indicates inactive states through low contrast and reduced emphasis."
       },
       "brand-01": {
-        "value": "{color.lime.400}",
+        "value": "{color.emerald-green.800}",
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       },
       "brand-02": {
-        "value": "{color.cobalt-blue.700}",
+        "value": "{color.forest-green.900}",
         "description": "Brand icon color using the secondary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       },
       "brand-03": {
-        "value": "{color.cobalt-blue.900}",
+        "value": "{color.lime.400}",
         "description": "Brand icon color using the tertiary brand hue — applied for expressive or active states to reinforce brand identity within the interface."
       }
     },
@@ -244,7 +228,7 @@
         "description": "Used on dark backgrounds for strong contrast or container outlines — ideal for high-visibility boundaries or interactive components."
       },
       "state-focus": {
-        "value": "{color.cobalt-blue.600}",
+        "value": "{color.neutral.950}",
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation."
       },
       "state-disabled-on-light": {
@@ -264,11 +248,11 @@
         "description": "Attention border used on dark backgrounds to indicate urgency or alert states such as errors, live content, or breaking news."
       },
       "brand-01": {
-        "value": "{color.lime.400}",
+        "value": "{color.emerald-green.800}",
         "description": "Primary brand border used to introduce subtle brand presence — applies the main brand color in decorative or accent details."
       },
       "brand-02": {
-        "value": "{color.cobalt-blue.700}",
+        "value": "{color.spring-green.500}",
         "description": "Secondary brand border used to introduce subtle brand presence — applies the secondary brand color in decorative or accent details."
       }
     },
@@ -327,7 +311,7 @@
         "description": "Primary light overlay used on dark or vivid backgrounds — improves legibility and contrast for UI elements like buttons, icons, or text over imagery."
       },
       "white-subtle": {
-        "value": "rgb(255 255 255 / 30%)",
+        "value": "rgb(255 255 255 / 35%)",
         "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media."
       }
     },
@@ -338,15 +322,16 @@
         "Brand-accent controls provide a secondary branded option with higher contrast or alternative styling, including border styles where applicable.",
         "Shared control styles (filled, outlined, ghost, utility) are defined in base colors and work across all brands and component types."
       ],
-      "brand-background": { "value": "{color.cobalt-blue.700}" },
+      "brand-background": { "value": "{color.emerald-green.800}" },
       "brand-text": { "value": "{color.base.white}" },
-      "brand-hover-background": { "value": "{color.cobalt-blue.900}" },
+      "brand-button-icon": { "value": "{color.base.white}" },
+      "brand-hover-background": { "value": "{color.forest-green.900}" },
       "brand-hover-text": { "value": "{color.base.white}" },
-      "brand-accent-background": { "value": "{color.brand.03}" },
-      "brand-accent-border": { "value": "{color.brand.03}" },
-      "brand-accent-text": { "value": "{color.neutral.950}" },
-      "brand-accent-hover-border": { "value": "{color.brand.03}" },
-      "brand-accent-hover-text": { "value": "{color.base.white}" }
+      "brand-accent-background": { "value": "{color.lime.400}" },
+      "brand-accent-text": { "value": "{color.forest-green.900}" },
+      "brand-accent-button-icon": { "value": "{color.forest-green.900}" },
+      "brand-accent-hover-background": { "value": "{color.lime.200}" },
+      "brand-accent-hover-text": { "value": "{color.forest-green.900}" }
     }
   }
 }
