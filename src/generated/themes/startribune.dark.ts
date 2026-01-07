@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: startribune-dark tokens
- * Date: 2025-12-23T22:18:42.966Z
+ * Date: 2026-01-07T06:36:25.047Z
  */
 
 export const colors = {
@@ -190,17 +190,21 @@ export const colors = {
   'border-state-disabled-on-light': ['#45474A'],
   'border-state-focus': ['#ffffff'],
   'button-filled-background': ['#ffffff'],
+  'button-filled-button-icon': ['#0D0D0D'],
   'button-filled-hover-background': ['#E3E5E8'],
   'button-filled-hover-text': ['#0D0D0D'],
   'button-filled-text': ['#0D0D0D'],
   'button-ghost-background': ['#000000'],
   'button-ghost-hover-background': ['#45474A'],
+  'button-ghost-hover-button-icon': ['#ffffff'],
   'button-ghost-hover-text': ['#ffffff'],
   'button-ghost-text': ['#ffffff'],
   'button-outlined-background': ['#000000'],
   'button-outlined-border': ['#ffffff'],
+  'button-outlined-button-icon': ['#ffffff'],
   'button-outlined-hover-background': ['#45474A'],
   'button-outlined-hover-border': ['#ffffff'],
+  'button-outlined-hover-button-icon': ['#ffffff'],
   'button-outlined-hover-text': ['#ffffff'],
   'button-outlined-text': ['#ffffff'],
   'button-utility-border': ['#585C5F'],
@@ -208,10 +212,12 @@ export const colors = {
   'button-utility-hover-text': ['#ffffff'],
   'button-utility-text': ['#E3E5E8'],
   'control-brand-accent-background': ['#C8FA31'],
+  'control-brand-accent-button-icon': ['#05442E'],
   'control-brand-accent-hover-background': ['#E5FD9D'],
   'control-brand-accent-hover-text': ['#05442E'],
   'control-brand-accent-text': ['#05442E'],
   'control-brand-background': ['#76D86E'],
+  'control-brand-button-icon': ['#0D0D0D'],
   'control-brand-hover-background': ['#9FE798'],
   'control-brand-hover-text': ['#0D0D0D'],
   'control-brand-text': ['#0D0D0D'],

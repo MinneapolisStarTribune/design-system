@@ -340,11 +340,13 @@
         ],
         "brand-background": { "value": "{color.cobalt-blue.500}" },
         "brand-text": { "value": "{color.neutral.950}" },
+        "brand-button-icon": { "value": "{color.neutral.950}" },
         "brand-hover-background": { "value": "{color.cobalt-blue.300}" },
         "brand-hover-text": { "value": "{color.neutral.950}" },
         "brand-accent-background": { "value": "{color.brand.03}" },
         "brand-accent-border": { "value": "{color.brand.03}" },
         "brand-accent-text": { "value": "{color.neutral.950}" },
+        "brand-accent-button-icon": { "value": "{color.neutral.950}" },
         "brand-accent-hover-background": { "value": "{color.neutral.950}" },
         "brand-accent-hover-border": { "value": "{color.brand.03}" },
         "brand-accent-hover-text": { "value": "{color.base.white}" }

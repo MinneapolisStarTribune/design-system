@@ -7,6 +7,7 @@ import {
 import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
+import { IconColor } from '../../types/globalTypes';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 import styles from './Button.module.scss';
 
@@ -51,8 +52,26 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Determine icon color based on button color and variant
   // Icon is always decorative (aria-hidden) when using the simple icon prop
-  const iconColorValue =
-    color === 'neutral' && variant === 'filled' ? 'on-dark-primary' : 'on-light-primary';
+  // Map button color/variant combinations to appropriate icon color tokens
+  const getIconColor = (): IconColor | undefined => {
+    // Brand colors map directly to icon colors
+    if (color === 'brand') return 'brand-button-icon';
+    if (color === 'brand-accent') return 'brand-accent-button-icon';
+
+    // Neutral color uses variant-specific icon colors
+    if (color === 'neutral') {
+      const variantIconMap: Record<ButtonVariant, IconColor> = {
+        filled: 'neutral-filled-button-icon',
+        outlined: 'neutral-outlined-button-icon',
+        ghost: 'neutral-ghost-button-icon',
+      };
+      return variantIconMap[variant];
+    }
+
+    return undefined;
+  };
+
+  const iconColorValue = getIconColor();
 
   const iconElement = icon ? (
     <Icon name={icon} color={iconColorValue} size={size} aria-hidden={true} />

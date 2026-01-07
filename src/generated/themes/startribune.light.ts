@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: startribune-light tokens
- * Date: 2025-12-23T22:18:42.935Z
+ * Date: 2026-01-07T06:36:25.014Z
  */
 
 export const colors = {
@@ -190,28 +190,34 @@ export const colors = {
   'border-state-disabled-on-light': ['#C8CCD0'],
   'border-state-focus': ['#0D0D0D'],
   'button-filled-background': ['#0D0D0D'],
+  'button-filled-button-icon': ['#ffffff'],
   'button-filled-hover-background': ['#45474A'],
   'button-filled-hover-text': ['#ffffff'],
   'button-filled-text': ['#ffffff'],
   'button-ghost-background': ['#ffffff'],
+  'button-ghost-button-icon': ['#0D0D0D'],
   'button-ghost-hover-background': ['#F5F6F7'],
   'button-ghost-hover-text': ['#0D0D0D'],
   'button-ghost-text': ['#0D0D0D'],
   'button-outlined-background': ['#ffffff'],
   'button-outlined-border': ['#0D0D0D'],
+  'button-outlined-button-icon': ['#0D0D0D'],
   'button-outlined-hover-background': ['#F5F6F7'],
   'button-outlined-hover-border': ['#0D0D0D'],
   'button-outlined-hover-text': ['#0D0D0D'],
   'button-outlined-text': ['#0D0D0D'],
   'button-utility-border': ['#E3E5E8'],
+  'button-utility-button-icon': ['#0D0D0D'],
   'button-utility-hover-border': ['#0D0D0D'],
   'button-utility-hover-text': ['#0D0D0D'],
   'button-utility-text': ['#45474A'],
   'control-brand-accent-background': ['#C8FA31'],
-  'control-brand-accent-hover-background': ['#C8FA31'],
+  'control-brand-accent-button-icon': ['#05442E'],
+  'control-brand-accent-hover-background': ['#E5FD9D'],
   'control-brand-accent-hover-text': ['#05442E'],
   'control-brand-accent-text': ['#05442E'],
   'control-brand-background': ['#00854B'],
+  'control-brand-button-icon': ['#ffffff'],
   'control-brand-hover-background': ['#05442E'],
   'control-brand-hover-text': ['#ffffff'],
   'control-brand-text': ['#ffffff'],

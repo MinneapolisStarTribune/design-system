@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2026-01-07T05:06:23.159Z
+ * Date: 2026-01-07T06:36:25.077Z
  */
 
 export const colors = {
@@ -199,30 +199,36 @@ export const colors = {
   'brand-04-from': ['#1683F8'],
   'brand-04-to': ['#0050A6'],
   'button-filled-background': ['#0D0D0D'],
+  'button-filled-button-icon': ['#ffffff'],
   'button-filled-hover-background': ['#45474A'],
   'button-filled-hover-text': ['#ffffff'],
   'button-filled-text': ['#ffffff'],
   'button-ghost-background': ['#ffffff'],
+  'button-ghost-button-icon': ['#0D0D0D'],
   'button-ghost-hover-background': ['#F5F6F7'],
   'button-ghost-hover-text': ['#0D0D0D'],
   'button-ghost-text': ['#0D0D0D'],
   'button-outlined-background': ['#ffffff'],
   'button-outlined-border': ['#0D0D0D'],
+  'button-outlined-button-icon': ['#0D0D0D'],
   'button-outlined-hover-background': ['#F5F6F7'],
   'button-outlined-hover-border': ['#0D0D0D'],
   'button-outlined-hover-text': ['#0D0D0D'],
   'button-outlined-text': ['#0D0D0D'],
   'button-utility-border': ['#E3E5E8'],
+  'button-utility-button-icon': ['#0D0D0D'],
   'button-utility-hover-border': ['#0D0D0D'],
   'button-utility-hover-text': ['#0D0D0D'],
   'button-utility-text': ['#45474A'],
   'control-brand-accent-background': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'control-brand-accent-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
+  'control-brand-accent-button-icon': ['#0D0D0D'],
   'control-brand-accent-hover-background': ['#000000'],
   'control-brand-accent-hover-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'control-brand-accent-hover-text': ['#0D0D0D'],
   'control-brand-accent-text': ['#0D0D0D'],
   'control-brand-background': ['#0064CF'],
+  'control-brand-button-icon': ['#ffffff'],
   'control-brand-hover-background': ['#003D7D'],
   'control-brand-hover-text': ['#ffffff'],
   'control-brand-text': ['#ffffff'],
