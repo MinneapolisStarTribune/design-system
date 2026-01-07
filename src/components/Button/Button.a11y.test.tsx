@@ -1,4 +1,5 @@
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button } from './Button';
 
@@ -38,7 +39,7 @@ describe('Button Accessibility', () => {
   describe('interactive states', () => {
     it('has no violations when focused', async () => {
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Focusable Button" onClick={() => {}} />
+        <Button label="Focusable Button" onClick={() => {}} data-testid="button" />
       );
 
       // Focus the button
@@ -53,7 +54,7 @@ describe('Button Accessibility', () => {
     it('has no violations when clicked', async () => {
       const handleClick = vi.fn();
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Clickable Button" onClick={handleClick} />
+        <Button label="Clickable Button" onClick={handleClick} data-testid="button" />
       );
 
       // Click the button
