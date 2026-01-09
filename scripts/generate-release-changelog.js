@@ -45,15 +45,6 @@ module.exports = async ({ github, context, currentTag }) => {
       throw new Error(`Current tag "${currentTag}" not found in repository. Available tags: ${tags.slice(0, 5).map(t => t.name).join(', ')}`);
     }
 
-    // Get the previous tag (next in the list since tags are sorted by date, newest first)
-    if (currentTagIndex === tags.length - 1) {
-      // This is the first/oldest tag - no previous tag exists
-      throw new Error(
-        `No previous tag found. "${currentTag}" is the first release in this repository. ` +
-        `For the first release, create a changelog manually or skip changelog generation.`
-      );
-    }
-
     previousTag = tags[currentTagIndex + 1].name;
     console.log(`Previous tag: ${previousTag}`);
   } catch (error) {
