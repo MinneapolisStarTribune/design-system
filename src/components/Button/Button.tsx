@@ -1,115 +1,119 @@
-import { twMerge } from 'tailwind-merge';
 import React from 'react';
+import {
+  Button as MantineButton,
+  ButtonProps as MantineButtonProps,
+  useMantineTheme,
+} from '@mantine/core';
+import classNames from 'classnames';
+import { Icon } from '../Icon/Icon';
+import { IconName } from '../Icon/iconNames';
+import { IconColor } from '../../types/globalTypes';
+import { getIconLabel } from '../../utils/accessibilityHelpers';
+import styles from './Button.module.scss';
 
-export type ButtonProps = {
-  className?: string | string[];
-  variant?: 'primary' | 'secondary' | 'text';
-  color?: 'black' | 'green';
-  size?: 'sm' | 'md' | 'lg';
-  icon?: React.ReactNode;
-  iconClassName?: string | string[];
+export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
+export type ButtonColor = (typeof BUTTON_COLORS)[number];
+export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
+export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
+export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
+export type ButtonSize = (typeof BUTTON_SIZES)[number];
+
+export interface ButtonProps
+  extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
+  color?: ButtonColor;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  icon?: IconName;
   iconPosition?: 'start' | 'end';
-  label: string;
-  disabled?: boolean;
-} & (
-  | {
-      // External link — consumer must pass an element
-      as: React.ElementType;
-      href: string;
-      onClick?: never;
-    }
-  | {
-      // Regular button
-      as?: never;
-      href?: never;
-      onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    }
-);
+  label?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  isDisabled?: boolean;
+}
 
-export const Button = ({
-  className = '',
-  variant = 'text',
-  color = 'black',
-  size = 'md',
+// Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
+export const Button: React.FC<ButtonProps> = ({
+  color = 'neutral',
+  variant = 'filled',
+  size = 'medium',
   icon,
-  iconClassName = '',
   iconPosition = 'end',
   label,
-  disabled = false,
-  onClick,
-  as: LinkComponent,
-  href,
-}: ButtonProps) => {
-  const classList = twMerge(
-    ['ds:inline-flex', 'ds:items-center', 'ds:gap-1', 'ds:cursor-pointer'],
-    (variant === 'primary' || variant === 'secondary') && [
-      'ds:rounded-full',
-      'ds:px-5',
-      'ds:py-2',
-      'ds:font-semibold',
-      'ds:uppercase',
-    ],
-    variant === 'primary' && [
-      'ds:bg-base-black',
-      'ds:hover:bg-gray-700',
-      'ds:text-base-white',
-      'ds:max-xl:text-xs',
-      'ds:max-xl:px-4',
-    ],
-    variant === 'secondary' && ['ds:border'],
-    color === 'green' && [
-      'ds:bg-linear-to-r ds:from-lime-300 ds:to-spring-400 ds:text-base-black ds:border-1 ds:border-transparent',
-      'ds:hover:bg-none ds:hover:border-1 ds:hover:border-bright-green ds:hover:text-base-white',
-    ],
-    size === 'sm' && 'ds:text-xs',
-    size === 'md' && ['ds:text-sm', 'ds:px-6', 'ds:py-3'],
-    size === 'lg' && ['ds:text-base', 'ds:px-6', 'ds:py-4'],
-    className
-  );
+  children: _children,
+  className,
+  isDisabled,
+  ...props
+}) => {
+  let mantineVariant;
+  if (variant === 'ghost') {
+    mantineVariant = 'subtle';
+  } else {
+    mantineVariant = variant;
+  }
 
-  const inners = (
-    <>
+  // Determine icon color based on button color and variant
+  // Icon is always decorative (aria-hidden) when using the simple icon prop
+  // Map button color/variant combinations to appropriate icon color tokens
+  const getIconColor = (): IconColor | undefined => {
+    // Brand colors map directly to icon colors
+    if (color === 'brand') return 'brand-button-icon';
+    if (color === 'brand-accent') return 'brand-accent-button-icon';
+
+    // Neutral color uses variant-specific icon colors
+    if (color === 'neutral') {
+      const variantIconMap: Record<ButtonVariant, IconColor> = {
+        filled: 'neutral-filled-button-icon',
+        outlined: 'neutral-outlined-button-icon',
+        ghost: 'neutral-ghost-button-icon',
+      };
+      return variantIconMap[variant];
+    }
+
+    return undefined;
+  };
+
+  const iconColorValue = getIconColor();
+
+  const iconElement = icon ? (
+    <Icon name={icon} color={iconColorValue} size={size} aria-hidden={true} />
+  ) : null;
+
+  // Extract aria-label from props if provided (using type assertion for HTML attributes)
+  const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
+
+  // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
+  const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
+
+  // Use Mantine's leftSection/rightSection for icon positioning
+  const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
+  const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
+
+  // Check if brand-accent filled button should have gradient border
+  // Check the theme colors directly to see if the hover-border token is a gradient
+  const theme = useMantineTheme();
+  const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
+  const brandAccentHoverBorder = theme.colors['control-brand-accent-hover-border']?.[0];
+  const hasGradientBorder = isBrandAccentFilled && brandAccentHoverBorder?.includes('gradient');
+
+  // Apply special hover styles for brand-accent filled button with gradient border
+  const brandAccentFilledClass =
+    isBrandAccentFilled && hasGradientBorder ? styles.brandAccentFilled : undefined;
+
+  // Combine class names using classnames utility
+  const combinedClassNames = classNames(className, brandAccentFilledClass);
+
+  return (
+    <MantineButton
+      variant={mantineVariant}
+      color={color}
+      size={size}
+      leftSection={leftSection}
+      rightSection={rightSection}
+      aria-label={buttonAriaLabel}
+      disabled={isDisabled}
+      className={combinedClassNames || undefined}
+      {...props}
+    >
       {label}
-      {icon && (
-        <span
-          className={twMerge(
-            'ds:flex',
-            'ds:flex-col',
-            size === 'sm' && ['ds:w-[12px]', 'ds:h-[12px]'],
-            (size === 'lg' || size === 'md') && ['ds:w-[1em]', 'ds:h-[1em]'],
-            iconPosition === 'start' && 'ds:order-first',
-            iconClassName
-          )}
-        >
-          {icon}
-        </span>
-      )}
-    </>
+    </MantineButton>
   );
-
-  if (!label) return null;
-
-  if (onClick) {
-    return (
-      <button
-        className={classList}
-        type="button"
-        onClick={onClick}
-        disabled={disabled}
-        data-testid="button"
-      >
-        {inners}
-      </button>
-    );
-  }
-
-  if (LinkComponent && href) {
-    return (
-      <LinkComponent className={classList} href={href} data-testid="button">
-        {inners}
-      </LinkComponent>
-    );
-  }
-
-  return null;
 };

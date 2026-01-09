@@ -1,4 +1,5 @@
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button } from './Button';
 
@@ -6,55 +7,39 @@ describe('Button Accessibility', () => {
   describe('static rendering', () => {
     it('has no violations with all variants', async () => {
       await expectNoA11yViolations(
-        <Button label="Text Button" onClick={() => {}} variant="text" />
+        <Button label="Primary Button" onClick={() => {}} variant="filled" />
       );
 
       await expectNoA11yViolations(
-        <Button label="Primary Button" onClick={() => {}} variant="primary" />
+        <Button label="Primary Button" onClick={() => {}} variant="outlined" />
       );
 
       await expectNoA11yViolations(
-        <Button label="Secondary Button" onClick={() => {}} variant="secondary" />
+        <Button label="Primary Button" onClick={() => {}} variant="ghost" />
       );
     });
 
     it('has no violations when disabled', async () => {
-      await expectNoA11yViolations(<Button label="Disabled Button" onClick={() => {}} disabled />);
+      await expectNoA11yViolations(
+        <Button label="Disabled Button" onClick={() => {}} isDisabled />
+      );
     });
 
-    it('has no violations as a link', async () => {
-      const MockLink = ({
-        href,
-        children,
-        ...rest
-      }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-        <a href={href} {...rest}>
-          {children}
-        </a>
-      );
-
+    it('has no violations with an icon and text', async () => {
       await expectNoA11yViolations(
-        <Button label="Link Button" as={MockLink} href="https://example.com" />
+        <Button label="Button with Icon" onClick={() => {}} icon="camera-filled" />
       );
     });
 
     it('has no violations with an icon', async () => {
-      const icon = (
-        <svg role="img" aria-label="Arrow icon">
-          <path d="M10 10" />
-        </svg>
-      );
-
-      await expectNoA11yViolations(
-        <Button label="Button with Icon" onClick={() => {}} icon={icon} />
-      );
+      await expectNoA11yViolations(<Button onClick={() => {}} icon="camera-filled" />);
     });
   });
 
   describe('interactive states', () => {
     it('has no violations when focused', async () => {
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Focusable Button" onClick={() => {}} />
+        <Button label="Focusable Button" onClick={() => {}} data-testid="button" />
       );
 
       // Focus the button
@@ -69,7 +54,7 @@ describe('Button Accessibility', () => {
     it('has no violations when clicked', async () => {
       const handleClick = vi.fn();
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Clickable Button" onClick={handleClick} />
+        <Button label="Clickable Button" onClick={handleClick} data-testid="button" />
       );
 
       // Click the button

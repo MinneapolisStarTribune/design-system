@@ -1,69 +1,57 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Button } from './Button';
-
-// Simple anchor component for Storybook links
-const Anchor = (props: React.ComponentProps<'a'>) => <a {...props} />;
+import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   parameters: {},
   tags: ['autodocs'],
-  argTypes: {},
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: [...BUTTON_VARIANTS] as string[],
+    },
+    color: {
+      control: 'select',
+      options: [...BUTTON_COLORS] as string[],
+      description: 'The color token for the button',
+    },
+    size: {
+      control: 'select',
+      options: [...BUTTON_SIZES] as string[],
+      description: 'The size of the button',
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const PrimaryButton: Story = {
+export const ConfigurableButton: Story = {
   args: {
     label: 'See More',
     onClick: () => alert('Hello'),
-    variant: 'primary',
-    size: 'lg',
+    variant: 'filled',
+    size: 'large',
+    color: 'brand',
   },
 };
 
-export const PrimaryButtonIconStart: Story = {
+export const WithIcon: Story = {
   args: {
-    ...PrimaryButton.args,
+    ...ConfigurableButton.args,
+    icon: 'camera-filled',
     iconPosition: 'start',
   },
 };
 
-export const PrimaryLink: Story = {
+export const ButtonWithIcon: Story = {
   args: {
-    label: 'See More',
-    as: Anchor, // <-- pass 'a' as Link component
-    href: '#',
-    variant: 'primary',
-    size: 'lg',
-  },
-};
-
-export const SecondaryButton: Story = {
-  args: {
-    label: 'See More',
-    onClick: () => alert('Hello'),
-    variant: 'secondary',
-  },
-};
-
-export const SecondaryLink: Story = {
-  args: {
-    label: 'See More',
-    as: Anchor,
-    href: '#',
-    variant: 'secondary',
-  },
-};
-
-export const TextLink: Story = {
-  args: {
-    label: 'See More',
-    as: Anchor,
-    href: '#',
-    variant: 'text',
+    label: 'View All Sports Hubs',
+    onClick: () => alert('Clicked'),
+    variant: 'filled',
+    icon: 'camera-filled',
+    iconPosition: 'start',
   },
 };

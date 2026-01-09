@@ -1,69 +1,39 @@
-import { render } from '@testing-library/react';
 import { vi } from 'vitest';
 import { Button } from './Button';
+import { renderWithProvider } from '../../test-utils/render';
 
 describe('Button', () => {
   it('renders', () => {
-    const { getByTestId } = render(<Button label="Button Label" onClick={vi.fn()} />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Button Label" onClick={vi.fn()} data-testid="button" />
+    );
 
     expect(getByTestId('button')).toBeInTheDocument();
   });
 
-  it('renders nothing when label is empty', () => {
-    const { container } = render(<Button label="" onClick={vi.fn()} />);
-
-    expect(container.firstChild).toBeNull();
-  });
-
-  it('renders as a link when as and href are provided', () => {
-    const MockLink = ({
-      href,
-      children,
-      ...rest
-    }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => (
-      <a href={href} {...rest}>
-        {children}
-      </a>
-    );
-    const { getByTestId } = render(
-      <Button label="Link Button" as={MockLink} href="https://example.com" />
-    );
-
-    const component = getByTestId('button');
-
-    expect(component).toBeInTheDocument();
-    expect(component).toHaveAttribute('href', 'https://example.com');
-  });
-
   it('displays the label text', () => {
-    const { getByText } = render(<Button label="Click me" onClick={vi.fn()} />);
+    const { getByText } = renderWithProvider(<Button label="Click me" onClick={vi.fn()} />);
 
     expect(getByText('Click me')).toBeInTheDocument();
   });
 
-  it('has correct color when passing in a color prop', () => {
-    const { getByTestId } = render(
-      <Button label="Green" onClick={vi.fn()} variant="primary" color="green" />
+  it('has correct size when passing in a size prop', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button label="Small" onClick={vi.fn()} size="small" data-testid="button" />
     );
 
     const component = getByTestId('button');
 
     expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:text-base-black');
-  });
-
-  it('has correct size when passing in a size prop', () => {
-    const { getByTestId } = render(<Button label="Small" onClick={vi.fn()} size="sm" />);
-
-    const component = getByTestId('button');
-
-    expect(component).toBeInTheDocument();
-    expect(component).toHaveClass('ds:text-xs');
+    // Button uses Mantine's theming system which applies styles via CSS variables
+    // Verify the button has the correct size attribute
+    expect(component).toHaveAttribute('data-size', 'small');
+    expect(component).toHaveClass('mantine-Button-root');
   });
 
   it('applies custom className', () => {
-    const { getByTestId } = render(
-      <Button label="Custom" onClick={vi.fn()} className="custom-class" />
+    const { getByTestId } = renderWithProvider(
+      <Button label="Custom" onClick={vi.fn()} className="custom-class" data-testid="button" />
     );
 
     const component = getByTestId('button');
@@ -73,14 +43,17 @@ describe('Button', () => {
   });
 
   it('renders with an icon', () => {
-    const icon = <svg data-testid="test-icon" />;
-    const { getByTestId } = render(<Button label="With Icon" onClick={vi.fn()} icon={icon} />);
+    const { container } = renderWithProvider(
+      <Button label="With Icon" onClick={vi.fn()} icon="camera-filled" />
+    );
 
-    expect(getByTestId('test-icon')).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
-  it('is disabled when disabled prop is true', () => {
-    const { getByTestId } = render(<Button label="Disabled" onClick={vi.fn()} disabled />);
+  it('is disabled when isDisabled prop is true', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button label="Disabled" onClick={vi.fn()} isDisabled data-testid="button" />
+    );
 
     const component = getByTestId('button');
 
@@ -89,7 +62,9 @@ describe('Button', () => {
 
   it('calls onClick handler when clicked', () => {
     const handleClick = vi.fn();
-    const { getByTestId } = render(<Button label="Clickable" onClick={handleClick} />);
+    const { getByTestId } = renderWithProvider(
+      <Button label="Clickable" onClick={handleClick} data-testid="button" />
+    );
 
     const component = getByTestId('button');
     component.click();

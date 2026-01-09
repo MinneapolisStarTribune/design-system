@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import layoutJson from '../../../../../tokens/breakpoint.json';
+import { BreakpointIndicator } from './BreakpointIndicator';
+
+<Meta title="Foundations/Layout & Spacing/Breakpoints" />
+
+# Breakpoints
+
+Breakpoints define the responsive breakpoints for the design system. Resize your browser window to see how content adapts at different breakpoints.
+
+## Breakpoint Values
+
+<table>
+  <thead>
+    <tr>
+      <th>Breakpoint</th>
+      <th>Min Width</th>
+      <th>Max Width</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Large</td>
+      <td>{layoutJson.breakpoint.large.min.value}</td>
+      <td>{layoutJson.breakpoint.large.max.value}</td>
+    </tr>
+    <tr>
+      <td>Medium</td>
+      <td>{layoutJson.breakpoint.medium.min.value}</td>
+      <td>{layoutJson.breakpoint.medium.max.value}</td>
+    </tr>
+    <tr>
+      <td>Small</td>
+      <td>{layoutJson.breakpoint.small.min.value}</td>
+      <td>{layoutJson.breakpoint.small.max.value}</td>
+    </tr>
+  </tbody>
+</table>
+
+## Visual Breakpoint Indicator
+
+<BreakpointIndicator />
+
+## Breakpoint-Specific Content
+
+<div style={{ marginBottom: '2rem' }}>
+  <div
+    style={{
+      padding: '1rem',
+      backgroundColor: '#f0f7ff',
+      border: '2px solid #1683F8',
+      borderRadius: '4px',
+      marginBottom: '1rem',
+    }}
+    id="large-only"
+  >
+    <strong>Large Breakpoint Only</strong> (≥ {layoutJson.breakpoint.large.min.value})
+    <div style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>
+      This content is only visible at the large breakpoint and above.
+    </div>
+  </div>
+
+  <div
+    style={{
+      padding: '1rem',
+      backgroundColor: '#fff7ed',
+      border: '2px solid #F96A06',
+      borderRadius: '4px',
+      marginBottom: '1rem',
+    }}
+    id="medium-only"
+  >
+    <strong>Medium Breakpoint Only</strong> ({layoutJson.breakpoint.medium.min.value} - {layoutJson.breakpoint.medium.max.value})
+    <div style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>
+      This content is only visible at the medium breakpoint.
+    </div>
+  </div>
+
+  <div
+    style={{
+      padding: '1rem',
+      backgroundColor: '#fef2f2',
+      border: '2px solid #F04C4C',
+      borderRadius: '4px',
+    }}
+    id="small-only"
+  >
+    <strong>Small Breakpoint Only</strong> (≤ {layoutJson.breakpoint.small.max.value})
+    <div style={{ margin: '0.5rem 0 0 0', fontSize: '0.875rem' }}>
+      This content is only visible at the small breakpoint.
+    </div>
+  </div>
+</div>
+
+## CSS Custom Properties
+
+```css
+@media (min-width: var(--breakpoint-large-min)) {
+  /* Large breakpoint styles */
+}
+
+@media (min-width: var(--breakpoint-medium-min)) and (max-width: var(--breakpoint-medium-max)) {
+  /* Medium breakpoint styles */
+}
+
+@media (max-width: var(--breakpoint-small-max)) {
+  /* Small breakpoint styles */
+}
+```
+
+

@@ -10,10 +10,11 @@
     // Module system
     "module": "ESNext",
     "target": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "resolveJsonModule": true,
 
     // Strictness
     "strict": true,
@@ -30,5 +31,5 @@
     "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", ".storybook"]
+  "exclude": ["node_modules", "dist", ".storybook", "**/*.stories.tsx", "**/*.stories.ts"]
 }

@@ -1,0 +1,75 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { borderRadiusTokens } from './borderRadiusData';
+
+<Meta title="Foundations/Layout & Spacing/Border Radius" />
+
+# Border Radius
+
+Border radius tokens define consistent corner radius values used throughout the design system. These tokens are available as CSS custom properties and can be used with Tailwind CSS utilities.
+
+## Usage
+
+Border radius tokens can be used in several ways:
+
+### CSS Custom Properties
+
+```css
+.my-element {
+  border-radius: var(--radius-8);
+  border-top-left-radius: var(--radius-16);
+}
+```
+
+### Tailwind CSS Utilities
+
+Tailwind v4 automatically generates utilities from border radius tokens. Simply use the numeric value - Tailwind will automatically use the corresponding CSS custom property:
+
+```jsx
+<div className="ds:rounded-8 ds:rounded-tl-16">
+  {/* Automatically uses var(--radius-8), var(--radius-16) */}
+</div>
+```
+
+**How it works:** When you write `ds:rounded-8`, Tailwind automatically maps it to `var(--radius-8)`. This happens automatically - no need to write `rounded-[var(--radius-8)]` or reference the CSS variable directly.
+
+**Note:** This project uses the `ds:` prefix for all Tailwind utilities.
+
+## Border Radius Scale
+
+<div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '2rem' }}>
+  {borderRadiusTokens.map((radius) => (
+    <div
+      key={radius.name}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '1rem',
+      }}
+    >
+      <div
+        style={{
+          width: radius.name === 'full' ? '200px' : '120px',
+          height: radius.name === 'full' ? '80px' : '120px',
+          backgroundColor: '#1683F8',
+          borderRadius: radius.value,
+          marginBottom: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          fontWeight: '600',
+        }}
+      >
+        {radius.value}
+      </div>
+      <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>
+        {radius.name}
+      </div>
+      <div style={{ fontFamily: 'monospace', fontSize: '0.875rem', color: '#666' }}>
+        {radius.tokenName}
+      </div>
+    </div>
+  ))}
+</div>
+
