@@ -13,10 +13,6 @@ jobs:
   tests:
     name: Run component tests
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write
-      pull-requests: write
 
     steps:
       - uses: actions/checkout@v6
@@ -28,11 +24,6 @@ jobs:
           VITEST_JUNIT_OUTPUT: ./reports/unit-junit.xml
         run: yarn test:coverage -- --exclude "**/*.a11y.test.tsx"
 
-      - name: Run a11y tests with coverage
-        env:
-          VITEST_JUNIT_OUTPUT: ./reports/a11y-junit.xml
-        run: yarn test:a11y --coverage
-
       - name: Upload unit test coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
@@ -42,22 +33,7 @@ jobs:
           verbose: true
         if: always()
 
-      - name: Upload a11y test coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: MinneapolisStarTribune/design-system
-          flags: a11y
-          verbose: true
-        if: always()
-
       - name: Upload unit test results
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-        if: always()
-
-      - name: Upload a11y test results
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -71,6 +47,26 @@ jobs:
           path: "reports/unit-junit.xml"
           reporter: "java-junit"
           fail-on-error: true
+
+      - name: Run a11y tests with coverage
+        env:
+          VITEST_JUNIT_OUTPUT: ./reports/a11y-junit.xml
+        run: yarn test:a11y --coverage
+
+      - name: Upload a11y test coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: MinneapolisStarTribune/design-system
+          flags: a11y
+          verbose: true
+        if: always()
+
+      - name: Upload a11y test results
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        if: always()
 
       - name: A11y Test Report
         uses: dorny/test-reporter@v2

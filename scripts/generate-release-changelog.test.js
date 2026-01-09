@@ -56,7 +56,7 @@ describe('generate-release-changelog', () => {
             },
             {
               sha: 'commit2',
-              commit: { message: 'Fix bug in component (#43)' },
+              commit: { message: 'Merge pull request #43 from bugfix/modal-a11y' },
             },
           ],
         },
@@ -126,9 +126,9 @@ Modal now properly traps focus.`,
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
           commits: [
-            { sha: 'c1', commit: { message: 'Fix bug (#1)' } },
-            { sha: 'c2', commit: { message: 'Add new feature (#2)' } },
-            { sha: 'c3', commit: { message: 'Refactor code (#3)' } },
+            { sha: 'c1', commit: { message: 'Merge pull request #1' } },
+            { sha: 'c2', commit: { message: 'Merge pull request #2' } },
+            { sha: 'c3', commit: { message: 'Merge pull request #3' } },
           ],
         },
       });
@@ -248,7 +248,7 @@ Modal now properly traps focus.`,
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
           commits: [
-            { sha: 'c1', commit: { message: 'Add feature (#1)' } },
+            { sha: 'c1', commit: { message: 'Merge pull request #1' } },
           ],
         },
       });
@@ -284,8 +284,8 @@ Modal now properly traps focus.`,
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
           commits: [
-            { sha: 'c1', commit: { message: 'Add feature (#1)' } },
-            { sha: 'c2', commit: { message: 'Fix bug (#2)' } },
+            { sha: 'c1', commit: { message: 'Merge pull request #1' } },
+            { sha: 'c2', commit: { message: 'Merge pull request #2' } },
           ],
         },
       });
@@ -356,7 +356,7 @@ Modal now properly traps focus.`,
           context: mockContext,
           currentTag: 'v0.0.99',
         })
-      ).rejects.toThrow('Current tag "v0.0.99" not found in repository');
+      ).rejects.toThrow('Current tag "v0.0.99" is not the most recent tag. Most recent tag is "v0.0.2". Changelog generation should only run for the latest release.');
     });
 
     it('should throw error if current tag is the oldest tag', async () => {
@@ -374,7 +374,7 @@ Modal now properly traps focus.`,
           context: mockContext,
           currentTag: 'v0.0.1',
         })
-      ).rejects.toThrow('No previous tag found');
+      ).rejects.toThrow('Current tag "v0.0.1" is not the most recent tag. Most recent tag is "v0.0.3". Changelog generation should only run for the latest release.');
     });
   });
 
