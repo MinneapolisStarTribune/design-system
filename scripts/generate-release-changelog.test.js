@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Import the module to test
 const generateChangelog = require('./generate-release-changelog.js');
 
-const JIRA_BASE_URL = 'https://x.atlassian.net/browse';
+const JIRA_BASE_URL = 'https://minneapolisstartribune.atlassian.net/browse';
 
 describe('generate-release-changelog', () => {
   let mockGithub;
@@ -13,7 +13,7 @@ describe('generate-release-changelog', () => {
     // Reset mocks before each test
     mockContext = {
       repo: {
-        owner: 'x',
+        owner: 'MinneapolisStarTribune',
         repo: 'design-system',
       },
     };
@@ -36,7 +36,7 @@ describe('generate-release-changelog', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  describe('Happy Path', () => {
+  describe('General Tests', () => {
     it('should generate changelog with multiple PRs', async () => {
       // Mock tags response
       mockGithub.rest.repos.listTags.mockResolvedValue({
@@ -390,11 +390,11 @@ Modal now properly traps focus.`,
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
           commits: [
-            { sha: 'c1', commit: { message: 'PR #1' } },
-            { sha: 'c2', commit: { message: 'PR #2' } },
-            { sha: 'c3', commit: { message: 'PR #3' } },
-            { sha: 'c4', commit: { message: 'PR #4' } },
-            { sha: 'c5', commit: { message: 'PR #5' } },
+            { sha: 'c1', commit: { message: 'Merge pull request #1 from feature/one' } },
+            { sha: 'c2', commit: { message: 'Merge pull request #2 from feature/two' } },
+            { sha: 'c3', commit: { message: 'Merge pull request #3 from feature/three' } },
+            { sha: 'c4', commit: { message: 'Merge pull request #4 from feature/four' } },
+            { sha: 'c5', commit: { message: 'Merge pull request #5 from feature/five' } },
           ],
         },
       });
@@ -411,13 +411,20 @@ Modal now properly traps focus.`,
         });
       });
 
+      console.warn(mockContext);
+      console.warn('='.repeat(60));
+
+      // Restore console.log for this test so you can see logs from generateChangelog
+      console.log.mockRestore();
+
       const result = await generateChangelog({
         github: mockGithub,
         context: mockContext,
         currentTag: 'v0.0.2',
       });
 
-      console.log(result.content);
+      console.warn(result);
+      console.warn('='.repeat(60));
 
       // Check that all JIRA projects are linked
       expect(result.content).toContain('[LOON-1]');
@@ -439,7 +446,7 @@ Modal now properly traps focus.`,
 
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
-          commits: [{ sha: 'c1', commit: { message: 'PR #1' } }],
+          commits: [{ sha: 'c1', commit: { message: 'Merge pull request #1 from feature/test' } }],
         },
       });
 
@@ -480,7 +487,7 @@ This is the internal changelog content that should be extracted.
 
       mockGithub.rest.repos.compareCommitsWithBasehead.mockResolvedValue({
         data: {
-          commits: [{ sha: 'c1', commit: { message: 'PR #1' } }],
+          commits: [{ sha: 'c1', commit: { message: 'Merge pull request #1 from feature/test' } }],
         },
       });
 

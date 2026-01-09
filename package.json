@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.0.1",
+    "@octokit/rest": "^22.0.1",
     "@storybook/addon-a11y": "^9.0.18",
     "@storybook/addon-docs": "^9.0.18",
     "@storybook/addon-onboarding": "^9.0.18",
@@ -77,6 +78,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "vitest run a11y.test",
+    "test:scripts": "vitest run scripts/*.test.js",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
