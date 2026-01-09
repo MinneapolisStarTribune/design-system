@@ -411,11 +411,11 @@ Modal now properly traps focus.`,
         });
       });
 
-      console.warn(mockContext);
-      console.warn('='.repeat(60));
+      // Debug
+      // console.warn(mockContext);
 
       // Restore console.log for this test so you can see logs from generateChangelog
-      console.log.mockRestore();
+      // console.log.mockRestore();
 
       const result = await generateChangelog({
         github: mockGithub,
@@ -423,8 +423,8 @@ Modal now properly traps focus.`,
         currentTag: 'v0.0.2',
       });
 
-      console.warn(result);
-      console.warn('='.repeat(60));
+      // Debug
+      // console.warn(result);
 
       // Check that all JIRA projects are linked
       expect(result.content).toContain('[LOON-1]');

@@ -25,7 +25,7 @@ Edit these constants in `generate-release-changelog.js` to customize:
 
 ```javascript
 const JIRA_PROJECTS = ['LOON', 'VARSITY', 'PS', 'NLT', 'DS'];
-const JIRA_BASE_URL = 'https://startribune.atlassian.net/browse';
+const JIRA_BASE_URL = 'https://minneapolisstartribune.atlassian.net/browse';
 const PRODUCT_NAME = 'Shared UI Library';
 ```
 
