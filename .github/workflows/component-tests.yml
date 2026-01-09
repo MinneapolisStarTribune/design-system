@@ -5,13 +5,21 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true  # Cancel old runs when new commits pushed
+
 jobs:
-  unit-tests:
-    name: Run unit tests
+  tests:
+    name: Run component tests
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
 
@@ -20,12 +28,26 @@ jobs:
           VITEST_JUNIT_OUTPUT: ./reports/unit-junit.xml
         run: yarn test:coverage -- --exclude "**/*.a11y.test.tsx"
 
+      - name: Run a11y tests with coverage
+        env:
+          VITEST_JUNIT_OUTPUT: ./reports/a11y-junit.xml
+        run: yarn test:a11y --coverage
+
       - name: Upload unit test coverage to Codecov
-        uses: codecov/codecov-action@v5.4.0
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MinneapolisStarTribune/design-system
           flags: unit
+          verbose: true
+        if: always()
+
+      - name: Upload a11y test coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: MinneapolisStarTribune/design-system
+          flags: a11y
           verbose: true
         if: always()
 
@@ -35,8 +57,14 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
         if: always()
 
+      - name: Upload a11y test results
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        if: always()
+
       - name: Unit Test Report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: always()
         with:
           name: "Unit Test Report"
@@ -44,37 +72,8 @@ jobs:
           reporter: "java-junit"
           fail-on-error: true
 
-  a11y-tests:
-    name: Run accessibility tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Configure Node environment
-        uses: ./.github/actions/configure-workflow-node-environment
-
-      - name: Run a11y tests with coverage
-        env:
-          VITEST_JUNIT_OUTPUT: ./reports/a11y-junit.xml
-        run: yarn test:a11y --coverage
-
-      - name: Upload a11y test coverage to Codecov
-        uses: codecov/codecov-action@v5.4.0
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: MinneapolisStarTribune/design-system
-          flags: a11y
-          verbose: true
-        if: always()
-
-      - name: Upload a11y test results
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-        if: always()
-
       - name: A11y Test Report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: always()
         with:
           name: "Accessibility Test Report"

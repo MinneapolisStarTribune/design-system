@@ -13,7 +13,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.{test,spec,a11y.test}.{ts,tsx}'],
+    include: ['src/**/*.{test,spec,a11y.test}.{ts,tsx}', 'scripts/**/*.test.js'],
     exclude: ['src/**/*.stories.{ts,tsx}', 'node_modules'],
     css: true,
     coverage: {

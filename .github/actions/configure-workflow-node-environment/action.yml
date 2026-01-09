@@ -3,13 +3,13 @@ description: Configures a Node environment with cached modules
 runs:
   using: composite # Allows for composable actions
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version-file: .nvmrc
         cache: yarn
 
     - name: Cache Node modules installation
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: node-modules-cache
       with:
         path: node_modules
