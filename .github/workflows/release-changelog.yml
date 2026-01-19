@@ -85,7 +85,7 @@ jobs:
                 
                 # Extract JIRA ticket from branch name
                 JIRA_TICKET=""
-                if [[ "$BRANCH" =~ (LOON|VARSITY|PS|NLT|DS)-[0-9]+ ]]; then
+                if [[ "$BRANCH" =~ (LOON|VARSITY|PS|NLT)-[0-9]+ ]]; then
                   JIRA_TICKET="${BASH_REMATCH[0]}"
                 fi
                 
@@ -119,14 +119,13 @@ jobs:
                 fi
                 
                 # Create PR summary with new format
-                # Format: • emoji Category - PR title - [JIRA-TICKET](link)
-                PR_SUMMARY="• $CATEGORY_EMOJI **$CATEGORY_NAME** - $TITLE"
+                # Format: • emoji Category - PR title - (Ticket-1234)
+                PR_SUMMARY="• $CATEGORY_EMOJI $CATEGORY_NAME - $TITLE"
                 if [ -n "$JIRA_TICKET" ]; then
-                  JIRA_URL="https://startribune.atlassian.net/browse/$JIRA_TICKET"
-                  PR_SUMMARY="$PR_SUMMARY - [$JIRA_TICKET]($JIRA_URL)"
+                  PR_SUMMARY="$PR_SUMMARY - ($JIRA_TICKET)"
                 fi
                 if [ -n "$DESCRIPTION_CONTENT" ]; then
-                  PR_SUMMARY="$PR_SUMMARY\n$DESCRIPTION_CONTENT"
+                  PR_SUMMARY="$PR_SUMMARY\n   - $DESCRIPTION_CONTENT"
                 fi
                 
                 # Add to product PRs array
@@ -139,7 +138,7 @@ jobs:
 
           # Create JSON payload for product updates
           if [ ${#PRODUCT_PRS[@]} -gt 0 ]; then
-            PRODUCT_CONTENT="🚀 **Deploying to Production!** - Shared UI Library Updates\n\n"
+            PRODUCT_CONTENT="🚀 Deploying to Production! - Shared UI Library Updates\n\n"
             for pr in "${PRODUCT_PRS[@]}"; do
               PRODUCT_CONTENT="$PRODUCT_CONTENT$pr\n\n"
             done
@@ -155,14 +154,14 @@ jobs:
         if: steps.get-merged-prs.outputs.has_updates == 'true'
         uses: slackapi/slack-github-action@v2.0.0
         with:
-          webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
+          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
           webhook-type: webhook-trigger
           payload: |
             {
               "text": "${{ steps.get-merged-prs.outputs.product_content }}"
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
 
       - name: Post to General Channel (All Updates)
         if: steps.get-merged-prs.outputs.has_updates == 'true'
