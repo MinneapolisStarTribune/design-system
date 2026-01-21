@@ -173,6 +173,100 @@ describe('build-tokens.js', () => {
 
       expect(content.length).toBeGreaterThan(100);
     });
+
+    it('includes font-family tokens', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const filePath = path.join(themesDir, 'startribune-light.css');
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // Should include font-family tokens
+      expect(content).toMatch(/--font-family-/);
+      
+      // Verify graphik-compact token exists
+      expect(content).toMatch(/--font-family-graphik-compact:/);
+    });
+  });
+
+  describe('Token Reference Resolution', () => {
+    it('resolves font.family.graphik-compact token reference correctly', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const filePath = path.join(themesDir, 'startribune-light.css');
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // Extract the font-family-graphik-compact value
+      const match = content.match(/--font-family-graphik-compact:\s*([^;]+);/);
+      
+      expect(match).toBeTruthy();
+      
+      const resolvedValue = match[1].trim();
+      
+      // Verify it resolved to the actual font value (not a token reference)
+      expect(resolvedValue).toBe('Graphik Compact, sans-serif');
+      
+      // Verify it's not still a token reference
+      expect(resolvedValue).not.toMatch(/^{font\.family\.graphik-compact}$/);
+      expect(resolvedValue).not.toContain('{font.family');
+    });
+
+    it('resolves all font-family token references across all themes', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const testFiles = [
+        'startribune-light.css',
+        'startribune-dark.css',
+        'varsity-light.css',
+        'varsity-dark.css',
+      ];
+
+      testFiles.forEach((file) => {
+        const filePath = path.join(themesDir, file);
+        const content = fs.readFileSync(filePath, 'utf-8');
+
+        // Verify graphik-compact token exists in all themes
+        expect(content).toMatch(/--font-family-graphik-compact:/);
+        
+        // Extract and verify the value is resolved correctly
+        const match = content.match(/--font-family-graphik-compact:\s*([^;]+);/);
+        expect(match).toBeTruthy();
+        
+        const resolvedValue = match[1].trim();
+        expect(resolvedValue).toBe('Graphik Compact, sans-serif');
+        
+        // Verify no unresolved token references remain
+        expect(resolvedValue).not.toContain('{');
+        expect(resolvedValue).not.toContain('}');
+      });
+    });
+
+    it('resolves token references with correct format', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const filePath = path.join(themesDir, 'varsity-dark.css');
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // Verify all font-family tokens are properly formatted
+      const fontFamilyMatches = content.matchAll(/--font-family-([^:]+):\s*([^;]+);/g);
+      
+      let foundGraphikCompact = false;
+      for (const match of fontFamilyMatches) {
+        const tokenName = match[1].trim();
+        const tokenValue = match[2].trim();
+        
+        // Verify no unresolved token references
+        expect(tokenValue).not.toContain('{');
+        expect(tokenValue).not.toContain('}');
+        
+        // Track if we found the specific token we're testing
+        if (tokenName === 'graphik-compact') {
+          foundGraphikCompact = true;
+          expect(tokenValue).toBe('Graphik Compact, sans-serif');
+        }
+      }
+      
+      expect(foundGraphikCompact).toBe(true);
+    });
   });
 
   describe('Brand and Mode Differences', () => {
