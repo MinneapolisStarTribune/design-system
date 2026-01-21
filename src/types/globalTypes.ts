@@ -47,7 +47,9 @@ export type IconSpecificProps<IconName extends string = string> = {
   size?: Extract<Size, 'small' | 'medium' | 'large'>;
 };
 
-// Global size tokens for the design system
+/**
+ * Global size tokens for the design system
+ */
 export const SIZES = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'] as const;
 
 export type Size = (typeof SIZES)[number];
