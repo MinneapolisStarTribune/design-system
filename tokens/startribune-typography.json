@@ -545,6 +545,86 @@
             "line-height": "1.15"
           }
         }
+      },
+      "text-regular": {
+        "xx-small": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "12px",
+            "font-weight": "400",
+            "line-height": "1.25"
+          }
+        },
+        "x-small": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "14px",
+            "font-weight": "400",
+            "line-height": "1.25"
+          }
+        },
+        "small": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "16px",
+            "font-weight": "400",
+            "line-height": "1.25"
+          }
+        },
+        "medium": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.publico-text}",
+              "font-size": "18px",
+              "font-weight": "400",
+              "line-height": "1.25"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.publico-text}",
+              "font-size": "17px",
+              "font-weight": "400",
+              "line-height": "1.25"
+            }
+          },
+          "large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.publico-text}",
+                "font-size": "20px",
+                "font-weight": "400",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.publico-text}",
+                "font-size": "18px",
+                "font-weight": "400",
+                "line-height": "1.25"
+              }
+            }
+          },
+          "x-large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.publico-text}",
+                "font-size": "23px",
+                "font-weight": "400",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.publico-text}",
+                "font-size": "19px",
+                "font-weight": "400",
+                "line-height": "1.10"
+              }
+            }
+          }
+        }
       }
     }
   }
