@@ -130,6 +130,132 @@
         }
       },
       "opinion": {
+        "h1": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{52px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{40px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{36px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          }
+        },
+        "h2": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{38px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{28px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{28px}",
+              "line-height": "{1.05}",
+              "letter-spacing": "{0.03em}"
+            }
+          }
+        },
+        "h3": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{28px}",
+              "line-height": "{1.10}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{24px}",
+              "line-height": "{1.10}",
+              "letter-spacing": "{0.03em}"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-weight": "{400}",
+              "style": "{regular}",
+              "font-size": "{24px}",
+              "line-height": "{1.10}",
+              "letter-spacing": "{0.03em}"
+            }
+          }
+        },
+        "h4": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-weight": "{400}",
+            "style": "{regular}",
+            "font-size": "{20px}",
+            "line-height": "{1.10}",
+            "letter-spacing": "{0.03em}"
+          }
+        },
+        "h5": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-weight": "{400}",
+            "style": "{regular}",
+            "font-size": "{18px}",
+            "line-height": "{1.15}",
+            "letter-spacing": "{0.03em}"
+          }
+        },
+        "h6": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-weight": "{400}",
+            "style": "{regular}",
+            "font-size": "{16px}",
+            "line-height": "{1.15}",
+            "letter-spacing": "{0.04em}"
+          }
+        }
       },
       "text": {
         "regular": {
