@@ -260,6 +260,100 @@
       "text": {
         "regular": {
           "xx-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-style": "{regular}",
+              "font-weight": "{400}",
+              "font-size": "{12px}",
+              "line-height": "{1.25}",
+              "letter-spacing": "{0}"
+            }
+          },
+          "x-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-style": "{regular}",
+              "font-weight": "{400}",
+              "font-size": "{14px}",
+              "line-height": "{1.25}",
+              "letter-spacing": "{0}"
+            }
+          },
+          "small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-style": "{regular}",
+              "font-weight": "{400}",
+              "font-size": "{16px}",
+              "line-height": "{1.25}",
+              "letter-spacing": "{0}"
+            }
+          },
+          "medium": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{18px}",
+                "line-height": "{1.25}",
+                "letter-spacing": "{0}"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{17px}",
+                "line-height": "{1.25}",
+                "letter-spacing": "{0}"
+              }
+            }
+          },
+          "large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{20px}",
+                "line-height": "{1.25}",
+                "letter-spacing": "{0}"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{18px}",
+                "line-height": "{1.25}",
+                "letter-spacing": "{0}"
+              }
+            }
+          },
+          "x-large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{23px}",
+                "line-height": "{1.10}",
+                "letter-spacing": "{0}"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-style": "{regular}",
+                "font-weight": "{400}",
+                "font-size": "{19px}",
+                "line-height": "{1.10}",
+                "letter-spacing": "{0}"
+              }
+            }
           }
         },
         "bold": {
