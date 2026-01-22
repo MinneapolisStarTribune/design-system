@@ -1200,6 +1200,50 @@
           }
         }
       }
+    },
+    "article-quote-small": {
+      "value": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-headline}",
+            "font-size": "24px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.15"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-headline}",
+            "font-size": "22px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.15"
+          }
+        }
+      }
+    },
+    "article-quote-large": {
+      "value": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-headline}",
+            "font-size": "32px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.15"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-headline}",
+            "font-size": "28px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.15"
+          }
+        }
+      }
     }
   }
 }
