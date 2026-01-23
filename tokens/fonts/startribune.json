@@ -104,7 +104,7 @@
               },
               {
                 "weight": 700,
-                "style": "bold",
+                "style": "normal",
                 "file": "PublicoText-Bold-Web.woff2"
               },
               {
@@ -149,32 +149,32 @@
               {
                 "weight": 700,
                 "style": "normal",
-                "file": "BarlowCondensed-Bold-Web.woff2"
+                "file": "Barlow-Bold-Web.woff2"
               },
               {
                 "weight": 600,
                 "style": "normal",
-                "file": "BarlowCondensed-SemiBold-Web.woff2"
+                "file": "Barlow-SemiBold-Web.woff2"
               },
               {
                 "weight": 600,
                 "style": "italic",
-                "file": "BarlowCondensed-SemiBold-Web.woff2"
+                "file": "Barlow-SemiBold-Web.woff2"
               },
               {
                 "weight": 500,
                 "style": "normal",
-                "file": "BarlowCondensed-Medium-Web.woff2"
+                "file": "Barlow-Medium-Web.woff2"
               },
               {
                 "weight": 400,
                 "style": "normal",
-                "file": "BarlowCondensed-Regular-Web.woff2"
+                "file": "Barlow-Regular-Web.woff2"
               },
               {
                 "weight": 400,
                 "style": "italic",
-                "file": "BarlowCondensed-Regular-Web.woff2"
+                "file": "Barlow-Regular-Web.woff2"
               }
             ]
           }
