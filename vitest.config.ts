@@ -13,6 +13,16 @@ export default defineConfig({
       include: '**/*.svg?react',
     }),
   ],
+  css: {
+    modules: {
+      // Return class names as-is for CSS modules in tests
+      // This prevents "Could not parse CSS stylesheet" errors
+      generateScopedName: (name: string) => name,
+    },
+    preprocessorOptions: {
+      // SCSS will be processed by sass (already installed)
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
