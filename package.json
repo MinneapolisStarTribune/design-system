@@ -89,8 +89,8 @@
     "test:a11y": "vitest run a11y.test",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\" \"tokens/**/*.json\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\" \"tokens/**/*.json\"",
     "typecheck": "tsc --noEmit",
     "prepare": "npx husky"
   },
