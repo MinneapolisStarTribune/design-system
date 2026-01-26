@@ -15,5 +15,11 @@
       "barlow-condensed": { "value": "Barlow Condensed, sans-serif" },
       "popular": { "value": "Popular, sans-serif" }
     }
+  },
+  "text": {
+    "size": {
+      "1xl": { "value": "1.375rem" },
+      "2xxl": { "value": "1.75rem" }
+    }
   }
 }

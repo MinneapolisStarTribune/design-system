@@ -2,27 +2,27 @@
   "color": {
     "button": {
       "filled-background": { "value": "{color.neutral.950}" },
-      "filled-text": { "value": "{color.base.white}" },
       "filled-hover-background": { "value": "{color.neutral.800}" },
       "filled-hover-text": { "value": "{color.base.white}" },
+      "filled-text": { "value": "{color.base.white}" },
+      "ghost-background": { "value": "{color.base.white}" },
+      "ghost-hover-background": { "value": "{color.neutral.100}" },
+      "ghost-hover-text": { "value": "{color.neutral.950}" },
+      "ghost-text": { "value": "{color.neutral.950}" },
       "neutral-filled-button-icon": { "value": "{color.base.white}" },
+      "neutral-ghost-button-icon": { "value": "{color.neutral.950}" },
+      "neutral-outlined-button-icon": { "value": "{color.neutral.950}" },
+      "neutral-utility-button-icon": { "value": "{color.neutral.950}" },
       "outlined-background": { "value": "{color.base.white}" },
       "outlined-border": { "value": "{color.neutral.950}" },
-      "outlined-text": { "value": "{color.neutral.950}" },
       "outlined-hover-background": { "value": "{color.neutral.100}" },
       "outlined-hover-border": { "value": "{color.neutral.950}" },
       "outlined-hover-text": { "value": "{color.neutral.950}" },
-      "neutral-outlined-button-icon": { "value": "{color.neutral.950}" },
-      "ghost-background": { "value": "{color.base.white}" },
-      "ghost-text": { "value": "{color.neutral.950}" },
-      "neutral-ghost-button-icon": { "value": "{color.neutral.950}" },
-      "ghost-hover-background": { "value": "{color.neutral.100}" },
-      "ghost-hover-text": { "value": "{color.neutral.950}" },
+      "outlined-text": { "value": "{color.neutral.950}" },
       "utility-border": { "value": "{color.neutral.200}" },
-      "utility-text": { "value": "{color.neutral.800}" },
       "utility-hover-border": { "value": "{color.neutral.950}" },
       "utility-hover-text": { "value": "{color.neutral.950}" },
-      "neutral-utility-button-icon": { "value": "{color.neutral.950}" }
+      "utility-text": { "value": "{color.neutral.800}" }
     }
   }
 }
