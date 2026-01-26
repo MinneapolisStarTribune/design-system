@@ -2,6 +2,7 @@
   "arrowParens": "always",
   "endOfLine": "lf",
   "jsonRecursiveSort": true,
+  "jsonSortOrder": "{ \"/^\\\\d+/\": \"numeric\", \"/.*/\": \"lexical\" }",
   "plugins": ["prettier-plugin-sort-json"],
   "printWidth": 100,
   "semi": true,
