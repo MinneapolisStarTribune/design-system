@@ -1,14 +1,14 @@
 /**
  * Custom Typography Classes Format
- * 
+ *
  * This function formats typography tokens into CSS utility classes.
  * It processes composite typography tokens and generates CSS classes with all typography properties.
- * 
+ *
  * @param {Object} options - Style Dictionary format options
  * @param {Object} options.dictionary - The Style Dictionary token dictionary
  * @param {Object} options.options - Format options (may include brand)
  * @returns {string} Complete CSS file content with typography classes
- * 
+ *
  * Example output:
  * ```
  * /**
@@ -27,7 +27,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
   // Access tokens from dictionary.tokens (nested structure)
   // Style Dictionary stores tokens in nested object structure
   const typographyData = dictionary.tokens?.typography;
-  
+
   if (!typographyData) {
     return '/**\n * Do not edit directly, this file was auto-generated.\n * No typography tokens found.\n */\n';
   }
@@ -35,7 +35,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
   // Process nested typography structure manually
   // Structure: typography.utility.page.h1.desktop.value.{font-family, font-size, etc}
   const typographyTokens = [];
-  
+
   function traverse(obj, path = []) {
     if (obj && typeof obj === 'object') {
       if (obj.value && typeof obj.value === 'object' && !Array.isArray(obj.value)) {
@@ -56,9 +56,9 @@ function typographyClassesFormat({ dictionary, options = {} }) {
       }
     }
   }
-  
+
   traverse(typographyData, ['typography']);
-  
+
   if (typographyTokens.length === 0) {
     return '/**\n * Do not edit directly, this file was auto-generated.\n * No typography tokens found.\n */\n';
   }
@@ -70,24 +70,24 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     // Token path structure after Style Dictionary processing:
     // ['typography', 'editorial', 'news', 'h1', 'desktop', 'value', 'font-family']
     // or: ['typography', 'utility', 'page', 'h1', 'desktop', 'value', 'font-size']
-    
+
     const path = token.path;
-    
+
     // Find where 'value' appears in the path (it's the parent of the property)
     const valueIndex = path.indexOf('value');
     if (valueIndex === -1) return; // Skip if no 'value' in path
-    
+
     // Extract the property name (last element after 'value')
     const property = path[path.length - 1];
-    
+
     // Extract the base path (everything before 'value')
     const basePath = path.slice(0, valueIndex);
-    
+
     // Check if there's a breakpoint (desktop, tablet, mobile) in the path
     const breakpoints = ['desktop', 'tablet', 'mobile'];
     let breakpoint = null;
     let classPath = [...basePath];
-    
+
     // Check if one of the path segments is a breakpoint
     for (let i = 0; i < basePath.length; i++) {
       if (breakpoints.includes(basePath[i])) {
@@ -96,11 +96,11 @@ function typographyClassesFormat({ dictionary, options = {} }) {
         break;
       }
     }
-    
+
     // Generate class name from path: typography.editorial.news.h1 -> typography-editorial-news-h1
     const className = classPath.join('-').toLowerCase();
     const key = breakpoint ? `${className}-${breakpoint}` : className;
-    
+
     // Initialize group if it doesn't exist
     if (!tokenGroups.has(key)) {
       tokenGroups.set(key, {
@@ -109,19 +109,19 @@ function typographyClassesFormat({ dictionary, options = {} }) {
         properties: {},
       });
     }
-    
+
     // Convert property name from camelCase to kebab-case
     // font-family, font-weight, font-size, line-height, letter-spacing
     const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-    
+
     // Get the resolved value
     let cssValue = token.value;
-    
+
     // If value is still a token reference string, try to resolve it
     if (typeof cssValue === 'string' && cssValue.startsWith('{') && cssValue.endsWith('}')) {
       // Try to find the referenced token in the dictionary
       const refPath = cssValue.slice(1, -1).split('.');
-      
+
       // Style Dictionary stores tokens in dictionary.tokens with dot notation
       // Try to find the token by path
       let refToken = null;
@@ -132,7 +132,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
       } catch (e) {
         // Token not found in nested structure
       }
-      
+
       if (refToken && refToken.value) {
         cssValue = refToken.value;
       } else {
@@ -141,7 +141,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
         cssValue = `var(${varName})`;
       }
     }
-    
+
     // Convert pixel values to rem for better accessibility
     // "18px" -> "1.125rem" (18/16 = 1.125)
     if (typeof cssValue === 'string' && cssValue.endsWith('px')) {
@@ -151,13 +151,13 @@ function typographyClassesFormat({ dictionary, options = {} }) {
         cssValue = `${remValue}rem`;
       }
     }
-    
+
     tokenGroups.get(key).properties[cssProperty] = cssValue;
   });
 
   // Generate CSS classes
   const classes = [];
-  
+
   // Breakpoint values for media queries
   const breakpointMap = {
     desktop: '@media (min-width: 1160px)',
@@ -168,7 +168,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
   // Group classes by breakpoint for media query organization
   const classesByBreakpoint = new Map();
   const nonResponsiveClasses = [];
-  
+
   tokenGroups.forEach((data, key) => {
     if (data.breakpoint) {
       if (!classesByBreakpoint.has(data.breakpoint)) {
@@ -194,7 +194,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
 
   // Then, generate responsive classes organized by breakpoint
   const breakpointOrder = ['desktop', 'tablet', 'mobile'];
-  
+
   breakpointOrder.forEach((breakpoint) => {
     const classesForBreakpoint = classesByBreakpoint.get(breakpoint);
     if (!classesForBreakpoint || classesForBreakpoint.length === 0) {
@@ -222,4 +222,3 @@ function typographyClassesFormat({ dictionary, options = {} }) {
 }
 
 module.exports = typographyClassesFormat;
-
