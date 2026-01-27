@@ -918,86 +918,78 @@
         }
       },
       "regular": {
-        "value": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "18px",
-              "font-weight": "400",
-              "line-height": "1.32"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "17px",
-              "font-weight": "400",
-              "line-height": "1.32"
-            }
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-weight": "400",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
+            "font-weight": "400",
+            "line-height": "1.32"
           }
         }
       },
       "italic": {
-        "value": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "18px",
-              "font-style": "italic",
-              "font-weight": "400",
-              "line-height": "1.32"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "17px",
-              "font-style": "italic",
-              "font-weight": "400",
-              "line-height": "1.32"
-            }
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.32"
           }
         }
       },
-      "bold-bol": {
-        "value": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "18px",
-              "font-weight": "700",
-              "line-height": "1.32"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "17px",
-              "font-weight": "700",
-              "line-height": "1.32"
-            }
+      "bold-bold": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-weight": "700",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
+            "font-weight": "700",
+            "line-height": "1.32"
           }
         }
       },
       "bold-italic": {
-        "value": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "18px",
-              "font-style": "italic",
-              "font-weight": "700",
-              "line-height": "1.32"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.publico-text}",
-              "font-size": "17px",
-              "font-style": "italic",
-              "font-weight": "700",
-              "line-height": "1.32"
-            }
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-style": "italic",
+            "font-weight": "700",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
+            "font-style": "italic",
+            "font-weight": "700",
+            "line-height": "1.32"
           }
         }
       },
