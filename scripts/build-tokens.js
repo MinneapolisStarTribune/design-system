@@ -170,7 +170,7 @@ function getStyleDictionaryConfig(brand, mode) {
     
     // Platform configuration - defines output format and location
     platforms: {
-      cssTheme: {
+      css: {
         // Use CSS transform group - handles token reference resolution
         // This automatically resolves {color.neutral.500} references to actual hex values
         transformGroup: 'css',
@@ -190,13 +190,16 @@ function getStyleDictionaryConfig(brand, mode) {
           },
         ],
       },
-      cssFonts: {
+      'font-faces': {
         transformGroup: 'css',
         buildPath: `dist/fonts/`,
         files: [
           {
             destination: `${brand}-font-faces.css`,
             format: 'css/font-face',
+            options: {
+              brand,
+            }
           },
         ],
       },
@@ -257,60 +260,23 @@ async function buildTokens() {
  * A custom format function for Style Dictionary that generates font-face CSS rules
  * from token data.
  */
-
-const fontFaceFormat = ({ dictionary, options }) => {
-  const brand = options.brand;
-
-  const fonts = dictionary.tokens?.font?.brand?.[brand]?.fonts ?? [];
+const fontFaceFormat = ({ dictionary }) => {
+  const fonts =
+    dictionary.tokens?.font?.brand?.startribune?.fonts ?? [];
 
   const fontFaces = [];
 
   fonts.forEach((font) => {
-    const { family, weights = [], styles = [], url, file = {} } = font;
-
-    // Case 1: weight-only fonts (no styles)
-    if (styles.length === 0) {
-      weights.forEach((weight) => {
-        const fontFile = file[String(weight)];
-        if (!fontFile) return;
-
-        fontFaces.push(
-          `
+    font.variants.forEach((variant) => {
+      const { weight, style, file } = variant;
+      fontFaces.push(`
 @font-face {
-  font-family: "${family}";
-  font-style: normal;
+  font-family: "${font.family}";
+  src: url("${font.url}${file}") format("woff2");
   font-weight: ${weight};
-  src: url("${url}${fontFile}") format("woff2");
-  font-display: swap;
+  font-style: ${style};
 }
-        `.trim()
-        );
-      });
-
-      return;
-    }
-
-    // Case 2: weight + style fonts
-    weights.forEach((weight) => {
-      styles.forEach((styleKey) => {
-        const lookupKey = `${weight} && ${styleKey}`;
-        const fontFile = file[lookupKey];
-        if (!fontFile) return;
-
-        const fontStyle = styleKey.includes('italic') ? 'italic' : 'normal';
-
-        fontFaces.push(
-          `
-@font-face {
-  font-family: "${family}";
-  font-style: ${fontStyle};
-  font-weight: ${weight};
-  src: url("${url}${fontFile}") format("woff2");
-  font-display: swap;
-}
-        `.trim()
-        );
-      });
+      `.trim());
     });
   });
 
