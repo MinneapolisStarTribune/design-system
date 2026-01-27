@@ -631,7 +631,6 @@
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-size": "12px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -640,7 +639,6 @@
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-size": "14px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -649,7 +647,6 @@
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-size": "16px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -659,7 +656,6 @@
             "value": {
               "font-family": "{font.family.publico-text}",
               "font-size": "18px",
-              "font-style": "bold",
               "font-weight": "700",
               "line-height": "1.25"
             }
@@ -668,7 +664,6 @@
             "value": {
               "font-family": "{font.family.publico-text}",
               "font-size": "17px",
-              "font-style": "bold",
               "font-weight": "700",
               "line-height": "1.25"
             }
@@ -678,7 +673,6 @@
               "value": {
                 "font-family": "{font.family.publico-text}",
                 "font-size": "20px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.25"
               }
@@ -687,7 +681,6 @@
               "value": {
                 "font-family": "{font.family.publico-text}",
                 "font-size": "18px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.25"
               }
@@ -698,7 +691,6 @@
               "value": {
                 "font-family": "{font.family.publico-text}",
                 "font-size": "23px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.10"
               }
@@ -707,7 +699,6 @@
               "value": {
                 "font-family": "{font.family.publico-text}",
                 "font-size": "19px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.10"
               }
@@ -800,7 +791,6 @@
           "value": {
             "font-family": "{font.family.barlow}",
             "font-size": "12px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -809,7 +799,6 @@
           "value": {
             "font-family": "{font.family.barlow}",
             "font-size": "14px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -818,7 +807,6 @@
           "value": {
             "font-family": "{font.family.barlow}",
             "font-size": "16px",
-            "font-style": "bold",
             "font-weight": "700",
             "line-height": "1.25"
           }
@@ -828,7 +816,6 @@
             "value": {
               "font-family": "{font.family.barlow}",
               "font-size": "18px",
-              "font-style": "bold",
               "font-weight": "700",
               "line-height": "1.25"
             }
@@ -837,7 +824,6 @@
             "value": {
               "font-family": "{font.family.barlow}",
               "font-size": "17px",
-              "font-style": "bold",
               "font-weight": "700",
               "line-height": "1.25"
             }
@@ -847,7 +833,6 @@
               "value": {
                 "font-family": "{font.family.barlow}",
                 "font-size": "20px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.25"
               }
@@ -856,7 +841,6 @@
               "value": {
                 "font-family": "{font.family.barlow}",
                 "font-size": "18px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.25"
               }
@@ -867,7 +851,6 @@
               "value": {
                 "font-family": "{font.family.barlow}",
                 "font-size": "23px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.10"
               }
@@ -876,7 +859,6 @@
               "value": {
                 "font-family": "{font.family.barlow}",
                 "font-size": "19px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.10"
               }
@@ -982,7 +964,6 @@
               "value": {
                 "font-family": "{font.family.publico-text}",
                 "font-size": "18px",
-                "font-style": "bold",
                 "font-weight": "700",
                 "line-height": "1.32"
               }
