@@ -1,22 +1,22 @@
 /**
  * Build Tokens Script
- * 
+ *
  * This script generates CSS theme files from design tokens using Style Dictionary.
  * It creates separate CSS files for each brand (startribune, varsity) and color scheme (light, dark).
- * 
+ *
  * Current State:
  * - ✅ Uses Style Dictionary for token processing and CSS generation
  * - ✅ Reads token JSON files from the tokens/ directory
  * - ✅ Resolves token references (e.g., {color.neutral.500})
  * - ✅ Generates typography utility classes for each brand
  * - ❌ NOT YET IMPLEMENTED: Figma integration/bridge to automatically sync tokens from Figma
- * 
+ *
  * Future Goal:
  * We want to build a bridge between Figma and this codebase using Style Dictionary,
  * so that design tokens can be automatically synced from Figma without manual JSON file updates.
  * This integration has not been implemented yet - currently tokens are maintained manually
  * in the tokens/ directory.
- * 
+ *
  * Output files:
  * - dist/themes/startribune-light.css
  * - dist/themes/startribune-dark.css
@@ -28,15 +28,15 @@
  * - dist/fonts/utility/varsity-fonts.css (shared + varsity overrides)
  * - dist/fonts/startribune.css (@font-face from tokens/fonts/startribune.json)
  * - dist/fonts/varsity.css (@font-face from tokens/fonts/varsity.json)
- * 
+ *
  * Each theme file contains CSS variables in :root that can be imported and used in applications.
  * Each fonts file contains typography utility classes.
- * 
+ *
  * Usage:
  *   node scripts/build-tokens.js
  *   or
  *   yarn tokens
- * 
+ *
  * The script:
  * 1. Reads token JSON files from the tokens/ directory
  * 2. Resolves token references (e.g., {color.neutral.500})
@@ -54,25 +54,25 @@ const buildFontFaces = require('./builders/build-font-faces');
 
 /**
  * Main Build Function
- * 
+ *
  * Orchestrates the token building process for all brands and color schemes.
  * Generates CSS files for each combination:
  * - startribune + light → startribune-light.css
  * - startribune + dark → startribune-dark.css
  * - varsity + light → varsity-light.css
  * - varsity + dark → varsity-dark.css
- * 
+ *
  * Also generates typography class files:
  * - dist/fonts/editorial/: startribune-fonts.css, varsity-fonts.css (editorial only)
  * - dist/fonts/utility/: startribune-fonts.css, varsity-fonts.css (shared + brand overrides)
- * 
+ *
  * Process:
  * 1. Iterates through all brand/mode combinations
  * 2. Creates Style Dictionary configuration for each
  * 3. Builds CSS file using Style Dictionary
  * 4. Builds typography classes for each brand
  * 5. Logs progress and completion
- * 
+ *
  * @returns {Promise<void>} Resolves when all tokens are built
  * @throws {Error} If any build fails, the process exits with error code 1
  */
@@ -92,7 +92,7 @@ async function buildTokens() {
   // Build editorial typography classes for each brand
   console.log('\n==============================================');
   console.log('Building typography classes...');
-  
+
   for (const brand of brands) {
     await buildTypographyClasses(brand);
   }
@@ -100,7 +100,7 @@ async function buildTokens() {
   // Build utility typography classes (shared.json common for both; brand json overrides)
   console.log('\n==============================================');
   console.log('Building utility typography classes...');
-  
+
   for (const brand of brands) {
     await buildUtilityTypographyClasses(brand);
   }
@@ -108,7 +108,7 @@ async function buildTokens() {
   // Build @font-face CSS from tokens/fonts/ (startribune.json, varsity.json)
   console.log('\n==============================================');
   console.log('Building @font-face CSS...');
-  
+
   for (const brand of brands) {
     await buildFontFaces(brand);
   }

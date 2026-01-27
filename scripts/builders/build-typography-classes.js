@@ -69,4 +69,3 @@ async function buildTypographyClasses(brand) {
 }
 
 module.exports = buildTypographyClasses;
-
