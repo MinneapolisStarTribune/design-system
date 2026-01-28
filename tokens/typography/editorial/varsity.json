@@ -109,14 +109,14 @@
           }
         },
         "h5": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "style": "semibold",
-              "font-size": "18px",
-              "line-height": "1.15",
-              "letter-spacing": "0.03em"
-            }
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-weight": "600",
+            "style": "semibold",
+            "font-size": "18px",
+            "line-height": "1.15",
+            "letter-spacing": "0.03em"
+          }
         },
         "h6": {
           "value": {
@@ -458,7 +458,7 @@
     },
     "article-body": {
       "regular": {
-        "desktop":{
+        "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-weight": "400",
@@ -478,7 +478,7 @@
         }
       },
       "italic": {
-        "desktop":{
+        "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-weight": "400",
@@ -498,7 +498,7 @@
         }
       },
       "bold": {
-        "desktop":{
+        "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-weight": "700",
@@ -518,7 +518,7 @@
         }
       },
       "bold-italic": {
-        "desktop":{
+        "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-weight": "700",
@@ -538,7 +538,7 @@
         }
       },
       "link": {
-        "desktop":{
+        "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
             "font-weight": "400",

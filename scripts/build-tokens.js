@@ -135,7 +135,7 @@ function getStyleDictionaryConfig(brand, mode) {
   // Add shared token files that apply to all brands and modes
   sourceFiles.push(
     'tokens/color/semantic.json',  
-    'tokens/text.json',            
+    'tokens/typography/font.json',            
     'tokens/border-radius.json',   
     'tokens/spacing.json',         
     'tokens/breakpoint.json'       

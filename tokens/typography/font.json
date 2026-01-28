@@ -1,0 +1,19 @@
+{
+  "font": {
+    "family": {
+      "barlow": { "value": "Barlow, sans-serif" },
+      "barlow-condensed": { "value": "Barlow Condensed, sans-serif" },
+      "graphik": { "value": "Graphik, sans-serif" },
+      "graphik-compact": { "value": "Graphik Compact, sans-serif" },
+      "graphik-condensed": { "value": "Graphik Condensed, sans-serif" },
+      "nohemi": { "value": "Nohemi, sans-serif" },
+      "publico-banner": { "value": "Publico Banner, serif" },
+      "publico-banner-condensed": { "value": "Publico Banner Condensed, serif" },
+      "publico-banner-x-condensed": { "value": "Publico Banner X Condensed, serif" },
+      "publico-headline": { "value": "Publico Headline, serif" },
+      "publico-headline-condensed": { "value": "Publico Headline Condensed, serif" },
+      "publico-text": { "value": "Publico Text, serif" },
+      "popular": { "value": "Popular, sans-serif" }
+    }
+  }
+}
