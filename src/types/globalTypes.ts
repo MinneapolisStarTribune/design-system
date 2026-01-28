@@ -53,3 +53,19 @@ export type IconSpecificProps<IconName extends string = string> = {
 export const SIZES = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'] as const;
 
 export type Size = (typeof SIZES)[number];
+
+/**
+ * Global font weight/style tokens for the design system
+ */
+export const FONT_WEIGHT_STYLE = [
+  'regular',
+  'medium',
+  'italic',
+  'semibold',
+  'semibold-italic',
+  'bold',
+  'bold-italic',
+  'dropcap',
+] as const;
+
+export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
