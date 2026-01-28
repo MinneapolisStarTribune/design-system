@@ -1,6 +1,8 @@
 {
   "font": {
     "family": {
+      "barlow": { "value": "Barlow, sans-serif" },
+      "barlow-condensed": { "value": "Barlow Condensed, sans-serif" },
       "graphik": { "value": "Graphik, sans-serif" },
       "graphik-compact": { "value": "Graphik Compact, sans-serif" },
       "graphik-condensed": { "value": "Graphik Condensed, sans-serif" },
@@ -11,8 +13,6 @@
       "publico-headline": { "value": "Publico Headline, serif" },
       "publico-headline-condensed": { "value": "Publico Headline Condensed, serif" },
       "publico-text": { "value": "Publico Text, serif" },
-      "barlow": { "value": "Barlow, sans-serif" },
-      "barlow-condensed": { "value": "Barlow Condensed, sans-serif" },
       "popular": { "value": "Popular, sans-serif" }
     }
   }
