@@ -328,5 +328,59 @@ describe('build-tokens.js', () => {
       expect(scriptContent).toContain('process.exit(1)');
     });
   });
+
+  describe('Font Face Generation', () => {
+    const fontsDir = path.join(projectRoot, 'dist', 'fonts');
+    const fontFile = 'startribune-font-faces.css';
+
+    beforeEach(() => {
+      if (fs.existsSync(fontsDir)) {
+        const filePath = path.join(fontsDir, fontFile);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+    });
+
+    it('generates font-face declarations for Star Tribune fonts', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const filePath = path.join(fontsDir, fontFile);
+      expect(fs.existsSync(filePath)).toBe(true);
+
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      // Header comment
+      expect(content).toContain('Do not edit directly');
+      expect(content).toContain('@font-face');
+
+      // Verify Publico Headline Condensed
+      expect(content).toContain('font-family: "Publico Banner Condensed, serif"');
+      expect(content).toContain('font-weight: 900');
+      expect(content).toContain('font-style: normal');
+      expect(content).toContain(
+        'https://fonts.startribune.com/PublicoHeadlineCondensedWebFonts/'
+      );
+
+      // Verify italic handling
+      expect(content).toContain('font-style: italic');
+
+      // Ensure multiple @font-face rules exist
+      const fontFaceCount = (content.match(/@font-face/g) || []).length;
+      expect(fontFaceCount).toBeGreaterThan(1);
+    });
+
+    it('uses font-style normal for non-italic variants', () => {
+      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+
+      const content = fs.readFileSync(
+        path.join(fontsDir, fontFile),
+        'utf-8'
+      );
+
+      // Normal weights should explicitly be normal
+      expect(content).toMatch(/font-style:\s*normal;/);
+    });
+  });
 });
 

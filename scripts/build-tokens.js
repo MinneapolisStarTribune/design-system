@@ -21,8 +21,10 @@
  * - dist/themes/startribune-dark.css
  * - dist/themes/varsity-light.css
  * - dist/themes/varsity-dark.css
+ * - dist/fonts/startribune-fonts.css
  * 
  * Each file contains CSS variables in :root that can be imported and used in applications.
+ * Font files contain @font-face declarations.
  * 
  * Usage:
  *   node scripts/build-tokens.js
@@ -141,6 +143,14 @@ function getStyleDictionaryConfig(brand, mode) {
     'tokens/breakpoint.json'       
   );
 
+  // Add brand-specific font tokens
+  const fontFile = `tokens/fonts/${brand}.json`;
+  const fontFilePath = path.join(process.cwd(), fontFile);
+
+  if (fs.existsSync(fontFilePath)) {
+    sourceFiles.push(fontFile);
+  }
+
   // Return Style Dictionary configuration
   return {
     // Verbose logging helps debug token resolution issues
@@ -154,6 +164,7 @@ function getStyleDictionaryConfig(brand, mode) {
     hooks: {
       formats: {
         'css/variables': cssVariablesFormat,
+        'css/font-face': fontFaceFormat,
       },
     },
     
@@ -176,6 +187,19 @@ function getStyleDictionaryConfig(brand, mode) {
             
             // Use our custom format function
             format: 'css/variables',
+          },
+        ],
+      },
+      'font-faces': {
+        transformGroup: 'css',
+        buildPath: `dist/fonts/`,
+        files: [
+          {
+            destination: `${brand}-font-faces.css`,
+            format: 'css/font-face',
+            options: {
+              brand,
+            }
           },
         ],
       },
@@ -232,6 +256,38 @@ async function buildTokens() {
   console.log('\n✓ All tokens built successfully!\n');
 }
 
+/**
+ * A custom format function for Style Dictionary that generates font-face CSS rules
+ * from token data.
+ */
+const fontFaceFormat = ({ dictionary }) => {
+  const fonts =
+    dictionary.tokens?.font?.brand?.startribune?.fonts ?? [];
+
+  const fontFaces = [];
+
+  fonts.forEach((font) => {
+    font.variants.forEach((variant) => {
+      const { weight, style, file } = variant;
+      fontFaces.push(`
+@font-face {
+  font-family: "${font.family}";
+  src: url("${font.url}${file}") format("woff2");
+  font-weight: ${weight};
+  font-style: ${style};
+}
+      `.trim());
+    });
+  });
+
+  return `/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+${fontFaces.join('\n\n')}
+`;
+};
+
 // Execute the build function
 // If any error occurs, log it and exit with error code 1
 // This ensures CI/CD pipelines fail if token generation fails
@@ -239,4 +295,3 @@ buildTokens().catch((error) => {
   console.error('Error building tokens:', error);
   process.exit(1);
 });
-
