@@ -6,7 +6,9 @@ import * as varsityDark from '../generated/themes/varsity.dark';
 import spacingJson from '../../tokens/spacing.json';
 import borderRadiusJson from '../../tokens/border-radius.json';
 
-export type Brand = 'startribune' | 'varsity';
+export const BRANDS = ['startribune', 'varsity'] as const;
+
+export type Brand = (typeof BRANDS)[number];
 export type ColorScheme = 'light' | 'dark';
 
 /**
