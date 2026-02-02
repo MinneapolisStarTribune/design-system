@@ -55,27 +55,13 @@ export const SIZES = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-larg
 export type Size = (typeof SIZES)[number];
 
 /**
- * Global font weight/style tokens for the design system
- */
-export const FONT_WEIGHT_STYLE = [
-  'regular',
-  'medium',
-  'italic',
-  'semibold',
-  'semibold-italic',
-  'bold',
-  'bold-italic',
-  'dropcap',
-] as const;
-
-export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
-
-/**
  * UtilityLabel size tokens for the design system
  */
-export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
+export const UTILITY_LABEL_SIZES = ['small', 'medium', 'large'] as const;
+export type UtilityLabelSize = (typeof UTILITY_LABEL_SIZES)[number];
 
 /**
  * UtilityLabel weight tokens for the design system
  */
-export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+export const UTILITY_LABEL_WEIGHTS = ['regular', 'semibold'] as const;
+export type UtilityLabelWeight = (typeof UTILITY_LABEL_WEIGHTS)[number];
