@@ -1,0 +1,3 @@
+{
+  "imports": ["../editorial/index.json", "./startribune.json", "./varsity.json"]
+}
