@@ -4,30 +4,26 @@ const fs = require('fs');
 const typographyClassesFormat = require('../formats/typography-classes');
 
 /**
- * Build Typography Classes for a Brand
- * 
- * Generates CSS utility classes from typography tokens for a specific brand.
- * Loads both utility and editorial typography tokens and generates a single CSS file.
- * 
+ * Build Editorial Typography Classes for a Brand
+ *
+ * Generates CSS classes from typography.editorial tokens only.
+ * Output goes to dist/fonts/editorial/. Utility typography is built separately to dist/fonts/utility/.
+ *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
- * @returns {Promise<void>} Resolves when typography classes are built
+ * @returns {Promise<void>} Resolves when editorial typography classes are built
  */
 async function buildTypographyClasses(brand) {
-  console.log(`\nBuilding typography classes for ${brand}...`);
+  console.log(`\nBuilding editorial typography classes for ${brand}...`);
 
   const sourceFiles = [
-    'tokens/text.json', // Primitives (font families)
-    'tokens/typography/utility/index.json', // Shared utility typography tokens
-    `tokens/typography/utility/${brand}.json`, // Brand-specific utility typography tokens
-    `tokens/typography/editorial/${brand}.json`, // Editorial typography tokens
+    'tokens/text.json',
+    `tokens/typography/editorial/${brand}.json`,
   ];
 
-  // Check if typography files exist
-  const utilityFile = path.join(process.cwd(), `tokens/typography/utility/${brand}.json`);
   const editorialFile = path.join(process.cwd(), `tokens/typography/editorial/${brand}.json`);
 
-  if (!fs.existsSync(utilityFile) && !fs.existsSync(editorialFile)) {
-    console.log(`⚠️  No typography files found for ${brand}, skipping...`);
+  if (!fs.existsSync(editorialFile)) {
+    console.log(`⚠️  No editorial typography file found for ${brand}, skipping...`);
     return;
   }
 
@@ -48,10 +44,10 @@ async function buildTypographyClasses(brand) {
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: 'dist/fonts/',
+        buildPath: 'dist/fonts/editorial/',
         files: [
           {
-            destination: `${brand}-fonts.css`,
+            destination: `${brand}.css`,
             format: 'css/typography-classes',
             filter: (token) => {
               // Only include typography tokens
