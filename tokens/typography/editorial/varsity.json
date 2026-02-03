@@ -1,472 +1,20 @@
 {
   "typography": {
-    "editorial": {
-      "news": {
-        "h1": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "52px",
-              "line-height": "1.05",
-              "letter-spacing": "0.01em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "40px",
-              "line-height": "1.05",
-              "letter-spacing": "0.01em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "36px",
-              "line-height": "1.05",
-              "letter-spacing": "0.01em"
-            }
-          }
-        },
-        "h2": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "38px",
-              "line-height": "1.05",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "28px",
-              "line-height": "1.05",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "24px",
-              "line-height": "1.05",
-              "letter-spacing": "0.02em"
-            }
-          }
-        },
-        "h3": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "28px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "24px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
-              "font-size": "20px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          }
-        },
-        "h4": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "600",
-            "font-size": "20px",
-            "line-height": "1.10",
-            "letter-spacing": "0.03em"
-          }
-        },
-        "h5": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "600",
-            "font-size": "18px",
-            "line-height": "1.15",
-            "letter-spacing": "0.03em"
-          }
-        },
-        "h6": {
-          "value": {
-            "font-family": "{font.family.graphik}",
-            "font-weight": "600",
-            "font-size": "16px",
-            "line-height": "1.15",
-            "letter-spacing": "-0.01em"
-          }
-        }
-      },
-      "opinion": {
-        "h1": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "52px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "40px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "36px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          }
-        },
-        "h2": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "38px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "28px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "28px",
-              "line-height": "1.05",
-              "letter-spacing": "0.03em"
-            }
-          }
-        },
-        "h3": {
-          "desktop": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "28px",
-              "line-height": "1.10",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "24px",
-              "line-height": "1.10",
-              "letter-spacing": "0.03em"
-            }
-          },
-          "mobile": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
-              "font-weight": "400",
-              "font-size": "24px",
-              "line-height": "1.10",
-              "letter-spacing": "0.03em"
-            }
-          }
-        },
-        "h4": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
-            "font-size": "20px",
-            "line-height": "1.10",
-            "letter-spacing": "0.03em"
-          }
-        },
-        "h5": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
-            "font-size": "18px",
-            "line-height": "1.15",
-            "letter-spacing": "0.03em"
-          }
-        },
-        "h6": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
-            "font-size": "16px",
-            "line-height": "1.15",
-            "letter-spacing": "0.04em"
-          }
-        }
-      },
-      "text": {
-        "regular": {
-          "xx-small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "400",
-              "font-size": "12px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "x-small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "400",
-              "font-size": "14px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "400",
-              "font-size": "16px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "medium": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "18px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "17px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            }
-          },
-          "large": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "20px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "18px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            }
-          },
-          "x-large": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "23px",
-                "line-height": "1.10",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "400",
-                "font-size": "19px",
-                "line-height": "1.10",
-                "letter-spacing": "0"
-              }
-            }
-          }
-        },
-        "bold": {
-          "xx-small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "600",
-              "font-size": "12px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "x-small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "600",
-              "font-size": "14px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "small": {
-            "value": {
-              "font-family": "{font.family.graphik}",
-              "font-weight": "600",
-              "font-size": "16px",
-              "line-height": "1.25",
-              "letter-spacing": "0"
-            }
-          },
-          "medium": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "18px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "17px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            }
-          },
-          "large": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "20px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "18px",
-                "line-height": "1.25",
-                "letter-spacing": "0"
-              }
-            }
-          },
-          "x-large": {
-            "desktop": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "23px",
-                "line-height": "1.10",
-                "letter-spacing": "0"
-              }
-            },
-            "mobile": {
-              "value": {
-                "font-family": "{font.family.graphik}",
-                "font-weight": "600",
-                "font-size": "19px",
-                "line-height": "1.10",
-                "letter-spacing": "0"
-              }
-            }
-          }
-        }
-      }
-    },
     "article-body": {
-      "regular": {
-        "desktop": {
-          "value": {
-            "font-family": "{font.family.publico-text}",
-            "font-weight": "400",
-            "font-size": "18px",
-            "line-height": "1.32"
-          }
-        },
-        "mobile": {
-          "value": {
-            "font-family": "{font.family.publico-text}",
-            "font-weight": "400",
-            "font-size": "17px",
-            "line-height": "1.32"
-          }
-        }
-      },
-      "italic": {
-        "desktop": {
-          "value": {
-            "font-family": "{font.family.publico-text}",
-            "font-style": "italic",
-            "font-weight": "400",
-            "font-size": "18px",
-            "line-height": "1.32"
-          }
-        },
-        "mobile": {
-          "value": {
-            "font-family": "{font.family.publico-text}",
-            "font-style": "italic",
-            "font-weight": "400",
-            "font-size": "17px",
-            "line-height": "1.32"
-          }
-        }
-      },
       "bold": {
         "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
-            "font-weight": "700",
             "font-size": "18px",
+            "font-weight": "700",
             "line-height": "1.32"
           }
         },
         "mobile": {
           "value": {
             "font-family": "{font.family.publico-text}",
-            "font-weight": "700",
             "font-size": "17px",
+            "font-weight": "700",
             "line-height": "1.32"
           }
         }
@@ -475,18 +23,46 @@
         "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
             "font-style": "italic",
             "font-weight": "700",
-            "font-size": "18px",
             "line-height": "1.32"
           }
         },
         "mobile": {
           "value": {
             "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
             "font-style": "italic",
             "font-weight": "700",
+            "line-height": "1.32"
+          }
+        }
+      },
+      "dropcap": {
+        "value": {
+          "font-family": "{font.family.publico-headline-condensed}",
+          "font-size": "82px",
+          "font-weight": "300",
+          "line-height": ".86"
+        }
+      },
+      "italic": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-style": "italic",
+            "font-weight": "400",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
             "font-size": "17px",
+            "font-style": "italic",
+            "font-weight": "400",
             "line-height": "1.32"
           }
         }
@@ -495,8 +71,8 @@
         "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
-            "font-weight": "400",
             "font-size": "18px",
+            "font-weight": "400",
             "line-height": "1.32",
             "text-decoration": "underline"
           }
@@ -504,60 +80,484 @@
         "mobile": {
           "value": {
             "font-family": "{font.family.publico-text}",
-            "font-weight": "400",
             "font-size": "17px",
+            "font-weight": "400",
             "line-height": "1.32",
             "text-decoration": "underline"
           }
         }
       },
-      "dropcap": {
-        "value": {
-          "font-family": "{font.family.publico-headline-condensed}",
-          "font-weight": "300",
-          "font-size": "82px",
-          "line-height": ".86"
+      "regular": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "18px",
+            "font-weight": "400",
+            "line-height": "1.32"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.publico-text}",
+            "font-size": "17px",
+            "font-weight": "400",
+            "line-height": "1.32"
+          }
         }
       }
     },
     "article-quote": {
-      "small": {
-        "desktop": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
-            "font-size": "24px",
-            "line-height": "1.15",
-            "letter-spacing": "0.03em"
-          }
-        },
-        "mobile": {
-          "value": {
-            "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
-            "font-size": "22px",
-            "line-height": "1.15",
-            "letter-spacing": "0.03em"
-          }
-        }
-      },
       "large": {
         "desktop": {
           "value": {
             "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
             "font-size": "30px",
-            "line-height": "1.15",
-            "letter-spacing": "0.02em"
+            "font-weight": "400",
+            "letter-spacing": "0.02em",
+            "line-height": "1.15"
           }
         },
         "mobile": {
           "value": {
             "font-family": "{font.family.nohemi}",
-            "font-weight": "400",
             "font-size": "28px",
-            "line-height": "1.15",
-            "letter-spacing": "0.02em"
+            "font-weight": "400",
+            "letter-spacing": "0.02em",
+            "line-height": "1.15"
+          }
+        }
+      },
+      "small": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "24px",
+            "font-weight": "400",
+            "letter-spacing": "0.03em",
+            "line-height": "1.15"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "22px",
+            "font-weight": "400",
+            "letter-spacing": "0.03em",
+            "line-height": "1.15"
+          }
+        }
+      }
+    },
+    "editorial": {
+      "news": {
+        "h1": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "52px",
+              "font-weight": "600",
+              "letter-spacing": "0.01em",
+              "line-height": "1.05"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "36px",
+              "font-weight": "600",
+              "letter-spacing": "0.01em",
+              "line-height": "1.05"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "40px",
+              "font-weight": "600",
+              "letter-spacing": "0.01em",
+              "line-height": "1.05"
+            }
+          }
+        },
+        "h2": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "38px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.05"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "24px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.05"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.05"
+            }
+          }
+        },
+        "h3": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "20px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "24px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          }
+        },
+        "h4": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "20px",
+            "font-weight": "600",
+            "letter-spacing": "0.03em",
+            "line-height": "1.10"
+          }
+        },
+        "h5": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "18px",
+            "font-weight": "600",
+            "letter-spacing": "0.03em",
+            "line-height": "1.15"
+          }
+        },
+        "h6": {
+          "value": {
+            "font-family": "{font.family.graphik}",
+            "font-size": "16px",
+            "font-weight": "600",
+            "letter-spacing": "-0.01em",
+            "line-height": "1.15"
+          }
+        }
+      },
+      "opinion": {
+        "h1": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "52px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "36px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "40px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          }
+        },
+        "h2": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "38px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.05"
+            }
+          }
+        },
+        "h3": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "24px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "24px",
+              "font-weight": "400",
+              "letter-spacing": "0.03em",
+              "line-height": "1.10"
+            }
+          }
+        },
+        "h4": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "20px",
+            "font-weight": "400",
+            "letter-spacing": "0.03em",
+            "line-height": "1.10"
+          }
+        },
+        "h5": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "0.03em",
+            "line-height": "1.15"
+          }
+        },
+        "h6": {
+          "value": {
+            "font-family": "{font.family.nohemi}",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "0.04em",
+            "line-height": "1.15"
+          }
+        }
+      },
+      "text": {
+        "bold": {
+          "large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "20px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "18px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            }
+          },
+          "medium": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "18px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "17px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            }
+          },
+          "small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "16px",
+              "font-weight": "600",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
+          },
+          "x-large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "23px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.10"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "19px",
+                "font-weight": "600",
+                "letter-spacing": "0",
+                "line-height": "1.10"
+              }
+            }
+          },
+          "x-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "14px",
+              "font-weight": "600",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
+          },
+          "xx-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "12px",
+              "font-weight": "600",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
+          }
+        },
+        "regular": {
+          "large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "20px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "18px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            }
+          },
+          "medium": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "18px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "17px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.25"
+              }
+            }
+          },
+          "small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "16px",
+              "font-weight": "400",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
+          },
+          "x-large": {
+            "desktop": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "23px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.10"
+              }
+            },
+            "mobile": {
+              "value": {
+                "font-family": "{font.family.graphik}",
+                "font-size": "19px",
+                "font-weight": "400",
+                "letter-spacing": "0",
+                "line-height": "1.10"
+              }
+            }
+          },
+          "x-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "14px",
+              "font-weight": "400",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
+          },
+          "xx-small": {
+            "value": {
+              "font-family": "{font.family.graphik}",
+              "font-size": "12px",
+              "font-weight": "400",
+              "letter-spacing": "0",
+              "line-height": "1.25"
+            }
           }
         }
       }
