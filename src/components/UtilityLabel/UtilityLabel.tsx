@@ -1,8 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
-import { BaseProps, UtilityLabelSize, UtilityLabelWeight } from '../../types/globalTypes';
+import {
+  AccessibilityProps,
+  BaseProps,
+  UtilityLabelSize,
+  UtilityLabelWeight,
+} from '../../types/globalTypes';
 
-export interface UtilityLabelProps extends BaseProps {
+export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
   size: UtilityLabelSize;
   weight?: UtilityLabelWeight;
   capitalize?: boolean;

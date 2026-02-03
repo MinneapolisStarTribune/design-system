@@ -78,6 +78,4 @@ export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
 /**
  * UtilityLabel weight tokens for the design system
  */
-export const UTILITY_LABEL_WEIGHTS = ['regular', 'semibold'] as const;
-
-export type UtilityLabelWeight = (typeof UTILITY_LABEL_WEIGHTS)[number];
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
