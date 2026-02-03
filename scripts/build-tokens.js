@@ -22,8 +22,12 @@
  * - dist/themes/startribune-dark.css
  * - dist/themes/varsity-light.css
  * - dist/themes/varsity-dark.css
- * - dist/fonts/startribune-fonts.css
- * - dist/fonts/varsity-fonts.css
+ * - dist/fonts/editorial/startribune-fonts.css
+ * - dist/fonts/editorial/varsity-fonts.css
+ * - dist/fonts/utility/startribune-fonts.css (shared + startribune overrides)
+ * - dist/fonts/utility/varsity-fonts.css (shared + varsity overrides)
+ * - dist/fonts/startribune.css (@font-face from tokens/fonts/startribune.json)
+ * - dist/fonts/varsity.css (@font-face from tokens/fonts/varsity.json)
  * 
  * Each theme file contains CSS variables in :root that can be imported and used in applications.
  * Each fonts file contains typography utility classes.
@@ -38,11 +42,15 @@
  * 2. Resolves token references (e.g., {color.neutral.500})
  * 3. Formats tokens as CSS variables
  * 4. Writes CSS files to dist/themes/
- * 5. Generates typography utility classes to dist/fonts/
+ * 5. Generates editorial typography classes to dist/fonts/editorial/
+ * 6. Generates utility typography classes to dist/fonts/utility/ (shared.json common for both)
+ * 7. Generates @font-face CSS from tokens/fonts/ to dist/fonts/{brand}.css
  */
 
 const buildThemeTokens = require('./builders/build-theme-tokens');
 const buildTypographyClasses = require('./builders/build-typography-classes');
+const buildUtilityTypographyClasses = require('./builders/build-utility-typography-classes');
+const buildFontFaces = require('./builders/build-font-faces');
 
 /**
  * Main Build Function
@@ -55,8 +63,8 @@ const buildTypographyClasses = require('./builders/build-typography-classes');
  * - varsity + dark → varsity-dark.css
  * 
  * Also generates typography class files:
- * - startribune-fonts.css
- * - varsity-fonts.css
+ * - dist/fonts/editorial/: startribune-fonts.css, varsity-fonts.css (editorial only)
+ * - dist/fonts/utility/: startribune-fonts.css, varsity-fonts.css (shared + brand overrides)
  * 
  * Process:
  * 1. Iterates through all brand/mode combinations
@@ -81,12 +89,28 @@ async function buildTokens() {
     }
   }
 
-  // Build typography classes for each brand
+  // Build editorial typography classes for each brand
   console.log('\n==============================================');
   console.log('Building typography classes...');
   
   for (const brand of brands) {
     await buildTypographyClasses(brand);
+  }
+
+  // Build utility typography classes (shared.json common for both; brand json overrides)
+  console.log('\n==============================================');
+  console.log('Building utility typography classes...');
+  
+  for (const brand of brands) {
+    await buildUtilityTypographyClasses(brand);
+  }
+
+  // Build @font-face CSS from tokens/fonts/ (startribune.json, varsity.json)
+  console.log('\n==============================================');
+  console.log('Building @font-face CSS...');
+  
+  for (const brand of brands) {
+    await buildFontFaces(brand);
   }
 
   console.log('\n==============================================');
