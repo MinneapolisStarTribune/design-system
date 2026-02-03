@@ -36,7 +36,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 
   // Required base files - must exist
   const baseFiles = [
-    requireFile('tokens/color/global.json', 'Global color palettes (includes base colors)'),
+    requireFile('tokens/color/global.json', 'Global color palettes (core colors shared across modes)'),
     requireFile(`tokens/color/button-${mode}.json`, `Mode-specific button tokens (${mode})`),
   ];
 
