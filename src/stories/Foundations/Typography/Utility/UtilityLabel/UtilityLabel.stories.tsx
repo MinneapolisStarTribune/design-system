@@ -7,7 +7,7 @@ import {
 } from '../../../../../types/globalTypes';
 
 const meta = {
-  title: 'Foundations/Typography/Utility/Label',
+  title: 'Foundations/Typography/Utility/UtilityLabel',
   component: UtilityLabel,
   parameters: {
     layout: 'centered',
