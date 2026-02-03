@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { MantineProvider as MantineProviderBase } from '@mantine/core';
 import { createMantineTheme } from './mantine-theme';
 import { Brand, ColorScheme } from './theme-helpers';
+import { BrandContext } from './brand/BrandContext';
 
 export type { Brand };
 
@@ -23,8 +24,10 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   );
 
   return (
-    <MantineProviderBase theme={theme} forceColorScheme={forceColorScheme}>
-      {children}
-    </MantineProviderBase>
+    <BrandContext.Provider value={brand}>
+      <MantineProviderBase theme={theme} forceColorScheme={forceColorScheme}>
+        {children}
+      </MantineProviderBase>
+    </BrandContext.Provider>
   );
 };
