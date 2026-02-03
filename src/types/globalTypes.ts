@@ -73,11 +73,11 @@ export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
 /**
  * UtilityLabel size tokens for the design system
  */
-export const UTILITY_LABEL_SIZES = ['small', 'medium', 'large'] as const;
-export type UtilityLabelSize = (typeof UTILITY_LABEL_SIZES)[number];
+export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
 /**
  * UtilityLabel weight tokens for the design system
  */
 export const UTILITY_LABEL_WEIGHTS = ['regular', 'semibold'] as const;
+
 export type UtilityLabelWeight = (typeof UTILITY_LABEL_WEIGHTS)[number];
