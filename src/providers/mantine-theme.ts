@@ -147,6 +147,51 @@ function mapBrandColors(
 }
 
 /**
+ * Get button colors directly from semantic colors (without theme dependency)
+ * Used for disabled state styling where we can't access the theme
+ */
+function getButtonColorsDirect(
+  semanticColors: Record<string, string[]>,
+  color: string,
+  variant: string
+): { background?: string; color?: string; border?: string } {
+  const getButtonColor = (key: string): string | undefined => {
+    return semanticColors[key]?.[0];
+  };
+
+  // Find matching button variant configuration
+  const config = BUTTON_VARIANT_CONFIGS.find(
+    (c) => c.color === color && c.variant === variant
+  );
+
+  if (!config) {
+    return {};
+  }
+
+  const bgColor = getButtonColor(`${config.tokenPrefix}-background`);
+  const textColor = getButtonColor(`${config.tokenPrefix}-text`);
+  const result: { background?: string; color?: string; border?: string } = {};
+
+  if (bgColor) {
+    result.background = bgColor;
+  }
+  if (textColor) {
+    result.color = textColor;
+  }
+
+  // Add border for outlined variant (solid colors only - gradients handled via component styles)
+  if (config.includeBorder) {
+    const borderColor = getButtonColor(`${config.tokenPrefix}-border`);
+
+    if (borderColor && !borderColor.includes('gradient')) {
+      result.border = borderColor;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Create button variant color resolver
  */
 function createButtonVariantResolver(
@@ -217,6 +262,9 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
   const spacing = getSpacing();
   const radius = getBorderRadius();
 
+  // Create button variant resolver with semantic colors
+  const buttonVariantResolver = createButtonVariantResolver(semanticColors);
+
   return createTheme({
     defaultRadius: 'md',
     colors: themeColors as any,
@@ -224,7 +272,7 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
     black: blackColor,
     spacing: spacing as any,
     radius: radius as any,
-    variantColorResolver: createButtonVariantResolver(semanticColors),
+    variantColorResolver: buttonVariantResolver,
     components: {
       Button: Button.extend({
         vars: (theme, props) => {
@@ -242,8 +290,26 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
           // Styles that apply to all buttons
           vars['--button-radius'] = theme.radius['full'];
 
+          // Override Mantine's disabled color CSS variables to preserve original button colors
+          // Get the original colors for this button variant
+          const originalColors = getButtonColorsDirect(
+            semanticColors,
+            props.color || 'neutral',
+            props.variant || 'filled'
+          );
+
+          // Set Mantine's disabled color variables to use original button colors
+          // This prevents Mantine from changing button colors when disabled
+          if (originalColors.background) {
+            vars['--mantine-color-disabled'] = originalColors.background;
+          }
+          if (originalColors.color) {
+            vars['--mantine-color-disabled-color'] = originalColors.color;
+          }
+
           return { root: vars };
         },
+        // Disabled styles are handled in Button.module.scss for better specificity
       }),
     },
   });

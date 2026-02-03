@@ -58,4 +58,10 @@ button {
       z-index: 1;
     }
   }
+
+  /* Disabled button styles - applies to all buttons regardless of brand or variant */
+  &.disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+  }
 }
