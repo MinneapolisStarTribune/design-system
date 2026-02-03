@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UtilityLabel } from '../../../../components/UtilityLabel';
-import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../../../../types/globalTypes';
+import { UtilityLabel } from '../../../../../components/UtilityLabel';
+import {
+  UTILITY_LABEL_WEIGHTS,
+  UtilityLabelSize,
+  UtilityLabelWeight,
+} from '../../../../../types/globalTypes';
 
 const meta = {
-  title: 'Foundations/Typography/Utility',
+  title: 'Foundations/Typography/Utility/Label',
   component: UtilityLabel,
   parameters: {
     layout: 'centered',
@@ -12,12 +16,12 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: [...UTILITY_LABEL_SIZES] as string[],
+      options: ['large', 'medium', 'small'] as UtilityLabelSize[],
       description: 'The size of the label',
     },
     weight: {
       control: 'select',
-      options: [...UTILITY_LABEL_WEIGHTS] as string[],
+      options: [...UTILITY_LABEL_WEIGHTS] as UtilityLabelWeight[],
       description: 'The font weight of the label',
     },
     capitalize: {
