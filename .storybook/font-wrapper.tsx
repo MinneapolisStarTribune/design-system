@@ -1,3 +1,33 @@
+/**
+ * FontWrapper Component
+ *
+ * This component is responsible for dynamically loading font CSS files in Storybook.
+ * It ensures that the correct font faces, utility typography classes, and editorial
+ * typography classes are available in the DOM before rendering child components.
+ *
+ * Why this exists:
+ * - Our design system uses brand-specific fonts (@font-face definitions) and typography
+ *   classes that are defined in CSS files (dist/fonts/font-face/{brand}.css,
+ *   dist/fonts/utility/{brand}.css, dist/fonts/editorial/{brand}.css)
+ * - These CSS files must be loaded into the DOM for components to use the fonts
+ * - Storybook needs to dynamically switch between brands (startribune/varsity) based
+ *   on user selection in the toolbar
+ *
+ * How it works:
+ * 1. Takes brand prop to determine which brand-specific font files to load
+ * 2. Always loads utility fonts (shared across brands, but brand-specific files)
+ * 3. Dynamically creates <link> elements pointing to the correct font CSS files
+ * 4. Injects them into the document head, replacing any previously loaded fonts
+ * 5. Shows a loading state until the fonts are loaded
+ * 6. Only renders children after the font CSS is available
+ *
+ * The font CSS files are served from /fonts/ via Storybook's staticDirs configuration
+ * (see .storybook/main.ts). Files are organized as:
+ * - /fonts/font-face/{brand}.css - @font-face definitions
+ * - /fonts/utility/{brand}.css - Utility typography classes
+ * - /fonts/editorial/{brand}.css - Editorial typography classes
+ */
+
 import { ReactNode, useEffect, useState } from 'react';
 import { Brand } from '../src/providers/MantineProvider';
 
