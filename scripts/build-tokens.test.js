@@ -355,7 +355,7 @@ describe('build-tokens.js', () => {
       expect(content).toContain('@font-face');
 
       // Verify Publico Headline Condensed
-      expect(content).toContain('font-family: "Publico Banner Condensed, serif"');
+      expect(content).toContain('font-family: "Publico Headline Condensed, serif"');
       expect(content).toContain('font-weight: 900');
       expect(content).toContain('font-style: normal');
       expect(content).toContain(
