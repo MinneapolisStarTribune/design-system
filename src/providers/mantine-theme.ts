@@ -160,9 +160,7 @@ function getButtonColorsDirect(
   };
 
   // Find matching button variant configuration
-  const config = BUTTON_VARIANT_CONFIGS.find(
-    (c) => c.color === color && c.variant === variant
-  );
+  const config = BUTTON_VARIANT_CONFIGS.find((c) => c.color === color && c.variant === variant);
 
   if (!config) {
     return {};
