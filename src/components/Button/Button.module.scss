@@ -1,59 +1,61 @@
-/* Special hover behavior for brand-accent filled button */
-/* 
- * Browsers do not support linear gradients for borders natively.
- * The CSS `border` property only accepts solid colors, and `border-image` 
- * doesn't work with `border-radius`, which we need for rounded buttons.
- * 
- * Approach: Use a ::after pseudo-element with the gradient as background,
- * then use CSS mask to "cut out" the inner content area, leaving only
- * the padding area (the border) visible. This creates a gradient border
- * that respects border-radius.
- * 
- * On hover: transparent background + gradient border via ::after pseudo-element
- * 
- * Note: This class is only applied when the hover-border token contains "gradient" (Varsity brand only)
- */
-.brandAccentFilled {
-  position: relative;
+/* Button component styles */
+button {
+  /* Special hover behavior for brand-accent filled button */
+  /* 
+   * Browsers do not support linear gradients for borders natively.
+   * The CSS `border` property only accepts solid colors, and `border-image` 
+   * doesn't work with `border-radius`, which we need for rounded buttons.
+   * 
+   * Approach: Use a ::after pseudo-element with the gradient as background,
+   * then use CSS mask to "cut out" the inner content area, leaving only
+   * the padding area (the border) visible. This creates a gradient border
+   * that respects border-radius.
+   * 
+   * On hover: transparent background + gradient border via ::after pseudo-element
+   * 
+   * Note: This class is only applied when the hover-border token contains "gradient" (Varsity brand only)
+   */
+  &.brandAccentFilled {
+    position: relative;
 
-  /* ::after pseudo-element - always present, matches button size */
-  &::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: var(--button-radius);
-    left: 0;
-    top: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  &:hover:not(:disabled) {
-    background: transparent !important;
-
-    /* On hover: create gradient border using mask technique */
-    /* The ::after covers the button, and we mask out the center to create the border */
-    /* Only applies when --has-gradient-border is '1' (set via CSS variable) */
+    /* ::after pseudo-element - always present, matches button size */
     &::after {
-      background: var(--color-control-brand-accent-hover-border);
-      /* Use mask to create border effect - mask out the content area */
-      -webkit-mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: exclude;
-      mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
-      mask-composite: exclude;
-      padding: 1px; /* Border thickness */
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: var(--button-radius);
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    &:hover:not(:disabled) {
+      background: transparent !important;
+
+      /* On hover: create gradient border using mask technique */
+      /* The ::after covers the button, and we mask out the center to create the border */
+      /* Only applies when --has-gradient-border is '1' (set via CSS variable) */
+      &::after {
+        background: var(--color-control-brand-accent-hover-border);
+        /* Use mask to create border effect - mask out the content area */
+        -webkit-mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: exclude;
+        mask: 
+          linear-gradient(#fff 0 0) content-box, 
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        padding: 1px; /* Border thickness */
+      }
+    }
+
+    /* Ensure button content is above the border */
+    &:hover:not(:disabled) > * {
+      position: relative;
+      z-index: 1;
     }
   }
-
-  /* Ensure button content is above the border */
-  &:hover:not(:disabled) > * {
-    position: relative;
-    z-index: 1;
-  }
 }
-
