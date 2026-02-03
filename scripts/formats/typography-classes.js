@@ -188,12 +188,8 @@ function typographyClassesFormat({ dictionary, options = {} }) {
         return `  ${prop}: ${value};`;
       })
       .join('\n');
-    
-    // Add font-display: swap if font-family is present
-    const hasFontFamily = data.properties['font-family'];
-    const fontDisplay = hasFontFamily ? '\n  font-display: swap;' : '';
-    
-    classes.push(`${className} {\n${props}${fontDisplay}\n}`);
+
+    classes.push(`${className} {\n${props}\n}`);
   });
 
   // Then, generate responsive classes organized by breakpoint
@@ -215,12 +211,8 @@ function typographyClassesFormat({ dictionary, options = {} }) {
           return `    ${prop}: ${value};`;
         })
         .join('\n');
-      
-      // Add font-display: swap if font-family is present
-      const hasFontFamily = data.properties['font-family'];
-      const fontDisplay = hasFontFamily ? '\n    font-display: swap;' : '';
-      
-      classes.push(`  ${fullClassName} {\n${props}${fontDisplay}\n  }`);
+
+      classes.push(`  ${fullClassName} {\n${props}\n  }`);
     });
 
     classes.push('}');
