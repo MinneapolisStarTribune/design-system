@@ -6,28 +6,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "46px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
               "font-weight": "600",
-              "font-size": "36px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "32px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "36px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           }
         },
@@ -35,28 +35,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "36px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
               "font-weight": "600",
-              "font-size": "28px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "26px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "28px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           }
         },
@@ -64,28 +64,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "28px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
               "font-weight": "600",
-              "font-size": "24px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "600",
               "font-size": "22px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "24px",
+              "font-weight": "600",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           }
         },
@@ -93,28 +93,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "500",
               "font-size": "20px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
-            }
-          },
-          "tablet": {
-            "value": {
-              "font-family": "{font.family.nohemi}",
               "font-weight": "500",
-              "font-size": "18px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.nohemi}",
-              "font-weight": "500",
               "font-size": "18px",
-              "line-height": "1.10",
-              "letter-spacing": "0.02em"
+              "font-weight": "500",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.nohemi}",
+              "font-size": "18px",
+              "font-weight": "500",
+              "letter-spacing": "0.02em",
+              "line-height": "1.10"
             }
           }
         }
