@@ -24,14 +24,24 @@
                 "weight": 700
               },
               {
+                "file": "Nohemi-SemiBold.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
                 "file": "Nohemi-Medium-Web.woff2",
                 "style": "normal",
                 "weight": 500
               },
               {
-                "file": "Nohemi-Roman-Web.woff2",
+                "file": "Nohemi-Regular.woff2",
                 "style": "normal",
                 "weight": 400
+              },
+              {
+                "file": "Nohemi-Light.woff2",
+                "style": "normal",
+                "weight": 300
               }
             ]
           },
