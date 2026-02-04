@@ -3,6 +3,21 @@ name: Release Changelog
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      test_tag:
+        description: "Test tag name (optional - for manual testing)"
+        required: false
+        type: string
+      test_previous_tag:
+        description: "Previous tag name (optional - for manual testing)"
+        required: false
+        type: string
+      post_to_test_channel:
+        description: "Post to test channel instead of official channels (for testing only)"
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: "release-changelog"
@@ -15,11 +30,157 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}
           fetch-depth: 0
+
+      - name: Get previous release tag
+        id: get-previous-tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          # Handle manual workflow_dispatch with optional previous tag input
+          if [ -n "${{ github.event.inputs.test_previous_tag }}" ]; then
+            PREVIOUS_TAG="${{ github.event.inputs.test_previous_tag }}"
+          elif [ -n "${{ github.event.inputs.test_tag }}" ]; then
+            # For manual test with tag, try to find previous tag
+            PREVIOUS_TAG=$(git describe --tags --abbrev=0 ${{ github.event.inputs.test_tag }}^ 2>/dev/null || echo "")
+            if [ -z "$PREVIOUS_TAG" ]; then
+              # If no previous tag, get the first commit of main branch
+              PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+            fi
+          else
+            # Normal release flow - get previous tag from current release tag
+            CURRENT_TAG="${{ github.event.release.tag_name }}"
+            PREVIOUS_TAG=$(git describe --tags --abbrev=0 $CURRENT_TAG^ 2>/dev/null || echo "")
+            if [ -z "$PREVIOUS_TAG" ]; then
+              # If no previous tag, get the first commit of main branch
+              PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
+            fi
+          fi
+          echo "previous_tag=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+          echo "Previous tag: $PREVIOUS_TAG"
+
+      - name: Get merged PRs since last release
+        id: get-merged-prs
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          PREVIOUS_TAG="${{ steps.get-previous-tag.outputs.previous_tag }}"
+          CURRENT_TAG="${{ github.event.inputs.test_tag || github.event.release.tag_name }}"
+
+          echo "Getting PRs between $PREVIOUS_TAG and $CURRENT_TAG"
+
+          # Get all commits between previous tag and current tag
+          COMMITS=$(git log --pretty=format:"%H" $PREVIOUS_TAG..$CURRENT_TAG)
+
+          # Initialize array for PRs
+          PRODUCT_PRS=()
+
+          # Process each commit to find associated PRs
+          for commit in $COMMITS; do
+            # Get PR number from commit message (look for "Merge pull request #123")
+            PR_NUM=$(git log --format=%B -n 1 $commit | grep -o "Merge pull request #[0-9]*" | grep -o "[0-9]*" || echo "")
+
+            if [ -n "$PR_NUM" ]; then
+              echo "Processing PR #$PR_NUM for commit $commit"
+
+              # Get PR details using GitHub API
+              PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUM")
+
+              # Check if PR was merged (not just closed)
+              MERGED=$(echo "$PR_DATA" | jq -r '.merged_at // empty')
+              if [ -n "$MERGED" ]; then
+                # Extract PR information
+                TITLE=$(echo "$PR_DATA" | jq -r '.title // "No title"')
+                BODY=$(echo "$PR_DATA" | jq -r '.body // ""')
+                URL=$(echo "$PR_DATA" | jq -r '.html_url // ""')
+                BRANCH=$(echo "$PR_DATA" | jq -r '.head.ref // ""')
+
+                # Extract JIRA ticket from branch name
+                JIRA_TICKET=""
+                if [[ "$BRANCH" =~ [A-Z]+-[0-9]+ ]]; then
+                  JIRA_TICKET="${BASH_REMATCH[0]}"
+                fi
+
+                # Determine category based on PR title
+                CATEGORY_EMOJI=""
+                CATEGORY_NAME=""
+                TITLE_LOWER=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]')
+
+                if [[ "$TITLE_LOWER" =~ (bug|fix|fixing|fixed|hotfix|patch|issue|error|broken) ]]; then
+                  CATEGORY_EMOJI="🐞"
+                  CATEGORY_NAME="BugFix"
+                elif [[ "$TITLE_LOWER" =~ (new|feature|add|adding|added|implement|implementing|create|creating|ux|ui|design) ]]; then
+                  CATEGORY_EMOJI="✨"
+                  CATEGORY_NAME="New"
+                else
+                  CATEGORY_EMOJI="🔧"
+                  CATEGORY_NAME="Maintenance/Engineering"
+                fi
+
+                # This repo is for shared UI library at the MN Star Tribune
+                PRODUCT="Shared UI Library"
+
+                # Extract description content (only content between # Internal Changelog and next section)
+                DESCRIPTION_CONTENT=""
+                if echo "$BODY" | grep -q "# Internal Changelog"; then
+                  # Extract content between "# Internal Changelog" and the next "# " section
+                  DESCRIPTION_CONTENT=$(echo "$BODY" | sed -n '/# Internal Changelog/,/# [A-Z]/p' | sed '1d;$d')
+                  # Remove HTML comments (both standalone and inline)
+                  DESCRIPTION_CONTENT=$(echo "$DESCRIPTION_CONTENT" | sed 's/<!--[^>]*-->//g' | sed 's/<!--.*$//g')
+                  # Remove empty lines and trim
+                  DESCRIPTION_CONTENT=$(echo "$DESCRIPTION_CONTENT" | sed '/^$/d' | head -10)
+                  # Replace actual newlines with spaces and clean up multiple spaces
+                  DESCRIPTION_CONTENT=$(echo "$DESCRIPTION_CONTENT" | tr '\n' ' ' | sed 's/  */ /g' | sed 's/^ *//' | sed 's/ *$//')
+                fi
+
+                # Create PR summary with new format
+                # Format: • emoji Category - PR title (TICKET-123)
+                #          - Description (TICKET-123)
+                PR_SUMMARY="• $CATEGORY_EMOJI $CATEGORY_NAME - $TITLE"
+                if [ -n "$JIRA_TICKET" ]; then
+                  PR_SUMMARY="$PR_SUMMARY ($JIRA_TICKET)"
+                fi
+                # Only add description if it's not empty (after trimming)
+                DESCRIPTION_TRIMMED=$(echo "$DESCRIPTION_CONTENT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                if [ -n "$DESCRIPTION_TRIMMED" ] && [ "$DESCRIPTION_TRIMMED" != "" ]; then
+                  # Build the indented bullet with description on the same line (no newline between dash and description)
+                  # Format: newline + 3 spaces + dash + space + description
+                  if [ -n "$JIRA_TICKET" ]; then
+                    PR_SUMMARY="$PR_SUMMARY\n   - $DESCRIPTION_TRIMMED ($JIRA_TICKET)"
+                  else
+                    PR_SUMMARY="$PR_SUMMARY\n   - $DESCRIPTION_TRIMMED"
+                  fi
+                fi
+
+                # Add to product PRs array
+                PRODUCT_PRS+=("$PR_SUMMARY")
+
+                echo "Added PR #$PR_NUM for $PRODUCT"
+              fi
+            fi
+          done
+
+          # Create JSON payload for product updates
+          if [ ${#PRODUCT_PRS[@]} -gt 0 ]; then
+            PRODUCT_CONTENT="🚀 Deploying to Production! - Shared UI Library Updates\n\n"
+            for pr in "${PRODUCT_PRS[@]}"; do
+              PRODUCT_CONTENT="$PRODUCT_CONTENT$pr\n\n"
+            done
+            # Store raw content for display (EOF delimiter preserves literal \n)
+            echo "product_content<<EOF" >> $GITHUB_OUTPUT
+            echo "$PRODUCT_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            # Store JSON-escaped version for Slack (convert \n to actual newlines, then JSON-escape)
+            PRODUCT_CONTENT_JSON=$(printf "%b" "$PRODUCT_CONTENT" | jq -Rs .)
+            echo "product_content_json=$PRODUCT_CONTENT_JSON" >> $GITHUB_OUTPUT
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Generate changelog from merged PRs
         id: generate-changelog
+        if: github.event_name == 'release'
         uses: actions/github-script@v8
         with:
           script: |
@@ -39,8 +200,21 @@ jobs:
 
             return result;
 
+      - name: Post to Test Channel
+        if: steps.get-merged-prs.outputs.has_updates == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.post_to_test_channel == 'true'
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_TEST_RELEASE_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": ${{ steps.get-merged-prs.outputs.product_content_json || steps.get-merged-prs.outputs.product_content }}
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_TEST_RELEASE_WEBHOOK }}
+
       - name: Post to Product Slack Channel (Design System)
-        if: steps.generate-changelog.outputs.has_updates == 'true'
+        if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
@@ -52,8 +226,21 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
 
+      - name: Post to Product Slack Channel (Shared UI Library)
+        if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "${{ steps.generate-changelog.outputs.product_content }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
+
       - name: Post to General Channel (All Updates)
-        if: steps.generate-changelog.outputs.has_updates == 'true'
+        if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
@@ -66,8 +253,26 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
 
       - name: Summary
+        if: always()
         run: |
           echo "## Release Changelog Summary"
-          echo "Release: ${{ github.event.release.tag_name }}"
-          echo "Product: Design System"
-          echo "Has updates: ${{ steps.generate-changelog.outputs.has_updates }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Release: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}"
+            echo "Product: Shared UI Library"
+            echo "Has updates: ${{ steps.get-merged-prs.outputs.has_updates }}"
+            echo ""
+            if [ "${{ steps.get-merged-prs.outputs.has_updates }}" = "true" ]; then
+              echo "### Generated Changelog Content:"
+              echo ""
+              echo '```'
+              # Convert literal \n escape sequences to actual newlines for display
+              printf "%b" "${{ steps.get-merged-prs.outputs.product_content }}"
+              echo '```'
+            else
+              echo "No updates to display."
+            fi
+          else
+            echo "Release: ${{ github.event.release.tag_name }}"
+            echo "Product: Design System"
+            echo "Has updates: ${{ steps.generate-changelog.outputs.has_updates }}"
+          fi

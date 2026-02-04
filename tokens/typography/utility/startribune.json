@@ -1,0 +1,124 @@
+{
+  "typography": {
+    "utility": {
+      "page": {
+        "h1": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "48px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "34px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "40px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          }
+        },
+        "h2": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "36px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "28px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "30px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          }
+        },
+        "h3": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "28px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "22px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "24px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          }
+        },
+        "h4": {
+          "desktop": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "22px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "mobile": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "18px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          },
+          "tablet": {
+            "value": {
+              "font-family": "{font.family.popular}",
+              "font-size": "20px",
+              "font-weight": "700",
+              "letter-spacing": "0",
+              "line-height": "1.10"
+            }
+          }
+        }
+      }
+    }
+  }
+}

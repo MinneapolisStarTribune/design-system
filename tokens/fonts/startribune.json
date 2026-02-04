@@ -1,0 +1,185 @@
+{
+  "font": {
+    "brand": {
+      "startribune": {
+        "fonts": [
+          {
+            "family": "Publico Headline Condensed, serif",
+            "name": "Publico Headline Condensed",
+            "url": "https://fonts.startribune.com/PublicoHeadlineCondensedWebFonts/",
+            "variants": [
+              {
+                "file": "PublicoHeadlineCondensed-Black-Web.woff2",
+                "style": "normal",
+                "weight": 900
+              },
+              {
+                "file": "PublicoHeadlineCondensed-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "PublicoHeadlineCondensed-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "PublicoHeadlineCondensed-Roman-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "PublicoHeadlineCondensed-Light-Web.woff2",
+                "style": "normal",
+                "weight": 300
+              }
+            ]
+          },
+          {
+            "family": "Publico Headline, serif",
+            "name": "Publico Headline",
+            "url": "https://fonts.startribune.com/PublicoHeadlineWebFonts/",
+            "variants": [
+              {
+                "file": "PublicoHeadline-Black-Web.woff2",
+                "style": "normal",
+                "weight": 900
+              },
+              {
+                "file": "PublicoHeadline-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "PublicoHeadline-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "PublicoHeadline-Roman-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "PublicoHeadline-Italic-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              },
+              {
+                "file": "PublicoHeadline-Light-Web.woff2",
+                "style": "normal",
+                "weight": 300
+              },
+              {
+                "file": "PublicoHeadline-LightItalic-Web.woff2",
+                "style": "italic",
+                "weight": 300
+              }
+            ]
+          },
+          {
+            "family": "Publico Text, serif",
+            "name": "Publico Text",
+            "url": "https://fonts.startribune.com/PublicoTextWebFonts/",
+            "variants": [
+              {
+                "file": "PublicoText-Roman-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "PublicoText-Italic-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              },
+              {
+                "file": "PublicoText-Semibold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "PublicoText-SemiboldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 600
+              },
+              {
+                "file": "PublicoText-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "PublicoText-BoldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 700
+              }
+            ]
+          },
+          {
+            "family": "Barlow Condensed, sans-serif",
+            "name": "Barlow Condensed",
+            "url": "https://fonts.startribune.com/BarlowCondensedWebFonts/",
+            "variants": [
+              {
+                "file": "BarlowCondensed-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "BarlowCondensed-SemiBold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "BarlowCondensed-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "BarlowCondensed-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              }
+            ]
+          },
+          {
+            "family": "Barlow, sans-serif",
+            "name": "Barlow",
+            "url": "https://fonts.startribune.com/BarlowWebFonts/",
+            "variants": [
+              {
+                "file": "Barlow-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "Barlow-SemiBold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "Barlow-SemiBold-Web.woff2",
+                "style": "italic",
+                "weight": 600
+              },
+              {
+                "file": "Barlow-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "Barlow-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "Barlow-Regular-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

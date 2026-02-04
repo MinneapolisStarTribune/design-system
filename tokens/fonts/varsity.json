@@ -1,0 +1,148 @@
+{
+  "font": {
+    "brand": {
+      "varsity": {
+        "fonts": [
+          {
+            "family": "Nohemi, sans-serif",
+            "name": "Nohemi",
+            "url": "https://fonts.startribune.com/NohemiWebFonts/",
+            "variants": [
+              {
+                "file": "Nohemi-Black-Web.woff2",
+                "style": "normal",
+                "weight": 900
+              },
+              {
+                "file": "Nohemi-ExtraBold-Web.woff2",
+                "style": "normal",
+                "weight": 800
+              },
+              {
+                "file": "Nohemi-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "Nohemi-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "Nohemi-Roman-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              }
+            ]
+          },
+          {
+            "family": "Graphik, sans-serif",
+            "name": "Graphik",
+            "url": "https://fonts.startribune.com/GraphikWebFonts/",
+            "variants": [
+              {
+                "file": "Graphik-Black-Web.woff2",
+                "style": "normal",
+                "weight": 900
+              },
+              {
+                "file": "Graphik-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "Graphik-Semibold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "Graphik-SemiboldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 600
+              },
+              {
+                "file": "Graphik-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "Graphik-MediumItalic-Web.woff2",
+                "style": "italic",
+                "weight": 500
+              },
+              {
+                "file": "Graphik-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "Graphik-RegularItalic-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              }
+            ]
+          },
+          {
+            "family": "Graphik Condensed, sans-serif",
+            "name": "Graphik Condensed",
+            "url": "https://fonts.startribune.com/GraphikCondensedWebFonts/",
+            "variants": [
+              {
+                "file": "GraphikCondensed-Semibold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "GraphikCondensed-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "GraphikCondensed-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              }
+            ]
+          },
+          {
+            "family": "Publico Text, serif",
+            "name": "Publico Text",
+            "url": "https://fonts.startribune.com/PublicoTextWebFonts/",
+            "variants": [
+              {
+                "file": "PublicoText-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "PublicoText-BoldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 700
+              },
+              {
+                "file": "PublicoText-Semibold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "PublicoText-SemiboldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 600
+              },
+              {
+                "file": "PublicoText-Roman-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "PublicoText-Italic-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
