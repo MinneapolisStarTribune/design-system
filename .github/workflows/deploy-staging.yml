@@ -1,0 +1,192 @@
+# Deploy the lowest-version release branch to Vercel staging.
+# Triggers: push to release/*, hourly schedule, or manual dispatch.
+# Staging URL: stage-design-system.startribune.com
+
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - 'release/**'
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  STAGING_ALIAS: stage-design-system.startribune.com
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get release branches
+        id: release-branches
+        run: |
+          BRANCHES=$(git branch -r | grep 'origin/release/' | sed 's/^[[:space:]]*//' | awk '{print $1}')
+          if [ -z "$BRANCHES" ]; then
+            echo "Warning: No release/* branches found. Skipping deployment."
+            echo "branches=" >> "$GITHUB_OUTPUT"
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "branches<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$BRANCHES" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$BRANCHES" | wc -l)
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Select lowest version branch
+        id: select-branch
+        run: |
+          BRANCHES="${{ steps.release-branches.outputs.branches }}"
+          if [ -z "$BRANCHES" ] || [ "${{ steps.release-branches.outputs.count }}" = "0" ]; then
+            echo "Skipping deployment: no release branches."
+            echo "branch=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          LOWEST=$(node scripts/select-lowest-version-branch.js $BRANCHES) || true
+          if [ -z "$LOWEST" ]; then
+            echo "Warning: No valid release branch could be selected (invalid branch names). Skipping deployment."
+            echo "branch=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "branch=$LOWEST" >> "$GITHUB_OUTPUT"
+          echo "Selected branch for staging: $LOWEST"
+
+      - name: Checkout selected branch
+        if: steps.select-branch.outputs.branch != ''
+        run: |
+          git fetch origin ${{ steps.select-branch.outputs.branch }}
+          git checkout ${{ steps.select-branch.outputs.branch }}
+
+      - name: Setup Node
+        if: steps.select-branch.outputs.branch != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: steps.select-branch.outputs.branch != ''
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        if: steps.select-branch.outputs.branch != ''
+        run: yarn build
+
+      - name: Install Vercel CLI
+        if: steps.select-branch.outputs.branch != ''
+        run: npm install -g vercel@latest
+
+      - name: Deploy to Vercel staging (with retry)
+        if: steps.select-branch.outputs.branch != ''
+        id: deploy
+        run: |
+          MAX_ATTEMPTS=3
+          URL=""
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Deploy attempt $i of $MAX_ATTEMPTS"
+            OUT=$(vercel deploy --prebuilt --token="$VERCEL_TOKEN" --yes 2>&1) || true
+            echo "$OUT"
+            URL=$(echo "$OUT" | grep -oE 'https://[^[:space:]]+' | tail -1)
+            if [ -n "$URL" ]; then
+              echo "url=$URL" >> "$GITHUB_OUTPUT"
+              echo "Deployment URL: $URL"
+              exit 0
+            fi
+            if [ $i -lt $MAX_ATTEMPTS ]; then
+              echo "Deploy failed, retrying in 10s..."
+              sleep 10
+            fi
+          done
+          echo "Deployment failed after $MAX_ATTEMPTS attempts."
+          exit 1
+
+      - name: Alias deployment to staging URL
+        if: steps.select-branch.outputs.branch != '' && steps.deploy.outputs.url != ''
+        run: |
+          vercel alias set ${{ steps.deploy.outputs.url }} ${{ env.STAGING_ALIAS }} --token="$VERCEL_TOKEN"
+
+      - name: Deployment summary
+        if: always()
+        run: |
+          if [ -n "${{ steps.select-branch.outputs.branch }}" ]; then
+            echo "Staging deployment: ${{ env.STAGING_ALIAS }}"
+            echo "Branch deployed: ${{ steps.select-branch.outputs.branch }}"
+          else
+            echo "No release branch selected; deployment skipped."
+          fi
+
+  # On push to a release branch, also deploy that branch to a versioned URL
+  # (e.g. release/1.2.1 → release-1-2-1.stage-design-system.startribune.com)
+  # so you can keep branches and still "go back" to any release in Storybook.
+  deploy-versioned:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref != ''
+    steps:
+      - name: Checkout pushed branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Versioned alias slug
+        id: slug
+        run: |
+          REF_NAME="${{ github.ref_name }}"
+          # release/1.2.1 → release-1-2-1
+          SLUG=$(echo "$REF_NAME" | sed 's|release/|release-|g' | tr '.' '-')
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "Versioned slug: $SLUG"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy to Vercel (versioned)
+        id: deploy-versioned
+        run: |
+          MAX_ATTEMPTS=3
+          URL=""
+          for i in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Deploy attempt $i of $MAX_ATTEMPTS"
+            OUT=$(vercel deploy --prebuilt --token="$VERCEL_TOKEN" --yes 2>&1) || true
+            echo "$OUT"
+            URL=$(echo "$OUT" | grep -oE 'https://[^[:space:]]+' | tail -1)
+            if [ -n "$URL" ]; then
+              echo "url=$URL" >> "$GITHUB_OUTPUT"
+              echo "Deployment URL: $URL"
+              exit 0
+            fi
+            if [ $i -lt $MAX_ATTEMPTS ]; then
+              echo "Deploy failed, retrying in 10s..."
+              sleep 10
+            fi
+          done
+          echo "Deployment failed after $MAX_ATTEMPTS attempts."
+          exit 1
+
+      - name: Alias to versioned staging URL
+        if: steps.deploy-versioned.outputs.url != ''
+        run: |
+          VERSIONED_ALIAS="${{ steps.slug.outputs.slug }}.${{ env.STAGING_ALIAS }}"
+          vercel alias set ${{ steps.deploy-versioned.outputs.url }} "$VERSIONED_ALIAS" --token="$VERCEL_TOKEN"
+          echo "Versioned URL: https://$VERSIONED_ALIAS"
