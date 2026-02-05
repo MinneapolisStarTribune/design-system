@@ -38,13 +38,27 @@ const BUTTON_VARIANT_CONFIGS: ButtonVariantConfig[] = [
   { color: 'neutral', variant: 'filled', tokenPrefix: 'button-filled' },
   { color: 'neutral', variant: 'outlined', tokenPrefix: 'button-outlined', includeBorder: true },
   { color: 'neutral', variant: 'ghost', tokenPrefix: 'button-ghost' },
-  { color: 'brand', variant: 'filled', tokenPrefix: 'control-brand' },
+  { color: 'brand', variant: 'filled', tokenPrefix: 'button-brand-filled' },
+  {
+    color: 'brand',
+    variant: 'outlined',
+    tokenPrefix: 'button-brand-outlined',
+    includeBorder: true,
+  },
+  { color: 'brand', variant: 'ghost', tokenPrefix: 'button-brand-ghost' },
   {
     color: 'brand-accent',
     variant: 'filled',
-    tokenPrefix: 'control-brand-accent',
+    tokenPrefix: 'button-brand-accent-filled',
     includeBorder: true,
   },
+  {
+    color: 'brand-accent',
+    variant: 'outlined',
+    tokenPrefix: 'button-brand-accent-outlined',
+    includeBorder: true,
+  },
+  { color: 'brand-accent', variant: 'ghost', tokenPrefix: 'button-brand-accent-ghost' },
 ];
 
 /**
@@ -136,8 +150,8 @@ function mapBrandColors(
   }
 
   const brandAccentKey = findBrandKey(colorsRecord, [
-    'control-brand-accent-background',
-    'control-brandAccentBackground',
+    'button-brand-accent-filled-background',
+    'button-brand-accent-background',
     'brand-accent-background',
   ]);
 
@@ -202,9 +216,13 @@ function createButtonVariantResolver(
   return (input) => {
     const defaultResolvedColors = defaultVariantColorsResolver(input);
 
+    // Map Mantine's 'subtle' variant back to 'ghost' for our config lookup
+    // (Button component converts 'ghost' to 'subtle' for Mantine)
+    const variantForLookup = input.variant === 'subtle' ? 'ghost' : input.variant;
+
     // Find matching button variant configuration
     const config = BUTTON_VARIANT_CONFIGS.find(
-      (c) => c.color === input.color && c.variant === input.variant
+      (c) => c.color === input.color && c.variant === variantForLookup
     );
 
     if (!config) {
