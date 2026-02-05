@@ -9,9 +9,9 @@ const PACKAGE_NAME = '@minneapolisstartribune/design-system';
 export function getBrandFontPath(brand: Brand): string {
   switch (brand) {
     case 'startribune':
-      return `${PACKAGE_NAME}/dist/fonts/startribune.css`;
+      return `${PACKAGE_NAME}/dist/fonts/font-face/startribune.css`;
     case 'varsity':
-      return `${PACKAGE_NAME}/dist/fonts/varsity.css`;
+      return `${PACKAGE_NAME}/dist/fonts/font-face/varsity.css`;
     default:
       return '';
   }
@@ -24,9 +24,9 @@ export function getBrandFontPath(brand: Brand): string {
 function getBrandFontRelativePath(brand: Brand): string {
   switch (brand) {
     case 'startribune':
-      return './fonts/startribune.css';
+      return './fonts/font-face/startribune.css';
     case 'varsity':
-      return './fonts/varsity.css';
+      return './fonts/font-face/varsity.css';
     default:
       return '';
   }
@@ -49,6 +49,6 @@ export function loadBrandFonts(brand: Brand): void {
   const link = document.createElement('link');
   link.id = linkId;
   link.rel = 'stylesheet';
-  link.href = new URL(relativePath, import.meta.url).href;
+  link.href = relativePath;
   document.head.appendChild(link);
 }

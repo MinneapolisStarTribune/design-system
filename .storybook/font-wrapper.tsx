@@ -1,33 +1,39 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { Brand } from '../src/providers/MantineProvider';
 
+const FONT_LINK_PREFIX = 'storybook-font-link';
+
+const FONT_CSS_PATHS = [
+  (brand: Brand) => `/fonts/font-face/${brand}.css`,
+  (brand: Brand) => `/fonts/utility/${brand}.css`,
+  (brand: Brand) => `/fonts/editorial/${brand}.css`,
+];
+
 /**
  * Loads a brand font-face CSS file into the document head
  *
  * This is used to ensure that the correct font is loaded before rendering components.
  *
- * @param brand - Brand name ('startribune' | 'varsity')
- * @returns Promise that resolves when the font CSS is loaded
+ * @param href - The CSS file URL to load
+ * @param id - The unique ID for the link element
+ * @returns Promise that resolves when the CSS is loaded
  */
-export const loadFont = (brand: Brand): Promise<void> => {
+const loadCss = (href: string, id: string): Promise<void> => {
   return new Promise((resolve) => {
-    // Remove any existing font link
-    const existingLink = document.getElementById('storybook-font-link');
-    if (existingLink) {
-      existingLink.remove();
+    const existing = document.getElementById(id) as HTMLLinkElement | null;
+
+    if (existing) {
+      existing.remove();
     }
 
-    // Load the correct font file based on brand
-    const fontFileName = `${brand}-font-faces.css`;
     const link = document.createElement('link');
-
-    link.id = 'storybook-font-link';
+    link.id = id;
     link.rel = 'stylesheet';
-    link.href = `/fonts/${fontFileName}`;
+    link.href = href;
 
     link.onload = () => resolve();
     link.onerror = () => {
-      console.error(`Failed to load font: ${fontFileName}`);
+      console.error(`Failed to load CSS: ${href}`);
       resolve(); // Resolve anyway to not block rendering
     };
 
@@ -39,8 +45,8 @@ export const loadFont = (brand: Brand): Promise<void> => {
 };
 
 interface FontWrapperProps {
-  children: ReactNode;
   brand: Brand;
+  children: ReactNode;
 }
 
 /**
@@ -62,7 +68,15 @@ export const FontWrapper = ({ children, brand }: FontWrapperProps) => {
   useEffect(() => {
     setFontLoaded(false);
 
-    loadFont(brand).then(() => {
+    Promise.all(
+      FONT_CSS_PATHS.map((getPath) => {
+        const href = getPath(brand);
+
+        const folderName = href.split('/')[2]; // e.g., 'font-face', 'utility', 'editorial'
+        const id = `${FONT_LINK_PREFIX}-${folderName}-${brand}`;
+        return loadCss(href, id);
+      })
+    ).then(() => {
       setFontLoaded(true);
     });
   }, [brand]);

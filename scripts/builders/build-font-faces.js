@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const TOKENS_DIR_PREFIX = 'tokens/fonts';
+const OUT_DIR_PREFIX = 'dist/fonts/font-face';
 /**
  * Build @font-face CSS from tokens/fonts/{brand}.json
  *
@@ -11,7 +13,7 @@ const path = require('path');
  * @returns {Promise<void>}
  */
 async function buildFontFaces(brand) {
-  const tokensPath = path.join(process.cwd(), `tokens/fonts/${brand}.json`);
+  const tokensPath = path.join(process.cwd(), `${TOKENS_DIR_PREFIX}/${brand}.json`);
   if (!fs.existsSync(tokensPath)) {
     console.log(`⚠️  No font tokens found for ${brand}, skipping @font-face build...`);
     return;
@@ -22,13 +24,13 @@ async function buildFontFaces(brand) {
   const data = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
   const fonts = data?.font?.brand?.[brand]?.fonts;
   if (!Array.isArray(fonts)) {
-    console.log(`⚠️  No fonts array in tokens/fonts/${brand}.json, skipping...`);
+    console.log(`⚠️  No fonts array in ${TOKENS_DIR_PREFIX}/${brand}.json, skipping...`);
     return;
   }
 
   const rules = [];
   rules.push('/**');
-  rules.push(' * Do not edit directly. Generated from tokens/fonts/' + brand + '.json');
+  rules.push(` * Do not edit directly. Generated from ${TOKENS_DIR_PREFIX}/${brand}.json`);
   rules.push(' * Load only when brand="' + brand + '"');
   rules.push(' */');
   rules.push('');
@@ -56,14 +58,14 @@ async function buildFontFaces(brand) {
     }
   }
 
-  const outDir = path.join(process.cwd(), 'dist/fonts');
+  const outDir = path.join(process.cwd(), OUT_DIR_PREFIX);
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
   }
   const outPath = path.join(outDir, `${brand}.css`);
   fs.writeFileSync(outPath, rules.join('\n'), 'utf8');
 
-  console.log(`✓ ${brand} @font-face CSS built → dist/fonts/${brand}.css`);
+  console.log(`✓ ${brand} @font-face CSS built → ${OUT_DIR_PREFIX}/${brand}.css`);
 }
 
 module.exports = buildFontFaces;
