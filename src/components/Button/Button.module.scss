@@ -38,7 +38,7 @@ button {
       /* The ::after covers the button, and we mask out the center to create the border */
       /* Only applies when --has-gradient-border is '1' (set via CSS variable) */
       &::after {
-        background: var(--color-control-brand-accent-hover-border);
+        background: var(--color-button-brand-accent-filled-hover-border);
         /* Use mask to create border effect - mask out the content area */
         -webkit-mask: 
           linear-gradient(#fff 0 0) content-box, 
