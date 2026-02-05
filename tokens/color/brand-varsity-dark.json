@@ -152,20 +152,68 @@
       },
       "description": "Brand colors establish the core visual identity to express the brand across digital and print materials. Brand colors are intended for expressive, marketing, and creative applications, but are not tied to specific UI functions or component usage."
     },
-    "control": {
-      "brand-accent-background": { "value": "{color.brand.03}" },
-      "brand-accent-border": { "value": "{color.brand.03}" },
-      "brand-accent-button-icon": { "value": "{color.neutral.950}" },
-      "brand-accent-hover-background": { "value": "{color.neutral.950}" },
-      "brand-accent-hover-border": { "value": "{color.brand.03}" },
-      "brand-accent-hover-text": { "value": "{color.base.white}" },
-      "brand-accent-text": { "value": "{color.neutral.950}" },
-      "brand-background": { "value": "{color.cobalt-blue.500}" },
-      "brand-button-icon": { "value": "{color.neutral.950}" },
-      "brand-hover-background": { "value": "{color.cobalt-blue.300}" },
-      "brand-hover-text": { "value": "{color.neutral.950}" },
-      "brand-text": { "value": "{color.neutral.950}" },
-      "description": "Control tokens define the color palette for interactive UI components including buttons, checkboxes, radio buttons, switches, and other form controls. Brand controls use expressive brand colors, while shared control styles (filled, outlined, ghost, utility) are available in the base color tokens.",
+    "button": {
+      "brand": {
+        "filled": {
+          "background": { "value": "{color.cobalt-blue.500}" },
+          "hover-background": { "value": "{color.cobalt-blue.300}" },
+          "hover-text": { "value": "{color.base.black}" },
+          "text": { "value": "{color.base.black}" }
+        },
+        "ghost": {
+          "background": { "value": "{color.base.black}" },
+          "hover-background": {
+            "_comment": "16% opacity of cobalt-blue.500 for subtle hover effect",
+            "value": "rgb(72 160 255 / 16%)"
+          },
+          "hover-text": { "value": "{color.cobalt-blue.500}" },
+          "text": { "value": "{color.cobalt-blue.500}" }
+        },
+        "outlined": {
+          "background": { "value": "{color.base.black}" },
+          "border": { "value": "{color.cobalt-blue.500}" },
+          "hover-background": {
+            "_comment": "16% opacity of cobalt-blue.500 for subtle hover effect",
+            "value": "rgb(72 160 255 / 16%)"
+          },
+          "hover-text": { "value": "{color.cobalt-blue.500}" },
+          "text": { "value": "{color.cobalt-blue.500}" }
+        }
+      },
+      "brand-accent": {
+        "filled": {
+          "background": { "value": "{color.brand.03}" },
+          "hover-background": { "value": "{color.brand.03}" },
+          "hover-border": {
+            "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})"
+          },
+          "hover-text": { "value": "{color.base.white}" },
+          "text": { "value": "{color.base.black}" }
+        },
+        "ghost": {
+          "background": { "value": "{color.base.black}" },
+          "hover-background": {
+            "_comment": "16% opacity of lime.400 for subtle hover effect",
+            "value": "rgb(200 250 49 / 16%)"
+          },
+          "hover-text": { "value": "{color.lime.400}" },
+          "text": { "value": "{color.lime.400}" }
+        },
+        "outlined": {
+          "background": { "value": "{color.base.black}" },
+          "border": { "value": "{color.brand.03}" },
+          "hover-background": {
+            "_comment": "16% opacity of lime.400 for subtle hover effect",
+            "value": "rgb(200 250 49 / 16%)"
+          },
+          "hover-border": {
+            "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})"
+          },
+          "hover-text": { "value": "{color.lime.400}" },
+          "text": { "value": "{color.lime.400}" }
+        }
+      },
+      "description": "Button color tokens define the color palette for interactive UI components like buttons. Brand controls use expressive brand colors, while shared control styles (filled, outlined, ghost, utility) are available in the base color tokens.",
       "overview": [
         "Brand controls use the primary brand colors to create expressive, branded interactive elements for buttons, checkboxes, radio buttons, switches, and similar components.",
         "Brand-accent controls provide a secondary branded option with higher contrast or alternative styling, including border styles where applicable.",
