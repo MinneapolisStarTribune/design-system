@@ -7,7 +7,7 @@ const OUT_DIR_PREFIX = 'dist/fonts/font-face';
  * Build @font-face CSS from tokens/fonts/{brand}.json
  *
  * Reads font definitions (name, family, url, variants) and outputs
- * one @font-face rule per variant. Writes to dist/fonts/{brand}.css.
+ * one @font-face rule per variant. Writes to dist/fonts/font-face/{brand}.css.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Promise<void>}
