@@ -1,35 +1,35 @@
 {
   "compilerOptions": {
-    // Build output
-    "outDir": "dist",
+    // Paths
+    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": false,
-    "sourceMap": true,
-
-    // Module system
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "resolveJsonModule": true,
-
-    // Strictness
-    "strict": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
-    // Paths
-    "baseUrl": ".",
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    // Module system
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    // Build output
+    "outDir": "dist",
     "paths": {
       "@/*": ["./src/*"]
     },
 
+    "resolveJsonModule": true,
+
+    "skipLibCheck": true,
+    "sourceMap": true,
+
+    // Strictness
+    "strict": true,
+    "target": "ESNext",
     // Types
     "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", ".storybook", "**/*.stories.tsx", "**/*.stories.ts"]
+  "exclude": ["node_modules", "dist", ".storybook", "**/*.stories.tsx", "**/*.stories.ts"],
+  "include": ["src"]
 }
