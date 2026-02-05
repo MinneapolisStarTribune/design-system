@@ -3,7 +3,7 @@ name: Visual Regression
 on:
   workflow_call:
   pull_request:
-    branches: [main]
+    branches: [main, 'release/**']
 
 jobs:
   changes:
