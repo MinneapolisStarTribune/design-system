@@ -11,25 +11,6 @@
             "line-height": "1.2"
           }
         },
-        "large-bold": {
-          "value": {
-            "font-family": "{font.family.graphik}",
-            "font-size": "16px",
-            "font-weight": "600",
-            "letter-spacing": "0",
-            "line-height": "1.2"
-          }
-        },
-        "large-bold-caps": {
-          "value": {
-            "font-family": "{font.family.graphik}",
-            "font-size": "16px",
-            "font-weight": "600",
-            "letter-spacing": "0.03em",
-            "line-height": "1.2",
-            "text-transform": "uppercase"
-          }
-        },
         "large-caps": {
           "value": {
             "font-family": "{font.family.graphik}",
@@ -49,25 +30,6 @@
             "line-height": "1.2"
           }
         },
-        "medium-bold": {
-          "value": {
-            "font-family": "{font.family.graphik}",
-            "font-size": "14px",
-            "font-weight": "600",
-            "letter-spacing": "0",
-            "line-height": "1.2"
-          }
-        },
-        "medium-bold-caps": {
-          "value": {
-            "font-family": "{font.family.graphik}",
-            "font-size": "14px",
-            "font-weight": "600",
-            "letter-spacing": "0.03em",
-            "line-height": "1.2",
-            "text-transform": "uppercase"
-          }
-        },
         "medium-caps": {
           "value": {
             "font-family": "{font.family.graphik}",
@@ -78,7 +40,45 @@
             "text-transform": "uppercase"
           }
         },
-        "sm-bold": {
+        "semibold-large": {
+          "value": {
+            "font-family": "{font.family.graphik}",
+            "font-size": "16px",
+            "font-weight": "600",
+            "letter-spacing": "0",
+            "line-height": "1.2"
+          }
+        },
+        "semibold-large-caps": {
+          "value": {
+            "font-family": "{font.family.graphik}",
+            "font-size": "16px",
+            "font-weight": "600",
+            "letter-spacing": "0.03em",
+            "line-height": "1.2",
+            "text-transform": "uppercase"
+          }
+        },
+        "semibold-medium": {
+          "value": {
+            "font-family": "{font.family.graphik}",
+            "font-size": "14px",
+            "font-weight": "600",
+            "letter-spacing": "0",
+            "line-height": "1.2"
+          }
+        },
+        "semibold-medium-caps": {
+          "value": {
+            "font-family": "{font.family.graphik}",
+            "font-size": "14px",
+            "font-weight": "600",
+            "letter-spacing": "0.03em",
+            "line-height": "1.2",
+            "text-transform": "uppercase"
+          }
+        },
+        "semibold-small": {
           "value": {
             "font-family": "{font.family.graphik}",
             "font-size": "12px",
@@ -87,7 +87,7 @@
             "line-height": "1.2"
           }
         },
-        "sm-bold-caps": {
+        "semibold-small-caps": {
           "value": {
             "font-family": "{font.family.graphik}",
             "font-size": "11px",
