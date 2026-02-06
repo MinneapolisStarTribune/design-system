@@ -145,7 +145,7 @@
           "text": { "value": "{color.base.black}" }
         },
         "ghost": {
-          "background": { "value": "{color.base.black}" },
+          "background": { "value": "rgb(0 0 0 0)" },
           "hover-background": {
             "_comment": "16% opacity of spring-green.400 for subtle hover effect",
             "value": "rgb(118 216 110 / 16%)"
@@ -154,7 +154,7 @@
           "text": { "value": "{color.spring-green.400}" }
         },
         "outlined": {
-          "background": { "value": "{color.base.black}" },
+          "background": { "value": "rgb(0 0 0 0)" },
           "border": { "value": "{color.spring-green.400}" },
           "hover-background": {
             "_comment": "16% opacity of spring-green.400 for subtle hover effect",
@@ -172,7 +172,7 @@
           "text": { "value": "{color.forest-green.900}" }
         },
         "ghost": {
-          "background": { "value": "{color.base.white}" },
+          "background": { "value": "rgb(0 0 0 0)" },
           "hover-background": {
             "_comment": "16% opacity of lime.400 for subtle hover effect",
             "value": "rgb(200, 250, 49 / 16%)"
@@ -181,7 +181,7 @@
           "text": { "value": "{color.lime.300}" }
         },
         "outlined": {
-          "background": { "value": "{color.base.white}" },
+          "background": { "value": "rgb(0 0 0 0)" },
           "border": { "value": "{color.lime.400}" },
           "hover-background": {
             "_comment": "16% opacity of lime.400 for subtle hover effect",
