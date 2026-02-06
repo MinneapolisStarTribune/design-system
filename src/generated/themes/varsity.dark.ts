@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-dark tokens
- * Date: 2026-01-07T06:36:25.102Z
+ * Date: 2026-02-04T13:29:25.591Z
  */
 
 export const colors = {
@@ -199,21 +199,22 @@ export const colors = {
   'brand-04-from': ['#1683F8'],
   'brand-04-to': ['#0050A6'],
   'button-filled-background': ['#ffffff'],
-  'button-filled-button-icon': ['#0D0D0D'],
   'button-filled-hover-background': ['#E3E5E8'],
   'button-filled-hover-text': ['#0D0D0D'],
   'button-filled-text': ['#0D0D0D'],
   'button-ghost-background': ['#000000'],
   'button-ghost-hover-background': ['#45474A'],
-  'button-ghost-hover-button-icon': ['#ffffff'],
   'button-ghost-hover-text': ['#ffffff'],
   'button-ghost-text': ['#ffffff'],
+  'button-neutral-filled-button-icon': ['#0D0D0D'],
+  'button-neutral-ghost-hover-button-icon': ['#ffffff'],
+  'button-neutral-outlined-button-icon': ['#ffffff'],
+  'button-neutral-outlined-hover-button-icon': ['#ffffff'],
+  'button-neutral-utility-hover-button-icon': ['#ffffff'],
   'button-outlined-background': ['#000000'],
   'button-outlined-border': ['#ffffff'],
-  'button-outlined-button-icon': ['#ffffff'],
   'button-outlined-hover-background': ['#45474A'],
   'button-outlined-hover-border': ['#ffffff'],
-  'button-outlined-hover-button-icon': ['#ffffff'],
   'button-outlined-hover-text': ['#ffffff'],
   'button-outlined-text': ['#ffffff'],
   'button-utility-border': ['#585C5F'],

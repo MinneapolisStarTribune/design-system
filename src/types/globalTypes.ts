@@ -69,3 +69,10 @@ export const FONT_WEIGHT_STYLE = [
 ] as const;
 
 export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
+
+/**
+ * Global position tokens for overlays and floating UI
+ */
+export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
+
+export type Position = (typeof POSITIONS)[number];
