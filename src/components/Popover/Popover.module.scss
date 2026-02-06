@@ -1,0 +1,83 @@
+/* Root card */
+.container {
+    min-width: 240px;
+    max-width: 320px;
+
+    padding: 16px;
+
+    background: #fff;
+    border-radius: 12px;
+
+    position: relative;
+
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Header row */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 8px;
+}
+
+/* Holds compound children */
+.headerContent {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+}
+
+/* Close button */
+.closeButton {
+    flex-shrink: 0;
+    margin-top: -4px;
+    margin-right: -4px;
+    width: 20px;
+    height: 20px;
+    &:hover {
+        background-color: #f5f6f7;
+        border-radius: 50%;
+    }
+}
+
+/* Heading */
+.heading {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #000;
+
+    margin-bottom: 4px;
+}
+
+/* Body */
+.body {
+    margin-top: 12px;
+
+    overflow-y: auto;
+    max-height: 400px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: #eee;
+
+    margin: 12px 0;
+}
+
+.dividerFullBleed {
+    margin-left: -16px;
+    margin-right: -16px;
+}
