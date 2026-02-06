@@ -69,3 +69,13 @@ export const FONT_WEIGHT_STYLE = [
 ] as const;
 
 export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
+
+/**
+ * UtilityLabel size tokens for the design system
+ */
+export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
+
+/**
+ * UtilityLabel weight tokens for the design system
+ */
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
