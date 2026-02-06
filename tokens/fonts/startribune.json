@@ -177,6 +177,130 @@
                 "weight": 400
               }
             ]
+          },
+          {
+            "family": "Popular, sans-serif",
+            "name": "Popular",
+            "url": "https://fonts.startribune.com/PopularWebFonts/",
+            "variants": [
+              {
+                "file": "Popular-Light-Web.woff2",
+                "style": "normal",
+                "weight": 300
+              },
+              {
+                "file": "Popular-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "Popular-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "Popular-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              }
+            ]
+          },
+          {
+            "family": "Graphik, sans-serif",
+            "name": "Graphik",
+            "url": "https://fonts.startribune.com/GraphikWebFonts/",
+            "variants": [
+              {
+                "file": "Graphik-Thin-Web.woff2",
+                "style": "normal",
+                "weight": 100
+              },
+              {
+                "file": "Graphik-ThinItalic-Web.woff2",
+                "style": "italic",
+                "weight": 100
+              },
+              {
+                "file": "Graphik-Extralight-Web.woff2",
+                "style": "normal",
+                "weight": 200
+              },
+              {
+                "file": "Graphik-ExtralightItalic-Web.woff2",
+                "style": "italic",
+                "weight": 200
+              },
+              {
+                "file": "Graphik-Light-Web.woff2",
+                "style": "normal",
+                "weight": 300
+              },
+              {
+                "file": "Graphik-LightItalic-Web.woff2",
+                "style": "italic",
+                "weight": 300
+              },
+              {
+                "file": "Graphik-Regular-Web.woff2",
+                "style": "normal",
+                "weight": 400
+              },
+              {
+                "file": "Graphik-RegularItalic-Web.woff2",
+                "style": "italic",
+                "weight": 400
+              },
+              {
+                "file": "Graphik-Medium-Web.woff2",
+                "style": "normal",
+                "weight": 500
+              },
+              {
+                "file": "Graphik-MediumItalic-Web.woff2",
+                "style": "italic",
+                "weight": 500
+              },
+              {
+                "file": "Graphik-Semibold-Web.woff2",
+                "style": "normal",
+                "weight": 600
+              },
+              {
+                "file": "Graphik-SemiboldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 600
+              },
+              {
+                "file": "Graphik-Bold-Web.woff2",
+                "style": "normal",
+                "weight": 700
+              },
+              {
+                "file": "Graphik-BoldItalic-Web.woff2",
+                "style": "italic",
+                "weight": 700
+              },
+              {
+                "file": "Graphik-Black-Web.woff2",
+                "style": "normal",
+                "weight": 800
+              },
+              {
+                "file": "Graphik-BlackItalic-Web.woff2",
+                "style": "italic",
+                "weight": 800
+              },
+              {
+                "file": "Graphik-Super-Web.woff2",
+                "style": "normal",
+                "weight": 900
+              },
+              {
+                "file": "Graphik-SuperItalic-Web.woff2",
+                "style": "italic",
+                "weight": 900
+              }
+            ]
           }
         ]
       }
