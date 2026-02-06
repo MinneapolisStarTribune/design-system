@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-dark tokens
- * Date: 2026-02-05T01:41:01.300Z
+ * Date: 2026-02-06T20:48:16.201Z
  */
 
 export const colors = {
@@ -203,11 +203,11 @@ export const colors = {
   'button-brand-accent-filled-hover-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'button-brand-accent-filled-hover-text': ['#ffffff'],
   'button-brand-accent-filled-text': ['#000000'],
-  'button-brand-accent-ghost-background': ['#000000'],
+  'button-brand-accent-ghost-background': ['rgb(0 0 0 0)'],
   'button-brand-accent-ghost-hover-background': ['rgb(200 250 49 / 16%)'],
   'button-brand-accent-ghost-hover-text': ['#C8FA31'],
   'button-brand-accent-ghost-text': ['#C8FA31'],
-  'button-brand-accent-outlined-background': ['#000000'],
+  'button-brand-accent-outlined-background': ['rgb(0 0 0 0)'],
   'button-brand-accent-outlined-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'button-brand-accent-outlined-hover-background': ['rgb(200 250 49 / 16%)'],
   'button-brand-accent-outlined-hover-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
@@ -217,11 +217,11 @@ export const colors = {
   'button-brand-filled-hover-background': ['#ADD5FF'],
   'button-brand-filled-hover-text': ['#000000'],
   'button-brand-filled-text': ['#000000'],
-  'button-brand-ghost-background': ['#000000'],
+  'button-brand-ghost-background': ['rgb(0 0 0 0)'],
   'button-brand-ghost-hover-background': ['rgb(72 160 255 / 16%)'],
   'button-brand-ghost-hover-text': ['#48A0FF'],
   'button-brand-ghost-text': ['#48A0FF'],
-  'button-brand-outlined-background': ['#000000'],
+  'button-brand-outlined-background': ['rgb(0 0 0 0)'],
   'button-brand-outlined-border': ['#48A0FF'],
   'button-brand-outlined-hover-background': ['rgb(72 160 255 / 16%)'],
   'button-brand-outlined-hover-text': ['#48A0FF'],
@@ -230,11 +230,11 @@ export const colors = {
   'button-filled-hover-background': ['#E3E5E8'],
   'button-filled-hover-text': ['#0D0D0D'],
   'button-filled-text': ['#0D0D0D'],
-  'button-ghost-background': ['#000000'],
+  'button-ghost-background': ['rgb(0, 0, 0, 0)'],
   'button-ghost-hover-background': ['#45474A'],
   'button-ghost-hover-text': ['#ffffff'],
   'button-ghost-text': ['#ffffff'],
-  'button-outlined-background': ['#000000'],
+  'button-outlined-background': ['rgb(0, 0, 0, 0)'],
   'button-outlined-border': ['#ffffff'],
   'button-outlined-hover-background': ['#45474A'],
   'button-outlined-hover-border': ['#ffffff'],

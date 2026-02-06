@@ -140,7 +140,7 @@
       "brand": {
         "filled": {
           "background": { "value": "{color.emerald-green.800}" },
-          "hover-background": { "value": "{color.emerald-green.900}" },
+          "hover-background": { "value": "{color.forest-green.900}" },
           "hover-text": { "value": "{color.base.white}" },
           "text": { "value": "{color.base.white}" }
         },
@@ -160,7 +160,7 @@
             "_comment": "8% opacity of emerald-green.800 for subtle hover effect",
             "value": "rgb(0 133 75 / 8%)"
           },
-          "hover-text": { "value": "{color.forest-green.900}" },
+          "hover-text": { "value": "{color.emerald-green.900}" },
           "text": { "value": "{color.emerald-green.800}" }
         }
       },
@@ -177,8 +177,8 @@
             "_comment": "16% opacity of lime.400 for subtle hover effect",
             "value": "rgb(200 250 49 / 16%)"
           },
-          "hover-text": { "value": "{color.emerald-green.800}" },
-          "text": { "value": "{color.lime.300}" }
+          "hover-text": { "value": "{color.lime.400}" },
+          "text": { "value": "{color.lime.400}" }
         },
         "outlined": {
           "background": { "value": "rgb(0 0 0 0)" },
@@ -188,7 +188,7 @@
             "value": "rgb(200 250 49 / 16%)"
           },
           "hover-text": { "value": "{color.lime.400}" },
-          "text": { "value": "{color.lime.300}" }
+          "text": { "value": "{color.lime.400}" }
         }
       },
       "description": "Button color tokens define the color palette for interactive UI components like buttons. Brand controls use expressive brand colors, while shared control styles (filled, outlined, ghost, utility) are available in the base color tokens.",
