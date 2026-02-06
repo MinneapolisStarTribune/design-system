@@ -49,20 +49,9 @@ export const Icon = ({
   const combinedClassName = className ? `${styles.icon} ${className}`.trim() : styles.icon;
 
   // Determine fill color based on color type:
-  // - Brand button colors (brand-button-icon, brand-accent-button-icon) → 'control' prefix
-  // - Regular button colors (filled/outlined/ghost/utility-button-icon) → 'button' prefix
   // - Regular icon colors → 'icon' prefix
-  // - No color → 'currentColor'
-  const isBrandButtonColor = color === 'brand-button-icon' || color === 'brand-accent-button-icon';
-  const isRegularButtonColor =
-    color === 'neutral-filled-button-icon' ||
-    color === 'neutral-outlined-button-icon' ||
-    color === 'neutral-ghost-button-icon' ||
-    color === 'neutral-utility-button-icon';
-
-  const colorFill = color
-    ? `var(--color-${isBrandButtonColor ? 'control' : isRegularButtonColor ? 'button' : 'icon'}-${color})`
-    : 'currentColor';
+  // - No color → 'currentColor' (inherits from parent, used for buttons where icon matches text)
+  const colorFill = color ? `var(--color-icon-${color})` : 'currentColor';
 
   return (
     <IconComponent

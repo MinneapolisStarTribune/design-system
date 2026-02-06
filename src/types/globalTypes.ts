@@ -31,12 +31,6 @@ export const ICON_COLORS = [
   'brand-01',
   'brand-02',
   'brand-03',
-  'brand-button-icon',
-  'brand-accent-button-icon',
-  'neutral-filled-button-icon',
-  'neutral-outlined-button-icon',
-  'neutral-ghost-button-icon',
-  'neutral-utility-button-icon',
 ] as const;
 
 export type IconColor = (typeof ICON_COLORS)[number];
