@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2026-02-05T01:41:01.274Z
+ * Date: 2026-02-06T20:48:16.167Z
  */
 
 export const colors = {
@@ -203,11 +203,11 @@ export const colors = {
   'button-brand-accent-filled-hover-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'button-brand-accent-filled-hover-text': ['#ffffff'],
   'button-brand-accent-filled-text': ['#000000'],
-  'button-brand-accent-ghost-background': ['#000000'],
+  'button-brand-accent-ghost-background': ['rgb(0 0 0 0)'],
   'button-brand-accent-ghost-hover-background': ['rgb(200 250 49 / 16%)'],
   'button-brand-accent-ghost-hover-text': ['#C8FA31'],
   'button-brand-accent-ghost-text': ['#C8FA31'],
-  'button-brand-accent-outlined-background': ['#000000'],
+  'button-brand-accent-outlined-background': ['rgb(0 0 0 0)'],
   'button-brand-accent-outlined-border': ['linear-gradient(to right, #DBFA7D, #76D86E)'],
   'button-brand-accent-outlined-hover-background': ['rgb(200 250 49 / 16%)'],
   'button-brand-accent-outlined-hover-text': ['#C8FA31'],
@@ -216,11 +216,11 @@ export const colors = {
   'button-brand-filled-hover-background': ['#003D7D'],
   'button-brand-filled-hover-text': ['#ffffff'],
   'button-brand-filled-text': ['#ffffff'],
-  'button-brand-ghost-background': ['#ffffff'],
+  'button-brand-ghost-background': ['rgb(0 0 0 0)'],
   'button-brand-ghost-hover-background': ['rgb(0 100 207 / 8%)'],
   'button-brand-ghost-hover-text': ['#0064CF'],
   'button-brand-ghost-text': ['#0064CF'],
-  'button-brand-outlined-background': ['#ffffff'],
+  'button-brand-outlined-background': ['rgb(0 0 0 0)'],
   'button-brand-outlined-border': ['#0064CF'],
   'button-brand-outlined-hover-background': ['rgb(0 100 207 / 8%)'],
   'button-brand-outlined-hover-text': ['#0064CF'],
@@ -229,11 +229,11 @@ export const colors = {
   'button-filled-hover-background': ['#45474A'],
   'button-filled-hover-text': ['#ffffff'],
   'button-filled-text': ['#ffffff'],
-  'button-ghost-background': ['#ffffff'],
+  'button-ghost-background': ['rgb(0, 0, 0, 0)'],
   'button-ghost-hover-background': ['#F5F6F7'],
   'button-ghost-hover-text': ['#0D0D0D'],
   'button-ghost-text': ['#0D0D0D'],
-  'button-outlined-background': ['#ffffff'],
+  'button-outlined-background': ['rgb(0, 0, 0, 0)'],
   'button-outlined-border': ['#0D0D0D'],
   'button-outlined-hover-background': ['#F5F6F7'],
   'button-outlined-hover-border': ['#0D0D0D'],
