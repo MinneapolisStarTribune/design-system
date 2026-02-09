@@ -1,10 +1,7 @@
-# Only runs when PR targets main. PRs into release/* do not run this check.
-# After changing base branch in the PR UI, push a new commit to trigger a fresh run (re-run reuses the old event).
 name: Merging into main must come from a branch that starts with release/*
 
 on:
   pull_request:
-    branches: [main]
 
 jobs:
   enforce:
