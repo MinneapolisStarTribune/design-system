@@ -44,6 +44,7 @@ import '@mantine/core/styles.css';
 import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
+import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 
 const preview: Preview = {
   globalTypes: {
@@ -104,7 +105,9 @@ const preview: Preview = {
                   padding: '1rem',
                 }}
               >
-                <Story />
+                <BrandValidationErrorBoundary>
+                  <Story />
+                </BrandValidationErrorBoundary>
               </div>
             </DesignSystemProvider>
           </FontWrapper>

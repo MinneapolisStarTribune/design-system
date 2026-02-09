@@ -192,8 +192,9 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     classes.push(`${className} {\n${props}\n}`);
   });
 
-  // Then, generate responsive classes organized by breakpoint
-  const breakpointOrder = ['desktop', 'tablet', 'mobile'];
+  // Then, generate responsive classes: use the design-token class name (no -desktop/-tablet/-mobile suffix)
+  // so that one class (e.g. .typography-editorial-news-h1) gets different styles per breakpoint.
+  const breakpointOrder = ['mobile', 'tablet', 'desktop'];
 
   breakpointOrder.forEach((breakpoint) => {
     const classesForBreakpoint = classesByBreakpoint.get(breakpoint);
@@ -205,14 +206,14 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     classes.push(`\n${mediaQuery} {`);
 
     classesForBreakpoint.forEach((data) => {
-      const fullClassName = `.${data.className}-${breakpoint}`;
+      const className = `.${data.className}`;
       const props = Object.entries(data.properties)
         .map(([prop, value]) => {
           return `    ${prop}: ${value};`;
         })
         .join('\n');
 
-      classes.push(`  ${fullClassName} {\n${props}\n  }`);
+      classes.push(`  ${className} {\n${props}\n  }`);
     });
 
     classes.push('}');

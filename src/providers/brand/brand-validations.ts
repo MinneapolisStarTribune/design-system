@@ -10,10 +10,12 @@ export const STAR_TRIBUNE_UNSUPPORTED_COMPONENTS: readonly ComponentName[] = [
 
 /**
  * Components that are not supported in Varsity.
+ * Editorial headings enterprise, non-news, and sponsored have typography tokens only for Star Tribune.
  */
 export const VARSITY_UNSUPPORTED_COMPONENTS: readonly ComponentName[] = [
   'EnterpriseHeading',
-  // Add other component names that Varsity doesn't support
+  'NonNewsHeading',
+  'SponsoredHeading',
 ] as const;
 
 /**
