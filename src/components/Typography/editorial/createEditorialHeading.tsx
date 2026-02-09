@@ -1,48 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
-import type { ComponentName } from '@/types/component-names';
-
-export type EditorialHeadingImportance = 1 | 2 | 3 | 4 | 5 | 6;
-
-export interface EditorialHeadingProps
-  extends Omit<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'children'> {
-  importance: EditorialHeadingImportance;
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-  'aria-label'?: string;
-}
-
-interface CreateEditorialHeadingOptions {
-  /**
-   * Component name for error messages, display, and brand validation
-   */
-  componentName: ComponentName;
-  /**
-   * Class name prefix (e.g., 'news', 'sponsored').
-   * Will be combined with importance to create: typography-editorial-{prefix}-h{importance}
-   */
-  classNamePrefix: string;
-}
+import type {
+  CreateEditorialHeadingOptions,
+  EditorialHeadingImportance,
+  EditorialHeadingProps,
+} from './types';
 
 /**
- * Factory function to create editorial heading components
+ * Factory for editorial heading components (NewsHeading, SponsoredHeading, etc.).
+ * Each variant uses the same props and semantics; styling is driven by design tokens
+ * via the generated class name typography-editorial-{prefix}-h{1-6}.
  *
  * @example
  * export const NewsHeading = createEditorialHeading({
  *   componentName: 'NewsHeading',
  *   classNamePrefix: 'news',
- * });
- *
- * export const SponsoredHeading = createEditorialHeading({
- *   componentName: 'SponsoredHeading',
- *   classNamePrefix: 'sponsored',
- * });
- *
- * export const NonNewsHeading = createEditorialHeading({
- *   componentName: 'NonNewsHeading',
- *   classNamePrefix: 'non-news',
  * });
  */
 export function createEditorialHeading({
