@@ -4,7 +4,6 @@ name: Merging into main must come from a branch that starts with release/*
 
 on:
   pull_request:
-    branches: [main]
 
 jobs:
   enforce:
