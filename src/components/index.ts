@@ -3,4 +3,5 @@ export * from './Button/Button';
 export * from './Icon/Icon';
 export { UtilityLabel, type UtilityLabelProps } from './UtilityLabel/UtilityLabel';
 export * from './Typography/EditorialHeading/createEditorialHeading';
+export * from './Typography/editorial';
 export * from './Typography/NewsHeading/NewsHeading';
