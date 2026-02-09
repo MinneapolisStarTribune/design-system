@@ -38,15 +38,57 @@
  */
 
 import type { Preview } from '@storybook/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 
+import versionsList from './versions.json';
+
+type VersionsEntry = { version: string; url: string };
+
+function VersionOpenEffect({
+  version,
+  updateGlobals,
+}: {
+  version: string;
+  updateGlobals: (g: { version: string }) => void;
+}) {
+  const openedRef = useRef(false);
+  useEffect(() => {
+    if (!version || version === 'current') {
+      openedRef.current = false;
+      return;
+    }
+    const entry = (versionsList as VersionsEntry[]).find((v) => v.version === version);
+    if (entry && !openedRef.current) {
+      openedRef.current = true;
+      window.open(entry.url, '_blank', 'noopener');
+      updateGlobals({ version: 'current' });
+    }
+  }, [version, updateGlobals]);
+  return null;
+}
+
 const preview: Preview = {
   globalTypes: {
+    version: {
+      description: 'View Storybook at a past release (opens in new tab)',
+      toolbar: {
+        title: 'Version',
+        icon: 'branch',
+        items: [
+          { value: 'current', title: 'Current' },
+          ...(versionsList as VersionsEntry[]).map((v) => ({
+            value: v.version,
+            title: v.version,
+          })),
+        ],
+        dynamicTitle: true,
+      },
+    },
     brand: {
       description: 'Brand theme for components',
       toolbar: {
@@ -75,6 +117,7 @@ const preview: Preview = {
   initialGlobals: {
     brand: 'startribune',
     theme: 'light',
+    version: 'current',
   },
   decorators: [
     /**
@@ -95,20 +138,24 @@ const preview: Preview = {
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
 
       return (
-        <ThemeWrapper brand={brand} colorScheme={scheme}>
-          <FontWrapper brand={brand}>
-            <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
-              <ColorSchemeScript />
-              <div
-                style={{
-                  padding: '1rem',
-                }}
-              >
-                <Story />
-              </div>
-            </DesignSystemProvider>
-          </FontWrapper>
-        </ThemeWrapper>
+        <>
+          <VersionOpenEffect
+            version={context.globals.version || 'current'}
+            updateGlobals={context.updateGlobals}
+          />
+          <ThemeWrapper brand={brand} colorScheme={scheme}>
+            <FontWrapper brand={brand}>
+              <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
+                <ColorSchemeScript />
+                <div
+                  style={{
+                    padding: '1rem',
+                  }}
+                ></div>
+              </DesignSystemProvider>
+            </FontWrapper>
+          </ThemeWrapper>
+        </>
       );
     },
   ],
