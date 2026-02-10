@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react-vite';
-import { FontWeight, SIZES } from '../../../types/globalTypes';
+import { FontWeight, SIZES } from '../../../../types/globalTypes';
 import { EditorialText } from './EditorialText';
 
 const meta = {
