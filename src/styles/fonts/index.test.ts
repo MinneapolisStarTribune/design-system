@@ -5,11 +5,13 @@ const PACKAGE_NAME = '@minneapolisstartribune/design-system';
 
 describe('getBrandFontPath', () => {
   it('returns package path for startribune', () => {
-    expect(getBrandFontPath('startribune')).toBe(`${PACKAGE_NAME}/dist/fonts/startribune.css`);
+    expect(getBrandFontPath('startribune')).toBe(
+      `${PACKAGE_NAME}/dist/fonts/font-face/startribune.css`
+    );
   });
 
   it('returns package path for varsity', () => {
-    expect(getBrandFontPath('varsity')).toBe(`${PACKAGE_NAME}/dist/fonts/varsity.css`);
+    expect(getBrandFontPath('varsity')).toBe(`${PACKAGE_NAME}/dist/fonts/font-face/varsity.css`);
   });
 });
 
