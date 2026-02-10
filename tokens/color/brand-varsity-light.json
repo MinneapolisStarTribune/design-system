@@ -128,7 +128,7 @@
       },
       "03": {
         "description": "Primary brand accent in marketing and high-visibility CTA elements like the \"Subscribe\" button.",
-        "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})"
+        "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.500})"
       },
       "03-from": {
         "description": "Start color for brand-03 gradient. Use with Tailwind's from- utility.",
@@ -136,7 +136,7 @@
       },
       "03-to": {
         "description": "End color for brand-03 gradient. Use with Tailwind's to- utility.",
-        "value": "{color.spring-green.400}"
+        "value": "{color.spring-green.500}"
       },
       "04": {
         "description": "Blue gradient used as a grounding background color.",
@@ -185,9 +185,9 @@
           "background": { "value": "{color.brand.03}" },
           "hover-background": { "value": "{color.base.black}" },
           "hover-border": {
-            "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.400})"
+            "value": "{color.brand.03}"
           },
-          "hover-text": { "value": "{color.base.white}" },
+          "hover-text": { "value": "{color.base.black}" },
           "text": { "value": "{color.base.black}" }
         },
         "ghost": {
@@ -205,6 +205,9 @@
           "hover-background": {
             "_comment": "16% opacity of lime.400 for subtle hover effect",
             "value": "rgb(200 250 49 / 16%)"
+          },
+          "hover-border": {
+            "value": "{color.brand.03}"
           },
           "hover-text": { "value": "{color.lime.400}" },
           "text": { "value": "{color.lime.400}" }
