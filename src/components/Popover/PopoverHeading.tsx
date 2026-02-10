@@ -14,7 +14,7 @@ export const PopoverHeading: React.FC<{
       <CloseButton
         aria-label="Close popover"
         className={styles.closeButton}
-        size="lg"
+        size="md"
         onClick={close}
       />
     </Box>

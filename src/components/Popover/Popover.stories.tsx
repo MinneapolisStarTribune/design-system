@@ -46,43 +46,24 @@ export const WithTitle: Story = {
   },
 };
 
-export const WithTitleAndDescription: Story = {
-  args: {
-    trigger: <Button>Open</Button>,
-    children: (
-      <>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Description>
-          This is a popover, it is opened when button is clicked.
-        </Popover.Description>
-      </>
-    ),
-  },
-};
-
-export const WithDescriptionAndBody: Story = {
-  args: {
-    trigger: <Button>Open</Button>,
-    children: (
-      <>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Description>
-          This is a popover, it is opened when button is clicked.
-        </Popover.Description>
-
-        <Popover.Divider />
-
-        <Popover.Body>
-          <Box>Sample custom content</Box>
-        </Popover.Body>
-      </>
-    ),
-  },
-};
-
 export const WithCustomContent: Story = {
+  parameters: {
+    layout: 'centered',
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          paddingBottom: 120,
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     trigger: <Button>Open</Button>,
+    pointer: 'bottom',
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
@@ -101,6 +82,20 @@ export const WithCustomContent: Story = {
 };
 
 export const WithDividerAndCustomContent: Story = {
+  parameters: {
+    layout: 'centered',
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          paddingBottom: 120,
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     trigger: <Button>Open</Button>,
     children: (
@@ -115,6 +110,7 @@ export const WithDividerAndCustomContent: Story = {
         </Popover.Body>
       </>
     ),
+    pointer: 'bottom',
   },
 };
 
