@@ -9,11 +9,8 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-bold-medium');
-    expect(element).toHaveTextContent('Editorial content');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveTextContent('Editorial content');
   });
 
   it('applies correct class for medium size', () => {
@@ -23,10 +20,8 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-regular-medium');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveClass('typography-editorial-text-regular-medium');
   });
 
   it('applies correct class for small size', () => {
@@ -36,10 +31,8 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-regular-small');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveClass('typography-editorial-text-regular-small');
   });
 
   it('applies correct class for large size', () => {
@@ -49,10 +42,8 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-regular-large');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveClass('typography-editorial-text-regular-large');
   });
 
   it('applies custom className when provided', () => {
@@ -67,11 +58,9 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-bold-medium');
-    expect(element).toHaveClass('custom-class');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveClass('typography-editorial-text-bold-medium');
+    expect(getByTestId('editorial-text')).toHaveClass('custom-class');
   });
 
   it('renders children correctly', () => {
@@ -81,10 +70,9 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element.querySelector('span')).toHaveTextContent('Sample editorial text');
+    expect(getByTestId('editorial-text').querySelector('span')).toHaveTextContent(
+      'Sample editorial text'
+    );
   });
 
   it('defaults to regular weight when weight prop is not provided', () => {
@@ -94,9 +82,7 @@ describe('EditorialText', () => {
       </EditorialText>
     );
 
-    const element = getByTestId('editorial-text');
-
-    expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('typography-editorial-text-regular-medium');
+    expect(getByTestId('editorial-text')).toBeInTheDocument();
+    expect(getByTestId('editorial-text')).toHaveClass('typography-editorial-text-regular-medium');
   });
 });
