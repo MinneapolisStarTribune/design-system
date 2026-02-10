@@ -64,22 +64,35 @@ export const Button: React.FC<ButtonProps> = ({
   const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
   const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
 
-  // Check if brand-accent filled button should have gradient border
+  // Check if brand-accent buttons should have gradient border
   // Check the theme colors directly to see if the hover-border token is a gradient
   const theme = useMantineTheme();
   const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
-  const brandAccentHoverBorder = theme.colors['button-brand-accent-filled-hover-border']?.[0];
-  const hasGradientBorder = isBrandAccentFilled && brandAccentHoverBorder?.includes('gradient');
+  const isBrandAccentOutlined = color === 'brand-accent' && variant === 'outlined';
+  const brandAccentFilledHoverBorder = theme.colors['button-brand-accent-filled-hover-border']?.[0];
+  const brandAccentOutlinedHoverBorder =
+    theme.colors['button-brand-accent-outlined-hover-border']?.[0];
+  const hasGradientBorderFilled =
+    isBrandAccentFilled && brandAccentFilledHoverBorder?.includes('gradient');
+  const hasGradientBorderOutlined =
+    isBrandAccentOutlined && brandAccentOutlinedHoverBorder?.includes('gradient');
 
-  // Apply special hover styles for brand-accent filled button with gradient border
+  // Apply special hover styles for brand-accent buttons with gradient border
   const brandAccentFilledClass =
-    isBrandAccentFilled && hasGradientBorder ? styles.brandAccentFilled : undefined;
+    isBrandAccentFilled && hasGradientBorderFilled ? styles.brandAccentFilled : undefined;
+  const brandAccentOutlinedClass =
+    isBrandAccentOutlined && hasGradientBorderOutlined ? styles.brandAccentOutlined : undefined;
 
   // Add disabled class for styling
   const disabledClass = isDisabled ? styles.disabled : undefined;
 
   // Combine class names using classnames utility
-  const combinedClassNames = classNames(className, brandAccentFilledClass, disabledClass);
+  const combinedClassNames = classNames(
+    className,
+    brandAccentFilledClass,
+    brandAccentOutlinedClass,
+    disabledClass
+  );
 
   return (
     <MantineButton
