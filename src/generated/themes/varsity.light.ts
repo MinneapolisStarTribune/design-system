@@ -1,14 +1,14 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2026-02-10T03:48:19.107Z
+ * Date: 2026-02-10T16:37:45.575Z
  */
 
 export const colors = {
   brand: [
     '#C8FA31',
     '#0064CF',
-    'linear-gradient(to right, #DBFA7D, #65CC5C)',
+    'linear-gradient(to right, #C8FA31, #65CC5C)',
     'linear-gradient(to right, #1683F8, #0050A6)',
   ],
   'cobalt-blue': [
@@ -194,13 +194,13 @@ export const colors = {
   'border-state-disabled-on-dark': ['#45474A'],
   'border-state-disabled-on-light': ['#C8CCD0'],
   'border-state-focus': ['#0D0D0D'],
-  'brand-03-from': ['#DBFA7D'],
+  'brand-03-from': ['#C8FA31'],
   'brand-03-to': ['#65CC5C'],
   'brand-04-from': ['#1683F8'],
   'brand-04-to': ['#0050A6'],
-  'button-brand-accent-filled-background': ['linear-gradient(to right, #DBFA7D, #65CC5C)'],
+  'button-brand-accent-filled-background': ['linear-gradient(to right, #C8FA31, #65CC5C)'],
   'button-brand-accent-filled-hover-background': ['#000000'],
-  'button-brand-accent-filled-hover-border': ['linear-gradient(to right, #DBFA7D, #65CC5C)'],
+  'button-brand-accent-filled-hover-border': ['linear-gradient(to right, #C8FA31, #65CC5C)'],
   'button-brand-accent-filled-hover-text': ['#000000'],
   'button-brand-accent-filled-text': ['#000000'],
   'button-brand-accent-ghost-background': ['rgb(0 0 0 0)'],
@@ -208,9 +208,9 @@ export const colors = {
   'button-brand-accent-ghost-hover-text': ['#C8FA31'],
   'button-brand-accent-ghost-text': ['#C8FA31'],
   'button-brand-accent-outlined-background': ['rgb(0 0 0 0)'],
-  'button-brand-accent-outlined-border': ['linear-gradient(to right, #DBFA7D, #65CC5C)'],
+  'button-brand-accent-outlined-border': ['linear-gradient(to right, #C8FA31, #65CC5C)'],
   'button-brand-accent-outlined-hover-background': ['rgb(200 250 49 / 16%)'],
-  'button-brand-accent-outlined-hover-border': ['linear-gradient(to right, #DBFA7D, #65CC5C)'],
+  'button-brand-accent-outlined-hover-border': ['linear-gradient(to right, #C8FA31, #65CC5C)'],
   'button-brand-accent-outlined-hover-text': ['#C8FA31'],
   'button-brand-accent-outlined-text': ['#C8FA31'],
   'button-brand-filled-background': ['#0064CF'],

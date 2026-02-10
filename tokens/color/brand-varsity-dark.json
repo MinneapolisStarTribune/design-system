@@ -128,11 +128,11 @@
       },
       "03": {
         "description": "Primary brand accent in marketing and high-visibility CTA elements like the \"Subscribe\" button.",
-        "value": "linear-gradient(to right, {color.lime.300}, {color.spring-green.500})"
+        "value": "linear-gradient(to right, {color.lime.400}, {color.spring-green.500})"
       },
       "03-from": {
         "description": "Start color for brand-03 gradient. Use with Tailwind's from- utility.",
-        "value": "{color.lime.300}"
+        "value": "{color.lime.400}"
       },
       "03-to": {
         "description": "End color for brand-03 gradient. Use with Tailwind's to- utility.",
