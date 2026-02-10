@@ -71,6 +71,16 @@ export const FONT_WEIGHT_STYLE = [
 export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
 
 /**
+ * UtilityLabel size tokens for the design system
+ */
+export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
+
+/**
+ * UtilityLabel weight tokens for the design system
+ */
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+
+/**
  * Global position tokens for overlays and floating UI
  */
 export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
