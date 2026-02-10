@@ -1,18 +1,25 @@
-import React from 'react';
-import { Popover as MantinePopover, CloseButton } from '@mantine/core';
-
-import classNames from 'classnames';
-
+import React, { HTMLAttributes, ReactNode } from 'react';
+import { Popover as MantinePopover } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import styles from './Popover.module.scss';
-
 import { PopoverHeading } from './PopoverHeading';
 import { PopoverBody } from './PopoverBody';
 import { PopoverDivider } from './PopoverDivider';
+import { PopoverDescription } from './PopoverDescription';
+import { PopoverContext } from './PopoverContext';
 
-import type { PopoverProps } from './Popover.types';
-import type { Position } from '@/types/globalTypes';
+export type Position = 'top' | 'right' | 'bottom' | 'left';
 
-const POINTER_TO_POSITION: Record<Position, 'top' | 'bottom' | 'left' | 'right'> = {
+export type PopoverProps = {
+  trigger: ReactNode;
+  children: ReactNode;
+  pointer?: Position;
+  isDisabled?: boolean;
+  className?: string;
+  dataTestId?: string;
+} & HTMLAttributes<HTMLDivElement>;
+
+const POINTER_TO_POSITION: Record<Position, 'top' | 'right' | 'bottom' | 'left'> = {
   top: 'bottom',
   right: 'left',
   bottom: 'top',
@@ -24,51 +31,43 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   children,
   pointer = 'right',
   isDisabled,
-  className,
-  dataTestId,
-  ...ariaProps
 }) => {
+  const [opened, { open, close, toggle }] = useDisclosure(false);
   const position = POINTER_TO_POSITION[pointer];
 
   return (
-    <MantinePopover
-      position={position}
-      withArrow
-      arrowSize={6}
-      arrowOffset={0}
-      arrowPosition="center"
-      offset={8}
-      withinPortal={false}
-      disabled={isDisabled}
-      closeOnEscape
-      closeOnClickOutside
-      middlewares={{
-        flip: true,
-        shift: true,
-      }}
-    >
-      <MantinePopover.Target>{trigger}</MantinePopover.Target>
-
-      <MantinePopover.Dropdown
-        className={classNames(styles.container, className)}
-        data-testid={dataTestId}
-        role="dialog"
-        {...ariaProps}
+    <PopoverContext.Provider value={{ close }}>
+      <MantinePopover
+        opened={opened}
+        onChange={(setOpened) => (setOpened ? open() : close())}
+        position={position}
+        withArrow
+        arrowSize={6}
+        offset={8}
+        withinPortal={false}
+        disabled={isDisabled}
+        closeOnEscape
+        closeOnClickOutside
       >
-        <div className={styles.header}>
-          <div className={styles.headerContent}>{children}</div>
+        <MantinePopover.Target>
+          <div style={{ display: 'inline-block', cursor: 'pointer' }} onClick={toggle}>
+            {trigger}
+          </div>
+        </MantinePopover.Target>
 
-          <CloseButton aria-label="Close popover" className={styles.closeButton} size="lg" />
-        </div>
-      </MantinePopover.Dropdown>
-    </MantinePopover>
+        <MantinePopover.Dropdown className={styles.container}>
+          <div className={styles.content}>{children}</div>
+        </MantinePopover.Dropdown>
+      </MantinePopover>
+    </PopoverContext.Provider>
   );
 };
 
-/* Compound */
+/* Compound API */
 
 type PopoverComponent = React.FC<PopoverProps> & {
   Heading: typeof PopoverHeading;
+  Description: typeof PopoverDescription;
   Body: typeof PopoverBody;
   Divider: typeof PopoverDivider;
 };
@@ -77,4 +76,5 @@ export const Popover = PopoverRoot as PopoverComponent;
 
 Popover.Heading = PopoverHeading;
 Popover.Body = PopoverBody;
+Popover.Description = PopoverDescription;
 Popover.Divider = PopoverDivider;

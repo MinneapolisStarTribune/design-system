@@ -1,10 +1,22 @@
 import React from 'react';
-import { Box } from '@mantine/core';
-
+import { Box, CloseButton } from '@mantine/core';
 import styles from './Popover.module.scss';
+import { usePopoverContext } from './PopoverContext';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  return <Box className={styles.heading}>{children}</Box>;
+  const { close } = usePopoverContext();
+
+  return (
+    <Box className={styles.header}>
+      {children}
+      <CloseButton
+        aria-label="Close popover"
+        className={styles.closeButton}
+        size="lg"
+        onClick={close}
+      />
+    </Box>
+  );
 };

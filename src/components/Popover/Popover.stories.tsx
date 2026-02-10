@@ -1,222 +1,232 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-import { Text, Stack, Box } from '@mantine/core';
-
+import { Box, Button } from '@mantine/core';
 import { Popover } from './Popover';
-import { Button } from '../Button/Button';
-
-import { POSITIONS } from '../../types/globalTypes';
-
-const meta: Meta<typeof Popover> = {
-  title: 'Components/Popover',
+import { Icon } from '../index';
+const meta = {
+  title: 'Feedback & Status/Popover',
   component: Popover,
   tags: ['autodocs'],
-
   argTypes: {
+    trigger: { control: false },
+    children: { control: false },
     pointer: {
       control: 'select',
-      options: POSITIONS,
-      description: 'Pointer position',
+      options: ['top', 'right', 'bottom', 'left'],
     },
+  },
+} satisfies Meta<typeof Popover>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const TextOnly: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <Popover.Heading>
+        <Popover.Description>
+          This is a popover, it is opened when button is clicked.
+        </Popover.Description>
+      </Popover.Heading>
+    ),
   },
 };
 
-export default meta;
-
-type Story = StoryObj<typeof Popover>;
-
-//
-// Default
-//
-export const Default: Story = {
-  render: () => (
-    <Box
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '400px',
-        padding: '40px',
-      }}
-    >
-      <Popover trigger={<Button label="Open" />} pointer="top">
-        <Popover.Body>
-          <Text size="sm">Basic popover content</Text>
-        </Popover.Body>
-      </Popover>
-    </Box>
-  ),
-};
-
-//
-// With title
-//
 export const WithTitle: Story = {
-  render: () => (
-    <Box
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '400px',
-        padding: '40px',
-        flexDirection: 'column',
-      }}
-    >
-      <Popover trigger={<Button label="Open Popover" />} pointer="left">
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
         <Popover.Heading>Title</Popover.Heading>
-
-        <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-        </Popover.Body>
-      </Popover>
-    </Box>
-  ),
+        <Popover.Description>
+          This is a popover, it is opened when button is clicked.
+        </Popover.Description>
+      </>
+    ),
+  },
 };
 
-//
-// With Header Divider
-//
-export const WithHeaderDivider: Story = {
-  render: () => (
-    <Box
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '400px',
-        padding: '40px',
-      }}
-    >
-      <Popover trigger={<Button label="Open Popover" />} pointer="right">
+export const WithTitleAndDescription: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
         <Popover.Heading>Title</Popover.Heading>
+        <Popover.Description>
+          This is a popover, it is opened when button is clicked.
+        </Popover.Description>
+      </>
+    ),
+  },
+};
+
+export const WithDescriptionAndBody: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Description>
+          This is a popover, it is opened when button is clicked.
+        </Popover.Description>
 
         <Popover.Divider />
 
         <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
+          <Box>Sample custom content</Box>
         </Popover.Body>
-      </Popover>
-    </Box>
-  ),
+      </>
+    ),
+  },
 };
 
-//
-// Scrollable
-//
-export const Scrollable: Story = {
-  render: () => (
-    <Box
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '600px',
-        padding: '40px',
-      }}
-    >
-      <Popover trigger={<Button label="Open Popover" />} pointer="left">
-        <Popover.Heading>Items</Popover.Heading>
+export const WithCustomContent: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Description>Choose an option below</Popover.Description>
 
         <Popover.Divider />
 
         <Popover.Body>
-          <Stack gap="xs">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <Text key={i} size="sm">
-                Item {i + 1}
-              </Text>
-            ))}
-          </Stack>
+          <Box>Option 1</Box>
+          <Box>Option 2</Box>
+          <Box>Option 3</Box>
         </Popover.Body>
-      </Popover>
-    </Box>
-  ),
+      </>
+    ),
+  },
 };
 
-//
-// Pointer positions - All directions
-//
-export const PointerPositions: Story = {
+export const WithDividerAndCustomContent: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>
+          <Box>Sample Description</Box>
+        </Popover.Body>
+        <Popover.Divider />
+        <Popover.Body>
+          <Box>Sample Content popover body</Box>
+        </Popover.Body>
+      </>
+    ),
+  },
+};
+
+export const ScrollableBody: Story = {
+  args: {
+    trigger: <Button>Open</Button>,
+    children: (
+      <>
+        <Popover.Heading>Scrollable content</Popover.Heading>
+        <Popover.Description>This list is scrollable</Popover.Description>
+
+        <Popover.Divider />
+
+        <Popover.Body>
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i}>Item {i + 1}</div>
+          ))}
+        </Popover.Body>
+      </>
+    ),
+  },
+};
+
+export const IconPopover: Story = {
+  parameters: {
+    layout: 'centered',
+  },
+  args: {
+    trigger: <Icon name="camera" />,
+    children: (
+      <>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>
+          <Box>Sample Description</Box>
+        </Popover.Body>
+        <Popover.Divider />
+        <Popover.Body>
+          <Box>Sample Content popover body</Box>
+        </Popover.Body>
+      </>
+    ),
+    pointer: 'top',
+  },
+};
+
+export const AllPositions: Story = {
+  args: {
+    trigger: null,
+    children: null,
+  },
+
   render: () => (
-    <Box
+    <div
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gridTemplateRows: 'repeat(3, 1fr)',
-        gap: '40px',
-        minHeight: '600px',
-        padding: '100px',
-        alignItems: 'center',
-        justifyItems: 'center',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 120,
+        padding: 160,
+        minHeight: '100vh',
+        placeItems: 'center',
       }}
     >
-      {/* Top row - top pointer */}
-      <div />
-      <Popover pointer="top" trigger={<Button label="Top" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-        </Popover.Body>
-      </Popover>
-      <div />
-
-      {/* Middle row - left and right pointers */}
-      <Popover pointer="left" trigger={<Button label="Left" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-        </Popover.Body>
+      {/* TOP */}
+      <Popover
+        pointer="top"
+        trigger={<Button>Top</Button>}
+        // middlewares={{ flip: false, shift: false }}
+      >
+        <Popover.Heading>Top</Popover.Heading>
+        <Popover.Divider />
+        <Popover.Body>Arrow on top</Popover.Body>
       </Popover>
 
-      <div />
-
-      <Popover pointer="right" trigger={<Button label="Right" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-        </Popover.Body>
+      {/* RIGHT */}
+      <Popover
+        pointer="right"
+        trigger={<Button>Right</Button>}
+        // middlewares={{ flip: false, shift: false }}
+      >
+        <Popover.Heading>Right</Popover.Heading>
+        <Popover.Divider />
+        <Popover.Body>Arrow on right</Popover.Body>
       </Popover>
 
-      {/* Bottom row - bottom pointer */}
-      <div />
-      <Popover pointer="bottom" trigger={<Button label="Bottom" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
-          <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-        </Popover.Body>
+      {/* LEFT */}
+      <Popover
+        pointer="left"
+        trigger={<Button>Left</Button>}
+        // middlewares={{ flip: false, shift: false }}
+      >
+        <Popover.Heading>Left</Popover.Heading>
+        <Popover.Divider />
+        <Popover.Body>Arrow on left</Popover.Body>
       </Popover>
-      <div />
-    </Box>
+
+      {/* BOTTOM */}
+      <Popover
+        pointer="bottom"
+        trigger={<Button>Bottom</Button>}
+        // middlewares={{ flip: false, shift: false }}
+      >
+        <Popover.Heading>Bottom</Popover.Heading>
+        <Popover.Divider />
+        <Popover.Body>Arrow on bottom</Popover.Body>
+      </Popover>
+    </div>
   ),
-};
 
-//
-// Interactive States
-//
-export const InteractiveStates: Story = {
-  render: () => (
-    <Box
-      style={{
-        display: 'flex',
-        gap: '80px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '400px',
-        padding: '40px',
-      }}
-    >
-      <Box>
-        <Text size="sm" mb="md" c="dimmed">
-          Default
-        </Text>
-        <Popover trigger={<Button label="Open Popover" />} pointer="top">
-          <Popover.Heading>Title</Popover.Heading>
-          <Popover.Body>
-            <Text size="sm">This is a popover, it is opened when button is clicked</Text>
-          </Popover.Body>
-        </Popover>
-      </Box>
-    </Box>
-  ),
+  parameters: {
+    layout: 'fullscreen',
+    controls: {
+      exclude: ['pointer', 'trigger', 'children'],
+    },
+  },
 };
