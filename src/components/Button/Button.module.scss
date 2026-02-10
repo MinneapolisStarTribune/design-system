@@ -1,6 +1,6 @@
 /* Button component styles */
 button {
-  /* Special hover behavior for brand-accent filled button */
+  /* Gradient border for brand-accent buttons (Varsity brand only) */
   /* 
    * Browsers do not support linear gradients for borders natively.
    * The CSS `border` property only accepts solid colors, and `border-image` 
@@ -11,14 +11,20 @@ button {
    * the padding area (the border) visible. This creates a gradient border
    * that respects border-radius.
    * 
-   * On hover: transparent background + gradient border via ::after pseudo-element
+   * Gradient border is shown at rest AND on hover for Varsity brand-accent buttons.
    * 
-   * Note: This class is only applied when the hover-border token contains "gradient" (Varsity brand only)
+   * Note: These classes are only applied when the hover-border token contains "gradient"
    */
-  &.brandAccentFilled {
+  &.brandAccentFilled,
+  &.brandAccentOutlined {
     position: relative;
 
-    /* ::after pseudo-element - always present, matches button size */
+    /* Hide default border for outlined buttons */
+    &.brandAccentOutlined {
+      border-color: transparent !important;
+    }
+
+    /* ::after pseudo-element - creates gradient border at rest and on hover */
     &::after {
       content: '';
       position: absolute;
@@ -29,31 +35,40 @@ button {
       top: 0;
       pointer-events: none;
       z-index: 0;
+      /* Gradient border using mask technique - mask out the content area */
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: exclude;
+      mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      padding: 1px; /* Border thickness */
     }
 
-    &:hover:not(:disabled) {
-      background: transparent !important;
+    /* Filled buttons: gradient border at rest */
+    &.brandAccentFilled::after {
+      background: var(--color-button-brand-accent-filled-hover-border);
+    }
 
-      /* On hover: create gradient border using mask technique */
-      /* The ::after covers the button, and we mask out the center to create the border */
-      /* Only applies when --has-gradient-border is '1' (set via CSS variable) */
-      &::after {
-        background: var(--color-button-brand-accent-filled-hover-border);
-        /* Use mask to create border effect - mask out the content area */
-        -webkit-mask: 
-          linear-gradient(#fff 0 0) content-box, 
-          linear-gradient(#fff 0 0);
-        -webkit-mask-composite: exclude;
-        mask: 
-          linear-gradient(#fff 0 0) content-box, 
-          linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        padding: 1px; /* Border thickness */
+    /* Outlined buttons: gradient border at rest */
+    &.brandAccentOutlined::after {
+      background: var(--color-button-brand-accent-outlined-hover-border);
+    }
+
+    /* Hover state: maintain gradient border */
+    &:hover:not(:disabled) {
+      &.brandAccentFilled {
+        background: transparent !important;
+      }
+      &.brandAccentOutlined {
+        border-color: transparent !important;
       }
     }
 
     /* Ensure button content is above the border */
-    &:hover:not(:disabled) > * {
+    > * {
       position: relative;
       z-index: 1;
     }
