@@ -38,57 +38,57 @@
  */
 
 import type { Preview } from '@storybook/react';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { ColorSchemeScript } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
+import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 
 import versionsList from './versions.json';
 
 type VersionsEntry = { version: string; url: string };
 
-function VersionOpenEffect({
-  version,
-  updateGlobals,
-}: {
-  version: string;
-  updateGlobals: (g: { version: string }) => void;
-}) {
-  const openedRef = useRef(false);
-  useEffect(() => {
-    if (!version || version === 'current') {
-      openedRef.current = false;
-      return;
-    }
-    const entry = (versionsList as VersionsEntry[]).find((v) => v.version === version);
-    if (entry && !openedRef.current) {
-      openedRef.current = true;
-      window.open(entry.url, '_blank', 'noopener');
-      updateGlobals({ version: 'current' });
-    }
-  }, [version, updateGlobals]);
-  return null;
+const versions = versionsList as VersionsEntry[];
+
+/** Clickable version links – use these to actually navigate (toolbar dropdown runs in iframe and is often blocked). */
+function VersionLinksBar() {
+  if (versions.length === 0) return null;
+  return (
+    <div
+      style={{
+        marginBottom: '0.75rem',
+        padding: '0.5rem 0',
+        borderBottom: '1px solid var(--sb-border-color, #eee)',
+        fontSize: '13px',
+      }}
+    >
+      <span style={{ marginRight: '0.5rem' }}>Versions:</span>
+      <span style={{ marginRight: '0.5rem' }}>Current</span>
+      {versions.map((v) =>
+        v.url ? (
+          <a
+            key={v.version}
+            href={v.url}
+            target="_top"
+            rel="noopener noreferrer"
+            style={{ marginRight: '0.75rem', color: 'var(--sb-link-color, #1ea7fd)' }}
+          >
+            {v.version}
+          </a>
+        ) : (
+          <span key={v.version} style={{ marginRight: '0.75rem', color: '#999' }}>
+            {v.version}
+          </span>
+        )
+      )}
+    </div>
+  );
 }
 
 const preview: Preview = {
   globalTypes: {
-    version: {
-      description: 'View Storybook at a past release (opens in new tab)',
-      toolbar: {
-        title: 'Version',
-        icon: 'branch',
-        items: [
-          { value: 'current', title: 'Current' },
-          ...(versionsList as VersionsEntry[]).map((v) => ({
-            value: v.version,
-            title: v.version,
-          })),
-        ],
-        dynamicTitle: true,
-      },
-    },
     brand: {
       description: 'Brand theme for components',
       toolbar: {
@@ -117,7 +117,6 @@ const preview: Preview = {
   initialGlobals: {
     brand: 'startribune',
     theme: 'light',
-    version: 'current',
   },
   decorators: [
     /**
@@ -138,24 +137,19 @@ const preview: Preview = {
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
 
       return (
-        <>
-          <VersionOpenEffect
-            version={context.globals.version || 'current'}
-            updateGlobals={context.updateGlobals}
-          />
-          <ThemeWrapper brand={brand} colorScheme={scheme}>
-            <FontWrapper brand={brand}>
-              <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
-                <ColorSchemeScript />
-                <div
-                  style={{
-                    padding: '1rem',
-                  }}
-                ></div>
-              </DesignSystemProvider>
-            </FontWrapper>
-          </ThemeWrapper>
-        </>
+        <ThemeWrapper brand={brand} colorScheme={scheme}>
+          <FontWrapper brand={brand}>
+            <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
+              <ColorSchemeScript />
+              <div style={{ padding: '1rem' }}>
+                <VersionLinksBar />
+                <BrandValidationErrorBoundary>
+                  <Story />
+                </BrandValidationErrorBoundary>
+              </div>
+            </DesignSystemProvider>
+          </FontWrapper>
+        </ThemeWrapper>
       );
     },
   ],
