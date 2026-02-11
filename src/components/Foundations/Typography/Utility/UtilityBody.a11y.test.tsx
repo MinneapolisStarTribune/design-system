@@ -19,11 +19,5 @@ describe('UtilityBody Accessibility', () => {
 
       await checkA11y();
     });
-
-    it('has no accessibility violations with different elements', async () => {
-      await expectNoA11yViolations(<UtilityBody as="span">Span text</UtilityBody>);
-
-      await expectNoA11yViolations(<UtilityBody as="div">Div text</UtilityBody>);
-    });
   });
 });

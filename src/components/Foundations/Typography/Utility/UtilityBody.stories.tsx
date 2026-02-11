@@ -15,10 +15,6 @@ const meta = {
       control: 'select',
       options: ['regular', 'italic', 'medium', 'semibold', 'bold'],
     },
-    as: {
-      control: 'select',
-      options: ['p', 'span', 'div'],
-    },
   },
 } satisfies Meta<typeof UtilityBody>;
 
