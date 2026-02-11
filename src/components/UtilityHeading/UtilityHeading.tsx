@@ -4,6 +4,8 @@ import { BaseProps } from '../../types/globalTypes';
 export interface UtilityHeadingProps extends BaseProps {
   importance: number;
   children: React.ReactNode;
+  //This would be either 'section' or 'page', but one issue is page is used for both Varsity and Strib
+  //To expand on that, a heading with importance 1 is title the same thing for both Varisty and Strib: utility-page-h1
   headingType: string;
 }
 
