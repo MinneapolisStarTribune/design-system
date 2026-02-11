@@ -2,3 +2,4 @@
 export * from './Button/Button';
 export * from './Icon/Icon';
 export * from './Foundations/Typography/Utility/UtilityHeading';
+export { UtilityLabel, type UtilityLabelProps } from './UtilityLabel/UtilityLabel';
