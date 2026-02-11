@@ -12,7 +12,7 @@ export const UtilityHeading: React.FC<UtilityHeadingProps> = ({
   headingType,
   children,
   dataTestId,
-}: UtilityHeadingProps) => {
+}) => {
   // Generate heading class name based on props
   // Pattern: typography-{headingType}-label-{weight}-{size}[-caps]
   const typographyClassName = `typography-utility-${headingType}-h${importance}`;
@@ -22,5 +22,4 @@ export const UtilityHeading: React.FC<UtilityHeadingProps> = ({
       {children}
     </span>
   );
-
 };
