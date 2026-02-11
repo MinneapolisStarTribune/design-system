@@ -98,8 +98,11 @@ export const Button: React.FC<ButtonProps> = ({
   const brandAccentFilledClass =
     isBrandAccentFilled && hasGradientBorder ? styles.brandAccentFilled : undefined;
 
+  // Add disabled class for styling
+  const disabledClass = isDisabled ? styles.disabled : undefined;
+
   // Combine class names using classnames utility
-  const combinedClassNames = classNames(className, brandAccentFilledClass);
+  const combinedClassNames = classNames(className, brandAccentFilledClass, disabledClass);
 
   return (
     <MantineButton

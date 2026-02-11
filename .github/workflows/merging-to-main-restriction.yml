@@ -1,0 +1,26 @@
+name: Merging into main must come from a branch that starts with release/*
+
+on:
+  pull_request:
+
+jobs:
+  enforce:
+    name: Validate branch naming
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate source branch
+        run: |
+          echo "Base: ${{ github.base_ref }}"
+          echo "Head: ${{ github.head_ref }}"
+
+          # Only enforce the rule if merging into main
+          if [[ "${{ github.base_ref }}" == "main" ]]; then
+            if [[ "${{ github.head_ref }}" != release/* ]]; then
+              echo "❌ Pull requests into main must come from a release/* branch."
+              exit 1
+            else
+              echo "✅ Source branch starts with release/*, validation passed."
+            fi
+          else
+            echo "✅ Not merging into main, validation passed."
+          fi
