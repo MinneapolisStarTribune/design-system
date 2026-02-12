@@ -7,7 +7,6 @@ import {
 import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
-import { IconColor } from '../../types/globalTypes';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 import styles from './Button.module.scss';
 
@@ -50,32 +49,10 @@ export const Button: React.FC<ButtonProps> = ({
     mantineVariant = variant;
   }
 
-  // Determine icon color based on button color and variant
+  // Icons use the same color as text (no separate button-icon tokens needed)
   // Icon is always decorative (aria-hidden) when using the simple icon prop
-  // Map button color/variant combinations to appropriate icon color tokens
-  const getIconColor = (): IconColor | undefined => {
-    // Brand colors map directly to icon colors
-    if (color === 'brand') return 'brand-button-icon';
-    if (color === 'brand-accent') return 'brand-accent-button-icon';
-
-    // Neutral color uses variant-specific icon colors
-    if (color === 'neutral') {
-      const variantIconMap: Record<ButtonVariant, IconColor> = {
-        filled: 'neutral-filled-button-icon',
-        outlined: 'neutral-outlined-button-icon',
-        ghost: 'neutral-ghost-button-icon',
-      };
-      return variantIconMap[variant];
-    }
-
-    return undefined;
-  };
-
-  const iconColorValue = getIconColor();
-
-  const iconElement = icon ? (
-    <Icon name={icon} color={iconColorValue} size={size} aria-hidden={true} />
-  ) : null;
+  // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
+  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
 
   // Extract aria-label from props if provided (using type assertion for HTML attributes)
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
@@ -87,22 +64,35 @@ export const Button: React.FC<ButtonProps> = ({
   const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
   const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
 
-  // Check if brand-accent filled button should have gradient border
+  // Check if brand-accent buttons should have gradient border
   // Check the theme colors directly to see if the hover-border token is a gradient
   const theme = useMantineTheme();
   const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
-  const brandAccentHoverBorder = theme.colors['control-brand-accent-hover-border']?.[0];
-  const hasGradientBorder = isBrandAccentFilled && brandAccentHoverBorder?.includes('gradient');
+  const isBrandAccentOutlined = color === 'brand-accent' && variant === 'outlined';
+  const brandAccentFilledHoverBorder = theme.colors['button-brand-accent-filled-hover-border']?.[0];
+  const brandAccentOutlinedHoverBorder =
+    theme.colors['button-brand-accent-outlined-hover-border']?.[0];
+  const hasGradientBorderFilled =
+    isBrandAccentFilled && brandAccentFilledHoverBorder?.includes('gradient');
+  const hasGradientBorderOutlined =
+    isBrandAccentOutlined && brandAccentOutlinedHoverBorder?.includes('gradient');
 
-  // Apply special hover styles for brand-accent filled button with gradient border
+  // Apply special hover styles for brand-accent buttons with gradient border
   const brandAccentFilledClass =
-    isBrandAccentFilled && hasGradientBorder ? styles.brandAccentFilled : undefined;
+    isBrandAccentFilled && hasGradientBorderFilled ? styles.brandAccentFilled : undefined;
+  const brandAccentOutlinedClass =
+    isBrandAccentOutlined && hasGradientBorderOutlined ? styles.brandAccentOutlined : undefined;
 
   // Add disabled class for styling
   const disabledClass = isDisabled ? styles.disabled : undefined;
 
   // Combine class names using classnames utility
-  const combinedClassNames = classNames(className, brandAccentFilledClass, disabledClass);
+  const combinedClassNames = classNames(
+    className,
+    brandAccentFilledClass,
+    brandAccentOutlinedClass,
+    disabledClass
+  );
 
   return (
     <MantineButton
