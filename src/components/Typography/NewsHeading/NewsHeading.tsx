@@ -1,4 +1,4 @@
-import { createEditorialHeading } from '../Editorial';
+import { createEditorialHeading } from '@/components/Typography/Editorial';
 
 export const NewsHeading = createEditorialHeading({
   componentName: 'NewsHeading',
