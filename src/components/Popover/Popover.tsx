@@ -48,6 +48,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
         disabled={isDisabled}
         closeOnEscape
         closeOnClickOutside
+        classNames={{ dropdown: styles.container }}
       >
         <MantinePopover.Target>
           <div style={{ display: 'inline-block', cursor: 'pointer' }} onClick={toggle}>
@@ -55,7 +56,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           </div>
         </MantinePopover.Target>
 
-        <MantinePopover.Dropdown classNames={{ dropdown: styles.container }}>
+        <MantinePopover.Dropdown>
           <div className={styles.content}>{children}</div>
         </MantinePopover.Dropdown>
       </MantinePopover>
