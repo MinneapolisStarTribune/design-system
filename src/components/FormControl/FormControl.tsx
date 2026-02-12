@@ -7,6 +7,7 @@ export interface FormControlProps extends BaseProps {
 }
 
 export const FormControl: React.FC<FormControlProps> & {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
   // Add any new form control subcomponents here
 } = () => {
