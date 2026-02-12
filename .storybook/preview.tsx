@@ -52,40 +52,10 @@ type VersionsEntry = { version: string; url: string };
 
 const versions = versionsList as VersionsEntry[];
 
-/** Clickable version links – use these to actually navigate (toolbar dropdown runs in iframe and is often blocked). */
-function VersionLinksBar() {
-  if (versions.length === 0) return null;
-  return (
-    <div
-      style={{
-        marginBottom: '0.75rem',
-        padding: '0.5rem 0',
-        borderBottom: '1px solid var(--sb-border-color, #eee)',
-        fontSize: '13px',
-      }}
-    >
-      <span style={{ marginRight: '0.5rem' }}>Versions:</span>
-      <span style={{ marginRight: '0.5rem' }}>Current</span>
-      {versions.map((v) =>
-        v.url ? (
-          <a
-            key={v.version}
-            href={v.url}
-            target="_top"
-            rel="noopener noreferrer"
-            style={{ marginRight: '0.75rem', color: 'var(--sb-link-color, #1ea7fd)' }}
-          >
-            {v.version}
-          </a>
-        ) : (
-          <span key={v.version} style={{ marginRight: '0.75rem', color: '#999' }}>
-            {v.version}
-          </span>
-        )
-      )}
-    </div>
-  );
-}
+const versionToolbarItems = [
+  { value: 'current', title: 'Current' },
+  ...versions.map((v) => ({ value: v.url, title: v.version })),
+];
 
 const preview: Preview = {
   globalTypes: {
@@ -113,10 +83,20 @@ const preview: Preview = {
         ],
       },
     },
+    versions: {
+      description: 'Storybook version',
+      toolbar: {
+        title: 'Versions',
+        icon: 'branch',
+        dynamicTitle: true,
+        items: versionToolbarItems,
+      },
+    },
   },
   initialGlobals: {
     brand: 'startribune',
     theme: 'light',
+    versions: 'current',
   },
   decorators: [
     /**
@@ -133,6 +113,14 @@ const preview: Preview = {
      * are available before Mantine components try to use them.
      */
     (Story, context) => {
+      const selectedVersion = context.globals.versions as string;
+      if (typeof selectedVersion === 'string' && selectedVersion.startsWith('http')) {
+        if (typeof window !== 'undefined') {
+          (window.top || window).location.href = selectedVersion;
+        }
+        return <div>Redirecting...</div>;
+      }
+
       const brand = (context.globals.brand || 'startribune') as Brand;
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
 
@@ -142,7 +130,6 @@ const preview: Preview = {
             <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
               <ColorSchemeScript />
               <div style={{ padding: '1rem' }}>
-                <VersionLinksBar />
                 <BrandValidationErrorBoundary>
                   <Story />
                 </BrandValidationErrorBoundary>
