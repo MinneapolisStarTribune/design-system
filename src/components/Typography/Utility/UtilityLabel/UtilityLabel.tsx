@@ -1,13 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
-import { AccessibilityProps, BaseProps } from '@/types/globalTypes';
-
-export type UtilityLabelSize = 'small' | 'medium' | 'large';
-export type UtilityLabelWeight = 'regular' | 'semibold';
-
+import { AccessibilityProps, BaseProps, Size, FontWeight } from '@/types/globalTypes';
 export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
-  size: UtilityLabelSize;
-  weight?: UtilityLabelWeight;
+  size: Extract<Size, 'small' | 'medium' | 'large'>;
+  weight?: Extract<FontWeight, 'regular' | 'semibold'>;
   capitalize?: boolean;
   children: React.ReactNode;
 }
