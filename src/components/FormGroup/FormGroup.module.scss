@@ -1,0 +1,25 @@
+/* FormGroup container - provides consistent spacing */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+/* Label styling */
+.label {
+  /* Typography will be handled by design tokens/typography classes */
+  /* Add any specific label styling here if needed */
+}
+
+/* Description styling */
+.description {
+  /* Typography will be handled by design tokens/typography classes */
+  /* Add any specific description styling here if needed */
+  color: var(--color-text-secondary, currentColor);
+}
+
+/* Caption base styling */
+.caption {
+  /* Typography will be handled by design tokens/typography classes */
+  /* Add any specific caption styling here if needed */
+}

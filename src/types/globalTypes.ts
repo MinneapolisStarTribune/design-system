@@ -1,6 +1,6 @@
 export interface BaseProps {
   className?: string | string[];
-  dataTestId?: string; // this will likely have defaults set at the component level
+  dataTestId?: string;
 }
 
 export type VariantProps<Color extends string, Variant extends string> = {
