@@ -44,6 +44,48 @@ import '@mantine/core/styles.css';
 import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
+import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
+
+import versionsList from './versions.json';
+
+type VersionsEntry = { version: string; url: string };
+
+const versions = versionsList as VersionsEntry[];
+
+/** Clickable version links – use these to actually navigate (toolbar dropdown runs in iframe and is often blocked). */
+function VersionLinksBar() {
+  if (versions.length === 0) return null;
+  return (
+    <div
+      style={{
+        marginBottom: '0.75rem',
+        padding: '0.5rem 0',
+        borderBottom: '1px solid var(--sb-border-color, #eee)',
+        fontSize: '13px',
+      }}
+    >
+      <span style={{ marginRight: '0.5rem' }}>Versions:</span>
+      <span style={{ marginRight: '0.5rem' }}>Current</span>
+      {versions.map((v) =>
+        v.url ? (
+          <a
+            key={v.version}
+            href={v.url}
+            target="_top"
+            rel="noopener noreferrer"
+            style={{ marginRight: '0.75rem', color: 'var(--sb-link-color, #1ea7fd)' }}
+          >
+            {v.version}
+          </a>
+        ) : (
+          <span key={v.version} style={{ marginRight: '0.75rem', color: '#999' }}>
+            {v.version}
+          </span>
+        )
+      )}
+    </div>
+  );
+}
 
 const preview: Preview = {
   globalTypes: {
@@ -99,12 +141,11 @@ const preview: Preview = {
           <FontWrapper brand={brand}>
             <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
               <ColorSchemeScript />
-              <div
-                style={{
-                  padding: '1rem',
-                }}
-              >
-                <Story />
+              <div style={{ padding: '1rem' }}>
+                <VersionLinksBar />
+                <BrandValidationErrorBoundary>
+                  <Story />
+                </BrandValidationErrorBoundary>
               </div>
             </DesignSystemProvider>
           </FontWrapper>
