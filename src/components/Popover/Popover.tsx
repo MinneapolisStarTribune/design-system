@@ -55,7 +55,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           </div>
         </MantinePopover.Target>
 
-        <MantinePopover.Dropdown className={styles.container}>
+        <MantinePopover.Dropdown classNames={{ dropdown: styles.container }}>
           <div className={styles.content}>{children}</div>
         </MantinePopover.Dropdown>
       </MantinePopover>
