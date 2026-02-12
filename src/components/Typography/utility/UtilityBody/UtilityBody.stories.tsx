@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
 
 const meta = {
-  title: 'Foundations/Typography/Utility',
+  title: 'Foundations/Typography/UtilityBody',
   component: UtilityBody,
   tags: ['autodocs'],
   argTypes: {
@@ -21,7 +21,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
+export const Configurable: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
