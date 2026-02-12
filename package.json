@@ -15,6 +15,9 @@
     "url": "https://github.com/MinneapolisStarTribune/design-system"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@mantine/core": "^8.3.9",
     "@mantine/hooks": "^8.3.9",
