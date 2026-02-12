@@ -5,7 +5,7 @@ import type {
   CreateEditorialHeadingOptions,
   EditorialHeadingImportance,
   EditorialHeadingProps,
-} from './types';
+} from '../Editorial/types';
 
 /**
  * Factory for editorial heading components (NewsHeading, SponsoredHeading, etc.).
