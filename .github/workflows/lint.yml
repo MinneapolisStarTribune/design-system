@@ -5,17 +5,25 @@ on:
   pull_request:
     branches: [main, 'release/**']
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true  # Cancel old runs when new commits pushed
+
 jobs:
   lint:
     name: Run linters
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
+
       - name: Run ESLint
         run: yarn lint
+
       - name: Check formatting
         run: yarn format:check
+
       - name: Type check
         run: yarn typecheck
