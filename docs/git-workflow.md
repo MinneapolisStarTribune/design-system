@@ -68,7 +68,7 @@ release/0.2.0
 
 From this point on:
 
-- All workflow commands (`goodMorning`, `newbranch <name>` etc.) will use this release branch
+- All workflow commands (`syncmybranch`, `newbranch <name>` etc.) will use this release branch
 - The file is **local only** (never committed)
 - Each developer controls their own pin
 
@@ -180,8 +180,8 @@ After setup, these commands are available:
 - `setrelease` - Pin the current release branch locally (required before using other commands)
 - `whichrelease` - Show which release branch is currently pinned
 - `newbranch <name>` - Create a new feature branch from the pinned release branch
-- `goodMorning` - Daily sync workflow (stash, update, rebase, restore)
-- `gitpushmybranch` - Push current feature branch (safe - won't push main/release)
+- `syncmybranch` - Sync your branch with the pinned release branch (stash, update release branch, rebase, restore). Does NOT push.
+- `gitpushmybranch` - Sync your branch with the pinned release branch, then push to origin. Safe - won't push main/release branches.
 
 These are all defined and live in the below file. If anything needs to change, update it there.
 

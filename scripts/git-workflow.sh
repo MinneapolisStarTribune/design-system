@@ -153,51 +153,23 @@ whichrelease() {
   echo "📌 Active release (pinned): $release_branch"
 }
 
-# Daily sync: stash, update release branch, rebase, restore
-goodMorning() {
-  # Handle errors explicitly (no set -e) to prevent terminal from closing in VS Code/Cursor
-  verify_correct_repo || return 1
+# Helper: Stash uncommitted changes
+_stash_changes() {
+  local stash_message="$1"
+  local -n stashed_ref="$2"
   
-  local release_branch
-  release_branch=$(get_release_branch) || return 1
-  
-  echo "🌅 Syncing with $release_branch..."
-  
-  # Capture original branch before any checkouts
-  local original_branch
-  original_branch=$(git rev-parse --abbrev-ref HEAD) || return 1
-  
-  # Stash uncommitted changes
-  local stashed=false
+  stashed_ref=false
   if ! git diff --quiet || ! git diff --cached --quiet; then
-    git stash push -u -m "goodMorning auto-stash" || return 1
-    stashed=true
+    git stash push -u -m "$stash_message" || return 1
+    stashed_ref=true
     echo "📦 Changes stashed"
   fi
+}
+
+# Helper: Restore stashed changes
+_restore_stash() {
+  local stashed="$1"
   
-  # Update release branch from origin
-  git fetch origin "$release_branch" --quiet || return 1
-  git checkout "$release_branch" --quiet || return 1
-  git pull origin "$release_branch" --quiet 2>/dev/null || echo "⚠️  Could not pull $release_branch (may not exist on origin yet)"
-  
-  # If we were already on the release branch, we're done
-  if [[ "$original_branch" == "$release_branch" ]]; then
-    echo "✨ Already on $release_branch and up to date"
-  else
-    # Switch back to original branch and rebase
-    git checkout "$original_branch" --quiet || return 1
-    
-    if ! git rebase "$release_branch"; then
-      echo "🚨 Rebase conflict with $release_branch"
-      echo "   Resolve conflicts, then run: git rebase --continue"
-      if [[ "$stashed" == true ]]; then
-        echo "   (Your stashed changes are still in the stash)"
-      fi
-      return 1
-    fi
-  fi
-  
-  # Restore stashed changes
   if [[ "$stashed" == true ]]; then
     if ! git stash pop; then
       echo "⚠️  Stash conflicts detected"
@@ -206,11 +178,81 @@ goodMorning() {
     fi
     echo "📦 Changes restored"
   fi
+}
+
+# Helper: Core sync logic - stash, fetch, update release branch, rebase, restore
+# Args:
+#   $1: stash_message (default: "auto-stash")
+#   $2: skip_if_on_release (default: "true" - skip rebase if already on release branch)
+# Returns: 0 on success, 1 on error
+_sync_with_release_branch() {
+  local stash_message="${1:-auto-stash}"
+  local skip_if_on_release="${2:-true}"
+  
+  verify_correct_repo || return 1
+  
+  local release_branch
+  release_branch=$(get_release_branch) || return 1
+  
+  # Capture original branch before any checkouts
+  local original_branch
+  original_branch=$(git rev-parse --abbrev-ref HEAD) || return 1
+  
+  # Stash uncommitted changes
+  local stashed=false
+  _stash_changes "$stash_message" stashed || return 1
+  
+  # Fetch and update release branch from origin
+  git fetch origin "$release_branch" --quiet || return 1
+  git checkout "$release_branch" --quiet || return 1
+  git pull origin "$release_branch" --quiet 2>/dev/null || echo "⚠️  Could not pull $release_branch (may not exist on origin yet)"
+  
+  # If we were already on the release branch and skip_if_on_release is true, we're done
+  if [[ "$skip_if_on_release" == "true" && "$original_branch" == "$release_branch" ]]; then
+    echo "✨ Already on $release_branch and up to date"
+  else
+    # Switch back to original branch and rebase (if not already on release branch)
+    if [[ "$original_branch" != "$release_branch" ]]; then
+      git checkout "$original_branch" --quiet || return 1
+      echo "🔄 Rebasing $original_branch on top of $release_branch..."
+      
+      if ! git rebase "$release_branch"; then
+        echo "🚨 Rebase conflict with $release_branch"
+        echo "   Resolve conflicts, then run: git rebase --continue"
+        if [[ "$stashed" == true ]]; then
+          echo "   (Your stashed changes are still in the stash)"
+        fi
+        return 1
+      fi
+    fi
+  fi
+  
+  # Restore stashed changes
+  _restore_stash "$stashed" || return 1
+  
+  return 0
+}
+
+# Daily sync: updates your branch with latest from release branch (no push)
+# Use this to sync your feature branch with the pinned release branch
+syncmybranch() {
+  verify_correct_repo || return 1
+  
+  local release_branch
+  release_branch=$(get_release_branch) || return 1
+  
+  echo "🌅 Syncing with $release_branch..."
+  
+  if ! _sync_with_release_branch "syncmybranch auto-stash" "true"; then
+    return 1
+  fi
   
   echo "✨ You're amazing! Have a good day!"
 }
 
-# Push current feature branch (with protection for main and release/*)
+# Sync + push: updates your branch with release branch, then pushes to origin
+# Use this to sync your feature branch and push it in one command
+# Protected branches (main, release/*) are not allowed - use explicit git push for those
 gitpushmybranch() {
   verify_correct_repo || return 1
   
@@ -223,5 +265,17 @@ gitpushmybranch() {
     return 1
   fi
   
-  git push origin "$branch"
+  local release_branch
+  release_branch=$(get_release_branch) || return 1
+  
+  echo "🚀 Pushing $branch (syncing with $release_branch first)..."
+  
+  # Sync with release branch (always rebase, even if on release branch - but we're on feature branch)
+  if ! _sync_with_release_branch "gitpushmybranch auto-stash" "false"; then
+    return 1
+  fi
+  
+  # Push feature branch to github
+  git push origin "$branch" || return 1
+  echo "✅ Pushed $branch to origin"
 }
