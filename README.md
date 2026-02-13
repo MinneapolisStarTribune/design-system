@@ -80,7 +80,7 @@ function App() {
   return (
     <DesignSystemProvider brand={brand} forceColorScheme={theme}>
       {/* Your app with theme switcher */}
-      <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}>
+      <button onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}>
         Toggle Theme
       </button>
     </DesignSystemProvider>
@@ -133,6 +133,7 @@ function App() {
 ```
 
 **Important notes:**
+
 - The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
 - The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
 - If you want to switch themes dynamically, use the dynamic loading approach shown above
@@ -238,6 +239,12 @@ This project uses [Vercel](https://vercel.com) to automatically deploy Storybook
 - Test changes before merging
 - Perfect for designer/stakeholder review
 - Auto-updates on every commit
+
+**Version Dropdown**:
+
+- The Storybook header includes a version selector to switch between released versions
+- The list is synced from Vercel production deployments (daily at 9am CST, after tag deploys, or manually)
+- See [docs/storybook-version-sync.md](docs/storybook-version-sync.md) for details
 
 ## Releases
 

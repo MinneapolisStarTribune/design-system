@@ -6,11 +6,9 @@ on:
       - 'v*'
 
 jobs:
-  deploy-and-update-versions:
-    name: Deploy Storybook and update versions list
+  deploy:
+    name: Deploy Storybook to Vercel
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     env:
       VERSION: ${{ github.ref_name }}
     steps:
@@ -26,37 +24,13 @@ jobs:
         run: yarn build-storybook
 
       - name: Deploy Storybook to Vercel
-        id: deploy
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          DEPLOY_OUTPUT=$(npx vercel deploy ./storybook-static --token="$VERCEL_TOKEN" --yes 2>&1)
-          echo "$DEPLOY_OUTPUT"
-          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[^ ]+' | tail -1)
-          if [ -z "$DEPLOY_URL" ]; then
-            echo "Could not parse deployment URL from Vercel output"
-            exit 1
-          fi
-          echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout main and update versions.json
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git checkout main
-          git pull origin main
-          # Prepend new version; dedupe by version (keep first = newest)
-          jq --arg v "${{ env.VERSION }}" --arg u "${{ steps.deploy.outputs.url }}" \
-            '[{version:$v, url:$u}] + . | unique_by(.version)' \
-            .storybook/versions.json > .storybook/versions.json.tmp
-          mv .storybook/versions.json.tmp .storybook/versions.json
-          git add .storybook/versions.json
-          if git diff --staged --quiet; then
-            echo "No change to versions.json (version may already exist with same URL)"
-          else
-            git commit -m "chore(storybook): add ${{ env.VERSION }} to version dropdown"
-            git push origin main
-          fi
+          npx vercel deploy ./storybook-static \
+            --token="$VERCEL_TOKEN" \
+            --yes \
+            --prod \
+            --meta "githubCommitRef=${{ env.VERSION }}"
