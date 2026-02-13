@@ -5,7 +5,7 @@ import {
   BaseProps,
   UtilityLabelSize,
   UtilityLabelWeight,
-} from '../../types/globalTypes';
+} from '@/types/globalTypes';
 
 export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
   size: UtilityLabelSize;
