@@ -5,6 +5,10 @@ on:
   pull_request:
     branches: [main, 'release/**']
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true  # Cancel old runs when new commits pushed
+
 jobs:
   changes:
     name: Check for component changes
@@ -13,7 +17,7 @@ jobs:
       uiChanged: ${{ steps.changes.outputs.ui }}
     steps:
       - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |
@@ -35,7 +39,7 @@ jobs:
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
       - name: Run Chromatic
-        uses: chromaui/action@latest
+        uses: chromaui/action@v13
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
