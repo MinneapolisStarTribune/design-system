@@ -56,11 +56,11 @@ describe('NonNewsHeading', () => {
     ).not.toThrow();
   });
 
-  it('renders without throwing when brand is varsity (Non-news supported for both)', () => {
+  it('throws when brand is varsity', () => {
     expect(() =>
       renderWithProvider(<NonNewsHeading importance={1}>Non-news</NonNewsHeading>, {
         brand: 'varsity',
       })
-    ).not.toThrow();
+    ).toThrow();
   });
 });
