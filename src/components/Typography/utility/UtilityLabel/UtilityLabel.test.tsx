@@ -1,5 +1,5 @@
 import { UtilityLabel } from './UtilityLabel';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 describe('UtilityLabel', () => {
   it('renders with required props', () => {

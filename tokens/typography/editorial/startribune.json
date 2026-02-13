@@ -497,7 +497,7 @@
             "value": {
               "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "34px",
-              "font-weight": "900",
+              "font-weight": "500",
               "line-height": "1.10"
             }
           },
@@ -505,7 +505,7 @@
             "value": {
               "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "28px",
-              "font-weight": "900",
+              "font-weight": "500",
               "line-height": "1.10"
             }
           },
@@ -513,7 +513,7 @@
             "value": {
               "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "32px",
-              "font-weight": "900",
+              "font-weight": "500",
               "line-height": "1.10"
             }
           }
@@ -522,7 +522,7 @@
           "value": {
             "font-family": "{font.family.publico-headline-condensed}",
             "font-size": "24px",
-            "font-weight": "900",
+            "font-weight": "500",
             "line-height": "1.10"
           }
         },
@@ -530,7 +530,7 @@
           "value": {
             "font-family": "{font.family.publico-headline-condensed}",
             "font-size": "20px",
-            "font-weight": "900",
+            "font-weight": "500",
             "line-height": "1.15"
           }
         },
@@ -538,7 +538,7 @@
           "value": {
             "font-family": "{font.family.publico-headline-condensed}",
             "font-size": "18px",
-            "font-weight": "900",
+            "font-weight": "500",
             "letter-spacing": "0.01em",
             "line-height": "1.15"
           }
@@ -558,7 +558,6 @@
             "value": {
               "font-family": "{font.family.publico-banner}",
               "font-size": "42px",
-              "font-style": "italic",
               "font-weight": "400",
               "line-height": "1.05"
             }
@@ -567,7 +566,6 @@
             "value": {
               "font-family": "{font.family.publico-banner}",
               "font-size": "48px",
-              "font-style": "italic",
               "font-weight": "400",
               "line-height": "1.05"
             }
@@ -612,7 +610,7 @@
             "value": {
               "font-family": "{font.family.publico-headline}",
               "font-size": "28px",
-              "font-weight": "300",
+              "font-weight": "400",
               "line-height": "1.10"
             }
           },
@@ -620,7 +618,7 @@
             "value": {
               "font-family": "{font.family.publico-headline}",
               "font-size": "32px",
-              "font-weight": "300",
+              "font-weight": "400",
               "line-height": "1.10"
             }
           }
