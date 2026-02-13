@@ -55,11 +55,7 @@ describe('PageHeading', () => {
 
   it('applies custom className', () => {
     const { getByTestId } = renderWithProvider(
-      <PageHeading
-        importance={1}
-        className="custom-heading-class"
-        dataTestId="heading"
-      >
+      <PageHeading importance={1} className="custom-heading-class" dataTestId="heading">
         Custom Class Heading
       </PageHeading>
     );
