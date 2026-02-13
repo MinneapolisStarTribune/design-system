@@ -1,12 +1,12 @@
-import { UtilityHeading } from './UtilityHeading';
+import { PageHeading } from './PageHeading';
 import { renderWithProvider } from '../../test-utils/render';
 
-describe('UtilityHeading', () => {
+describe('PageHeading', () => {
   it('renders with required props', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={1} headingType="page" dataTestId="heading">
+      <PageHeading importance={1} dataTestId="heading">
         Page Title
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('heading')).toBeInTheDocument();
@@ -15,9 +15,9 @@ describe('UtilityHeading', () => {
 
   it('renders correct heading element for importance level', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={1} headingType="page" dataTestId="h1-heading">
+      <PageHeading importance={1} dataTestId="h1-heading">
         H1 Heading
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('h1-heading').tagName).toBe('H1');
@@ -25,39 +25,19 @@ describe('UtilityHeading', () => {
 
   it('renders h2 when importance is 2', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={2} headingType="section" dataTestId="h2-heading">
+      <PageHeading importance={2} dataTestId="h2-heading">
         Section Title
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('h2-heading').tagName).toBe('H2');
   });
 
-  it('applies correct class for section heading with h1', () => {
-    const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={1} headingType="section" dataTestId="heading">
-        Section H1
-      </UtilityHeading>
-    );
-
-    expect(getByTestId('heading')).toHaveClass('typography-utility-section-h1');
-  });
-
-  it('applies correct class for section heading with h2', () => {
-    const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={2} headingType="section" dataTestId="heading">
-        Section H2
-      </UtilityHeading>
-    );
-
-    expect(getByTestId('heading')).toHaveClass('typography-utility-section-h2');
-  });
-
   it('applies correct class for page heading with h1', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={1} headingType="page" dataTestId="heading">
+      <PageHeading importance={1} dataTestId="heading">
         Page H1
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('heading')).toHaveClass('typography-utility-page-h1');
@@ -65,9 +45,9 @@ describe('UtilityHeading', () => {
 
   it('applies correct class for page heading with h2', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={2} headingType="page" dataTestId="heading">
+      <PageHeading importance={2} dataTestId="heading">
         Page H2
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('heading')).toHaveClass('typography-utility-page-h2');
@@ -75,14 +55,13 @@ describe('UtilityHeading', () => {
 
   it('applies custom className', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading
+      <PageHeading
         importance={1}
-        headingType="page"
         className="custom-heading-class"
         dataTestId="heading"
       >
         Custom Class Heading
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('heading')).toHaveClass('custom-heading-class');
@@ -91,9 +70,9 @@ describe('UtilityHeading', () => {
 
   it('renders children correctly', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityHeading importance={1} headingType="page" dataTestId="heading">
+      <PageHeading importance={1} dataTestId="heading">
         <span>Nested Content</span>
-      </UtilityHeading>
+      </PageHeading>
     );
 
     expect(getByTestId('heading').querySelector('span')).toHaveTextContent('Nested Content');
