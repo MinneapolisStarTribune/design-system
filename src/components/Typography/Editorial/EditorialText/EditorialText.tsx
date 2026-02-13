@@ -17,11 +17,8 @@ export const EditorialText: FC<EditorialTextProps> = (props) => {
     dataTestId = 'editorial-text',
     ...restProps
   } = props;
-  const baseClass = `typography-editorial-text-${weight}-${size}`;
-
-  const responsiveClasses = [`${baseClass}-desktop`, `${baseClass}-tablet`, `${baseClass}-mobile`];
-
-  const combinedClassName = classNames(baseClass, ...responsiveClasses, className);
+  const typographyClassName = `typography-editorial-text-${weight}-${size}`;
+  const combinedClassName = classNames(typographyClassName, className);
 
   return (
     <p className={combinedClassName} data-testid={dataTestId} {...restProps}>
