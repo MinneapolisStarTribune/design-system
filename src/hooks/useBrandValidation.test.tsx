@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { useBrandValidation } from '../useBrandValidation';
+import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { BrandContext } from '@/providers/brand/BrandContext';
 import { ComponentName } from '@/types/component-names';
 
