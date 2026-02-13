@@ -56,7 +56,7 @@ export const PageHeadings: Story = {
       <PageHeading importance={1}>Page H1</PageHeading>
       <PageHeading importance={2}>Page H2</PageHeading>
       <PageHeading importance={3}>Page H3</PageHeading>
-      <PageHeading importance={3}>Page H4</PageHeading>
+      <PageHeading importance={4}>Page H4</PageHeading>
     </div>
   ),
 };
