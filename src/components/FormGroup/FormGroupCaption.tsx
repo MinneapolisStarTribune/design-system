@@ -2,7 +2,7 @@
 // PLEASE SEE https://minneapolisstartribune.atlassian.net/browse/SUS-143 FOR MORE INFORMATION.
 import React from 'react';
 import classNames from 'classnames';
-import { BaseProps } from '../../types/globalTypes';
+import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
 
 export interface FormGroupCaptionProps extends BaseProps {

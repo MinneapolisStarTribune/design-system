@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseProps } from '../../types/globalTypes';
+import { BaseProps } from '@/types/globalTypes';
 import { TextInput } from './TextInput/TextInput';
 
 export interface FormControlProps extends BaseProps {
