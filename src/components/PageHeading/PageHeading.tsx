@@ -2,23 +2,20 @@ import React from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '../../types/globalTypes';
 
-export interface UtilityHeadingProps extends BaseProps {
+export interface PageHeadingProps extends BaseProps {
   importance: number;
   children: React.ReactNode;
-  // 'section' or 'page'
-  headingType: string;
   className?: string;
 }
 
-export const UtilityHeading: React.FC<UtilityHeadingProps> = ({
+export const PageHeading: React.FC<PageHeadingProps> = ({
   importance,
-  headingType,
   children,
   dataTestId,
   className,
 }) => {
   //Generate heading class name based on props
-  const typographyClassName = `typography-utility-${headingType}-h${importance}`;
+  const typographyClassName = `typography-utility-page-h${importance}`;
   const combinedClassNames = classNames(typographyClassName, className);
   const HeadingTag = `h${importance}`;
 
