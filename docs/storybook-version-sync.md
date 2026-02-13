@@ -20,7 +20,7 @@ The version selector in the Storybook header lets users switch between different
 
 **Triggers**:
 
-- **Daily** at 9am CST (3pm UTC)
+- **Daily** at 9am CST (3pm UTC) // [Can be changes as per needed]
 - **Manual** via "Run workflow" in the Actions tab
 - **After tag deploy** when "Storybook versioned deploy" completes
 
