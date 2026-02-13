@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from './UtilityLabel';
-import { UtilityLabelSize, UtilityLabelWeight } from '../../types/globalTypes';
+import { UtilityLabelSize, UtilityLabelWeight } from '@/types/globalTypes';
 
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityLabel',

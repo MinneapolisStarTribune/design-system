@@ -1,9 +1,9 @@
-import { createEditorialHeading } from '../editorial';
+import { createEditorialHeading } from '../Editorial';
 
 export const NewsHeading = createEditorialHeading({
   componentName: 'NewsHeading',
   classNamePrefix: 'news',
 });
 
-export type { EditorialHeadingImportance as NewsHeadingImportance } from '../editorial';
-export type { EditorialHeadingProps as NewsHeadingProps } from '../editorial';
+export type { EditorialHeadingImportance as NewsHeadingImportance } from '../Editorial';
+export type { EditorialHeadingProps as NewsHeadingProps } from '../Editorial';

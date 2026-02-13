@@ -4,7 +4,7 @@
       "startribune": {
         "fonts": [
           {
-            "family": "Publico Headline Condensed, serif",
+            "family": "Publico Headline Condensed",
             "name": "Publico Headline Condensed",
             "url": "https://fonts.startribune.com/PublicoHeadlineCondensedWebFonts/",
             "variants": [
@@ -36,7 +36,7 @@
             ]
           },
           {
-            "family": "Publico Headline, serif",
+            "family": "Publico Headline",
             "name": "Publico Headline",
             "url": "https://fonts.startribune.com/PublicoHeadlineWebFonts/",
             "variants": [
@@ -78,7 +78,7 @@
             ]
           },
           {
-            "family": "Publico Text, serif",
+            "family": "Publico Text",
             "name": "Publico Text",
             "url": "https://fonts.startribune.com/PublicoTextWebFonts/",
             "variants": [

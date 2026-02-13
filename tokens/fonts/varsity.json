@@ -4,7 +4,7 @@
       "varsity": {
         "fonts": [
           {
-            "family": "Nohemi, sans-serif",
+            "family": "Nohemi",
             "name": "Nohemi",
             "url": "https://fonts.startribune.com/NohemiWebFonts/",
             "variants": [
@@ -46,7 +46,7 @@
             ]
           },
           {
-            "family": "Graphik, sans-serif",
+            "family": "Graphik",
             "name": "Graphik",
             "url": "https://fonts.startribune.com/GraphikWebFonts/",
             "variants": [
@@ -93,7 +93,7 @@
             ]
           },
           {
-            "family": "Graphik Condensed, sans-serif",
+            "family": "Graphik Condensed",
             "name": "Graphik Condensed",
             "url": "https://fonts.startribune.com/GraphikCondensedWebFonts/",
             "variants": [
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "family": "Publico Text, serif",
+            "family": "Publico Text",
             "name": "Publico Text",
             "url": "https://fonts.startribune.com/PublicoTextWebFonts/",
             "variants": [
