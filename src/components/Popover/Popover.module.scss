@@ -1,0 +1,84 @@
+/* Root */
+.container {
+  min-width: 240px;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 8px 0 16px 16px;
+}
+
+/* Layout wrapper */
+.content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Header row */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16.8px;
+  padding-right: 8px;
+}
+
+/* Close button */
+.closeButton {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 100% !important;
+}
+
+/* Description */
+.description {
+  font-size: 12px;
+  line-height: 14.4px;
+  color: #555;
+  font-weight: 400;
+  max-width: 192px;
+  margin-top: 8px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 12px 0 12px -16px;
+}
+
+/* Body */
+.body {
+  padding-right: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+   /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+/* WebKit (Chrome, Edge, Safari) */
+.body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Text-only mode */
+.textOnly {
+  padding: 16px;
+}
