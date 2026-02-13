@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { BaseProps } from '../../types/globalTypes';
+import { BaseProps } from '../../../../types/globalTypes';
 
 export interface PageHeadingProps extends BaseProps {
   importance: number;
