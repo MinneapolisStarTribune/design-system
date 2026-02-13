@@ -4,11 +4,11 @@
 // ABSOLUTELY CHECK MY WORK FOR ACCURACY.
 import React from 'react';
 import classNames from 'classnames';
-import { FormControlProps } from '../FormControl';
-import { AccessibilityProps, Size } from '../../../types/globalTypes';
-import { Icon } from '../../Icon/Icon';
-import { IconName } from '../../Icon/iconNames';
-import { useFormGroupContext } from '../../FormGroup/FormGroupContext';
+import { FormControlProps } from '@/components/FormControl/FormControl';
+import { AccessibilityProps, Size } from '@/types/globalTypes';
+import { Icon } from '@/components/Icon/Icon';
+import { IconName } from '@/components/Icon/iconNames';
+import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 
 export type TextInputSize = Extract<Size, 'small' | 'medium' | 'large'>;
 

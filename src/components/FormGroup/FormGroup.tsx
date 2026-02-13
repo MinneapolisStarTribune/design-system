@@ -2,7 +2,7 @@
 // PLEASE SEE https://minneapolisstartribune.atlassian.net/browse/SUS-140 FOR MORE INFORMATION.
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
-import { BaseProps } from '../../types/globalTypes';
+import { BaseProps } from '@/types/globalTypes';
 import { FormGroupLabel, type FormGroupLabelProps } from './FormGroupLabel';
 import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroupDescription';
 import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroupCaption';
