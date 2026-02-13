@@ -46,6 +46,17 @@ import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 
+import versionsList from './versions.json';
+
+type VersionsEntry = { version: string; url: string };
+
+const versions = versionsList as VersionsEntry[];
+
+const versionToolbarItems = [
+  { value: 'current', title: 'Current' },
+  ...versions.map((v) => ({ value: v.url, title: v.version })),
+];
+
 const preview: Preview = {
   globalTypes: {
     brand: {
@@ -72,10 +83,20 @@ const preview: Preview = {
         ],
       },
     },
+    versions: {
+      description: 'Storybook version',
+      toolbar: {
+        title: 'Versions',
+        icon: 'branch',
+        dynamicTitle: true,
+        items: versionToolbarItems,
+      },
+    },
   },
   initialGlobals: {
     brand: 'startribune',
     theme: 'light',
+    versions: 'current',
   },
   decorators: [
     /**
@@ -92,6 +113,14 @@ const preview: Preview = {
      * are available before Mantine components try to use them.
      */
     (Story, context) => {
+      const selectedVersion = context.globals.versions as string;
+      if (typeof selectedVersion === 'string' && selectedVersion.startsWith('http')) {
+        if (typeof window !== 'undefined') {
+          (window.top || window).location.href = selectedVersion;
+        }
+        return <div>Redirecting...</div>;
+      }
+
       const brand = (context.globals.brand || 'startribune') as Brand;
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
 
@@ -100,11 +129,7 @@ const preview: Preview = {
           <FontWrapper brand={brand}>
             <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
               <ColorSchemeScript />
-              <div
-                style={{
-                  padding: '1rem',
-                }}
-              >
+              <div style={{ padding: '1rem' }}>
                 <BrandValidationErrorBoundary>
                   <Story />
                 </BrandValidationErrorBoundary>
