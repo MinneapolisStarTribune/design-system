@@ -1,7 +1,7 @@
 {
   "typography": {
     "article-body": {
-      "bold-bold": {
+      "bold": {
         "desktop": {
           "value": {
             "font-family": "{font.family.publico-text}",
@@ -156,7 +156,7 @@
       }
     },
     "article-body-sponsored": {
-      "bold-bold": {
+      "bold": {
         "desktop": {
           "value": {
             "font-family": "{font.family.barlow}",

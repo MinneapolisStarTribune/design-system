@@ -5,3 +5,4 @@ export * from './Icon/Icon';
 export * from './Typography/Editorial';
 export * from './Typography/Utility';
 export * from './Typography/NewsHeading/NewsHeading';
+export * from './Typography/ArticleBody';
