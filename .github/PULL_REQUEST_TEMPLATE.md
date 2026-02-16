@@ -12,6 +12,10 @@
 - [ ] Added/updated a11y tests (`*.a11y.test.tsx`)
 - [ ] Updated/added Storybook stories
 
+## How to test
+
+<!-- Steps for a reviewer to verify the changes (e.g. run Storybook, run tests, try component X in app Y). -->
+
 ## Visual Changes
 
 <!-- If this PR includes UI changes, add screenshots or videos -->
