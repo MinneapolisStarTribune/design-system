@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { AccessibilityProps, BaseProps } from '@/types/globalTypes';
 
 export type UtilityLabelSize = 'small' | 'medium' | 'large';
-export type UtilityLabelWeight = 'regular' | 'semibold';
+export type UtilityLabelWeight = 'regular' | 'bold' | 'semibold';
 
 export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
   size: UtilityLabelSize;
