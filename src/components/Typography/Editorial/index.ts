@@ -3,8 +3,7 @@
  * Use createEditorialHeading to define new heading variants (NewsHeading, etc.).
  */
 export { createEditorialHeading } from './createEditorialHeading';
-export type {
-  CreateEditorialHeadingOptions,
-  EditorialHeadingImportance,
-  EditorialHeadingProps,
-} from './types';
+export type * from './types';
+
+export * from './NewsHeading/NewsHeading';
+export * from './NonNewsHeading/NonNewsHeading';

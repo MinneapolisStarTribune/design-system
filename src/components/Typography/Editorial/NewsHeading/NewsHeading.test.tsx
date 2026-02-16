@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { NewsHeading } from './NewsHeading';
-import { renderWithProvider } from '../../../test-utils/render';
+import { renderWithProvider } from '../../../../test-utils/render';
 
 describe('NewsHeading', () => {
   it('renders with default importance (h1)', () => {

@@ -8,4 +8,4 @@ export const NonNewsHeading = createEditorialHeading({
 export type {
   EditorialHeadingImportance as NonNewsHeadingImportance,
   EditorialHeadingProps as NonNewsHeadingProps,
-} from '../index';
+} from '../types';
