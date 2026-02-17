@@ -188,7 +188,6 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Top</Popover.Heading>
-        <Popover.Divider />
         <Popover.Body>Arrow on top</Popover.Body>
       </Popover>
 
@@ -199,7 +198,6 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Right</Popover.Heading>
-        <Popover.Divider />
         <Popover.Body>Arrow on right</Popover.Body>
       </Popover>
 
@@ -210,7 +208,6 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Left</Popover.Heading>
-        <Popover.Divider />
         <Popover.Body>Arrow on left</Popover.Body>
       </Popover>
 
@@ -221,7 +218,6 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Bottom</Popover.Heading>
-        <Popover.Divider />
         <Popover.Body>Arrow on bottom</Popover.Body>
       </Popover>
     </div>
