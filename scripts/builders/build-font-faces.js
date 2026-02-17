@@ -36,7 +36,10 @@ async function buildFontFaces(brand) {
   rules.push('');
 
   for (const font of fonts) {
-    const family = font.family || font.name;
+    // Use font.name for @font-face - it's the font identifier. font.family includes
+    // the fallback (e.g. "Publico Headline Condensed, serif") which would register
+    // the wrong identifier and cause the browser to fall back to generic serif.
+    const family = font.name || font.family;
     const baseUrl = (font.url || '').replace(/\/?$/, '/');
 
     for (const v of font.variants || []) {
