@@ -115,7 +115,7 @@
             ]
           },
           {
-            "family": "Barlow Condensed, sans-serif",
+            "family": "Barlow Condensed",
             "name": "Barlow Condensed",
             "url": "https://fonts.startribune.com/BarlowCondensedWebFonts/",
             "variants": [
@@ -142,7 +142,7 @@
             ]
           },
           {
-            "family": "Barlow, sans-serif",
+            "family": "Barlow",
             "name": "Barlow",
             "url": "https://fonts.startribune.com/BarlowWebFonts/",
             "variants": [
@@ -179,7 +179,7 @@
             ]
           },
           {
-            "family": "Popular, sans-serif",
+            "family": "Popular",
             "name": "Popular",
             "url": "https://fonts.startribune.com/PopularWebFonts/",
             "variants": [
@@ -206,7 +206,7 @@
             ]
           },
           {
-            "family": "Graphik, sans-serif",
+            "family": "Graphik",
             "name": "Graphik",
             "url": "https://fonts.startribune.com/GraphikWebFonts/",
             "variants": [
