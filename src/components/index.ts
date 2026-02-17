@@ -5,6 +5,7 @@ export {
   UtilityLabel,
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/UtilityLabel';
+export * from './Popover/Popover';
 //Typography Components
 export * from './Typography/Editorial';
 export * from './Typography/Utility';
