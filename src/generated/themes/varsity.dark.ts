@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-dark tokens
- * Date: 2026-02-10T16:37:45.600Z
+ * Date: generated at build time
  */
 
 export const colors = {

@@ -1,7 +1,7 @@
 const StyleDictionary = require('style-dictionary').default;
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-
 
 /**
  * Custom TypeScript formatter for Mantine themes
@@ -79,34 +79,40 @@ const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
   
   // Generate TypeScript code
   const indent = (level) => '  '.repeat(level);
-  
+  const keyStr = (name) =>
+    /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name) ? name : `'${name}'`;
+
   let code = `/**\n * Do not edit directly, this file was auto-generated.\n`;
   code += ` * Generated from: ${brand}-${mode} tokens\n`;
-  code += ` * Date: ${new Date().toISOString()}\n */\n\n`;
+  code += ` * Date: generated at build time\n */\n\n`;
   code += `export const colors = {\n`;
-  
+
   // Output palettes first (sorted)
   Object.keys(mantinePalettes).sort().forEach((paletteName) => {
-    code += `${indent(1)}'${paletteName}': [\n`;
+    code += `${indent(1)}${keyStr(paletteName)}: [\n`;
     mantinePalettes[paletteName].forEach((color, index) => {
       code += `${indent(2)}'${color}'${index < mantinePalettes[paletteName].length - 1 ? ',' : ''}\n`;
     });
     code += `${indent(1)}],\n`;
   });
-  
+
   // Output semantic tokens - only include if they're already arrays or valid color values
   // Do not generate additional colors
   Object.keys(colorTokens).sort().forEach((key) => {
     const value = colorTokens[key];
-    
+
     // If value is already an array (shouldn't happen from tokens, but check anyway)
     if (Array.isArray(value)) {
       // No length restriction - use whatever is provided
-      code += `${indent(1)}'${key}': [\n`;
-      value.forEach((color, index) => {
-        code += `${indent(2)}'${color}'${index < value.length - 1 ? ',' : ''}\n`;
-      });
-      code += `${indent(1)}],\n`;
+      if (value.length === 1) {
+        code += `${indent(1)}${keyStr(key)}: ['${value[0]}'],\n`;
+      } else {
+        code += `${indent(1)}${keyStr(key)}: [\n`;
+        value.forEach((color, index) => {
+          code += `${indent(2)}'${color}'${index < value.length - 1 ? ',' : ''}\n`;
+        });
+        code += `${indent(1)}],\n`;
+      }
     } else if (typeof value === 'string') {
       // Single color value - Mantine needs arrays, so we'll use a single-element array
       // and warn the developer
@@ -115,10 +121,7 @@ const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
         `Mantine typically uses color arrays. This token will be available as a single-element array but may not work correctly with Mantine components that expect multiple shades. ` +
         `Please provide a full color array in your token files (global.json or brand-${brand}-${mode}.json).`
       );
-      // Use the single color as a single-element array (not generating new colors)
-      code += `${indent(1)}'${key}': [\n`;
-      code += `${indent(2)}'${value}'\n`;
-      code += `${indent(1)}],\n`;
+      code += `${indent(1)}${keyStr(key)}: ['${value}'],\n`;
     }
   });
   
@@ -126,22 +129,6 @@ const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
   code += `export type Colors = typeof colors;\n`;
   
   return code;
-};
-
-/**
- * Transform to resolve color references
- * This will be handled by Style Dictionary's built-in transforms
- */
-const resolveColorReference = {
-  type: 'value',
-  matcher: (token) => {
-    return token.value && typeof token.value === 'string' && token.value.startsWith('{color.');
-  },
-  transform: (token) => {
-    // Style Dictionary should resolve these automatically
-    // This is a placeholder for custom resolution if needed
-    return token.value;
-  },
 };
 
 /**
@@ -212,7 +199,9 @@ async function buildMantineTokens() {
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
+
+  const currentTokenHash = hashTokenSources();
+
   for (const brand of brands) {
     for (const mode of modes) {
       console.log(`\n==============================================`);
@@ -233,9 +222,92 @@ async function buildMantineTokens() {
       }
     }
   }
-  
+
+  const generatedDir = path.join(process.cwd(), 'src/generated');
+  const buildInfoPath = path.join(generatedDir, 'build-info.ts');
+  const lastTokenHash = readTokenHashFromBuildInfo(buildInfoPath);
+
+  // Only write build-info when token sources changed (new or updated tokens)
+  if (currentTokenHash !== lastTokenHash) {
+    if (!fs.existsSync(generatedDir)) {
+      fs.mkdirSync(generatedDir, { recursive: true });
+    }
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')
+    );
+    const buildTime = new Date().toISOString();
+    const buildInfoContent = `/**
+ * Do not edit directly, this file was auto-generated.
+ * Build time and package version for this design-system build.
+ * Only regenerated when token sources change (tokens/color/*.json, etc.).
+ */
+export const buildInfo = {
+  buildTime: '${buildTime}',
+  version: '${pkg.version}',
+  tokenSourceHash: '${currentTokenHash}',
+} as const;
+`;
+    fs.writeFileSync(buildInfoPath, buildInfoContent, 'utf8');
+    console.log('✓ build-info.ts updated (token sources changed)');
+  } else {
+    console.log('✓ build-info.ts unchanged (same token sources)');
+  }
+
   console.log('\n==============================================');
   console.log('\n✓ All Mantine tokens built successfully!\n');
+}
+
+/** Token source files that affect theme output (derived from tokens/ to stay in sync with getStyleDictionaryConfig) */
+function getTokenSourceFiles() {
+  const cwd = process.cwd();
+  const colorDir = path.join(cwd, 'tokens/color');
+  const sharedNames = ['text.json', 'border-radius.json', 'spacing.json', 'breakpoint.json'];
+
+  if (!fs.existsSync(colorDir)) return [];
+
+  const colorFiles = fs.readdirSync(colorDir).filter((f) => f.endsWith('.json'));
+  const colorPaths = colorFiles
+    .sort()
+    .map((f) => path.join('tokens', 'color', f));
+  const sharedPaths = sharedNames
+    .filter((f) => fs.existsSync(path.join(cwd, 'tokens', f)))
+    .map((f) => path.join('tokens', f));
+
+  return [...colorPaths, ...sharedPaths];
+}
+
+/** Hash of token source file contents. Changes only when token definitions change. */
+function hashTokenSources() {
+  const cwd = process.cwd();
+  let concat = '';
+  for (const file of getTokenSourceFiles()) {
+    const filePath = path.join(cwd, file);
+    if (!fs.existsSync(filePath)) return null;
+    concat += fs.readFileSync(filePath, 'utf8');
+  }
+  return crypto.createHash('sha256').update(concat).digest('hex');
+}
+
+/** Read tokenSourceHash from existing build-info.ts, or null if missing/different format */
+function readTokenHashFromBuildInfo(buildInfoPath) {
+  if (!fs.existsSync(buildInfoPath)) return null;
+  const content = fs.readFileSync(buildInfoPath, 'utf8');
+  const m = content.match(/tokenSourceHash:\s*'([^']+)'/);
+  return m ? m[1] : null;
+}
+
+/** Returns a hash of generated theme file contents, or null if any file is missing (kept for reference) */
+function _hashThemeOutputs(outputDir, brands, modes) {
+  const files = brands.flatMap((brand) =>
+    modes.map((mode) => `${brand}.${mode}.ts`)
+  );
+  let concat = '';
+  for (const file of files) {
+    const filePath = path.join(outputDir, file);
+    if (!fs.existsSync(filePath)) return null;
+    concat += fs.readFileSync(filePath, 'utf8');
+  }
+  return crypto.createHash('sha256').update(concat).digest('hex');
 }
 
 buildMantineTokens().catch((error) => {

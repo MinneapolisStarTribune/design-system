@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: startribune-dark tokens
- * Date: 2026-02-10T03:48:19.079Z
+ * Date: generated at build time
  */
 
 export const colors = {

@@ -73,3 +73,10 @@ export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
  * UtilityLabel weight tokens for the design system
  */
 export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+
+/**
+ * Global position tokens for overlays and floating UI
+ */
+export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
+
+export type Position = (typeof POSITIONS)[number];
