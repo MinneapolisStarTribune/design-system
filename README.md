@@ -225,6 +225,13 @@ function App() {
 - **Brand Colors** (`tokens/color/brand-{brand}-{scheme}.json`) - Brand-specific colors for each brand and color scheme
 - **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
 - **Typography** (`tokens/text.json`) - Font families and text sizes
+- **Fonts** (`tokens/fonts/{brand}.json`) - Brand font definitions (name, family, url, variants) used to build `@font-face` CSS
+
+#### Font tokens
+
+- **@font-face** uses the single font name (e.g. `'Popular'`, `'Nohemi'`); **usage** uses the full stack (e.g. `Popular, sans-serif`). The first token must match so the font renders.
+- If font URLs return **403** or are blocked: put woff2 files in `dist/fonts/assets/{brand}/`, then run `yarn tokens`. Optional: `yarn fonts:fetch` to try fetching from the CDN.
+- See [tokens/fonts/README.md](tokens/fonts/README.md) for details.
 
 ### Modifying Tokens
 
