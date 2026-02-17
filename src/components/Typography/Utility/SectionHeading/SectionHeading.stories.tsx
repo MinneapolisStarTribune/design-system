@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UtilityHeading } from './UtilityHeading';
+import { SectionHeading } from './SectionHeading';
 
 const meta = {
-  title: 'Foundations/Typography/Utility/UtilityHeading',
-  component: UtilityHeading,
+  title: 'Foundations/Typography/Utility/SectionHeading',
+  component: SectionHeading,
   tags: ['autodocs'],
   argTypes: {
     importance: {
@@ -11,7 +11,7 @@ const meta = {
       options: [1, 2, 3, 4, 5, 6],
     },
   },
-} satisfies Meta<typeof UtilityHeading>;
+} satisfies Meta<typeof SectionHeading>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -30,12 +30,12 @@ export const AllLevels: Story = {
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <UtilityHeading importance={1}>Heading 1</UtilityHeading>
-      <UtilityHeading importance={2}>Heading 2</UtilityHeading>
-      <UtilityHeading importance={3}>Heading 3</UtilityHeading>
-      <UtilityHeading importance={4}>Heading 4</UtilityHeading>
-      <UtilityHeading importance={5}>Heading 5</UtilityHeading>
-      <UtilityHeading importance={6}>Heading 6</UtilityHeading>
+      <SectionHeading importance={1}>Heading 1</SectionHeading>
+      <SectionHeading importance={2}>Heading 2</SectionHeading>
+      <SectionHeading importance={3}>Heading 3</SectionHeading>
+      <SectionHeading importance={4}>Heading 4</SectionHeading>
+      <SectionHeading importance={5}>Heading 5</SectionHeading>
+      <SectionHeading importance={6}>Heading 6</SectionHeading>
     </div>
   ),
 };

@@ -2,14 +2,14 @@ import React from 'react';
 import classNames from 'classnames';
 import { BaseProps, AccessibilityProps } from '@/types/globalTypes';
 
-export type UtilityHeadingImportance = 1 | 2 | 3 | 4 | 5 | 6;
+export type SectionHeadingImportance = 1 | 2 | 3 | 4 | 5 | 6;
 
-export interface UtilityHeadingProps extends BaseProps, AccessibilityProps {
-  importance: UtilityHeadingImportance;
+export interface SectionHeadingProps extends BaseProps, AccessibilityProps {
+  importance: SectionHeadingImportance;
   children: React.ReactNode;
 }
 
-export const UtilityHeading: React.FC<UtilityHeadingProps> = ({
+export const SectionHeading: React.FC<SectionHeadingProps> = ({
   importance,
   children,
   className,
@@ -27,4 +27,4 @@ export const UtilityHeading: React.FC<UtilityHeadingProps> = ({
   );
 };
 
-UtilityHeading.displayName = 'UtilityHeading';
+SectionHeading.displayName = 'SectionHeading';
