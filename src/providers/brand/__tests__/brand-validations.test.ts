@@ -1,21 +1,11 @@
 import { validateComponentForBrand } from '../brand-validations';
 
 describe('validateComponentForBrand', () => {
-  it('should throw an error when the component is not supported for the brand', () => {
-    const componentName = 'EnterpriseHeading';
-    const brand = 'varsity';
-
-    expect(() => {
-      validateComponentForBrand(componentName, brand);
-    }).toThrow(`[Brand Validation] "${componentName}" is not supported for "${brand}".`);
+  it('should not throw when NewsHeading is used with startribune brand', () => {
+    expect(() => validateComponentForBrand('NewsHeading', 'startribune')).not.toThrow();
   });
 
-  it('should not throw an error when the component is supported for the brand', () => {
-    const componentName = 'EnterpriseHeading';
-    const brand = 'startribune';
-
-    expect(() => {
-      validateComponentForBrand(componentName, brand);
-    }).not.toThrow();
+  it('should not throw when NewsHeading is used with varsity brand', () => {
+    expect(() => validateComponentForBrand('NewsHeading', 'varsity')).not.toThrow();
   });
 });

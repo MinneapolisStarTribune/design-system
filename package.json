@@ -15,6 +15,9 @@
     "url": "https://github.com/MinneapolisStarTribune/design-system"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@mantine/core": "^8.3.9",
     "@mantine/hooks": "^8.3.9",
@@ -28,6 +31,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
+    "@octokit/rest": "^22.0.1",
     "@storybook/addon-a11y": "^10.1.11",
     "@storybook/addon-docs": "^10.1.11",
     "@storybook/addon-onboarding": "^10.1.11",
@@ -79,8 +83,9 @@
   },
   "scripts": {
     "tokens": "node scripts/build-tokens.js",
-    "tokens:mantine": "node scripts/build-mantine-tokens.js",
-    "icons": "node scripts/build-icon-mapping.js",
+    "fonts:fetch": "node scripts/fetch-fonts.js",
+    "tokens:mantine": "node scripts/build-mantine-tokens.js && prettier --write \"src/generated/**/*.ts\"",
+    "icons": "node scripts/build-icon-mapping.js && prettier --write src/components/Icon/iconOptions.ts",
     "build": "npm run tokens && npm run tokens:mantine && npm run icons && NODE_ENV=production vite build",
     "storybook": "node scripts/build-if-needed.js && storybook dev -p 6006",
     "build-storybook": "npm run tokens && npm run tokens:mantine && npm run icons && storybook build",
@@ -88,6 +93,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "vitest run a11y.test",
+    "test:scripts": "vitest run scripts/*.test.js",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\" \"tokens/**/*.json\"",

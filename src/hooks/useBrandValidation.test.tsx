@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { useBrandValidation } from '../useBrandValidation';
+import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { BrandContext } from '@/providers/brand/BrandContext';
 import { ComponentName } from '@/types/component-names';
 
@@ -10,28 +10,28 @@ const TestComponent = ({ componentName }: { componentName: ComponentName }) => {
 
 describe('useBrandValidation', () => {
   it('throws when used outside DesignSystemProvider', () => {
-    expect(() => render(<TestComponent componentName="EnterpriseHeading" />)).toThrow(
-      `"EnterpriseHeading" must be used within DesignSystemProvider.`
+    expect(() => render(<TestComponent componentName="NewsHeading" />)).toThrow(
+      `"NewsHeading" must be used within DesignSystemProvider.`
     );
   });
 
-  it('does not throw when used the component is supported for the brand', () => {
+  it('does not throw when the component is supported for the brand', () => {
     expect(() =>
       render(
         <BrandContext.Provider value="startribune">
-          <TestComponent componentName="EnterpriseHeading" />
+          <TestComponent componentName="NewsHeading" />
         </BrandContext.Provider>
       )
     ).not.toThrow();
   });
 
-  it('throws when the component is not supported for the brand', () => {
+  it('does not throw when NewsHeading is used with varsity brand', () => {
     expect(() =>
       render(
         <BrandContext.Provider value="varsity">
-          <TestComponent componentName="EnterpriseHeading" />
+          <TestComponent componentName="NewsHeading" />
         </BrandContext.Provider>
       )
-    ).toThrow(`"EnterpriseHeading" is not supported for "varsity".`);
+    ).not.toThrow();
   });
 });

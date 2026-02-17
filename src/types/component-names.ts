@@ -4,6 +4,13 @@
  * All component names must be reflected here.
  * @remarks Used for brand validation and enforcement.
  */
-export const COMPONENT_NAMES = ['EnterpriseHeading'] as const;
+export const COMPONENT_NAMES = [
+  'NewsHeading',
+  'NonNewsHeading',
+  'EnterpriseHeading',
+  'OpinionHeading',
+  'FormGroup',
+  'FormControl',
+] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];

@@ -2,6 +2,63 @@
 
 A React component library built with TypeScript and Mantine, with a comprehensive design token system.
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Yarn package manager
+- Git
+
+### Initial Setup
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone <repository-url>
+   cd design-system
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   yarn install
+   ```
+
+3. **Set up Git workflow helpers:**
+
+   This repo uses a release-based branching workflow with helpful commands. Set them up by following the instructions in [docs/git-workflow.md](docs/git-workflow.md)\*\*
+
+4. **Verify your setup:**
+
+   ```bash
+   # Run tests to make sure everything works
+   yarn test
+
+   # Start Storybook to see components
+   yarn storybook
+   ```
+
+### Available Commands
+
+**Development:**
+
+- `yarn dev` - Start development server
+- `yarn storybook` - Start Storybook
+- `yarn build` - Build the package
+- `yarn test` - Run tests
+- `yarn lint` - Lint code
+
+**Git Workflow:**
+
+- `setrelease` - Pin the current release branch
+- `whichrelease` - Show which release branch is pinned
+- `newbranch <name>` - Create a new feature branch
+- `syncmybranch` - Sync your branch with the release branch (no push)
+- `gitpushmybranch` - Sync and push your branch
+
+See [docs/git-workflow.md](docs/git-workflow.md) for complete Git workflow documentation.
+
 ## Design Tokens
 
 This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands.
@@ -80,7 +137,7 @@ function App() {
   return (
     <DesignSystemProvider brand={brand} forceColorScheme={theme}>
       {/* Your app with theme switcher */}
-      <button onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}>
+      <button onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}>
         Toggle Theme
       </button>
     </DesignSystemProvider>
@@ -133,6 +190,7 @@ function App() {
 ```
 
 **Important notes:**
+
 - The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
 - The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
 - If you want to switch themes dynamically, use the dynamic loading approach shown above
@@ -167,6 +225,13 @@ function App() {
 - **Brand Colors** (`tokens/color/brand-{brand}-{scheme}.json`) - Brand-specific colors for each brand and color scheme
 - **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
 - **Typography** (`tokens/text.json`) - Font families and text sizes
+- **Fonts** (`tokens/fonts/{brand}.json`) - Brand font definitions (name, family, url, variants) used to build `@font-face` CSS
+
+#### Font tokens
+
+- **@font-face** uses the single font name (e.g. `'Popular'`, `'Nohemi'`); **usage** uses the full stack (e.g. `Popular, sans-serif`). The first token must match so the font renders.
+- If font URLs return **403** or are blocked: put woff2 files in `dist/fonts/assets/{brand}/`, then run `yarn tokens`. Optional: `yarn fonts:fetch` to try fetching from the CDN.
+- See [tokens/fonts/README.md](tokens/fonts/README.md) for details.
 
 ### Modifying Tokens
 
@@ -238,6 +303,12 @@ This project uses [Vercel](https://vercel.com) to automatically deploy Storybook
 - Test changes before merging
 - Perfect for designer/stakeholder review
 - Auto-updates on every commit
+
+**Version Dropdown**:
+
+- The Storybook header includes a version selector to switch between released versions
+- The list is synced from Vercel production deployments (daily at 9am CST, after tag deploys, or manually)
+- See [docs/storybook-version-sync.md](docs/storybook-version-sync.md) for details
 
 ## Releases
 

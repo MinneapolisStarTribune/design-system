@@ -31,12 +31,6 @@ export const ICON_COLORS = [
   'brand-01',
   'brand-02',
   'brand-03',
-  'brand-button-icon',
-  'brand-accent-button-icon',
-  'neutral-filled-button-icon',
-  'neutral-outlined-button-icon',
-  'neutral-ghost-button-icon',
-  'neutral-utility-button-icon',
 ] as const;
 
 export type IconColor = (typeof ICON_COLORS)[number];
@@ -69,3 +63,20 @@ export const FONT_WEIGHT_STYLE = [
 ] as const;
 
 export type FontWeight = (typeof FONT_WEIGHT_STYLE)[number];
+
+/**
+ * UtilityLabel size tokens for the design system
+ */
+export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
+
+/**
+ * UtilityLabel weight tokens for the design system
+ */
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+
+/**
+ * Global position tokens for overlays and floating UI
+ */
+export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
+
+export type Position = (typeof POSITIONS)[number];

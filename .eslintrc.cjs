@@ -49,6 +49,14 @@ module.exports = {
   },
   overrides: [
     {
+      // Node scripts (CommonJS) - allow require
+      files: ['scripts/**/*.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+    {
       // Test files
       files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
       globals: {
