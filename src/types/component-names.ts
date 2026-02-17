@@ -8,6 +8,7 @@ export const COMPONENT_NAMES = [
   'NewsHeading',
   'NonNewsHeading',
   'EnterpriseHeading',
+  'OpinionHeading',
   'FormGroup',
   'FormControl',
 ] as const;

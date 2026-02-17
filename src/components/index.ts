@@ -13,3 +13,4 @@ export * from './Typography/Editorial/NewsHeading/NewsHeading';
 export * from './Typography/ArticleBody';
 export * from './Typography/Utility/SectionHeading/SectionHeading';
 export * from './Typography/Editorial/EnterpriseHeading/EnterpriseHeading';
+export * from './Typography/Editorial/OpinionHeading/OpinionHeading';
