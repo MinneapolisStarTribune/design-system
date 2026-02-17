@@ -85,7 +85,7 @@
     "tokens": "node scripts/build-tokens.js",
     "fonts:fetch": "node scripts/fetch-fonts.js",
     "tokens:mantine": "node scripts/build-mantine-tokens.js",
-    "icons": "node scripts/build-icon-mapping.js && prettier --write src/components/Icon/iconNames.ts src/components/Icon/iconOptions.ts",
+    "icons": "node scripts/build-icon-mapping.js && prettier --write src/components/Icon/iconOptions.ts",
     "build": "npm run tokens && npm run tokens:mantine && npm run icons && NODE_ENV=production vite build",
     "storybook": "node scripts/build-if-needed.js && storybook dev -p 6006",
     "build-storybook": "npm run tokens && npm run tokens:mantine && npm run icons && storybook build",
