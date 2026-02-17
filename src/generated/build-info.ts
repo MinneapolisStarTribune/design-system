@@ -3,6 +3,6 @@
  * Build time and package version for this design-system build.
  */
 export const buildInfo = {
-  buildTime: '2026-02-17T14:55:41.894Z',
+  buildTime: '2026-02-17T15:03:43.706Z',
   version: '0.0.7',
 } as const;
