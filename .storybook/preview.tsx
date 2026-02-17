@@ -171,8 +171,9 @@ const preview: Preview = {
       test: 'todo',
     },
     docs: {
+      codePanel: true,
       source: {
-        type: 'code',
+        type: 'dynamic',
       },
     },
   },

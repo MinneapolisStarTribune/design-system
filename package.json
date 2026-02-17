@@ -15,6 +15,9 @@
     "url": "https://github.com/MinneapolisStarTribune/design-system"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@mantine/core": "^8.3.9",
     "@mantine/hooks": "^8.3.9",
@@ -80,6 +83,7 @@
   },
   "scripts": {
     "tokens": "node scripts/build-tokens.js",
+    "fonts:fetch": "node scripts/fetch-fonts.js",
     "tokens:mantine": "node scripts/build-mantine-tokens.js",
     "icons": "node scripts/build-icon-mapping.js",
     "build": "npm run tokens && npm run tokens:mantine && npm run icons && NODE_ENV=production vite build",
