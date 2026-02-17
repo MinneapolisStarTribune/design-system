@@ -1,6 +1,5 @@
-import { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types/globalTypes';
 import classNames from 'classnames';
-import { FC } from 'react';
 
 export interface EditorialTextProps extends BaseProps, AccessibilityProps {
   size: Size;
@@ -8,7 +7,7 @@ export interface EditorialTextProps extends BaseProps, AccessibilityProps {
   children: React.ReactNode;
 }
 
-export const EditorialText: FC<EditorialTextProps> = (props) => {
+export const EditorialText: React.FC<EditorialTextProps> = (props) => {
   const {
     size,
     weight = 'regular',

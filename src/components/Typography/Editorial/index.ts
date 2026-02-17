@@ -8,3 +8,6 @@ export type {
   EditorialHeadingImportance,
   EditorialHeadingProps,
 } from './types';
+
+export * from './EditorialText/EditorialText';
+export * from './EditorialSponsoredText/EditorialSponsoredText';
