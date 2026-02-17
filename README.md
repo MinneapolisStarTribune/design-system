@@ -304,6 +304,12 @@ This project uses [Vercel](https://vercel.com) to automatically deploy Storybook
 - Perfect for designer/stakeholder review
 - Auto-updates on every commit
 
+**Version Dropdown**:
+
+- The Storybook header includes a version selector to switch between released versions
+- The list is synced from Vercel production deployments (daily at 9am CST, after tag deploys, or manually)
+- See [docs/storybook-version-sync.md](docs/storybook-version-sync.md) for details
+
 ## Releases
 
 This project uses [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) for versioning and publishing.

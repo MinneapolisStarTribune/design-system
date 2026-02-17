@@ -1,16 +1,15 @@
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 
-const BRAND_VALIDATION_PREFIX = '[Brand Validation]';
-
 interface Props {
   children: ReactNode;
   fallback?: (error: Error) => ReactNode;
 }
 
 interface State {
+  hasError: boolean;
   error: Error | null;
 }
-
+const BRAND_VALIDATION_PREFIX = '[Brand Validation]';
 /**
  * Error boundary that catches brand validation errors and displays the
  * validateComponentForBrand message in the Storybook canvas instead of

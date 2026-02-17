@@ -1,0 +1,45 @@
+name: Sync versions from Vercel
+
+on:
+  schedule:
+    # Daily at 9am CST (3pm UTC)
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Storybook versioned deploy']
+    types: [completed]
+
+jobs:
+  sync-versions:
+    name: Sync versions.json from Vercel prod deployments
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+
+      - name: Sync versions from Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_SYNC_TARGET: stage
+        run: node scripts/sync-versions-from-vercel.js
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .storybook/versions.json
+          if git diff --staged --quiet; then
+            echo "No change to versions.json"
+          else
+            git commit -m "chore(storybook): sync versions from Vercel prod deployments"
+            git push origin main
+          fi

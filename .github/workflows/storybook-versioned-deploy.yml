@@ -1,0 +1,36 @@
+name: Storybook versioned deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    name: Deploy Storybook to Vercel
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.ref_name }}
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+
+      - name: Build Storybook
+        run: yarn build-storybook
+
+      - name: Deploy Storybook to Vercel
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npx vercel deploy ./storybook-static \
+            --token="$VERCEL_TOKEN" \
+            --yes \
+            --prod \
+            --meta "githubCommitRef=${{ env.VERSION }}"
