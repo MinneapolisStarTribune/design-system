@@ -4,9 +4,10 @@ export * from './Icon/Icon';
 export {
   UtilityLabel,
   type UtilityLabelProps,
-} from './Typography/utility/UtilityLabel/UtilityLabel';
+} from './Typography/Utility/UtilityLabel/UtilityLabel';
 //Typography Components
 export * from './Typography/editorial';
-export * from './Typography/utility';
+export * from './Typography/Utility';
 export * from './Typography/NewsHeading/NewsHeading';
-export * from './Typography/utility/SectionHeading/SectionHeading';
+
+export * from './Typography/Utility/SectionHeading/SectionHeading';
