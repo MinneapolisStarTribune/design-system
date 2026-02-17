@@ -3,7 +3,14 @@
  * Use createEditorialHeading to define new heading variants (NewsHeading, etc.).
  */
 export { createEditorialHeading } from './createEditorialHeading';
-export type * from './types';
+export type {
+  CreateEditorialHeadingOptions,
+  EditorialHeadingImportance,
+  EditorialHeadingProps,
+} from './types';
 
-export * from './EditorialText/EditorialText';
-export * from './EditorialSponsoredText/EditorialSponsoredText';
+export { EditorialText, type EditorialTextProps } from './EditorialText/EditorialText';
+export {
+  EditorialSponsoredText,
+  type EditorialSponsoredTextProps,
+} from './EditorialSponsoredText/EditorialSponsoredText';
