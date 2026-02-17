@@ -6,6 +6,7 @@
  */
 export const COMPONENT_NAMES = [
   'NewsHeading',
+  'NonNewsHeading',
   'EnterpriseHeading',
   'FormGroup',
   'FormControl',
