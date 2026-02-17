@@ -132,22 +132,6 @@ const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
 };
 
 /**
- * Transform to resolve color references
- * This will be handled by Style Dictionary's built-in transforms
- */
-const resolveColorReference = {
-  type: 'value',
-  matcher: (token) => {
-    return token.value && typeof token.value === 'string' && token.value.startsWith('{color.');
-  },
-  transform: (token) => {
-    // Style Dictionary should resolve these automatically
-    // This is a placeholder for custom resolution if needed
-    return token.value;
-  },
-};
-
-/**
  * Get Style Dictionary configuration for a specific brand and mode
  */
 function getStyleDictionaryConfig(brand, mode) {
@@ -216,7 +200,7 @@ async function buildMantineTokens() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const hashBefore = hashThemeOutputs(outputDir, brands, modes);
+  const currentTokenHash = hashTokenSources();
 
   for (const brand of brands) {
     for (const mode of modes) {
@@ -239,12 +223,12 @@ async function buildMantineTokens() {
     }
   }
 
-  const hashAfter = hashThemeOutputs(outputDir, brands, modes);
-  const outputsChanged = hashBefore !== hashAfter;
+  const generatedDir = path.join(process.cwd(), 'src/generated');
+  const buildInfoPath = path.join(generatedDir, 'build-info.ts');
+  const lastTokenHash = readTokenHashFromBuildInfo(buildInfoPath);
 
-  // Only write build info when generated theme files actually changed
-  if (outputsChanged) {
-    const generatedDir = path.join(process.cwd(), 'src/generated');
+  // Only write build-info when token sources changed (new or updated tokens)
+  if (currentTokenHash !== lastTokenHash) {
     if (!fs.existsSync(generatedDir)) {
       fs.mkdirSync(generatedDir, { recursive: true });
     }
@@ -259,24 +243,60 @@ async function buildMantineTokens() {
 export const buildInfo = {
   buildTime: '${buildTime}',
   version: '${pkg.version}',
+  tokenSourceHash: '${currentTokenHash}',
 } as const;
 `;
-    fs.writeFileSync(
-      path.join(generatedDir, 'build-info.ts'),
-      buildInfoContent,
-      'utf8'
-    );
-    console.log('✓ build-info.ts updated (theme output changed)');
+    fs.writeFileSync(buildInfoPath, buildInfoContent, 'utf8');
+    console.log('✓ build-info.ts updated (token sources changed)');
   } else {
-    console.log('✓ build-info.ts unchanged (no theme changes)');
+    console.log('✓ build-info.ts unchanged (same token sources)');
   }
 
   console.log('\n==============================================');
   console.log('\n✓ All Mantine tokens built successfully!\n');
 }
 
-/** Returns a hash of generated theme file contents, or null if any file is missing */
-function hashThemeOutputs(outputDir, brands, modes) {
+/** Token source files that affect theme output (derived from tokens/ to stay in sync with getStyleDictionaryConfig) */
+function getTokenSourceFiles() {
+  const cwd = process.cwd();
+  const colorDir = path.join(cwd, 'tokens/color');
+  const sharedNames = ['text.json', 'border-radius.json', 'spacing.json', 'breakpoint.json'];
+
+  if (!fs.existsSync(colorDir)) return [];
+
+  const colorFiles = fs.readdirSync(colorDir).filter((f) => f.endsWith('.json'));
+  const colorPaths = colorFiles
+    .sort()
+    .map((f) => path.join('tokens', 'color', f));
+  const sharedPaths = sharedNames
+    .filter((f) => fs.existsSync(path.join(cwd, 'tokens', f)))
+    .map((f) => path.join('tokens', f));
+
+  return [...colorPaths, ...sharedPaths];
+}
+
+/** Hash of token source file contents. Changes only when token definitions change. */
+function hashTokenSources() {
+  const cwd = process.cwd();
+  let concat = '';
+  for (const file of getTokenSourceFiles()) {
+    const filePath = path.join(cwd, file);
+    if (!fs.existsSync(filePath)) return null;
+    concat += fs.readFileSync(filePath, 'utf8');
+  }
+  return crypto.createHash('sha256').update(concat).digest('hex');
+}
+
+/** Read tokenSourceHash from existing build-info.ts, or null if missing/different format */
+function readTokenHashFromBuildInfo(buildInfoPath) {
+  if (!fs.existsSync(buildInfoPath)) return null;
+  const content = fs.readFileSync(buildInfoPath, 'utf8');
+  const m = content.match(/tokenSourceHash:\s*'([^']+)'/);
+  return m ? m[1] : null;
+}
+
+/** Returns a hash of generated theme file contents, or null if any file is missing (kept for reference) */
+function _hashThemeOutputs(outputDir, brands, modes) {
   const files = brands.flatMap((brand) =>
     modes.map((mode) => `${brand}.${mode}.ts`)
   );
