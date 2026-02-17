@@ -67,9 +67,6 @@ export const WithCustomContent: Story = {
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
-        <Popover.Description>Choose an option below</Popover.Description>
-
-        <Popover.Divider />
 
         <Popover.Body>
           <Box>Option 1</Box>
@@ -101,9 +98,6 @@ export const WithDividerAndCustomContent: Story = {
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
-          <Box>Sample Description</Box>
-        </Popover.Body>
         <Popover.Divider />
         <Popover.Body>
           <Box>Sample Content popover body</Box>
@@ -115,6 +109,20 @@ export const WithDividerAndCustomContent: Story = {
 };
 
 export const ScrollableBody: Story = {
+  parameters: {
+    layout: 'centered',
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          paddingBottom: 120,
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     trigger: <Button>Open</Button>,
     children: (

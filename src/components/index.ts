@@ -4,7 +4,7 @@ export * from './Icon/Icon';
 export {
   UtilityLabel,
   type UtilityLabelProps,
-} from './Typography/utility/UtilityLabel/UtilityLabel';
+} from './Typography/Utility/UtilityLabel/UtilityLabel';
 export * from './Popover/Popover';
 //Typography Components
 export * from './Typography/Editorial';
