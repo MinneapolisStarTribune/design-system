@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
 
 const meta = {
-  title: 'Foundations/Typography/UtilityBody',
+  title: 'Foundations/Typography/Utility/UtilityBody',
   component: UtilityBody,
   tags: ['autodocs'],
   argTypes: {
