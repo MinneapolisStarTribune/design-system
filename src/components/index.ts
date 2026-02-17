@@ -4,3 +4,4 @@ export * from './Icon/Icon';
 //Typography Components
 export * from './Typography/Editorial';
 export * from './Typography/Utility';
+export * from './Typography/ArticleBody';
