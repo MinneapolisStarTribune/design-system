@@ -156,44 +156,6 @@
       }
     },
     "article-body-sponsored": {
-      "bold": {
-        "desktop": {
-          "value": {
-            "font-family": "{font.family.barlow}",
-            "font-size": "18px",
-            "font-weight": "600",
-            "line-height": "1.25"
-          }
-        },
-        "mobile": {
-          "value": {
-            "font-family": "{font.family.barlow}",
-            "font-size": "17px",
-            "font-weight": "600",
-            "line-height": "1.25"
-          }
-        }
-      },
-      "bold-italic": {
-        "desktop": {
-          "value": {
-            "font-family": "{font.family.barlow}",
-            "font-size": "18px",
-            "font-style": "italic",
-            "font-weight": "600",
-            "line-height": "1.25"
-          }
-        },
-        "mobile": {
-          "value": {
-            "font-family": "{font.family.barlow}",
-            "font-size": "17px",
-            "font-style": "italic",
-            "font-weight": "600",
-            "line-height": "1.25"
-          }
-        }
-      },
       "h1": {
         "value": {
           "font-family": "{font.family.barlow-condensed}",
@@ -288,6 +250,44 @@
             "font-family": "{font.family.barlow}",
             "font-size": "17px",
             "font-weight": "400",
+            "line-height": "1.25"
+          }
+        }
+      },
+      "semibold": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.barlow}",
+            "font-size": "18px",
+            "font-weight": "600",
+            "line-height": "1.25"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.barlow}",
+            "font-size": "17px",
+            "font-weight": "600",
+            "line-height": "1.25"
+          }
+        }
+      },
+      "semibold-italic": {
+        "desktop": {
+          "value": {
+            "font-family": "{font.family.barlow}",
+            "font-size": "18px",
+            "font-style": "italic",
+            "font-weight": "600",
+            "line-height": "1.25"
+          }
+        },
+        "mobile": {
+          "value": {
+            "font-family": "{font.family.barlow}",
+            "font-size": "17px",
+            "font-style": "italic",
+            "font-weight": "600",
             "line-height": "1.25"
           }
         }
