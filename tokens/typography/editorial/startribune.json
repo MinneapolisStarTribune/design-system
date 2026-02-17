@@ -338,7 +338,7 @@
         "h1": {
           "desktop": {
             "value": {
-              "font-family": "{font.family.publico-banner-condensed}",
+              "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "66px",
               "font-weight": "900",
               "line-height": "1.05"
@@ -443,7 +443,7 @@
         "h1": {
           "desktop": {
             "value": {
-              "font-family": "{font.family.publico-banner-condensed}",
+              "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "66px",
               "font-weight": "500",
               "line-height": "1.05"
@@ -451,7 +451,7 @@
           },
           "mobile": {
             "value": {
-              "font-family": "{font.family.publico-banner-condensed}",
+              "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "42px",
               "font-weight": "500",
               "line-height": "1.05"
@@ -459,7 +459,7 @@
           },
           "tablet": {
             "value": {
-              "font-family": "{font.family.publico-banner-condensed}",
+              "font-family": "{font.family.publico-headline-condensed}",
               "font-size": "48px",
               "font-weight": "500",
               "line-height": "1.05"
@@ -548,7 +548,7 @@
         "h1": {
           "desktop": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "66px",
               "font-weight": "400",
               "line-height": "1.05"
@@ -556,7 +556,7 @@
           },
           "mobile": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "42px",
               "font-weight": "400",
               "line-height": "1.05"
@@ -564,7 +564,7 @@
           },
           "tablet": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "48px",
               "font-weight": "400",
               "line-height": "1.05"
@@ -652,7 +652,7 @@
         "h1": {
           "desktop": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "66px",
               "font-style": "italic",
               "font-weight": "300",
@@ -661,7 +661,7 @@
           },
           "mobile": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "42px",
               "font-style": "italic",
               "font-weight": "300",
@@ -670,7 +670,7 @@
           },
           "tablet": {
             "value": {
-              "font-family": "{font.family.publico-banner}",
+              "font-family": "{font.family.publico-headline}",
               "font-size": "48px",
               "font-style": "italic",
               "font-weight": "300",
