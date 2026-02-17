@@ -1,13 +1,12 @@
-import { AccessibilityProps, BaseProps, FontWeight } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, FontWeight } from '@/types/globalTypes';
 import classNames from 'classnames';
-import { FC } from 'react';
 
 export interface ArticleBodySponsoredTextProps extends BaseProps, AccessibilityProps {
   weight?: Extract<FontWeight, 'regular' | 'italic' | 'semibold' | 'semibold-italic'>;
   children: React.ReactNode;
 }
 
-export const ArticleBodySponsoredText: FC<ArticleBodySponsoredTextProps> = (props) => {
+export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> = (props) => {
   const {
     weight = 'regular',
     children,
