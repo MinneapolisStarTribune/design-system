@@ -9,7 +9,6 @@ export type {
   EditorialHeadingImportance,
   EditorialHeadingProps,
 } from './types';
-export type {
-  EnterpriseHeadingImportance,
-  EnterpriseHeadingProps,
-} from './EnterpriseHeading/EnterpriseHeading';
+
+export * from './EditorialText/EditorialText';
+export * from './EditorialSponsoredText/EditorialSponsoredText';
