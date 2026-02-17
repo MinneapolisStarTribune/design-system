@@ -239,6 +239,7 @@ async function buildMantineTokens() {
     const buildInfoContent = `/**
  * Do not edit directly, this file was auto-generated.
  * Build time and package version for this design-system build.
+ * Only regenerated when token sources change (tokens/color/*.json, etc.).
  */
 export const buildInfo = {
   buildTime: '${buildTime}',
