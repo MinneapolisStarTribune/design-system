@@ -1,7 +1,7 @@
 /**
  * Do not edit directly, this file was auto-generated.
  * Generated from: varsity-light tokens
- * Date: 2026-02-10T16:37:45.575Z
+ * Date: 2026-02-12T16:40:45.509Z
  */
 
 export const colors = {
