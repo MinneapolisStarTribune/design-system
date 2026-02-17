@@ -5,5 +5,6 @@
 export { createEditorialHeading } from './createEditorialHeading';
 export type * from './types';
 
+export * from './EditorialSponsoredText/EditorialSponsoredText';
 export * from './NewsHeading/NewsHeading';
 export * from './NonNewsHeading/NonNewsHeading';
