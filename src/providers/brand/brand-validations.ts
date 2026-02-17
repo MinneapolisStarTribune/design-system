@@ -14,6 +14,7 @@ export const STAR_TRIBUNE_UNSUPPORTED_COMPONENTS: readonly ComponentName[] = [
 export const VARSITY_UNSUPPORTED_COMPONENTS: readonly ComponentName[] = [
   // Add component names that Varsity doesn't support
   'NonNewsHeading',
+  'EnterpriseHeading',
 ] as const;
 
 /**

@@ -6,9 +6,10 @@
  */
 export const COMPONENT_NAMES = [
   'NewsHeading',
+  'NonNewsHeading',
+  'EnterpriseHeading',
   'FormGroup',
   'FormControl',
-  'NonNewsHeading',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];
