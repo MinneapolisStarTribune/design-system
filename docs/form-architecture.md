@@ -245,7 +245,7 @@ src/components/
 │   │   └── ...
 │   ├── FormControl.test.tsx
 │   ├── FormControl.a11y.test.tsx
-│   └── formControl.stories.tsx
+│   └── FormControl.stories.tsx
 │
 └── FormGroup/
     ├── FormGroup.tsx                # Main component + children processing
