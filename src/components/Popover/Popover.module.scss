@@ -27,6 +27,7 @@
 
 /* Close button */
 .closeButton {
+  align-self: flex-start !important;
   width: 32px;
   height: 32px;
   flex-shrink: 0;
