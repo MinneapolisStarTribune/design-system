@@ -10,7 +10,8 @@ const svgFiles = fs
   .readdirSync(iconsDir)
   .filter((file) => file.endsWith('.svg'))
   .sort();
-//Generate the ion mapping
+
+// Generate the icon mapping
 const iconNames = svgFiles
   .map((file) => file.replace(/\.svg$/i, ''))
   .filter((name) => name.length > 0 && !name.includes('\n'));
