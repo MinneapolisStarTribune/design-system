@@ -8,10 +8,10 @@ export const PopoverHeading: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { close } = usePopoverContext();
-  const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
+  const typographyClassName = 'typography-utility-section-h6';
   return (
     <Box className={classNames(styles.header, typographyClassName)}>
-      {children}
+      <Box className={styles.headerContent}>{children}</Box>
       <CloseButton
         aria-label="Close popover"
         className={styles.closeButton}

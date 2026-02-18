@@ -151,9 +151,9 @@ export const IconPopover: Story = {
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
+        <Popover.Description>
           <Box>Sample Description</Box>
-        </Popover.Body>
+        </Popover.Description>
         <Popover.Divider />
         <Popover.Body>
           <Box>Sample Content popover body</Box>

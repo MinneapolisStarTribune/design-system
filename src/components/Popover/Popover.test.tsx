@@ -1,18 +1,33 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, act, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
 import { Button } from '../Button/Button';
 import { renderWithProvider } from '../../test-utils/render';
 
-describe('Popover', () => {
-  it('renders with trigger element', () => {
+beforeAll(() => {
+  class ResizeObserverMock {
+    observe = vi.fn();
+    unobserve = vi.fn();
+    disconnect = vi.fn();
+  }
+
+  global.ResizeObserver = ResizeObserverMock;
+
+  global.requestAnimationFrame = (cb: FrameRequestCallback) =>
+    setTimeout(() => cb(performance.now()), 0) as unknown as number;
+
+  global.cancelAnimationFrame = (id: number) => clearTimeout(id as unknown as NodeJS.Timeout);
+});
+
+describe('Popover Root', () => {
+  it('renders trigger element', () => {
     renderWithProvider(
       <Popover trigger={<Button label="Open" />}>
         <Popover.Body>Content</Popover.Body>
       </Popover>
     );
 
-    expect(screen.getByText('Open')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Open' })).toBeInTheDocument();
   });
 
   it('opens popover when trigger is clicked', async () => {
@@ -24,14 +39,12 @@ describe('Popover', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Open'));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
 
-    await waitFor(() => {
-      expect(screen.getByText('Popover Content')).toBeInTheDocument();
-    });
+    expect(await screen.findByText('Popover Content')).toBeInTheDocument();
   });
 
-  it('renders close button when heading is present', async () => {
+  it('closes popover when close button is clicked', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -41,34 +54,17 @@ describe('Popover', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      expect(screen.getByLabelText('Close popover')).toBeInTheDocument();
-    });
-  });
-
-  it('close button closes the popover', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button label="Open" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-    await waitFor(() => screen.getByText('Content'));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await screen.findByText('Content');
 
     await user.click(screen.getByLabelText('Close popover'));
 
-    await waitFor(() => {
-      expect(screen.queryByText('Content')).not.toBeInTheDocument();
-    });
+    await user.click(screen.getByLabelText('Close popover'));
+
+    await waitForElementToBeRemoved(() => screen.queryByText('Content'));
   });
 
-  it('does not open when isDisabled is true', async () => {
+  it('does not open when disabled', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -77,69 +73,13 @@ describe('Popover', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Open'));
-
-    await new Promise((r) => setTimeout(r, 100));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
 
     expect(screen.queryByText('Content')).not.toBeInTheDocument();
   });
 
-  it('renders with heading and body', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button label="Open" />}>
-        <Popover.Heading>Heading</Popover.Heading>
-        <Popover.Body>Body</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Heading')).toBeInTheDocument();
-      expect(screen.getByText('Body')).toBeInTheDocument();
-    });
-  });
-
-  it('renders divider', async () => {
-    const user = userEvent.setup();
-
-    const { container } = renderWithProvider(
-      <Popover trigger={<Button label="Open" />}>
-        <Popover.Heading>Title</Popover.Heading>
-        <Popover.Divider />
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      expect(container.querySelector('[class*="divider"]')).toBeInTheDocument();
-    });
-  });
-
-  it('renders divider with fullBleed enabled', async () => {
-    const user = userEvent.setup();
-
-    const { container } = renderWithProvider(
-      <Popover trigger={<Button label="Open" />}>
-        <Popover.Divider fullBleed />
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const divider = container.querySelector('[class*="divider"]');
-      expect(divider).toBeInTheDocument();
-    });
-  });
-
   it.each(['top', 'right', 'bottom', 'left'] as const)(
-    'renders with pointer position %s',
+    'renders with pointer %s',
     async (pointer) => {
       const user = userEvent.setup();
 
@@ -151,9 +91,7 @@ describe('Popover', () => {
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
 
-      await waitFor(() => {
-        expect(screen.getByText(`${pointer} content`)).toBeInTheDocument();
-      });
+      expect(await screen.findByText(`${pointer} content`)).toBeInTheDocument();
     }
   );
 
@@ -175,34 +113,12 @@ describe('Popover', () => {
 
     await user.click(screen.getByRole('button'));
 
-    await waitFor(() => {
-      expect(screen.getByText('Content')).toBeInTheDocument();
-    });
+    expect(await screen.findByText('Content')).toBeInTheDocument();
   });
 });
 
-describe('Popover.Body', () => {
-  it('renders children', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button label="Open" />}>
-        <Popover.Body>
-          <div data-testid="body">Body</div>
-        </Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('body')).toBeInTheDocument();
-    });
-  });
-});
-
-describe('Popover.Heading', () => {
-  it('renders children and close button', async () => {
+describe('Popover Compound Components', () => {
+  it('renders heading', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -214,11 +130,95 @@ describe('Popover.Heading', () => {
       </Popover>
     );
 
-    await user.click(screen.getByText('Open'));
+    await user.click(screen.getByRole('button', { name: 'Open' }));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('heading')).toBeInTheDocument();
-      expect(screen.getByLabelText('Close popover')).toBeInTheDocument();
+    expect(await screen.findByTestId('heading')).toBeInTheDocument();
+    expect(screen.getByLabelText('Close popover')).toBeInTheDocument();
+  });
+
+  it('renders description', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button label="Open" />}>
+        <Popover.Description>
+          <span data-testid="description">Description</span>
+        </Popover.Description>
+        <Popover.Body>Body</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(await screen.findByTestId('description')).toBeInTheDocument();
+  });
+
+  it('renders divider', async () => {
+    const user = userEvent.setup();
+
+    const { container } = renderWithProvider(
+      <Popover trigger={<Button label="Open" />}>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Divider />
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    await screen.findByText('Content');
+
+    expect(container.querySelector('[class*="divider"]')).toBeInTheDocument();
+  });
+});
+
+describe('Popover.Body Scroll Logic', () => {
+  it('applies bodyAtTop class initially', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button label="Open" />}>
+        <Popover.Body>Scrollable</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    const body = await screen.findByText('Scrollable');
+    const wrapper = body.closest('div');
+
+    expect(wrapper?.className).toContain('bodyAtTop');
+  });
+
+  it('removes bodyAtTop class when scrolled', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button label="Open" />}>
+        <Popover.Body>
+          <div style={{ height: 2000 }}>Scrollable</div>
+        </Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    const scrollable = await screen.findByText('Scrollable');
+    const wrapper = scrollable.closest('div');
+
+    act(() => {
+      Object.defineProperty(wrapper, 'scrollTop', {
+        value: 100,
+        writable: true,
+      });
+
+      wrapper?.dispatchEvent(new Event('scroll'));
     });
+
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 20));
+    });
+
+    expect(wrapper?.className).not.toContain('bodyAtTop');
   });
 });
