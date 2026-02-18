@@ -7,3 +7,9 @@ export type * from './types';
 
 export * from './EditorialText/EditorialText';
 export * from './EditorialSponsoredText/EditorialSponsoredText';
+
+export { EnterpriseHeading } from './EnterpriseHeading/EnterpriseHeading';
+export type {
+  EnterpriseHeadingImportance,
+  EnterpriseHeadingProps,
+} from './EnterpriseHeading/EnterpriseHeading';
