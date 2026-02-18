@@ -105,6 +105,108 @@ _Utility Typography:_
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.
 
+#### Export Pattern
+
+All component exports follow a consistent pattern:
+
+```typescript
+export { Component, type ComponentProps } from './path';
+```
+
+This means each component is exported alongside its main Props type. For example:
+
+- `Button` and `ButtonProps`
+- `NewsHeading` and `NewsHeadingProps`
+- `Icon` and `IconProps`
+
+#### Importing Types
+
+You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.
+
+**Component Prop Types:**
+
+```typescript
+import type {
+  ButtonProps,
+  FormGroupProps,
+  FormControlProps,
+  TextInputProps,
+  NewsHeadingProps,
+  // ... and many more
+} from '@minneapolisstartribune/design-system';
+```
+
+**Using Components:**
+
+You can use components directly without importing types - TypeScript will infer the types automatically:
+
+```typescript
+import { Button } from '@minneapolisstartribune/design-system';
+
+// Using the component directly - no types needed!
+<Button
+  label="Click me"
+  onClick={() => console.log('clicked')}
+  color="brand"           // TypeScript knows this is 'neutral' | 'brand' | 'brand-accent'
+  variant="filled"        // TypeScript knows this is 'filled' | 'outlined' | 'ghost'
+  size="large"           // TypeScript knows this is 'small' | 'medium' | 'large'
+  icon="camera-filled"   // TypeScript knows valid icon names
+  iconPosition="start"    // TypeScript knows this is 'start' | 'end'
+  isDisabled={false}
+  className="my-class"
+  data-testid="my-button"
+  aria-label="Custom label"
+  // ... any other HTML button attributes
+/>
+```
+
+**When You Need to Import Types:**
+
+You only need to import prop types when you're:
+
+- Typing function parameters or variables
+- Creating wrapper components or HOCs
+- Extending component props
+- Accessing nested types for type annotations
+
+**Accessing Nested Types:**
+
+Nested types (like `ButtonColor`, `NewsHeadingImportance`, etc.) are accessible via TypeScript indexed access types:
+
+```typescript
+import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system';
+
+// Access nested types using indexed access
+type ButtonColor = ButtonProps['color']; // 'neutral' | 'brand' | 'brand-accent' | undefined
+type ButtonVariant = ButtonProps['variant']; // 'filled' | 'outlined' | 'ghost' | undefined
+type NewsHeadingImportance = NewsHeadingProps['importance']; // 1 | 2 | 3 | 4 | 5 | 6
+```
+
+**Example: Using Types in Your Code**
+
+```typescript
+import { Button } from '@minneapolisstartribune/design-system';
+import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system';
+
+// Type function parameters
+function createButton(props: ButtonProps) {
+  return <Button {...props} />;
+}
+
+// Access nested types for function parameters
+function setButtonColor(color: ButtonProps['color']) {
+  // color is typed as 'neutral' | 'brand' | 'brand-accent' | undefined
+}
+
+// Use brand type
+const currentBrand: Brand = 'startribune';
+
+// Extend component props
+interface CustomButtonProps extends ButtonProps {
+  customProp?: string;
+}
+```
+
 ### Versioning
 
 This package follows [semantic versioning](https://semver.org/). Check your installed version:
