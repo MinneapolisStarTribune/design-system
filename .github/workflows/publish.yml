@@ -13,6 +13,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Node with authentication
         uses: actions/setup-node@v4
@@ -41,17 +44,12 @@ jobs:
           git add package.json
           git commit --no-verify -m "chore: bump version to ${{ steps.version.outputs.version }}"
 
+          # Fetch latest changes and rebase if main has moved
           git fetch origin main
-          LOCAL=$(git rev-parse HEAD)
-          REMOTE=$(git rev-parse origin/main)
-
-          if [ "$LOCAL" != "$REMOTE" ]; then
-            echo "Error: main branch has moved since workflow started."
-            echo "Local: $LOCAL"
-            echo "Remote: $REMOTE"
-            echo "Please re-run the release workflow."
+          git rebase origin/main || {
+            echo "Error: Failed to rebase on main. This may indicate a conflict."
             exit 1
-          fi
+          }
 
           git push origin main
 
