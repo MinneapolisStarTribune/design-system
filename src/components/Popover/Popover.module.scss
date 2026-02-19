@@ -23,7 +23,14 @@
   align-items: center;
   justify-content: space-between;
   padding-right: 8px;
+  color: var(--color-text-on-light-primary);
 }
+
+
+.headerContent:has(.description) {
+  padding-top: 8px;
+}
+
 
 /* Close button */
 .closeButton {
@@ -37,14 +44,14 @@
 /* Description */
 .description {
   max-width: 192px;
-  margin-top: 8px;
+  color:var(--color-text-on-light-secondary)
 }
 
 /* Divider */
 .divider {
   height: 1px;
   background: #eee;
-  margin: 12px 0 12px -16px;
+  margin: 12px 0 0 -16px;
 }
 
 /* Body */
@@ -52,26 +59,41 @@
   padding-right: 16px;
   max-height: 400px;
   overflow-y: auto;
-   /* Firefox */
+
+  /* Smoothen the padding on/off */
+  transition: padding-top 180ms ease;
+  will-change: padding-top;
+
+  /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
+
 /* WebKit (Chrome, Edge, Safari) */
 .body::-webkit-scrollbar {
   width: 6px;
 }
-
 .body::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .body::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.25);
   border-radius: 999px;
 }
-
 .body::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* When at top, add top padding (adjust as needed) */
+.bodyAtTop {
+  padding-top: 12px;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .body {
+    transition: none;
+  }
 }
 
 /* Text-only mode */

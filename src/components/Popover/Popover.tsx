@@ -42,7 +42,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
         onChange={(setOpened) => (setOpened ? open() : close())}
         position={position}
         withArrow
-        arrowSize={6}
+        arrowSize={12}
         offset={8}
         withinPortal={false}
         disabled={isDisabled}
