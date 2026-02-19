@@ -2,62 +2,228 @@
 
 A React component library built with TypeScript and Mantine, with a comprehensive design token system.
 
-## Getting Started
+## Installation
 
-### Prerequisites
+This package is published to GitHub Packages. To install it, you'll need to configure npm/yarn to authenticate with GitHub.
 
-- Node.js (v18 or higher)
-- Yarn package manager
-- Git
+### Step 1: Configure npm/yarn Authentication
 
-### Initial Setup
+**For npm:**
 
-1. **Clone the repository:**
+Create or edit `.yarnrc.yml` in your project root:
 
-   ```bash
-   git clone <repository-url>
-   cd design-system
-   ```
+```
+npmScopes:
+  minneapolisstartribune:
+    npmRegistryServer: "https://npm.pkg.github.com"
+    npmAlwaysAuth: true
+    npmAuthToken: "${{ secrets.NPM_AUTH_TOKEN_FOR_SUS }}"
+```
 
-2. **Install dependencies:**
+**Security Note:** Never commit your token to version control! Use environment variables:
 
-   ```bash
-   yarn install
-   ```
+### Step 2: Install the Package
 
-3. **Set up Git workflow helpers:**
+```bash
+# Using yarn
+yarn add @minneapolisstartribune/design-system
+```
 
-   This repo uses a release-based branching workflow with helpful commands. Set them up by following the instructions in [docs/git-workflow.md](docs/git-workflow.md)\*\*
+### Step 4: Install Peer Dependencies
 
-4. **Verify your setup:**
+This package requires Mantine and React as peer dependencies:
 
-   ```bash
-   # Run tests to make sure everything works
-   yarn test
+```bash
+# Using yarn
+yarn add @mantine/core@^7.15.0 @mantine/hooks@^7.15.0 react@^18.0.0 react-dom@^18.0.0
+```
 
-   # Start Storybook to see components
-   yarn storybook
-   ```
+## Quick Start
 
-### Available Commands
+1. **Install the package** (see [Installation](#installation) above)
+2. **Import a theme CSS file** in your app entry point
+3. **Wrap your app** with `DesignSystemProvider`
+4. **Import and use components**
 
-**Development:**
+```tsx
+// main.tsx or App.tsx
+import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system';
 
-- `yarn dev` - Start development server
-- `yarn storybook` - Start Storybook
-- `yarn build` - Build the package
-- `yarn test` - Run tests
-- `yarn lint` - Lint code
+function App() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      <Button label="Hello World" onClick={() => {}} />
+    </DesignSystemProvider>
+  );
+}
+```
 
-**Git Workflow:**
+See [Using Themes](#using-themes) and [Available Components](#available-components) for more details.
 
-- `setrelease` - Pin the current release branch
-- `whichrelease` - Show which release branch is pinned
-- `newbranch <name>` - Create a new feature branch
-- `syncmybranch` - Sync your branch with the release branch (no push)
-- `gitpushmybranch` - Sync and push your branch
+## Available Components
 
-See [docs/git-workflow.md](docs/git-workflow.md) for complete Git workflow documentation.
+Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
+
+### Component Categories
+
+**Core Components:**
+
+- `Button` - Interactive button component with multiple variants and colors
+- `Icon` - SVG icon component with 200+ available icons
+- `Popover` - Popover component with heading, body, and description
+
+**Typography Components:**
+
+_Editorial Headings:_
+
+- `NewsHeading` - For news article headlines
+- `NonNewsHeading` - For non-news editorial content
+- `EnterpriseHeading` - For enterprise/long-form articles
+- `OpinionHeading` - For opinion pieces
+- `EditorialSponsoredText` - Sponsored content text styling
+
+_Article Body:_
+
+- `ArticleBodyText` - Main article body text
+- `ArticleBodySponsoredText` - Sponsored article body text
+
+_Utility Typography:_
+
+- `UtilityLabel` - Labels and small text
+- `UtilityBody` - Body text for utility contexts
+- `SectionHeading` - Section-level headings (h1-h6)
+- `PageHeading` - Page-level headings
+
+**Form Components:**
+
+- `FormGroup` - Form field group container
+- `FormControl` - Form control wrapper
+- `TextInput` - Text input field
+
+### TypeScript Support
+
+This package includes full TypeScript type definitions. All components and their props are fully typed.
+
+#### Export Pattern
+
+All component exports follow a consistent pattern:
+
+```typescript
+export { Component, type ComponentProps } from './path';
+```
+
+This means each component is exported alongside its main Props type. For example:
+
+- `Button` and `ButtonProps`
+- `NewsHeading` and `NewsHeadingProps`
+- `Icon` and `IconProps`
+
+#### Importing Types
+
+You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.
+
+**Component Prop Types:**
+
+```typescript
+import type {
+  ButtonProps,
+  FormGroupProps,
+  FormControlProps,
+  TextInputProps,
+  NewsHeadingProps,
+  // ... and many more
+} from '@minneapolisstartribune/design-system';
+```
+
+**Using Components:**
+
+You can use components directly without importing types - TypeScript will infer the types automatically:
+
+```typescript
+import { Button } from '@minneapolisstartribune/design-system';
+
+// Using the component directly - no types needed!
+<Button
+  label="Click me"
+  onClick={() => console.log('clicked')}
+  color="brand"           // TypeScript knows this is 'neutral' | 'brand' | 'brand-accent'
+  variant="filled"        // TypeScript knows this is 'filled' | 'outlined' | 'ghost'
+  size="large"           // TypeScript knows this is 'small' | 'medium' | 'large'
+  icon="camera-filled"   // TypeScript knows valid icon names
+  iconPosition="start"    // TypeScript knows this is 'start' | 'end'
+  isDisabled={false}
+  className="my-class"
+  data-testid="my-button"
+  aria-label="Custom label"
+  // ... any other HTML button attributes
+/>
+```
+
+**When You Need to Import Types:**
+
+You only need to import prop types when you're:
+
+- Typing function parameters or variables
+- Creating wrapper components or HOCs
+- Extending component props
+- Accessing nested types for type annotations
+
+**Accessing Nested Types:**
+
+Nested types (like `ButtonColor`, `NewsHeadingImportance`, etc.) are accessible via TypeScript indexed access types:
+
+```typescript
+import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system';
+
+// Access nested types using indexed access
+type ButtonColor = ButtonProps['color']; // 'neutral' | 'brand' | 'brand-accent' | undefined
+type ButtonVariant = ButtonProps['variant']; // 'filled' | 'outlined' | 'ghost' | undefined
+type NewsHeadingImportance = NewsHeadingProps['importance']; // 1 | 2 | 3 | 4 | 5 | 6
+```
+
+**Example: Using Types in Your Code**
+
+```typescript
+import { Button } from '@minneapolisstartribune/design-system';
+import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system';
+
+// Type function parameters
+function createButton(props: ButtonProps) {
+  return <Button {...props} />;
+}
+
+// Access nested types for function parameters
+function setButtonColor(color: ButtonProps['color']) {
+  // color is typed as 'neutral' | 'brand' | 'brand-accent' | undefined
+}
+
+// Use brand type
+const currentBrand: Brand = 'startribune';
+
+// Extend component props
+interface CustomButtonProps extends ButtonProps {
+  customProp?: string;
+}
+```
+
+### Versioning
+
+This package follows [semantic versioning](https://semver.org/). Check your installed version:
+
+```bash
+npm list @minneapolisstartribune/design-system
+# or
+yarn list --pattern @minneapolisstartribune/design-system
+```
+
+To update to the latest version:
+
+```bash
+npm install @minneapolisstartribune/design-system@latest
+# or
+yarn add @minneapolisstartribune/design-system@latest
+```
 
 ## Design Tokens
 
@@ -158,26 +324,18 @@ All themes include the same token names, so you can use CSS variables in your CS
 }
 ```
 
-**Available token categories:**
+### Using React Components
 
-- `--color-icon-*` - Icon colors (e.g., `--color-icon-on-light-primary`)
-- `--color-text-*` - Text colors
-- `--color-background-*` - Background colors
-- `--color-border-*` - Border colors
-- `--color-button-*` - Button-specific colors
-- `--color-control-*` - Control component colors
-- Full primitive palettes (`--color-emerald-500`, `--color-lime-300`, etc.)
-
-### Using React Components with Mantine
-
-If you're using the design system's React components (Button, Icon, etc.), you need to:
+If you're using the design system's React components, you need to:
 
 1. **Load the theme CSS file** (see above)
 2. **Wrap your app with `DesignSystemProvider`**
+3. **Import and use components**
+
+#### Basic Example
 
 ```tsx
-import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
-import { Button } from '@minneapolisstartribune/design-system';
+import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system';
 import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
 
 function App() {
@@ -191,12 +349,66 @@ function App() {
 
 **Analytics (optional):** Components emit tracking events on interaction. Wrap with `AnalyticsProvider` and pass your `onTrackingEvent` handler to plug in GA4, Piano, etc. See [docs/analytics-integration.md](docs/analytics-integration.md).
 
+#### Typography Components Example
+
+```tsx
+import {
+  DesignSystemProvider,
+  NewsHeading,
+  ArticleBodyText,
+  SectionHeading,
+} from '@minneapolisstartribune/design-system';
+import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+
+function Article() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      <article>
+        <NewsHeading importance={1}>Article Title</NewsHeading>
+        <SectionHeading importance={2}>Section Title</SectionHeading>
+        <ArticleBodyText>
+          This is the article body text with proper typography styling.
+        </ArticleBodyText>
+      </article>
+    </DesignSystemProvider>
+  );
+}
+```
+
+#### Form Components Example
+
+```tsx
+import {
+  DesignSystemProvider,
+  FormGroup,
+  FormControl,
+  TextInput,
+} from '@minneapolisstartribune/design-system';
+import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+
+function ContactForm() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      <FormGroup>
+        <FormControl>
+          <TextInput label="Name" placeholder="Enter your name" />
+        </FormControl>
+        <FormControl>
+          <TextInput label="Email" type="email" placeholder="Enter your email" />
+        </FormControl>
+      </FormGroup>
+    </DesignSystemProvider>
+  );
+}
+```
+
 **Important notes:**
 
 - The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
 - The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
 - If you want to switch themes dynamically, use the dynamic loading approach shown above
 - The CSS file must be loaded **before** components render, or CSS variables will be undefined
+- Fonts are automatically loaded by `DesignSystemProvider` - no manual font loading needed
 
 ### Quick Reference: Setup Checklist
 
@@ -219,162 +431,85 @@ function App() {
 1. Open browser DevTools
 2. Check that CSS variables exist: `getComputedStyle(document.documentElement).getPropertyValue('--color-icon-on-light-primary')`
 3. Should return a color value (not empty string)
-4. For React apps, check that Mantine components render with correct colors
+4. For React apps, check that components render with correct colors
+5. Inspect the `<html>` element in DevTools - you should see CSS custom properties (variables) defined
+6. Check the Network tab to ensure the theme CSS file loaded successfully
 
-### Token Categories
+## Font Loading
 
-- **Global Colors** (`tokens/color/global.json`) - Base color palettes (cobalt-blue, emerald, lime, etc.)
-- **Brand Colors** (`tokens/color/brand-{brand}-{scheme}.json`) - Brand-specific colors for each brand and color scheme
-- **Semantic Colors** (`tokens/color/semantic.json`) - Purpose-based colors (text-primary, bg-primary, etc.)
-- **Typography** (`tokens/text.json`) - Font families and text sizes
-- **Fonts** (`tokens/fonts/{brand}.json`) - Brand font definitions (name, family, url, variants) used to build `@font-face` CSS
+Fonts are automatically loaded by `DesignSystemProvider` when your app renders. The provider handles brand-specific font loading internally.
 
-#### Font tokens
-
-- **@font-face** uses the single font name (e.g. `'Popular'`, `'Nohemi'`); **usage** uses the full stack (e.g. `Popular, sans-serif`). The first token must match so the font renders.
-- If font URLs return **403** or are blocked: put woff2 files in `dist/fonts/assets/{brand}/`, then run `yarn tokens`. Optional: `yarn fonts:fetch` to try fetching from the CDN.
-- See [tokens/fonts/README.md](tokens/fonts/README.md) for details.
-
-### Modifying Tokens
-
-1. Edit JSON files in `/tokens`
-2. Run `yarn tokens` to regenerate outputs
-3. Generated files go to `/build` (development)
-4. Run `yarn build` to include in `/dist` (published package)
-
-## Development
-
-### Linting & Formatting
-
-This project uses ESLint for linting and Prettier for code formatting.
-
-```bash
-# Lint code
-yarn lint
-
-# Fix linting issues
-yarn lint:fix
-
-# Format code
-yarn format
-
-# Check formatting
-yarn format:check
-```
-
-**Pre-commit hooks:** Linting and formatting run automatically on staged files before each commit.
-
-### CI/CD Workflows
-
-GitHub Actions automatically run on pull requests:
-
-- **Lint** - Runs ESLint, Prettier checks, and TypeScript type checking
-- **Unit Tests** - Runs component tests and uploads coverage to Codecov
-- **Accessibility Tests** - Runs a11y tests with axe-core and uploads coverage
-
-Test reports are generated as JUnit XML files:
-
-- Unit tests: `reports/unit-junit.xml`
-- A11y tests: `reports/a11y-junit.xml`
-
-These paths are configurable via the `VITEST_JUNIT_OUTPUT` environment variable:
-
-```bash
-# Generate a custom report path
-VITEST_JUNIT_OUTPUT=./reports/my-test-report.xml yarn test
-
-# Example: Generate separate reports locally
-VITEST_JUNIT_OUTPUT=./reports/unit-junit.xml yarn test -- --exclude "**/*.a11y.test.tsx"
-VITEST_JUNIT_OUTPUT=./reports/a11y-junit.xml yarn test:a11y
-```
-
-### Storybook Deployments
-
-This project uses [Vercel](https://vercel.com) to automatically deploy Storybook:
-
-**Production Deployment** (main branch):
-
-- Located at [design-system-8bmbp4q1g-startribune-team-one.vercel.app](design-system-8bmbp4q1g-startribune-team-one.vercel.app)
-- Deploys automatically when code is merged to `main`
-- Stable, always-available URL for the latest components
-- Share this URL with your team and stakeholders
-
-**Preview Deployments** (pull requests):
-
-- Every PR gets a unique preview URL posted as a comment
-- Test changes before merging
-- Perfect for designer/stakeholder review
-- Auto-updates on every commit
-
-**Version Dropdown**:
-
-- The Storybook header includes a version selector to switch between released versions
-- The list is synced from Vercel production deployments (daily at 9am CST, after tag deploys, or manually)
-- See [docs/storybook-version-sync.md](docs/storybook-version-sync.md) for details
-
-## Releases
-
-This project uses [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) for versioning and publishing.
-
-### Creating a Release
-
-1. **Merge your PRs to `main`** - All changes you want in the release
-2. **Go to GitHub** → Releases → **"Draft a new release"**
-3. **Create a new tag** following [semver](https://semver.org/):
-   - `v1.0.0` - Major version (breaking changes)
-   - `v0.1.0` - Minor version (new features)
-   - `v0.0.8` - Patch version (bug fixes)
-4. **Write release notes** - Describe what changed
-5. **Click "Publish release"**
-
-### What Happens Automatically
-
-When you publish a release, GitHub Actions will:
-
-1. ✅ Extract version from your tag (e.g., `v0.1.0` → `0.1.0`)
-2. ✅ Update `package.json` with the new version
-3. ✅ Build the package (includes token generation)
-4. ✅ Publish to GitHub Packages
-5. ✅ Commit the version bump back to `main`
-
-**No local `yarn publish` needed!** Everything happens in CI/CD.
-
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing, along with [React Testing Library](https://testing-library.com/react) for component testing and [axe](https://github.com/dequelabs/axe-core) for accessibility testing.
-
-### Running Tests
-
-```bash
-# Run all tests (unit + a11y)
-yarn test
-
-# Run a specific test
-yarn test path/to/test.test.tsx
-
-# Run tests in watch mode
-yarn test:watch
-
-# Run only accessibility tests
-yarn test:a11y
-
-# Generate coverage report
-yarn test:coverage
-```
-
-### Test Organization
-
-Tests are colocated alongside components:
-
-- `*.test.tsx` - Unit tests for component logic and behavior
-- `*.a11y.test.tsx` - Accessibility tests using axe-core
-
-Use the `@/test-utils/a11y` helpers for cleaner a11y tests:
+If you need manual font loading (e.g., for non-React usage), you can use the exported utilities:
 
 ```tsx
-import { expectNoA11yViolations } from '@/test-utils/a11y';
+import { getBrandFontPath, loadBrandFonts } from '@minneapolisstartribune/design-system';
 
-it('has no a11y violations', async () => {
-  await expectNoA11yViolations(<Button label="Test" onClick={() => {}} />);
-});
+// Load fonts for a specific brand
+loadBrandFonts('startribune');
+
+// Get the font path for a brand
+const fontPath = getBrandFontPath('startribune');
 ```
+
+## Troubleshooting
+
+### CSS Variables Not Loading
+
+**Symptoms:** Components appear unstyled or with default browser styles.
+
+**Solutions:**
+
+1. Verify the theme CSS file is imported before components render
+2. Check the Network tab to ensure the CSS file loaded (look for `{brand}-{colorScheme}.css`)
+3. Ensure the import path is correct: `@minneapolisstartribune/design-system/dist/themes/{brand}-{colorScheme}.css`
+4. For dynamic loading, verify the link element is added to `<head>` before React renders
+
+### Theme Not Applying
+
+**Symptoms:** Components render but don't match the expected theme colors.
+
+**Solutions:**
+
+1. Verify `brand` prop matches the CSS file brand (`'startribune'` or `'varsity'`)
+2. Verify `forceColorScheme` prop matches the CSS file (`'light'` or `'dark'`)
+3. Check that `DesignSystemProvider` wraps all components that need theming
+4. Inspect computed styles in DevTools to see if CSS variables are defined
+
+### Component Styling Issues
+
+**Symptoms:** Components render but styling looks wrong.
+
+**Solutions:**
+
+1. Ensure `DesignSystemProvider` is wrapping your components
+2. Verify you're using the correct brand/theme combination
+3. Check that Mantine peer dependencies are installed and compatible
+4. Clear your build cache and rebuild: `rm -rf node_modules/.cache && yarn build` (or `npm run build`)
+
+### Build/Bundler Configuration Issues
+
+**Symptoms:** Import errors or CSS not being processed.
+
+**Solutions:**
+
+1. **Vite:** No special configuration needed - CSS imports work out of the box
+2. **Webpack/CRA:** May need to configure CSS loader. Ensure CSS files in `node_modules` are processed
+3. **TypeScript:** Ensure `@minneapolisstartribune/design-system` is in your `tsconfig.json` types
+4. **Module resolution:** Verify your bundler can resolve packages from GitHub Packages registry
+
+### Authentication Issues
+
+**Symptoms:** `npm install` or `yarn add` fails with 404 or authentication errors.
+
+**Solutions:**
+
+1. Verify your `.npmrc` or `.yarnrc` is configured correctly (see [Installation](#installation))
+2. Check that your GitHub token has `read:packages` scope
+3. Ensure the token hasn't expired
+4. For CI/CD, verify the token is set as a secret/environment variable
+
+### Still Having Issues?
+
+- Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples
+- Review component source code in the repository
+- Open an issue on GitHub with details about your setup and error messages
