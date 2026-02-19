@@ -1,19 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
-import { AnalyticsProvider } from '../../providers/AnalyticsProvider';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
-  parameters: {
-    docs: {
-      description: {
-        component:
-          'Analytics-ready: Button emits `button_click` events on click. Brands wrap with `AnalyticsProvider` and merge with page metadata. See "With Analytics" story.',
-      },
-    },
-  },
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -29,10 +20,6 @@ const meta = {
       control: 'select',
       options: [...BUTTON_SIZES] as string[],
       description: 'The size of the button',
-    },
-    analytics: {
-      description:
-        'Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name).',
     },
   },
 } satisfies Meta<typeof Button>;
@@ -65,52 +52,5 @@ export const ButtonWithIcon: Story = {
     variant: 'filled',
     icon: 'camera-filled',
     iconPosition: 'start',
-  },
-};
-
-export const WithPerButtonAnalytics: Story = {
-  args: {
-    label: 'Subscribe',
-    variant: 'filled',
-    color: 'brand',
-    analytics: { cta_type: 'subscribe', module_position: 'hero' },
-  },
-  decorators: [
-    (Story) => (
-      <AnalyticsProvider onTrackingEvent={action('onTrackingEvent')}>
-        <Story />
-      </AnalyticsProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Pass `analytics` prop to add per-button tracking data. Each button can send different context (cta_type, module_name, etc.).',
-      },
-    },
-  },
-};
-
-export const WithAnalytics: Story = {
-  args: {
-    label: 'Subscribe',
-    variant: 'filled',
-    color: 'brand',
-  },
-  decorators: [
-    (Story) => (
-      <AnalyticsProvider onTrackingEvent={action('onTrackingEvent')}>
-        <Story />
-      </AnalyticsProvider>
-    ),
-  ],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'With AnalyticsProvider, clicks emit tracking events. Check the Actions panel to see the payload brands would receive (event, component, label, etc.).',
-      },
-    },
   },
 };
