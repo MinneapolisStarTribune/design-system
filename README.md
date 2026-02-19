@@ -189,6 +189,8 @@ function App() {
 }
 ```
 
+**Analytics (optional):** Components emit tracking events on interaction. Wrap with `AnalyticsProvider` and pass your `onTrackingEvent` handler to plug in GA4, Piano, etc. See [docs/analytics-integration.md](docs/analytics-integration.md).
+
 **Important notes:**
 
 - The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
