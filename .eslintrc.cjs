@@ -14,7 +14,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['react', '@typescript-eslint', 'unicorn', 'unused-imports'],
+  plugins: ['react', '@typescript-eslint', 'unicorn', 'unused-imports', 'simple-import-sort'],
   settings: {
     react: {
       version: 'detect',
@@ -92,6 +92,13 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
+    {
+      // Index files - sort exports alphabetically
+      files: ['src/index.ts', 'src/components/index.ts'],
+      rules: {
+        'simple-import-sort/exports': 'error',
       },
     },
   ],
