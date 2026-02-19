@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import svgr from 'vite-plugin-svgr';
+import dts from 'vite-plugin-dts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +25,18 @@ export default defineConfig({
         icon: true,
       },
       include: '**/*.svg?react',
+    }),
+    dts({
+      include: ['src/**/*'],
+      exclude: [
+        'src/**/*.test.tsx',
+        'src/**/*.test.ts',
+        'src/**/*.stories.tsx',
+        'src/**/*.stories.ts',
+      ],
+      outDir: 'dist',
+      insertTypesEntry: true,
+      rollupTypes: true,
     }),
   ],
   build: {
