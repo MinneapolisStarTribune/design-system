@@ -90,16 +90,29 @@ src/
 2. **Components barrel**: Export from `src/components/index.ts`
 3. **Main entry**: Export from `src/index.ts` (public API)
 
+### Export Pattern
+
+All component exports follow a consistent pattern:
+
+```typescript
+export { Component, type ComponentProps } from './path';
+```
+
+This means each component is exported alongside its main Props type. Nested types (like `ButtonColor`, `NewsHeadingImportance`, etc.) are not exported separately, as they can be accessed via TypeScript indexed access types:
+
+```typescript
+// Consumers can access nested types using indexed access
+type ButtonColor = ButtonProps['color'];
+type NewsHeadingImportance = NewsHeadingProps['importance'];
+```
+
 ### Export Example
 
 ```typescript
-// src/components/Button/index.ts
-export { Button } from './Button';
-export type { ButtonProps, ButtonColor } from './types';
-
 // src/components/index.ts
-export * from './Button';
-export * from './Icon';
+export { Button, type ButtonProps } from './Button/Button';
+export { Icon, type IconProps } from './Icon/Icon';
+export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsHeading/NewsHeading';
 
 // src/index.ts
 export * from './components';
