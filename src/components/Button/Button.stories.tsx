@@ -77,11 +77,7 @@ export const WithPerButtonAnalytics: Story = {
   },
   decorators: [
     (Story) => (
-      <AnalyticsProvider
-        onTrackingEvent={(event) => {
-          console.log('[Analytics] Event with custom data:', event);
-        }}
-      >
+      <AnalyticsProvider onTrackingEvent={action('onTrackingEvent')}>
         <Story />
       </AnalyticsProvider>
     ),
@@ -104,11 +100,7 @@ export const WithAnalytics: Story = {
   },
   decorators: [
     (Story) => (
-      <AnalyticsProvider
-        onTrackingEvent={(event) => {
-          console.log('[Analytics] Event received:', event);
-        }}
-      >
+      <AnalyticsProvider onTrackingEvent={action('onTrackingEvent')}>
         <Story />
       </AnalyticsProvider>
     ),
@@ -117,7 +109,7 @@ export const WithAnalytics: Story = {
     docs: {
       description: {
         story:
-          'With AnalyticsProvider, clicks emit tracking events. Open DevTools console to see the payload brands would receive (event, component, label, etc.).',
+          'With AnalyticsProvider, clicks emit tracking events. Check the Actions panel to see the payload brands would receive (event, component, label, etc.).',
       },
     },
   },
