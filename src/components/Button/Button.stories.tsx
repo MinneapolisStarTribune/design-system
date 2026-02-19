@@ -5,7 +5,6 @@ import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
 const meta = {
   title: 'Components/Button',
   component: Button,
-  parameters: {},
   tags: ['autodocs'],
   argTypes: {
     variant: {
