@@ -16,7 +16,8 @@ const meta = {
     },
     id: {
       control: 'text',
-      description: 'ID for the label element (falls back to FormGroup context labelId when inside FormGroup)',
+      description:
+        'ID for the label element (falls back to FormGroup context labelId when inside FormGroup)',
     },
     htmlFor: {
       control: 'text',

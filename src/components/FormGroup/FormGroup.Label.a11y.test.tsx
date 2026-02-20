@@ -31,11 +31,7 @@ describe('FormGroupLabel Accessibility', () => {
       const inputId = 'test-id-input';
       await expectNoA11yViolations(
         <>
-          <FormGroupLabel
-            id="test-label"
-            htmlFor={inputId}
-            dataTestId="form-group-label"
-          >
+          <FormGroupLabel id="test-label" htmlFor={inputId} dataTestId="form-group-label">
             Label with test id
           </FormGroupLabel>
           <input id={inputId} type="text" aria-labelledby="test-label" />
