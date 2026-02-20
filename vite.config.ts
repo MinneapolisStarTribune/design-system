@@ -33,6 +33,7 @@ export default defineConfig({
         'src/**/*.test.ts',
         'src/**/*.stories.tsx',
         'src/**/*.stories.ts',
+        'src/test-utils/**/*',
       ],
       outDir: 'dist',
       insertTypesEntry: true,
@@ -40,6 +41,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    emptyOutDir: false,
     lib: {
       entry: 'src/index.ts',
       formats: ['es'],
