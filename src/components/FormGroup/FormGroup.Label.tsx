@@ -2,7 +2,7 @@ import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
 import { UtilityBody } from '../Typography/Utility/UtilityBody/UtilityBody';
-import { UtilityLabel } from '../Typography/Utility/UtilityLabel/UtilityLabel'
+import { UtilityLabel } from '../Typography/Utility/UtilityLabel/UtilityLabel';
 
 export interface FormGroupLabelProps extends BaseProps {
   children: React.ReactNode;
@@ -29,15 +29,15 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
         id={id}
         htmlFor={htmlForValue}
         // size and weight are always the same
-        size = 'medium'
-        weight = 'bold'
+        size="medium"
+        weight="bold"
         data-testid={dataTestId}
       >
         {children}
       </UtilityLabel>
       {required && (
         <UtilityBody
-        // size and weight are the always the same
+          // size and weight are always the same
           size="xx-small"
           weight="regular"
           style={{ margin: 0 }}

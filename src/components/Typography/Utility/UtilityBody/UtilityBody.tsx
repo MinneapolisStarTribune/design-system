@@ -22,7 +22,12 @@ export const UtilityBody: React.FC<UtilityBodyProps> = ({
   const typographyClassName = `typography-utility-text-${weight}-${size}`;
 
   return (
-    <p className={classNames(typographyClassName, className)} data-testid={dataTestId} style={style} {...props}>
+    <p
+      className={classNames(typographyClassName, className)}
+      data-testid={dataTestId}
+      style={style}
+      {...props}
+    >
       {children}
     </p>
   );

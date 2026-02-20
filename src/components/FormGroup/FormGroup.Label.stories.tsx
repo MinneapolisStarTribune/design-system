@@ -20,7 +20,8 @@ const meta = {
     },
     htmlFor: {
       control: 'text',
-      description: 'Associates the label with a form control by id (falls back to FormGroup context inputId when inside FormGroup)',
+      description:
+        'Associates the label with a form control by id (falls back to FormGroup context inputId when inside FormGroup)',
     },
     required: {
       control: 'boolean',
