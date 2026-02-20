@@ -28,6 +28,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
       <UtilityLabel
         id={id}
         htmlFor={htmlForValue}
+        // size and weight are always the same
         size = 'medium'
         weight = 'bold'
         data-testid={dataTestId}
@@ -36,6 +37,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
       </UtilityLabel>
       {required && (
         <UtilityBody
+        // size and weight are the always the same
           size="xx-small"
           weight="regular"
           style={{ margin: 0 }}
