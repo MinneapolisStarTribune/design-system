@@ -39,7 +39,7 @@ jobs:
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
       - name: Run Chromatic
-        uses: chromaui/action@v13
+        uses: chromaui/action@v15
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
