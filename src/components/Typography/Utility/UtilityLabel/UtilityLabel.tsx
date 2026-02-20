@@ -23,8 +23,6 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   children,
   className,
   dataTestId,
-  id,
-  htmlFor,
   ...rest
 }) => {
   // Generate typography class name based on props
