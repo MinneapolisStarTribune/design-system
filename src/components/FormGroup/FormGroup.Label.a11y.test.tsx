@@ -1,4 +1,3 @@
-import React from 'react';
 import { expectNoA11yViolations } from '@/test-utils/a11y';
 import { FormGroupLabel } from './FormGroup.Label';
 
