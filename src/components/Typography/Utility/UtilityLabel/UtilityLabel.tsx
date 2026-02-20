@@ -11,7 +11,9 @@ export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
   size: UtilityLabelSize;
   weight?: UtilityLabelWeight;
   capitalize?: boolean;
+  id?: string;
   children: React.ReactNode;
+  htmlFor?: string;
 }
 
 export const UtilityLabel: React.FC<UtilityLabelProps> = ({
@@ -21,6 +23,8 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   children,
   className,
   dataTestId,
+  id,
+  htmlFor,
   ...rest
 }) => {
   // Generate typography class name based on props
