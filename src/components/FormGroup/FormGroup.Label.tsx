@@ -30,7 +30,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
         htmlFor={htmlForValue}
         // size and weight are always the same
         size="medium"
-        weight="bold"
+        weight="semibold"
         data-testid={dataTestId}
       >
         {children}
