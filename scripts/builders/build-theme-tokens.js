@@ -21,11 +21,14 @@ async function buildThemeTokens(brand, mode) {
   // Create Style Dictionary instance with the configuration
   const sd = new StyleDictionary(config);
   
-  // Build all platforms (in this case, just CSS)
-  // This reads token files, resolves references, and generates the CSS file
+  // Build all platforms (CSS for web, JavaScript for mobile)
+  // This reads token files, resolves references, and generates:
+  // - CSS file for web (dist/themes/{brand}-{mode}.css)
+  // - JavaScript file for mobile (dist/mobile/{brand}-{mode}.js)
+  // TypeScript can infer types from the JSON exports - no .d.ts files needed
   await sd.buildAllPlatforms();
 
-  console.log(`✓ ${brand}-${mode} tokens built`);
+  console.log(`✓ ${brand}-${mode} tokens built (CSS, JS)`);
 }
 
 module.exports = buildThemeTokens;
