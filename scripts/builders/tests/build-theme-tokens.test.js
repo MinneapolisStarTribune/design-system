@@ -7,8 +7,12 @@ vi.mock('../../formats/css-variables', () => ({
 }));
 
 describe('buildThemeTokens', () => {
+  let existsSyncSpy;
+  let logSpy;
+
   beforeEach(() => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+    existsSyncSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -19,14 +23,28 @@ describe('buildThemeTokens', () => {
     const brand = 'startribune';
     const mode = 'light';
 
-    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
     await buildThemeTokens(brand, mode);
 
-    expect(fs.existsSync).toHaveBeenCalled();
-    
-    expect(logSpy).toHaveBeenCalled();
+    expect(existsSyncSpy).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('startribune-light tokens built (CSS, JS)'));
+  });
 
-    logSpy.mockRestore();
+  it('logs processing message before building', async () => {
+    await buildThemeTokens('startribune', 'light');
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('Processing: startribune-light'));
+  });
+
+  it('builds tokens for different brand and mode combinations', async () => {
+    await buildThemeTokens('varsity', 'dark');
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('varsity-dark tokens built (CSS, JS)'));
+  });
+
+  it('indicates both CSS and JavaScript outputs in success message', async () => {
+    await buildThemeTokens('startribune', 'light');
+
+    // Verify the success message mentions both CSS and JS
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('tokens built (CSS, JS)'));
   });
 });
