@@ -18,6 +18,7 @@
  * in the tokens/ directory.
  *
  * Output files:
+ * Web Files:
  * - dist/themes/startribune-light.css
  * - dist/themes/startribune-dark.css
  * - dist/themes/varsity-light.css
@@ -28,8 +29,18 @@
  * - dist/fonts/utility/varsity-fonts.css (shared + varsity overrides)
  * - dist/fonts/startribune.css (@font-face from tokens/fonts/startribune.json)
  * - dist/fonts/varsity.css (@font-face from tokens/fonts/varsity.json)
+ * Mobile JavaScript Files (no .d.ts files - TypeScript can infer types from JSON exports):
+ * - dist/mobile/startribune-light.js
+ * - dist/mobile/startribune-dark.js
+ * - dist/mobile/varsity-light.js
+ * - dist/mobile/varsity-dark.js
+ * - dist/mobile/startribune-fonts.js
+ * - dist/mobile/varsity-fonts.js
+ * - dist/mobile/startribune-typography.js
+ * - dist/mobile/varsity-typography.js
  *
- * Each theme file contains CSS variables in :root that can be imported and used in applications.
+ * Each theme file contains CSS variables in :root that can be imported and used in web applications.
+ * Each mobile token file contains JavaScript ES6 modules that can be imported in React Native applications.
  * Each fonts file contains typography utility classes.
  *
  * Usage:
@@ -40,17 +51,22 @@
  * The script:
  * 1. Reads token JSON files from the tokens/ directory
  * 2. Resolves token references (e.g., {color.neutral.500})
- * 3. Formats tokens as CSS variables
+ * 3. Formats tokens as CSS variables (for web) and JavaScript ES6 modules (for mobile)
  * 4. Writes CSS files to dist/themes/
- * 5. Generates editorial typography classes to dist/fonts/editorial/
- * 6. Generates utility typography classes to dist/fonts/utility/ (shared.json common for both)
- * 7. Generates @font-face CSS from tokens/fonts/ to dist/fonts/{brand}.css
+ * 5. Writes JavaScript token files to dist/mobile/ (TypeScript can infer types from JSON exports)
+ * 7. Generates editorial typography classes to dist/fonts/editorial/
+ * 8. Generates utility typography classes to dist/fonts/utility/ (shared.json common for both)
+ * 9. Generates @font-face CSS from tokens/fonts/ to dist/fonts/{brand}.css (web)
+ * 10. Generates mobile font tokens from tokens/fonts/ to dist/mobile/{brand}-fonts.js (React Native)
+ * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/{brand}-typography.js (React Native)
  */
 
 const buildThemeTokens = require('./builders/build-theme-tokens');
 const buildTypographyClasses = require('./builders/build-typography-classes');
 const buildUtilityTypographyClasses = require('./builders/build-utility-typography-classes');
 const buildFontFaces = require('./builders/build-font-faces');
+const buildMobileFonts = require('./builders/build-mobile-fonts');
+const buildMobileTypography = require('./builders/build-mobile-typography');
 
 /**
  * Main Build Function
@@ -68,8 +84,8 @@ const buildFontFaces = require('./builders/build-font-faces');
  *
  * Process:
  * 1. Iterates through all brand/mode combinations
- * 2. Creates Style Dictionary configuration for each
- * 3. Builds CSS file using Style Dictionary
+ * 2. Creates Style Dictionary configuration for each (CSS, JavaScript, TypeScript platforms)
+ * 3. Builds CSS files, JavaScript token files, and TypeScript declarations using Style Dictionary
  * 4. Builds typography classes for each brand
  * 5. Logs progress and completion
  *
@@ -111,6 +127,22 @@ async function buildTokens() {
 
   for (const brand of brands) {
     await buildFontFaces(brand);
+  }
+
+  // Build mobile font tokens from tokens/fonts/ (startribune.json, varsity.json)
+  console.log('\n==============================================');
+  console.log('Building mobile font tokens...');
+
+  for (const brand of brands) {
+    await buildMobileFonts(brand);
+  }
+
+  // Build mobile typography tokens from tokens/typography/ (editorial + utility)
+  console.log('\n==============================================');
+  console.log('Building mobile typography tokens...');
+
+  for (const brand of brands) {
+    await buildMobileTypography(brand);
   }
 
   console.log('\n==============================================');
