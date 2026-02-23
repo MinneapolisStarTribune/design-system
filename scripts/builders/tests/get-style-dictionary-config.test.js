@@ -30,6 +30,8 @@ describe('getStyleDictionaryConfig', () => {
     expect(config.platforms.css.transformGroup).toBe('css');
     expect(config.platforms.css.buildPath).toBe('dist/themes/');
     expect(config.platforms.css.files[0].destination).toBe('startribune-light.css');
+    expect(config.platforms.javascript.buildPath).toBe('dist/mobile/');
+    expect(config.platforms.javascript.files[0].destination).toBe('startribune-light.js');
 
     // Verify source files
     expect(config.source).toHaveLength(7);
