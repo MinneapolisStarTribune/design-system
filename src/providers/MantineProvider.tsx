@@ -11,20 +11,29 @@ export interface DesignSystemProviderProps {
   brand: Brand;
   forceColorScheme?: ColorScheme;
   children: React.ReactNode;
+  /**
+   * Set to true when the consumer handles font loading via SSR (e.g. Next.js layout.tsx).
+   * Prevents the client-side <link> injection that would 404 if fonts are not at the
+   * relative path this package expects.
+   * @default false
+   */
+  disableFontInjection?: boolean;
 }
 
 export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   brand,
   forceColorScheme = 'light',
   children,
+  disableFontInjection = false,
 }) => {
-  // Load brand-specific fonts when brand changes.
-  // In production: brand is set once, fonts load once.
-  // In Storybook: brand may change dynamically, fonts load as needed.
-  // loadBrandFonts is idempotent and prevents duplicate link elements.
+  // Load brand-specific fonts by injecting a <link> element.
+  // Skip when the consumer handles font loading via SSR to avoid a 404
+  // (the relative path here resolves to /fonts/font-face/<brand>.css which
+  // won't exist unless the consumer explicitly serves it there).
   useEffect(() => {
+    if (disableFontInjection) return;
     loadBrandFonts(brand);
-  }, [brand]);
+  }, [brand, disableFontInjection]);
 
   // Recreate theme when brand or colorScheme changes
   const theme = useMemo(
