@@ -19,16 +19,16 @@
  *
  * Output files:
  * Web Files:
- * - dist/themes/startribune-light.css
- * - dist/themes/startribune-dark.css
- * - dist/themes/varsity-light.css
- * - dist/themes/varsity-dark.css
- * - dist/fonts/editorial/startribune-fonts.css
- * - dist/fonts/editorial/varsity-fonts.css
- * - dist/fonts/utility/startribune-fonts.css (shared + startribune overrides)
- * - dist/fonts/utility/varsity-fonts.css (shared + varsity overrides)
- * - dist/fonts/startribune.css (@font-face from tokens/fonts/startribune.json)
- * - dist/fonts/varsity.css (@font-face from tokens/fonts/varsity.json)
+ * - dist/web/themes/startribune-light.css
+ * - dist/web/themes/startribune-dark.css
+ * - dist/web/themes/varsity-light.css
+ * - dist/web/themes/varsity-dark.css
+ * - dist/web/fonts/editorial/startribune-fonts.css
+ * - dist/web/fonts/editorial/varsity-fonts.css
+ * - dist/web/fonts/utility/startribune-fonts.css (shared + startribune overrides)
+ * - dist/web/fonts/utility/varsity-fonts.css (shared + varsity overrides)
+ * - dist/web/fonts/font-face/startribune.css (@font-face from tokens/fonts/startribune.json)
+ * - dist/web/fonts/font-face/varsity.css (@font-face from tokens/fonts/varsity.json)
  * Mobile JavaScript Files (no .d.ts files - TypeScript can infer types from JSON exports):
  * - dist/mobile/startribune-light.js
  * - dist/mobile/startribune-dark.js
@@ -52,11 +52,11 @@
  * 1. Reads token JSON files from the tokens/ directory
  * 2. Resolves token references (e.g., {color.neutral.500})
  * 3. Formats tokens as CSS variables (for web) and JavaScript ES6 modules (for mobile)
- * 4. Writes CSS files to dist/themes/
+ * 4. Writes CSS files to dist/web/themes/
  * 5. Writes JavaScript token files to dist/mobile/ (TypeScript can infer types from JSON exports)
- * 7. Generates editorial typography classes to dist/fonts/editorial/
- * 8. Generates utility typography classes to dist/fonts/utility/ (shared.json common for both)
- * 9. Generates @font-face CSS from tokens/fonts/ to dist/fonts/{brand}.css (web)
+ * 7. Generates editorial typography classes to dist/web/fonts/editorial/
+ * 8. Generates utility typography classes to dist/web/fonts/utility/ (shared.json common for both)
+ * 9. Generates @font-face CSS from tokens/fonts/ to dist/web/fonts/font-face/{brand}.css (web)
  * 10. Generates mobile font tokens from tokens/fonts/ to dist/mobile/{brand}-fonts.js (React Native)
  * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/{brand}-typography.js (React Native)
  */
@@ -79,8 +79,8 @@ const buildMobileTypography = require('./builders/build-mobile-typography');
  * - varsity + dark → varsity-dark.css
  *
  * Also generates typography class files:
- * - dist/fonts/editorial/: startribune-fonts.css, varsity-fonts.css (editorial only)
- * - dist/fonts/utility/: startribune-fonts.css, varsity-fonts.css (shared + brand overrides)
+ * - dist/web/fonts/editorial/: startribune-fonts.css, varsity-fonts.css (editorial only)
+ * - dist/web/fonts/utility/: startribune-fonts.css, varsity-fonts.css (shared + brand overrides)
  *
  * Process:
  * 1. Iterates through all brand/mode combinations
