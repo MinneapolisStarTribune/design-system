@@ -1,9 +1,21 @@
 {
   "name": "@minneapolisstartribune/design-system",
   "version": "0.1.3",
-  "main": "dist/design-system.cjs.js",
-  "module": "dist/design-system.es.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/web/design-system.es.js",
+  "module": "dist/web/design-system.es.js",
+  "types": "dist/web/index.web.d.ts",
+  "exports": {
+    "./web": {
+      "types": "./dist/web/index.web.d.ts",
+      "import": "./dist/web/design-system.es.js",
+      "default": "./dist/web/design-system.es.js"
+    },
+    "./native": {
+      "types": "./dist/mobile/index.native.d.ts",
+      "import": "./dist/mobile/design-system.es.js",
+      "default": "./dist/mobile/design-system.es.js"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -80,7 +92,8 @@
     "@mantine/core": "^7.15.0",
     "@mantine/hooks": "^7.15.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-native": ">=0.73.0"
   },
   "scripts": {
     "tokens": "node scripts/builders/build-tokens.js",
@@ -88,7 +101,9 @@
     "tokens:mantine": "node scripts/builders/build-mantine-tokens.js && prettier --write \"src/generated/**/*.ts\"",
     "icons": "node scripts/builders/build-icon-mapping.js && prettier --write src/components/Icon/iconOptions.ts",
     "clean:dist": "rm -rf dist",
-    "build": "npm run clean:dist && npm run tokens && npm run tokens:mantine && npm run icons && cross-env NODE_ENV=production vite build",
+    "build": "npm run clean:dist && npm run tokens && npm run tokens:mantine && npm run icons && npm run build:web && npm run build:native",
+    "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
+    "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
     "storybook": "node scripts/builders/build-if-needed.js && storybook dev -p 6006",
     "build-storybook": "npm run tokens && npm run tokens:mantine && npm run icons && storybook build",
     "test": "vitest run",
