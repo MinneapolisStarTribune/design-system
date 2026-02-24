@@ -5,7 +5,14 @@
 export { createEditorialHeading } from './createEditorialHeading';
 export type * from './types';
 
+export { EnterpriseHeading } from './EnterpriseHeading/EnterpriseHeading';
+export type {
+  EnterpriseHeadingImportance,
+  EnterpriseHeadingProps,
+} from './EnterpriseHeading/EnterpriseHeading';
+
 export { EditorialText, type EditorialTextProps } from './EditorialText/EditorialText';
+
 export {
   EditorialSponsoredText,
   type EditorialSponsoredTextProps,
