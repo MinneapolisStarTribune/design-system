@@ -91,7 +91,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         transformGroup: 'css',
         
         // Output directory for generated CSS files
-        buildPath: `dist/themes/`,
+        buildPath: `dist/web/themes/`,
         
         // File generation configuration
         files: [

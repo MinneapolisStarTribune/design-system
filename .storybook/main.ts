@@ -18,7 +18,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
-  staticDirs: ['../dist'],
+  staticDirs: ['../dist/web'],
 
   // Vite configuration to handle path aliases
   async viteFinal(config) {

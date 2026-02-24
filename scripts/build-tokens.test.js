@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 
 describe('build-tokens.js', () => {
   const projectRoot = path.join(__dirname, '..');
-  const themesDir = path.join(projectRoot, 'dist', 'themes');
+  const themesDir = path.join(projectRoot, 'dist', 'web', 'themes');
   const expectedFiles = [
     'startribune-light.css',
     'startribune-dark.css',

@@ -58,10 +58,10 @@ function shouldRebuildTokens() {
   
   // Output files: generated CSS files
   const tokenOutputFiles = [
-    'dist/themes/startribune-light.css',
-    'dist/themes/startribune-dark.css',
-    'dist/themes/varsity-light.css',
-    'dist/themes/varsity-dark.css',
+    'dist/web/themes/startribune-light.css',
+    'dist/web/themes/startribune-dark.css',
+    'dist/web/themes/varsity-light.css',
+    'dist/web/themes/varsity-dark.css',
   ].map(file => path.join(projectRoot, file));
   
   // Check if any output file is missing

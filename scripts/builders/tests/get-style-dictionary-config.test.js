@@ -28,7 +28,7 @@ describe('getStyleDictionaryConfig', () => {
     // Verify config structure
     expect(config.log.verbosity).toBe('verbose');
     expect(config.platforms.css.transformGroup).toBe('css');
-    expect(config.platforms.css.buildPath).toBe('dist/themes/');
+    expect(config.platforms.css.buildPath).toBe('dist/web/themes/');
     expect(config.platforms.css.files[0].destination).toBe('startribune-light.css');
     expect(config.platforms.javascript.buildPath).toBe('dist/mobile/');
     expect(config.platforms.javascript.files[0].destination).toBe('startribune-light.js');

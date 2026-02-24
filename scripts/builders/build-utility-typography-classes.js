@@ -8,7 +8,7 @@ const typographyClassesFormat = require('../formats/typography-classes');
  *
  * Generates CSS utility classes from typography.utility tokens.
  * Loads shared.json (common for both brands) then brand-specific overrides.
- * Output goes to dist/fonts/utility/ so utility CSS is separate from editorial.
+ * Output goes to dist/web/fonts/utility/ so utility CSS is separate from editorial.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Promise<void>} Resolves when utility typography classes are built
@@ -47,7 +47,7 @@ async function buildUtilityTypographyClasses(brand) {
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: 'dist/fonts/utility/',
+        buildPath: 'dist/web/fonts/utility/',
         files: [
           {
             destination: `${brand}.css`,
