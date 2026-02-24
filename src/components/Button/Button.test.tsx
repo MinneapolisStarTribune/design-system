@@ -71,4 +71,69 @@ describe('Button', () => {
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
+
+  describe('analytics', () => {
+    it('emits tracking event on click when AnalyticsProvider is present', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <Button label="Subscribe" onClick={vi.fn()} data-testid="button" />,
+        { mockOnTrackingEvent }
+      );
+
+      getByTestId('button').click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledTimes(1);
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'button_click',
+          component: 'Button',
+          label: 'Subscribe',
+          variant: 'filled',
+          color: 'neutral',
+        })
+      );
+    });
+
+    it('merges analytics prop into tracking event', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <Button
+          label="Subscribe"
+          onClick={vi.fn()}
+          analytics={{ cta_type: 'subscribe', module_position: 'hero' }}
+          data-testid="button"
+        />,
+        { mockOnTrackingEvent }
+      );
+
+      getByTestId('button').click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'button_click',
+          component: 'Button',
+          cta_type: 'subscribe',
+          module_position: 'hero',
+        })
+      );
+    });
+
+    it('includes icon in tracking event when present', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <Button label="Share" onClick={vi.fn()} icon="share" data-testid="button" />,
+        { mockOnTrackingEvent }
+      );
+
+      getByTestId('button').click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'button_click',
+          component: 'Button',
+          icon: 'share',
+        })
+      );
+    });
+  });
 });

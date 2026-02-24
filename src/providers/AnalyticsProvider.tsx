@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useMemo } from 'react';
 import type { OnTrackingEvent } from '../types/analytics';
 
 export interface AnalyticsContextValue {
@@ -45,9 +45,9 @@ export const AnalyticsProvider: React.FC<AnalyticsProviderProps> = ({
   warnWhenUnhandled = false,
   children,
 }) => {
-  const value: AnalyticsContextValue = {
-    onTrackingEvent,
-    warnWhenUnhandled,
-  };
+  const value = useMemo(
+    () => ({ onTrackingEvent, warnWhenUnhandled }),
+    [onTrackingEvent, warnWhenUnhandled]
+  );
   return <AnalyticsContext.Provider value={value}>{children}</AnalyticsContext.Provider>;
 };
