@@ -11,6 +11,7 @@ export const COMPONENT_NAMES = [
   'OpinionHeading',
   'FormGroup',
   'FormControl',
+  'SponsoredHeading',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];
