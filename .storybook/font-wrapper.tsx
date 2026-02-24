@@ -7,8 +7,8 @@
  *
  * Why this exists:
  * - Our design system uses brand-specific fonts (@font-face definitions) and typography
- *   classes that are defined in CSS files (dist/fonts/font-face/{brand}.css,
- *   dist/fonts/utility/{brand}.css, dist/fonts/editorial/{brand}.css)
+ *   classes that are defined in CSS files (dist/web/fonts/font-face/{brand}.css,
+ *   dist/web/fonts/utility/{brand}.css, dist/web/fonts/editorial/{brand}.css)
  * - These CSS files must be loaded into the DOM for components to use the fonts
  * - Storybook needs to dynamically switch between brands (startribune/varsity) based
  *   on user selection in the toolbar

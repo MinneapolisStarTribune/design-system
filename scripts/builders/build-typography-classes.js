@@ -7,7 +7,7 @@ const typographyClassesFormat = require('../formats/typography-classes');
  * Build Editorial Typography Classes for a Brand
  *
  * Generates CSS classes from typography.editorial tokens only.
- * Output goes to dist/fonts/editorial/. Utility typography is built separately to dist/fonts/utility/.
+ * Output goes to dist/web/fonts/editorial/. Utility typography is built separately to dist/web/fonts/utility/.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Promise<void>} Resolves when editorial typography classes are built
@@ -44,7 +44,7 @@ async function buildTypographyClasses(brand) {
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: 'dist/fonts/editorial/',
+        buildPath: 'dist/web/fonts/editorial/',
         files: [
           {
             destination: `${brand}.css`,
