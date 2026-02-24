@@ -4,7 +4,10 @@ import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
 import { FormGroupLabel, type FormGroupLabelProps } from './FormGroupLabel';
-import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroupDescription';
+import {
+  FormGroupDescription,
+  type FormGroupDescriptionProps,
+} from './FormGroup.Description';
 import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroupCaption';
 import { FormGroupProvider } from './FormGroupContext';
 
@@ -65,5 +68,5 @@ FormGroup.Caption = FormGroupCaption;
 
 // Re-export types so they come from one place
 export type { FormGroupLabelProps } from './FormGroupLabel';
-export type { FormGroupDescriptionProps } from './FormGroupDescription';
+export type { FormGroupDescriptionProps } from './FormGroup.Description';
 export type { FormGroupCaptionProps } from './FormGroupCaption';
