@@ -44,7 +44,7 @@
  * Each fonts file contains typography utility classes.
  *
  * Usage:
- *   node scripts/build-tokens.js
+ *   node scripts/builders/build-tokens.js
  *   or
  *   yarn tokens
  *
@@ -61,12 +61,12 @@
  * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/{brand}-typography.js (React Native)
  */
 
-const buildThemeTokens = require('./builders/build-theme-tokens');
-const buildTypographyClasses = require('./builders/build-typography-classes');
-const buildUtilityTypographyClasses = require('./builders/build-utility-typography-classes');
-const buildFontFaces = require('./builders/build-font-faces');
-const buildMobileFonts = require('./builders/build-mobile-fonts');
-const buildMobileTypography = require('./builders/build-mobile-typography');
+const buildThemeTokens = require('./build-theme-tokens');
+const buildTypographyClasses = require('./build-typography-classes');
+const buildUtilityTypographyClasses = require('./build-utility-typography-classes');
+const buildFontFaces = require('./build-font-faces');
+const buildMobileFonts = require('./build-mobile-fonts');
+const buildMobileTypography = require('./build-mobile-typography');
 
 /**
  * Main Build Function
