@@ -1,6 +1,7 @@
 import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
+import { Icon } from '@/components/Icon/Icon';
 
 export interface FormGroupCaptionProps extends BaseProps {
   children: React.ReactNode;
@@ -27,25 +28,25 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
   switch (variant) {
     case 'info':
       color = 'var(--color-text-on-light-tertiary)';
-      icon = null; // TODO: info.icon
+      icon = <Icon name="information" size="small" aria-hidden />;
       break;
     case 'error':
-      color = 'red';
-      icon = null; // TODO: error.icon
+      color = 'var(--color-text-state-attention-on-light)';
+      icon = <Icon name="error" size="small" aria-hidden />;
       break;
     case 'success':
-      color = 'green';
-      icon = null; // TODO: success.icon
+      color = 'var(--color-text-state-success-on-light, #00854B)';
+      icon = <Icon name="check" size="small" aria-hidden />;
       break;
   }
 
   return (
-    <div 
-        id={id} 
-        role={role}
-        className={`typography-utility-text-regular-x-small`}
-        style={{ color }}
-        data-testid={dataTestId}
+    <div
+      id={id}
+      role={role}
+      className="typography-utility-text-regular-x-small"
+      style={{ color }}
+      data-testid={dataTestId}
     >
       {icon}
       {children}

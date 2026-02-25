@@ -34,13 +34,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    variant: 'info',
-    children: 'Helper text or validation message appears here.',
-  },
-};
-
 export const Info: Story = {
   args: {
     variant: 'info',
