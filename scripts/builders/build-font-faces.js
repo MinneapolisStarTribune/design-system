@@ -36,10 +36,12 @@ async function buildFontFaces(brand) {
   rules.push('');
 
   for (const font of fonts) {
-    // Use font.name for @font-face - it's the font identifier. font.family includes
-    // the fallback (e.g. "Publico Headline Condensed, serif") which would register
-    // the wrong identifier and cause the browser to fall back to generic serif.
-    const family = font.name || font.family;
+    // Use font.name for @font-face - it's the font identifier.
+    const family = font.name;
+    if (!family) {
+      console.warn(`⚠️  Skipping font with no name in ${TOKENS_DIR_PREFIX}/${brand}.json`);
+      continue;
+    }
     const baseUrl = (font.url || '').replace(/\/?$/, '/');
 
     for (const v of font.variants || []) {

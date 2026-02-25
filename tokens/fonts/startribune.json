@@ -4,7 +4,6 @@
       "startribune": {
         "fonts": [
           {
-            "family": "Publico Headline Condensed, serif",
             "name": "Publico Headline Condensed",
             "url": "https://fonts.startribune.com/PublicoHeadlineCondensedWebFonts/",
             "variants": [
@@ -36,7 +35,6 @@
             ]
           },
           {
-            "family": "Publico Headline, serif",
             "name": "Publico Headline",
             "url": "https://fonts.startribune.com/PublicoHeadlineWebFonts/",
             "variants": [
@@ -78,7 +76,6 @@
             ]
           },
           {
-            "family": "Publico Text, serif",
             "name": "Publico Text",
             "url": "https://fonts.startribune.com/PublicoTextWebFonts/",
             "variants": [
@@ -115,7 +112,6 @@
             ]
           },
           {
-            "family": "Barlow Condensed, sans-serif",
             "name": "Barlow Condensed",
             "url": "https://fonts.startribune.com/BarlowCondensedWebFonts/",
             "variants": [
@@ -142,7 +138,6 @@
             ]
           },
           {
-            "family": "Barlow, sans-serif",
             "name": "Barlow",
             "url": "https://fonts.startribune.com/BarlowWebFonts/",
             "variants": [
@@ -179,7 +174,6 @@
             ]
           },
           {
-            "family": "Popular, sans-serif",
             "name": "Popular",
             "url": "https://fonts.startribune.com/PopularWebFonts/",
             "variants": [
@@ -206,7 +200,6 @@
             ]
           },
           {
-            "family": "Graphik, sans-serif",
             "name": "Graphik",
             "url": "https://fonts.startribune.com/GraphikWebFonts/",
             "variants": [

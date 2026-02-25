@@ -80,7 +80,7 @@ describe('buildFontFaces', () => {
 
   it('skips generation when fonts array is missing', async () => {
     const brand = 'startribune';
-    
+
     existsSyncSpy.mockReturnValue(true);
     readFileSyncSpy.mockReturnValue(JSON.stringify({ font: { brand: { startribune: {} } } }));
 
@@ -94,30 +94,74 @@ describe('buildFontFaces', () => {
 
   it('ignores variants without files', async () => {
     const brand = 'startribune';
-    
+
     existsSyncSpy.mockReturnValue(true);
-    readFileSyncSpy.mockReturnValue(JSON.stringify({
-      font: {
-        brand: {
-          startribune: {
-            fonts: [
-              {
-                name: 'TestFont',
-                url: '/fonts/test',
-                variants: [
-                  { weight: 400 }, // no file property
-                ],
-              },
-            ],
+    readFileSyncSpy.mockReturnValue(
+      JSON.stringify({
+        font: {
+          brand: {
+            startribune: {
+              fonts: [
+                {
+                  name: 'TestFont',
+                  url: '/fonts/test',
+                  variants: [
+                    { weight: 400 }, // no file property
+                  ],
+                },
+              ],
+            },
           },
         },
-      },
-    }));
+      })
+    );
 
     await buildFontFaces(brand);
 
     expect(writeFileSyncSpy).toHaveBeenCalled();
     const cssOutput = writeFileSyncSpy.mock.calls[0][1];
     expect(cssOutput).not.toContain('@font-face');
+  });
+
+  it('skips fonts with no name and logs a warning', async () => {
+    const brand = 'startribune';
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const tokenData = {
+      font: {
+        brand: {
+          startribune: {
+            fonts: [
+              {
+                // no "name" field — should be skipped
+                url: '/fonts/test',
+                variants: [{ file: 'test.woff2', style: 'normal', weight: 400 }],
+              },
+              {
+                name: 'ValidFont',
+                url: '/fonts/valid',
+                variants: [{ file: 'valid.woff2', style: 'normal', weight: 400 }],
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    existsSyncSpy.mockReturnValue(true);
+    readFileSyncSpy.mockReturnValue(JSON.stringify(tokenData));
+
+    await buildFontFaces(brand);
+
+    // Warning was emitted for the nameless font
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Skipping font with no name'));
+
+    // The valid font still produced @font-face output
+    expect(writeFileSyncSpy).toHaveBeenCalled();
+    const cssOutput = writeFileSyncSpy.mock.calls[0][1];
+    expect(cssOutput).toContain("font-family: 'ValidFont';");
+    // The nameless font must not appear
+    expect(cssOutput).not.toContain("url('/fonts/test/test.woff2')");
+
+    warnSpy.mockRestore();
   });
 });
