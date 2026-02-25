@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const TOKENS_DIR_PREFIX = 'tokens/fonts';
-const OUT_DIR_PREFIX = 'dist/mobile';
+const OUT_DIR_PREFIX = 'dist/mobile/fonts';
 
 /**
  * Build mobile font tokens from tokens/fonts/{brand}.json

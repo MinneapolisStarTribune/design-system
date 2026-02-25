@@ -48,7 +48,7 @@ describe('buildMobileFonts', () => {
 
     existsSyncSpy.mockImplementation((filePath) => {
       if (filePath.includes('tokens/fonts/startribune.json')) return true;
-      if (filePath.includes('dist/mobile')) return false;
+      if (filePath.includes('dist/mobile/fonts')) return false;
       return false;
     });
     readFileSyncSpy.mockReturnValue(JSON.stringify(tokenData));

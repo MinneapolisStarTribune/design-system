@@ -24,7 +24,7 @@ async function buildThemeTokens(brand, mode) {
   // Build all platforms (CSS for web, JavaScript for mobile)
   // This reads token files, resolves references, and generates:
   // - CSS file for web (dist/web/themes/{brand}-{mode}.css)
-  // - JavaScript file for mobile (dist/mobile/{brand}-{mode}.js)
+  // - JavaScript file for mobile (dist/mobile/themes/{brand}-{mode}.js)
   // TypeScript can infer types from the JSON exports - no .d.ts files needed
   await sd.buildAllPlatforms();
 
