@@ -61,7 +61,7 @@ describe('build-tokens.js', () => {
   describe('File Generation', () => {
     it('generates all expected CSS files', () => {
       // Run the build script
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       // Verify all expected files exist
       expectedFiles.forEach((file) => {
@@ -71,7 +71,7 @@ describe('build-tokens.js', () => {
     });
 
     it('generates files with correct naming pattern', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       expectedFiles.forEach((file) => {
         const filePath = path.join(themesDir, file);
@@ -87,7 +87,7 @@ describe('build-tokens.js', () => {
 
   describe('CSS File Format', () => {
     it('generates valid CSS with :root selector', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       expectedFiles.forEach((file) => {
         const filePath = path.join(themesDir, file);
@@ -104,7 +104,7 @@ describe('build-tokens.js', () => {
     });
 
     it('generates CSS variables with correct format', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -123,7 +123,7 @@ describe('build-tokens.js', () => {
     });
 
     it('removes duplicate color- prefixes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -135,7 +135,7 @@ describe('build-tokens.js', () => {
 
   describe('Token Content', () => {
     it('includes base color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -146,7 +146,7 @@ describe('build-tokens.js', () => {
     });
 
     it('includes icon color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'varsity-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -156,7 +156,7 @@ describe('build-tokens.js', () => {
     });
 
     it('includes button color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -166,7 +166,7 @@ describe('build-tokens.js', () => {
     });
 
     it('includes spacing tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -175,7 +175,7 @@ describe('build-tokens.js', () => {
     });
 
     it('includes font-family tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -190,7 +190,7 @@ describe('build-tokens.js', () => {
 
   describe('Token Reference Resolution', () => {
     it('resolves font.family.graphik-compact token reference correctly', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -211,7 +211,7 @@ describe('build-tokens.js', () => {
     });
 
     it('resolves all font-family token references across all themes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const testFiles = [
         'startribune-light.css',
@@ -241,7 +241,7 @@ describe('build-tokens.js', () => {
     });
 
     it('resolves token references with correct format', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const filePath = path.join(themesDir, 'varsity-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
@@ -271,7 +271,7 @@ describe('build-tokens.js', () => {
 
   describe('Brand and Mode Differences', () => {
     it('generates different content for different brands', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const startribunePath = path.join(themesDir, 'startribune-light.css');
       const varsityPath = path.join(themesDir, 'varsity-light.css');
@@ -290,7 +290,7 @@ describe('build-tokens.js', () => {
     });
 
     it('generates different content for light vs dark modes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const lightPath = path.join(themesDir, 'startribune-light.css');
       const darkPath = path.join(themesDir, 'startribune-dark.css');
