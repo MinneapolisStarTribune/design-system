@@ -30,7 +30,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConfigurableEditorialText: Story = {
+// Configurable
+export const Default: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
@@ -38,98 +39,57 @@ export const ConfigurableEditorialText: Story = {
   },
 };
 
-export const AllSizes: Story = {
-  args: {
-    size: 'medium',
-    weight: 'regular',
-    children: 'Editorial Text',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <EditorialText size="xx-small" weight="regular">
-        XX-Small editorial text
-      </EditorialText>
-      <EditorialText size="x-small" weight="regular">
-        X-Small editorial text
-      </EditorialText>
-      <EditorialText size="small" weight="regular">
-        Small editorial text
-      </EditorialText>
-      <EditorialText size="medium" weight="regular">
-        Medium editorial text
-      </EditorialText>
-      <EditorialText size="large" weight="regular">
-        Large editorial text
-      </EditorialText>
-    </div>
-  ),
+// XX-Small
+export const XxSmallRegular: Story = {
+  name: 'XX-Small / Regular',
+  args: { size: 'xx-small', weight: 'regular', children: 'XX-Small Regular editorial text' },
 };
 
-export const WeightComparison: Story = {
-  args: {
-    size: 'medium',
-    weight: 'regular',
-    children: 'Editorial Text',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <EditorialText size="medium" weight="regular">
-        Regular editorial text (400)
-      </EditorialText>
-      <EditorialText size="medium" weight="bold">
-        Bold editorial text (700)
-      </EditorialText>
-    </div>
-  ),
+export const XxSmallBold: Story = {
+  name: 'XX-Small / Bold',
+  args: { size: 'xx-small', weight: 'bold', children: 'XX-Small Bold editorial text' },
 };
 
-export const AllVariants: Story = {
-  args: {
-    size: 'medium',
-    weight: 'regular',
-    children: 'Editorial Text',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <h2>XX-Small</h2>
-      <EditorialText size="xx-small" weight="regular">
-        XX-Small / Regular
-      </EditorialText>
-      <EditorialText size="xx-small" weight="bold">
-        XX-Small / Bold
-      </EditorialText>
+// X-Small
+export const XSmallRegular: Story = {
+  name: 'X-Small / Regular',
+  args: { size: 'x-small', weight: 'regular', children: 'X-Small Regular editorial text' },
+};
 
-      <h2 style={{ marginTop: '24px' }}>X-Small</h2>
-      <EditorialText size="x-small" weight="regular">
-        X-Small / Regular
-      </EditorialText>
-      <EditorialText size="x-small" weight="bold">
-        X-Small / Bold
-      </EditorialText>
+export const XSmallBold: Story = {
+  name: 'X-Small / Bold',
+  args: { size: 'x-small', weight: 'bold', children: 'X-Small Bold editorial text' },
+};
 
-      <h3>Small</h3>
-      <EditorialText size="small" weight="regular">
-        Small / Regular
-      </EditorialText>
-      <EditorialText size="small" weight="bold">
-        Small / Bold
-      </EditorialText>
+// Small
+export const SmallRegular: Story = {
+  name: 'Small / Regular',
+  args: { size: 'small', weight: 'regular', children: 'Small Regular editorial text' },
+};
 
-      <h3 style={{ marginTop: '24px' }}>Medium</h3>
-      <EditorialText size="medium" weight="regular">
-        Medium / Regular
-      </EditorialText>
-      <EditorialText size="medium" weight="bold">
-        Medium / Bold
-      </EditorialText>
+export const SmallBold: Story = {
+  name: 'Small / Bold',
+  args: { size: 'small', weight: 'bold', children: 'Small Bold editorial text' },
+};
 
-      <h3 style={{ marginTop: '24px' }}>Large</h3>
-      <EditorialText size="large" weight="regular">
-        Large / Regular
-      </EditorialText>
-      <EditorialText size="large" weight="bold">
-        Large / Bold
-      </EditorialText>
-    </div>
-  ),
+// Medium
+export const MediumRegular: Story = {
+  name: 'Medium / Regular',
+  args: { size: 'medium', weight: 'regular', children: 'Medium Regular editorial text' },
+};
+
+export const MediumBold: Story = {
+  name: 'Medium / Bold',
+  args: { size: 'medium', weight: 'bold', children: 'Medium Bold editorial text' },
+};
+
+// Large
+export const LargeRegular: Story = {
+  name: 'Large / Regular',
+  args: { size: 'large', weight: 'regular', children: 'Large Regular editorial text' },
+};
+
+export const LargeBold: Story = {
+  name: 'Large / Bold',
+  args: { size: 'large', weight: 'bold', children: 'Large Bold editorial text' },
 };
