@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const TYPOGRAPHY_DIR_PREFIX = 'tokens/typography';
-const OUT_DIR_PREFIX = 'dist/mobile';
+const OUT_DIR_PREFIX = 'dist/mobile/typography';
 
 /**
  * Convert kebab-case to camelCase

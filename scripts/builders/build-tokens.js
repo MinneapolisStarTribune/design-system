@@ -30,14 +30,14 @@
  * - dist/web/fonts/font-face/startribune.css (@font-face from tokens/fonts/startribune.json)
  * - dist/web/fonts/font-face/varsity.css (@font-face from tokens/fonts/varsity.json)
  * Mobile JavaScript Files (no .d.ts files - TypeScript can infer types from JSON exports):
- * - dist/mobile/startribune-light.js
- * - dist/mobile/startribune-dark.js
- * - dist/mobile/varsity-light.js
- * - dist/mobile/varsity-dark.js
- * - dist/mobile/startribune-fonts.js
- * - dist/mobile/varsity-fonts.js
- * - dist/mobile/startribune-typography.js
- * - dist/mobile/varsity-typography.js
+ * - dist/mobile/themes/startribune-light.js
+ * - dist/mobile/themes/startribune-dark.js
+ * - dist/mobile/themes/varsity-light.js
+ * - dist/mobile/themes/varsity-dark.js
+ * - dist/mobile/fonts/startribune-fonts.js
+ * - dist/mobile/fonts/varsity-fonts.js
+ * - dist/mobile/typography/startribune-typography.js
+ * - dist/mobile/typography/varsity-typography.js
  *
  * Each theme file contains CSS variables in :root that can be imported and used in web applications.
  * Each mobile token file contains JavaScript ES6 modules that can be imported in React Native applications.
@@ -53,12 +53,12 @@
  * 2. Resolves token references (e.g., {color.neutral.500})
  * 3. Formats tokens as CSS variables (for web) and JavaScript ES6 modules (for mobile)
  * 4. Writes CSS files to dist/web/themes/
- * 5. Writes JavaScript token files to dist/mobile/ (TypeScript can infer types from JSON exports)
+ * 5. Writes JavaScript theme token files to dist/mobile/themes/ (TypeScript can infer types from JSON exports)
  * 7. Generates editorial typography classes to dist/web/fonts/editorial/
  * 8. Generates utility typography classes to dist/web/fonts/utility/ (shared.json common for both)
  * 9. Generates @font-face CSS from tokens/fonts/ to dist/web/fonts/font-face/{brand}.css (web)
- * 10. Generates mobile font tokens from tokens/fonts/ to dist/mobile/{brand}-fonts.js (React Native)
- * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/{brand}-typography.js (React Native)
+ * 10. Generates mobile font tokens from tokens/fonts/ to dist/mobile/fonts/{brand}-fonts.js (React Native)
+ * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/typography/{brand}-typography.js (React Native)
  */
 
 const buildThemeTokens = require('./build-theme-tokens');
