@@ -9,14 +9,14 @@ export interface FormGroupLabelProps extends BaseProps {
   element?: string;
   id?: string;
   htmlFor?: string;
-  required?: boolean;
+  optional?: boolean;
 }
 
 export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
   children,
   id: idProp,
   htmlFor,
-  required = false,
+  optional = false,
   dataTestId,
 }) => {
   const context = useFormGroupContext();
@@ -35,7 +35,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
       >
         {children}
       </UtilityLabel>
-      {required && (
+      {optional && (
         <UtilityBody
           // size and weight are always the same
           size="xx-small"

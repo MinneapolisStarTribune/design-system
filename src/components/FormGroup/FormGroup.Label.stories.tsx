@@ -24,7 +24,7 @@ const meta = {
       description:
         'Associates the label with a form control by id (falls back to FormGroup context inputId when inside FormGroup)',
     },
-    required: {
+    optional: {
       control: 'boolean',
       description: 'When true, appends " (Optional)" to the label',
     },
@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     children: 'Field Label',
-    required: false,
+    optional: false,
   },
   render: (args) => (
     <FormGroup>
@@ -50,7 +50,7 @@ export const Configurable: Story = {
 export const WithOptional: Story = {
   args: {
     children: 'Phone Number',
-    required: true,
+    optional: true,
   },
   render: (args) => (
     <FormGroup>

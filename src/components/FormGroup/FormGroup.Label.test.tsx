@@ -32,9 +32,9 @@ describe('FormGroupLabel', () => {
     expect(label).toHaveAttribute('for', 'email-input');
   });
 
-  it('shows (Optional) when required is true', () => {
+  it('shows (Optional) when optional is true', () => {
     const { getByText } = renderWithProvider(
-      <FormGroupLabel required dataTestId="label">
+      <FormGroupLabel optional dataTestId="label">
         Optional field
       </FormGroupLabel>
     );
@@ -42,9 +42,9 @@ describe('FormGroupLabel', () => {
     expect(getByText('(Optional)')).toBeInTheDocument();
   });
 
-  it('does not show (Optional) when required is false', () => {
+  it('does not show (Optional) when optional is false', () => {
     const { queryByText } = renderWithProvider(
-      <FormGroupLabel required={false} dataTestId="label">
+      <FormGroupLabel optional={false} dataTestId="label">
         Required field
       </FormGroupLabel>
     );

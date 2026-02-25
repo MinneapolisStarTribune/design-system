@@ -15,11 +15,11 @@ describe('FormGroupLabel Accessibility', () => {
       );
     });
 
-    it('has no violations with required (optional indicator)', async () => {
+    it('has no violations with optional (optional indicator)', async () => {
       const inputId = 'optional-field';
       await expectNoA11yViolations(
         <>
-          <FormGroupLabel id="optional-label" htmlFor={inputId} required>
+          <FormGroupLabel id="optional-label" htmlFor={inputId} optional>
             Optional field
           </FormGroupLabel>
           <input id={inputId} type="text" aria-labelledby="optional-label" />
