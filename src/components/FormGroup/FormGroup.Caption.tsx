@@ -45,11 +45,17 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
       id={id}
       role={role}
       className="typography-utility-text-regular-x-small"
-      style={{ color }}
+      style={{
+        color,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--spacing-2)',
+        marginTop: 'var(--spacing-8)',
+      }}
       data-testid={dataTestId}
     >
-      {icon}
-      {children}
+      <span style={{ display: 'inline-flex', flexShrink: 0 }}>{icon}</span>
+      <span>{children}</span>
     </div>
   );
 };
