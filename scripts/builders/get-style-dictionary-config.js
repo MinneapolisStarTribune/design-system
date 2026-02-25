@@ -111,7 +111,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         transformGroup: 'js',
         
         // Output directory for generated JavaScript token files
-        buildPath: `dist/mobile/`,
+        buildPath: `dist/mobile/themes/`,
         
         // File generation configuration
         files: [

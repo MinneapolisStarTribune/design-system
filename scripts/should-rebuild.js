@@ -56,12 +56,16 @@ function shouldRebuildTokens() {
     'tokens/breakpoint.json',
   ].map(file => path.join(projectRoot, file));
   
-  // Output files: generated CSS files
+  // Output files: generated CSS files (web) and JavaScript files (mobile)
   const tokenOutputFiles = [
     'dist/web/themes/startribune-light.css',
     'dist/web/themes/startribune-dark.css',
     'dist/web/themes/varsity-light.css',
     'dist/web/themes/varsity-dark.css',
+    'dist/mobile/themes/startribune-light.js',
+    'dist/mobile/themes/startribune-dark.js',
+    'dist/mobile/themes/varsity-light.js',
+    'dist/mobile/themes/varsity-dark.js',
   ].map(file => path.join(projectRoot, file));
   
   // Check if any output file is missing
