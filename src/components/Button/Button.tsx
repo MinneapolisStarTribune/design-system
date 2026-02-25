@@ -9,6 +9,7 @@ import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import styles from './Button.module.scss';
+import { UtilityLabel } from '../Typography/Utility';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -129,7 +130,9 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={handleClick}
       {...props}
     >
-      {label}
+      <UtilityLabel size={size} weight="semibold" capitalize={false}>
+        {label}
+      </UtilityLabel>
     </MantineButton>
   );
 };
