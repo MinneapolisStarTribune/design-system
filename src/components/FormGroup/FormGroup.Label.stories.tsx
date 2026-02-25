@@ -34,18 +34,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    children: 'Email Address',
-  },
-  render: (args) => (
-    <FormGroup>
-      <FormGroup.Label {...args} />
-      <FormControl.TextInput placeholderText="Enter email" />
-    </FormGroup>
-  ),
-};
-
 export const Configurable: Story = {
   args: {
     children: 'Field Label',
