@@ -10,12 +10,12 @@ import type {
 /**
  * Factory for editorial heading components (NewsHeading, SponsoredHeading, etc.).
  * Each variant uses the same props and semantics; styling is driven by design tokens
- * via the generated class name typography-editorial-{prefix}-h{1-6}.
+ * via the generated class name typography-{prefix}-h{1-6}.
  *
  * @example
  * export const NewsHeading = createEditorialHeading({
  *   componentName: 'NewsHeading',
- *   classNamePrefix: 'news',
+ *   classNamePrefix: 'editorial-news',
  * });
  */
 export function createEditorialHeading({
@@ -29,27 +29,27 @@ export function createEditorialHeading({
     > = {
       1: {
         element: 'h1',
-        className: `typography-editorial-${classNamePrefix}-h1`,
+        className: `typography-${classNamePrefix}-h1`,
       },
       2: {
         element: 'h2',
-        className: `typography-editorial-${classNamePrefix}-h2`,
+        className: `typography-${classNamePrefix}-h2`,
       },
       3: {
         element: 'h3',
-        className: `typography-editorial-${classNamePrefix}-h3`,
+        className: `typography-${classNamePrefix}-h3`,
       },
       4: {
         element: 'h4',
-        className: `typography-editorial-${classNamePrefix}-h4`,
+        className: `typography-${classNamePrefix}-h4`,
       },
       5: {
         element: 'h5',
-        className: `typography-editorial-${classNamePrefix}-h5`,
+        className: `typography-${classNamePrefix}-h5`,
       },
       6: {
         element: 'h6',
-        className: `typography-editorial-${classNamePrefix}-h6`,
+        className: `typography-${classNamePrefix}-h6`,
       },
     };
     return configs[importance];
