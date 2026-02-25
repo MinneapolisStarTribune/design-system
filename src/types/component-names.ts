@@ -11,6 +11,12 @@ export const COMPONENT_NAMES = [
   'OpinionHeading',
   'FormGroup',
   'FormControl',
+  'PhotoLayout',
+  'ImageGallery',
+  'InlineVideo',
+  'CodeBlock',
+  'PullQuote',
+  'SocialEmbeds',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];
