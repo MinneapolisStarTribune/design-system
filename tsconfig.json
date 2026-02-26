@@ -16,7 +16,8 @@
     // Build output
     "outDir": "dist",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@dist/*": ["./dist/*"]
     },
 
     "resolveJsonModule": true,

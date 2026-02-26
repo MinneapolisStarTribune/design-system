@@ -157,7 +157,9 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 
 - `yarn dev` - Start development server (if configured)
 - `yarn storybook` - Start Storybook development server on port 6006. Automatically builds tokens/icons if needed. Use this for visual component development.
-- `yarn build` - Build the package for production. Runs token generation, icon mapping, and Mantine token generation, then builds the package to `/dist`.
+- `yarn build` - Build the package for production. Runs token generation, icon mapping, and Mantine token generation, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
+- `yarn build:web` - Build only the web bundle to `/dist/web`
+- `yarn build:native` - Build only the native bundle to `/dist/mobile`
 - `yarn test` - Run all tests (unit + accessibility) once
 - `yarn test:watch` - Run tests in watch mode (re-runs on file changes)
 - `yarn test:coverage` - Run tests with coverage report

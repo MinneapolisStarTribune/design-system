@@ -5,13 +5,12 @@
  * This file is NOT used in production code. It processes color tokens from JSON files
  * to create data structures used by Storybook stories for displaying color palettes.
  *
- * For production code, colors should be accessed through the Mantine theme system
- * via useMantineTheme() or the DesignSystemProvider, which properly handles
- * brand-specific and theme-aware color resolution.
+ * For production code, colors should be accessed through CSS variables loaded by
+ * DesignSystemProvider, which properly handles brand-specific and theme-aware color resolution.
  */
 import React, { useMemo, useEffect, useState } from 'react';
-import { useMantineTheme, useMantineColorScheme } from '@mantine/core';
 import { Brand, ColorScheme } from '../../../providers/theme-helpers';
+import { useTheme } from '../../../providers/theme/ThemeContext';
 
 // Import token JSON files for descriptions
 import startribuneLightJson from '../../../../tokens/color/brand-startribune-light.json';
@@ -69,11 +68,12 @@ function getCategoryMetadata(
     return {};
   }
 
-  const categoryData = brandJson?.color?.[category];
+  // Note: "control" category maps to "button" in token JSON
+  const categoryName = category === 'control' ? 'button' : category;
+  const categoryData = brandJson?.color?.[categoryName];
   if (!categoryData || typeof categoryData !== 'object') {
     return {};
   }
-
   return {
     description: categoryData.description || categoryData.$description,
     overview: categoryData.overview,
@@ -98,7 +98,9 @@ function getColorDescriptions(
     return {};
   }
 
-  const categoryData = brandJson?.color?.[category];
+  // Note: "control" category maps to "button" in token JSON
+  const categoryName = category === 'control' ? 'button' : category;
+  const categoryData = brandJson?.color?.[categoryName];
   if (!categoryData || typeof categoryData !== 'object') {
     return {};
   }
@@ -124,88 +126,140 @@ function getColorDescriptions(
   return descriptions;
 }
 
+/**
+ * Get brand and colorScheme from Storybook globals
+ */
+function getBrandFromGlobals(): Brand {
+  try {
+    const parent = window.parent;
+    if (parent && parent !== window) {
+      const globals = (parent as any).__STORYBOOK_GLOBALS__;
+      if (globals?.brand) {
+        return globals.brand as Brand;
+      }
+    } else {
+      const globals = (window as any).__STORYBOOK_GLOBALS__;
+      if (globals?.brand) {
+        return globals.brand as Brand;
+      }
+    }
+  } catch (e) {
+    // Ignore errors
+  }
+  return 'startribune'; // Default fallback
+}
+
+function getColorSchemeFromGlobals(): ColorScheme {
+  try {
+    const parent = window.parent;
+    if (parent && parent !== window) {
+      const globals = (parent as any).__STORYBOOK_GLOBALS__;
+      if (globals?.theme) {
+        return globals.theme as ColorScheme;
+      }
+    } else {
+      const globals = (window as any).__STORYBOOK_GLOBALS__;
+      if (globals?.theme) {
+        return globals.theme as ColorScheme;
+      }
+    }
+  } catch (e) {
+    // Ignore errors
+  }
+  return 'light'; // Default fallback
+}
+
+/**
+ * Read CSS variables from the DOM
+ */
+function getCSSVariableValue(varName: string): string | null {
+  if (typeof window === 'undefined' || !document.documentElement) {
+    return null;
+  }
+  const styles = getComputedStyle(document.documentElement);
+  return styles.getPropertyValue(varName).trim() || null;
+}
+
+/**
+ * Get all CSS variables that match a category prefix
+ */
+function getCSSVariablesByCategory(category: ColorCategory): Record<string, string> {
+  const variables: Record<string, string> = {};
+  const prefix = `--color-${category}-`;
+  
+  if (typeof window === 'undefined' || !document.documentElement) {
+    return variables;
+  }
+
+  const styles = getComputedStyle(document.documentElement);
+  
+  // Iterate through all CSS variables
+  for (let i = 0; i < styles.length; i++) {
+    const property = styles[i];
+    if (property.startsWith(prefix)) {
+      const value = styles.getPropertyValue(property).trim();
+      if (value) {
+        variables[property] = value;
+      }
+    }
+  }
+
+  return variables;
+}
+
 export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = ({
   category,
   categoryDisplayName,
   groupBy,
 }) => {
-  const theme = useMantineTheme();
-  const { colorScheme } = useMantineColorScheme();
-
-  // Read brand from Storybook's globals synchronously on mount, then poll for changes
-  const getBrandFromGlobals = (): Brand => {
-    try {
-      const parent = window.parent;
-      if (parent && parent !== window) {
-        const globals = (parent as any).__STORYBOOK_GLOBALS__;
-        if (globals?.brand) {
-          return globals.brand as Brand;
-        }
-      } else {
-        const globals = (window as any).__STORYBOOK_GLOBALS__;
-        if (globals?.brand) {
-          return globals.brand as Brand;
-        }
-      }
-    } catch (e) {
-      // Ignore errors
-    }
-    return 'startribune'; // Default fallback
-  };
-
-  const [brand, setBrand] = useState<Brand>(getBrandFromGlobals);
-
-  // Poll for brand changes (Storybook updates globals when toolbar changes)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newBrand = getBrandFromGlobals();
-      setBrand((current) => (current !== newBrand ? newBrand : current));
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
+  // Use theme from context - this will automatically update when theme changes!
+  const theme = useTheme();
+  const { colors: themeColors, brand, colorScheme } = theme;
 
   const categoryMetadata = useMemo(
     () => getCategoryMetadata(brand, colorScheme as ColorScheme, category),
     [brand, colorScheme, category]
   );
 
-  // Compute colors from theme (independent of brand - brand only affects descriptions)
+  // Compute colors from theme context
+  // This automatically updates when theme changes because theme.colors changes
   const colors = useMemo(() => {
-    if (!theme || !theme.colors) {
-      return [];
-    }
-
     const colorList: ColorDisplay[] = [];
 
-    // Special handling for brand colors: they're stored as a direct "brand" array
-    // in the theme, not as "brand-01", "brand-02", etc.
-    // We ONLY want to show the first 4 colors (01, 02, 03, 04) from this array, not the duplicates
-    // (Mantine requires 10 colors, so indices 4-9 are duplicates of brand-04)
-    if (category === 'brand' && theme.colors['brand'] && Array.isArray(theme.colors['brand'])) {
-      const brandArray = theme.colors['brand'] as string[];
-      const brandColorsToShow = brandArray.slice(0, 4);
-      brandColorsToShow.forEach((colorValue, index) => {
-        const colorKey = String(index + 1).padStart(2, '0'); // 01, 02, 03, 04
-        colorList.push({
-          name: formatColorName(colorKey),
-          tokenName: `brand-${colorKey}`, // Use brand-01, brand-02, etc. for consistency
-          value: colorValue,
-          description: undefined,
-        });
-      });
-    } else {
-      // Get colors from Mantine theme - they're already loaded and resolved!
-      const prefix = `${category}-`;
-      Object.entries(theme.colors).forEach(([key, colorArray]) => {
-        // Match keys like "background-*" for category "background"
-        if (key.startsWith(prefix) && Array.isArray(colorArray) && colorArray.length > 0) {
-          const colorKey = key.replace(prefix, '');
-          const colorValue = colorArray[0];
-
+    if (category === 'brand') {
+      // Brand colors are ColorBrand01, ColorBrand02, etc. in context
+      for (let i = 1; i <= 4; i++) {
+        const colorKey = String(i).padStart(2, '0'); // 01, 02, 03, 04
+        const contextKey = `ColorBrand${colorKey}`;
+        const colorValue = themeColors[contextKey];
+        if (colorValue) {
           colorList.push({
             name: formatColorName(colorKey),
-            tokenName: key,
+            tokenName: `brand-${colorKey}`,
             value: colorValue,
+            description: undefined,
+          });
+        }
+      }
+    } else {
+      // Filter theme colors by category prefix
+      // e.g., ColorButtonFilledBackground -> button-filled-background
+      // Note: "control" category maps to "button" tokens
+      const categoryName = category === 'control' ? 'button' : category;
+      const categoryPrefix = `Color${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}`;
+      Object.entries(themeColors).forEach(([key, value]) => {
+        if (key.startsWith(categoryPrefix)) {
+          // Convert ColorButtonFilledBackground to button-filled-background
+          const tokenKey = key
+            .replace(categoryPrefix, '')
+            .replace(/([A-Z])/g, '-$1')
+            .toLowerCase()
+            .replace(/^-/, '');
+          
+          colorList.push({
+            name: formatColorName(tokenKey),
+            tokenName: `${category}-${tokenKey}`,
+            value: value,
             description: undefined,
           });
         }
@@ -216,7 +270,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     colorList.sort((a, b) => a.tokenName.localeCompare(b.tokenName));
 
     return colorList;
-  }, [theme, category]);
+  }, [category, themeColors]);
 
   // Add descriptions based on brand (this can update separately)
   const colorsWithDescriptions = useMemo(() => {
@@ -230,10 +284,10 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     });
   }, [colors, brand, colorScheme, category]);
 
-  if (!theme || !theme.colors) {
+  if (colors.length === 0 && typeof window !== 'undefined') {
     return (
       <div>
-        <p>Loading theme...</p>
+        <p>Loading theme colors...</p>
       </div>
     );
   }
@@ -275,7 +329,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
               <div
                 key={color.tokenName}
                 style={{
-                  border: `1px solid ${theme.colors.gray?.[3] || '#e9ecef'}`,
+                  border: `1px solid ${getCSSVariableValue('--color-border-on-light-subtle-01') || '#e9ecef'}`,
                   borderRadius: '4px',
                   overflow: 'hidden',
                 }}

@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import type { RenderResult } from '@testing-library/react';
 import type { RunOptions } from 'axe-core';
-import { DesignSystemProvider } from '../providers/MantineProvider';
+import { DesignSystemProvider } from '../providers/DesignSystemProvider';
 
 /**
  * Test a component for accessibility violations

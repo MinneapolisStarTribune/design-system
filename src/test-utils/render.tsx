@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
-import { DesignSystemProvider, type Brand } from '../providers/MantineProvider';
+import { DesignSystemProvider, type Brand } from '../providers/DesignSystemProvider';
 import type { ColorScheme } from '../providers/theme-helpers';
 
 interface RenderWithProviderOptions extends Omit<RenderOptions, 'wrapper'> {

@@ -5,9 +5,8 @@
  * This file is NOT used in production code. It processes color tokens from JSON files
  * to create data structures used by Storybook stories for displaying color palettes.
  *
- * For production code, colors should be accessed through the Mantine theme system
- * via useMantineTheme() or the DesignSystemProvider, which properly handles
- * brand-specific and theme-aware color resolution.
+ * For production code, colors should be accessed through CSS variables loaded by
+ * DesignSystemProvider, which properly handles brand-specific and theme-aware color resolution.
  */
 
 import primitivesColorsJson from '../../../../tokens/color/global.json';

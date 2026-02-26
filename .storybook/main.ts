@@ -18,7 +18,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
-  staticDirs: ['../dist'],
+  staticDirs: ['../dist/web'],
 
   // Vite configuration to handle path aliases
   async viteFinal(config) {
@@ -26,6 +26,7 @@ const config: StorybookConfig = {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '../src'),
+          '@dist': path.resolve(__dirname, '../dist'),
         },
       },
     });
