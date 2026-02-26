@@ -1,12 +1,14 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
-import { FormGroupCaption } from './FormGroup.Caption';
 
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Caption',
-  component: FormGroupCaption,
-  parameters: {},
+  component: FormGroup.Caption,
+  parameters: {
+    layout: 'centered',
+  },
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -28,7 +30,7 @@ const meta = {
       </FormGroup>
     ),
   ],
-} satisfies Meta<typeof FormGroupCaption>;
+} satisfies Meta<typeof FormGroup.Caption>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
