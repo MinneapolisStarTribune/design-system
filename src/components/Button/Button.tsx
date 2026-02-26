@@ -21,6 +21,7 @@ export type ButtonSize = (typeof BUTTON_SIZES)[number];
 export interface ButtonProps
   extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
   color?: ButtonColor;
+  capitalize?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: IconName;
@@ -33,6 +34,7 @@ export interface ButtonProps
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
+  capitalize = false,
   variant = 'filled',
   size = 'medium',
   icon,
@@ -107,7 +109,7 @@ export const Button: React.FC<ButtonProps> = ({
       className={combinedClassNames || undefined}
       {...props}
     >
-      <UtilityLabel size={size} weight="semibold" capitalize={false}>
+      <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
         {label}
       </UtilityLabel>
     </MantineButton>
