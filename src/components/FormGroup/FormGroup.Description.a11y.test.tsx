@@ -24,18 +24,10 @@ describe('FormGroupDescription Accessibility', () => {
       const descriptionId = 'desc-id';
       await expectNoA11yViolations(
         <>
-          <FormGroupDescription
-            id={descriptionId}
-            dataTestId="form-group-description"
-          >
+          <FormGroupDescription id={descriptionId} dataTestId="form-group-description">
             Help text for the field.
           </FormGroupDescription>
-          <input
-            id="field-input"
-            type="text"
-            aria-label="Field"
-            aria-describedby={descriptionId}
-          />
+          <input id="field-input" type="text" aria-label="Field" aria-describedby={descriptionId} />
         </>
       );
     });

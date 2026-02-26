@@ -48,4 +48,3 @@ describe('FormGroupDescription', () => {
     expect(el).toHaveAttribute('id', 'custom-description-id');
   });
 });
-
