@@ -3,10 +3,7 @@
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
-import {
-  FormGroupDescription,
-  type FormGroupDescriptionProps,
-} from './FormGroup.Description';
+import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup.Description';
 import { FormGroupLabel, type FormGroupLabelProps } from './FormGroup.Label';
 import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroupCaption';
 import { FormGroupProvider } from './FormGroupContext';
