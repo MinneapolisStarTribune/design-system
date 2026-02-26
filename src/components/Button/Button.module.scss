@@ -1,5 +1,144 @@
 /* Button component styles */
-button {
+.button {
+  /* Base button styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  
+  /* Typography */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  
+  /* Remove default button styles */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  
+  border: none;
+  
+  /* Size variants */
+  &.small {
+    padding: var(--spacing-8) var(--spacing-12);
+  }
+  
+  &.medium {
+    padding: var(--spacing-8) var(--spacing-16);
+  }
+  
+  &.large {
+    padding: var(--spacing-8) var(--spacing-24);
+  }
+  
+  /* Neutral colors */
+  &.neutral {
+    &.filled {
+      background-color: var(--color-button-filled-background);
+      color: var(--color-button-filled-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-filled-hover-background);
+        color: var(--color-button-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-outlined-background);
+      color: var(--color-button-outlined-text);
+      border: 1px solid var(--color-button-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-outlined-hover-background);
+        color: var(--color-button-outlined-hover-text);
+        border-color: var(--color-button-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-ghost-background);
+      color: var(--color-button-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-ghost-hover-background);
+        color: var(--color-button-ghost-hover-text);
+      }
+    }
+  }
+  
+  /* Brand colors */
+  &.brand {
+    &.filled {
+      background-color: var(--color-button-brand-filled-background);
+      color: var(--color-button-brand-filled-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-filled-hover-background);
+        color: var(--color-button-brand-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-brand-outlined-background);
+      color: var(--color-button-brand-outlined-text);
+      border: 1px solid var(--color-button-brand-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-outlined-hover-background);
+        color: var(--color-button-brand-outlined-hover-text);
+        border-color: var(--color-button-brand-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-brand-ghost-background);
+      color: var(--color-button-brand-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-ghost-hover-background);
+        color: var(--color-button-brand-ghost-hover-text);
+      }
+    }
+  }
+  
+  /* Brand-accent colors */
+  &.brand-accent {
+    &.filled {
+      background-color: var(--color-button-brand-accent-filled-background);
+      color: var(--color-button-brand-accent-filled-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-accent-filled-hover-background);
+        color: var(--color-button-brand-accent-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-brand-accent-outlined-background);
+      color: var(--color-button-brand-accent-outlined-text);
+      border: 1px solid var(--color-button-brand-accent-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-accent-outlined-hover-background);
+        color: var(--color-button-brand-accent-outlined-hover-text);
+        border-color: var(--color-button-brand-accent-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-brand-accent-ghost-background);
+      color: var(--color-button-brand-accent-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-accent-ghost-hover-background);
+        color: var(--color-button-brand-accent-ghost-hover-text);
+      }
+    }
+  }
+  
   /* Gradient border for brand-accent buttons (Varsity brand only) */
   /* 
    * Browsers do not support linear gradients for borders natively.
@@ -30,7 +169,7 @@ button {
       position: absolute;
       width: 100%;
       height: 100%;
-      border-radius: var(--button-radius);
+      border-radius: var(--radius-full);
       left: 0;
       top: 0;
       pointer-events: none;

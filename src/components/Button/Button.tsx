@@ -1,9 +1,4 @@
 import React from 'react';
-import {
-  Button as MantineButton,
-  ButtonProps as MantineButtonProps,
-  useMantineTheme,
-} from '@mantine/core';
 import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
@@ -17,19 +12,44 @@ export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
 
-export interface ButtonProps
-  extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor;
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: IconName;
   iconPosition?: 'start' | 'end';
   label?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isDisabled?: boolean;
 }
 
-// Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
+/**
+ * Build CSS variable name for button tokens
+ * Examples:
+ * - neutral + filled -> 'button-filled'
+ * - brand + outlined -> 'button-brand-outlined'
+ * - brand-accent + ghost -> 'button-brand-accent-ghost'
+ */
+function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
+  if (color === 'neutral') {
+    return `button-${variant}`;
+  } else if (color === 'brand') {
+    return `button-brand-${variant}`;
+  } else {
+    return `button-brand-accent-${variant}`;
+  }
+}
+
+/**
+ * Get CSS variable value from computed styles
+ */
+function getCSSVariable(element: HTMLElement | null, variableName: string): string | null {
+  if (!element || typeof window === 'undefined') {
+    return null;
+  }
+  const computed = window.getComputedStyle(element);
+  return computed.getPropertyValue(variableName).trim() || null;
+}
+
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
   variant = 'filled',
@@ -40,73 +60,88 @@ export const Button: React.FC<ButtonProps> = ({
   children: _children,
   className,
   isDisabled,
+  onClick,
   ...props
 }) => {
-  let mantineVariant;
-  if (variant === 'ghost') {
-    mantineVariant = 'subtle';
-  } else {
-    mantineVariant = variant;
-  }
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const [hasGradientBorder, setHasGradientBorder] = React.useState(false);
+
+  // Build token prefix for CSS variables
+  const tokenPrefix = getButtonTokenPrefix(color, variant);
+
+  // Check for gradient borders on brand-accent buttons (only for filled and outlined)
+  // This checks if the hover-border token contains "gradient" (for Varsity brand)
+  React.useEffect(() => {
+    if (
+      color === 'brand-accent' &&
+      (variant === 'filled' || variant === 'outlined') &&
+      buttonRef.current
+    ) {
+      const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
+      const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
+      // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
+      if (hoverBorderValue && hoverBorderValue.includes('gradient')) {
+        setHasGradientBorder(true);
+      } else {
+        setHasGradientBorder(false);
+      }
+    } else {
+      setHasGradientBorder(false);
+    }
+  }, [color, variant, tokenPrefix]);
 
   // Icons use the same color as text (no separate button-icon tokens needed)
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
   const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
 
-  // Extract aria-label from props if provided (using type assertion for HTML attributes)
-  const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
+  // Extract aria-label from props if provided
+  const ariaLabel = props['aria-label'];
 
   // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
   const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
 
-  // Use Mantine's leftSection/rightSection for icon positioning
-  const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
-  const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
+  // Determine icon position
+  const leftIcon = icon && iconPosition === 'start' ? iconElement : null;
+  const rightIcon = icon && iconPosition === 'end' ? iconElement : null;
 
-  // Check if brand-accent buttons should have gradient border
-  // Check the theme colors directly to see if the hover-border token is a gradient
-  const theme = useMantineTheme();
-  const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
-  const isBrandAccentOutlined = color === 'brand-accent' && variant === 'outlined';
-  const brandAccentFilledHoverBorder = theme.colors['button-brand-accent-filled-hover-border']?.[0];
-  const brandAccentOutlinedHoverBorder =
-    theme.colors['button-brand-accent-outlined-hover-border']?.[0];
-  const hasGradientBorderFilled =
-    isBrandAccentFilled && brandAccentFilledHoverBorder?.includes('gradient');
-  const hasGradientBorderOutlined =
-    isBrandAccentOutlined && brandAccentOutlinedHoverBorder?.includes('gradient');
-
-  // Apply special hover styles for brand-accent buttons with gradient border
+  // Apply special classes for gradient borders
   const brandAccentFilledClass =
-    isBrandAccentFilled && hasGradientBorderFilled ? styles.brandAccentFilled : undefined;
+    color === 'brand-accent' && variant === 'filled' && hasGradientBorder
+      ? styles.brandAccentFilled
+      : undefined;
   const brandAccentOutlinedClass =
-    isBrandAccentOutlined && hasGradientBorderOutlined ? styles.brandAccentOutlined : undefined;
+    color === 'brand-accent' && variant === 'outlined' && hasGradientBorder
+      ? styles.brandAccentOutlined
+      : undefined;
 
   // Add disabled class for styling
   const disabledClass = isDisabled ? styles.disabled : undefined;
 
-  // Combine class names using classnames utility
+  // Combine class names - use styles object for CSS modules
   const combinedClassNames = classNames(
-    className,
+    styles.button,
+    styles[color], // neutral, brand, or brand-accent (CSS modules handles hyphens)
+    styles[size], // small, medium, large
+    styles[variant], // filled, outlined, ghost
     brandAccentFilledClass,
     brandAccentOutlinedClass,
-    disabledClass
+    disabledClass,
+    className
   );
-
   return (
-    <MantineButton
-      variant={mantineVariant}
-      color={color}
-      size={size}
-      leftSection={leftSection}
-      rightSection={rightSection}
+    <button
+      ref={buttonRef}
+      type="button"
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
-      className={combinedClassNames || undefined}
+      className={combinedClassNames}
+      onClick={onClick}
       {...props}
     >
-      {label}
-    </MantineButton>
+      {leftIcon}
+      {label && <span>{label}</span>}
+      {rightIcon}
+    </button>
   );
 };
