@@ -3,8 +3,8 @@
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
+import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup.Description';
 import { FormGroupLabel, type FormGroupLabelProps } from './FormGroup.Label';
-import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroupDescription';
 import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroupCaption';
 import { FormGroupProvider } from './FormGroupContext';
 
@@ -64,6 +64,7 @@ FormGroup.Description = FormGroupDescription;
 FormGroup.Caption = FormGroupCaption;
 
 // Re-export types so they come from one place
+
+export type { FormGroupDescriptionProps } from './FormGroup.Description';
 export type { FormGroupLabelProps } from './FormGroup.Label';
-export type { FormGroupDescriptionProps } from './FormGroupDescription';
 export type { FormGroupCaptionProps } from './FormGroupCaption';
