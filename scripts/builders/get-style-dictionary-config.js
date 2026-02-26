@@ -17,7 +17,9 @@ const path = require('path');
  * 
  * @example
  * const config = getStyleDictionaryConfig('startribune', 'light', { cssVariables, typographyClasses });
- * // Returns config that will generate startribune-light.css
+ * Returns config that will generate:
+ * - startribune-light.css (web CSS variables)
+ * - startribune-light.js (mobile JavaScript tokens)
  */
 function getStyleDictionaryConfig(brand, mode, formats = {}) {
   // Helper function to check if file exists and throw error if not
@@ -89,7 +91,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         transformGroup: 'css',
         
         // Output directory for generated CSS files
-        buildPath: `dist/themes/`,
+        buildPath: `dist/web/themes/`,
         
         // File generation configuration
         files: [
@@ -100,6 +102,28 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
             
             // Use our custom format function
             format: 'css/variables',
+          },
+        ],
+      },
+      javascript: {
+        transformGroup: 'js',
+        // The pxToNumber transform removes 'px' from dimension values for React Native compatibility
+        transforms: [
+          'size/pxToNumber', // Custom transform: converts "14px" to 14 for React Native
+        ],
+        
+        // Output directory for generated JavaScript token files
+        buildPath: `dist/mobile/themes/`,
+        
+        // File generation configuration
+        files: [
+          {
+            // Output filename: {brand}-{mode}.js
+            // Examples: startribune-light.js, varsity-dark.js
+            destination: `${brand}-${mode}.js`,
+            
+            // Use Style Dictionary's built-in JavaScript ES6 module format
+            format: 'javascript/es6',
           },
         ],
       },
