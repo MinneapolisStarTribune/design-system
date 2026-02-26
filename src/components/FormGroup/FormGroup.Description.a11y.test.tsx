@@ -8,7 +8,7 @@ describe('FormGroupDescription Accessibility', () => {
       await expectNoA11yViolations(
         <>
           <FormGroupDescription id={descriptionId}>
-            We'll never share your email.
+            We will never share your email.
           </FormGroupDescription>
           <input
             id="email-input"
