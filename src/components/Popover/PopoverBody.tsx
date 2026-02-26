@@ -14,16 +14,16 @@ export const PopoverBody: React.FC<{
   const TOP_THRESHOLD = 1; // px
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const scrollElement = ref.current;
+    if (!scrollElement) return;
 
     const updateAtTop = () => {
-      const isAtTop = el.scrollTop <= TOP_THRESHOLD;
+      const isAtTop = scrollElement.scrollTop <= TOP_THRESHOLD;
       setAtTop((prev) => (prev !== isAtTop ? isAtTop : prev));
     };
 
     // rAF-throttled scroll handler to reduce state churn
-    const onScroll = () => {
+    const handleScroll = () => {
       if (rafId.current != null) return;
       rafId.current = requestAnimationFrame(() => {
         rafId.current = null;
@@ -34,15 +34,15 @@ export const PopoverBody: React.FC<{
     // Initialize once on mount
     updateAtTop();
 
-    el.addEventListener('scroll', onScroll, { passive: true });
+    scrollElement.addEventListener('scroll', handleScroll, { passive: true });
 
     // Keep state in sync on layout/content changes
-    const ro = new ResizeObserver(updateAtTop);
-    ro.observe(el);
+    const resizeObserver = new ResizeObserver(updateAtTop);
+    resizeObserver.observe(scrollElement);
 
     return () => {
-      el.removeEventListener('scroll', onScroll);
-      ro.disconnect();
+      scrollElement.removeEventListener('scroll', handleScroll);
+      resizeObserver.disconnect();
       if (rafId.current != null) {
         cancelAnimationFrame(rafId.current);
       }

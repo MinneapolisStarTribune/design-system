@@ -2,11 +2,11 @@
 .container {
   min-width: 240px;
   max-width: 320px;
-  background: #fff;
-  border-radius: 16px !important;
-  border: 1px solid #E3E5E8 !important;
-  box-shadow: 0 12px 16px -4px rgba(10, 10, 10, 0.08), 0 2px 6px -2px rgba(10, 10, 10, 0.03) !important;
-  padding: 8px 0 16px 16px !important;
+  background: var(--color-base-white);
+  border-radius: var(--radius-16) !important;
+  border: 1px solid var(--color-neutral-200) !important;
+  box-shadow: 0 12px 16px -4px #0a0a0a14, 0 2px 6px -2px #0a0a0a08 !important;
+  padding: var(--spacing-8) 0 var(--spacing-16) var(--spacing-16) !important;
   max-height: 500px;
 }
 
@@ -22,23 +22,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 8px;
+  padding-right: var(--spacing-8);
   color: var(--color-text-on-light-primary);
 }
 
 
 .headerContent:has(.description) {
-  padding-top: 8px;
+  padding-top: var(--spacing-8);
 }
 
 
 /* Close button */
 .closeButton {
   align-self: flex-start !important;
-  width: 32px;
-  height: 32px;
+  width: var(--spacing-32);
+  height: var(--spacing-32);
   flex-shrink: 0;
-  border-radius: 100% !important;
+  border-radius: var(--radius-full) !important;
 }
 
 /* Description */
@@ -50,13 +50,13 @@
 /* Divider */
 .divider {
   height: 1px;
-  background: #eee;
-  margin: 12px 0 0 -16px;
+  background: var(--color-neutral-200);
+  margin: var(--spacing-12) 0 0 calc(-1 * var(--spacing-16));
 }
 
 /* Body */
 .body {
-  padding-right: 16px;
+  padding-right: var(--spacing-16);
   max-height: 400px;
   overflow-y: auto;
 
@@ -66,7 +66,7 @@
 
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  scrollbar-color: #00000040 transparent;
 }
 
 /* WebKit (Chrome, Edge, Safari) */
@@ -77,16 +77,16 @@
   background: transparent;
 }
 .body::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: #00000040;
   border-radius: 999px;
 }
 .body::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #00000066;
 }
 
 /* When at top, add top padding (adjust as needed) */
 .bodyAtTop {
-  padding-top: 12px;
+  padding-top: var(--spacing-12);
 }
 
 /* Respect reduced-motion preferences */
@@ -98,5 +98,5 @@
 
 /* Text-only mode */
 .textOnly {
-  padding: 16px;
+  padding: var(--spacing-16);
 }
