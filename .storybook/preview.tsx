@@ -10,28 +10,21 @@
  *    - Theme selector: Switch between 'light' and 'dark' color schemes
  *
  * 2. Decorator Chain:
- *    - ThemeWrapper: Loads the correct CSS theme file based on brand/colorScheme
- *    - DesignSystemProvider: Provides Mantine theme configuration to components
- *    - ColorSchemeScript: Mantine's script for color scheme detection
+ *    - ThemeProvider: Loads CSS theme file and provides theme context
+ *    - FontWrapper: Loads brand-specific fonts
  *    - Story: The actual story component being rendered
  *
  * 3. Theme Loading Flow:
  *    - User selects brand/theme in toolbar → context.globals updates
  *    - Decorator extracts brand and colorScheme from context
- *    - ThemeWrapper loads the corresponding CSS file (e.g., startribune-light.css)
+ *    - ThemeProvider automatically loads the corresponding CSS file (e.g., startribune-light.css)
  *    - CSS variables become available in the DOM
- *    - DesignSystemProvider creates Mantine theme from TypeScript token files
- *    - Components can now use both CSS variables and Mantine theme tokens
+ *    - Components can now use CSS variables directly
  *
- * 4. Why Both CSS Variables and Mantine Theme?
- *    - CSS Variables: Used by CSS modules and direct CSS styling
- *    - Mantine Theme: Used by Mantine components via their theme system
- *    - Both are needed because they serve different purposes in the component architecture
- *
- * 5. ArgTypes Configuration:
+ * 4. ArgTypes Configuration:
  *    - Hides certain props from Storybook controls that are internal/accessibility-focused
  *
- * 6. Parameters:
+ * 5. Parameters:
  *    - Controls: Matchers for better control UI (e.g., color picker for color props)
  *    - A11y: Accessibility testing configuration
  *    - Docs: Source code display settings
@@ -39,10 +32,7 @@
 
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { ColorSchemeScript } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
-import { ThemeWrapper } from './theme-wrapper';
+import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvider';
 import { FontWrapper } from './font-wrapper';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 
@@ -73,7 +63,7 @@ const preview: Preview = {
     },
     theme: {
       name: 'Theme',
-      description: 'Mantine color scheme',
+      description: 'Color scheme',
       defaultValue: 'light',
       toolbar: {
         icon: 'mirror',
@@ -104,13 +94,9 @@ const preview: Preview = {
      *
      * This decorator:
      * 1. Extracts brand and colorScheme from Storybook's global context
-     * 2. Wraps the story in ThemeWrapper (loads CSS variables)
-     * 3. Wraps in DesignSystemProvider (provides Mantine theme)
-     * 4. Includes ColorSchemeScript for Mantine's color scheme detection
-     * 5. Adds padding container for visual spacing in Storybook UI
-     *
-     * The order matters: ThemeWrapper must be outermost so CSS variables
-     * are available before Mantine components try to use them.
+     * 2. Wraps the story in DesignSystemProvider (loads CSS variables automatically)
+     * 3. Wraps in FontWrapper (loads brand-specific fonts)
+     * 4. Adds padding container for visual spacing in Storybook UI
      */
     (Story, context) => {
       const selectedVersion = context.globals.versions as string;
@@ -125,18 +111,15 @@ const preview: Preview = {
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
 
       return (
-        <ThemeWrapper brand={brand} colorScheme={scheme}>
+        <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
           <FontWrapper brand={brand}>
-            <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
-              <ColorSchemeScript />
-              <div style={{ padding: '1rem' }}>
-                <BrandValidationErrorBoundary>
-                  <Story />
-                </BrandValidationErrorBoundary>
-              </div>
-            </DesignSystemProvider>
+            <div style={{ padding: '1rem' }}>
+              <BrandValidationErrorBoundary>
+                <Story />
+              </BrandValidationErrorBoundary>
+            </div>
           </FontWrapper>
-        </ThemeWrapper>
+        </DesignSystemProvider>
       );
     },
   ],
