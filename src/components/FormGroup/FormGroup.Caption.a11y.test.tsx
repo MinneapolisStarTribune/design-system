@@ -31,4 +31,4 @@ describe('FormGroupCaption Accessibility', () => {
     });
   });
 }
-
+)
