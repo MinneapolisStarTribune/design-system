@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import styles from './Button.module.scss';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
@@ -15,6 +16,9 @@ export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
+
+/** Extra data to merge into the tracking event. Use for per-button context (e.g. cta_type, module_position). */
+export type ButtonAnalytics = Record<string, unknown>;
 
 export interface ButtonProps
   extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
@@ -26,6 +30,8 @@ export interface ButtonProps
   label?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isDisabled?: boolean;
+  /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
+  analytics?: ButtonAnalytics;
 }
 
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
@@ -39,8 +45,25 @@ export const Button: React.FC<ButtonProps> = ({
   children: _children,
   className,
   isDisabled,
+  onClick,
+  analytics: analyticsOverride,
   ...props
 }) => {
+  const { track } = useAnalytics();
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    track({
+      event: 'button_click',
+      component: 'Button',
+      label: label ?? undefined,
+      icon: icon ?? undefined,
+      variant,
+      color,
+      ...analyticsOverride,
+    });
+    onClick?.(e);
+  };
+
   let mantineVariant;
   if (variant === 'ghost') {
     mantineVariant = 'subtle';
@@ -103,6 +126,7 @@ export const Button: React.FC<ButtonProps> = ({
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
       className={combinedClassNames || undefined}
+      onClick={handleClick}
       {...props}
     >
       {label}
