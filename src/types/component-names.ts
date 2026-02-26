@@ -11,6 +11,7 @@ export const COMPONENT_NAMES = [
   'OpinionHeading',
   'FormGroup',
   'FormControl',
+  'SponsoredHeading',
   'PhotoLayout',
   'ImageGallery',
   'InlineVideo',
