@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { FormGroup } from './FormGroup';
 import { FormGroupDescription } from './FormGroup.Description';
+import { FormControl } from '../FormControl/FormControl';
 
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Description',
   component: FormGroupDescription,
+  parameters: {
+    layout: 'centered',
+  },
   tags: ['autodocs'],
   argTypes: {
     children: {
@@ -14,27 +19,16 @@ const meta = {
       control: 'text',
       description: 'Optional id attribute for the description element.',
     },
-    dataTestId: {
-      control: 'text',
-      description: 'Test id used for querying the element in tests.',
-    },
   },
 } satisfies Meta<typeof FormGroupDescription>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    children: "We'll never share your email.",
-  },
-};
-
 export const WithCustomIdAndTestId: Story = {
   args: {
     id: 'email-description',
-    dataTestId: 'form-group-description',
-    children: 'Description with custom id and data-testid.',
+    children: 'Description with custom id.',
   },
 };
 
@@ -43,5 +37,18 @@ export const LongText: Story = {
     children:
       'This description provides additional context about the form field, explaining what information is required and how it will be used. It can span multiple sentences and should remain readable at smaller sizes.',
   },
+};
+
+export const WithLabel: Story = {
+  args: {
+    children: "We'll never share your email.",
+  },
+  render: (args) => (
+    <FormGroup>
+      <FormGroup.Label>Email address</FormGroup.Label>
+      <FormGroup.Description {...args} />
+      <FormControl.TextInput placeholderText="you@example.com" />
+    </FormGroup>
+  ),
 };
 
