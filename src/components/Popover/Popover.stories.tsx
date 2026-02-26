@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Box, Button } from '@mantine/core';
 import { Popover } from './Popover';
-import { Icon } from '../index';
+import { Icon, UtilityBody } from '../index';
+
 const meta = {
   title: 'Feedback & Status/Popover',
   component: Popover,
@@ -52,11 +53,7 @@ export const WithCustomContent: Story = {
   },
   decorators: [
     (Story) => (
-      <div
-        style={{
-          paddingBottom: 120,
-        }}
-      >
+      <div>
         <Story />
       </div>
     ),
@@ -69,9 +66,11 @@ export const WithCustomContent: Story = {
         <Popover.Heading>Title</Popover.Heading>
 
         <Popover.Body>
-          <Box>Option 1</Box>
-          <Box>Option 2</Box>
-          <Box>Option 3</Box>
+          <UtilityBody size="small">Option 1</UtilityBody>
+          <UtilityBody size="small">Option 2</UtilityBody>
+          <UtilityBody size="small">Option 3</UtilityBody>
+          <UtilityBody size="small">Option 4</UtilityBody>
+          <UtilityBody size="small">Option 5</UtilityBody>
         </Popover.Body>
       </>
     ),
@@ -100,7 +99,7 @@ export const WithDividerAndCustomContent: Story = {
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Divider />
         <Popover.Body>
-          <Box>Sample Content popover body</Box>
+          <UtilityBody>Sample Content popover body</UtilityBody>
         </Popover.Body>
       </>
     ),
@@ -134,7 +133,7 @@ export const ScrollableBody: Story = {
 
         <Popover.Body>
           {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i}>Item {i + 1}</div>
+            <UtilityBody key={i}>Item {i + 1}</UtilityBody>
           ))}
         </Popover.Body>
       </>
@@ -151,12 +150,12 @@ export const IconPopover: Story = {
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
-        <Popover.Body>
+        <Popover.Description>
           <Box>Sample Description</Box>
-        </Popover.Body>
+        </Popover.Description>
         <Popover.Divider />
         <Popover.Body>
-          <Box>Sample Content popover body</Box>
+          <UtilityBody>Sample Content popover body</UtilityBody>
         </Popover.Body>
       </>
     ),
@@ -188,7 +187,9 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Top</Popover.Heading>
-        <Popover.Body>Arrow on top</Popover.Body>
+        <Popover.Body>
+          <UtilityBody>Arrow on top</UtilityBody>
+        </Popover.Body>
       </Popover>
 
       {/* RIGHT */}
@@ -198,7 +199,9 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Right</Popover.Heading>
-        <Popover.Body>Arrow on right</Popover.Body>
+        <Popover.Body>
+          <UtilityBody>Arrow on right</UtilityBody>
+        </Popover.Body>
       </Popover>
 
       {/* LEFT */}
@@ -208,7 +211,9 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Left</Popover.Heading>
-        <Popover.Body>Arrow on left</Popover.Body>
+        <Popover.Body>
+          <UtilityBody>Arrow on left</UtilityBody>
+        </Popover.Body>
       </Popover>
 
       {/* BOTTOM */}
@@ -218,7 +223,9 @@ export const AllPositions: Story = {
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Bottom</Popover.Heading>
-        <Popover.Body>Arrow on bottom</Popover.Body>
+        <Popover.Body>
+          <UtilityBody>Arrow on bottom</UtilityBody>
+        </Popover.Body>
       </Popover>
     </div>
   ),
