@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
-import { FormGroupDescription } from './FormGroup.Description';
 import { FormControl } from '../FormControl/FormControl';
 
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Description',
-  component: FormGroupDescription,
+  component: FormGroup.Description,
   parameters: {
     layout: 'centered',
   },
@@ -20,7 +19,7 @@ const meta = {
       description: 'Optional id attribute for the description element.',
     },
   },
-} satisfies Meta<typeof FormGroupDescription>;
+} satisfies Meta<typeof FormGroup.Description>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
