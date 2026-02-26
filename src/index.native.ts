@@ -3,5 +3,6 @@
 // Export components (will be populated in Ticket 4)
 export * from './components/index.native';
 
-// Export Brand type for now (DesignSystemProvider will be adapted for React Native in a later ticket)
-export type { Brand } from './providers/MantineProvider';
+// Export DesignSystemProvider and Brand type
+export { type Brand, DesignSystemProvider } from './providers/DesignSystemProvider';
+export { useTheme } from './providers/theme/ThemeContext';
