@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@dist': path.resolve(__dirname, 'dist'),
     },
     extensions: ['.native.tsx', '.native.ts', '.tsx', '.ts', '.jsx', '.js'],
   },
@@ -45,6 +46,7 @@ export default defineConfig({
         baseUrl: __dirname,
         paths: {
           '@/*': [path.resolve(__dirname, 'src/*')],
+          '@dist/*': [path.resolve(__dirname, 'dist/*')],
         },
       },
       beforeWriteFile: (filePath, content) => {

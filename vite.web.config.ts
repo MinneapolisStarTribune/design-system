@@ -12,6 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@dist': path.resolve(__dirname, 'dist'),
     },
   },
   define: {
@@ -52,6 +53,7 @@ export default defineConfig({
         baseUrl: __dirname,
         paths: {
           '@/*': [path.resolve(__dirname, 'src/*')],
+          '@dist/*': [path.resolve(__dirname, 'dist/*')],
         },
       },
       beforeWriteFile: (filePath, content) => {
