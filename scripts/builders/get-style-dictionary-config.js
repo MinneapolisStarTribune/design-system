@@ -106,9 +106,11 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         ],
       },
       javascript: {
-        // Use JavaScript transform group - handles token reference resolution for JS output
-        // This automatically resolves {color.neutral.500} references to actual hex values
         transformGroup: 'js',
+        // The pxToNumber transform removes 'px' from dimension values for React Native compatibility
+        transforms: [
+          'size/pxToNumber', // Custom transform: converts "14px" to 14 for React Native
+        ],
         
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
