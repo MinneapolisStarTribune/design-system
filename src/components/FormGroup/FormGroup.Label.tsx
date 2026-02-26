@@ -1,4 +1,3 @@
-import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
 import { UtilityBody } from '../Typography/Utility/UtilityBody/UtilityBody';
