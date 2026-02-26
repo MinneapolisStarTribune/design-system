@@ -9,6 +9,7 @@ import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 import styles from './Button.module.scss';
+import { UtilityLabel } from '../Typography/Utility';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -20,6 +21,7 @@ export type ButtonSize = (typeof BUTTON_SIZES)[number];
 export interface ButtonProps
   extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
   color?: ButtonColor;
+  capitalize?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: IconName;
@@ -32,6 +34,7 @@ export interface ButtonProps
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
+  capitalize = false,
   variant = 'filled',
   size = 'medium',
   icon,
@@ -106,7 +109,9 @@ export const Button: React.FC<ButtonProps> = ({
       className={combinedClassNames || undefined}
       {...props}
     >
-      {label}
+      <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
+        {label}
+      </UtilityLabel>
     </MantineButton>
   );
 };

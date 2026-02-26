@@ -297,10 +297,13 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
           // Set padding based on size
           if (props.size === 'small') {
             vars['--button-padding-x'] = theme.spacing['12'];
+            vars['--button-height'] = '32px';
           } else if (props.size === 'medium') {
             vars['--button-padding-x'] = theme.spacing['16'];
+            vars['--button-height'] = '40px';
           } else if (props.size === 'large') {
             vars['--button-padding-x'] = theme.spacing['24'];
+            vars['--button-height'] = '52px';
           }
 
           // Styles that apply to all buttons
