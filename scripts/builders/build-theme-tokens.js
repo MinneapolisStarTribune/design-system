@@ -2,6 +2,23 @@ const StyleDictionary = require('style-dictionary').default;
 const getStyleDictionaryConfig = require('./get-style-dictionary-config');
 const cssVariablesFormat = require('../formats/css-variables');
 
+// Register transform to remove 'px' from dimension values for JavaScript/React Native
+StyleDictionary.registerTransform({
+  name: 'size/pxToNumber',
+  type: 'value',
+  transitive: true, // Process referenced tokens as well
+  filter: function(token) {
+    // This filter targets tokens with string values ending in 'px'
+    return typeof token.value === 'string' && token.value.trim().endsWith('px');
+  },
+  transform: function(token) {
+    // This function extracts the numeric value from the pixel string
+    const numericValue = parseFloat(token.value);
+    // Return the number, or the original value if parsing failed
+    return isNaN(numericValue) ? token.value : numericValue;
+  }
+});
+
 /**
  * Build theme tokens for a specific brand and mode
  * 
