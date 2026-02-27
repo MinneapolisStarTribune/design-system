@@ -4,5 +4,5 @@
   },
   "exclude": ["node_modules"],
   "extends": "../.storybook/.tsconfig.json",
-  "include": ["**/*.stories.ts", "**/*.stories.tsx"]
+  "include": ["env.d.ts", "**/*.stories.ts", "**/*.stories.tsx"]
 }
