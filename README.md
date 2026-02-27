@@ -61,6 +61,14 @@ function App() {
 
 See [Using Themes](#using-themes) and [Available Components](#available-components) for more details.
 
+### TypeScript configuration (tsconfig files)
+
+This repo intentionally has **three** `tsconfig` files, each with a specific role:
+
+- **`tsconfig.json`** – main project config used for builds and type-checking the library source in `src/`.
+- **`.storybook/.tsconfig.json`** – Storybook config that extends the main one and adds Storybook-specific types and options.
+- **`src/tsconfig.json`** – stories-only config so editors type-check `*.stories.tsx` files with the same settings as Storybook, avoiding false-positive JSX/`React` errors in some IDEs while keeping stories out of the main build.
+
 ## Available Components
 
 Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
