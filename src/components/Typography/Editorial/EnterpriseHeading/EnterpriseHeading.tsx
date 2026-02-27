@@ -2,7 +2,7 @@ import { createEditorialHeading } from '..';
 
 export const EnterpriseHeading = createEditorialHeading({
   componentName: 'EnterpriseHeading',
-  classNamePrefix: 'enterprise',
+  classNamePrefix: 'editorial-enterprise',
 });
 
 export type { EditorialHeadingImportance as EnterpriseHeadingImportance } from '..';

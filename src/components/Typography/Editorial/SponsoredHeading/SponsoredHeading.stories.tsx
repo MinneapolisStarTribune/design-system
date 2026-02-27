@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NonNewsHeading } from './NonNewsHeading';
-import type { NewsHeadingImportance } from '../NewsHeading/NewsHeading';
+import { SponsoredHeading } from './SponsoredHeading';
+import type { SponsoredHeadingImportance } from './SponsoredHeading';
 
-const importanceOptions: NewsHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+const importanceOptions: SponsoredHeadingImportance[] = [1, 2, 3, 4, 5, 6];
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/NonNewsHeading',
-  component: NonNewsHeading,
+  title: 'Foundations/Typography/Editorial/SponsoredHeading',
+  component: SponsoredHeading,
   parameters: {
     docs: {
       description: {
         component:
-          'Non-editorial heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
+          'Editorial sponsored heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
       },
     },
   },
@@ -28,7 +28,7 @@ const meta = {
       description: 'Heading text.',
     },
   },
-} satisfies Meta<typeof NonNewsHeading>;
+} satisfies Meta<typeof SponsoredHeading>;
 
 export default meta;
 
@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     importance: 1,
-    children: 'Non-news heading example',
+    children: 'Sponsored heading example',
   },
 };
 
@@ -48,10 +48,10 @@ export const AllLevels: Story = {
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
-        <NonNewsHeading key={level} importance={level}>
-          NonNewsHeading importance={level} (h{level})
-        </NonNewsHeading>
+      {(importanceOptions as SponsoredHeadingImportance[]).map((level) => (
+        <SponsoredHeading key={level} importance={level}>
+          SponsoredHeading importance={level} (h{level})
+        </SponsoredHeading>
       ))}
     </div>
   ),
