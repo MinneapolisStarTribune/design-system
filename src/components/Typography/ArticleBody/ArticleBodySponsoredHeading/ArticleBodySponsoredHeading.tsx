@@ -5,5 +5,7 @@ export const ArticleBodySponsoredHeading = createArticleBodyHeading({
   classNamePrefix: 'sponsored',
 });
 
-export type { EditorialHeadingImportance as ArticleBodySponsoredHeadingImportance } from '../../Editorial';
-export type { EditorialHeadingProps as ArticleBodySponsoredHeadingProps } from '../../Editorial';
+export type {
+  EditorialHeadingImportance as ArticleBodySponsoredHeadingImportance,
+  EditorialHeadingProps as ArticleBodySponsoredHeadingProps,
+} from '@/components/Typography/Editorial';

@@ -1,8 +1,10 @@
-import React from 'react';
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import type { ComponentName } from '@/types/component-names';
-import type { EditorialHeadingImportance, EditorialHeadingProps } from '../Editorial/types';
+import type {
+  EditorialHeadingImportance,
+  EditorialHeadingProps,
+} from '@/components/Typography/Editorial';
 
 interface CreateArticleBodyHeadingOptions {
   componentName: ComponentName;
