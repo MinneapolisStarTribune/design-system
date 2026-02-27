@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "exclude": ["node_modules"],
+  "extends": "../.storybook/.tsconfig.json",
+  "include": ["env.d.ts", "**/*.stories.ts", "**/*.stories.tsx"]
+}
