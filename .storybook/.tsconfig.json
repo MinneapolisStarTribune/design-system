@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "types": ["node", "@storybook/react", "vitest/globals", "@testing-library/jest-dom"]
+  },
+  "exclude": ["node_modules"],
+  "extends": "../tsconfig.json",
+  "include": ["../src", "./**/*.ts", "./**/*.tsx"]
+}
