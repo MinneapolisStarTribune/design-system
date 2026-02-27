@@ -172,6 +172,14 @@
           "line-height": "1.15"
         }
       },
+      "h3": {
+        "value": {
+          "font-family": "{font.family.barlow-condensed}",
+          "font-size": "24px",
+          "font-weight": "600",
+          "line-height": "1.15"
+        }
+      },
       "h4": {
         "value": {
           "font-family": "{font.family.barlow-condensed}",
