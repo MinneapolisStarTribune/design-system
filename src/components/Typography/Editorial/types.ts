@@ -21,8 +21,8 @@ export interface CreateEditorialHeadingOptions {
   /** Component name for React DevTools and brand validation. */
   componentName: ComponentName;
   /**
-   * Class name segment (e.g. 'news', 'sponsored').
-   * Produces classes: typography-editorial-{classNamePrefix}-h1 … h6.
+   * Class name segment (e.g. 'editorial-news', 'article-body').
+   * Produces classes: typography-{classNamePrefix}-h1 … h6.
    */
   classNamePrefix: string;
 }
