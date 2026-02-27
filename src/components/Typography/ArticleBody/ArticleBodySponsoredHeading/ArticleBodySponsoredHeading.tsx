@@ -1,8 +1,8 @@
-import { createEditorialHeading } from '../../Editorial/createEditorialHeading';
+import { createArticleBodyHeading } from '../createArticleBodyHeading';
 
-export const ArticleBodySponsoredHeading = createEditorialHeading({
+export const ArticleBodySponsoredHeading = createArticleBodyHeading({
   componentName: 'ArticleBodySponsoredHeading',
-  classNamePrefix: 'article-body-sponsored',
+  classNamePrefix: 'sponsored',
 });
 
 export type { EditorialHeadingImportance as ArticleBodySponsoredHeadingImportance } from '../../Editorial';

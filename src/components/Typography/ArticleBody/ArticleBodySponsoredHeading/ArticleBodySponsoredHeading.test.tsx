@@ -12,7 +12,7 @@ describe('ArticleBodySponsoredHeading', () => {
 
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent('Heading text');
-    expect(heading).toHaveClass('typography-editorial-article-body-sponsored-h1');
+    expect(heading).toHaveClass('typography-article-body-sponsored-h1');
   });
 
   it('renders correct element and class for each importance level', () => {
@@ -28,7 +28,7 @@ describe('ArticleBodySponsoredHeading', () => {
       const heading = getByRole('heading', { level: importance });
 
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveClass(`typography-editorial-article-body-sponsored-h${importance}`);
+      expect(heading).toHaveClass(`typography-article-body-sponsored-h${importance}`);
 
       unmount();
     });
@@ -43,7 +43,7 @@ describe('ArticleBodySponsoredHeading', () => {
 
     const heading = getByRole('heading', { level: 1 });
 
-    expect(heading).toHaveClass('typography-editorial-article-body-sponsored-h1');
+    expect(heading).toHaveClass('typography-article-body-sponsored-h1');
     expect(heading).toHaveClass('custom-class');
   });
 
