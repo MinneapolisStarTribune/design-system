@@ -60,7 +60,7 @@ export const Toast: React.FC<ToastProps> = ({
         className={styles.closeButton}
         onClick={onClose}
       >
-        ×
+        <Icon name="close" size="small" />
       </button>
     </div>
   );
