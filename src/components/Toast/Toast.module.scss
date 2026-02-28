@@ -83,6 +83,7 @@
 
 .variant-info {
   @include variant-semantic(info);
+  border: 1px solid var(--color-border-on-light-subtle-01);
 }
 
 .variant-success {
