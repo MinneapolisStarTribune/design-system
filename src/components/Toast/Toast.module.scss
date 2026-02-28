@@ -1,13 +1,13 @@
-/* Container – fixed top-right stack */
+/* Container – fixed top-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
 .container {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: var(--spacing-16);
+  right: var(--spacing-16);
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: min(400px, calc(100vw - 32px));
+  gap: var(--spacing-12);
+  max-width: min(400px, calc(100vw - var(--spacing-32)));
   pointer-events: none;
 
   > * {
@@ -15,13 +15,13 @@
   }
 }
 
-/* Toast base – variant sets background, border, and colors */
+/* Toast base – variant sets background, border, and colors. Uses: spacing (12, 16), radius-12. */
 .toast {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  padding: 12px 12px 12px 16px;
-  border-radius: 12px;
+  gap: var(--spacing-12);
+  padding: var(--spacing-12) var(--spacing-12) var(--spacing-12) var(--spacing-16);
+  border-radius: var(--radius-12);
   box-shadow: 0 12px 16px -4px rgba(10, 10, 10, 0.08), 0 2px 6px -2px rgba(10, 10, 10, 0.03);
   min-width: 280px;
   max-width: 100%;
@@ -30,7 +30,7 @@
 .content {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--spacing-12);
   flex: 1;
   min-width: 0;
 }
@@ -40,13 +40,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2px;
+  margin-top: var(--spacing-2);
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--spacing-2);
   min-width: 0;
 }
 
@@ -61,33 +61,7 @@
   line-height: 1.4;
 }
 
-/* Variant: info – neutral surface (background/light/gray-01, border/subtle-01, text/icon on-light) */
-.variant-info {
-  background: var(--color-background-light-gray-01);
-  border: 1px solid var(--color-border-on-light-subtle-01);
-
-  .icon {
-    color: var(--color-icon-on-light-primary);
-  }
-
-  .title {
-    color: var(--color-text-on-light-primary);
-  }
-
-  .description {
-    color: var(--color-text-on-light-secondary);
-  }
-
-  .closeButton {
-    color: var(--color-icon-on-light-primary);
-
-    &:hover {
-      background: color-mix(in srgb, var(--color-icon-on-light-primary) 12%, transparent);
-    }
-  }
-}
-
-/* Variant: success, error, warning – semantic tinted background + foreground */
+/* Variant: info, success, error, warning – semantic background + foreground */
 @mixin variant-semantic($name) {
   background: var(--color-semantic-#{$name}-background);
   border: 1px solid color-mix(in srgb, var(--color-semantic-#{$name}-foreground) 25%, transparent);
@@ -105,6 +79,10 @@
       background: color-mix(in srgb, var(--color-semantic-#{$name}-foreground) 12%, transparent);
     }
   }
+}
+
+.variant-info {
+  @include variant-semantic(info);
 }
 
 .variant-success {
@@ -128,11 +106,12 @@
   height: 28px;
   padding: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-6);
   background: transparent;
   font-size: 18px;
   line-height: 1;
   cursor: pointer;
+
   &:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
