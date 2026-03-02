@@ -3,7 +3,10 @@ export { Button, type ButtonProps } from './Button/Button';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
 export { FormGroup, type FormGroupProps } from './FormGroup/FormGroup';
+export { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
 export { useFormGroupContext, FormGroupProvider } from './FormGroup/FormGroupContext';
+export { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup/FormGroupDescription';
+export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
@@ -45,6 +48,3 @@ export {
   UtilityLabel,
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/UtilityLabel';
-export { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
-export { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup/FormGroupDescription';
-export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
@@ -28,7 +27,7 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     id: 'email-description',
-    children: "We'll never share your email.",
+    children: 'We will never share your email.',
   },
   render: (args) => (
     <FormGroup>
@@ -50,7 +49,7 @@ export const AllVariants: Story = {
       <FormGroup>
         <FormGroup.Label>Email address</FormGroup.Label>
         <FormGroup.Description id="email-description-short">
-          We'll never share your email.
+          We will never share your email.
         </FormGroup.Description>
         <FormControl.TextInput placeholderText="you@example.com" />
       </FormGroup>
