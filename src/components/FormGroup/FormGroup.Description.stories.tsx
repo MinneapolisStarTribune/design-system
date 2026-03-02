@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
@@ -24,22 +25,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithCustomIdAndTestId: Story = {
+export const Configurable: Story = {
   args: {
     id: 'email-description',
-    children: 'Description with custom id.',
-  },
-};
-
-export const LongText: Story = {
-  args: {
-    children:
-      'This description provides additional context about the form field, explaining what information is required and how it will be used. It can span multiple sentences and should remain readable at smaller sizes.',
-  },
-};
-
-export const WithLabel: Story = {
-  args: {
     children: "We'll never share your email.",
   },
   render: (args) => (
@@ -49,4 +37,37 @@ export const WithLabel: Story = {
       <FormControl.TextInput placeholderText="you@example.com" />
     </FormGroup>
   ),
+};
+
+export const AllVariants: Story = {
+  args: {
+    id: 'email-description',
+    children:
+      'This description provides additional context about the form field, explaining what information is required and how it will be used. It can span multiple sentences and should remain readable at smaller sizes.',
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: 480 }}>
+      <FormGroup>
+        <FormGroup.Label>Email address</FormGroup.Label>
+        <FormGroup.Description id="email-description-short">
+          We'll never share your email.
+        </FormGroup.Description>
+        <FormControl.TextInput placeholderText="you@example.com" />
+      </FormGroup>
+
+      <FormGroup>
+        <FormGroup.Label>Email address</FormGroup.Label>
+        <FormGroup.Description {...args} />
+        <FormControl.TextInput placeholderText="you@example.com" />
+      </FormGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Shows a short helper description and a longer explanatory description for comparison, each within a full form group.',
+      },
+    },
+  },
 };
