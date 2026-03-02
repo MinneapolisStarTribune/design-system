@@ -7,6 +7,7 @@ export interface UtilityBodyProps extends BaseProps, AccessibilityProps {
   size?: UtilityBodySize;
   weight?: UtilityBodyWeight;
   children: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 export const UtilityBody: React.FC<UtilityBodyProps> = ({
@@ -15,12 +16,18 @@ export const UtilityBody: React.FC<UtilityBodyProps> = ({
   className,
   children,
   dataTestId,
+  style,
   ...props
 }) => {
   const typographyClassName = `typography-utility-text-${weight}-${size}`;
 
   return (
-    <p className={classNames(typographyClassName, className)} data-testid={dataTestId} {...props}>
+    <p
+      className={classNames(typographyClassName, className)}
+      data-testid={dataTestId}
+      style={style}
+      {...props}
+    >
       {children}
     </p>
   );

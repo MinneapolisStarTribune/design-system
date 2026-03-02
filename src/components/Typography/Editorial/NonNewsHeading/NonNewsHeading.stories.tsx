@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NonNewsHeading } from './NonNewsHeading';
-import { NewsHeadingImportance } from '../../NewsHeading/NewsHeading';
+import type { NewsHeadingImportance } from '../NewsHeading/NewsHeading';
 
 const importanceOptions: NewsHeadingImportance[] = [1, 2, 3, 4, 5, 6];
 

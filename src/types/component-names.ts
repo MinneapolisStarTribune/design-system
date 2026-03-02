@@ -5,12 +5,15 @@
  * @remarks Used for brand validation and enforcement.
  */
 export const COMPONENT_NAMES = [
+  'ArticleBodySponsoredHeading',
+  'ArticleBodyHeading',
   'NewsHeading',
   'NonNewsHeading',
   'EnterpriseHeading',
   'OpinionHeading',
   'FormGroup',
   'FormControl',
+  'SponsoredHeading',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];
