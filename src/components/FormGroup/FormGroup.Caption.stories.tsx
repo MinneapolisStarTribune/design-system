@@ -55,8 +55,7 @@ export const AllVariants: Story = {
           <FormGroup.Label>Email Address</FormGroup.Label>
           <FormControl.TextInput placeholderText="Enter your email" />
           <FormGroup.Caption variant={variant}>
-            {variant === 'info' &&
-              'We recommend using a strong, unique password.'}
+            {variant === 'info' && 'We recommend using a strong, unique password.'}
             {variant === 'error' && 'Please enter a valid email address.'}
             {variant === 'success' && 'Email format looks good.'}
           </FormGroup.Caption>
