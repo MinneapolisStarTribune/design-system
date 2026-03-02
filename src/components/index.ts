@@ -2,13 +2,11 @@
 export { Button, type ButtonProps } from './Button/Button';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
-export {
-  FormGroup,
-  type FormGroupCaptionProps,
-  type FormGroupDescriptionProps,
-  type FormGroupLabelProps,
-  type FormGroupProps,
-} from './FormGroup/FormGroup';
+export { FormGroup, type FormGroupProps } from './FormGroup/FormGroup';
+export type { FormGroupDescriptionProps } from './FormGroup/FormGroup.Description';
+export type { FormGroupLabelProps } from './FormGroup/FormGroup.Label';
+export type { FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
+export { useFormGroupContext, FormGroupProvider } from './FormGroup/FormGroupContext';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
