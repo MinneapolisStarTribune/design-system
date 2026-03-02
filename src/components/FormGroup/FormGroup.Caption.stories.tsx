@@ -71,5 +71,4 @@ export const AllVariants: Story = {
       },
     },
   },
-  decorators: [],
 };
