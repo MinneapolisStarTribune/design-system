@@ -45,6 +45,6 @@ export {
   UtilityLabel,
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/UtilityLabel';
-export type { FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
-export type { FormGroupDescriptionProps } from './FormGroup/FormGroup.Description';
-export type { FormGroupLabelProps } from './FormGroup/FormGroup.Label';
+export { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
+export { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup/FormGroupDescription';
+export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
