@@ -62,6 +62,7 @@ export const AllVariants: Story = {
     </div>
   ),
   parameters: {
+    controls: { disable: true },
     docs: {
       description: {
         story:
