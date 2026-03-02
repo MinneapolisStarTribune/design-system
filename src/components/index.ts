@@ -10,6 +10,10 @@ export { useFormGroupContext, FormGroupProvider } from './FormGroup/FormGroupCon
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
+  ArticleBodySponsoredHeading,
+  type ArticleBodySponsoredHeadingProps,
+} from './Typography/ArticleBody/ArticleBodySponsoredHeading/ArticleBodySponsoredHeading';
+export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredText/ArticleBodySponsoredText';
