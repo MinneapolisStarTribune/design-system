@@ -2,7 +2,13 @@
   "compilerOptions": {
     "allowJs": true,
     "jsx": "react-jsx",
-    "types": ["node", "@storybook/react", "vitest/globals", "@testing-library/jest-dom"]
+    "types": [
+      "node",
+      "@storybook/react",
+      "vitest/globals",
+      "@testing-library/jest-dom",
+      "vite-plugin-svgr/client"
+    ]
   },
   "exclude": ["node_modules"],
   "extends": "../tsconfig.json",
