@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps } from './Toast';
+import styles from './Toast.stories.module.scss';
 
 const meta = {
   title: 'Feedback & Status/Toast',
@@ -12,12 +13,22 @@ const meta = {
     layout: 'centered',
   },
   argTypes: {
+    title: {
+      control: 'text',
+      description: 'Toast title',
+    },
+    description: {
+      control: 'text',
+      description: 'Optional body text',
+    },
     variant: {
       control: 'select',
       options: [...TOAST_VARIANTS],
+      description: 'Visual variant (info, success, warning, error)',
     },
     showIcon: {
       control: 'boolean',
+      description: 'Whether to show the variant icon',
     },
     onClose: {
       action: 'onClose',
@@ -30,12 +41,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// Wrapper so the toast can be dismissed and shown again (Storybook doesn't pass functions in args).
+// Wrapper so the toast can be dismissed and shown again
+// (Storybook doesn't pass functions in args).
 function ToastWithClose(props: ToastProps) {
   const [open, setOpen] = useState(true);
   const { onClose: _onClose, ...toastProps } = props;
   return (
-    <React.Fragment>
+    <>
       {open ? (
         <Toast {...toastProps} onClose={() => setOpen(false)} />
       ) : (
@@ -43,13 +55,13 @@ function ToastWithClose(props: ToastProps) {
           Show toast again
         </button>
       )}
-    </React.Fragment>
+    </>
   );
 }
 
 const renderWithClose = (args: ToastProps) => <ToastWithClose {...args} />;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     title: 'Update saved',
     description: 'Your changes have been saved.',
@@ -61,63 +73,40 @@ export const Default: Story = {
   render: renderWithClose,
 };
 
-export const TitleOnly: Story = {
+export const AllVariants: Story = {
+  parameters: {
+    controls: {
+      disable: true,
+    },
+  },
   args: {
-    title: 'Title only',
+    title: 'Example toast',
+    description: 'Example description',
     variant: 'info',
     showIcon: true,
     onClose: () => {},
+    dataTestId: 'toast-all-variants',
   },
-  render: renderWithClose,
-};
-
-export const WithoutIcon: Story = {
-  args: {
-    title: 'No icon',
-    description: 'Toast with showIcon set to false.',
-    showIcon: false,
-    variant: 'info',
-    onClose: () => {},
-  },
-  render: renderWithClose,
-};
-
-export const Info: Story = {
-  args: {
-    title: 'Information',
-    description: 'This is an info toast.',
-    variant: 'info',
-    onClose: () => {},
-  },
-  render: renderWithClose,
-};
-
-export const Success: Story = {
-  args: {
-    title: 'Success',
-    description: 'Your profile was updated.',
-    variant: 'success',
-    onClose: () => {},
-  },
-  render: renderWithClose,
-};
-
-export const Warning: Story = {
-  args: {
-    title: 'Warning',
-    description: 'Your session will expire in 5 minutes.',
-    variant: 'warning',
-    onClose: () => {},
-  },
-  render: renderWithClose,
-};
-
-export const Error: Story = {
-  args: {
-    title: 'Error',
-    description: 'Something went wrong. Please try again.',
-    variant: 'error',
-    onClose: () => {},
-  },
-  render: renderWithClose,
+  render: () => (
+    <div className={styles.list}>
+      {TOAST_VARIANTS.map((variant) => (
+        <div key={variant} className={styles.variantGroup}>
+          <Toast
+            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} toast`}
+            description="Toast with icon"
+            variant={variant}
+            showIcon
+            onClose={() => {}}
+          />
+          <Toast
+            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} toast (no icon)`}
+            description="Toast without icon"
+            variant={variant}
+            showIcon={false}
+            onClose={() => {}}
+          />
+        </div>
+      ))}
+    </div>
+  ),
 };
