@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyText } from './ArticleBodyText';
 import { FONT_WEIGHT_STYLE } from '../../../../types/globalTypes';
 
+const articleBodyWeights = ['regular', 'italic', 'bold', 'bold-italic', 'dropcap'] as const;
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyText',
   component: ArticleBodyText,
@@ -26,44 +28,35 @@ export default meta;
 
 type Story = StoryObj<typeof ArticleBodyText>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     weight: 'regular',
     children: 'Article body text',
   },
 };
 
-export const Regular: Story = {
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   args: {
     weight: 'regular',
     children: 'Article body text',
   },
-};
-
-export const Italic: Story = {
-  args: {
-    weight: 'italic',
-    children: 'Article body text',
-  },
-};
-
-export const Bold: Story = {
-  args: {
-    weight: 'bold',
-    children: 'Article body text',
-  },
-};
-
-export const BoldItalic: Story = {
-  args: {
-    weight: 'bold-italic',
-    children: 'Article body text',
-  },
-};
-
-export const Dropcap: Story = {
-  args: {
-    weight: 'dropcap',
-    children: 'Article body text',
-  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {articleBodyWeights.map((weight) => (
+        <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{weight}</span>
+          <ArticleBodyText weight={weight}>Article body text</ArticleBodyText>
+        </div>
+      ))}
+    </div>
+  ),
 };

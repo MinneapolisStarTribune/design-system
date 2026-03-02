@@ -34,28 +34,16 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'Opinion heading example',
   },
 };
 
-export const AllLevels: Story = {
-  args: {
-    importance: 1,
-    children: '',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(importanceOptions as OpinionHeadingImportance[]).map((level) => (
-        <OpinionHeading key={level} importance={level}>
-          OpinionHeading importance={level} (h{level})
-        </OpinionHeading>
-      ))}
-    </div>
-  ),
+export const AllVariants: Story = {
   parameters: {
+    controls: { disable: true },
     docs: {
       description: {
         story:
@@ -63,4 +51,18 @@ export const AllLevels: Story = {
       },
     },
   },
+  args: {
+    importance: 1,
+    children: '',
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {(importanceOptions as OpinionHeadingImportance[]).map((level) => (
+        <div key={level} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>OpinionHeading h{level}</span>
+          <OpinionHeading importance={level}>OpinionHeading h{level}</OpinionHeading>
+        </div>
+      ))}
+    </div>
+  ),
 };

@@ -37,29 +37,10 @@ export const Configurable: Story = {
   },
 };
 
-export const AllSizes: Story = {
-  args: {
-    name: 'camera-filled',
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
   },
-  render: (args: IconProps) => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="small" />
-        <span style={{ fontSize: '12px' }}>Small (14x14)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="medium" />
-        <span style={{ fontSize: '12px' }}>Medium (16x16)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="large" />
-        <span style={{ fontSize: '12px' }}>Large (24x24)</span>
-      </div>
-    </div>
-  ),
-};
-
-export const ColorVariants: Story = {
   args: {
     name: 'camera-filled',
     size: 'large',
@@ -69,10 +50,18 @@ export const ColorVariants: Story = {
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-        gap: '24px',
-        padding: '24px',
+        gap: '1rem',
       }}
     >
+      {['small', 'medium', 'large'].map((size) => (
+        <div
+          key={size}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}
+        >
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Size: {size}</span>
+          <Icon name={args.name} size={size as 'small' | 'medium' | 'large'} />
+        </div>
+      ))}
       {ICON_COLORS.map((color) => {
         const isOnDark = color.includes('on-dark');
         return (
@@ -92,7 +81,7 @@ export const ColorVariants: Story = {
             <Icon name={args.name} color={color} size={args.size} />
             <span
               style={{
-                fontSize: '12px',
+                fontSize: '0.75rem',
                 color: isOnDark ? '#ffffff' : '#6b7280',
                 textAlign: 'center',
                 wordBreak: 'break-word',
@@ -106,61 +95,4 @@ export const ColorVariants: Story = {
       })}
     </div>
   ),
-};
-
-export const IconGallery: Story = {
-  args: {
-    name: 'camera-filled',
-  },
-  render: () => {
-    const iconNames = Object.keys(iconOptions) as IconName[];
-
-    return (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-          gap: '24px',
-          padding: '24px',
-        }}
-      >
-        {iconNames.map((iconName) => (
-          <div
-            key={iconName}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '16px',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#f9fafb';
-              e.currentTarget.style.borderColor = '#d1d5db';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.borderColor = '#e5e7eb';
-            }}
-          >
-            <Icon name={iconName} size="large" />
-            <span
-              style={{
-                fontSize: '12px',
-                color: '#6b7280',
-                textAlign: 'center',
-                wordBreak: 'break-word',
-                maxWidth: '100%',
-              }}
-            >
-              {iconName}
-            </span>
-          </div>
-        ))}
-      </div>
-    );
-  },
 };

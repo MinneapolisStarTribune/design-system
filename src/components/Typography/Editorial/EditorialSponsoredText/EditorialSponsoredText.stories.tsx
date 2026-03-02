@@ -30,7 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConfigurableEditorialSponsoredText: Story = {
+export const Configurable: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
@@ -38,98 +38,42 @@ export const ConfigurableEditorialSponsoredText: Story = {
   },
 };
 
-export const AllSizes: Story = {
-  args: {
-    size: 'medium',
-    weight: 'regular',
-    children: 'Editorial Sponsored Text',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <EditorialSponsoredText size="xx-small" weight="regular">
-        XX-Small editorial sponsored text
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="x-small" weight="regular">
-        X-Small editorial sponsored text
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="small" weight="regular">
-        Small editorial sponsored text
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="medium" weight="regular">
-        Medium editorial sponsored text
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="large" weight="regular">
-        Large editorial sponsored text
-      </EditorialSponsoredText>
-    </div>
-  ),
-};
-
-export const WeightComparison: Story = {
-  args: {
-    size: 'medium',
-    weight: 'regular',
-    children: 'Editorial Sponsored Text',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <EditorialSponsoredText size="medium" weight="regular">
-        Regular editorial sponsored text (400)
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="medium" weight="bold">
-        Bold editorial sponsored text (700)
-      </EditorialSponsoredText>
-    </div>
-  ),
-};
-
 export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   args: {
     size: 'medium',
     weight: 'regular',
     children: 'Editorial Sponsored Text',
   },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <h2>XX-Small</h2>
-      <EditorialSponsoredText size="xx-small" weight="regular">
-        XX-Small / Regular
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="xx-small" weight="bold">
-        XX-Small / Bold
-      </EditorialSponsoredText>
-
-      <h2 style={{ marginTop: '24px' }}>X-Small</h2>
-      <EditorialSponsoredText size="x-small" weight="regular">
-        X-Small / Regular
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="x-small" weight="bold">
-        X-Small / Bold
-      </EditorialSponsoredText>
-
-      <h3>Small</h3>
-      <EditorialSponsoredText size="small" weight="regular">
-        Small / Regular
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="small" weight="bold">
-        Small / Bold
-      </EditorialSponsoredText>
-
-      <h3 style={{ marginTop: '24px' }}>Medium</h3>
-      <EditorialSponsoredText size="medium" weight="regular">
-        Medium / Regular
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="medium" weight="bold">
-        Medium / Bold
-      </EditorialSponsoredText>
-
-      <h3 style={{ marginTop: '24px' }}>Large</h3>
-      <EditorialSponsoredText size="large" weight="regular">
-        Large / Regular
-      </EditorialSponsoredText>
-      <EditorialSponsoredText size="large" weight="bold">
-        Large / Bold
-      </EditorialSponsoredText>
-    </div>
-  ),
+  render: () => {
+    const sizes = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'] as const;
+    const weights = ['regular', 'bold'] as const;
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem',
+        }}
+      >
+        {sizes.flatMap((size) =>
+          weights.map((weight) => (
+            <div
+              key={`${size}-${weight}`}
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+            >
+              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+                {size} / {weight}
+              </span>
+              <EditorialSponsoredText size={size} weight={weight}>
+                Editorial sponsored text
+              </EditorialSponsoredText>
+            </div>
+          ))
+        )}
+      </div>
+    );
+  },
 };

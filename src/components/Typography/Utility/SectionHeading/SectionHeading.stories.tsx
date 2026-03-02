@@ -16,26 +16,31 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'Section Heading',
   },
 };
 
-export const AllLevels: Story = {
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   args: {
     importance: 2,
     children: 'Heading',
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <SectionHeading importance={1}>Heading 1</SectionHeading>
-      <SectionHeading importance={2}>Heading 2</SectionHeading>
-      <SectionHeading importance={3}>Heading 3</SectionHeading>
-      <SectionHeading importance={4}>Heading 4</SectionHeading>
-      <SectionHeading importance={5}>Heading 5</SectionHeading>
-      <SectionHeading importance={6}>Heading 6</SectionHeading>
+      {[1, 2, 3, 4, 5, 6].map((importance) => (
+        <div key={importance} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Heading {importance}</span>
+          <SectionHeading importance={importance as 1 | 2 | 3 | 4 | 5 | 6}>
+            Heading {importance}
+          </SectionHeading>
+        </div>
+      ))}
     </div>
   ),
 };
