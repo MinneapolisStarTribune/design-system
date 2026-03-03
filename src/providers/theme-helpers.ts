@@ -15,7 +15,7 @@ export type ColorScheme = 'light' | 'dark';
  * Get the color tokens for a specific brand and color scheme
  *
  * Note: All brand/mode combinations must have corresponding token files.
- * The build scripts (build-tokens.js and build-mantine-tokens.js) require
+ * The build scripts (build-tokens.js and build-tamagui-tokens.js) require
  * all files to exist at build time. If a mode doesn't exist, the build will fail.
  *
  */
