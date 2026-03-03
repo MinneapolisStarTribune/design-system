@@ -44,7 +44,10 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   return (
     <BrandContext.Provider value={brand}>
       <MantineProviderBase theme={theme} forceColorScheme={forceColorScheme}>
-        {children}
+        {/* data-brand enables brand-specific CSS selectors (e.g. [data-brand="startribune"] .component).
+            Theme handles colors/fonts; this attribute lets components apply brand-specific layout (padding,
+            border-radius, full-bleed) that differs across Startribune vs Varsity. */}
+        <div data-brand={brand}>{children}</div>
       </MantineProviderBase>
     </BrandContext.Provider>
   );

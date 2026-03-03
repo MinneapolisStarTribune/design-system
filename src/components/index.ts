@@ -1,14 +1,39 @@
 // This is what we will export out to consuming apps. This file is sorted alphabetically.
 export { Button, type ButtonProps } from './Button/Button';
+export {
+  ARTICLE_BODY_VARIANTS,
+  type ArticleBodyVariant,
+  type ArticleToolkitAuthorProps,
+  type ArticleToolkitBaseProps,
+  type ArticleToolkitEventHandlers,
+  type ArticleToolkitMediaProps,
+  CodeBlock,
+  type CodeBlockProps,
+  type ImageData,
+  ImageGallery,
+  type ImageGalleryProps,
+  type ImageUrlTransformContext,
+  InlineVideo,
+  type InlineVideoProps,
+  PHOTO_LAYOUT_TYPES,
+  PhotoLayout,
+  type PhotoLayoutProps,
+  type PhotoLayoutType,
+  PullQuote,
+  type PullQuoteProps,
+  SocialEmbeds,
+  type SocialEmbedsProps,
+} from './EditorialContent/ArticleToolkit';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
+export { FormGroup, type FormGroupProps } from './FormGroup/FormGroup';
+export { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
+export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
-  FormGroup,
-  type FormGroupCaptionProps,
+  FormGroupDescription,
   type FormGroupDescriptionProps,
-  type FormGroupLabelProps,
-  type FormGroupProps,
-} from './FormGroup/FormGroup';
+} from './FormGroup/FormGroupDescription';
+export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
