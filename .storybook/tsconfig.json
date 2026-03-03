@@ -10,7 +10,7 @@
       "vite-plugin-svgr/client"
     ]
   },
-  "exclude": ["node_modules"],
+  "exclude": ["../node_modules", "../dist", "node_modules"],
   "extends": "../tsconfig.json",
   "include": ["../src", "./**/*.ts", "./**/*.tsx"]
 }
