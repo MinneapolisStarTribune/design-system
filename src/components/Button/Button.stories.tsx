@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
+import { AnalyticsProvider } from '../../providers/AnalyticsProvider';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
-  parameters: {},
   tags: ['autodocs'],
   argTypes: {
     variant: {
@@ -54,4 +54,32 @@ export const ButtonWithIcon: Story = {
     icon: 'camera-filled',
     iconPosition: 'start',
   },
+};
+
+/**
+ * Button with analytics tracking enabled. Click the button and check the browser console
+ * to see the tracking event payload. In production, brands wire this to GA4, Piano, etc.
+ */
+export const ButtonWithAnalytics: Story = {
+  args: {
+    label: 'Subscribe',
+    onClick: () => alert('Subscribed!'),
+    variant: 'filled',
+    color: 'brand',
+    icon: 'arrow-right',
+    iconPosition: 'end',
+    analytics: { cta_type: 'subscribe', module_position: 'hero' },
+  },
+  decorators: [
+    (Story) => (
+      <AnalyticsProvider
+        onTrackingEvent={(event) => {
+          // eslint-disable-next-line no-console
+          console.log('[Analytics] Button click:', event);
+        }}
+      >
+        <Story />
+      </AnalyticsProvider>
+    ),
+  ],
 };
