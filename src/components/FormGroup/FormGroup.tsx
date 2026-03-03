@@ -62,7 +62,6 @@ export const FormGroup: React.FC<FormGroupProps> & {
 FormGroup.Label = FormGroupLabel;
 FormGroup.Description = FormGroupDescription;
 FormGroup.Caption = FormGroupCaption;
-
 // Re-export types so they come from one place
 export type { FormGroupLabelProps } from './FormGroup.Label';
 export type { FormGroupDescriptionProps } from './FormGroupDescription';
