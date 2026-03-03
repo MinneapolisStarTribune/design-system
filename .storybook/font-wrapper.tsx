@@ -28,8 +28,8 @@
  * - /fonts/editorial/{brand}.css - Editorial typography classes
  */
 
-import { ReactNode, useEffect, useState } from 'react';
-import { Brand } from '../src/providers/MantineProvider';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Brand } from '../src/providers/TamaguiProvider';
 
 const FONT_LINK_PREFIX = 'storybook-font-link';
 
