@@ -41,8 +41,7 @@ export const Configurable: Story = {
   },
 };
 
-export const AllVariants: Story = {
-  name: 'All sizes / weights',
+export const AllLevels: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
