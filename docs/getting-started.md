@@ -157,7 +157,7 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 
 - `yarn dev` - Start development server (if configured)
 - `yarn storybook` - Start Storybook development server on port 6006. Automatically builds tokens/icons if needed. Use this for visual component development.
-- `yarn build` - Build the package for production. Runs token generation, icon mapping, and Mantine token generation, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
+- `yarn build` - Build the package for production. Runs token generation, Tamagui theme generation, and icon mapping, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
 - `yarn build:web` - Build only the web bundle to `/dist/web`
 - `yarn build:native` - Build only the native bundle to `/dist/mobile`
 - `yarn test` - Run all tests (unit + accessibility) once
@@ -173,7 +173,7 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 **Token & Asset Generation:**
 
 - `yarn tokens` - Generate design tokens from JSON files in `/tokens` to `/build`
-- `yarn tokens:mantine` - Generate Mantine-specific token files
+- `yarn tokens:tamagui` - Generate Tamagui-specific theme files in `src/generated/themes/*.ts`
 - `yarn icons` - Generate icon mapping files from SVG files
 - `yarn fonts:fetch` - Attempt to fetch fonts from CDN (optional)
 
@@ -211,7 +211,7 @@ yarn storybook          # Restart Storybook to see new icons
 
 ## Design Tokens
 
-This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Mantine theme configurations.
+This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Tamagui theme modules.
 
 ### Token File Structure
 
@@ -274,12 +274,12 @@ Style Dictionary transforms token JSON into CSS custom properties:
 
 Theme files are generated from tokens and organized by brand and color scheme:
 
-- **Star Tribune Light** - `dist/themes/startribune-light.css`
-- **Star Tribune Dark** - `dist/themes/startribune-dark.css`
-- **Varsity Light** - `dist/themes/varsity-light.css`
-- **Varsity Dark** - `dist/themes/varsity-dark.css`
+- **Star Tribune Light** - `dist/themes/startribune-light.css` (CSS) and `src/generated/themes/startribune.light.ts` (TypeScript for Tamagui)
+- **Star Tribune Dark** - `dist/themes/startribune-dark.css` and `src/generated/themes/startribune.dark.ts`
+- **Varsity Light** - `dist/themes/varsity-light.css` and `src/generated/themes/varsity.light.ts`
+- **Varsity Dark** - `dist/themes/varsity-dark.css` and `src/generated/themes/varsity.dark.ts`
 
-Each theme file contains all CSS variables for that brand/color scheme combination.
+Each CSS theme file contains all CSS variables for that brand/color scheme combination. The TypeScript theme files are consumed by `tamagui.config.ts`.
 
 ### Font Tokens
 
