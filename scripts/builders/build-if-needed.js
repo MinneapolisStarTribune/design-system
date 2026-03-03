@@ -29,7 +29,7 @@ function shouldRebuild(command) {
 // Main execution
 const commands = [
   { check: 'tokens', build: 'tokens' },
-  { check: 'tokens:mantine', build: 'tokens:mantine' },
+  { check: 'tokens:tamagui', build: 'tokens:tamagui' },
   { check: 'icons', build: 'icons' },
 ];
 
