@@ -1,0 +1,109 @@
+.photoLayout {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grid {
+  display: grid;
+  gap: 8px;
+}
+
+/* 2UP */
+/* 1 | 2 */
+.layout--2up .grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* 3UP */
+/*
+  1
+  2 | 3
+*/
+.layout--3up .grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.layout--3up .item:nth-child(1) {
+  grid-column: 1 / -1;
+}
+
+.layout--3up .item:nth-child(1) {
+  grid-column: 1 / -1;
+  height: 720px; // large top image
+}
+
+/* 4UP */
+/*
+  1 | 2
+  3 | 4
+*/
+.layout--4up .grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+// Default (Desktop)
+.item {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  height: 357px;
+}
+
+[data-brand='startribune'] .item {
+  border-radius: 0;
+}
+
+[data-brand='varsity'] .item {
+  border-radius: 12px;
+}
+
+// Tablet
+@media (max-width: 768px) {
+  .item {
+    height: 237px;
+  }
+
+  .layout--3up .item:nth-child(1) {
+    height: 480px;
+  }
+}
+
+// Mobile
+@media (max-width: 480px) {
+  .item {
+    height: 127px;
+  }
+
+  .layout--3up .item:nth-child(1) {
+    height: 260px;
+  }
+}
+
+.expandableItem {
+  cursor: pointer;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.caption {
+  color: var(--color-text-on-light-secondary);
+}
+
+// Mobile
+@media (max-width: 480px) {
+  [data-brand='startribune'] .caption {
+    padding: 0 16px;
+  }
+
+  [data-brand='varsity'] .caption {
+    padding: 0;
+  }
+}
