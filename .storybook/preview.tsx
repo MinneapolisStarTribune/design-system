@@ -11,8 +11,8 @@
  *
  * 2. Decorator Chain:
  *    - ThemeWrapper: Loads the correct CSS theme file based on brand/colorScheme
- *    - DesignSystemProvider: Provides Mantine theme configuration to components
- *    - ColorSchemeScript: Mantine's script for color scheme detection
+ *    - FontWrapper: Loads brand-specific font CSS files
+ *    - DesignSystemProvider: Provides Tamagui theme configuration to components
  *    - Story: The actual story component being rendered
  *
  * 3. Theme Loading Flow:
@@ -20,12 +20,12 @@
  *    - Decorator extracts brand and colorScheme from context
  *    - ThemeWrapper loads the corresponding CSS file (e.g., startribune-light.css)
  *    - CSS variables become available in the DOM
- *    - DesignSystemProvider creates Mantine theme from TypeScript token files
- *    - Components can now use both CSS variables and Mantine theme tokens
+ *    - DesignSystemProvider applies Tamagui theme based on brand and color scheme
+ *    - Components can now use both CSS variables and Tamagui theme tokens
  *
- * 4. Why Both CSS Variables and Mantine Theme?
+ * 4. Why Both CSS Variables and Tamagui Theme?
  *    - CSS Variables: Used by CSS modules and direct CSS styling
- *    - Mantine Theme: Used by Mantine components via their theme system
+ *    - Tamagui Theme: Used by Tamagui components via their theme system
  *    - Both are needed because they serve different purposes in the component architecture
  *
  * 5. ArgTypes Configuration:
@@ -39,12 +39,11 @@
 
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { ColorSchemeScript } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { DesignSystemProvider, Brand } from '../src/providers/MantineProvider';
+import { DesignSystemProvider, Brand } from '../src/providers/TamaguiProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
+import './preview.css';
 
 import versionsList from './versions.json';
 
@@ -73,7 +72,7 @@ const preview: Preview = {
     },
     theme: {
       name: 'Theme',
-      description: 'Mantine color scheme',
+      description: 'Color scheme',
       defaultValue: 'light',
       toolbar: {
         icon: 'mirror',
@@ -100,19 +99,20 @@ const preview: Preview = {
   },
   decorators: [
     /**
-     * Main decorator that wraps all stories with theme providers
+     * Theme decorator that provides brand and color scheme to all stories
      *
-     * This decorator:
-     * 1. Extracts brand and colorScheme from Storybook's global context
+     * It:
+     * 1. Reads theme from story parameters first, then falls back to globals
      * 2. Wraps the story in ThemeWrapper (loads CSS variables)
-     * 3. Wraps in DesignSystemProvider (provides Mantine theme)
-     * 4. Includes ColorSchemeScript for Mantine's color scheme detection
+     * 3. Wraps in FontWrapper (loads brand-specific fonts)
+     * 4. Wraps in DesignSystemProvider (provides Tamagui theme)
      * 5. Adds padding container for visual spacing in Storybook UI
      *
      * The order matters: ThemeWrapper must be outermost so CSS variables
-     * are available before Mantine components try to use them.
+     * are available before components try to use them.
      */
-    (Story, context) => {
+    ((Story, context) => {
+      // Handle version redirect
       const selectedVersion = context.globals.versions as string;
       if (typeof selectedVersion === 'string' && selectedVersion.startsWith('http')) {
         if (typeof window !== 'undefined') {
@@ -121,24 +121,36 @@ const preview: Preview = {
         return <div>Redirecting...</div>;
       }
 
+      // Get brand from globals (no parameter override for brand)
       const brand = (context.globals.brand || 'startribune') as Brand;
-      const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
+
+      // Get theme from parameters first (story-level override), then fallback to globals.
+      const theme = (context.parameters.theme || context.globals.theme || 'light') as
+        | 'light'
+        | 'dark';
 
       return (
-        <ThemeWrapper brand={brand} colorScheme={scheme}>
-          <FontWrapper brand={brand}>
-            <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
-              <ColorSchemeScript />
-              <div style={{ padding: '1rem' }}>
-                <BrandValidationErrorBoundary>
-                  <Story />
-                </BrandValidationErrorBoundary>
-              </div>
-            </DesignSystemProvider>
-          </FontWrapper>
-        </ThemeWrapper>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            width: '100%',
+          }}
+        >
+          <ThemeWrapper brand={brand} colorScheme={theme}>
+            <FontWrapper brand={brand}>
+              <DesignSystemProvider brand={brand} forceColorScheme={theme}>
+                  <BrandValidationErrorBoundary>
+                    <Story />
+                  </BrandValidationErrorBoundary>
+              </DesignSystemProvider>
+            </FontWrapper>
+          </ThemeWrapper>
+        </div>
       );
-    },
+    }),
   ],
   argTypes: {
     className: {
