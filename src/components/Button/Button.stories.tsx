@@ -28,7 +28,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConfigurableButton: Story = {
+export const Configurable: Story = {
   args: {
     label: 'See More',
     onClick: () => alert('Hello'),
@@ -38,22 +38,37 @@ export const ConfigurableButton: Story = {
   },
 };
 
-export const WithIcon: Story = {
-  args: {
-    ...ConfigurableButton.args,
-    icon: 'camera-filled',
-    iconPosition: 'start',
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
   },
-};
-
-export const ButtonWithIcon: Story = {
-  args: {
-    label: 'View All Sports Hubs',
-    onClick: () => alert('Clicked'),
-    variant: 'filled',
-    icon: 'camera-filled',
-    iconPosition: 'start',
-  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {BUTTON_VARIANTS.flatMap((variant) =>
+        BUTTON_COLORS.flatMap((color) =>
+          BUTTON_SIZES.map((size) => (
+            <div
+              key={`${variant}-${color}-${size}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '8px',
+              }}
+            >
+              <Button label={`${color} ${size}`} variant={variant} color={color} size={size} />
+            </div>
+          ))
+        )
+      )}
+    </div>
+  ),
 };
 
 /**

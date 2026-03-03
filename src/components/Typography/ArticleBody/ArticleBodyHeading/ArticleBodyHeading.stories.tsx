@@ -47,15 +47,36 @@ export const AllLevels: Story = {
     children: '',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
       {(importanceOptions as ArticleBodyHeadingImportance[]).map((level) => (
-        <ArticleBodyHeading key={level} importance={level}>
-          ArticleBodyHeading importance={level} (h{level})
-        </ArticleBodyHeading>
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <ArticleBodyHeading importance={level}>
+            ArticleBodyHeading importance={level} (h{level})
+          </ArticleBodyHeading>
+        </div>
       ))}
     </div>
   ),
   parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:

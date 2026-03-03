@@ -18,6 +18,13 @@ const groupButtonColors = (colorKey: string): string | null => {
   return null;
 };
 
-export const Default: Story = {
+export const Configurable: Story = {
+  render: () => <ThemeAwareColorCategory category="button" groupBy={groupButtonColors} />,
+};
+
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   render: () => <ThemeAwareColorCategory category="button" groupBy={groupButtonColors} />,
 };

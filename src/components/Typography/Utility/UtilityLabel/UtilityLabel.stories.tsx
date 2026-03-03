@@ -30,7 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConfigurableLabel: Story = {
+export const Configurable: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
@@ -39,140 +39,44 @@ export const ConfigurableLabel: Story = {
   },
 };
 
-export const AllSizes: Story = {
-  args: {
-    size: 'small',
-    weight: 'regular',
-    capitalize: false,
-    children: 'Utility Label',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <UtilityLabel size="small">Small Label</UtilityLabel>
-      <UtilityLabel size="medium">Medium Label</UtilityLabel>
-      <UtilityLabel size="large">Large Label</UtilityLabel>
-    </div>
-  ),
-};
-
-export const WeightComparison: Story = {
-  args: {
-    size: 'small',
-    weight: 'regular',
-    capitalize: false,
-    children: 'Utility Label',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <div>
-        <UtilityLabel size="small" weight="regular">
-          Small Regular (400)
-        </UtilityLabel>
-      </div>
-      <div>
-        <UtilityLabel size="small" weight="semibold">
-          Small Semibold (600)
-        </UtilityLabel>
-      </div>
-      <div>
-        <UtilityLabel size="medium" weight="regular">
-          Medium Regular (400)
-        </UtilityLabel>
-      </div>
-      <div>
-        <UtilityLabel size="medium" weight="semibold">
-          Medium Semibold (600)
-        </UtilityLabel>
-      </div>
-      <div>
-        <UtilityLabel size="large" weight="regular">
-          Large Regular (400)
-        </UtilityLabel>
-      </div>
-      <div>
-        <UtilityLabel size="large" weight="semibold">
-          Large Semibold (600)
-        </UtilityLabel>
-      </div>
-    </div>
-  ),
-};
-
-export const WithCapitalization: Story = {
-  args: {
-    size: 'small',
-    weight: 'regular',
-    capitalize: false,
-    children: 'Utility Label',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <UtilityLabel size="small" weight="regular">
-        Normal Text
-      </UtilityLabel>
-      <UtilityLabel size="small" weight="regular" capitalize>
-        Capitalized Text
-      </UtilityLabel>
-      <UtilityLabel size="medium" weight="semibold">
-        Normal Semibold
-      </UtilityLabel>
-      <UtilityLabel size="medium" weight="semibold" capitalize>
-        Capitalized Semibold
-      </UtilityLabel>
-    </div>
-  ),
-};
-
 export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
   args: {
     size: 'small',
     weight: 'regular',
     capitalize: false,
     children: 'Utility Label',
   },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <h3>Small</h3>
-      <UtilityLabel size="small" weight="regular">
-        Label Small / Regular
-      </UtilityLabel>
-      <UtilityLabel size="small" weight="regular" capitalize>
-        Label Small / Regular / All Caps
-      </UtilityLabel>
-      <UtilityLabel size="small" weight="semibold">
-        Label Small / Bold
-      </UtilityLabel>
-      <UtilityLabel size="small" weight="semibold" capitalize>
-        Label Small / Bold / All Caps
-      </UtilityLabel>
-
-      <h3 style={{ marginTop: '24px' }}>Medium</h3>
-      <UtilityLabel size="medium" weight="regular">
-        Label Medium / Regular
-      </UtilityLabel>
-      <UtilityLabel size="medium" weight="regular" capitalize>
-        Label Medium / Regular / All Caps
-      </UtilityLabel>
-      <UtilityLabel size="medium" weight="semibold">
-        Label Medium / Bold
-      </UtilityLabel>
-      <UtilityLabel size="medium" weight="semibold" capitalize>
-        Label Medium / Bold / All Caps
-      </UtilityLabel>
-
-      <h3 style={{ marginTop: '24px' }}>Large</h3>
-      <UtilityLabel size="large" weight="regular">
-        Label Large / Regular
-      </UtilityLabel>
-      <UtilityLabel size="large" weight="regular" capitalize>
-        Label Large / Regular / All Caps
-      </UtilityLabel>
-      <UtilityLabel size="large" weight="semibold">
-        Label Large / Bold
-      </UtilityLabel>
-      <UtilityLabel size="large" weight="semibold" capitalize>
-        Label Large / Bold / All Caps
-      </UtilityLabel>
-    </div>
-  ),
+  render: () => {
+    const sizes = ['small', 'medium', 'large'] as const;
+    const weights = ['regular', 'semibold'] as const;
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem',
+        }}
+      >
+        {sizes.flatMap((size) =>
+          weights.flatMap((weight) =>
+            [false, true].map((capitalize) => (
+              <div
+                key={`${size}-${weight}-${capitalize}`}
+                style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+              >
+                <UtilityLabel size={size} weight={weight} capitalize={capitalize}>
+                  Label - {size} / {weight}
+                  {capitalize ? ' / All caps' : ''}
+                </UtilityLabel>
+              </div>
+            ))
+          )
+        )}
+      </div>
+    );
+  },
 };

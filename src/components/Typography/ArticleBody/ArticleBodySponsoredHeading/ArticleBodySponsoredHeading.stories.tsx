@@ -48,15 +48,36 @@ export const AllVariants: Story = {
     children: '',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
       {(importanceOptions as ArticleBodySponsoredHeadingImportance[]).map((level) => (
-        <ArticleBodySponsoredHeading key={level} importance={level}>
-          ArticleBodySponsoredHeading importance={level} (h{level})
-        </ArticleBodySponsoredHeading>
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <ArticleBodySponsoredHeading importance={level}>
+            ArticleBodySponsoredHeading importance={level} (h{level})
+          </ArticleBodySponsoredHeading>
+        </div>
       ))}
     </div>
   ),
   parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:
