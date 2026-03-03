@@ -68,7 +68,7 @@ describe('generate-release-changelog', () => {
           data: {
             title: 'Add new button component',
             merged_at: '2024-01-01T00:00:00Z',
-            head: { ref: 'feature/DS-123-add-button' },
+            head: { ref: 'feature/SUS-123-add-button' },
             body: `# Description
 This PR adds a button component.
 
@@ -108,9 +108,9 @@ Modal now properly traps focus.`,
       expect(result.content).toContain('Shared UI Library Updates');
       expect(result.content).toContain('Add new button component');
       expect(result.content).toContain('Fix accessibility issue in modal');
-      expect(result.content).toContain('[DS-123]');
+      expect(result.content).toContain('[SUS-123]');
       expect(result.content).toContain('[LOON-456]');
-      expect(result.content).toContain(`${JIRA_BASE_URL}/DS-123`);
+      expect(result.content).toContain(`${JIRA_BASE_URL}/SUS-123`);
       expect(result.content).toContain(`${JIRA_BASE_URL}/LOON-456`);
       expect(result.content).toContain('Added a reusable button component with multiple variants.');
     });
@@ -399,7 +399,7 @@ Modal now properly traps focus.`,
         },
       });
 
-      const jiraProjects = ['LOON', 'VARSITY', 'PS', 'NLT', 'DS'];
+      const jiraProjects = ['LOON', 'VARSITY', 'PS', 'NLT', 'SUS'];
       jiraProjects.forEach((project, index) => {
         mockGithub.rest.pulls.get.mockResolvedValueOnce({
           data: {
@@ -431,7 +431,7 @@ Modal now properly traps focus.`,
       expect(result.content).toContain('[VARSITY-2]');
       expect(result.content).toContain('[PS-3]');
       expect(result.content).toContain('[NLT-4]');
-      expect(result.content).toContain('[DS-5]');
+      expect(result.content).toContain('[SUS-5]');
     });
   });
 
