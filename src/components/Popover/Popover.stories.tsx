@@ -36,7 +36,7 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   args: {
-    trigger: <Button label="Open" />,
+    trigger: <Button>Open</Button>,
     children: null,
   },
   parameters: {

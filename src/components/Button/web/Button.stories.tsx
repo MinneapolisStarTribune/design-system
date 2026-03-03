@@ -30,7 +30,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    label: 'See More',
+    children: 'See More',
     onClick: () => alert('Hello'),
     variant: 'filled',
     size: 'large',
@@ -62,7 +62,7 @@ export const AllVariants: Story = {
                 gap: '8px',
               }}
             >
-              <Button label={`${color} ${size}`} variant={variant} color={color} size={size} />
+              <Button variant={variant} color={color} size={size} >{`${color} ${size}`}</Button>
             </div>
           ))
         )
@@ -77,7 +77,7 @@ export const AllVariants: Story = {
  */
 export const ButtonWithAnalytics: Story = {
   args: {
-    label: 'Subscribe',
+    children: 'Subscribe',
     onClick: () => alert('Subscribed!'),
     variant: 'filled',
     color: 'brand',

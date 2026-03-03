@@ -26,7 +26,7 @@ export interface ButtonProps extends BaseProps {
   size?: ButtonSize;
   icon?: IconName;
   iconPosition?: 'start' | 'end';
-  label?: string;
+  children?: React.ReactNode;
   isDisabled?: boolean;
   /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
   analytics?: ButtonAnalytics;
@@ -68,7 +68,7 @@ export const Button: React.FC<ButtonProps> = ({
   size = 'medium',
   icon,
   iconPosition = 'end',
-  label,
+  children,
   className,
   isDisabled,
   onClick,
@@ -78,10 +78,12 @@ export const Button: React.FC<ButtonProps> = ({
   const { track } = useAnalytics();
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    const label = typeof children === 'string' ? children : undefined;
+
     track({
       event: 'button_click',
       component: 'Button',
-      label: label ?? undefined,
+      label,
       icon: icon ?? undefined,
       variant,
       color,
@@ -133,6 +135,8 @@ export const Button: React.FC<ButtonProps> = ({
   // Extract aria-label from props if provided
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
 
+  const label = typeof children === 'string' ? children : undefined;
+
   // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
   const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
 
@@ -176,7 +180,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {leftIcon}
       <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
-        {label}
+        {children}
       </UtilityLabel>
       {rightIcon}
     </button>
