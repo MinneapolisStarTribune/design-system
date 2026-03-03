@@ -31,6 +31,7 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@tamagui/popover": "^1.100.0",
     "@tamagui/core": "^1.100.0",
     "@tamagui/config": "^1.100.0",
     "@tamagui/vite-plugin": "^1.100.0",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
+    "@storybook/addon-themes": "^10.1.11",
     "@octokit/rest": "^22.0.1",
     "@storybook/addon-a11y": "^10.1.11",
     "@storybook/addon-docs": "^10.1.11",
@@ -104,7 +106,7 @@
     "build": "npm run clean:dist && npm run tokens && npm run tokens:tamagui && npm run icons && npm run build:web && npm run build:native",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
-    "storybook": "node scripts/builders/build-if-needed.js && storybook dev -p 6006",
+    "storybook": "node scripts/builders/build-if-needed.js && cross-env TAMAGUI_TARGET=web storybook dev -p 6006",
     "build-storybook": "npm run tokens && npm run tokens:tamagui && npm run icons && storybook build",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -1,6 +1,5 @@
-import React, { HTMLAttributes, ReactNode } from 'react';
-import { Popover as MantinePopover } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import React, { HTMLAttributes, ReactNode, useState } from 'react';
+import { Popover as TamaguiPopover } from '@tamagui/popover';
 import styles from './Popover.module.scss';
 import { PopoverHeading } from './PopoverHeading';
 import { PopoverBody } from './PopoverBody';
@@ -19,7 +18,7 @@ export type PopoverProps = {
   dataTestId?: string;
 } & HTMLAttributes<HTMLDivElement>;
 
-const POINTER_TO_POSITION: Record<Position, 'top' | 'right' | 'bottom' | 'left'> = {
+const POINTER_TO_PLACEMENT: Record<Position, 'top' | 'right' | 'bottom' | 'left'> = {
   top: 'bottom',
   right: 'left',
   bottom: 'top',
@@ -31,35 +30,42 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   children,
   pointer = 'right',
   isDisabled,
+  className,
+  dataTestId,
+  ...rest
 }) => {
-  const [opened, { open, close, toggle }] = useDisclosure(false);
-  const position = POINTER_TO_POSITION[pointer];
+  const [open, setOpen] = useState(false);
+
+  const placement = POINTER_TO_PLACEMENT[pointer];
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (isDisabled) {
+      return;
+    }
+
+    setOpen(nextOpen);
+  };
+
+  const close = () => setOpen(false);
 
   return (
     <PopoverContext.Provider value={{ close }}>
-      <MantinePopover
-        opened={opened}
-        onChange={(setOpened) => (setOpened ? open() : close())}
-        position={position}
-        withArrow
-        arrowSize={6}
-        offset={8}
-        withinPortal={false}
-        disabled={isDisabled}
-        closeOnEscape
-        closeOnClickOutside
-        classNames={{ dropdown: styles.container }}
-      >
-        <MantinePopover.Target>
-          <div style={{ display: 'inline-block', cursor: 'pointer' }} onClick={toggle}>
-            {trigger}
-          </div>
-        </MantinePopover.Target>
+      <TamaguiPopover open={open} onOpenChange={handleOpenChange} placement={placement}>
+        <TamaguiPopover.Trigger>
+          <div style={{ display: 'inline-block', cursor: 'pointer' }}>{trigger}</div>
+        </TamaguiPopover.Trigger>
 
-        <MantinePopover.Dropdown>
-          <div className={styles.content}>{children}</div>
-        </MantinePopover.Dropdown>
-      </MantinePopover>
+        <TamaguiPopover.Content trapFocus>
+          <TamaguiPopover.Arrow size="$1" />
+          <div
+            className={styles.container}
+            data-testid={dataTestId}
+            {...rest}
+          >
+            <div className={`${styles.content} ${className ?? ''}`}>{children}</div>
+          </div>
+        </TamaguiPopover.Content>
+      </TamaguiPopover>
     </PopoverContext.Provider>
   );
 };

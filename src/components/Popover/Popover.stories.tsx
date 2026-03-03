@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from '@mantine/core';
 import { Popover } from './Popover';
+import { Icon, Button } from '@/components/index.web';
 
 const meta = {
   title: 'Feedback & Status/Popover',
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     pointer: 'bottom',
     children: (
       <>
@@ -36,7 +36,7 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     children: null,
   },
   parameters: {
