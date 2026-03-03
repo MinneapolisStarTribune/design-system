@@ -177,7 +177,7 @@ const command = process.argv[2];
 
 if (!command) {
   console.error('Usage: node scripts/should-rebuild.js <command>');
-  console.error('Commands: tokens, tokens:mantine, icons');
+  console.error('Commands: tokens, tokens:tamagui, icons');
   process.exit(1);
 }
 
@@ -187,7 +187,7 @@ switch (command) {
   case 'tokens':
     shouldRebuild = shouldRebuildTokens();
     break;
-  case 'tokens:mantine':
+  case 'tokens:tamagui':
     shouldRebuild = shouldRebuildMantineTokens();
     break;
   case 'icons':
@@ -195,7 +195,7 @@ switch (command) {
     break;
   default:
     console.error(`Unknown command: ${command}`);
-    console.error('Commands: tokens, tokens:mantine, icons');
+    console.error('Commands: tokens, tokens:tamagui, icons');
     process.exit(1);
 }
 
