@@ -2,6 +2,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 import { mergeConfig } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { tamaguiPlugin } from '@tamagui/vite-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,14 +21,19 @@ const config: StorybookConfig = {
   },
   staticDirs: ['../dist/web'],
 
-  // Vite configuration to handle path aliases
-  async viteFinal(config) {
-    return mergeConfig(config, {
+  async viteFinal(baseConfig) {
+    return mergeConfig(baseConfig, {
       resolve: {
         alias: {
           '@': path.resolve(__dirname, '../src'),
         },
       },
+      plugins: [
+        tamaguiPlugin({
+          config: '../tamagui.config.ts',
+          components: ['@tamagui/core', '@tamagui/popover'],
+        }),
+      ],
     });
   },
 };

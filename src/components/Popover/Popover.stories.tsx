@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Box, Button } from '@mantine/core';
 import { Popover } from './Popover';
-import { Icon } from '../index';
+import { Icon, Button } from '../index';
+
 const meta = {
   title: 'Feedback & Status/Popover',
   component: Popover,
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const TextOnly: Story = {
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     children: (
       <Popover.Heading>
         <Popover.Description>
@@ -34,7 +34,7 @@ export const TextOnly: Story = {
 
 export const WithTitle: Story = {
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
@@ -62,16 +62,16 @@ export const WithCustomContent: Story = {
     ),
   ],
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     pointer: 'bottom',
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
 
         <Popover.Body>
-          <Box>Option 1</Box>
-          <Box>Option 2</Box>
-          <Box>Option 3</Box>
+          <div>Option 1</div>
+          <div>Option 2</div>
+          <div>Option 3</div>
         </Popover.Body>
       </>
     ),
@@ -94,13 +94,13 @@ export const WithDividerAndCustomContent: Story = {
     ),
   ],
   args: {
-    trigger: <Button>Open</Button>,
+    trigger: <Button label="Open" />,
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Divider />
         <Popover.Body>
-          <Box>Sample Content popover body</Box>
+          <div>Sample Content popover body</div>
         </Popover.Body>
       </>
     ),
@@ -152,11 +152,11 @@ export const IconPopover: Story = {
       <>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>
-          <Box>Sample Description</Box>
+          <div>Sample Description</div>
         </Popover.Body>
         <Popover.Divider />
         <Popover.Body>
-          <Box>Sample Content popover body</Box>
+          <div>Sample Content popover body</div>
         </Popover.Body>
       </>
     ),
@@ -184,7 +184,7 @@ export const AllPositions: Story = {
       {/* TOP */}
       <Popover
         pointer="top"
-        trigger={<Button>Top</Button>}
+        trigger={<Button label="Top" />}
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Top</Popover.Heading>
@@ -194,7 +194,7 @@ export const AllPositions: Story = {
       {/* RIGHT */}
       <Popover
         pointer="right"
-        trigger={<Button>Right</Button>}
+        trigger={<Button label="Right" />}
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Right</Popover.Heading>
@@ -204,7 +204,7 @@ export const AllPositions: Story = {
       {/* LEFT */}
       <Popover
         pointer="left"
-        trigger={<Button>Left</Button>}
+        trigger={<Button label="Left" />}
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Left</Popover.Heading>
@@ -214,7 +214,7 @@ export const AllPositions: Story = {
       {/* BOTTOM */}
       <Popover
         pointer="bottom"
-        trigger={<Button>Bottom</Button>}
+        trigger={<Button label="Bottom" />}
         // middlewares={{ flip: false, shift: false }}
       >
         <Popover.Heading>Bottom</Popover.Heading>
