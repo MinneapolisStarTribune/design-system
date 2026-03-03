@@ -2,16 +2,15 @@
 /**
  * ⚠️ IMPORTANT: This file is ONLY for displaying colors in Storybook documentation.
  *
- * This file is NOT used in production code. It processes color tokens from JSON files
+ * This file is NOT used in production code. It processes design tokens from JSON/TS files
  * to create data structures used by Storybook stories for displaying color palettes.
  *
- * For production code, colors should be accessed through the Mantine theme system
- * via useMantineTheme() or the DesignSystemProvider, which properly handles
+ * For production code, colors should be accessed through the design system provider
+ * and token utilities (e.g., Tamagui + existing token helpers), which properly handle
  * brand-specific and theme-aware color resolution.
  */
 import React, { useMemo, useEffect, useState } from 'react';
-import { useMantineTheme, useMantineColorScheme } from '@mantine/core';
-import { Brand, ColorScheme } from '../../../providers/theme-helpers';
+import { Brand, ColorScheme, getBrandColors } from '../../../providers/theme-helpers';
 
 // Import token JSON files for descriptions
 import startribuneLightJson from '../../../../tokens/color/brand-startribune-light.json';
@@ -24,7 +23,6 @@ export type ColorCategory =
   | 'text'
   | 'brand'
   | 'border'
-  | 'control'
   | 'icon'
   | 'overlay'
   | 'semantic'
@@ -129,9 +127,6 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
   categoryDisplayName,
   groupBy,
 }) => {
-  const theme = useMantineTheme();
-  const { colorScheme } = useMantineColorScheme();
-
   // Read brand from Storybook's globals synchronously on mount, then poll for changes
   const getBrandFromGlobals = (): Brand => {
     try {
@@ -155,52 +150,70 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
 
   const [brand, setBrand] = useState<Brand>(getBrandFromGlobals);
 
+  // Read color scheme from Storybook globals (theme toolbar)
+  const getColorSchemeFromGlobals = (): ColorScheme => {
+    try {
+      const parent = window.parent;
+      if (parent && parent !== window) {
+        const globals = (parent as any).__STORYBOOK_GLOBALS__;
+        if (globals?.theme === 'dark' || globals?.theme === 'light') {
+          return globals.theme as ColorScheme;
+        }
+      } else {
+        const globals = (window as any).__STORYBOOK_GLOBALS__;
+        if (globals?.theme === 'dark' || globals?.theme === 'light') {
+          return globals.theme as ColorScheme;
+        }
+      }
+    } catch (e) {
+      // Ignore errors
+    }
+    return 'light';
+  };
+
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(getColorSchemeFromGlobals);
+
   // Poll for brand changes (Storybook updates globals when toolbar changes)
   useEffect(() => {
     const interval = setInterval(() => {
       const newBrand = getBrandFromGlobals();
+      const newScheme = getColorSchemeFromGlobals();
       setBrand((current) => (current !== newBrand ? newBrand : current));
+      setColorScheme((current) => (current !== newScheme ? newScheme : current));
     }, 100);
     return () => clearInterval(interval);
   }, []);
 
   const categoryMetadata = useMemo(
-    () => getCategoryMetadata(brand, colorScheme as ColorScheme, category),
+    () => getCategoryMetadata(brand, colorScheme, category),
     [brand, colorScheme, category]
   );
 
-  // Compute colors from theme (independent of brand - brand only affects descriptions)
+  // Compute colors from brand/colorScheme tokens
   const colors = useMemo(() => {
-    if (!theme || !theme.colors) {
-      return [];
-    }
-
+    const brandColors = getBrandColors(brand, colorScheme);
     const colorList: ColorDisplay[] = [];
 
-    // Special handling for brand colors: they're stored as a direct "brand" array
-    // in the theme, not as "brand-01", "brand-02", etc.
-    // We ONLY want to show the first 4 colors (01, 02, 03, 04) from this array, not the duplicates
-    // (Mantine requires 10 colors, so indices 4-9 are duplicates of brand-04)
-    if (category === 'brand' && theme.colors['brand'] && Array.isArray(theme.colors['brand'])) {
-      const brandArray = theme.colors['brand'] as string[];
-      const brandColorsToShow = brandArray.slice(0, 4);
-      brandColorsToShow.forEach((colorValue, index) => {
-        const colorKey = String(index + 1).padStart(2, '0'); // 01, 02, 03, 04
-        colorList.push({
-          name: formatColorName(colorKey),
-          tokenName: `brand-${colorKey}`, // Use brand-01, brand-02, etc. for consistency
-          value: colorValue,
-          description: undefined,
-        });
+    // Special handling for brand colors: use brand-01 .. brand-04 tokens directly
+    if (category === 'brand') {
+      ['01', '02', '03', '04'].forEach((suffix) => {
+        const tokenName = `brand-${suffix}`;
+        const value = (brandColors as any)[tokenName] as string | undefined;
+        if (value) {
+          colorList.push({
+            name: formatColorName(suffix),
+            tokenName,
+            value,
+            description: undefined,
+          });
+        }
       });
     } else {
-      // Get colors from Mantine theme - they're already loaded and resolved!
       const prefix = `${category}-`;
-      Object.entries(theme.colors).forEach(([key, colorArray]) => {
+      Object.entries(brandColors as Record<string, string>).forEach(([key, colorValue]) => {
         // Match keys like "background-*" for category "background"
-        if (key.startsWith(prefix) && Array.isArray(colorArray) && colorArray.length > 0) {
+        if (key.startsWith(prefix) && typeof colorValue === 'string' && colorValue.length > 0) {
           const colorKey = key.replace(prefix, '');
-          const colorValue = colorArray[0];
 
           colorList.push({
             name: formatColorName(colorKey),
@@ -216,11 +229,11 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     colorList.sort((a, b) => a.tokenName.localeCompare(b.tokenName));
 
     return colorList;
-  }, [theme, category]);
+  }, [brand, colorScheme, category]);
 
   // Add descriptions based on brand (this can update separately)
   const colorsWithDescriptions = useMemo(() => {
-    const descriptions = getColorDescriptions(brand, colorScheme as ColorScheme, category);
+    const descriptions = getColorDescriptions(brand, colorScheme, category);
     return colors.map((color) => {
       const colorKey = color.tokenName.replace(`${category}-`, '');
       return {
@@ -229,14 +242,6 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
       };
     });
   }, [colors, brand, colorScheme, category]);
-
-  if (!theme || !theme.colors) {
-    return (
-      <div>
-        <p>Loading theme...</p>
-      </div>
-    );
-  }
 
   const displayName = categoryDisplayName || category.charAt(0).toUpperCase() + category.slice(1);
 
@@ -272,14 +277,16 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
           const renderColorCard = (color: ColorDisplay) => {
             const isGradient = color.value.startsWith('linear-gradient');
             return (
-              <div
-                key={color.tokenName}
-                style={{
-                  border: `1px solid ${theme.colors.gray?.[3] || '#e9ecef'}`,
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                }}
-              >
+                <div
+                  key={color.tokenName}
+                  style={{
+                    // Use a neutral border color derived from CSS variables (if available),
+                    // otherwise fall back to a light gray. This avoids relying on any theme object.
+                    border: '1px solid var(--color-border-on-light-subtle-01, #e3e5e8)',
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                  }}
+                >
                 <div
                   style={{
                     backgroundColor: isGradient ? 'transparent' : color.value,
