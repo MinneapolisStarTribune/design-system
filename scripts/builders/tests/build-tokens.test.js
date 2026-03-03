@@ -25,7 +25,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 describe('build-tokens.js', () => {
-  const projectRoot = path.join(__dirname, '..');
+  const projectRoot = path.join(__dirname, '..', '..', '..');
   const themesDir = path.join(projectRoot, 'dist', 'web', 'themes');
   const expectedFiles = [
     'startribune-light.css',
@@ -321,7 +321,7 @@ describe('build-tokens.js', () => {
       // In a real scenario, you might want to test with invalid token files
 
       // Verify the script has error handling
-      const scriptPath = path.join(__dirname, 'build-tokens.js');
+      const scriptPath = path.join(__dirname, '..', 'build-tokens.js');
       const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
       
       expect(scriptContent).toContain('.catch(');
