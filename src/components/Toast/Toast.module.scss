@@ -38,6 +38,8 @@
 .icon {
   flex-shrink: 0;
   display: inline-flex;
+  width: var(--spacing-20);
+  height: var(--spacing-20);
   align-items: center;
   justify-content: center;
   margin-top: var(--spacing-2);
@@ -50,16 +52,6 @@
   min-width: 0;
 }
 
-.title {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.description {
-  font-size: 14px;
-  line-height: 1.4;
-}
 
 /* Variant: info, success, error, warning – semantic background + foreground */
 @mixin variant-semantic($name) {

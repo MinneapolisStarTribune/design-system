@@ -18,10 +18,10 @@ export type ToastProps = {
 };
 
 const VARIANT_ICON: Record<ToastVariant, IconName> = {
-  info: 'information-filled',
-  success: 'check',
-  warning: 'information-filled',
-  error: 'error-filled',
+  info: 'information',
+  success: 'success',
+  warning: 'warning',
+  error: 'error',
 };
 
 export const Toast: React.FC<ToastProps> = ({
@@ -50,8 +50,16 @@ export const Toast: React.FC<ToastProps> = ({
           </span>
         )}
         <div className={styles.text}>
-          <span className={styles.title}>{title}</span>
-          {description && <span className={styles.description}>{description}</span>}
+          <span className={classNames(styles.title, 'typography-utility-label-semibold-large')}>
+            {title}
+          </span>
+          {description && (
+            <span
+              className={classNames(styles.description, 'typography-utility-text-regular-small')}
+            >
+              {description}
+            </span>
+          )}
         </div>
       </div>
       <button
