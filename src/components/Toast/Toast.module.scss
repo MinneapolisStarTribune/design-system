@@ -1,0 +1,135 @@
+/* Container – fixed top-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
+.container {
+  position: fixed;
+  top: var(--spacing-16);
+  right: var(--spacing-16);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  max-width: min(400px, calc(100vw - var(--spacing-32)));
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+/* Toast base – variant sets background, border, and colors. */
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  width: 372px;
+  padding: var(--spacing-12);
+  border-radius: var(--radius-8);
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px 2px rgba(0, 0, 0, 0.06);
+  max-width: 100%;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  flex: 1;
+  min-width: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+
+/* Variant colors – shared structure, different color tokens */
+@mixin variant-colors($background, $foreground, $description: null) {
+  background: $background;
+  border: 1px solid color-mix(in srgb, $foreground 25%, transparent);
+
+  /* Icon and title use foreground */
+  .icon,
+  .title {
+    color: $foreground;
+  }
+
+  /* Description uses secondary color when provided, otherwise foreground */
+  .description {
+    @if $description {
+      color: $description;
+    } @else {
+      color: $foreground;
+    }
+  }
+
+  /* Close button matches foreground, subtle hover */
+  .closeButton {
+    color: $foreground;
+
+    &:hover {
+      background: color-mix(in srgb, $foreground 12%, transparent);
+    }
+  }
+}
+
+.variant-info {
+  @include variant-colors(
+    var(--color-background-light-gray-01),
+    var(--color-icon-on-light-primary),
+    var(--color-text-on-light-secondary)
+  );
+  border: 1px solid var(--color-border-on-light-subtle-01);
+}
+
+.variant-success {
+  @include variant-colors(
+    var(--color-semantic-success-background),
+    var(--color-semantic-success-foreground)
+  );
+}
+
+.variant-error {
+  @include variant-colors(
+    var(--color-semantic-error-background),
+    var(--color-semantic-error-foreground)
+  );
+}
+
+.variant-warning {
+  @include variant-colors(
+    var(--color-semantic-warning-background),
+    var(--color-semantic-warning-foreground)
+  );
+}
+
+.closeButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-24);
+  height: var(--spacing-24);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-6);
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: var(--spacing-2) solid currentColor;
+    outline-offset: var(--spacing-2);
+  }
+}

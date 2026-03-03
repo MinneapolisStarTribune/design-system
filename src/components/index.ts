@@ -36,6 +36,7 @@ export {
 export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
+export { Toast, TOAST_VARIANTS, type ToastProps, type ToastVariant } from './Toast/Toast';
 export {
   ArticleBodySponsoredHeading,
   type ArticleBodySponsoredHeadingProps,
