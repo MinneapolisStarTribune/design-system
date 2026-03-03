@@ -118,7 +118,7 @@ This means each component is exported alongside its main Props type. For example
 
 You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.
 
-**Component Prop Types:**
+**Component Prop Types (web):**
 
 ```typescript
 import type {
@@ -128,15 +128,15 @@ import type {
   TextInputProps,
   NewsHeadingProps,
   // ... and many more
-} from '@minneapolisstartribune/design-system';
+} from '@minneapolisstartribune/design-system/web';
 ```
 
-**Using Components:**
+**Using Components (web):**
 
 You can use components directly without importing types - TypeScript will infer the types automatically:
 
 ```typescript
-import { Button } from '@minneapolisstartribune/design-system';
+import { Button } from '@minneapolisstartribune/design-system/web';
 
 // Using the component directly - no types needed!
 <Button
@@ -169,7 +169,7 @@ You only need to import prop types when you're:
 Nested types (like `ButtonColor`, `NewsHeadingImportance`, etc.) are accessible via TypeScript indexed access types:
 
 ```typescript
-import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system';
+import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system/web';
 
 // Access nested types using indexed access
 type ButtonColor = ButtonProps['color']; // 'neutral' | 'brand' | 'brand-accent' | undefined
@@ -180,8 +180,8 @@ type NewsHeadingImportance = NewsHeadingProps['importance']; // 1 | 2 | 3 | 4 | 
 **Example: Using Types in Your Code**
 
 ```typescript
-import { Button } from '@minneapolisstartribune/design-system';
-import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system';
+import { Button } from '@minneapolisstartribune/design-system/web';
+import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system/web';
 
 // Type function parameters
 function createButton(props: ButtonProps) {

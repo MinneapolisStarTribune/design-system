@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
-import { AnalyticsProvider } from '../../providers/AnalyticsProvider';
+import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 
 const meta = {
   title: 'Components/Button',

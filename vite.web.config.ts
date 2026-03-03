@@ -29,7 +29,6 @@ export default defineConfig({
     dts({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
-        path.resolve(__dirname, 'src/components/index.ts'),
         path.resolve(__dirname, 'src/components/index.web.ts'),
       ],
       exclude: [

@@ -1,5 +1,5 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
-export { Button, type ButtonProps } from './Button/Button';
+export { Button, type ButtonProps } from '@/components/Button/web/Button';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
 export {
