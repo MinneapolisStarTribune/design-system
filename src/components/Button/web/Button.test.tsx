@@ -25,10 +25,12 @@ describe('Button', () => {
     const component = getByTestId('button');
 
     expect(component).toBeInTheDocument();
-    // Button uses Mantine's theming system which applies styles via CSS variables
-    // Verify the button has the correct size attribute
-    expect(component).toHaveAttribute('data-size', 'small');
-    expect(component).toHaveClass('mantine-Button-root');
+
+    // Button now uses CSS modules and design tokens for sizing.
+    // CSS Modules generate hashed class names like `_button_xxx _small_xxx`.
+    // Verify that at least one of the classes corresponds to the `small` size.
+    const classNames = component.className.split(' ');
+    expect(classNames.some((c) => c.includes('small'))).toBe(true);
   });
 
   it('applies custom className', () => {
