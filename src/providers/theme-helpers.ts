@@ -67,3 +67,53 @@ export function getBorderRadius(): Record<string, string> {
 
   return radiusMap;
 }
+
+/**
+ * Get spacing tokens as numbers (px suffix removed) - for use with mobile/Tamagui
+ * This matches the format used in dist/mobile/themes/*.js files
+ */
+export function getSpacingAsNumbers(): Record<string, number> {
+  const spacing = getSpacing();
+  const spacingMap: Record<string, number> = {};
+
+  Object.entries(spacing).forEach(([key, value]) => {
+    if (typeof value === 'string' && value.endsWith('px')) {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        spacingMap[key] = numericValue;
+      }
+    } else if (typeof value === 'string') {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        spacingMap[key] = numericValue;
+      }
+    }
+  });
+
+  return spacingMap;
+}
+
+/**
+ * Get border radius tokens as numbers (px suffix removed) - for use with mobile/Tamagui
+ * This matches the format used in dist/mobile/themes/*.js files
+ */
+export function getBorderRadiusAsNumbers(): Record<string, number> {
+  const radius = getBorderRadius();
+  const radiusMap: Record<string, number> = {};
+
+  Object.entries(radius).forEach(([key, value]) => {
+    if (typeof value === 'string' && value.endsWith('px')) {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        radiusMap[key] = numericValue;
+      }
+    } else if (typeof value === 'string') {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        radiusMap[key] = numericValue;
+      }
+    }
+  });
+
+  return radiusMap;
+}
