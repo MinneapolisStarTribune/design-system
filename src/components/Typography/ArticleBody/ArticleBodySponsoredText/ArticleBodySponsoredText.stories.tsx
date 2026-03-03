@@ -52,9 +52,8 @@ export const AllVariants: Story = {
     >
       {sponsoredWeights.map((weight) => (
         <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{weight}</span>
           <ArticleBodySponsoredText weight={weight}>
-            Article body sponsored text
+            Article body sponsored text - {weight}
           </ArticleBodySponsoredText>
         </div>
       ))}

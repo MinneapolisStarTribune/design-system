@@ -44,12 +44,28 @@ export const Configurable: Story = {
 };
 
 export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'All caption variants (info, error, success) displayed together for comparison within their form groups.',
+      },
+    },
+  },
   args: {
     variant: 'info',
     children: 'We recommend using a strong, unique password.',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
       {captionVariants.map((variant) => (
         <FormGroup key={variant}>
           <FormGroup.Label>Email Address</FormGroup.Label>
@@ -63,13 +79,4 @@ export const AllVariants: Story = {
       ))}
     </div>
   ),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story:
-          'All caption variants (info, error, success) displayed together for comparison within their form groups.',
-      },
-    },
-  },
 };

@@ -26,18 +26,35 @@ export const Configurable: Story = {
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
   },
   args: {
     importance: 2,
     children: 'Heading',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
       {[1, 2, 3, 4, 5, 6].map((importance) => (
-        <div key={importance} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Heading {importance}</span>
+        <div
+          key={importance}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
           <SectionHeading importance={importance as 1 | 2 | 3 | 4 | 5 | 6}>
-            Heading {importance}
+            Section - H{importance} Heading
           </SectionHeading>
         </div>
       ))}

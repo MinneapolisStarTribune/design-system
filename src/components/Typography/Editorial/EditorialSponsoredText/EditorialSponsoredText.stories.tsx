@@ -41,6 +41,7 @@ export const Configurable: Story = {
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
   },
   args: {
     size: 'medium',
@@ -64,11 +65,8 @@ export const AllVariants: Story = {
               key={`${size}-${weight}`}
               style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
             >
-              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                {size} / {weight}
-              </span>
               <EditorialSponsoredText size={size} weight={weight}>
-                Editorial sponsored text
+                Editorial sponsored text - {size} / {weight}
               </EditorialSponsoredText>
             </div>
           ))

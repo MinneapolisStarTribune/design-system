@@ -44,6 +44,7 @@ export const Configurable: Story = {
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:
@@ -56,11 +57,27 @@ export const AllVariants: Story = {
     children: '',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
       {(importanceOptions as EnterpriseHeadingImportance[]).map((level) => (
-        <div key={level} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>EnterpriseHeading h{level}</span>
-          <EnterpriseHeading importance={level}>EnterpriseHeading h{level}</EnterpriseHeading>
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <EnterpriseHeading importance={level}>Enterprise Heading - h{level}</EnterpriseHeading>
         </div>
       ))}
     </div>

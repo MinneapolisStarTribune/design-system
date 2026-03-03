@@ -56,11 +56,8 @@ export const AllVariants: Story = {
             key={`${size}-${weight}`}
             style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
           >
-            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-              {size} / {weight}
-            </span>
             <UtilityBody size={size} weight={weight}>
-              Utility body text
+              Utility body text - {size} / {weight}
             </UtilityBody>
           </div>
         ))

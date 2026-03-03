@@ -62,9 +62,6 @@ export const AllVariants: Story = {
                 gap: '8px',
               }}
             >
-              <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                {variant} / {color} / {size}
-              </span>
               <Button label={`${color} ${size}`} variant={variant} color={color} size={size} />
             </div>
           ))

@@ -42,6 +42,7 @@ export const Configurable: Story = {
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
   },
   args: {
     size: 'small',
@@ -67,12 +68,9 @@ export const AllVariants: Story = {
                 key={`${size}-${weight}-${capitalize}`}
                 style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
               >
-                <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
-                  {size} / {weight}
-                  {capitalize ? ' / All caps' : ''}
-                </span>
                 <UtilityLabel size={size} weight={weight} capitalize={capitalize}>
-                  Label
+                  Label - {size} / {weight}
+                  {capitalize ? ' / All caps' : ''}
                 </UtilityLabel>
               </div>
             ))

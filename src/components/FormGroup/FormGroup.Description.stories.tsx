@@ -45,7 +45,13 @@ export const AllVariants: Story = {
       'This description provides additional context about the form field, explaining what information is required and how it will be used. It can span multiple sentences and should remain readable at smaller sizes.',
   },
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: 480 }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
       <FormGroup>
         <FormGroup.Label>Email address</FormGroup.Label>
         <FormGroup.Description id="email-description-short">
@@ -63,6 +69,7 @@ export const AllVariants: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:
