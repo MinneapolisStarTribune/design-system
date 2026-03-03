@@ -5,6 +5,8 @@
  * @remarks Used for brand validation and enforcement.
  */
 export const COMPONENT_NAMES = [
+  'ArticleBodySponsoredHeading',
+  'ArticleBodyHeading',
   'NewsHeading',
   'NonNewsHeading',
   'EnterpriseHeading',

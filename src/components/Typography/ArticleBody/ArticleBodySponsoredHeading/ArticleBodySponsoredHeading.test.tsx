@@ -1,18 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { SponsoredHeading } from './SponsoredHeading';
-import { renderWithProvider } from '../../../../test-utils/render';
+import { ArticleBodySponsoredHeading } from './ArticleBodySponsoredHeading';
+import { renderWithProvider } from '@/test-utils/render';
 
-describe('SponsoredHeading', () => {
+describe('ArticleBodySponsoredHeading', () => {
   it('renders with importance 1 (h1)', () => {
     const { getByRole } = renderWithProvider(
-      <SponsoredHeading importance={1}>Heading text</SponsoredHeading>
+      <ArticleBodySponsoredHeading importance={1}>Heading text</ArticleBodySponsoredHeading>
     );
 
     const heading = getByRole('heading', { level: 1 });
 
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent('Heading text');
-    expect(heading).toHaveClass('typography-sponsored-h1');
+    expect(heading).toHaveClass('typography-article-body-sponsored-h1');
   });
 
   it('renders correct element and class for each importance level', () => {
@@ -20,13 +20,15 @@ describe('SponsoredHeading', () => {
 
     levels.forEach((importance) => {
       const { getByRole, unmount } = renderWithProvider(
-        <SponsoredHeading importance={importance}>Level {importance}</SponsoredHeading>
+        <ArticleBodySponsoredHeading importance={importance}>
+          Level {importance}
+        </ArticleBodySponsoredHeading>
       );
 
       const heading = getByRole('heading', { level: importance });
 
       expect(heading).toBeInTheDocument();
-      expect(heading).toHaveClass(`typography-sponsored-h${importance}`);
+      expect(heading).toHaveClass(`typography-article-body-sponsored-h${importance}`);
 
       unmount();
     });
@@ -34,22 +36,22 @@ describe('SponsoredHeading', () => {
 
   it('applies custom className', () => {
     const { getByRole } = renderWithProvider(
-      <SponsoredHeading importance={1} className="custom-class">
+      <ArticleBodySponsoredHeading importance={1} className="custom-class">
         With custom class
-      </SponsoredHeading>
+      </ArticleBodySponsoredHeading>
     );
 
     const heading = getByRole('heading', { level: 1 });
 
-    expect(heading).toHaveClass('typography-sponsored-h1');
+    expect(heading).toHaveClass('typography-article-body-sponsored-h1');
     expect(heading).toHaveClass('custom-class');
   });
 
   it('passes through id and aria-label', () => {
     const { getByRole } = renderWithProvider(
-      <SponsoredHeading importance={1} id="section-title" aria-label="Section title">
+      <ArticleBodySponsoredHeading importance={1} id="section-title" aria-label="Section title">
         Title
-      </SponsoredHeading>
+      </ArticleBodySponsoredHeading>
     );
 
     const heading = getByRole('heading', { level: 1 });
@@ -60,17 +62,19 @@ describe('SponsoredHeading', () => {
 
   it('renders without throwing when brand is startribune', () => {
     expect(() =>
-      renderWithProvider(<SponsoredHeading importance={1}>Sponsored</SponsoredHeading>, {
-        brand: 'startribune',
-      })
+      renderWithProvider(
+        <ArticleBodySponsoredHeading importance={1}>Sponsored</ArticleBodySponsoredHeading>,
+        { brand: 'startribune' }
+      )
     ).not.toThrow();
   });
 
-  it('renders without throwing when brand is varsity (Sponsored supported for both)', () => {
+  it('throws when brand is varsity (ArticleBodySponsoredHeading is Star Tribune only)', () => {
     expect(() =>
-      renderWithProvider(<SponsoredHeading importance={1}>Sponsored</SponsoredHeading>, {
-        brand: 'varsity',
-      })
-    ).not.toThrow();
+      renderWithProvider(
+        <ArticleBodySponsoredHeading importance={1}>Sponsored</ArticleBodySponsoredHeading>,
+        { brand: 'varsity' }
+      )
+    ).toThrow();
   });
 });

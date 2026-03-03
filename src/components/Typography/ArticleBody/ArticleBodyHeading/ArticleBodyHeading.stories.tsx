@@ -1,17 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NonNewsHeading } from './NonNewsHeading';
-import type { NewsHeadingImportance } from '../NewsHeading/NewsHeading';
+import { ArticleBodyHeading } from './ArticleBodyHeading';
+import type { ArticleBodyHeadingImportance } from './ArticleBodyHeading';
 
-const importanceOptions: NewsHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+const importanceOptions: ArticleBodyHeadingImportance[] = [1, 2, 3, 4, 5, 6];
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/NonNewsHeading',
-  component: NonNewsHeading,
+  title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
+  component: ArticleBodyHeading,
   parameters: {
+    layout: 'centered',
     docs: {
       description: {
         component:
-          'Non-editorial heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
+          'Article body heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
       },
     },
   },
@@ -28,16 +29,15 @@ const meta = {
       description: 'Heading text.',
     },
   },
-} satisfies Meta<typeof NonNewsHeading>;
+} satisfies Meta<typeof ArticleBodyHeading>;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
-    children: 'Non-news heading example',
+    children: 'Article Body Heading',
   },
 };
 
@@ -48,10 +48,10 @@ export const AllLevels: Story = {
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
-        <NonNewsHeading key={level} importance={level}>
-          NonNewsHeading importance={level} (h{level})
-        </NonNewsHeading>
+      {(importanceOptions as ArticleBodyHeadingImportance[]).map((level) => (
+        <ArticleBodyHeading key={level} importance={level}>
+          ArticleBodyHeading importance={level} (h{level})
+        </ArticleBodyHeading>
       ))}
     </div>
   ),

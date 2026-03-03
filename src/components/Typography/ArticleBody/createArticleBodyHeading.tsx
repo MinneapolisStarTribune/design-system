@@ -1,26 +1,25 @@
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
+import type { ComponentName } from '@/types/component-names';
 import type {
-  CreateEditorialHeadingOptions,
   EditorialHeadingImportance,
   EditorialHeadingProps,
-} from './types';
+} from '@/components/Typography/Editorial';
+
+interface CreateArticleBodyHeadingOptions {
+  componentName: ComponentName;
+  /** Class name segment (e.g. 'sponsored'). Produces typography-article-body-{prefix}-h1 … h6. */
+  classNamePrefix: string;
+}
 
 /**
- * Factory for editorial heading components (NewsHeading, SponsoredHeading, etc.).
- * Each variant uses the same props and semantics; styling is driven by design tokens
- * via the generated class name typography-{prefix}-h{1-6}.
- *
- * @example
- * export const NewsHeading = createEditorialHeading({
- *   componentName: 'NewsHeading',
- *   classNamePrefix: 'editorial-news',
- * });
+ * Factory for article body heading components.
+ * Produces typography-article-body-{prefix}-h1 … h6 (no "editorial" in path).
  */
-export function createEditorialHeading({
+export function createArticleBodyHeading({
   componentName,
   classNamePrefix,
-}: CreateEditorialHeadingOptions): React.FC<EditorialHeadingProps> {
+}: CreateArticleBodyHeadingOptions): React.FC<EditorialHeadingProps> {
   const getHeadingConfig = (importance: EditorialHeadingImportance) => {
     const configs: Record<
       EditorialHeadingImportance,
@@ -28,33 +27,33 @@ export function createEditorialHeading({
     > = {
       1: {
         element: 'h1',
-        className: `typography-${classNamePrefix}-h1`,
+        className: `typography-article-body-${classNamePrefix}-h1`,
       },
       2: {
         element: 'h2',
-        className: `typography-${classNamePrefix}-h2`,
+        className: `typography-article-body-${classNamePrefix}-h2`,
       },
       3: {
         element: 'h3',
-        className: `typography-${classNamePrefix}-h3`,
+        className: `typography-article-body-${classNamePrefix}-h3`,
       },
       4: {
         element: 'h4',
-        className: `typography-${classNamePrefix}-h4`,
+        className: `typography-article-body-${classNamePrefix}-h4`,
       },
       5: {
         element: 'h5',
-        className: `typography-${classNamePrefix}-h5`,
+        className: `typography-article-body-${classNamePrefix}-h5`,
       },
       6: {
         element: 'h6',
-        className: `typography-${classNamePrefix}-h6`,
+        className: `typography-article-body-${classNamePrefix}-h6`,
       },
     };
     return configs[importance];
   };
 
-  const EditorialHeading: React.FC<EditorialHeadingProps> = ({
+  const ArticleBodyHeading: React.FC<EditorialHeadingProps> = ({
     importance,
     children,
     className,
@@ -70,6 +69,6 @@ export function createEditorialHeading({
     );
   };
 
-  EditorialHeading.displayName = componentName;
-  return EditorialHeading;
+  ArticleBodyHeading.displayName = componentName;
+  return ArticleBodyHeading;
 }

@@ -72,7 +72,7 @@ export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
 /**
  * UtilityLabel weight tokens for the design system
  */
-export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold' | 'bold'>;
 
 /**
  * Global position tokens for overlays and floating UI
