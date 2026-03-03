@@ -78,9 +78,8 @@ module.exports = {
       },
     },
     {
-      // Mantine theme and related files
+      // Tamagui theme and related files
       files: [
-        '**/mantine-theme.ts',
         '**/theme-helpers.ts',
         '**/ThemeAwareColorCategory.tsx',
         '**/colorsData.ts',
