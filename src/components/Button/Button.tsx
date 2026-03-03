@@ -132,7 +132,6 @@ export const Button: React.FC<ButtonProps> = ({
       variant={mantineVariant}
       color={color}
       size={size}
-      gap={4}
       leftSection={leftSection}
       rightSection={rightSection}
       aria-label={buttonAriaLabel}
