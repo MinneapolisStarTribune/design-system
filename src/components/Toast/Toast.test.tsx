@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import { Toast } from './Toast';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 describe('Toast', () => {
   it('renders', () => {
