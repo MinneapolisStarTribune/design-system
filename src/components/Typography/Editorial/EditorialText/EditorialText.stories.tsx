@@ -51,7 +51,6 @@ export const AllLevels: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {SIZES.map((size) => (
         <div key={size}>
-          <div style={{ fontWeight: 'bold', marginBottom: 8 }}>{size}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {weightOptions.map((weight) => (
               <EditorialText key={weight} size={size} weight={weight}>
