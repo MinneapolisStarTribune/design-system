@@ -116,7 +116,7 @@ export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsH
 
 // src/index.ts
 export * from './components';
-export { DesignSystemProvider, type Brand } from './providers/MantineProvider';
+export { DesignSystemProvider, type Brand } from './providers/TamaguiProvider';
 ```
 
 ---

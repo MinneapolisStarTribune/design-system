@@ -303,12 +303,10 @@ See [tokens/fonts/README.md](tokens/fonts/README.md) for complete font token det
 2. **Run `yarn tokens`** to regenerate token outputs to `/build`
    - This generates CSS files, TypeScript types, and other outputs
    - Files go to `/build` for development use
-3. **For Mantine tokens**, also run `yarn tokens:mantine`
-   - Generates Mantine-specific theme configuration
-4. **Restart Storybook** to see token changes: `yarn storybook`
-5. **Run `yarn build`** to include tokens in `/dist` (published package)
+3. **Restart Storybook** to see token changes: `yarn storybook`
+4. **Run `yarn build`** to include tokens in `/dist` (published package)
    - Only needed before publishing or to verify the full build
-6. **Make sure to get a review from UX in Github in your PR!**
+5. **Make sure to get a review from UX in Github in your PR!**
 
 **Development workflow:**
 
@@ -415,7 +413,7 @@ When you publish a release, GitHub Actions will:
 
 1. ✅ Extract version from your tag (e.g., `v0.1.0` → `0.1.0`)
 2. ✅ Update `package.json` with the new version
-3. ✅ Build the package (includes token generation, icon mapping, Mantine tokens)
+3. ✅ Build the package (includes token generation, icon mapping, Tamagui tokens)
 4. ✅ Publish to GitHub Packages (consuming apps can then install this version)
 5. ✅ Commit the version bump back to `main`
 

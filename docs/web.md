@@ -203,7 +203,7 @@ const fontPath = getBrandFontPath('startribune');
 
 ## Setup Checklist
 
-**For React apps using Mantine components:**
+**For React apps using this design system's React components:**
 
 - [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
 - [ ] Wrap your app with `<DesignSystemProvider brand="..." forceColorScheme="...">`

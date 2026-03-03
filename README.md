@@ -1,6 +1,6 @@
 # design-system
 
-A React component library built with TypeScript and Mantine, with a comprehensive design token system. Supports both web (React) and mobile (React Native) platforms.
+A React component library built with TypeScript, Tamagui, and a comprehensive design token system. Supports both web (React) and mobile (React Native) platforms.
 
 ## Installation
 
@@ -31,11 +31,11 @@ yarn add @minneapolisstartribune/design-system
 
 ### Step 3: Install Peer Dependencies
 
-This package requires Mantine and React as peer dependencies:
+This package requires React, React DOM, React Native (for native usage), and Tamagui core as peer dependencies:
 
 ```bash
 # Using yarn
-yarn add @mantine/core@^7.15.0 @mantine/hooks@^7.15.0 react@^18.0.0 react-dom@^18.0.0
+yarn add @tamagui/core@^1.100.0 react@^19.0.0 react-dom@^19.0.0 react-native@>=0.73.0
 ```
 
 ## Quick Start
