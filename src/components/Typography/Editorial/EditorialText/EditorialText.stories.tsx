@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FontWeight, SIZES } from '../../../../types/globalTypes';
-import { EditorialText } from './EditorialText';
+import { SIZES } from '@/types';
+import { EditorialText, EditorialTextProps } from './EditorialText';
+
+const weightOptions: EditorialTextProps['weight'][] = ['regular', 'bold'];
 
 const meta = {
   title: 'Foundations/Typography/Editorial/EditorialText',
@@ -17,7 +19,7 @@ const meta = {
     },
     weight: {
       control: 'select',
-      options: ['regular', 'bold'] as Extract<FontWeight, 'regular' | 'bold'>[],
+      options: weightOptions,
       description: 'The font weight of the editorial text',
     },
     children: {
@@ -31,7 +33,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Configurable
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     size: 'medium',
     weight: 'regular',
@@ -39,57 +41,27 @@ export const Default: Story = {
   },
 };
 
-// XX-Small
-export const XxSmallRegular: Story = {
-  name: 'XX-Small / Regular',
-  args: { size: 'xx-small', weight: 'regular', children: 'XX-Small Regular editorial text' },
-};
-
-export const XxSmallBold: Story = {
-  name: 'XX-Small / Bold',
-  args: { size: 'xx-small', weight: 'bold', children: 'XX-Small Bold editorial text' },
-};
-
-// X-Small
-export const XSmallRegular: Story = {
-  name: 'X-Small / Regular',
-  args: { size: 'x-small', weight: 'regular', children: 'X-Small Regular editorial text' },
-};
-
-export const XSmallBold: Story = {
-  name: 'X-Small / Bold',
-  args: { size: 'x-small', weight: 'bold', children: 'X-Small Bold editorial text' },
-};
-
-// Small
-export const SmallRegular: Story = {
-  name: 'Small / Regular',
-  args: { size: 'small', weight: 'regular', children: 'Small Regular editorial text' },
-};
-
-export const SmallBold: Story = {
-  name: 'Small / Bold',
-  args: { size: 'small', weight: 'bold', children: 'Small Bold editorial text' },
-};
-
-// Medium
-export const MediumRegular: Story = {
-  name: 'Medium / Regular',
-  args: { size: 'medium', weight: 'regular', children: 'Medium Regular editorial text' },
-};
-
-export const MediumBold: Story = {
-  name: 'Medium / Bold',
-  args: { size: 'medium', weight: 'bold', children: 'Medium Bold editorial text' },
-};
-
-// Large
-export const LargeRegular: Story = {
-  name: 'Large / Regular',
-  args: { size: 'large', weight: 'regular', children: 'Large Regular editorial text' },
-};
-
-export const LargeBold: Story = {
-  name: 'Large / Bold',
-  args: { size: 'large', weight: 'bold', children: 'Large Bold editorial text' },
+export const AllVariants: Story = {
+  name: 'All sizes / weights',
+  args: {
+    size: 'medium',
+    weight: 'regular',
+    children: 'Editorial text',
+  },
+  render: (_args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {SIZES.map((size) => (
+        <div key={size}>
+          <div style={{ fontWeight: 'bold', marginBottom: 8 }}>{size}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {weightOptions.map((weight) => (
+              <EditorialText key={weight} size={size} weight={weight}>
+                {`${size} / ${weight} editorial text`}
+              </EditorialText>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
 };

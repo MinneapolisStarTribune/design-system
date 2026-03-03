@@ -1,4 +1,4 @@
-import type { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types';
 import classNames from 'classnames';
 
 export interface EditorialTextProps extends BaseProps, AccessibilityProps {
