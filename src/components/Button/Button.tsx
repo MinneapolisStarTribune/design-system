@@ -74,10 +74,18 @@ export const Button: React.FC<ButtonProps> = ({
     mantineVariant = variant;
   }
 
+  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
+    small: 'x-small',
+    medium: 'small',
+    large: 'medium',
+  };
+
+  const iconSize = icon && iconSizeMap[size];
+
   // Icons use the same color as text (no separate button-icon tokens needed)
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
-  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
+  const iconElement = icon ? <Icon name={icon} size={iconSize} aria-hidden /> : null;
 
   // Extract aria-label from props if provided (using type assertion for HTML attributes)
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
