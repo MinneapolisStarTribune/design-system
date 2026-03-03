@@ -46,7 +46,7 @@ export const Toast: React.FC<ToastProps> = ({
       <div className={styles.content}>
         {showIcon === true && (
           <span className={styles.icon} aria-hidden>
-            <Icon name={iconName} size="small" />
+            <Icon name={iconName} size="medium" />
           </span>
         )}
         <div className={styles.text}>
