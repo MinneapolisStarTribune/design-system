@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import { Button } from './Button';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '../../../test-utils/render';
 
 describe('Button', () => {
   it('renders', () => {
