@@ -25,6 +25,11 @@ export interface PrimitiveColorFamily {
 
 // Helper function to resolve a single token reference like "{color.base.white}" to actual value
 function resolveSingleTokenReference(ref: string, additionalColors?: any): string {
+  // Bail out early if ref is not a non-empty string
+  if (!ref || typeof ref !== 'string') {
+    return '';
+  }
+
   if (!ref.startsWith('{') || !ref.endsWith('}')) {
     return ref; // Not a token reference, return as-is
   }
@@ -62,6 +67,11 @@ function resolveSingleTokenReference(ref: string, additionalColors?: any): strin
 
 // Helper function to resolve token references like "{color.base.white}" to actual values
 function resolveTokenReference(ref: string, additionalColors?: any): string {
+  // Bail out early if ref is not a non-empty string
+  if (!ref || typeof ref !== 'string') {
+    return '';
+  }
+
   // If it's a simple token reference (starts and ends with braces), resolve it directly
   if (ref.startsWith('{') && ref.endsWith('}')) {
     return resolveSingleTokenReference(ref, additionalColors);
