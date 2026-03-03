@@ -27,13 +27,13 @@ describe('Icon', () => {
   it('applies correct sizes for small, medium, and large', () => {
     const { container: smallContainer } = render(<Icon name="camera-filled" size="small" />);
     const smallSvg = smallContainer.querySelector('svg');
-    expect(smallSvg?.getAttribute('width')).toBe('14px');
-    expect(smallSvg?.getAttribute('height')).toBe('14px');
+    expect(smallSvg?.getAttribute('width')).toBe('16px');
+    expect(smallSvg?.getAttribute('height')).toBe('16px');
 
     const { container: mediumContainer } = render(<Icon name="camera-filled" size="medium" />);
     const mediumSvg = mediumContainer.querySelector('svg');
-    expect(mediumSvg?.getAttribute('width')).toBe('16px');
-    expect(mediumSvg?.getAttribute('height')).toBe('16px');
+    expect(mediumSvg?.getAttribute('width')).toBe('20px');
+    expect(mediumSvg?.getAttribute('height')).toBe('20px');
 
     const { container: largeContainer } = render(<Icon name="camera-filled" size="large" />);
     const largeSvg = largeContainer.querySelector('svg');

@@ -297,14 +297,19 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
           // Set padding based on size
           if (props.size === 'small') {
             vars['--button-padding-x'] = theme.spacing['12'];
+            vars['--button-height'] = '32px';
           } else if (props.size === 'medium') {
             vars['--button-padding-x'] = theme.spacing['16'];
+            vars['--button-height'] = '40px';
           } else if (props.size === 'large') {
             vars['--button-padding-x'] = theme.spacing['24'];
+            vars['--button-height'] = '52px';
           }
 
           // Styles that apply to all buttons
           vars['--button-radius'] = theme.radius['full'];
+          // Consistent gap between icon sections and label
+          vars['--button-section-spacing'] = '4px';
 
           // Override Mantine's disabled color CSS variables to preserve original button colors
           // Get the original colors for this button variant

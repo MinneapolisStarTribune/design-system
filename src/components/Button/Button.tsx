@@ -9,6 +9,7 @@ import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import styles from './Button.module.scss';
+import { UtilityLabel } from '../Typography/Utility';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -23,6 +24,7 @@ export type ButtonAnalytics = Record<string, unknown>;
 export interface ButtonProps
   extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
   color?: ButtonColor;
+  capitalize?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: IconName;
@@ -37,6 +39,7 @@ export interface ButtonProps
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
+  capitalize = false,
   variant = 'filled',
   size = 'medium',
   icon,
@@ -71,10 +74,18 @@ export const Button: React.FC<ButtonProps> = ({
     mantineVariant = variant;
   }
 
+  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
+    small: 'x-small',
+    medium: 'small',
+    large: 'medium',
+  };
+
+  const iconSize = icon && iconSizeMap[size];
+
   // Icons use the same color as text (no separate button-icon tokens needed)
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
-  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
+  const iconElement = icon ? <Icon name={icon} size={iconSize} aria-hidden /> : null;
 
   // Extract aria-label from props if provided (using type assertion for HTML attributes)
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
@@ -129,7 +140,9 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={handleClick}
       {...props}
     >
-      {label}
+      <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
+        {label}
+      </UtilityLabel>
     </MantineButton>
   );
 };
