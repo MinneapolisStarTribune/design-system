@@ -3,7 +3,7 @@ import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
 
 const meta = {
-  title: 'Components/Actions & Inputs/FormGroup/FormGroup.Label',
+  title: 'Components/Actions & Inputs/FormGroup/Label',
   component: FormGroup.Label,
   parameters: {
     layout: 'centered',
@@ -36,39 +36,56 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    children: 'Field Label',
+    children: 'Email address',
     optional: false,
   },
   render: (args) => (
     <FormGroup>
       <FormGroup.Label {...args} />
-      <FormControl.TextInput placeholderText="Placeholder" />
+      <FormControl.TextInput placeholderText="you@example.com" />
     </FormGroup>
   ),
 };
 
-export const WithOptional: Story = {
+export const AllVariants: Story = {
   args: {
-    children: 'Phone Number',
-    optional: true,
+    children: 'Email address',
+    optional: false,
   },
-  render: (args) => (
-    <FormGroup>
-      <FormGroup.Label {...args} />
-      <FormControl.TextInput placeholderText="Optional field" />
-    </FormGroup>
-  ),
-};
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'Examples of label usage including required, optional, and standalone labels displayed together for comparison.',
+      },
+    },
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      <FormGroup>
+        <FormGroup.Label>Email address</FormGroup.Label>
+        <FormControl.TextInput placeholderText="you@example.com" />
+      </FormGroup>
 
-export const Standalone: Story = {
-  args: {
-    children: 'Standalone label (with htmlFor)',
-    htmlFor: 'standalone-input',
-  },
-  render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <FormGroup.Label {...args} />
-      <input id="standalone-input" type="text" placeholder="Associated input" />
+      <FormGroup>
+        <FormGroup.Label optional>Phone number</FormGroup.Label>
+        <FormControl.TextInput placeholderText="Optional field" />
+      </FormGroup>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <FormGroup.Label htmlFor="standalone-input">
+          Standalone label (with htmlFor)
+        </FormGroup.Label>
+        <input id="standalone-input" type="text" placeholder="Associated input" />
+      </div>
     </div>
   ),
 };

@@ -22,15 +22,6 @@ const meta = {
       description: 'Caption text',
     },
   },
-  decorators: [
-    (Story) => (
-      <FormGroup>
-        <FormGroup.Label>Email Address</FormGroup.Label>
-        <FormControl.TextInput placeholderText="Enter your email" />
-        <Story />
-      </FormGroup>
-    ),
-  ],
 } satisfies Meta<typeof FormGroup.Caption>;
 
 export default meta;
@@ -41,6 +32,13 @@ export const Configurable: Story = {
     variant: 'info',
     children: 'We recommend using a strong, unique password.',
   },
+  render: (args) => (
+    <FormGroup>
+      <FormGroup.Label>Email Address</FormGroup.Label>
+      <FormControl.TextInput placeholderText="Enter your email" />
+      <FormGroup.Caption {...args} />
+    </FormGroup>
+  ),
 };
 
 export const AllVariants: Story = {
