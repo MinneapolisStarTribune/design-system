@@ -5,7 +5,8 @@ import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
 import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup.Description';
 import { FormGroupLabel, type FormGroupLabelProps } from './FormGroup.Label';
-import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroupCaption';
+import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroupDescription';
+import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup.Caption';
 import { FormGroupProvider } from './FormGroupContext';
 
 export interface FormGroupProps extends BaseProps {
@@ -62,3 +63,9 @@ export const FormGroup: React.FC<FormGroupProps> & {
 FormGroup.Label = FormGroupLabel;
 FormGroup.Description = FormGroupDescription;
 FormGroup.Caption = FormGroupCaption;
+
+// Re-export types so they come from one place
+export type { FormGroupLabelProps } from './FormGroup.Label';
+export type { FormGroupDescriptionProps } from './FormGroupDescription';
+export type { FormGroupCaptionProps } from './FormGroup.Caption';
+
