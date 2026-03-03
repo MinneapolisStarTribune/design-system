@@ -277,16 +277,16 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
           const renderColorCard = (color: ColorDisplay) => {
             const isGradient = color.value.startsWith('linear-gradient');
             return (
-                <div
-                  key={color.tokenName}
-                  style={{
-                    // Use a neutral border color derived from CSS variables (if available),
-                    // otherwise fall back to a light gray. This avoids relying on any theme object.
-                    border: '1px solid var(--color-border-on-light-subtle-01, #e3e5e8)',
-                    borderRadius: '4px',
-                    overflow: 'hidden',
-                  }}
-                >
+              <div
+                key={color.tokenName}
+                style={{
+                  // Use a neutral border color derived from CSS variables (if available),
+                  // otherwise fall back to a light gray. This avoids relying on any theme object.
+                  border: '1px solid var(--color-border-on-light-subtle-01, #e3e5e8)',
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                }}
+              >
                 <div
                   style={{
                     backgroundColor: isGradient ? 'transparent' : color.value,

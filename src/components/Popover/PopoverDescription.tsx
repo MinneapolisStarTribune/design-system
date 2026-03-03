@@ -7,9 +7,5 @@ export const PopoverDescription: React.FC<{
 }> = ({ children }) => {
   const typographyClassName = 'typography-utility-text-regular-x-small text-on-light-secondary';
 
-  return (
-    <div className={classNames(styles.description, typographyClassName)}>
-      {children}
-    </div>
-  );
+  return <div className={classNames(styles.description, typographyClassName)}>{children}</div>;
 };

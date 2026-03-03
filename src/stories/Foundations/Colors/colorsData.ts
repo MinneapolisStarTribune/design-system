@@ -5,7 +5,7 @@
  * This file is NOT used in production code. It processes color tokens from JSON files
  * to create data structures used by Storybook stories for displaying color palettes.
  *
- * For production code, colors should be accessed through the the DesignSystemProvider, 
+ * For production code, colors should be accessed through the the DesignSystemProvider,
  * which properly handles brand-specific and theme-aware color resolution.
  */
 

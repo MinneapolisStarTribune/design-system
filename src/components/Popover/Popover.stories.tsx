@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
-import { Icon, Button } from '@/components/index.web';
+import { Button } from '@/components/index.web';
 
 const meta = {
   title: 'Feedback & Status/Popover',
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    trigger: <Button label="Open" />,
+    trigger: <Button>Open</Button>,
     pointer: 'bottom',
     children: (
       <>

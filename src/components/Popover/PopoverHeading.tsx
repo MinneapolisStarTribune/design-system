@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
-import { Button } from '../index';
+import { Button } from '@/components/Button/web/Button';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;

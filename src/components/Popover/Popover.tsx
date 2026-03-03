@@ -57,11 +57,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
         <TamaguiPopover.Content trapFocus>
           <TamaguiPopover.Arrow size="$1" />
-          <div
-            className={styles.container}
-            data-testid={dataTestId}
-            {...rest}
-          >
+          <div className={styles.container} data-testid={dataTestId} {...rest}>
             <div className={`${styles.content} ${className ?? ''}`}>{children}</div>
           </div>
         </TamaguiPopover.Content>

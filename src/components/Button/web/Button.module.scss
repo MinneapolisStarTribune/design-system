@@ -4,6 +4,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* Consistent gap between icon and label */
   gap: var(--spacing-4);
   border-radius: var(--radius-full);
   cursor: pointer;
@@ -23,14 +24,17 @@
   
   /* Size variants */
   &.small {
+    height: 32px;
     padding: var(--spacing-8) var(--spacing-12);
   }
   
   &.medium {
+    height: 40px;
     padding: var(--spacing-8) var(--spacing-16);
   }
   
   &.large {
+    height: 52px;
     padding: var(--spacing-8) var(--spacing-24);
   }
   

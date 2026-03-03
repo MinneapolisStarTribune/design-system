@@ -28,7 +28,19 @@
 
    **Why this matters:** The design system uses a release branch workflow where features are developed on release branches (e.g., `release/v1.0`), not directly on `main`. The workflow helpers make it easy to create branches, sync with releases, and push changes. If you skip this step, you'll need to manually manage branches and may encounter merge conflicts.
 
-4. **Verify your setup:**
+4. **Generate Tamagui themes (required once per clone, and whenever tokens change):**
+
+   The Tamagui config and providers import generated theme modules from `src/generated/themes/*.ts`.
+   These files are **not committed** and must be generated locally:
+
+   ```bash
+   yarn tokens:tamagui
+   ```
+
+   Note: `yarn test` and `yarn test:a11y` automatically run `yarn tokens:tamagui` first via
+   `pretest`/`pretest:a11y` scripts, but running it explicitly is helpful after token changes.
+
+5. **Verify your setup:**
 
    ```bash
    # Run tests to make sure everything works

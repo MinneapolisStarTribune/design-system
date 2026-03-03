@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { Icon } from '@/components/Icon/Icon';
@@ -101,6 +100,8 @@ export const Button: React.FC<ButtonProps> = ({
   // Check for gradient borders on brand-accent buttons (only for filled and outlined)
   // This checks if the hover-border token contains "gradient" (for Varsity brand)
   useEffect(() => {
+    let nextHasGradientBorder = false;
+
     if (
       color === 'brand-accent' &&
       (variant === 'filled' || variant === 'outlined') &&
@@ -109,14 +110,11 @@ export const Button: React.FC<ButtonProps> = ({
       const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
       const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
       // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
-      if (hoverBorderValue && hoverBorderValue.includes('gradient')) {
-        setHasGradientBorder(true);
-      } else {
-        setHasGradientBorder(false);
-      }
-    } else {
-      setHasGradientBorder(false);
+      nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
     }
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant, tokenPrefix]);
 
   const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {

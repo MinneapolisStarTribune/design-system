@@ -49,10 +49,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
 
   // Compute theme name from brand and color scheme
   // Theme names in tamagui.config.ts follow pattern: ${brand}_${colorScheme}
-  const themeName = useMemo(
-    () => getThemeName(brand, forceColorScheme),
-    [brand, forceColorScheme]
-  );
+  const themeName = useMemo(() => getThemeName(brand, forceColorScheme), [brand, forceColorScheme]);
 
   return (
     <BrandContext.Provider value={brand}>

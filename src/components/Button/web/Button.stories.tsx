@@ -62,7 +62,7 @@ export const AllVariants: Story = {
                 gap: '8px',
               }}
             >
-              <Button variant={variant} color={color} size={size} >{`${color} ${size}`}</Button>
+              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
             </div>
           ))
         )

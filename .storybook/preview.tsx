@@ -111,7 +111,7 @@ const preview: Preview = {
      * The order matters: ThemeWrapper must be outermost so CSS variables
      * are available before components try to use them.
      */
-    ((Story, context) => {
+    (Story, context) => {
       // Handle version redirect
       const selectedVersion = context.globals.versions as string;
       if (typeof selectedVersion === 'string' && selectedVersion.startsWith('http')) {
@@ -129,28 +129,28 @@ const preview: Preview = {
         | 'light'
         | 'dark';
 
+      const layout = context.parameters.layout as string | undefined;
+      const isFullscreen = layout === 'fullscreen';
+
       return (
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            width: '100%',
+            padding: '1rem',
+            ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),
           }}
         >
           <ThemeWrapper brand={brand} colorScheme={theme}>
             <FontWrapper brand={brand}>
               <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-                  <BrandValidationErrorBoundary>
-                    <Story />
-                  </BrandValidationErrorBoundary>
+                <BrandValidationErrorBoundary>
+                  <Story />
+                </BrandValidationErrorBoundary>
               </DesignSystemProvider>
             </FontWrapper>
           </ThemeWrapper>
         </div>
       );
-    }),
+    },
   ],
   argTypes: {
     className: {
