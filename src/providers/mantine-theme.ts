@@ -308,6 +308,8 @@ export function createMantineTheme(brand: Brand, colorScheme: ColorScheme): Mant
 
           // Styles that apply to all buttons
           vars['--button-radius'] = theme.radius['full'];
+          // Consistent gap between icon sections and label
+          vars['--button-section-spacing'] = '4px';
 
           // Override Mantine's disabled color CSS variables to preserve original button colors
           // Get the original colors for this button variant
