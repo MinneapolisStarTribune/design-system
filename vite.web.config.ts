@@ -90,7 +90,7 @@ export default defineConfig({
       fileName: () => 'design-system.es.js',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@mantine/core', '@mantine/hooks'],
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
         globals: {
           react: 'React',

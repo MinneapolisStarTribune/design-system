@@ -3,7 +3,7 @@
  * 
  * Verifies that web and native bundles properly exclude platform-specific code:
  * - Web bundle excludes React Native dependencies
- * - Native bundle excludes Mantine and CSS/SCSS
+ * - Native bundle excludes CSS/SCSS
  * 
  * @vitest-environment node
  */
@@ -38,21 +38,6 @@ describe('Bundle Exclusions', () => {
   });
 
   describe('Native bundle', () => {
-    it('excludes Mantine dependencies', () => {
-      if (!fs.existsSync(nativeBundlePath)) {
-        console.warn('Native bundle not found. Run "yarn build:native" first.');
-        return;
-      }
-
-      const nativeBundle = fs.readFileSync(nativeBundlePath, 'utf-8');
-      const lowerContent = nativeBundle.toLowerCase();
-
-      // Verify Mantine is not included
-      expect(lowerContent).not.toContain('@mantine/core');
-      expect(lowerContent).not.toContain('@mantine/hooks');
-      expect(lowerContent).not.toContain('mantine');
-    });
-
     it('excludes CSS/SCSS and DOM-specific code', () => {
       if (!fs.existsSync(nativeBundlePath)) {
         console.warn('Native bundle not found. Run "yarn build:native" first.');

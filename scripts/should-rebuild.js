@@ -85,13 +85,13 @@ function shouldRebuildTokens() {
 }
 
 /**
- * Check if Mantine tokens need to be rebuilt
- * @returns {boolean} True if Mantine tokens should be rebuilt
+ * Check if Tamagui token TypeScript files need to be rebuilt
+ * @returns {boolean} True if Tamagui tokens should be rebuilt
  */
-function shouldRebuildMantineTokens() {
+function shouldRebuildTamaguiTokens() {
   const projectRoot = path.join(__dirname, '..');
   
-  // Source files: Mantine tokens use fewer files (no base.json, semantic.json, etc.)
+  // Source files: Tamagui theme tokens are built from the same core color files
   const tokenSourceFiles = [
     'tokens/color/global.json',
     'tokens/color/button-light.json',
@@ -102,8 +102,8 @@ function shouldRebuildMantineTokens() {
     'tokens/color/brand-varsity-dark.json',
   ].map(file => path.join(projectRoot, file));
   
-  // Output files: generated TypeScript files (note: format is brand.mode.ts, not brand-mode.ts)
-  const mantineOutputFiles = [
+  // Output files: generated TypeScript files (format is brand.mode.ts, not brand-mode.ts)
+  const tamaguiOutputFiles = [
     'src/generated/themes/startribune.light.ts',
     'src/generated/themes/startribune.dark.ts',
     'src/generated/themes/varsity.light.ts',
@@ -111,7 +111,7 @@ function shouldRebuildMantineTokens() {
   ].map(file => path.join(projectRoot, file));
   
   // Check if any output file is missing
-  const allOutputsExist = mantineOutputFiles.every(file => fs.existsSync(file));
+  const allOutputsExist = tamaguiOutputFiles.every(file => fs.existsSync(file));
   if (!allOutputsExist) {
     return true;
   }
@@ -120,7 +120,7 @@ function shouldRebuildMantineTokens() {
   const latestSourceMtime = getLatestMtime(tokenSourceFiles);
   
   // Get latest modification time from output files
-  const latestOutputMtime = getLatestMtime(mantineOutputFiles);
+  const latestOutputMtime = getLatestMtime(tamaguiOutputFiles);
   
   // Rebuild if source files are newer than output files
   return latestSourceMtime > latestOutputMtime;
@@ -172,7 +172,7 @@ function shouldRebuildIcons() {
 }
 
 // Main execution
-// This script is called with a command argument: 'tokens', 'tokens:mantine', or 'icons'
+// This script is called with a command argument: 'tokens', 'tokens:tamagui', or 'icons'
 const command = process.argv[2];
 
 if (!command) {
@@ -188,7 +188,7 @@ switch (command) {
     shouldRebuild = shouldRebuildTokens();
     break;
   case 'tokens:tamagui':
-    shouldRebuild = shouldRebuildMantineTokens();
+    shouldRebuild = shouldRebuildTamaguiTokens();
     break;
   case 'icons':
     shouldRebuild = shouldRebuildIcons();
