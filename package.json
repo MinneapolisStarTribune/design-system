@@ -31,8 +31,9 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@mantine/core": "^8.3.9",
-    "@mantine/hooks": "^8.3.9",
+    "@tamagui/core": "^1.100.0",
+    "@tamagui/config": "^1.100.0",
+    "@tamagui/vite-plugin": "^1.100.0",
     "@vitejs/plugin-react": "^4.7.0",
     "axe-core": "^4.11.0",
     "classnames": "^2.5.1",
@@ -89,8 +90,7 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@mantine/core": "^7.15.0",
-    "@mantine/hooks": "^7.15.0",
+    "@tamagui/core": "^1.100.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-native": ">=0.73.0"
