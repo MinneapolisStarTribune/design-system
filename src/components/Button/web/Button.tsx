@@ -1,15 +1,13 @@
-import {
-  Button as MantineButton,
-  ButtonProps as MantineButtonProps,
-  useMantineTheme,
-} from '@mantine/core';
+
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { Icon } from '../Icon/Icon';
-import { IconName } from '../Icon/iconNames';
-import { getIconLabel } from '../../utils/accessibilityHelpers';
-import { useAnalytics } from '../../hooks/useAnalytics';
+import { Icon } from '@/components/Icon/Icon';
+import { IconName } from '@/components/Icon/iconNames';
+import { getIconLabel } from '@/utils/accessibilityHelpers';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
-import { UtilityLabel } from '../Typography/Utility';
+import { UtilityLabel } from '@/components/Typography/Utility';
+import { BaseProps } from '@/types/globalTypes';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -21,8 +19,7 @@ export type ButtonSize = (typeof BUTTON_SIZES)[number];
 /** Extra data to merge into the tracking event. Use for per-button context (e.g. cta_type, module_position). */
 export type ButtonAnalytics = Record<string, unknown>;
 
-export interface ButtonProps
-  extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
+export interface ButtonProps extends BaseProps {
   color?: ButtonColor;
   capitalize?: boolean;
   variant?: ButtonVariant;
@@ -30,13 +27,40 @@ export interface ButtonProps
   icon?: IconName;
   iconPosition?: 'start' | 'end';
   label?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isDisabled?: boolean;
   /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
   analytics?: ButtonAnalytics;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-// Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
+/**
+ * Build CSS variable name for button tokens
+ * Examples:
+ * - neutral + filled -> 'button-filled'
+ * - brand + outlined -> 'button-brand-outlined'
+ * - brand-accent + ghost -> 'button-brand-accent-ghost'
+ */
+function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
+  if (color === 'neutral') {
+    return `button-${variant}`;
+  } else if (color === 'brand') {
+    return `button-brand-${variant}`;
+  } else {
+    return `button-brand-accent-${variant}`;
+  }
+}
+
+/**
+ * Get CSS variable value from computed styles
+ */
+function getCSSVariable(element: HTMLElement | null, variableName: string): string | null {
+  if (!element || typeof window === 'undefined') {
+    return null;
+  }
+  const computed = window.getComputedStyle(element);
+  return computed.getPropertyValue(variableName).trim() || null;
+}
+
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
   capitalize = false,
@@ -45,7 +69,6 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   iconPosition = 'end',
   label,
-  children: _children,
   className,
   isDisabled,
   onClick,
@@ -67,12 +90,32 @@ export const Button: React.FC<ButtonProps> = ({
     onClick?.(e);
   };
 
-  let mantineVariant;
-  if (variant === 'ghost') {
-    mantineVariant = 'subtle';
-  } else {
-    mantineVariant = variant;
-  }
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [hasGradientBorder, setHasGradientBorder] = React.useState(false);
+
+  // Build token prefix for CSS variables
+  const tokenPrefix = getButtonTokenPrefix(color, variant);
+
+  // Check for gradient borders on brand-accent buttons (only for filled and outlined)
+  // This checks if the hover-border token contains "gradient" (for Varsity brand)
+  useEffect(() => {
+    if (
+      color === 'brand-accent' &&
+      (variant === 'filled' || variant === 'outlined') &&
+      buttonRef.current
+    ) {
+      const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
+      const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
+      // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
+      if (hoverBorderValue && hoverBorderValue.includes('gradient')) {
+        setHasGradientBorder(true);
+      } else {
+        setHasGradientBorder(false);
+      }
+    } else {
+      setHasGradientBorder(false);
+    }
+  }, [color, variant, tokenPrefix]);
 
   const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
     small: 'x-small',
@@ -87,62 +130,55 @@ export const Button: React.FC<ButtonProps> = ({
   // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
   const iconElement = icon ? <Icon name={icon} size={iconSize} aria-hidden /> : null;
 
-  // Extract aria-label from props if provided (using type assertion for HTML attributes)
+  // Extract aria-label from props if provided
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
 
   // Generate aria-label: use explicit aria-label, fallback to label, or generate from icon name for icon-only buttons
   const buttonAriaLabel = ariaLabel || label || (icon ? `${getIconLabel(icon)} icon` : undefined);
 
-  // Use Mantine's leftSection/rightSection for icon positioning
-  const leftSection = icon && iconPosition === 'start' ? iconElement : undefined;
-  const rightSection = icon && iconPosition === 'end' ? iconElement : undefined;
+  // Determine icon position
+  const leftIcon = icon && iconPosition === 'start' ? iconElement : null;
+  const rightIcon = icon && iconPosition === 'end' ? iconElement : null;
 
-  // Check if brand-accent buttons should have gradient border
-  // Check the theme colors directly to see if the hover-border token is a gradient
-  const theme = useMantineTheme();
-  const isBrandAccentFilled = color === 'brand-accent' && variant === 'filled';
-  const isBrandAccentOutlined = color === 'brand-accent' && variant === 'outlined';
-  const brandAccentFilledHoverBorder = theme.colors['button-brand-accent-filled-hover-border']?.[0];
-  const brandAccentOutlinedHoverBorder =
-    theme.colors['button-brand-accent-outlined-hover-border']?.[0];
-  const hasGradientBorderFilled =
-    isBrandAccentFilled && brandAccentFilledHoverBorder?.includes('gradient');
-  const hasGradientBorderOutlined =
-    isBrandAccentOutlined && brandAccentOutlinedHoverBorder?.includes('gradient');
-
-  // Apply special hover styles for brand-accent buttons with gradient border
+  // Apply special classes for gradient borders
   const brandAccentFilledClass =
-    isBrandAccentFilled && hasGradientBorderFilled ? styles.brandAccentFilled : undefined;
+    color === 'brand-accent' && variant === 'filled' && hasGradientBorder
+      ? styles.brandAccentFilled
+      : undefined;
   const brandAccentOutlinedClass =
-    isBrandAccentOutlined && hasGradientBorderOutlined ? styles.brandAccentOutlined : undefined;
+    color === 'brand-accent' && variant === 'outlined' && hasGradientBorder
+      ? styles.brandAccentOutlined
+      : undefined;
 
   // Add disabled class for styling
   const disabledClass = isDisabled ? styles.disabled : undefined;
 
-  // Combine class names using classnames utility
+  // Combine class names - use styles object for CSS modules
   const combinedClassNames = classNames(
-    className,
+    styles.button,
+    styles[color], // neutral, brand, or brand-accent (CSS modules handles hyphens)
+    styles[size], // small, medium, large
+    styles[variant], // filled, outlined, ghost
     brandAccentFilledClass,
     brandAccentOutlinedClass,
-    disabledClass
+    disabledClass,
+    className
   );
-
   return (
-    <MantineButton
-      variant={mantineVariant}
-      color={color}
-      size={size}
-      leftSection={leftSection}
-      rightSection={rightSection}
+    <button
+      ref={buttonRef}
+      type="button"
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
       className={combinedClassNames || undefined}
       onClick={handleClick}
       {...props}
     >
+      {leftIcon}
       <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
         {label}
       </UtilityLabel>
-    </MantineButton>
+      {rightIcon}
+    </button>
   );
 };
