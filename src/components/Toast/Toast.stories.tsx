@@ -63,8 +63,8 @@ const renderWithClose = (args: ToastProps) => <ToastWithClose {...args} />;
 
 export const Configurable: Story = {
   args: {
-    title: 'Update saved',
-    description: 'Your changes have been saved.',
+    title: 'Changes saved',
+    description: 'Your changes were saved.',
     variant: 'info',
     showIcon: true,
     onClose: () => {},
@@ -80,8 +80,8 @@ export const AllVariants: Story = {
     },
   },
   args: {
-    title: 'Example toast',
-    description: 'Example description',
+    title: 'Status message',
+    description: 'Brief supporting text can go here.',
     variant: 'info',
     showIcon: true,
     onClose: () => {},
@@ -92,15 +92,15 @@ export const AllVariants: Story = {
       {TOAST_VARIANTS.map((variant) => (
         <div key={variant} className={styles.variantGroup}>
           <Toast
-            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} toast`}
-            description="Toast with icon"
+            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} message`}
+            description="With icon"
             variant={variant}
             showIcon
             onClose={() => {}}
           />
           <Toast
-            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} toast (no icon)`}
-            description="Toast without icon"
+            title={`${variant.charAt(0).toUpperCase()}${variant.slice(1)} message (no icon)`}
+            description="Without icon"
             variant={variant}
             showIcon={false}
             onClose={() => {}}
