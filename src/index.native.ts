@@ -4,4 +4,4 @@
 export * from './components/index.native';
 
 // Export Brand type for now (DesignSystemProvider will be adapted for React Native in a later ticket)
-export type { Brand } from './providers/MantineProvider';
+export { type Brand, DesignSystemProvider } from './providers/TamaguiProvider';
