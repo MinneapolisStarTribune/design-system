@@ -225,80 +225,11 @@ export const AllVariants: Story = {
         ),
       },
       {
-        label: 'Label + Caption (success)',
+        label: 'With icon',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>Email</FormGroup.Label>
-            <FormControl.TextInput placeholderText="you@example.com" />
-            <FormGroup.Caption variant="success">Looks good!</FormGroup.Caption>
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'With icon (left)',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Label</FormGroup.Label>
+            <FormGroup.Label>With icon</FormGroup.Label>
             <FormControl.TextInput placeholderText="Search" icon="search" iconPosition="start" />
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'With icon (right)',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.TextInput placeholderText="you@example.com" icon="mail" iconPosition="end" />
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'With icons (left & right)',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.TextInput
-              placeholderText="Search by date"
-              leftIcon="search"
-              rightIcon="calendar"
-            />
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'Label + Description + Caption + left icon',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Search</FormGroup.Label>
-            <FormGroup.Description>Search by keyword or date</FormGroup.Description>
-            <FormControl.TextInput placeholderText="Search..." icon="search" iconPosition="start" />
-            <FormGroup.Caption variant="info">Tip: Use quotes for exact phrases</FormGroup.Caption>
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'Label + Description + Caption + right icon',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Email</FormGroup.Label>
-            <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
-            <FormControl.TextInput placeholderText="you@example.com" icon="mail" iconPosition="end" />
-            <FormGroup.Caption variant="info">Enter a valid email address</FormGroup.Caption>
-          </FormGroup>
-        ),
-      },
-      {
-        label: 'Label + Description + Caption + both icons',
-        render: () => (
-          <FormGroup>
-            <FormGroup.Label>Search by date</FormGroup.Label>
-            <FormGroup.Description>Filter results by date range</FormGroup.Description>
-            <FormControl.TextInput
-              placeholderText="Search by date"
-              leftIcon="search"
-              rightIcon="calendar"
-            />
-            <FormGroup.Caption variant="success">Date filter applied</FormGroup.Caption>
           </FormGroup>
         ),
       },

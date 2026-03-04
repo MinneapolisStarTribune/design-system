@@ -23,6 +23,7 @@ export const FormGroupDescription: React.FC<FormGroupDescriptionProps> = ({
       style={{
         display: 'block',
         marginTop: 'var(--space-2, 2px)',
+        marginBottom: 'var(--space-8, 8px)',
       }}
     >
       {children}

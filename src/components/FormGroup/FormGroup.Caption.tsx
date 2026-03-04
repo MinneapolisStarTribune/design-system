@@ -50,6 +50,7 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
         display: 'flex',
         alignItems: 'center',
         gap: 'var(--spacing-2)',
+        marginTop: 'var(--spacing-8)',
       }}
       data-testid={dataTestId}
     >
