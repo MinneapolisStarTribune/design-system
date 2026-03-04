@@ -95,10 +95,10 @@
 // Mobile
 @media (max-width: 480px) {
   [data-brand='startribune'] .caption {
-    padding: 0 16px;
+    padding: 0 var(--spacing-16);
   }
 
   [data-brand='varsity'] .caption {
-    padding: 0;
+    padding: 0 var(--spacing-16);
   }
 }
