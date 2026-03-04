@@ -19,14 +19,10 @@
  *
  * Output files:
  * Web Files:
- * - dist/web/themes/startribune-light.css
- * - dist/web/themes/startribune-dark.css
- * - dist/web/themes/varsity-light.css
- * - dist/web/themes/varsity-dark.css
- * - dist/web/fonts/editorial/startribune-fonts.css
- * - dist/web/fonts/editorial/varsity-fonts.css
- * - dist/web/fonts/utility/startribune-fonts.css (shared + startribune overrides)
- * - dist/web/fonts/utility/varsity-fonts.css (shared + varsity overrides)
+ * - dist/web/startribune-light.css (combined typography + color theme)
+ * - dist/web/startribune-dark.css (combined typography + color theme)
+ * - dist/web/varsity-light.css (combined typography + color theme)
+ * - dist/web/varsity-dark.css (combined typography + color theme)
  * - dist/web/fonts/font-face/startribune.css (@font-face from tokens/fonts/startribune.json)
  * - dist/web/fonts/font-face/varsity.css (@font-face from tokens/fonts/varsity.json)
  * Mobile JavaScript Files (no .d.ts files - TypeScript can infer types from JSON exports):
@@ -52,18 +48,18 @@
  * 1. Reads token JSON files from the tokens/ directory
  * 2. Resolves token references (e.g., {color.neutral.500})
  * 3. Formats tokens as CSS variables (for web) and JavaScript ES6 modules (for mobile)
- * 4. Writes CSS files to dist/web/themes/
+ * 4. Writes CSS files to dist/web/themes/ (intermediate step)
  * 5. Writes JavaScript theme token files to dist/mobile/themes/ (TypeScript can infer types from JSON exports)
- * 7. Generates editorial typography classes to dist/web/fonts/editorial/
- * 8. Generates utility typography classes to dist/web/fonts/utility/ (shared.json common for both)
- * 9. Generates @font-face CSS from tokens/fonts/ to dist/web/fonts/font-face/{brand}.css (web)
- * 10. Generates mobile font tokens from tokens/fonts/ to dist/mobile/fonts/{brand}-fonts.js (React Native)
- * 11. Generates mobile typography tokens from tokens/typography/ to dist/mobile/typography/{brand}-typography.js (React Native)
+ * 6. Generates combined typography classes (editorial + utility) to dist/web/fonts/{brand}.css (intermediate step)
+ * 7. Combines typography + themes into dist/web/{brand}-{mode}.css (final output)
+ * 8. Generates @font-face CSS from tokens/fonts/ to dist/web/fonts/font-face/{brand}.css (web)
+ * 9. Generates mobile font tokens from tokens/fonts/ to dist/mobile/fonts/{brand}-fonts.js (React Native)
+ * 10. Generates mobile typography tokens from tokens/typography/ to dist/mobile/typography/{brand}-typography.js (React Native)
  */
 
 const buildThemeTokens = require('./build-theme-tokens');
 const buildTypographyClasses = require('./build-typography-classes');
-const buildUtilityTypographyClasses = require('./build-utility-typography-classes');
+const buildCombinedCSS = require('./build-combined-css');
 const buildFontFaces = require('./build-font-faces');
 const buildMobileFonts = require('./build-mobile-fonts');
 const buildMobileTypography = require('./build-mobile-typography');
@@ -78,9 +74,8 @@ const buildMobileTypography = require('./build-mobile-typography');
  * - varsity + light → varsity-light.css
  * - varsity + dark → varsity-dark.css
  *
- * Also generates typography class files:
- * - dist/web/fonts/editorial/: startribune-fonts.css, varsity-fonts.css (editorial only)
- * - dist/web/fonts/utility/: startribune-fonts.css, varsity-fonts.css (shared + brand overrides)
+ * Also generates combined CSS files:
+ * - dist/web/{brand}-{mode}.css (combined typography classes + CSS variables)
  *
  * Process:
  * 1. Iterates through all brand/mode combinations
@@ -105,7 +100,7 @@ async function buildTokens() {
     }
   }
 
-  // Build editorial typography classes for each brand
+  // Build typography classes (editorial + utility combined) for each brand
   console.log('\n==============================================');
   console.log('Building typography classes...');
 
@@ -113,12 +108,14 @@ async function buildTokens() {
     await buildTypographyClasses(brand);
   }
 
-  // Build utility typography classes (shared.json common for both; brand json overrides)
+  // Combine typography + themes into single files per brand/theme
   console.log('\n==============================================');
-  console.log('Building utility typography classes...');
+  console.log('Building combined CSS files...');
 
   for (const brand of brands) {
-    await buildUtilityTypographyClasses(brand);
+    for (const mode of modes) {
+      await buildCombinedCSS(brand, mode);
+    }
   }
 
   // Build @font-face CSS from tokens/fonts/ (startribune.json, varsity.json)
