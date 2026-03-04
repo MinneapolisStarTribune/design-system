@@ -4,77 +4,28 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Custom TypeScript formatter for Mantine themes
- * Converts design tokens into Mantine-compatible color objects
+ * Custom TypeScript formatter for Tamagui themes
+ * Converts design tokens into Tamagui-compatible color objects
  */
-const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
+const tamaguiTypeScriptFormat = ({ dictionary, options = {} }) => {
   const { brand, mode } = options;
   
-  // Group tokens by their path structure
+  // Collect all color tokens - just use whatever Style Dictionary gives us
   const colorTokens = {};
-  const paletteTokens = {}; // For color palettes (e.g., neutral.50, neutral.100, etc.)
   
   dictionary.allTokens.forEach((token) => {
-    const path = token.path;
-    
-    // Skip non-color tokens
-    if (path[0] !== 'color') return;
-    
-    // Get the resolved value (Style Dictionary should have resolved references)
+    const tokenPath = token.path;
     const value = token.value;
     
-    // Handle color palettes (e.g., color.neutral.50)
-    if (path.length === 3 && /^\d+$/.test(path[2])) {
-      const paletteName = path[1]; // e.g., "neutral"
-      const shade = path[2]; // e.g., "50"
-      
-      if (!paletteTokens[paletteName]) {
-        paletteTokens[paletteName] = {};
-      }
-      paletteTokens[paletteName][shade] = value;
-      return;
+    // Convert path to kebab-case key (e.g., ['color', 'background', 'light-default'] -> 'background-light-default')
+    // or ['color', 'neutral', '50'] -> 'neutral-50'
+    const key = tokenPath.slice(1).join('-');
+    
+    // Style Dictionary resolves all token values to strings (hex, rgb, etc.)
+    // Store as string if it's a non-empty string value
+    if (typeof value === 'string' && value.trim().length > 0) {
+      colorTokens[key] = value;
     }
-    
-    // Handle semantic tokens (e.g., color.control.brand-background)
-    // Convert path to kebab-case key (Mantine uses kebab-case for custom colors)
-    const key = path.slice(1).join('-');
-    colorTokens[key] = value;
-  });
-  
-  // Convert palette tokens to Mantine color arrays (only use what exists in token files)
-  const mantinePalettes = {};
-  Object.keys(paletteTokens).forEach((paletteName) => {
-    const shades = paletteTokens[paletteName];
-    // Include all available shades from token files, ordered by shade value
-    // Map shades: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, etc.
-    const mantineArray = [];
-    const shadeOrder = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
-    
-    shadeOrder.forEach((shade) => {
-      if (shades[shade]) {
-        mantineArray.push(shades[shade]);
-      }
-      // Do not add any colors that don't exist in token files
-    });
-    
-    // Include any other shades that might exist (sorted numerically)
-    const allShades = Object.keys(shades).sort((a, b) => parseInt(a) - parseInt(b));
-    allShades.forEach((shade) => {
-      if (!shadeOrder.includes(shade) && shades[shade]) {
-        mantineArray.push(shades[shade]);
-      }
-    });
-    
-    // Informational message if palette has fewer than 10 colors (Mantine typically uses 10)
-    if (mantineArray.length < 10) {
-      console.warn(
-        `⚠️  Warning: Palette "${paletteName}" has ${mantineArray.length} colors. ` +
-        `Mantine typically uses 10 colors (indices 0-9), but this palette will work with ${mantineArray.length} colors. ` +
-        `If you need more shades, add them to your token files (global.json or brand-${brand}-${mode}.json).`
-      );
-    }
-    
-    mantinePalettes[paletteName] = mantineArray;
   });
   
   // Generate TypeScript code
@@ -87,42 +38,9 @@ const mantineTypeScriptFormat = ({ dictionary, options = {} }) => {
   code += ` * Date: generated at build time\n */\n\n`;
   code += `export const colors = {\n`;
 
-  // Output palettes first (sorted)
-  Object.keys(mantinePalettes).sort().forEach((paletteName) => {
-    code += `${indent(1)}${keyStr(paletteName)}: [\n`;
-    mantinePalettes[paletteName].forEach((color, index) => {
-      code += `${indent(2)}'${color}'${index < mantinePalettes[paletteName].length - 1 ? ',' : ''}\n`;
-    });
-    code += `${indent(1)}],\n`;
-  });
-
-  // Output semantic tokens - only include if they're already arrays or valid color values
-  // Do not generate additional colors
+  // Output all color tokens as strings, sorted alphabetically
   Object.keys(colorTokens).sort().forEach((key) => {
-    const value = colorTokens[key];
-
-    // If value is already an array (shouldn't happen from tokens, but check anyway)
-    if (Array.isArray(value)) {
-      // No length restriction - use whatever is provided
-      if (value.length === 1) {
-        code += `${indent(1)}${keyStr(key)}: ['${value[0]}'],\n`;
-      } else {
-        code += `${indent(1)}${keyStr(key)}: [\n`;
-        value.forEach((color, index) => {
-          code += `${indent(2)}'${color}'${index < value.length - 1 ? ',' : ''}\n`;
-        });
-        code += `${indent(1)}],\n`;
-      }
-    } else if (typeof value === 'string') {
-      // Single color value - Mantine needs arrays, so we'll use a single-element array
-      // and warn the developer
-      console.warn(
-        `⚠️  Warning: Semantic token "${key}" is a single color value ("${value}"). ` +
-        `Mantine typically uses color arrays. This token will be available as a single-element array but may not work correctly with Mantine components that expect multiple shades. ` +
-        `Please provide a full color array in your token files (global.json or brand-${brand}-${mode}.json).`
-      );
-      code += `${indent(1)}${keyStr(key)}: ['${value}'],\n`;
-    }
+    code += `${indent(1)}${keyStr(key)}: '${colorTokens[key]}',\n`;
   });
   
   code += `} as const;\n\n`;
@@ -164,7 +82,7 @@ function getStyleDictionaryConfig(brand, mode) {
         files: [
           {
             destination: `${brand}.${mode}.ts`,
-            format: 'typescript/mantine',
+            format: 'typescript/tamagui',
             options: {
               brand,
               mode,
@@ -181,15 +99,15 @@ function getStyleDictionaryConfig(brand, mode) {
  * Style Dictionary v4 uses a different API
  */
 StyleDictionary.registerFormat({
-  name: 'typescript/mantine',
-  format: mantineTypeScriptFormat,
+  name: 'typescript/tamagui',
+  format: tamaguiTypeScriptFormat,
 });
 
 /**
  * Main build function
  */
-async function buildMantineTokens() {
-  console.log('Building Mantine theme tokens...\n');
+async function buildTamaguiTokens() {
+  console.log('Building Tamagui theme tokens...\n');
   
   const brands = ['startribune', 'varsity'];
   const modes = ['light', 'dark'];
@@ -200,7 +118,9 @@ async function buildMantineTokens() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
+  // Hash of current token source contents (used to decide whether to update build-info.ts)
   const currentTokenHash = hashTokenSources();
+  let hasErrors = false;
 
   for (const brand of brands) {
     for (const mode of modes) {
@@ -219,8 +139,15 @@ async function buildMantineTokens() {
         console.log(`✓ ${brand}.${mode}.ts generated`);
       } catch (error) {
         console.error(`✗ Error building ${brand}-${mode}:`, error.message);
+        hasErrors = true;
+        // Continue processing other themes, but mark that we had errors
       }
     }
+  }
+
+  // Fail build if any theme generation failed
+  if (hasErrors) {
+    throw new Error('One or more theme files failed to generate');
   }
 
   const generatedDir = path.join(process.cwd(), 'src/generated');
@@ -228,7 +155,8 @@ async function buildMantineTokens() {
   const lastTokenHash = readTokenHashFromBuildInfo(buildInfoPath);
 
   // Only write build-info when token sources changed (new or updated tokens)
-  if (currentTokenHash !== lastTokenHash) {
+  // Handle null case (first build or hash calculation failed)
+  if (currentTokenHash !== null && currentTokenHash !== lastTokenHash) {
     if (!fs.existsSync(generatedDir)) {
       fs.mkdirSync(generatedDir, { recursive: true });
     }
@@ -254,7 +182,7 @@ export const buildInfo = {
   }
 
   console.log('\n==============================================');
-  console.log('\n✓ All Mantine tokens built successfully!\n');
+  console.log('\n✓ All Tamagui tokens built successfully!\n');
 }
 
 /** Token source files that affect theme output (derived from tokens/ to stay in sync with getStyleDictionaryConfig) */
@@ -279,12 +207,29 @@ function getTokenSourceFiles() {
 /** Hash of token source file contents. Changes only when token definitions change. */
 function hashTokenSources() {
   const cwd = process.cwd();
+  const sourceFiles = getTokenSourceFiles();
+
+  // Return null if no source files found
+  if (sourceFiles.length === 0) {
+    return null;
+  }
+
   let concat = '';
-  for (const file of getTokenSourceFiles()) {
+  for (const file of sourceFiles) {
     const filePath = path.join(cwd, file);
-    if (!fs.existsSync(filePath)) return null;
+    if (!fs.existsSync(filePath)) {
+      // Log warning but continue with other files
+      console.warn(`Warning: Token source file not found: ${file}`);
+      continue;
+    }
     concat += fs.readFileSync(filePath, 'utf8');
   }
+
+  // Return null if no content was read (all files missing)
+  if (concat.length === 0) {
+    return null;
+  }
+
   return crypto.createHash('sha256').update(concat).digest('hex');
 }
 
@@ -296,22 +241,7 @@ function readTokenHashFromBuildInfo(buildInfoPath) {
   return m ? m[1] : null;
 }
 
-/** Returns a hash of generated theme file contents, or null if any file is missing (kept for reference) */
-function _hashThemeOutputs(outputDir, brands, modes) {
-  const files = brands.flatMap((brand) =>
-    modes.map((mode) => `${brand}.${mode}.ts`)
-  );
-  let concat = '';
-  for (const file of files) {
-    const filePath = path.join(outputDir, file);
-    if (!fs.existsSync(filePath)) return null;
-    concat += fs.readFileSync(filePath, 'utf8');
-  }
-  return crypto.createHash('sha256').update(concat).digest('hex');
-}
-
-buildMantineTokens().catch((error) => {
-  console.error('Error building Mantine tokens:', error);
+buildTamaguiTokens().catch((error) => {
+  console.error('Error building Tamagui tokens:', error);
   process.exit(1);
 });
-
