@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Icon, type IconProps } from './Icon';
+import { Icon } from './Icon';
 import { iconOptions } from './iconOptions';
 import { IconName } from './iconNames';
 import { ICON_COLORS } from '../../types/globalTypes';
@@ -22,8 +22,9 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['small', 'medium', 'large'],
-      description: 'The size of the icon (small: 14x14, medium: 16x16, large: 24x24)',
+      options: ['x-small', 'small', 'medium', 'large', 'x-large'],
+      description:
+        'The size of the icon (x-small: 14x14, small: 16x16, medium: 20x20, large: 24x24, x-large: 32x32)',
     },
   },
 } satisfies Meta<typeof Icon>;
@@ -37,78 +38,7 @@ export const Configurable: Story = {
   },
 };
 
-export const AllSizes: Story = {
-  args: {
-    name: 'camera-filled',
-  },
-  render: (args: IconProps) => (
-    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="small" />
-        <span style={{ fontSize: '12px' }}>Small (14x14)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="medium" />
-        <span style={{ fontSize: '12px' }}>Medium (16x16)</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-        <Icon name={args.name} size="large" />
-        <span style={{ fontSize: '12px' }}>Large (24x24)</span>
-      </div>
-    </div>
-  ),
-};
-
-export const ColorVariants: Story = {
-  args: {
-    name: 'camera-filled',
-    size: 'large',
-  },
-  render: (args: IconProps) => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-        gap: '24px',
-        padding: '24px',
-      }}
-    >
-      {ICON_COLORS.map((color) => {
-        const isOnDark = color.includes('on-dark');
-        return (
-          <div
-            key={color}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '16px',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              backgroundColor: isOnDark ? '#000000' : 'transparent',
-            }}
-          >
-            <Icon name={args.name} color={color} size={args.size} />
-            <span
-              style={{
-                fontSize: '12px',
-                color: isOnDark ? '#ffffff' : '#6b7280',
-                textAlign: 'center',
-                wordBreak: 'break-word',
-                maxWidth: '100%',
-              }}
-            >
-              {color}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  ),
-};
-
-export const IconGallery: Story = {
+export const AllVariants: Story = {
   args: {
     name: 'camera-filled',
   },

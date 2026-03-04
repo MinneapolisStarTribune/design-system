@@ -65,7 +65,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const TextInput: Story = {
+export const Configurable: Story = {
   args: {
     placeholderText: 'Enter text',
     size: 'medium',
@@ -86,6 +86,46 @@ export const TextInput: Story = {
         rounded={storyArgs.rounded}
         isDisabled={storyArgs.isDisabled}
       />
+    );
+  },
+};
+
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: () => {
+    const variants = [
+      { label: 'Small', size: 'small' as const },
+      { label: 'Medium', size: 'medium' as const },
+      { label: 'Large', size: 'large' as const },
+      { label: 'With icon (start)', icon: 'search' as const, iconPosition: 'start' as const },
+      { label: 'With icon (end)', icon: 'mail' as const, iconPosition: 'end' as const },
+      { label: 'Rounded', rounded: true },
+      { label: 'Disabled', isDisabled: true },
+    ];
+    return (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem',
+        }}
+      >
+        {variants.map((v) => (
+          <div key={v.label} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{v.label}</span>
+            <FormControl.TextInput
+              placeholderText={v.label}
+              size={v.size ?? 'medium'}
+              icon={v.icon}
+              iconPosition={v.iconPosition}
+              rounded={v.rounded}
+              isDisabled={v.isDisabled}
+            />
+          </div>
+        ))}
+      </div>
     );
   },
 };

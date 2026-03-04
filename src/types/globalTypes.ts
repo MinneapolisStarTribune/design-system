@@ -38,7 +38,7 @@ export type IconColor = (typeof ICON_COLORS)[number];
 export type IconSpecificProps<IconName extends string = string> = {
   name: IconName;
   color?: IconColor;
-  size?: Extract<Size, 'small' | 'medium' | 'large'>;
+  size?: Extract<Size, 'x-small' | 'small' | 'medium' | 'large' | 'x-large'>;
 };
 
 /**

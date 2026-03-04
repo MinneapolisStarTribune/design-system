@@ -1,5 +1,5 @@
 // Configuration
-const JIRA_PROJECTS = ['LOON', 'VARSITY', 'PS', 'NLT', 'DS'];
+const JIRA_PROJECTS = ['LOON', 'VARSITY', 'PS', 'NLT', 'SUS'];
 const JIRA_BASE_URL = 'https://minneapolisstartribune.atlassian.net/browse';
 const PRODUCT_NAME = 'Shared UI Library';
 const JIRA_REGEX = new RegExp(`(${JIRA_PROJECTS.join('|')})-[0-9]+`);

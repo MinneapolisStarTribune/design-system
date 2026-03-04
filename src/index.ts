@@ -6,5 +6,6 @@ export {
   PHOTO_LAYOUT_TYPES,
   type PhotoLayoutType,
 } from './components/EditorialContent/ArticleToolkit/types';
+export { AnalyticsProvider } from './providers/AnalyticsProvider';
 export { type Brand, DesignSystemProvider } from './providers/MantineProvider';
 export { getBrandFontPath, loadBrandFonts } from './styles/fonts';

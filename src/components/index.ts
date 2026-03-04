@@ -26,15 +26,21 @@ export {
 } from './EditorialContent/ArticleToolkit';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
+export { FormGroup, type FormGroupProps } from './FormGroup/FormGroup';
+export { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup/FormGroupCaption';
+export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
-  FormGroup,
-  type FormGroupCaptionProps,
+  FormGroupDescription,
   type FormGroupDescriptionProps,
-  type FormGroupLabelProps,
-  type FormGroupProps,
-} from './FormGroup/FormGroup';
+} from './FormGroup/FormGroupDescription';
+export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
+export { Toast, TOAST_VARIANTS, type ToastProps, type ToastVariant } from './Toast/Toast';
+export {
+  ArticleBodySponsoredHeading,
+  type ArticleBodySponsoredHeadingProps,
+} from './Typography/ArticleBody/ArticleBodySponsoredHeading/ArticleBodySponsoredHeading';
 export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
@@ -47,6 +53,10 @@ export {
   EditorialSponsoredText,
   type EditorialSponsoredTextProps,
 } from './Typography/Editorial/EditorialSponsoredText/EditorialSponsoredText';
+export {
+  EditorialText,
+  type EditorialTextProps,
+} from './Typography/Editorial/EditorialText/EditorialText';
 export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,

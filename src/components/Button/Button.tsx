@@ -7,7 +7,9 @@ import classNames from 'classnames';
 import { Icon } from '../Icon/Icon';
 import { IconName } from '../Icon/iconNames';
 import { getIconLabel } from '../../utils/accessibilityHelpers';
+import { useAnalytics } from '../../hooks/useAnalytics';
 import styles from './Button.module.scss';
+import { UtilityLabel } from '../Typography/Utility';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -16,9 +18,13 @@ export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
 
+/** Extra data to merge into the tracking event. Use for per-button context (e.g. cta_type, module_position). */
+export type ButtonAnalytics = Record<string, unknown>;
+
 export interface ButtonProps
   extends Omit<MantineButtonProps, 'color' | 'variant' | 'size' | 'leftSection' | 'rightSection'> {
   color?: ButtonColor;
+  capitalize?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize;
   icon?: IconName;
@@ -26,11 +32,14 @@ export interface ButtonProps
   label?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   isDisabled?: boolean;
+  /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
+  analytics?: ButtonAnalytics;
 }
 
 // Button Styles are defined in the Mantine theme (src/providers/mantine-theme.ts), following their documented best practices.
 export const Button: React.FC<ButtonProps> = ({
   color = 'neutral',
+  capitalize = false,
   variant = 'filled',
   size = 'medium',
   icon,
@@ -39,8 +48,25 @@ export const Button: React.FC<ButtonProps> = ({
   children: _children,
   className,
   isDisabled,
+  onClick,
+  analytics: analyticsOverride,
   ...props
 }) => {
+  const { track } = useAnalytics();
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    track({
+      event: 'button_click',
+      component: 'Button',
+      label: label ?? undefined,
+      icon: icon ?? undefined,
+      variant,
+      color,
+      ...analyticsOverride,
+    });
+    onClick?.(e);
+  };
+
   let mantineVariant;
   if (variant === 'ghost') {
     mantineVariant = 'subtle';
@@ -48,10 +74,18 @@ export const Button: React.FC<ButtonProps> = ({
     mantineVariant = variant;
   }
 
+  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
+    small: 'x-small',
+    medium: 'small',
+    large: 'medium',
+  };
+
+  const iconSize = icon && iconSizeMap[size];
+
   // Icons use the same color as text (no separate button-icon tokens needed)
   // Icon is always decorative (aria-hidden) when using the simple icon prop
   // By not passing a color prop, Icon component will use 'currentColor' which inherits the button's text color
-  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
+  const iconElement = icon ? <Icon name={icon} size={iconSize} aria-hidden /> : null;
 
   // Extract aria-label from props if provided (using type assertion for HTML attributes)
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
@@ -103,9 +137,12 @@ export const Button: React.FC<ButtonProps> = ({
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
       className={combinedClassNames || undefined}
+      onClick={handleClick}
       {...props}
     >
-      {label}
+      <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
+        {label}
+      </UtilityLabel>
     </MantineButton>
   );
 };
