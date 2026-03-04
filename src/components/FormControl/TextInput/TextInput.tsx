@@ -23,6 +23,8 @@ export interface TextInputProps
   placeholderText?: string;
   icon?: IconName;
   iconPosition?: 'start' | 'end';
+  leftIcon?: IconName;
+  rightIcon?: IconName;
   rounded?: boolean;
   isDisabled?: boolean;
 }
@@ -32,6 +34,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   placeholderText,
   icon,
   iconPosition = 'end',
+  leftIcon: leftIconProp,
+  rightIcon: rightIconProp,
   rounded = false,
   isDisabled = false,
   className,
@@ -65,13 +69,17 @@ export const TextInput: React.FC<TextInputProps> = ({
     : undefined;
   const ariaDescribedBy = ariaDescribedByProp ?? describedBy;
 
-  // Icon is always decorative (aria-hidden) when using the simple icon prop
-  // By not passing a color prop, Icon component will use 'currentColor' which inherits the input's text color
-  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
+  // Icon is always decorative (aria-hidden) when using the simple icon props.
+  // Support both explicit left/right icons and the legacy single `icon` + `iconPosition` API.
+  const leftIconName = leftIconProp ?? (icon && iconPosition === 'start' ? icon : undefined);
+  const rightIconName = rightIconProp ?? (icon && iconPosition === 'end' ? icon : undefined);
 
-  // Use conditional variables for icon positioning (similar to Button's leftSection/rightSection pattern)
-  const leftIcon = icon && iconPosition === 'start' ? iconElement : undefined;
-  const rightIcon = icon && iconPosition === 'end' ? iconElement : undefined;
+  const leftIconNode = leftIconName ? (
+    <Icon name={leftIconName} size={size} aria-hidden={true} />
+  ) : null;
+  const rightIconNode = rightIconName ? (
+    <Icon name={rightIconName} size={size} aria-hidden={true} />
+  ) : null;
 
   const inputClasses = classNames(
     'text-input',
@@ -89,9 +97,25 @@ export const TextInput: React.FC<TextInputProps> = ({
   });
 
   return (
-    <div className={wrapperClasses}>
-      {leftIcon && (
-        <span className={classNames('text-input-icon', 'text-input-icon-start')}>{leftIcon}</span>
+    <div
+      className={wrapperClasses}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      {leftIconNode && (
+        <span
+          className={classNames('text-input-icon', 'text-input-icon-start')}
+          style={{
+            display: 'inline-flex',
+            flexShrink: 0,
+            marginRight: 'var(--spacing-6)',
+            marginLeft: 'var(--spacing-16)',
+          }}
+        >
+          {leftIconNode}
+        </span>
       )}
       <input
         type="text"
@@ -105,10 +129,26 @@ export const TextInput: React.FC<TextInputProps> = ({
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
         data-testid={dataTestId}
+        style={{
+          flex: 1,
+          minWidth: 0,
+          marginTop: 'var(--spacing-8)',
+          marginBottom: 'var(--spacing-8)',
+        }}
         {...props}
       />
-      {rightIcon && (
-        <span className={classNames('text-input-icon', 'text-input-icon-end')}>{rightIcon}</span>
+      {rightIconNode && (
+        <span
+          className={classNames('text-input-icon', 'text-input-icon-end')}
+          style={{ 
+            display: 'inline-flex', 
+            flexShrink: 0,
+            marginLeft: 'var(--spacing-12)',
+            marginRight: 'var(--spacing-8)',
+          }}
+        >
+          {rightIconNode}
+        </span>
       )}
     </div>
   );
