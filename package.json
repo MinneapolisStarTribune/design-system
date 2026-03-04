@@ -10,6 +10,12 @@
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
     },
+    "./web/*": {
+      "default": "./dist/web/*"
+    },
+    "./web/fonts/font-face/*": {
+      "default": "./dist/web/fonts/font-face/*"
+    },
     "./native": {
       "types": "./dist/mobile/index.native.d.ts",
       "import": "./dist/mobile/design-system.es.js",
