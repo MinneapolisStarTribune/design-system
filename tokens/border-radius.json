@@ -1,4 +1,12 @@
 {
+  "component": {
+    "photo-layout": {
+      "immersive-radius": {
+        "startribune": { "value": "0px" },
+        "varsity": { "value": "{radius.12}" }
+      }
+    }
+  },
   "radius": {
     "2": { "value": "2px" },
     "4": { "value": "4px" },

@@ -2,80 +2,78 @@ import React, { useMemo } from 'react';
 import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../types';
 import classNames from 'classnames';
 import styles from './PhotoLayout.module.scss';
-import { getImageList } from './utils';
+import { Image } from '@/components';
 
 export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
-  photoLayoutCaption?: string;
+  caption?: string;
   imageList: ImageData[];
   photoLayout?: PhotoLayoutType;
-  expandable?: boolean;
-  imgixBaseUrl?: string;
-  onExpand?: (index: number) => void;
+  imageCredit?: string;
+  imgixParams?: string;
+  variant?: 'immersive'; // Restricting variant to 'immersive' for now, can be expanded in the future if needed
 }
+
+export const layoutImageCount: Record<PhotoLayoutType, number> = {
+  '2up': 2,
+  '3up': 3,
+  '4up': 4,
+};
 
 export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
   imageList,
   photoLayout = '2up',
   variant = 'immersive',
-  expandable = false,
-  onExpand,
   className,
-  photoLayoutCaption,
+  caption,
+  imageCredit,
+  imgixParams,
   dataTestId = 'photo-layout',
   ...accessibilityProps
 }) => {
-  // Restrict variant
-  if (variant !== 'immersive') {
-    console.warn('PhotoLayout currently supports only immersive variant');
-  }
-
-  const images = useMemo(() => getImageList(imageList, photoLayout), [imageList, photoLayout]);
-
-  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
-    if (!expandable) return;
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onExpand?.(index);
-    }
-  };
+  const images = useMemo(
+    () => imageList.slice(0, layoutImageCount[photoLayout]),
+    [imageList, photoLayout]
+  );
+  const captionText = caption
+    ? `${caption}  ${imageCredit ? ` (${imageCredit})` : ''}`
+    : imageCredit || '';
 
   return (
     <figure
       data-testid={dataTestId}
-      className={classNames(styles.photoLayout, styles[`layout--${photoLayout}`], className)}
+      className={classNames(
+        styles.photoLayout,
+        styles[`layout-${photoLayout}`],
+        styles[`variant-${variant}`],
+        className
+      )}
       {...accessibilityProps}
     >
       <div className={styles.grid}>
         {images.map((image, index) => {
           return (
-            <div
-              key={`${image.src}-${index}`}
-              className={classNames(styles.item, {
-                [styles.expandableItem]: expandable,
-              })}
-              tabIndex={expandable ? 0 : undefined}
-              role={expandable ? 'button' : undefined}
-              onClick={expandable ? () => onExpand?.(index) : undefined}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-            >
-              <img
+            <div key={`${image.src}-${index}`} className={classNames(styles.item)}>
+              <Image
                 src={image.src}
                 alt={image.altText}
+                className={styles.image}
+                imgixParams={imgixParams}
                 loading="lazy"
                 decoding="async"
-                className={styles.image}
+                data-testid={`${dataTestId}-image-${index}`}
+                tabIndex={0}
               />
             </div>
           );
         })}
       </div>
 
-      {photoLayoutCaption && (
+      {captionText && (
         <figcaption
           className={classNames(styles.caption, 'typography-utility-label-small')}
           data-testid={`${dataTestId}-caption`}
         >
-          {photoLayoutCaption}
+          {captionText}
         </figcaption>
       )}
     </figure>

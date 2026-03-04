@@ -3,17 +3,17 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-8);
 }
 
 .grid {
   display: grid;
-  gap: 8px;
+  gap: var(--spacing-8);
 }
 
 /* 2UP */
 /* 1 | 2 */
-.layout--2up .grid {
+.layout-2up .grid {
   grid-template-columns: repeat(2, 1fr);
 }
 
@@ -22,15 +22,15 @@
   1
   2 | 3
 */
-.layout--3up .grid {
+.layout-3up .grid {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.layout--3up .item:nth-child(1) {
+.layout-3up .item:nth-child(1) {
   grid-column: 1 / -1;
 }
 
-.layout--3up .item:nth-child(1) {
+.layout-3up .item:nth-child(1) {
   grid-column: 1 / -1;
   height: 720px; // large top image
 }
@@ -40,50 +40,45 @@
   1 | 2
   3 | 4
 */
-.layout--4up .grid {
+.layout-4up .grid {
   grid-template-columns: repeat(2, 1fr);
 }
 
 // Default (Desktop)
-.item {
+.variant-immersive .item {
   position: relative;
   overflow: hidden;
-  cursor: default;
   height: 357px;
 }
 
-[data-brand='startribune'] .item {
-  border-radius: 0;
+[data-brand='startribune'] .variant-immersive .item {
+  border-radius: var(--component-photo-layout-immersive-radius-startribune);
 }
 
-[data-brand='varsity'] .item {
-  border-radius: 12px;
+[data-brand='varsity'] .variant-immersive .item {
+  border-radius: var(--component-photo-layout-immersive-radius-varsity);
 }
 
 // Tablet
 @media (max-width: 768px) {
-  .item {
+  .variant-immersive .item {
     height: 237px;
   }
 
-  .layout--3up .item:nth-child(1) {
+  .layout-3up .variant-immersive .item:nth-child(1) {
     height: 480px;
   }
 }
 
 // Mobile
 @media (max-width: 480px) {
-  .item {
+  .variant-immersive .item {
     height: 127px;
   }
 
-  .layout--3up .item:nth-child(1) {
+  .layout-3up .variant-immersive .item:nth-child(1) {
     height: 260px;
   }
-}
-
-.expandableItem {
-  cursor: pointer;
 }
 
 .image {

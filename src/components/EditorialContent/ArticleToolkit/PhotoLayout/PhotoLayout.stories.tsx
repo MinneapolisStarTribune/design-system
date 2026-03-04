@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { PhotoLayout, PhotoLayoutProps } from './PhotoLayout';
-import { LAYOUT_IMAGE_COUNT } from './utils';
+import { layoutImageCount, PhotoLayout, PhotoLayoutProps } from './PhotoLayout';
 
 const meta: Meta<PhotoLayoutProps> = {
   title: 'Editorial Content/Article Toolkit/Photo Layout',
   component: PhotoLayout,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },
   argTypes: {
     photoLayout: {
       control: 'select',
-      options: Object.keys(LAYOUT_IMAGE_COUNT),
+      options: Object.keys(layoutImageCount),
       description: 'Photo layout grid type: 2-up, 3-up, or 4-up.',
     },
     variant: {
@@ -29,19 +29,19 @@ type Story = StoryObj<PhotoLayoutProps>;
 const images = [
   {
     src: 'https://picsum.photos/id/1018/1200/800',
-    altText: 'House exterior',
+    altText: 'Image 1',
   },
   {
     src: 'https://picsum.photos/id/1015/1200/800',
-    altText: 'Driveway',
+    altText: 'Image 2',
   },
   {
     src: 'https://picsum.photos/id/1019/1200/800',
-    altText: 'Backyard',
+    altText: 'Image 3',
   },
   {
     src: 'https://picsum.photos/id/1020/1200/800',
-    altText: 'Interior',
+    altText: 'Image 4',
   },
 ];
 
@@ -49,24 +49,25 @@ export const Configurable: Story = {
   args: {
     imageList: images,
     photoLayout: '2up',
-    photoLayoutCaption: '2-up layout with 2 images',
+    caption: '2-up layout with 2 images',
     variant: 'immersive',
   },
 };
 
-export const AllLayouts: Story = {
+export const AllLevels: Story = {
   args: {
     imageList: images,
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {Object.entries(LAYOUT_IMAGE_COUNT).map(([layout, count]) => (
+      {Object.entries(layoutImageCount).map(([layout, count]) => (
         <div key={layout}>
           <h3 style={{ marginBottom: '0.5rem' }}>{layout.toUpperCase()} Layout</h3>
           <PhotoLayout
-            imageList={images.slice(0, count)}
+            imageList={images}
             photoLayout={layout as PhotoLayoutProps['photoLayout']}
-            photoLayoutCaption={`${count}-up immersive layout showcasing ${count} related visuals arranged in a structured grid format.`}
+            caption={`${count}-up immersive layout showcasing ${count} related visuals arranged in a structured grid format.`}
+            variant="immersive"
           />
         </div>
       ))}
