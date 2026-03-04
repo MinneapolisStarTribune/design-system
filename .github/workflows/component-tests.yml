@@ -19,6 +19,9 @@ jobs:
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
 
+      - name: Create reports directory
+        run: mkdir -p reports
+
       - name: Run unit tests with coverage
         env:
           VITEST_JUNIT_OUTPUT: ./reports/unit-junit.xml
