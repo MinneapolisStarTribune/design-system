@@ -98,7 +98,9 @@ export const AllVariantsStarTribuneLight: Story = {
                 gap: '8px',
               }}
             >
-              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+              <Button variant={variant} color={color} size={size}>
+                {`${color} ${variant} ${size}`}
+              </Button>
             </div>
           ))
         )
@@ -138,7 +140,9 @@ export const AllVariantsStarTribuneDark: Story = {
                 gap: '8px',
               }}
             >
-              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+              <Button variant={variant} color={color} size={size}>
+                {`${color} ${variant} ${size}`}
+              </Button>
             </div>
           ))
         )
@@ -178,7 +182,9 @@ export const AllVariantsVarsityLight: Story = {
                 gap: '8px',
               }}
             >
-              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+              <Button variant={variant} color={color} size={size}>
+                {`${color} ${variant} ${size}`}
+              </Button>
             </div>
           ))
         )
@@ -218,7 +224,9 @@ export const AllVariantsVarsityDark: Story = {
                 gap: '8px',
               }}
             >
-              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+              <Button variant={variant} color={color} size={size}>
+                {`${color} ${variant} ${size}`}
+              </Button>
             </div>
           ))
         )
