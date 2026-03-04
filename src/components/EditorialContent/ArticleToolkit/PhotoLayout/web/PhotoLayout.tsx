@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../types';
+import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
 import classNames from 'classnames';
 import styles from './PhotoLayout.module.scss';
 import { Image } from '@/components';

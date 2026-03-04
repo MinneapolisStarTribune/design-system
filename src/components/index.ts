@@ -35,7 +35,7 @@ export {
 } from './FormGroup/FormGroupDescription';
 export { FormGroupLabel, type FormGroupLabelProps } from './FormGroup/FormGroupLabel';
 export { Icon, type IconProps } from './Icon/Icon';
-export { Image, type ImageProps } from './Image/Image';
+export { Image, type ImageProps } from './Image/web/Image';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { Toast, TOAST_VARIANTS, type ToastProps, type ToastVariant } from './Toast/Toast';
 export {
