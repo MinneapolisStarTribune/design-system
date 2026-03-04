@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from '@mantine/core';
 import { Popover } from './Popover';
+import { Button } from '@/components/index.web';
 
 const meta = {
   title: 'Feedback & Status/Popover',

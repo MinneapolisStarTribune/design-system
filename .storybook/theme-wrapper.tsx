@@ -7,7 +7,7 @@
  *
  * Why this exists:
  * - Our design system uses CSS variables (e.g., --color-icon-on-light-primary) that are
- *   defined in theme CSS files (dist/themes/{brand}-{colorScheme}.css)
+ *   defined in theme CSS files (dist/web/themes/{brand}-{colorScheme}.css)
  * - These CSS files must be loaded into the DOM for components to use the variables
  * - Storybook needs to dynamically switch between brands (startribune/varsity) and
  *   color schemes (light/dark) based on user selection in the toolbar

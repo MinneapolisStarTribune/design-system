@@ -10,7 +10,7 @@ const { execSync } = require('child_process');
 
 /**
  * Check if a build command should run by calling should-rebuild.js
- * @param {string} command - The command to check ('tokens', 'tokens:mantine', or 'icons')
+ * @param {string} command - The command to check ('tokens', 'tokens:tamagui', or 'icons')
  * @returns {boolean} True if rebuild is needed, false otherwise
  */
 function shouldRebuild(command) {
@@ -29,7 +29,7 @@ function shouldRebuild(command) {
 // Main execution
 const commands = [
   { check: 'tokens', build: 'tokens' },
-  { check: 'tokens:mantine', build: 'tokens:mantine' },
+  { check: 'tokens:tamagui', build: 'tokens:tamagui' },
   { check: 'icons', build: 'icons' },
 ];
 

@@ -2,12 +2,12 @@ const fs = require('fs');
 const path = require('path');
 
 const TOKENS_DIR_PREFIX = 'tokens/fonts';
-const OUT_DIR_PREFIX = 'dist/fonts/font-face';
+const OUT_DIR_PREFIX = 'dist/web/fonts/font-face';
 /**
  * Build @font-face CSS from tokens/fonts/{brand}.json
  *
  * Reads font definitions (name, family, url, variants) and outputs
- * one @font-face rule per variant. Writes to dist/fonts/font-face/{brand}.css.
+ * one @font-face rule per variant. Writes to dist/web/fonts/font-face/{brand}.css.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Promise<void>}

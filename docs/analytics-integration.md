@@ -16,7 +16,7 @@ Design system components are **analytics-ready**: they emit tracking events on u
 ### 1. Wrap your app with AnalyticsProvider
 
 ```tsx
-import { AnalyticsProvider, DesignSystemProvider } from '@minneapolisstartribune/design-system';
+import { AnalyticsProvider, DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
 import { usePageTracking } from './contexts/PageTracking'; // your page context
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
 
 ```tsx
 // In startribune-web layout or root
-import { AnalyticsProvider } from '@minneapolisstartribune/design-system';
+import { AnalyticsProvider } from '@minneapolisstartribune/design-system/web';
 import { usePageTrackingContext } from '@/contexts/global/PageTracking.context';
 import { trackEvent } from '@/lib/helpers/tracking/tracking';
 

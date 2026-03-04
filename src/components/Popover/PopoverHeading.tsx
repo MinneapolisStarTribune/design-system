@@ -1,23 +1,26 @@
 import React from 'react';
-import { Box, CloseButton } from '@mantine/core';
+import classNames from 'classnames';
 import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
-import classNames from 'classnames';
+import { Button } from '@/components/Button/web/Button';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { close } = usePopoverContext();
   const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
+
   return (
-    <Box className={classNames(styles.header, typographyClassName)}>
+    <div className={classNames(styles.header, typographyClassName)}>
       {children}
-      <CloseButton
+      <Button
+        variant="ghost"
+        size="small"
+        icon="close"
         aria-label="Close popover"
         className={styles.closeButton}
-        size="md"
         onClick={close}
       />
-    </Box>
+    </div>
   );
 };
