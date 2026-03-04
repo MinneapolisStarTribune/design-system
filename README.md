@@ -6,30 +6,55 @@ A React component library built with TypeScript, Tamagui, and a comprehensive de
 
 This package is published to GitHub Packages. To install it, you'll need to configure npm/yarn to authenticate with GitHub.
 
-### Step 1: Configure npm/yarn Authentication
+### Step 1: Create a Personal Access Token (PAT) on GitHub
 
-**For npm:**
+**Prerequisites:** You must be a developer in the MinneapolisStarTribune GitHub organization.
+
+[GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+
+1. Go to https://github.com/settings/profile
+2. Click "Developer Settings" in the left navigation
+3. Click "Personal Access Tokens" → "Tokens (Classic)"
+4. Click "Generate New Token" → "Generate New Token (classic)"
+5. Configure your token:
+   - Name your token (e.g., "Design System Package Access")
+   - Set the expiration to one year from now
+   - Check the `read:packages` checkbox
+6. Click "Generate Token"
+7. **Copy the token immediately** — you will only see it once!
+8. Save the token in your `.env.local` file in the repository where you're installing this design system:
+   ```
+   NPM_AUTH_TOKEN_FOR_SUS=your_token_here
+   ```
+   This token will be used in Step 2 below.
+
+### Step 2: Configure npm/yarn Authentication
+
+**For yarn:**
 
 Create or edit `.yarnrc.yml` in your project root:
 
 ```
+injectEnvironmentFiles:
+  - .env.local?
+
 npmScopes:
   minneapolisstartribune:
     npmRegistryServer: "https://npm.pkg.github.com"
     npmAlwaysAuth: true
-    npmAuthToken: "${{ secrets.NPM_AUTH_TOKEN_FOR_SUS }}"
+    npmAuthToken: "${NPM_AUTH_TOKEN_FOR_SUS}"
 ```
 
 **Security Note:** Never commit your token to version control! Use environment variables:
 
-### Step 2: Install the Package
+### Step 3: Install the Package
 
 ```bash
 # Using yarn
 yarn add @minneapolisstartribune/design-system
 ```
 
-### Step 3: Install Peer Dependencies
+### Step 4: Install Peer Dependencies
 
 This package requires React, React DOM, React Native (for native usage), and Tamagui core as peer dependencies:
 
