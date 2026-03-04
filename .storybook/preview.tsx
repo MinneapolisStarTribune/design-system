@@ -102,7 +102,7 @@ const preview: Preview = {
      * Theme decorator that provides brand and color scheme to all stories
      *
      * It:
-     * 1. Reads theme from story parameters first, then falls back to globals
+     * 1. Reads brand and theme from story parameters first, then falls back to globals
      * 2. Wraps the story in ThemeWrapper (loads CSS variables)
      * 3. Wraps in FontWrapper (loads brand-specific fonts)
      * 4. Wraps in DesignSystemProvider (provides Tamagui theme)
@@ -121,8 +121,8 @@ const preview: Preview = {
         return <div>Redirecting...</div>;
       }
 
-      // Get brand from globals (no parameter override for brand)
-      const brand = (context.globals.brand || 'startribune') as Brand;
+      // Get brand from parameters first (story-level override), then fallback to globals.
+      const brand = (context.parameters.brand || context.globals.brand || 'startribune') as Brand;
 
       // Get theme from parameters first (story-level override), then fallback to globals.
       const theme = (context.parameters.theme || context.globals.theme || 'light') as
@@ -132,10 +132,19 @@ const preview: Preview = {
       const layout = context.parameters.layout as string | undefined;
       const isFullscreen = layout === 'fullscreen';
 
+      // Use CSS variables for background - these are loaded by ThemeWrapper
+      // Fallback to white for light, black for dark if variables aren't loaded yet
+      const backgroundColor =
+        theme === 'dark'
+          ? 'var(--color-background-dark-default, #0D0D0D)'
+          : 'var(--color-background-light-default, #ffffff)';
+
       return (
         <div
           style={{
             padding: '1rem',
+            backgroundColor,
+            minHeight: '100%',
             ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),
           }}
         >

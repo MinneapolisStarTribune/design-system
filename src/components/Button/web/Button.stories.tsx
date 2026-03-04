@@ -2,15 +2,22 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZES } from './Button';
 import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
+import { iconOptions } from '@/components/Icon/iconOptions';
+import { IconName } from '@/components/Icon/iconNames';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: 'text',
+      description: 'The button label text',
+    },
     variant: {
       control: 'select',
       options: [...BUTTON_VARIANTS] as string[],
+      description: 'The visual style variant of the button',
     },
     color: {
       control: 'select',
@@ -21,6 +28,24 @@ const meta = {
       control: 'select',
       options: [...BUTTON_SIZES] as string[],
       description: 'The size of the button',
+    },
+    icon: {
+      control: 'select',
+      options: Object.keys(iconOptions) as IconName[],
+      description: 'The icon to display in the button',
+    },
+    iconPosition: {
+      control: 'select',
+      options: ['start', 'end'],
+      description: 'The position of the icon relative to the text',
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: 'Whether the button is disabled',
+    },
+    capitalize: {
+      control: 'boolean',
+      description: 'Whether to capitalize the button text',
     },
   },
 } satisfies Meta<typeof Button>;
@@ -35,12 +60,143 @@ export const Configurable: Story = {
     variant: 'filled',
     size: 'large',
     color: 'brand',
+    icon: undefined,
+    iconPosition: 'end',
+    isDisabled: false,
+    capitalize: false,
   },
 };
 
-export const AllVariants: Story = {
+/**
+ * All button variants for Star Tribune brand (light mode) - used for Chromatic visual regression testing.
+ * This story renders all combinations of variant, color, and size with the startribune brand theme in light mode.
+ */
+export const AllVariantsStarTribuneLight: Story = {
   parameters: {
     controls: { disable: true },
+    layout: 'fullscreen',
+    brand: 'startribune',
+    theme: 'light',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {BUTTON_VARIANTS.flatMap((variant) =>
+        BUTTON_COLORS.flatMap((color) =>
+          BUTTON_SIZES.map((size) => (
+            <div
+              key={`${variant}-${color}-${size}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '8px',
+              }}
+            >
+              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+            </div>
+          ))
+        )
+      )}
+    </div>
+  ),
+};
+
+/**
+ * All button variants for Star Tribune brand (dark mode) - used for Chromatic visual regression testing.
+ * This story renders all combinations of variant, color, and size with the startribune brand theme in dark mode.
+ */
+export const AllVariantsStarTribuneDark: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    brand: 'startribune',
+    theme: 'dark',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {BUTTON_VARIANTS.flatMap((variant) =>
+        BUTTON_COLORS.flatMap((color) =>
+          BUTTON_SIZES.map((size) => (
+            <div
+              key={`${variant}-${color}-${size}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '8px',
+              }}
+            >
+              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+            </div>
+          ))
+        )
+      )}
+    </div>
+  ),
+};
+
+/**
+ * All button variants for Varsity brand (light mode) - used for Chromatic visual regression testing.
+ * This story renders all combinations of variant, color, and size with the varsity brand theme in light mode.
+ */
+export const AllVariantsVarsityLight: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    brand: 'varsity',
+    theme: 'light',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {BUTTON_VARIANTS.flatMap((variant) =>
+        BUTTON_COLORS.flatMap((color) =>
+          BUTTON_SIZES.map((size) => (
+            <div
+              key={`${variant}-${color}-${size}`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '8px',
+              }}
+            >
+              <Button variant={variant} color={color} size={size}>{`${color} ${size}`}</Button>
+            </div>
+          ))
+        )
+      )}
+    </div>
+  ),
+};
+
+/**
+ * All button variants for Varsity brand (dark mode) - used for Chromatic visual regression testing.
+ * This story renders all combinations of variant, color, and size with the varsity brand theme in dark mode.
+ */
+export const AllVariantsVarsityDark: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    brand: 'varsity',
+    theme: 'dark',
   },
   render: () => (
     <div

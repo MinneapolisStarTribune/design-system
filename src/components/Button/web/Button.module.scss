@@ -25,17 +25,17 @@
   /* Size variants */
   &.small {
     height: 32px;
-    padding: var(--spacing-8) var(--spacing-12);
+    padding: 0 var(--spacing-12);
   }
   
   &.medium {
     height: 40px;
-    padding: var(--spacing-8) var(--spacing-16);
+    padding: 0 var(--spacing-16);
   }
   
   &.large {
     height: 52px;
-    padding: var(--spacing-8) var(--spacing-24);
+    padding: 0 var(--spacing-24);
   }
   
   /* Neutral colors */
@@ -111,11 +111,12 @@
   /* Brand-accent colors */
   &.brand-accent {
     &.filled {
-      background-color: var(--color-button-brand-accent-filled-background);
+      /* Use 'background' instead of 'background-color' to support linear gradients */
+      background: var(--color-button-brand-accent-filled-background);
       color: var(--color-button-brand-accent-filled-text);
       
       &:hover:not(:disabled) {
-        background-color: var(--color-button-brand-accent-filled-hover-background);
+        background: var(--color-button-brand-accent-filled-hover-background);
         color: var(--color-button-brand-accent-filled-hover-text);
       }
     }
@@ -190,20 +191,18 @@
       padding: 1px; /* Border thickness */
     }
 
-    /* Filled buttons: gradient border at rest */
-    &.brandAccentFilled::after {
-      background: var(--color-button-brand-accent-filled-hover-border);
-    }
-
     /* Outlined buttons: gradient border at rest */
     &.brandAccentOutlined::after {
       background: var(--color-button-brand-accent-outlined-hover-border);
     }
 
-    /* Hover state: maintain gradient border */
+    /* Hover state: show gradient border for filled, maintain for outlined */
     &:hover:not(:disabled) {
       &.brandAccentFilled {
         background: transparent !important;
+        &::after {
+          background: var(--color-button-brand-accent-filled-hover-border);
+        }
       }
       &.brandAccentOutlined {
         border-color: transparent !important;
