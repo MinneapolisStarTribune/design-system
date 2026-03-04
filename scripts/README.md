@@ -24,7 +24,7 @@ Generates release changelogs from merged PRs between two git tags. Used by the `
 Edit these constants in `generate-release-changelog.js` to customize:
 
 ```javascript
-const JIRA_PROJECTS = ['LOON', 'VARSITY', 'PS', 'NLT', 'DS'];
+const JIRA_PROJECTS = ['LOON', 'VARSITY', 'PS', 'NLT', 'SUS'];
 const JIRA_BASE_URL = 'https://minneapolisstartribune.atlassian.net/browse';
 const PRODUCT_NAME = 'Shared UI Library';
 ```
