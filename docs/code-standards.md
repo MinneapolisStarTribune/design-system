@@ -156,15 +156,22 @@ import { useBrandValidation } from '../../../hooks/useBrandValidation';
 
 ### Story Structure
 
-1. **First Story Must Be "Configurable"**: The first exported story in every story file must be named "Configurable" (or "Configurable{ComponentName}") and must expose all component props as interactive controls
-2. **Purpose**: The Configurable story serves as an interactive playground for UX designers, PMs, and other engineers to experiment with all component options
-3. **Full Control Exposure**: All component props should be exposed via `argTypes` with appropriate controls (select, boolean, text, etc.)
+Every story file must have exactly **2 stories**:
+
+1. **"Configurable"** (first story): Named "Configurable" or "Configurable{ComponentName}". Exposes all component props as interactive controls for UX designers, PMs, and engineers to experiment with all options.
+2. **"All variants"** (second story): Named "AllVariants". Renders all prop combinations/variants in one view for visual regression testing with Chromatic.
 
 ### Configurable Story Requirements
 
 - **Must be the first story**: Appears at the top of the story list
 - **All props controllable**: Every prop should have a control in the Storybook Controls panel
 - **Sensible defaults**: Provide default values that showcase the component well
+
+### All Variants Story Requirements
+
+- **Must be the second story**: Used for Chromatic visual regression snapshots
+- **Complete coverage**: Renders every variant/combination of component props
+- **No interactive controls needed**: Static render of all variants for consistent snapshots
 
 ### Story Example
 
@@ -211,9 +218,13 @@ export const Configurable: Story = {
   },
 };
 
-// Additional stories can follow for specific use cases
-export const AllSizes: Story = {
-  // ... other stories
+// ✅ Second story - all variants for Chromatic regression testing
+export const AllVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Render all size/weight/capitalize combinations */}
+    </div>
+  ),
 };
 ```
 
@@ -235,7 +246,7 @@ Key requirements:
 - Follow file naming conventions
 - Register new components in component-names.ts
 - Include JSDoc comments for public APIs
-- Create Storybook stories with "Configurable" as the first story (fully interactive for UX/PM/Engineers)
+- Create Storybook stories with exactly 2 stories: "Configurable" (first, fully interactive for UX/PM/Engineers) and "AllVariants" (second, for Chromatic regression testing)
 ```
 
 ### Cursor-Specific Instructions

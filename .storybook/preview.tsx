@@ -123,13 +123,20 @@ const preview: Preview = {
 
       const brand = (context.globals.brand || 'startribune') as Brand;
       const scheme = (context.globals.theme || 'light') as 'light' | 'dark';
+      const layout = context.parameters.layout as string | undefined;
+      const isFullscreen = layout === 'fullscreen';
 
       return (
         <ThemeWrapper brand={brand} colorScheme={scheme}>
           <FontWrapper brand={brand}>
             <DesignSystemProvider brand={brand} forceColorScheme={scheme}>
               <ColorSchemeScript />
-              <div style={{ padding: '1rem' }}>
+              <div
+                style={{
+                  padding: '1rem',
+                  ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),
+                }}
+              >
                 <BrandValidationErrorBoundary>
                   <Story />
                 </BrandValidationErrorBoundary>

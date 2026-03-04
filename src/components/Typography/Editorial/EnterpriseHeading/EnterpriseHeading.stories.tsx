@@ -34,28 +34,17 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'Enterprise heading example',
   },
 };
 
-export const AllLevels: Story = {
-  args: {
-    importance: 1,
-    children: '',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(importanceOptions as EnterpriseHeadingImportance[]).map((level) => (
-        <EnterpriseHeading key={level} importance={level}>
-          EnterpriseHeading importance={level} (h{level})
-        </EnterpriseHeading>
-      ))}
-    </div>
-  ),
+export const AllVariants: Story = {
   parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:
@@ -63,4 +52,34 @@ export const AllLevels: Story = {
       },
     },
   },
+  args: {
+    importance: 1,
+    children: '',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
+      {(importanceOptions as EnterpriseHeadingImportance[]).map((level) => (
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <EnterpriseHeading importance={level}>Enterprise Heading - h{level}</EnterpriseHeading>
+        </div>
+      ))}
+    </div>
+  ),
 };

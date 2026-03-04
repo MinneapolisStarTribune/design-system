@@ -24,47 +24,48 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const ConfigurableHeading: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'Page Heading',
   },
 };
 
-export const AllImportanceLevels: Story = {
-  args: {
-    importance: 1,
-    children: 'Page Heading',
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
   },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <PageHeading importance={1}>Page H1 Heading</PageHeading>
-      <PageHeading importance={2}>Page H2 Heading</PageHeading>
-      <PageHeading importance={3}>Page H3 Heading</PageHeading>
-      <PageHeading importance={4}>Page H4 Heading</PageHeading>
-    </div>
-  ),
-};
-
-export const PageHeadings: Story = {
   args: {
     importance: 1,
     children: 'Page Heading',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <PageHeading importance={1}>Page H1</PageHeading>
-      <PageHeading importance={2}>Page H2</PageHeading>
-      <PageHeading importance={3}>Page H3</PageHeading>
-      <PageHeading importance={4}>Page H4</PageHeading>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
+      {[1, 2, 3, 4].map((importance) => (
+        <div
+          key={importance}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <PageHeading importance={importance as 1 | 2 | 3 | 4}>
+            Page - H{importance} Heading
+          </PageHeading>
+        </div>
+      ))}
     </div>
   ),
-};
-
-export const WithCustomClassName: Story = {
-  args: {
-    importance: 1,
-    children: 'Heading with custom class',
-    className: 'custom-heading-class',
-  },
 };

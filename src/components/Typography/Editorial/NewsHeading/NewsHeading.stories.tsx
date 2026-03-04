@@ -34,28 +34,17 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'News heading example',
   },
 };
 
-export const AllLevels: Story = {
-  args: {
-    importance: 1,
-    children: '',
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
-        <NewsHeading key={level} importance={level}>
-          NewsHeading importance={level} (h{level})
-        </NewsHeading>
-      ))}
-    </div>
-  ),
+export const AllVariants: Story = {
   parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
     docs: {
       description: {
         story:
@@ -63,4 +52,34 @@ export const AllLevels: Story = {
       },
     },
   },
+  args: {
+    importance: 1,
+    children: '',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
+      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <NewsHeading importance={level}>News Heading - h{level}</NewsHeading>
+        </div>
+      ))}
+    </div>
+  ),
 };

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
 
+const sponsoredWeights = ['regular', 'italic', 'semibold', 'semibold-italic'] as const;
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredText',
   component: ArticleBodySponsoredText,
@@ -25,37 +27,36 @@ export default meta;
 
 type Story = StoryObj<typeof ArticleBodySponsoredText>;
 
-export const Default: Story = {
+export const Configurable: Story = {
   args: {
     weight: 'regular',
     children: 'Article body sponsored text',
   },
 };
 
-export const Regular: Story = {
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   args: {
     weight: 'regular',
     children: 'Article body sponsored text',
   },
-};
-
-export const Italic: Story = {
-  args: {
-    weight: 'italic',
-    children: 'Article body sponsored text',
-  },
-};
-
-export const Semibold: Story = {
-  args: {
-    weight: 'semibold',
-    children: 'Article body sponsored text',
-  },
-};
-
-export const SemiboldItalic: Story = {
-  args: {
-    weight: 'semibold-italic',
-    children: 'Article body sponsored text',
-  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {sponsoredWeights.map((weight) => (
+        <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <ArticleBodySponsoredText weight={weight}>
+            Article body sponsored text - {weight}
+          </ArticleBodySponsoredText>
+        </div>
+      ))}
+    </div>
+  ),
 };

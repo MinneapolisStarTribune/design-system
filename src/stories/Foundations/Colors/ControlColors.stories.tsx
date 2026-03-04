@@ -9,6 +9,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Configurable: Story = {
+  render: () => <ThemeAwareColorCategory category="control" />,
+};
+
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
   render: () => <ThemeAwareColorCategory category="control" />,
 };

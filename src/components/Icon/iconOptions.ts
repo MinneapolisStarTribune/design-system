@@ -210,6 +210,7 @@ import sportsComponent from '../../icons/sports.svg?react';
 import star_filledComponent from '../../icons/star-filled.svg?react';
 import starComponent from '../../icons/star.svg?react';
 import steering_wheelComponent from '../../icons/steering-wheel.svg?react';
+import successComponent from '../../icons/success.svg?react';
 import text_sizeComponent from '../../icons/text-size.svg?react';
 import thumbs_down_filledComponent from '../../icons/thumbs-down-filled.svg?react';
 import thumbs_downComponent from '../../icons/thumbs-down.svg?react';
@@ -233,6 +234,7 @@ import volume_filledComponent from '../../icons/volume-filled.svg?react';
 import volume_mute_filledComponent from '../../icons/volume-mute-filled.svg?react';
 import volume_muteComponent from '../../icons/volume-mute.svg?react';
 import volumeComponent from '../../icons/volume.svg?react';
+import warningComponent from '../../icons/warning.svg?react';
 import weather_day_mostly_cloudy_thunderstorms_colorComponent from '../../icons/weather-day-mostly-cloudy-thunderstorms-color.svg?react';
 import weather_day_mostly_cloudy_thunderstormsComponent from '../../icons/weather-day-mostly-cloudy-thunderstorms.svg?react';
 import weather_day_mostly_sunny_colorComponent from '../../icons/weather-day-mostly-sunny-color.svg?react';
@@ -490,6 +492,7 @@ export const iconOptions = {
   'star-filled': star_filledComponent,
   star: starComponent,
   'steering-wheel': steering_wheelComponent,
+  success: successComponent,
   'text-size': text_sizeComponent,
   'thumbs-down-filled': thumbs_down_filledComponent,
   'thumbs-down': thumbs_downComponent,
@@ -513,6 +516,7 @@ export const iconOptions = {
   'volume-mute-filled': volume_mute_filledComponent,
   'volume-mute': volume_muteComponent,
   volume: volumeComponent,
+  warning: warningComponent,
   'weather-day-mostly-cloudy-thunderstorms-color':
     weather_day_mostly_cloudy_thunderstorms_colorComponent,
   'weather-day-mostly-cloudy-thunderstorms': weather_day_mostly_cloudy_thunderstormsComponent,

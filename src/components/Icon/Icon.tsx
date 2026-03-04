@@ -38,10 +38,12 @@ export const Icon = ({
   }
 
   // Size mapping
-  const sizeMap: Record<'small' | 'medium' | 'large', string> = {
-    small: '14px',
-    medium: '16px',
+  const sizeMap: Record<NonNullable<IconProps['size']>, string> = {
+    'x-small': '14px',
+    small: '16px',
+    medium: '20px',
     large: '24px',
+    'x-large': '32px',
   };
   const sizeValue = sizeMap[size];
 

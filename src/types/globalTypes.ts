@@ -38,7 +38,7 @@ export type IconColor = (typeof ICON_COLORS)[number];
 export type IconSpecificProps<IconName extends string = string> = {
   name: IconName;
   color?: IconColor;
-  size?: Extract<Size, 'small' | 'medium' | 'large'>;
+  size?: Extract<Size, 'x-small' | 'small' | 'medium' | 'large' | 'x-large'>;
 };
 
 /**
@@ -72,7 +72,7 @@ export type UtilityLabelSize = Extract<Size, 'small' | 'medium' | 'large'>;
 /**
  * UtilityLabel weight tokens for the design system
  */
-export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold'>;
+export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold' | 'bold'>;
 
 /**
  * Global position tokens for overlays and floating UI

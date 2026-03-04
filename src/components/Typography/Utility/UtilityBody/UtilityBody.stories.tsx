@@ -1,6 +1,10 @@
 // UtilityBody.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
+import type { UtilityBodySize, UtilityBodyWeight } from './types';
+
+const SIZES: UtilityBodySize[] = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'];
+const WEIGHTS: UtilityBodyWeight[] = ['regular', 'italic', 'medium', 'semibold', 'bold'];
 
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityBody',
@@ -27,4 +31,37 @@ export const Configurable: Story = {
     weight: 'regular',
     children: 'Utility body text is designed for readability at a variety of sizes.',
   },
+};
+
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  args: {
+    size: 'medium',
+    weight: 'regular',
+    children: 'Utility body text',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {SIZES.flatMap((size) =>
+        WEIGHTS.map((weight) => (
+          <div
+            key={`${size}-${weight}`}
+            style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+          >
+            <UtilityBody size={size} weight={weight}>
+              Utility body text - {size} / {weight}
+            </UtilityBody>
+          </div>
+        ))
+      )}
+    </div>
+  ),
 };

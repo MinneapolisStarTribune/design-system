@@ -149,7 +149,6 @@ export const Configurable: Story = {
               isDisabled={storyArgs.isDisabled}
             />
           );
-        // Add any new form control subcomponents here as they are created
         default:
           return (
             <FormControl.TextInput
@@ -179,52 +178,77 @@ export const Configurable: Story = {
   },
 };
 
-export const FullExample: Story = {
-  args: {
-    labelText: 'Email Address',
-    descriptionText: "We'll never share your email",
-    placeholderText: 'you@example.com',
-    captionText: 'Please enter a valid email address',
-    captionVariant: 'error',
-    iconName: 'mail',
-    inputSize: 'medium',
-    formControlType: 'TextInput',
-    showLabel: true,
-    showDescription: true,
-    showCaption: true,
-  } as any,
-  render: (args) => {
-    const storyArgs = args as unknown as FormGroupStoryArgs;
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  args: {} as any,
+  render: () => {
+    const variants = [
+      {
+        label: 'Label only',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Label only</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Placeholder" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Description',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
+            <FormControl.TextInput placeholderText="you@example.com" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Caption (info)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Username</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Enter username" />
+            <FormGroup.Caption variant="info">Choose a unique username</FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Caption (error)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Password</FormGroup.Label>
+            <FormControl.TextInput type="password" placeholderText="Enter password" />
+            <FormGroup.Caption variant="error">Password is required</FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'With icon',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>With icon</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Search" icon="search" iconPosition="start" />
+          </FormGroup>
+        ),
+      },
+    ];
     return (
-      <FormGroup>
-        <FormGroup.Label>{storyArgs.labelText}</FormGroup.Label>
-        <FormGroup.Description>{storyArgs.descriptionText}</FormGroup.Description>
-        <FormControl.TextInput
-          placeholderText={storyArgs.placeholderText}
-          icon={storyArgs.iconName}
-          iconPosition="start"
-          size={storyArgs.inputSize}
-        />
-        <FormGroup.Caption variant={storyArgs.captionVariant}>
-          {storyArgs.captionText}
-        </FormGroup.Caption>
-      </FormGroup>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem',
+        }}
+      >
+        {variants.map((v) => (
+          <div key={v.label} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>{v.label}</span>
+            {v.render()}
+          </div>
+        ))}
+      </div>
     );
   },
-};
-
-export const MultipleFormGroups: Story = {
-  args: {} as any,
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <FormGroup>
-        <FormGroup.Label>Username</FormGroup.Label>
-        <FormControl.TextInput placeholderText="Enter username" />
-      </FormGroup>
-      <FormGroup>
-        <FormGroup.Label>Password</FormGroup.Label>
-        <FormControl.TextInput type="password" placeholderText="Enter password" />
-      </FormGroup>
-    </div>
-  ),
 };
