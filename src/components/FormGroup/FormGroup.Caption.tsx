@@ -3,7 +3,7 @@ import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
 import { Icon } from '@/components/Icon/Icon';
 import styles from './FormGroup.module.scss';
-import classNames from 'classnames'
+import classNames from 'classnames';
 
 export interface FormGroupCaptionProps extends BaseProps {
   children: React.ReactNode;
@@ -46,7 +46,7 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
     <div
       id={id}
       role={role}
-      className={classNames("typography-utility-text-regular-x-small", styles.caption)}
+      className={classNames('typography-utility-text-regular-x-small', styles.caption)}
       style={{ color }}
       data-testid={dataTestId}
     >

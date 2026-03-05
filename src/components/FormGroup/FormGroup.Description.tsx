@@ -21,10 +21,7 @@ export const FormGroupDescription: React.FC<FormGroupDescriptionProps> = ({
     <span
       id={id}
       data-testid={dataTestId}
-      className={classNames(
-        'typography-utility-text-regular-x-small',
-        styles.description,
-      )}
+      className={classNames('typography-utility-text-regular-x-small', styles.description)}
     >
       {children}
     </span>
