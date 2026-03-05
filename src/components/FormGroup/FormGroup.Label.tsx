@@ -3,6 +3,7 @@ import { useFormGroupContext } from './FormGroupContext';
 import { UtilityBody } from '../Typography/Utility/UtilityBody/UtilityBody';
 import { UtilityLabel } from '../Typography/Utility/UtilityLabel/UtilityLabel';
 import styles from './FormGroup.module.scss';
+import classNames from 'classnames';
 
 export interface FormGroupLabelProps extends BaseProps {
   children: React.ReactNode;
@@ -24,7 +25,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
   const htmlForValue = htmlFor ?? context?.inputId;
 
   return (
-    <div className={styles.label}>
+    <div className={classNames(styles.label)}>
       <UtilityLabel
         id={id}
         htmlFor={htmlForValue}
@@ -40,7 +41,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
           // size and weight are always the same
           size="xx-small"
           weight="regular"
-          className={styles.optional}
+          className={classNames(styles.optional)}
         >
           <div style={{ color: 'var(--color-text-on-light-tertiary)' }}>(Optional)</div>
         </UtilityBody>

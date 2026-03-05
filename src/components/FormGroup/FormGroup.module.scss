@@ -1,41 +1,40 @@
-.formGroup {
+:global(.form-group) {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
-}
 
-.label {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: var(--spacing-8);
+  .label {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: var(--spacing-8);
 
-  // When Description follows, don't add margin
-  &:has(+ .description) {
-    margin-bottom: 0;
+    // When Description follows, don't add margin
+    &:has(+ .description) {
+      margin-bottom: 0;
+    }
+
+    .optional {
+      margin: 0;
+    }
   }
 
-  .optional {
-    margin: 0;
+  .caption {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-top: var(--spacing-8);
+
+    .icon {
+      display: inline-flex;
+      flex-shrink: 0;
+    }
   }
-}
 
-.caption {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  margin-top: var(--spacing-8);
-
-  .icon {
-    display: inline-flex;
-    flex-shrink: 0;
+  .description {
+    display: block;
+    margin-top: var(--space-2, 2px);
+    margin-bottom: var(--space-8, 8px);
+    color: var(--color-text-on-light-secondary);
   }
-}
-
-.description {
-  display: block;
-  margin-top: var(--space-2, 2px);
-  margin-bottom: var(--space-8, 8px);
-  color: var(--color-text-on-light-secondary);
 }

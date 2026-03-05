@@ -2,6 +2,7 @@ import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
 import styles from './FormGroup.module.scss';
+import classNames from 'classnames';
 
 export interface FormGroupDescriptionProps extends BaseProps {
   children: React.ReactNode;
@@ -20,7 +21,10 @@ export const FormGroupDescription: React.FC<FormGroupDescriptionProps> = ({
     <span
       id={id}
       data-testid={dataTestId}
-      className={`typography-utility-text-regular-x-small ${styles.description}`}
+      className={classNames(
+        'typography-utility-text-regular-x-small',
+        styles.description,
+      )}
     >
       {children}
     </span>
