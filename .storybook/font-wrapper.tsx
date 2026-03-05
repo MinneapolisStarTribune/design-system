@@ -1,31 +1,29 @@
 /**
  * FontWrapper Component
  *
- * This component is responsible for dynamically loading font CSS files in Storybook.
- * It ensures that the correct font faces, utility typography classes, and editorial
- * typography classes are available in the DOM before rendering child components.
+ * This component is responsible for dynamically loading font-face CSS files in Storybook.
+ * It ensures that the correct @font-face definitions are available in the DOM
+ * before rendering child components.
  *
  * Why this exists:
- * - Our design system uses brand-specific fonts (@font-face definitions) and typography
- *   classes that are defined in CSS files (dist/web/fonts/font-face/{brand}.css,
- *   dist/web/fonts/utility/{brand}.css, dist/web/fonts/editorial/{brand}.css)
+ * - Our design system uses brand-specific fonts (@font-face definitions) that are
+ *   defined in CSS files (dist/web/fonts/font-face/{brand}.css)
  * - These CSS files must be loaded into the DOM for components to use the fonts
  * - Storybook needs to dynamically switch between brands (startribune/varsity) based
  *   on user selection in the toolbar
+ * - Note: Typography classes and CSS variables are now loaded by ThemeWrapper
+ *   (combined in {brand}-{colorScheme}.css files)
  *
  * How it works:
- * 1. Takes brand prop to determine which brand-specific font files to load
- * 2. Always loads utility fonts (shared across brands, but brand-specific files)
- * 3. Dynamically creates <link> elements pointing to the correct font CSS files
- * 4. Injects them into the document head, replacing any previously loaded fonts
- * 5. Shows a loading state until the fonts are loaded
- * 6. Only renders children after the font CSS is available
+ * 1. Takes brand prop to determine which brand-specific font-face file to load
+ * 2. Dynamically creates <link> element pointing to the correct font-face CSS file
+ * 3. Injects it into the document head, replacing any previously loaded fonts
+ * 4. Shows a loading state until the fonts are loaded
+ * 5. Only renders children after the font CSS is available
  *
- * The font CSS files are served from /fonts/ via Storybook's staticDirs configuration
+ * The font-face CSS files are served from /fonts/font-face/ via Storybook's staticDirs configuration
  * (see .storybook/main.ts). Files are organized as:
  * - /fonts/font-face/{brand}.css - @font-face definitions
- * - /fonts/utility/{brand}.css - Utility typography classes
- * - /fonts/editorial/{brand}.css - Editorial typography classes
  */
 
 import React, { ReactNode, useEffect, useState } from 'react';
@@ -34,9 +32,7 @@ import { Brand } from '../src/providers/TamaguiProvider';
 const FONT_LINK_PREFIX = 'storybook-font-link';
 
 const FONT_CSS_PATHS = [
-  (brand: Brand) => `/fonts/font-face/${brand}.css`,
-  (brand: Brand) => `/fonts/utility/${brand}.css`,
-  (brand: Brand) => `/fonts/editorial/${brand}.css`,
+  (brand: Brand) => `/fonts/font-face/${brand}.css`, // @font-face definitions only
 ];
 
 /**
@@ -102,8 +98,7 @@ export const FontWrapper = ({ children, brand }: FontWrapperProps) => {
       FONT_CSS_PATHS.map((getPath) => {
         const href = getPath(brand);
 
-        const folderName = href.split('/')[2]; // e.g., 'font-face', 'utility', 'editorial'
-        const id = `${FONT_LINK_PREFIX}-${folderName}-${brand}`;
+        const id = `${FONT_LINK_PREFIX}-font-face-${brand}`;
         return loadCss(href, id);
       })
     ).then(() => {
