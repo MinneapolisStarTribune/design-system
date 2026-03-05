@@ -1,7 +1,7 @@
 {
   "name": "@minneapolisstartribune/design-system",
   "version": "1.0.3",
-  "main": "dist/web/design-system.es.js",
+  "main": "dist/web/root-entry-error.cjs.js",
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
   "exports": {
