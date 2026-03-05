@@ -184,9 +184,19 @@ function createAllVariantsStory(brand: 'startribune' | 'varsity', theme: 'light'
     },
     render: () => (
       <div style={{ padding: '2rem' }}>
-        {renderButtonSection('All Text Buttons', BUTTON_SIZES, false, false)}
-        {renderButtonSection('All Text Buttons with Icons', BUTTON_SIZES, false, true)}
-        {renderButtonSection('All Icon Only Buttons', ICON_ONLY_BUTTON_SIZES, true, false)}
+        {renderButtonSection(`All ${brand} ${theme} Text Buttons`, BUTTON_SIZES, false, false)}
+        {renderButtonSection(
+          `All ${brand} ${theme} Text Buttons with Icons`,
+          BUTTON_SIZES,
+          false,
+          true
+        )}
+        {renderButtonSection(
+          `All ${brand} ${theme} Icon Only Buttons`,
+          ICON_ONLY_BUTTON_SIZES,
+          true,
+          false
+        )}
       </div>
     ),
   };
