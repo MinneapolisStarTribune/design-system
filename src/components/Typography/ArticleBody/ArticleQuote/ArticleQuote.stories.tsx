@@ -35,21 +35,6 @@ export const Configurable: Story = {
   },
 };
 
-export const Small: Story = {
-  args: {
-    size: 'small',
-    children: 'Use sparingly to capture sensitive moments.',
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: 'large',
-    children:
-      'Article Quote provides visual emphasis while remaining integrated with the surrounding body content.',
-  },
-};
-
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
