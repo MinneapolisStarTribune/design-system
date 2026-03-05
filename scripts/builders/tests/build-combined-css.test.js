@@ -40,7 +40,7 @@ describe('buildCombinedCSS', () => {
 
     existsSyncSpy.mockReturnValue(true);
     readFileSyncSpy.mockImplementation((filePath) => {
-      if (filePath.includes('fonts/startribune.css')) {
+      if (filePath.includes('fonts/startribune-light.css')) {
         return fontsCSS;
       }
       if (filePath.includes('themes/startribune-light.css')) {
@@ -68,7 +68,7 @@ describe('buildCombinedCSS', () => {
     const themesCSS = ':root { --color-base-black: #000000; }';
 
     existsSyncSpy.mockImplementation((filePath) => {
-      if (filePath.includes('fonts/startribune.css')) {
+      if (filePath.includes('fonts/startribune-light.css')) {
         return false;
       }
       if (filePath.includes('themes/startribune-light.css')) {
