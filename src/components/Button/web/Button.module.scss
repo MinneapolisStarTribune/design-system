@@ -4,16 +4,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Consistent gap between icon and label */
-  gap: var(--spacing-4);
   border-radius: var(--radius-full);
   cursor: pointer;
+  box-sizing: border-box;
   
   /* Typography */
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
   line-height: inherit;
+  
+  /* Override typography color rules - buttons control their own text color */
+  /* This single rule applies to all button variants */
+  [class*="typography-"] {
+    color: inherit;
+  }
   
   /* Remove default button styles */
   appearance: none;
@@ -36,6 +41,46 @@
   &.large {
     height: 52px;
     padding: 0 var(--spacing-24);
+  }
+
+  /* Gap between icon and text when button has both */
+  &.hasIcon {
+    gap: var(--spacing-4);
+  }
+
+  /* Icon element styling */
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Icon-only button styles - perfectly round buttons with specific dimensions */
+  &.icon-only {
+    &.large {
+      height: 44px;
+      width: 44px;
+      padding: var(--spacing-6);
+    }
+    
+    &.medium {
+      height: 40px;
+      width: 40px;
+      padding: var(--spacing-8);
+    }
+    
+    &.small {
+      height: 32px;
+      width: 32px;
+      padding: var(--spacing-6);
+    }
+    
+    &.x-small {
+      height: 24px;
+      width: 24px;
+      padding: var(--spacing-4);
+    }
   }
   
   /* Neutral colors */
@@ -159,12 +204,12 @@
    * 
    * Note: These classes are only applied when the hover-border token contains "gradient"
    */
-  &.brandAccentFilled,
-  &.brandAccentOutlined {
+  &.brand-accent-filled,
+  &.brand-accent-outlined {
     position: relative;
 
     /* Hide default border for outlined buttons */
-    &.brandAccentOutlined {
+    &.brand-accent-outlined {
       border-color: transparent !important;
     }
 
@@ -172,13 +217,11 @@
     &::after {
       content: '';
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       border-radius: var(--radius-full);
-      left: 0;
-      top: 0;
       pointer-events: none;
       z-index: 0;
+      box-sizing: border-box;
       /* Gradient border using mask technique - mask out the content area */
       -webkit-mask: 
         linear-gradient(#fff 0 0) content-box, 
@@ -192,20 +235,23 @@
     }
 
     /* Outlined buttons: gradient border at rest */
-    &.brandAccentOutlined::after {
+    &.brand-accent-outlined::after {
       background: var(--color-button-brand-accent-outlined-hover-border);
     }
 
     /* Hover state: show gradient border for filled, maintain for outlined */
     &:hover:not(:disabled) {
-      &.brandAccentFilled {
+      &.brand-accent-filled {
         background: transparent !important;
         &::after {
           background: var(--color-button-brand-accent-filled-hover-border);
         }
       }
-      &.brandAccentOutlined {
+      &.brand-accent-outlined {
         border-color: transparent !important;
+        &::after {
+          background: var(--color-button-brand-accent-outlined-hover-border);
+        }
       }
     }
 

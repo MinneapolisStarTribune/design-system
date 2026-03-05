@@ -8,12 +8,14 @@ This design system uses [Style Dictionary](https://amzn.github.io/style-dictiona
 
 ### Available Themes
 
-Theme files are organized by brand and color scheme:
+Combined CSS files (typography classes + CSS variables) are organized by brand and color scheme:
 
-- **Star Tribune Light** - `dist/themes/startribune-light.css`
-- **Star Tribune Dark** - `dist/themes/startribune-dark.css`
-- **Varsity Light** - `dist/themes/varsity-light.css`
-- **Varsity Dark** - `dist/themes/varsity-dark.css`
+- **Star Tribune Light** - `startribune-light.css`
+- **Star Tribune Dark** - `startribune-dark.css`
+- **Varsity Light** - `varsity-light.css`
+- **Varsity Dark** - `varsity-dark.css`
+
+Each file contains both typography classes and CSS variables, eliminating FOUC risk and simplifying imports.
 
 ### Using Themes
 
@@ -25,9 +27,10 @@ You need to load the correct CSS file based on your brand and whether you're usi
 
 ```tsx
 // In your main entry file (e.g., main.tsx or App.tsx)
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+// Single import includes both typography classes and CSS variables
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
 // or
-import '@minneapolisstartribune/design-system/dist/themes/startribune-dark.css';
+import '@minneapolisstartribune/design-system/web/startribune-dark.css';
 
 // Then wrap your app with DesignSystemProvider
 import { DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
@@ -58,14 +61,14 @@ function App() {
       existingLink.remove();
     }
 
-    // Load the correct theme CSS
+    // Load the correct combined CSS file (typography + themes)
     // Note: Adjust this path based on how your bundler resolves node_modules
-    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`
+    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`
     // For Webpack/CRA: You may need to use a dynamic import or copy files to public folder
     const link = document.createElement('link');
     link.id = 'design-system-theme';
     link.rel = 'stylesheet';
-    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`;
+    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`;
     document.head.appendChild(link);
 
     // Cleanup on unmount
@@ -113,7 +116,7 @@ If you're using the design system's React components, you need to:
 
 ```tsx
 import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/web';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
 
 function App() {
   return (
@@ -133,7 +136,7 @@ import {
   ArticleBodyText,
   SectionHeading,
 } from '@minneapolisstartribune/design-system/web';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
 
 function Article() {
   return (
@@ -159,7 +162,7 @@ import {
   FormControl,
   TextInput,
 } from '@minneapolisstartribune/design-system/web';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
 
 function ContactForm() {
   return (
@@ -182,8 +185,8 @@ function ContactForm() {
 - The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
 - The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
 - If you want to switch themes dynamically, use the dynamic loading approach shown above
-- The CSS file must be loaded **before** components render, or CSS variables will be undefined
-- Fonts are automatically loaded by `DesignSystemProvider` - no manual font loading needed
+- The combined CSS file includes both typography classes and CSS variables, eliminating FOUC risk
+- Font-face files are automatically loaded by `DesignSystemProvider` - no manual font loading needed
 
 ## Font Loading
 
@@ -205,7 +208,7 @@ const fontPath = getBrandFontPath('startribune');
 
 **For React apps using this design system's React components:**
 
-- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
+- [ ] Import the combined CSS file: `@minneapolisstartribune/design-system/web/{brand}-{colorScheme}.css`
 - [ ] Wrap your app with `<DesignSystemProvider brand="..." forceColorScheme="...">`
 - [ ] Ensure `brand` prop matches the CSS file brand (`'startribune'` or `'varsity'`)
 - [ ] Ensure `forceColorScheme` prop matches the CSS file (`'light'` or `'dark'`)
@@ -213,8 +216,9 @@ const fontPath = getBrandFontPath('startribune');
 
 **For CSS-only usage:**
 
-- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
+- [ ] Import the combined CSS file: `@minneapolisstartribune/design-system/web/{brand}-{colorScheme}.css`
 - [ ] Use CSS variables in your styles: `var(--color-*)`
+- [ ] Use typography classes: `typography-editorial-*` or `typography-utility-*`
 - [ ] Switch themes by changing the import path
 
 **Verifying it works:**

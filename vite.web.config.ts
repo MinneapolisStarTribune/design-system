@@ -54,27 +54,21 @@ export default defineConfig({
         },
       },
       beforeWriteFile: (filePath, content) => {
-        // Only copy the main entry file and rename it to index.web.d.ts
-        // Other files will be copied as-is to maintain import paths
-        if (
-          filePath.endsWith('index.web.d.ts') ||
-          (filePath.includes('index.web') && filePath.endsWith('.d.ts'))
-        ) {
-          // Ensure it's named index.web.d.ts in dist/web
-          if (filePath.includes('index.web.d.ts')) {
-            return {
-              filePath: path.resolve(__dirname, 'dist', 'web', 'index.web.d.ts'),
-              content,
-            };
-          }
+        const normalizedPath = filePath.replace(/\\/g, '/');
+
+        // Keep the components barrel types at dist/web/components/index.web.d.ts
+        if (normalizedPath.endsWith('components/index.web.d.ts')) {
+          return { filePath, content };
         }
-        // For the main index file, rename it
-        if (filePath.endsWith('index.d.ts') && filePath.includes('index.web')) {
+
+        // Ensure the main web entrypoint types are written to dist/web/index.web.d.ts
+        if (normalizedPath.endsWith('index.web.d.ts')) {
           return {
             filePath: path.resolve(__dirname, 'dist', 'web', 'index.web.d.ts'),
             content,
           };
         }
+
         return { filePath, content };
       },
     }),
