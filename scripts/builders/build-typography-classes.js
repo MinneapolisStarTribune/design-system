@@ -4,17 +4,18 @@ const fs = require('fs');
 const typographyClassesFormat = require('../formats/typography-classes');
 
 /**
- * Build Typography Classes for a Brand
+ * Build Typography Classes for a Brand and Mode
  *
  * Generates CSS classes from both typography.editorial and typography.utility tokens.
- * Combines editorial and utility typography into a single CSS file.
- * Output goes to dist/web/fonts/{brand}.css.
+ * Combines editorial and utility typography into a single CSS file with theme-aware color.
+ * Output goes to dist/web/fonts/{brand}-{mode}.css.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
+ * @param {string} mode - The color scheme ('light' or 'dark')
  * @returns {Promise<void>} Resolves when typography classes are built
  */
-async function buildTypographyClasses(brand) {
-  console.log(`\nBuilding typography classes (editorial + utility) for ${brand}...`);
+async function buildTypographyClasses(brand, mode) {
+  console.log(`\nBuilding typography classes (editorial + utility) for ${brand} ${mode}...`);
 
   // Load all typography source files: editorial, utility shared, and utility brand-specific
   const sourceFiles = [
@@ -64,7 +65,7 @@ async function buildTypographyClasses(brand) {
         buildPath: 'dist/web/fonts/',
         files: [
           {
-            destination: `${brand}.css`,
+            destination: `${brand}-${mode}.css`,
             format: 'css/typography-classes',
             filter: (token) => {
               // Only include typography tokens
@@ -72,6 +73,7 @@ async function buildTypographyClasses(brand) {
             },
             options: {
               brand: brand,
+              mode: mode,
             },
           },
         ],
@@ -82,7 +84,7 @@ async function buildTypographyClasses(brand) {
   const sd = new StyleDictionary(config);
   await sd.buildAllPlatforms();
 
-  console.log(`✓ ${brand} typography classes built → dist/web/fonts/${brand}.css`);
+  console.log(`✓ ${brand} ${mode} typography classes built → dist/web/fonts/${brand}-${mode}.css`);
 }
 
 module.exports = buildTypographyClasses;
