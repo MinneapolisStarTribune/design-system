@@ -1,6 +1,6 @@
 {
   "name": "@minneapolisstartribune/design-system",
-  "version": "0.2.0",
+  "version": "1.0.2",
   "main": "dist/web/design-system.es.js",
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
@@ -9,6 +9,12 @@
       "types": "./dist/web/index.web.d.ts",
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
+    },
+    "./web/*": {
+      "default": "./dist/web/*"
+    },
+    "./web/fonts/font-face/*": {
+      "default": "./dist/web/fonts/font-face/*"
     },
     "./native": {
       "types": "./dist/mobile/index.native.d.ts",

@@ -19,43 +19,57 @@ describe('buildTypographyClasses', () => {
     vi.restoreAllMocks();
   });
 
-  it('builds typography classes for a given brand', async () => {
+  it('builds combined typography classes for a given brand', async () => {
     existsSyncSpy.mockReturnValue(true);
     const brand = 'startribune';
 
     await buildTypographyClasses(brand);
 
     expect(fs.existsSync).toHaveBeenCalled();
-    expect(logSpy).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Building typography classes (editorial + utility)')
+    );
   });
 
-  it('returns early when editorial typography file does not exist', async () => {
+  it('skips build when both editorial and utility files are missing', async () => {
     const brand = 'nonexistent';
-    
-    // Return false only for the editorial file path check
-    existsSyncSpy.mockReturnValue(false);
+
+    existsSyncSpy.mockImplementation((filePath) => {
+      // Neither editorial nor utility files exist
+      if (filePath.includes('editorial') || filePath.includes('utility')) {
+        return false;
+      }
+      // text.json exists
+      return true;
+    });
 
     await buildTypographyClasses(brand);
 
-    // Should log the initial message and the warning
-    expect(logSpy).toHaveBeenCalledWith(`
-Building editorial typography classes for ${brand}...`);
-    expect(logSpy).toHaveBeenCalledWith(`⚠️  No editorial typography file found for ${brand}, skipping...`);
-    
-    // Should NOT log the success message
-    expect(logSpy).not.toHaveBeenCalledWith(expect.stringContaining('typography classes built'));
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('No typography files found')
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('skipping')
+    );
+    // Should NOT log success message
+    expect(logSpy).not.toHaveBeenCalledWith(
+      expect.stringContaining('typography classes built')
+    );
   });
 
   it('filters out non-existent source files', async () => {
     const brand = 'startribune';
-    
-    // Mock to return true for editorial file check, but false for some source files
+
     existsSyncSpy.mockImplementation((filePath) => {
-      // Editorial file exists (first check at line 25)
+      // Editorial file exists
       if (filePath.includes('editorial') && filePath.includes(brand)) {
         return true;
       }
-      // tokens/text.json doesn't exist (filtered at line 31-34)
+      // Utility shared file exists
+      if (filePath.includes('utility/shared.json')) {
+        return true;
+      }
+      // text.json doesn't exist (should be filtered)
       if (filePath.includes('text.json')) {
         return false;
       }
@@ -66,6 +80,8 @@ Building editorial typography classes for ${brand}...`);
     await buildTypographyClasses(brand);
 
     // Should still build successfully with remaining files
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('typography classes built'));
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining('typography classes built')
+    );
   });
 });

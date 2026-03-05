@@ -10,9 +10,9 @@ Common issues and solutions for using the design system.
 
 **Solutions:**
 
-1. Verify the theme CSS file is imported before components render
+1. Verify the combined CSS file is imported before components render
 2. Check the Network tab to ensure the CSS file loaded (look for `{brand}-{colorScheme}.css`)
-3. Ensure the import path is correct: `@minneapolisstartribune/design-system/dist/themes/{brand}-{colorScheme}.css`
+3. Ensure the import path is correct: `@minneapolisstartribune/design-system/web/{brand}-{colorScheme}.css`
 4. For dynamic loading, verify the link element is added to `<head>` before React renders
 
 ### Theme Not Applying

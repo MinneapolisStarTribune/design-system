@@ -221,6 +221,14 @@ yarn icons              # Regenerate icon mapping
 yarn storybook          # Restart Storybook to see new icons
 ```
 
+## TypeScript configuration (tsconfig files)
+
+This repo intentionally has **three** `tsconfig` files, each with a specific role:
+
+- **`tsconfig.json`** – main project config used for builds and type-checking the library source in `src/`.
+- **`.storybook/.tsconfig.json`** – Storybook config that extends the main one and adds Storybook-specific types and options.
+- **`src/tsconfig.json`** – stories-only config so editors type-check `*.stories.tsx` files with the same settings as Storybook, avoiding false-positive JSX/`React` errors in some IDEs while keeping stories out of the main build.
+
 ## Design Tokens
 
 This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Tamagui theme modules.

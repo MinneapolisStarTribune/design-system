@@ -16,7 +16,8 @@
 /* Default to light background */
 .sb-story,
 .docs-story,
-.sb-main-padded {
+.sb-main-padded,
+.sb-main-centered {
   /* Use CSS variables from our theme files (loaded by ThemeWrapper) */
   /* These variables are defined in dist/web/themes/{brand}-{theme}.css */
   background-color: var(--color-background-light-default, #ffffff);
@@ -26,6 +27,7 @@
 /* The addon-themes applies 'sb-dark' class to html/document */
 .sb-dark .sb-story,
 .sb-dark .docs-story,
-.sb-dark .sb-main-padded {
-  background-color: var(--color-background-dark-default, #0D0D0D);
+.sb-dark .sb-main-padded,
+.sb-dark .sb-main-centered {
+  background-color: var(--color-background-dark-default, #0d0d0d);
 }
