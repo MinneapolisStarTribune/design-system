@@ -5,16 +5,20 @@
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/root-entry-error.cjs.js",
+      "import": "./dist/web/root-entry-error.cjs.js",
+      "default": "./dist/web/root-entry-error.cjs.js"
+    },
     "./web": {
       "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/design-system.cjs.js",
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
     },
     "./web/*": {
       "default": "./dist/web/*"
-    },
-    "./web/fonts/font-face/*": {
-      "default": "./dist/web/fonts/font-face/*"
     },
     "./native": {
       "types": "./dist/mobile/index.native.d.ts",
@@ -109,7 +113,7 @@
     "tokens:tamagui": "node scripts/builders/build-tamagui-tokens.js && prettier --write \"src/generated/**/*.ts\"",
     "icons": "node scripts/builders/build-icon-mapping.js && prettier --write src/components/Icon/iconOptions.ts",
     "clean:dist": "rm -rf dist",
-    "build": "npm run clean:dist && npm run tokens && npm run tokens:tamagui && npm run icons && npm run build:web && npm run build:native",
+    "build": "npm run clean:dist && npm run tokens && npm run tokens:tamagui && npm run icons && npm run build:web && npm run build:native && node scripts/create-root-entry-error.cjs",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
     "pretest": "yarn tokens:tamagui",
