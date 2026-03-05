@@ -54,7 +54,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   return (
     <BrandContext.Provider value={brand}>
       <TamaguiProvider config={config} defaultTheme={themeName}>
-        {children}
+        <div data-brand={brand}>{children}</div>
       </TamaguiProvider>
     </BrandContext.Provider>
   );
