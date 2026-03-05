@@ -30,6 +30,7 @@
     // Types
     "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
   },
-  "exclude": ["node_modules", "dist", ".storybook", "**/*.stories.tsx", "**/*.stories.ts"],
-  "include": ["src"]
+  "exclude": ["node_modules", "dist", ".storybook"],
+  "include": ["src", "tamagui.config.ts"]
+  // Note: Stories are included here for IDE type-checking, but excluded from build by Vite
 }

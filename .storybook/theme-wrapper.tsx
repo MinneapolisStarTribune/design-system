@@ -1,25 +1,25 @@
 /**
  * ThemeWrapper Component
  *
- * This component is responsible for dynamically loading CSS theme files in Storybook.
- * It ensures that the correct design tokens (CSS variables) are available in the DOM
- * before rendering child components.
+ * This component is responsible for dynamically loading combined CSS files in Storybook.
+ * It ensures that the correct design tokens (CSS variables) and typography classes are
+ * available in the DOM before rendering child components.
  *
  * Why this exists:
- * - Our design system uses CSS variables (e.g., --color-icon-on-light-primary) that are
- *   defined in theme CSS files (dist/themes/{brand}-{colorScheme}.css)
- * - These CSS files must be loaded into the DOM for components to use the variables
+ * - Our design system uses CSS variables (e.g., --color-icon-on-light-primary) and
+ *   typography classes that are defined in combined CSS files (dist/web/{brand}-{colorScheme}.css)
+ * - These CSS files must be loaded into the DOM for components to use the variables and classes
  * - Storybook needs to dynamically switch between brands (startribune/varsity) and
  *   color schemes (light/dark) based on user selection in the toolbar
  *
  * How it works:
  * 1. Takes brand and colorScheme props to determine which CSS file to load
- * 2. Dynamically creates a <link> element pointing to the correct theme CSS file
+ * 2. Dynamically creates a <link> element pointing to the correct combined CSS file
  * 3. Injects it into the document head, replacing any previously loaded theme
  * 4. Shows a loading state until the CSS is loaded
- * 5. Only renders children after the theme CSS is available
+ * 5. Only renders children after the CSS is available
  *
- * The theme CSS files are served from /themes/ via Storybook's staticDirs configuration
+ * The combined CSS files are served from / via Storybook's staticDirs configuration
  * (see .storybook/main.ts). Files are named: {brand}-{colorScheme}.css
  * (e.g., startribune-light.css, varsity-dark.css)
  */
@@ -42,12 +42,12 @@ export const loadTheme = (brand: string, colorScheme: 'light' | 'dark'): Promise
       existingLink.remove();
     }
 
-    // Load the correct theme file based on brand and color scheme
+    // Load the correct combined CSS file based on brand and color scheme
     const themeFileName = `${brand}-${colorScheme}.css`;
     const link = document.createElement('link');
     link.id = 'storybook-theme-link';
     link.rel = 'stylesheet';
-    link.href = `/themes/${themeFileName}`;
+    link.href = `/${themeFileName}`;
 
     // Wait for CSS to load
     link.onload = () => resolve();

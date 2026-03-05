@@ -7,39 +7,55 @@ describe('Button Accessibility', () => {
   describe('static rendering', () => {
     it('has no violations with all variants', async () => {
       await expectNoA11yViolations(
-        <Button label="Primary Button" onClick={() => {}} variant="filled" />
+        <Button onClick={() => {}} variant="filled">
+          Primary Button
+        </Button>
       );
 
       await expectNoA11yViolations(
-        <Button label="Primary Button" onClick={() => {}} variant="outlined" />
+        <Button onClick={() => {}} variant="outlined">
+          Primary Button
+        </Button>
       );
 
       await expectNoA11yViolations(
-        <Button label="Primary Button" onClick={() => {}} variant="ghost" />
+        <Button onClick={() => {}} variant="ghost">
+          Primary Button
+        </Button>
       );
     });
 
     it('has no violations when disabled', async () => {
       await expectNoA11yViolations(
-        <Button label="Disabled Button" onClick={() => {}} isDisabled />
+        <Button onClick={() => {}} isDisabled>
+          Disabled Button
+        </Button>
       );
     });
 
     it('has no violations with an icon and text', async () => {
       await expectNoA11yViolations(
-        <Button label="Button with Icon" onClick={() => {}} icon="camera-filled" />
+        <Button onClick={() => {}} icon="camera-filled">
+          Button with Icon
+        </Button>
       );
     });
 
     it('has no violations with an icon', async () => {
-      await expectNoA11yViolations(<Button onClick={() => {}} icon="camera-filled" />);
+      await expectNoA11yViolations(
+        <Button onClick={() => {}} icon="camera-filled">
+          Button with Icon
+        </Button>
+      );
     });
   });
 
   describe('interactive states', () => {
     it('has no violations when focused', async () => {
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Focusable Button" onClick={() => {}} data-testid="button" />
+        <Button onClick={() => {}} data-testid="button">
+          Focusable Button
+        </Button>
       );
 
       // Focus the button
@@ -54,7 +70,9 @@ describe('Button Accessibility', () => {
     it('has no violations when clicked', async () => {
       const handleClick = vi.fn();
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Button label="Clickable Button" onClick={handleClick} data-testid="button" />
+        <Button onClick={handleClick} data-testid="button">
+          Clickable Button
+        </Button>
       );
 
       // Click the button

@@ -15,7 +15,7 @@ export type ColorScheme = 'light' | 'dark';
  * Get the color tokens for a specific brand and color scheme
  *
  * Note: All brand/mode combinations must have corresponding token files.
- * The build scripts (build-tokens.js and build-mantine-tokens.js) require
+ * The build scripts (build-tokens.js and build-tamagui-tokens.js) require
  * all files to exist at build time. If a mode doesn't exist, the build will fail.
  *
  */
@@ -62,6 +62,56 @@ export function getBorderRadius(): Record<string, string> {
   Object.entries(radius).forEach(([key, token]: [string, any]) => {
     if (token?.value) {
       radiusMap[key] = token.value;
+    }
+  });
+
+  return radiusMap;
+}
+
+/**
+ * Get spacing tokens as numbers (px suffix removed) - for use with mobile/Tamagui
+ * This matches the format used in dist/mobile/themes/*.js files
+ */
+export function getSpacingAsNumbers(): Record<string, number> {
+  const spacing = getSpacing();
+  const spacingMap: Record<string, number> = {};
+
+  Object.entries(spacing).forEach(([key, value]) => {
+    if (typeof value === 'string' && value.endsWith('px')) {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        spacingMap[key] = numericValue;
+      }
+    } else if (typeof value === 'string') {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        spacingMap[key] = numericValue;
+      }
+    }
+  });
+
+  return spacingMap;
+}
+
+/**
+ * Get border radius tokens as numbers (px suffix removed) - for use with mobile/Tamagui
+ * This matches the format used in dist/mobile/themes/*.js files
+ */
+export function getBorderRadiusAsNumbers(): Record<string, number> {
+  const radius = getBorderRadius();
+  const radiusMap: Record<string, number> = {};
+
+  Object.entries(radius).forEach(([key, value]) => {
+    if (typeof value === 'string' && value.endsWith('px')) {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        radiusMap[key] = numericValue;
+      }
+    } else if (typeof value === 'string') {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue)) {
+        radiusMap[key] = numericValue;
+      }
     }
   });
 

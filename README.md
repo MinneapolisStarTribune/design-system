@@ -1,28 +1,53 @@
 # design-system
 
-A React component library built with TypeScript and Mantine, with a comprehensive design token system.
+A React component library built with TypeScript, Tamagui, and a comprehensive design token system. Supports both web (React) and mobile (React Native) platforms.
 
 ## Installation
 
 This package is published to GitHub Packages. To install it, you'll need to configure npm/yarn to authenticate with GitHub.
 
-### Step 1: Configure npm/yarn Authentication
+### Step 1: Create a Personal Access Token (PAT) on GitHub
 
-**For npm:**
+**Prerequisites:** You must be a developer in the MinneapolisStarTribune GitHub organization.
+
+[GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+
+1. Go to https://github.com/settings/profile
+2. Click "Developer Settings" in the left navigation
+3. Click "Personal Access Tokens" → "Tokens (Classic)"
+4. Click "Generate New Token" → "Generate New Token (classic)"
+5. Configure your token:
+   - Name your token (e.g., "Design System Package Access")
+   - Set the expiration to one year from now
+   - Check the `read:packages` checkbox
+6. Click "Generate Token"
+7. **Copy the token immediately** — you will only see it once!
+8. Save the token in your `.env.local` file in the repository where you're installing this design system:
+   ```
+   NPM_AUTH_TOKEN_FOR_SUS=your_token_here
+   ```
+   This token will be used in Step 2 below.
+
+### Step 2: Configure npm/yarn Authentication
+
+**For yarn:**
 
 Create or edit `.yarnrc.yml` in your project root:
 
 ```
+injectEnvironmentFiles:
+  - .env.local?
+
 npmScopes:
   minneapolisstartribune:
     npmRegistryServer: "https://npm.pkg.github.com"
     npmAlwaysAuth: true
-    npmAuthToken: "${{ secrets.NPM_AUTH_TOKEN_FOR_SUS }}"
+    npmAuthToken: "${NPM_AUTH_TOKEN_FOR_SUS}"
 ```
 
 **Security Note:** Never commit your token to version control! Use environment variables:
 
-### Step 2: Install the Package
+### Step 3: Install the Package
 
 ```bash
 # Using yarn
@@ -31,24 +56,27 @@ yarn add @minneapolisstartribune/design-system
 
 ### Step 4: Install Peer Dependencies
 
-This package requires Mantine and React as peer dependencies:
+This package requires React, React DOM, React Native (for native usage), and Tamagui core as peer dependencies:
 
 ```bash
 # Using yarn
-yarn add @mantine/core@^7.15.0 @mantine/hooks@^7.15.0 react@^18.0.0 react-dom@^18.0.0
+yarn add @tamagui/core@^1.100.0 react@^19.0.0 react-dom@^19.0.0 react-native@>=0.73.0
 ```
 
 ## Quick Start
 
+### Web (React)
+
 1. **Install the package** (see [Installation](#installation) above)
-2. **Import a theme CSS file** in your app entry point
+2. **Import components from the web entry point**
 3. **Wrap your app** with `DesignSystemProvider`
 4. **Import and use components**
 
 ```tsx
 // main.tsx or App.tsx
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
-import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system';
+// Single import includes both typography classes and CSS variables
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
+import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/web';
 
 function App() {
   return (
@@ -59,61 +87,38 @@ function App() {
 }
 ```
 
-See [Using Themes](#using-themes) and [Available Components](#available-components) for more details.
+See [Web Usage Documentation](docs/web.md) for more details.
 
-### TypeScript configuration (tsconfig files)
+### Mobile (React Native)
 
-This repo intentionally has **three** `tsconfig` files, each with a specific role:
+1. **Install the package** (see [Installation](#installation) above)
+2. **Import components from the native entry point**
+3. **Wrap your app** with `DesignSystemProvider` to enable brand and color scheme support
+4. **Use components in your React Native app**
 
-- **`tsconfig.json`** – main project config used for builds and type-checking the library source in `src/`.
-- **`.storybook/.tsconfig.json`** – Storybook config that extends the main one and adds Storybook-specific types and options.
-- **`src/tsconfig.json`** – stories-only config so editors type-check `*.stories.tsx` files with the same settings as Storybook, avoiding false-positive JSX/`React` errors in some IDEs while keeping stories out of the main build.
+```tsx
+import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/native';
+
+function App() {
+  return (
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
+      <Button label="Click me" onPress={() => {}} />
+    </DesignSystemProvider>
+  );
+}
+```
+
+See [Mobile Usage Documentation](docs/mobile.md) for more details.
 
 ## Available Components
 
 Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
 
-### Component Categories
-
-**Core Components:**
-
-- `Button` - Interactive button component with multiple variants and colors
-- `Icon` - SVG icon component with 200+ available icons
-- `Popover` - Popover component with heading, body, and description
-
-**Typography Components:**
-
-_Editorial Headings:_
-
-- `NewsHeading` - For news article headlines
-- `NonNewsHeading` - For non-news editorial content
-- `EnterpriseHeading` - For enterprise/long-form articles
-- `OpinionHeading` - For opinion pieces
-- `EditorialSponsoredText` - Sponsored content text styling
-
-_Article Body:_
-
-- `ArticleBodyText` - Main article body text
-- `ArticleBodySponsoredText` - Sponsored article body text
-
-_Utility Typography:_
-
-- `UtilityLabel` - Labels and small text
-- `UtilityBody` - Body text for utility contexts
-- `SectionHeading` - Section-level headings (h1-h6)
-- `PageHeading` - Page-level headings
-
-**Form Components:**
-
-- `FormGroup` - Form field group container
-- `FormControl` - Form control wrapper
-- `TextInput` - Text input field
-
-### TypeScript Support
+## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.
 
-#### Export Pattern
+### Export Pattern
 
 All component exports follow a consistent pattern:
 
@@ -127,11 +132,11 @@ This means each component is exported alongside its main Props type. For example
 - `NewsHeading` and `NewsHeadingProps`
 - `Icon` and `IconProps`
 
-#### Importing Types
+### Importing Types
 
 You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.
 
-**Component Prop Types:**
+**Component Prop Types (web):**
 
 ```typescript
 import type {
@@ -141,15 +146,15 @@ import type {
   TextInputProps,
   NewsHeadingProps,
   // ... and many more
-} from '@minneapolisstartribune/design-system';
+} from '@minneapolisstartribune/design-system/web';
 ```
 
-**Using Components:**
+**Using Components (web):**
 
 You can use components directly without importing types - TypeScript will infer the types automatically:
 
 ```typescript
-import { Button } from '@minneapolisstartribune/design-system';
+import { Button } from '@minneapolisstartribune/design-system/web';
 
 // Using the component directly - no types needed!
 <Button
@@ -182,7 +187,7 @@ You only need to import prop types when you're:
 Nested types (like `ButtonColor`, `NewsHeadingImportance`, etc.) are accessible via TypeScript indexed access types:
 
 ```typescript
-import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system';
+import type { ButtonProps, NewsHeadingProps } from '@minneapolisstartribune/design-system/web';
 
 // Access nested types using indexed access
 type ButtonColor = ButtonProps['color']; // 'neutral' | 'brand' | 'brand-accent' | undefined
@@ -193,8 +198,8 @@ type NewsHeadingImportance = NewsHeadingProps['importance']; // 1 | 2 | 3 | 4 | 
 **Example: Using Types in Your Code**
 
 ```typescript
-import { Button } from '@minneapolisstartribune/design-system';
-import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system';
+import { Button } from '@minneapolisstartribune/design-system/web';
+import type { ButtonProps, Brand } from '@minneapolisstartribune/design-system/web';
 
 // Type function parameters
 function createButton(props: ButtonProps) {
@@ -215,7 +220,7 @@ interface CustomButtonProps extends ButtonProps {
 }
 ```
 
-### Versioning
+## Versioning
 
 This package follows [semantic versioning](https://semver.org/). Check your installed version:
 
@@ -233,290 +238,13 @@ npm install @minneapolisstartribune/design-system@latest
 yarn add @minneapolisstartribune/design-system@latest
 ```
 
-## Design Tokens
+## Documentation
 
-This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands.
+- **[Web Usage](docs/web.md)** - Complete guide for using the design system in web (React) applications
+- **[Mobile Usage](docs/mobile.md)** - Complete guide for using the design system in React Native applications
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
 
-### Available Themes
-
-Theme files are organized by brand and color scheme:
-
-- **Star Tribune Light** - `dist/themes/startribune-light.css`
-- **Star Tribune Dark** - `dist/themes/startribune-dark.css`
-- **Varsity Light** - `dist/themes/varsity-light.css`
-- **Varsity Dark** - `dist/themes/varsity-dark.css`
-
-### Using Themes
-
-#### Step 1: Choose Your Brand and Color Scheme
-
-You need to load the correct CSS file based on your brand and whether you're using light or dark mode, then wrap your app with `DesignSystemProvider`.
-
-**Option A: Static import (if you know the brand/theme at build time)**
-
-```tsx
-// In your main entry file (e.g., main.tsx or App.tsx)
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
-// or
-import '@minneapolisstartribune/design-system/dist/themes/startribune-dark.css';
-
-// Then wrap your app with DesignSystemProvider
-import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
-
-function App() {
-  return (
-    <DesignSystemProvider brand="startribune" forceColorScheme="light">
-      {/* Your app */}
-    </DesignSystemProvider>
-  );
-}
-```
-
-**Option B: Dynamic loading (if you need to switch themes at runtime)**
-
-```tsx
-import { useEffect, useState } from 'react';
-import { DesignSystemProvider } from '@minneapolisstartribune/design-system';
-
-function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const brand = 'startribune'; // or 'varsity'
-
-  useEffect(() => {
-    // Remove any existing theme link
-    const existingLink = document.getElementById('design-system-theme');
-    if (existingLink) {
-      existingLink.remove();
-    }
-
-    // Load the correct theme CSS
-    // Note: Adjust this path based on how your bundler resolves node_modules
-    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`
-    // For Webpack/CRA: You may need to use a dynamic import or copy files to public folder
-    const link = document.createElement('link');
-    link.id = 'design-system-theme';
-    link.rel = 'stylesheet';
-    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/themes/${brand}-${theme}.css`;
-    document.head.appendChild(link);
-
-    // Cleanup on unmount
-    return () => {
-      const linkToRemove = document.getElementById('design-system-theme');
-      if (linkToRemove) {
-        linkToRemove.remove();
-      }
-    };
-  }, [brand, theme]);
-
-  return (
-    <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-      {/* Your app with theme switcher */}
-      <button onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}>
-        Toggle Theme
-      </button>
-    </DesignSystemProvider>
-  );
-}
-```
-
-**Using CSS variables in your styles:**
-
-All themes include the same token names, so you can use CSS variables in your CSS modules or inline styles:
-
-```css
-/* In your CSS module or stylesheet */
-.my-component {
-  background: var(--color-brand-primary-strib-emerald-green);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-subtle);
-}
-```
-
-### Using React Components
-
-If you're using the design system's React components, you need to:
-
-1. **Load the theme CSS file** (see above)
-2. **Wrap your app with `DesignSystemProvider`**
-3. **Import and use components**
-
-#### Basic Example
-
-```tsx
-import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
-
-function App() {
-  return (
-    <DesignSystemProvider brand="startribune" forceColorScheme="light">
-      <Button label="Click me" onClick={() => {}} />
-    </DesignSystemProvider>
-  );
-}
-```
-
-**Analytics (optional):** Components emit tracking events on interaction. Wrap with `AnalyticsProvider` and pass your `onTrackingEvent` handler to plug in GA4, Piano, etc. See [docs/analytics-integration.md](docs/analytics-integration.md).
-
-#### Typography Components Example
-
-```tsx
-import {
-  DesignSystemProvider,
-  NewsHeading,
-  ArticleBodyText,
-  SectionHeading,
-} from '@minneapolisstartribune/design-system';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
-
-function Article() {
-  return (
-    <DesignSystemProvider brand="startribune" forceColorScheme="light">
-      <article>
-        <NewsHeading importance={1}>Article Title</NewsHeading>
-        <SectionHeading importance={2}>Section Title</SectionHeading>
-        <ArticleBodyText>
-          This is the article body text with proper typography styling.
-        </ArticleBodyText>
-      </article>
-    </DesignSystemProvider>
-  );
-}
-```
-
-#### Form Components Example
-
-```tsx
-import {
-  DesignSystemProvider,
-  FormGroup,
-  FormControl,
-  TextInput,
-} from '@minneapolisstartribune/design-system';
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
-
-function ContactForm() {
-  return (
-    <DesignSystemProvider brand="startribune" forceColorScheme="light">
-      <FormGroup>
-        <FormControl>
-          <TextInput label="Name" placeholder="Enter your name" />
-        </FormControl>
-        <FormControl>
-          <TextInput label="Email" type="email" placeholder="Enter your email" />
-        </FormControl>
-      </FormGroup>
-    </DesignSystemProvider>
-  );
-}
-```
-
-**Important notes:**
-
-- The `brand` prop must match the CSS file you imported (`'startribune'` or `'varsity'`)
-- The `forceColorScheme` prop must match the CSS file (`'light'` or `'dark'`)
-- If you want to switch themes dynamically, use the dynamic loading approach shown above
-- The CSS file must be loaded **before** components render, or CSS variables will be undefined
-- Fonts are automatically loaded by `DesignSystemProvider` - no manual font loading needed
-
-### Quick Reference: Setup Checklist
-
-**For React apps using Mantine components:**
-
-- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
-- [ ] Wrap your app with `<DesignSystemProvider brand="..." forceColorScheme="...">`
-- [ ] Ensure `brand` prop matches the CSS file brand (`'startribune'` or `'varsity'`)
-- [ ] Ensure `forceColorScheme` prop matches the CSS file (`'light'` or `'dark'`)
-- [ ] Load CSS **before** components render (import at top of entry file)
-
-**For CSS-only usage:**
-
-- [ ] Import the correct theme CSS file: `{brand}-{colorScheme}.css`
-- [ ] Use CSS variables in your styles: `var(--color-*)`
-- [ ] Switch themes by changing the import path
-
-**Verifying it works:**
-
-1. Open browser DevTools
-2. Check that CSS variables exist: `getComputedStyle(document.documentElement).getPropertyValue('--color-icon-on-light-primary')`
-3. Should return a color value (not empty string)
-4. For React apps, check that components render with correct colors
-5. Inspect the `<html>` element in DevTools - you should see CSS custom properties (variables) defined
-6. Check the Network tab to ensure the theme CSS file loaded successfully
-
-## Font Loading
-
-Fonts are automatically loaded by `DesignSystemProvider` when your app renders. The provider handles brand-specific font loading internally.
-
-If you need manual font loading (e.g., for non-React usage), you can use the exported utilities:
-
-```tsx
-import { getBrandFontPath, loadBrandFonts } from '@minneapolisstartribune/design-system';
-
-// Load fonts for a specific brand
-loadBrandFonts('startribune');
-
-// Get the font path for a brand
-const fontPath = getBrandFontPath('startribune');
-```
-
-## Troubleshooting
-
-### CSS Variables Not Loading
-
-**Symptoms:** Components appear unstyled or with default browser styles.
-
-**Solutions:**
-
-1. Verify the theme CSS file is imported before components render
-2. Check the Network tab to ensure the CSS file loaded (look for `{brand}-{colorScheme}.css`)
-3. Ensure the import path is correct: `@minneapolisstartribune/design-system/dist/themes/{brand}-{colorScheme}.css`
-4. For dynamic loading, verify the link element is added to `<head>` before React renders
-
-### Theme Not Applying
-
-**Symptoms:** Components render but don't match the expected theme colors.
-
-**Solutions:**
-
-1. Verify `brand` prop matches the CSS file brand (`'startribune'` or `'varsity'`)
-2. Verify `forceColorScheme` prop matches the CSS file (`'light'` or `'dark'`)
-3. Check that `DesignSystemProvider` wraps all components that need theming
-4. Inspect computed styles in DevTools to see if CSS variables are defined
-
-### Component Styling Issues
-
-**Symptoms:** Components render but styling looks wrong.
-
-**Solutions:**
-
-1. Ensure `DesignSystemProvider` is wrapping your components
-2. Verify you're using the correct brand/theme combination
-3. Check that Mantine peer dependencies are installed and compatible
-4. Clear your build cache and rebuild: `rm -rf node_modules/.cache && yarn build` (or `npm run build`)
-
-### Build/Bundler Configuration Issues
-
-**Symptoms:** Import errors or CSS not being processed.
-
-**Solutions:**
-
-1. **Vite:** No special configuration needed - CSS imports work out of the box
-2. **Webpack/CRA:** May need to configure CSS loader. Ensure CSS files in `node_modules` are processed
-3. **TypeScript:** Ensure `@minneapolisstartribune/design-system` is in your `tsconfig.json` types
-4. **Module resolution:** Verify your bundler can resolve packages from GitHub Packages registry
-
-### Authentication Issues
-
-**Symptoms:** `npm install` or `yarn add` fails with 404 or authentication errors.
-
-**Solutions:**
-
-1. Verify your `.npmrc` or `.yarnrc` is configured correctly (see [Installation](#installation))
-2. Check that your GitHub token has `read:packages` scope
-3. Ensure the token hasn't expired
-4. For CI/CD, verify the token is set as a secret/environment variable
-
-### Still Having Issues?
+## Still Having Issues?
 
 - Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples
 - Review component source code in the repository

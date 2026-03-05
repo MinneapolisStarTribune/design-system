@@ -28,7 +28,19 @@
 
    **Why this matters:** The design system uses a release branch workflow where features are developed on release branches (e.g., `release/v1.0`), not directly on `main`. The workflow helpers make it easy to create branches, sync with releases, and push changes. If you skip this step, you'll need to manually manage branches and may encounter merge conflicts.
 
-4. **Verify your setup:**
+4. **Generate Tamagui themes (required once per clone, and whenever tokens change):**
+
+   The Tamagui config and providers import generated theme modules from `src/generated/themes/*.ts`.
+   These files are **not committed** and must be generated locally:
+
+   ```bash
+   yarn tokens:tamagui
+   ```
+
+   Note: `yarn test` and `yarn test:a11y` automatically run `yarn tokens:tamagui` first via
+   `pretest`/`pretest:a11y` scripts, but running it explicitly is helpful after token changes.
+
+5. **Verify your setup:**
 
    ```bash
    # Run tests to make sure everything works
@@ -157,7 +169,9 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 
 - `yarn dev` - Start development server (if configured)
 - `yarn storybook` - Start Storybook development server on port 6006. Automatically builds tokens/icons if needed. Use this for visual component development.
-- `yarn build` - Build the package for production. Runs token generation, icon mapping, and Mantine token generation, then builds the package to `/dist`.
+- `yarn build` - Build the package for production. Runs token generation, Tamagui theme generation, and icon mapping, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
+- `yarn build:web` - Build only the web bundle to `/dist/web`
+- `yarn build:native` - Build only the native bundle to `/dist/mobile`
 - `yarn test` - Run all tests (unit + accessibility) once
 - `yarn test:watch` - Run tests in watch mode (re-runs on file changes)
 - `yarn test:coverage` - Run tests with coverage report
@@ -171,7 +185,7 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 **Token & Asset Generation:**
 
 - `yarn tokens` - Generate design tokens from JSON files in `/tokens` to `/build`
-- `yarn tokens:mantine` - Generate Mantine-specific token files
+- `yarn tokens:tamagui` - Generate Tamagui-specific theme files in `src/generated/themes/*.ts`
 - `yarn icons` - Generate icon mapping files from SVG files
 - `yarn fonts:fetch` - Attempt to fetch fonts from CDN (optional)
 
@@ -207,9 +221,17 @@ yarn icons              # Regenerate icon mapping
 yarn storybook          # Restart Storybook to see new icons
 ```
 
+## TypeScript configuration (tsconfig files)
+
+This repo intentionally has **three** `tsconfig` files, each with a specific role:
+
+- **`tsconfig.json`** – main project config used for builds and type-checking the library source in `src/`.
+- **`.storybook/.tsconfig.json`** – Storybook config that extends the main one and adds Storybook-specific types and options.
+- **`src/tsconfig.json`** – stories-only config so editors type-check `*.stories.tsx` files with the same settings as Storybook, avoiding false-positive JSX/`React` errors in some IDEs while keeping stories out of the main build.
+
 ## Design Tokens
 
-This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Mantine theme configurations.
+This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Tamagui theme modules.
 
 ### Token File Structure
 
@@ -272,12 +294,12 @@ Style Dictionary transforms token JSON into CSS custom properties:
 
 Theme files are generated from tokens and organized by brand and color scheme:
 
-- **Star Tribune Light** - `dist/themes/startribune-light.css`
-- **Star Tribune Dark** - `dist/themes/startribune-dark.css`
-- **Varsity Light** - `dist/themes/varsity-light.css`
-- **Varsity Dark** - `dist/themes/varsity-dark.css`
+- **Star Tribune Light** - `dist/themes/startribune-light.css` (CSS) and `src/generated/themes/startribune.light.ts` (TypeScript for Tamagui)
+- **Star Tribune Dark** - `dist/themes/startribune-dark.css` and `src/generated/themes/startribune.dark.ts`
+- **Varsity Light** - `dist/themes/varsity-light.css` and `src/generated/themes/varsity.light.ts`
+- **Varsity Dark** - `dist/themes/varsity-dark.css` and `src/generated/themes/varsity.dark.ts`
 
-Each theme file contains all CSS variables for that brand/color scheme combination.
+Each CSS theme file contains all CSS variables for that brand/color scheme combination. The TypeScript theme files are consumed by `tamagui.config.ts`.
 
 ### Font Tokens
 
@@ -301,12 +323,10 @@ See [tokens/fonts/README.md](tokens/fonts/README.md) for complete font token det
 2. **Run `yarn tokens`** to regenerate token outputs to `/build`
    - This generates CSS files, TypeScript types, and other outputs
    - Files go to `/build` for development use
-3. **For Mantine tokens**, also run `yarn tokens:mantine`
-   - Generates Mantine-specific theme configuration
-4. **Restart Storybook** to see token changes: `yarn storybook`
-5. **Run `yarn build`** to include tokens in `/dist` (published package)
+3. **Restart Storybook** to see token changes: `yarn storybook`
+4. **Run `yarn build`** to include tokens in `/dist` (published package)
    - Only needed before publishing or to verify the full build
-6. **Make sure to get a review from UX in Github in your PR!**
+5. **Make sure to get a review from UX in Github in your PR!**
 
 **Development workflow:**
 
@@ -413,7 +433,7 @@ When you publish a release, GitHub Actions will:
 
 1. ✅ Extract version from your tag (e.g., `v0.1.0` → `0.1.0`)
 2. ✅ Update `package.json` with the new version
-3. ✅ Build the package (includes token generation, icon mapping, Mantine tokens)
+3. ✅ Build the package (includes token generation, icon mapping, Tamagui tokens)
 4. ✅ Publish to GitHub Packages (consuming apps can then install this version)
 5. ✅ Commit the version bump back to `main`
 

@@ -4,27 +4,44 @@ const fs = require('fs');
 const typographyClassesFormat = require('../formats/typography-classes');
 
 /**
- * Build Editorial Typography Classes for a Brand
+ * Build Typography Classes for a Brand
  *
- * Generates CSS classes from typography.editorial tokens only.
- * Output goes to dist/fonts/editorial/. Utility typography is built separately to dist/fonts/utility/.
+ * Generates CSS classes from both typography.editorial and typography.utility tokens.
+ * Combines editorial and utility typography into a single CSS file.
+ * Output goes to dist/web/fonts/{brand}.css.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
- * @returns {Promise<void>} Resolves when editorial typography classes are built
+ * @returns {Promise<void>} Resolves when typography classes are built
  */
 async function buildTypographyClasses(brand) {
-  console.log(`\nBuilding editorial typography classes for ${brand}...`);
+  console.log(`\nBuilding typography classes (editorial + utility) for ${brand}...`);
 
+  // Load all typography source files: editorial, utility shared, and utility brand-specific
   const sourceFiles = [
     'tokens/text.json',
     `tokens/typography/editorial/${brand}.json`,
+    'tokens/typography/utility/shared.json',
+    `tokens/typography/utility/${brand}.json`,
   ];
 
+  // Check if required files exist
   const editorialFile = path.join(process.cwd(), `tokens/typography/editorial/${brand}.json`);
+  const sharedUtilityFile = path.join(process.cwd(), 'tokens/typography/utility/shared.json');
 
-  if (!fs.existsSync(editorialFile)) {
-    console.log(`⚠️  No editorial typography file found for ${brand}, skipping...`);
+  const hasEditorial = fs.existsSync(editorialFile);
+  const hasUtility = fs.existsSync(sharedUtilityFile);
+
+  if (!hasEditorial && !hasUtility) {
+    console.log(`⚠️  No typography files found for ${brand}, skipping...`);
     return;
+  }
+
+  if (!hasEditorial) {
+    console.log(`⚠️  No editorial typography file found for ${brand}, continuing with utility only...`);
+  }
+
+  if (!hasUtility) {
+    console.log(`⚠️  No shared utility typography found, continuing with editorial only...`);
   }
 
   // Filter out non-existent files
@@ -44,7 +61,7 @@ async function buildTypographyClasses(brand) {
     platforms: {
       css: {
         transformGroup: 'css',
-        buildPath: 'dist/fonts/editorial/',
+        buildPath: 'dist/web/fonts/',
         files: [
           {
             destination: `${brand}.css`,
@@ -65,7 +82,7 @@ async function buildTypographyClasses(brand) {
   const sd = new StyleDictionary(config);
   await sd.buildAllPlatforms();
 
-  console.log(`✓ ${brand} typography classes built`);
+  console.log(`✓ ${brand} typography classes built → dist/web/fonts/${brand}.css`);
 }
 
 module.exports = buildTypographyClasses;

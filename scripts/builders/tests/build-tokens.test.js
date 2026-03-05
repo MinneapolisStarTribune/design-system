@@ -8,7 +8,7 @@
  * - Includes expected token values
  * 
  * Note: These tests run in Node.js environment (not jsdom) since they test
- * file system operations and script execution. This prevents React/Mantine
+ * file system operations and script execution. This prevents React/Tamagui
  * from being loaded, which would cause errors since we're not rendering components.
  * 
  * @vitest-environment node
@@ -25,8 +25,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 describe('build-tokens.js', () => {
-  const projectRoot = path.join(__dirname, '..');
-  const themesDir = path.join(projectRoot, 'dist', 'themes');
+  const projectRoot = path.join(__dirname, '..', '..', '..');
+  const webDir = path.join(projectRoot, 'dist', 'web');
   const expectedFiles = [
     'startribune-light.css',
     'startribune-dark.css',
@@ -35,10 +35,10 @@ describe('build-tokens.js', () => {
   ];
 
   beforeEach(() => {
-    // Clean up any existing theme files before tests
-    if (fs.existsSync(themesDir)) {
+    // Clean up any existing combined CSS files before tests
+    if (fs.existsSync(webDir)) {
       expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
         }
@@ -48,9 +48,9 @@ describe('build-tokens.js', () => {
 
   afterEach(() => {
     // Clean up generated files after tests
-    if (fs.existsSync(themesDir)) {
+    if (fs.existsSync(webDir)) {
       expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
         }
@@ -61,20 +61,20 @@ describe('build-tokens.js', () => {
   describe('File Generation', () => {
     it('generates all expected CSS files', () => {
       // Run the build script
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      // Verify all expected files exist
+      // Verify all expected combined CSS files exist
       expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         expect(fs.existsSync(filePath)).toBe(true);
       });
     });
 
     it('generates files with correct naming pattern', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         expect(fs.existsSync(filePath)).toBe(true);
         
         // Verify naming pattern: {brand}-{mode}.css
@@ -86,16 +86,19 @@ describe('build-tokens.js', () => {
   });
 
   describe('CSS File Format', () => {
-    it('generates valid CSS with :root selector', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+    it('generates valid combined CSS with :root selector and typography classes', () => {
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         const content = fs.readFileSync(filePath, 'utf-8');
 
-        // Should contain :root selector
+        // Should contain :root selector (from themes)
         expect(content).toContain(':root {');
         expect(content).toContain('}');
+
+        // Should contain typography classes (from fonts)
+        expect(content).toMatch(/\.typography-(editorial|utility)-/);
 
         // Should have header comment
         expect(content).toContain('Do not edit directly');
@@ -104,9 +107,9 @@ describe('build-tokens.js', () => {
     });
 
     it('generates CSS variables with correct format', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should contain CSS variable declarations
@@ -123,9 +126,9 @@ describe('build-tokens.js', () => {
     });
 
     it('removes duplicate color- prefixes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should not contain duplicate color-color- prefix
@@ -135,9 +138,9 @@ describe('build-tokens.js', () => {
 
   describe('Token Content', () => {
     it('includes base color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should include base colors
@@ -146,9 +149,9 @@ describe('build-tokens.js', () => {
     });
 
     it('includes icon color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'varsity-dark.css');
+      const filePath = path.join(webDir, 'varsity-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should include icon color tokens
@@ -156,9 +159,9 @@ describe('build-tokens.js', () => {
     });
 
     it('includes button color tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should include button color tokens
@@ -166,18 +169,18 @@ describe('build-tokens.js', () => {
     });
 
     it('includes spacing tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-dark.css');
+      const filePath = path.join(webDir, 'startribune-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       expect(content.length).toBeGreaterThan(100);
     });
 
     it('includes font-family tokens', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Should include font-family tokens
@@ -190,9 +193,9 @@ describe('build-tokens.js', () => {
 
   describe('Token Reference Resolution', () => {
     it('resolves font.family.graphik-compact token reference correctly', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'startribune-light.css');
+      const filePath = path.join(webDir, 'startribune-light.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Extract the font-family-graphik-compact value
@@ -211,7 +214,7 @@ describe('build-tokens.js', () => {
     });
 
     it('resolves all font-family token references across all themes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
       const testFiles = [
         'startribune-light.css',
@@ -221,7 +224,7 @@ describe('build-tokens.js', () => {
       ];
 
       testFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
+        const filePath = path.join(webDir, file);
         const content = fs.readFileSync(filePath, 'utf-8');
 
         // Verify graphik-compact token exists in all themes
@@ -241,9 +244,9 @@ describe('build-tokens.js', () => {
     });
 
     it('resolves token references with correct format', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const filePath = path.join(themesDir, 'varsity-dark.css');
+      const filePath = path.join(webDir, 'varsity-dark.css');
       const content = fs.readFileSync(filePath, 'utf-8');
 
       // Verify all font-family tokens are properly formatted
@@ -271,10 +274,10 @@ describe('build-tokens.js', () => {
 
   describe('Brand and Mode Differences', () => {
     it('generates different content for different brands', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const startribunePath = path.join(themesDir, 'startribune-light.css');
-      const varsityPath = path.join(themesDir, 'varsity-light.css');
+      const startribunePath = path.join(webDir, 'startribune-light.css');
+      const varsityPath = path.join(webDir, 'varsity-light.css');
 
       const startribuneContent = fs.readFileSync(startribunePath, 'utf-8');
       const varsityContent = fs.readFileSync(varsityPath, 'utf-8');
@@ -290,10 +293,10 @@ describe('build-tokens.js', () => {
     });
 
     it('generates different content for light vs dark modes', () => {
-      execSync('node scripts/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
+      execSync('node scripts/builders/build-tokens.js', { cwd: projectRoot, stdio: 'pipe' });
 
-      const lightPath = path.join(themesDir, 'startribune-light.css');
-      const darkPath = path.join(themesDir, 'startribune-dark.css');
+      const lightPath = path.join(webDir, 'startribune-light.css');
+      const darkPath = path.join(webDir, 'startribune-dark.css');
 
       const lightContent = fs.readFileSync(lightPath, 'utf-8');
       const darkContent = fs.readFileSync(darkPath, 'utf-8');
@@ -321,7 +324,7 @@ describe('build-tokens.js', () => {
       // In a real scenario, you might want to test with invalid token files
 
       // Verify the script has error handling
-      const scriptPath = path.join(__dirname, 'build-tokens.js');
+      const scriptPath = path.join(__dirname, '..', 'build-tokens.js');
       const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
       
       expect(scriptContent).toContain('.catch(');
