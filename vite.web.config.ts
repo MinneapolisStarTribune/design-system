@@ -78,9 +78,10 @@ export default defineConfig({
     outDir: 'dist/web',
     lib: {
       entry: 'src/index.web.ts',
-      formats: ['es'],
+      // Emit both ESM and CJS bundles so consumers can use either `import` or `require`.
+      formats: ['es', 'cjs'],
       name: 'DesignSystem',
-      fileName: () => 'design-system.es.js',
+      fileName: (format) => (format === 'cjs' ? 'design-system.cjs.js' : 'design-system.es.js'),
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
