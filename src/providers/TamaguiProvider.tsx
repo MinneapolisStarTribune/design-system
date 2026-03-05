@@ -3,6 +3,7 @@ import { TamaguiProvider } from '@tamagui/core';
 import { config } from '../../tamagui.config';
 import { Brand, ColorScheme } from './theme-helpers';
 import { BrandContext } from './brand/BrandContext';
+import { BrandWrapper } from './brand/BrandWrapper';
 import { loadBrandFonts } from '../styles/fonts';
 
 export type { Brand };
@@ -54,7 +55,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   return (
     <BrandContext.Provider value={brand}>
       <TamaguiProvider config={config} defaultTheme={themeName}>
-        {children}
+        <BrandWrapper brand={brand}>{children}</BrandWrapper>
       </TamaguiProvider>
     </BrandContext.Provider>
   );
