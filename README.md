@@ -74,7 +74,8 @@ yarn add @tamagui/core@^1.100.0 react@^19.0.0 react-dom@^19.0.0 react-native@>=0
 
 ```tsx
 // main.tsx or App.tsx
-import '@minneapolisstartribune/design-system/dist/themes/startribune-light.css';
+// Single import includes both typography classes and CSS variables
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
 import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/web';
 
 function App() {
