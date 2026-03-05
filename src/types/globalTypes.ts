@@ -12,7 +12,9 @@ export type VariantProps<Color extends string, Variant extends string> = {
 
 export type AccessibilityProps = {
   'aria-label'?: string;
+  'aria-labelledby'?: string;
   'aria-describedby'?: string;
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
   'aria-hidden'?: boolean;
 };
 

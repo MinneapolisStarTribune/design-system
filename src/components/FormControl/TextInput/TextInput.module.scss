@@ -1,0 +1,144 @@
+/* TextInput component - single-line text input for names, emails, etc. */
+/* Uses design tokens for colors, spacing, typography */
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  background-color: var(--color-background-light-default);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  /* Size variants - control height and padding */
+  &.small {
+    height: 32px;
+    min-height: 32px;
+    padding: 0 var(--spacing-12);
+  }
+
+  &.medium {
+    height: 40px;
+    min-height: 40px;
+    padding: 0 var(--spacing-16);
+  }
+
+  &.large {
+    height: 52px;
+    min-height: 52px;
+    padding: 0 var(--spacing-24);
+  }
+
+  /* Border radius variants */
+  &.rounded {
+    border-radius: var(--radius-full);
+  }
+
+  &:not(.rounded) {
+    border-radius: var(--radius-4);
+  }
+
+  /* Hover - subtle border change */
+  &:hover:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-light-subtle-02);
+  }
+
+  /* Focus - focus ring for accessibility (keyboard focus only via :focus-visible) */
+  &:focus-within .input:focus-visible {
+    outline: none;
+  }
+
+  &:has(.input:focus-visible) {
+    border-color: var(--color-border-state-focus);
+    box-shadow: 0 0 0 2px var(--color-border-state-focus);
+  }
+
+  /* Filled - subtle visual indication when value present */
+  &.filled:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-light-strong-01);
+  }
+
+  /* Error state - red border, only when error is present */
+  &.error:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-state-attention-on-light);
+  }
+
+  &.error {
+    border-color: var(--color-border-state-attention-on-light);
+  }
+
+  /* Success state - green border */
+  &.success:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-brand-01);
+  }
+
+  &.success {
+    border-color: var(--color-border-brand-01);
+  }
+
+  /* Disabled state */
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: var(--color-border-state-disabled-on-light);
+    background-color: var(--color-background-light-gray-01);
+  }
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--color-text-on-light-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-on-light-tertiary);
+  }
+
+  /* Size variants - font size (padding from wrapper) */
+  .wrapper.small & {
+    font-size: 14px;
+  }
+
+  .wrapper.medium & {
+    font-size: 16px;
+  }
+
+  .wrapper.large & {
+    font-size: 18px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--color-text-state-disabled-on-light);
+  }
+}
+
+/* Icon container - leading or trailing */
+.iconStart,
+.iconEnd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-on-light-tertiary);
+  pointer-events: none;
+}
+
+.iconStart {
+  margin-right: var(--spacing-8);
+}
+
+.iconEnd {
+  margin-left: var(--spacing-8);
+}
+
+/* Icon inherits size from Icon component (x-small/small/medium based on input size) */
