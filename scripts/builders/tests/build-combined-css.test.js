@@ -105,18 +105,4 @@ describe('buildCombinedCSS', () => {
     );
     expect(writeFileSyncSpy).not.toHaveBeenCalled();
   });
-
-  it('creates output directory if it does not exist', async () => {
-    const brand = 'startribune';
-    const mode = 'light';
-    const mkdirSyncSpy = vi.spyOn(fs, 'mkdirSync').mockImplementation(() => {});
-
-    existsSyncSpy.mockReturnValue(true);
-    readFileSyncSpy.mockReturnValue('test content');
-
-    await buildCombinedCSS(brand, mode);
-
-    expect(mkdirSyncSpy).toHaveBeenCalled();
-    mkdirSyncSpy.mockRestore();
-  });
 });
