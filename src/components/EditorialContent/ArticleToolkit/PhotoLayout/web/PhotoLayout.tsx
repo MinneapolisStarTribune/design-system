@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
 import classNames from 'classnames';
+import { Image } from '@/components/index.web';
+import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
 import styles from './PhotoLayout.module.scss';
-import { Image } from '@/components';
 
 export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
   caption?: string;
