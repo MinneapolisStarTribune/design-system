@@ -39,7 +39,7 @@ export function validateComponentForBrand(componentName: ComponentName, brand: B
   const unsupportedComponents = getUnsupportedComponentsForBrand(brand);
 
   if (unsupportedComponents.includes(componentName)) {
-    const supportedBrands = getSupportedBrandsForComponent(componentName);
+    const _supportedBrands = getSupportedBrandsForComponent(componentName);
 
     throw new Error(
       createDesignSystemError(
