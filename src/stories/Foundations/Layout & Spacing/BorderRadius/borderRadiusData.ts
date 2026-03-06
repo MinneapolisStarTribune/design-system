@@ -2,12 +2,12 @@ import borderRadiusJson from '../../../../../tokens/primitives/border-radius.jso
 
 export interface BorderRadiusData {
   name: string;
-  value: string;
+  value: number;
   tokenName: string;
 }
 
 interface RadiusToken {
-  value: string;
+  value: number;
 }
 
 interface BorderRadiusJson {
@@ -34,8 +34,6 @@ export const borderRadiusTokens: BorderRadiusData[] = typedBorderRadiusJson?.rad
         // Sort by numeric value, with 'full' at the end
         if (a.name === 'full') return 1;
         if (b.name === 'full') return -1;
-        const aNum = parseInt(a.value);
-        const bNum = parseInt(b.value);
-        return bNum - aNum; // Descending order (largest first)
+        return b.value - a.value; // Descending order (largest first)
       })
   : [];
