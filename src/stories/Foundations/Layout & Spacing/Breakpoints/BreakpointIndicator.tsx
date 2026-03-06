@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import layoutJson from '../../../../../tokens/breakpoint.json';
+import layoutJson from '../../../../../tokens/primitives/breakpoint.json';
 
 export const BreakpointIndicator: React.FC = () => {
   const [breakpoint, setBreakpoint] = useState('');
