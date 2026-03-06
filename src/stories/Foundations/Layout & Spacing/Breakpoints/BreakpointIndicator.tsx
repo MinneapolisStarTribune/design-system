@@ -6,12 +6,12 @@ export const BreakpointIndicator: React.FC = () => {
   const [viewportWidth, setViewportWidth] = useState(0);
   const [color, setColor] = useState('#1683F8');
 
-  const largeMin = parseInt(layoutJson.breakpoint.large.min.value);
-  const largeMax = parseInt(layoutJson.breakpoint.large.max.value);
-  const mediumMin = parseInt(layoutJson.breakpoint.medium.min.value);
-  const mediumMax = parseInt(layoutJson.breakpoint.medium.max.value);
-  const smallMin = parseInt(layoutJson.breakpoint.small.min.value);
-  const smallMax = parseInt(layoutJson.breakpoint.small.max.value);
+  const largeMin = Number(layoutJson.breakpoint.large.min.value);
+  const largeMax = Number(layoutJson.breakpoint.large.max.value);
+  const mediumMin = Number(layoutJson.breakpoint.medium.min.value);
+  const mediumMax = Number(layoutJson.breakpoint.medium.max.value);
+  const smallMin = Number(layoutJson.breakpoint.small.min.value);
+  const smallMax = Number(layoutJson.breakpoint.small.max.value);
 
   useEffect(() => {
     const updateBreakpoint = () => {

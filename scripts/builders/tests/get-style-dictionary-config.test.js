@@ -27,14 +27,14 @@ describe('getStyleDictionaryConfig', () => {
 
     // Verify config structure
     expect(config.log.verbosity).toBe('verbose');
-    expect(config.platforms.css.transformGroup).toBe('css');
+    expect(config.platforms.css.transformGroup).toBe('web');
     expect(config.platforms.css.buildPath).toBe('dist/web/themes/');
     expect(config.platforms.css.files[0].destination).toBe('startribune-light.css');
     expect(config.platforms.javascript.buildPath).toBe('dist/mobile/themes/');
     expect(config.platforms.javascript.files[0].destination).toBe('startribune-light.js');
 
     // Verify source files
-    expect(config.source).toHaveLength(7);
+    expect(config.source).toHaveLength(8);
     expect(config.source).toContain('tokens/primitives/color.json');
     expect(config.source).toContain('tokens/color/button-light.json');
     expect(config.source).toContain('tokens/color/brand-startribune-light.json');
@@ -56,7 +56,7 @@ describe('getStyleDictionaryConfig', () => {
 
   it('throws error when required files are missing', () => {
     existsSyncSpy.mockImplementation((filePath) => {
-      return !filePath.includes('global.json');
+      return !filePath.includes('tokens/primitives/color.json');
     });
 
     expect(() => {
