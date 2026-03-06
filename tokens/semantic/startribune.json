@@ -1,0 +1,8 @@
+{
+  "semantic": {
+    "photo-layout-border-radius": {
+      "description": "Border radius for photo layout components - Star Tribune uses pointy corners",
+      "value": "{radius.none}"
+    }
+  }
+}
