@@ -6,7 +6,7 @@
 export { CodeBlock, type CodeBlockProps } from './CodeBlock/CodeBlock';
 export { ImageGallery, type ImageGalleryProps } from './ImageGallery/ImageGallery';
 export { InlineVideo, type InlineVideoProps } from './InlineVideo/InlineVideo';
-export { PhotoLayout, type PhotoLayoutProps } from './PhotoLayout/PhotoLayout';
+export { PhotoLayout, type PhotoLayoutProps } from './PhotoLayout/web/PhotoLayout';
 export { PullQuote, type PullQuoteProps } from './PullQuote/PullQuote';
 export { SocialEmbeds, type SocialEmbedsProps } from './SocialEmbeds/SocialEmbeds';
 export {

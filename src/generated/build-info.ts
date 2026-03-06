@@ -4,7 +4,7 @@
  * Only regenerated when token sources change (tokens/color/*.json, etc.).
  */
 export const buildInfo = {
-  buildTime: '2026-03-03T05:58:12.879Z',
-  version: '0.1.3',
-  tokenSourceHash: 'cda3ed6d134dbad0814cdef15dd588c4224218434e32b72478be83e5ae708514',
+  buildTime: '2026-03-05T05:42:29.637Z',
+  version: '1.0.1',
+  tokenSourceHash: 'ae0219f2fd41f2e93a47147ba36d3bb6896c1e3768841c8caa2afda31be6bdfe',
 } as const;
