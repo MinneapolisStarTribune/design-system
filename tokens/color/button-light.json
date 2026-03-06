@@ -21,6 +21,24 @@
         "utility-hover-text": { "value": "{color.neutral.950}" },
         "utility-text": { "value": "{color.neutral.800}" }
       }
+    },
+    "utility": {
+      "border-default": { "value": "{color.neutral.200}" },
+      "border-hover": { "value": "{color.neutral.950}" },
+      "foreground-default": { "value": "{color.neutral.800}" },
+      "foreground-hover": { "value": "{color.neutral.950}" }
+    },
+    "utility-toggle": {
+      "inactive-border-default": { "value": "{color.neutral.200}"},
+      "inactive-border-hover": { "value": "{color.neutral.950}"},
+      "inactive-text-default": { "value": "{color.neutral.800}"},
+      "inactive-text-hover": { "value": "{color.neutral.950}"},
+      "inactive-icon-default": { "value": "{color.neutral.800}"},
+      "inactive-icon-hover": { "value": "{color.neutral.950}"},
+      "active-border-default": { "value": "{color.neutral.200}"},
+      "active-border-hover": { "value": "{color.neutral.950}"},
+      "active-text-default": { "value": "{color.neutral.800}"},
+      "active-text-hover": { "value": "{color.neutral.950}"}
     }
   }
 }
