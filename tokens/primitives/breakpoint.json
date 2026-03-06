@@ -2,27 +2,27 @@
   "breakpoint": {
     "large": {
       "columns": { "value": "12" },
-      "container-max": { "value": "1080px" },
-      "gutter": { "value": "24px" },
+      "container-max": { "type": "dimension", "value": 1080 },
+      "gutter": { "type": "dimension", "value": 24 },
       "margin": { "value": "flex" },
-      "max": { "value": "1600px" },
-      "min": { "value": "1160px" }
+      "max": { "type": "dimension", "value": 1600 },
+      "min": { "type": "dimension", "value": 1160 }
     },
     "medium": {
       "columns": { "value": "8" },
       "container-max": { "value": "none" },
-      "gutter": { "value": "20px" },
-      "margin": { "value": "24px" },
-      "max": { "value": "1159px" },
-      "min": { "value": "768px" }
+      "gutter": { "type": "dimension", "value": 20 },
+      "margin": { "type": "dimension", "value": 24 },
+      "max": { "type": "dimension", "value": 1159 },
+      "min": { "type": "dimension", "value": 768 }
     },
     "small": {
       "columns": { "value": "8" },
       "container-max": { "value": "none" },
-      "gutter": { "value": "12px" },
-      "margin": { "value": "16px" },
-      "max": { "value": "767px" },
-      "min": { "value": "320px" }
+      "gutter": { "type": "dimension", "value": 12 },
+      "margin": { "type": "dimension", "value": 16 },
+      "max": { "type": "dimension", "value": 767 },
+      "min": { "type": "dimension", "value": 320 }
     }
   }
 }

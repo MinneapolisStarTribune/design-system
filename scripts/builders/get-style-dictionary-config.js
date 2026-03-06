@@ -90,7 +90,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
     
     // Source files to read tokens from (in order - later files can override earlier ones)
     source: sourceFiles,
-    
+
     // Custom format registration
     // This tells Style Dictionary to use our custom format functions
     hooks: {
@@ -102,7 +102,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
       css: {
         // Use CSS transform group - handles token reference resolution
         // This automatically resolves {color.neutral.500} references to actual hex values
-        transformGroup: 'css',
+        transformGroup: 'web',
         
         // Output directory for generated CSS files
         buildPath: `dist/web/themes/`,
@@ -116,15 +116,15 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
             
             // Use our custom format function
             format: 'css/variables',
+            "options": {
+              "outputReferences": true
+            }
           },
         ],
       },
       javascript: {
-        transformGroup: 'js',
-        // The pxToNumber transform removes 'px' from dimension values for React Native compatibility
-        transforms: [
-          'size/pxToNumber', // Custom transform: converts "14px" to 14 for React Native
-        ],
+        // Use JS transform group - Style Dictionary preserves numbers natively as numbers
+        transformGroup: 'react-native',
         
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
