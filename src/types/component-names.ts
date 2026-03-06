@@ -7,6 +7,7 @@
 export const COMPONENT_NAMES = [
   'ArticleBodySponsoredHeading',
   'ArticleBodyHeading',
+  'ArticleQuote',
   'NewsHeading',
   'NonNewsHeading',
   'EnterpriseHeading',
