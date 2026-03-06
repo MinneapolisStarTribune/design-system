@@ -280,16 +280,6 @@
         "value": "{color.neutral.600}"
       }
     },
-    "utility-toggle": {
-      "active-icon-default": {
-        "description": "Default icon color for active utility toggle controls on dark backgrounds.",
-        "value": "{color.cobalt-blue.600}"
-      },
-      "active-icon-hover": {
-        "description": "Hover icon color for active utility toggle controls on dark backgrounds.",
-        "value": "{color.cobalt-blue.600}"
-      }
-    },
     "overlay": {
       "black": {
         "description": "Primary dark overlay used behind modals, drawers, or high-emphasis layers — creates strong contrast and draws attention to the active surface.",
@@ -407,6 +397,16 @@
       "state-disabled-on-light": {
         "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs.",
         "value": "{color.neutral.600}"
+      }
+    },
+    "utility-toggle": {
+      "active-icon-default": {
+        "description": "Default icon color for active utility toggle controls on dark backgrounds.",
+        "value": "{color.cobalt-blue.600}"
+      },
+      "active-icon-hover": {
+        "description": "Hover icon color for active utility toggle controls on dark backgrounds.",
+        "value": "{color.cobalt-blue.600}"
       }
     }
   }
