@@ -7,6 +7,7 @@ import { FormGroupLabel, type FormGroupLabelProps } from './FormGroup.Label';
 import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup.Description';
 import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup.Caption';
 import { FormGroupProvider } from './FormGroupContext';
+import styles from './FormGroup.module.scss';
 
 export interface FormGroupProps extends BaseProps {
   children: React.ReactNode;
@@ -51,7 +52,7 @@ export const FormGroup: React.FC<FormGroupProps> & {
 
   return (
     <FormGroupProvider hasLabel={hasLabel} hasDescription={hasDescription} hasCaption={hasCaption}>
-      <div className={classNames('form-group', className)} data-testid={dataTestId}>
+      <div className={classNames(styles['form-group'], className)} data-testid={dataTestId}>
         {children}
       </div>
     </FormGroupProvider>
