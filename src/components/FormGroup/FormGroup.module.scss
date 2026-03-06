@@ -33,8 +33,8 @@
 
   .description {
     display: block;
-    margin-top: var(--space-2, 2px);
-    margin-bottom: var(--space-8, 8px);
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-8);
     color: var(--color-text-on-light-secondary);
   }
 }

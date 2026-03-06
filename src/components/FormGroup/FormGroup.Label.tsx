@@ -43,7 +43,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
           weight="regular"
           className={classNames(styles.optional)}
         >
-          <div style={{ color: 'var(--color-text-on-light-tertiary)' }}>(Optional)</div>
+          <span style={{ color: 'var(--color-text-on-light-tertiary)' }}>(Optional)</span>
         </UtilityBody>
       )}
     </div>
