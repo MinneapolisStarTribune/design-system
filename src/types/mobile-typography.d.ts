@@ -5,20 +5,16 @@
  */
 declare module '@mobile/typography/startribune-typography.js' {
   const typography: {
-    default: {
-      articleQuoteSmall?: Record<string, unknown>;
-      articleQuoteLarge?: Record<string, unknown>;
-    };
+    articleQuoteSmall?: Record<string, unknown>;
+    articleQuoteLarge?: Record<string, unknown>;
   };
   export default typography;
 }
 
 declare module '@mobile/typography/varsity-typography.js' {
   const typography: {
-    default: {
-      articleQuoteSmall?: Record<string, unknown>;
-      articleQuoteLarge?: Record<string, unknown>;
-    };
+    articleQuoteSmall?: Record<string, unknown>;
+    articleQuoteLarge?: Record<string, unknown>;
   };
   export default typography;
 }

@@ -25,8 +25,7 @@ function resolveFontFamily(ref: string): string {
 }
 
 function getTypographyStyles(brand: Brand) {
-  const typography =
-    brand === 'startribune' ? startribuneTypography.default : varsityTypography.default;
+  const typography = brand === 'startribune' ? startribuneTypography : varsityTypography;
 
   const smallRaw = typography.articleQuoteSmall ?? {};
   const largeRaw = typography.articleQuoteLarge ?? {};
@@ -37,10 +36,10 @@ function getTypographyStyles(brand: Brand) {
       style.fontFamily = resolveFontFamily(raw.fontFamily as string);
     }
     if (typeof raw.fontSize === 'number') style.fontSize = raw.fontSize;
-    if (raw.fontWeight) style.fontWeight = raw.fontWeight as string;
+    if (typeof raw.fontWeight === 'number') style.fontWeight = raw.fontWeight;
     if (raw.fontStyle) style.fontStyle = raw.fontStyle as string;
-    if (raw.lineHeight) style.lineHeight = raw.lineHeight as number;
-    if (raw.letterSpacing) style.letterSpacing = raw.letterSpacing as number;
+    if (typeof raw.lineHeight === 'number') style.lineHeight = raw.lineHeight;
+    if (typeof raw.letterSpacing === 'number') style.letterSpacing = raw.letterSpacing;
     return style;
   };
 

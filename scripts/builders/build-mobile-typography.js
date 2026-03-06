@@ -11,13 +11,43 @@ function toCamelCase(str) {
   return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 }
 
+/** Base font size for rem-to-px conversion (matches web) */
+const REM_BASE = 16;
+
 /**
- * Convert CSS values to React Native compatible values
+ * Convert CSS values to React Native compatible values.
+ * Outputs fontSize, fontWeight, lineHeight, letterSpacing as numbers (like web CSS).
  */
 function convertValue(prop, value) {
-  // Convert px to numbers (React Native uses numbers for fontSize)
-  if (prop === 'fontSize' && typeof value === 'string' && value.endsWith('px')) {
-    return parseFloat(value);
+  // Convert fontSize: "17px" -> 17, "1.75rem" -> 28 (rem * REM_BASE)
+  if (prop === 'fontSize') {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      if (value.endsWith('px')) return parseFloat(value) || value;
+      if (value.endsWith('rem')) return Math.round(parseFloat(value) * REM_BASE) || value;
+      const num = parseFloat(value);
+      return Number.isNaN(num) ? value : num;
+    }
+    return value;
+  }
+  // Convert fontWeight: "700" -> 700, "500" -> 500
+  if (prop === 'fontWeight') {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      const num = parseFloat(value);
+      return Number.isNaN(num) ? value : num;
+    }
+    return value;
+  }
+  // Convert lineHeight from string to number (e.g. "1.32" -> 1.32)
+  if (prop === 'lineHeight' && typeof value === 'string') {
+    const num = parseFloat(value);
+    return Number.isNaN(num) ? value : num;
+  }
+  // Convert letterSpacing from string to number (e.g. "0.01em" -> 0.01)
+  if (prop === 'letterSpacing' && typeof value === 'string') {
+    const num = parseFloat(value);
+    return Number.isNaN(num) ? value : num;
   }
   // Keep other values as-is
   return value;
