@@ -6,7 +6,7 @@ Defines brand fonts (Publico, Barlow, Graphik, Popular, Nohemi, etc.) in `tokens
 
 For any font to render, the **@font-face name** and the **first token of the font-family in CSS** must match.
 
-- **@font-face** uses the single name (e.g. `'Popular'`, `'Nohemi'`, `'Graphik'`) — the build derives this from `tokens/text.json` so it matches usage.
+- **@font-face** uses the single name (e.g. `'Popular'`, `'Nohemi'`, `'Graphik'`) — the build derives this from `tokens/primitives/text.json` so it matches usage.
 - **Usage** (utility/editorial CSS) uses the full stack (e.g. `Popular, sans-serif`). The browser matches the first token to the @font-face name.
 - In each font entry, keep `name` and the first token of `family` in sync.
 

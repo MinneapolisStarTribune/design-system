@@ -1,4 +1,4 @@
-import borderRadiusJson from '../../../../../tokens/border-radius.json';
+import borderRadiusJson from '../../../../../tokens/primitives/border-radius.json';
 
 export interface BorderRadiusData {
   name: string;

@@ -35,7 +35,7 @@ describe('getStyleDictionaryConfig', () => {
 
     // Verify source files
     expect(config.source).toHaveLength(7);
-    expect(config.source).toContain('tokens/color/global.json');
+    expect(config.source).toContain('tokens/primitives/color.json');
     expect(config.source).toContain('tokens/color/button-light.json');
     expect(config.source).toContain('tokens/color/brand-startribune-light.json');
 

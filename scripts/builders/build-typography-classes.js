@@ -19,7 +19,7 @@ async function buildTypographyClasses(brand, mode) {
 
   // Load all typography source files: editorial, utility shared, and utility brand-specific
   const sourceFiles = [
-    'tokens/text.json',
+    'tokens/primitives/text.json',
     `tokens/typography/editorial/${brand}.json`,
     'tokens/typography/utility/shared.json',
     `tokens/typography/utility/${brand}.json`,
