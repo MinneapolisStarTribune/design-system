@@ -13,7 +13,7 @@
  * @vitest-environment node
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
@@ -33,29 +33,9 @@ describe('build-tamagui-tokens.js', () => {
     'varsity.dark.ts',
   ];
 
-  beforeEach(() => {
-    // Clean up any existing theme files before tests
-    if (fs.existsSync(themesDir)) {
-      expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      });
-    }
-  });
-
-  afterEach(() => {
-    // Clean up generated files after tests
-    if (fs.existsSync(themesDir)) {
-      expectedFiles.forEach((file) => {
-        const filePath = path.join(themesDir, file);
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-        }
-      });
-    }
-  });
+  // Note: No beforeEach/afterEach cleanup. The theme files are required by
+  // theme-helpers.ts and tamagui.config.ts. Deleting them breaks component
+  // tests that run in parallel. The build script overwrites files anyway.
 
   describe('File Generation', () => {
     it('generates all expected TypeScript files', () => {
