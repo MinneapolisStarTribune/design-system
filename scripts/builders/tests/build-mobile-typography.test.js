@@ -73,7 +73,7 @@ describe('buildMobileTypography', () => {
     expect(jsContent).toContain('articleBody');
     expect(jsContent).toContain('bold');
     expect(jsContent).toContain('"fontSize": 17');
-    expect(jsContent).toContain('"fontWeight": "700"');
+    expect(jsContent).toContain('"fontWeight": 700');
   });
 
   it('falls back to direct value when mobile is not available', async () => {
