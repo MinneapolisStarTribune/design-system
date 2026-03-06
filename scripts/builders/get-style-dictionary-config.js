@@ -41,7 +41,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 
   // Required base files - must exist
   const baseFiles = [
-    requireFile('tokens/color/global.json', 'Global color palettes (core colors shared across modes)'),
+    requireFile('tokens/primitives/color.json', 'Global color palettes (core colors shared across modes)'),
     requireFile(`tokens/color/button-${mode}.json`, `Mode-specific button tokens (${mode})`),
   ];
 
@@ -52,14 +52,14 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   requireFile(brandFile, `Brand-specific colors for ${brand} (${mode} mode)`);
   sourceFiles.push(brandFile);
 
-  // Add shared token files that apply to all brands and modes
+  // Add shared primitive token files that apply to all brands and modes
   // These must be loaded before semantic tokens so semantic tokens can reference them
   // Note: semantic colors are mode-specific and defined in brand files, not in a shared file
   const sharedFiles = [
-    requireFile('tokens/text.json', 'Font family definitions'),
-    requireFile('tokens/border-radius.json', 'Border radius tokens'),
-    requireFile('tokens/spacing.json', 'Spacing tokens'),
-    requireFile('tokens/breakpoint.json', 'Breakpoint definitions'),
+    requireFile('tokens/primitives/text.json', 'Font family definitions'),
+    requireFile('tokens/primitives/border-radius.json', 'Border radius tokens'),
+    requireFile('tokens/primitives/spacing.json', 'Spacing tokens'),
+    requireFile('tokens/primitives/breakpoint.json', 'Breakpoint definitions'),
   ];
   
   sourceFiles.push(...sharedFiles);

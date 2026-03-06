@@ -3,8 +3,8 @@ import * as startribuneLight from '../generated/themes/startribune.light';
 import * as startribuneDark from '../generated/themes/startribune.dark';
 import * as varsityLight from '../generated/themes/varsity.light';
 import * as varsityDark from '../generated/themes/varsity.dark';
-import spacingJson from '../../tokens/spacing.json';
-import borderRadiusJson from '../../tokens/border-radius.json';
+import spacingJson from '../../tokens/primitives/spacing.json';
+import borderRadiusJson from '../../tokens/primitives/border-radius.json';
 
 export const BRANDS = ['startribune', 'varsity'] as const;
 

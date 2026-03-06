@@ -1,4 +1,4 @@
-import spacingJson from '../../../../../tokens/spacing.json';
+import spacingJson from '../../../../../tokens/primitives/spacing.json';
 
 export interface SpacingData {
   name: string;
