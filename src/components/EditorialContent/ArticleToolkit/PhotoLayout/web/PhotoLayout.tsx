@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef, useEffect, useContext } from 'react';
 import classNames from 'classnames';
-import { Image } from '@/components/index.web';
 import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
+import { PhotoLayoutGrid } from './PhotoLayoutGrid';
+import { PhotoLayoutDialog } from './PhotoLayoutDialog';
 import styles from './PhotoLayout.module.scss';
+import { BrandContext } from '@/providers/brand/BrandContext';
 
 export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
   caption?: string;
@@ -11,6 +13,7 @@ export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
   imageCredit?: string;
   imgixParams?: string;
   variant?: 'immersive'; // Restricting variant to 'immersive' for now, can be expanded in the future if needed
+  expandable?: boolean;
 }
 
 export const layoutImageCount: Record<PhotoLayoutType, number> = {
@@ -28,55 +31,90 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
   imageCredit,
   imgixParams,
   dataTestId = 'photo-layout',
+  expandable = false,
   ...accessibilityProps
 }) => {
   const images = useMemo(
     () => imageList.slice(0, layoutImageCount[photoLayout]),
     [imageList, photoLayout]
   );
-  const captionText = caption
-    ? `${caption}  ${imageCredit ? ` (${imageCredit})` : ''}`
-    : imageCredit || '';
+
+  const brand = useContext(BrandContext) || 'startribune';
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const image = openIndex !== null ? images[openIndex] : null;
+  const captionText = [caption, imageCredit && `(${imageCredit})`].filter(Boolean).join(' ');
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (image) {
+      dialog.showModal();
+      document.body.style.overflow = 'hidden';
+    } else if (dialog.open) {
+      dialog.close();
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      if (dialog.open) dialog.close();
+      document.body.style.overflow = '';
+    };
+  }, [image]);
+
+  const close = () => {
+    setOpenIndex(null);
+    lastTriggerRef.current?.focus();
+  };
+  const handleExpand = (index: number, el: HTMLButtonElement) => {
+    lastTriggerRef.current = el;
+    setOpenIndex(index);
+  };
 
   return (
-    <figure
-      data-testid={dataTestId}
-      className={classNames(
-        styles.photoLayout,
-        styles[`layout-${photoLayout}`],
-        styles[`variant-${variant}`],
-        className
-      )}
-      {...accessibilityProps}
-    >
-      <div className={styles.grid}>
-        {images.map((image, index) => {
-          return (
-            <div key={`${image.src}-${index}`} className={classNames(styles.item)}>
-              <Image
-                src={image.src}
-                alt={image.altText}
-                className={styles.image}
-                imgixParams={imgixParams}
-                loading="lazy"
-                decoding="async"
-                data-testid={`${dataTestId}-image-${index}`}
-                tabIndex={0}
-              />
-            </div>
-          );
-        })}
-      </div>
+    <>
+      <figure
+        data-testid={dataTestId}
+        data-brand={brand}
+        className={classNames(
+          styles.photoLayout,
+          styles[`layout-${photoLayout}`],
+          styles[`variant-${variant}`],
+          className
+        )}
+        {...accessibilityProps}
+      >
+        <PhotoLayoutGrid
+          images={images}
+          expandable={expandable}
+          openIndex={openIndex}
+          dataTestId={dataTestId}
+          imgixParams={imgixParams}
+          lastTriggerRef={lastTriggerRef}
+          onExpand={handleExpand}
+        />
+        {captionText && (
+          <figcaption
+            className={classNames(styles.caption, 'typography-utility-label-small')}
+            data-testid={`${dataTestId}-caption`}
+          >
+            {captionText}
+          </figcaption>
+        )}
+      </figure>
 
-      {captionText && (
-        <figcaption
-          className={classNames(styles.caption, 'typography-utility-label-small')}
-          data-testid={`${dataTestId}-caption`}
-        >
-          {captionText}
-        </figcaption>
+      {image && (
+        <PhotoLayoutDialog
+          caption={caption}
+          image={image}
+          imageCredit={imageCredit}
+          imgixParams={imgixParams}
+          dialogRef={dialogRef}
+          onClose={close}
+        />
       )}
-    </figure>
+    </>
   );
 };
 

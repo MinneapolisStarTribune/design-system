@@ -19,6 +19,9 @@ const meta: Meta<PhotoLayoutProps> = {
       options: ['immersive'],
       description: 'Article body variant: standard or immersive.',
     },
+    expandable: {
+      control: 'boolean',
+    },
   },
 };
 
@@ -50,13 +53,16 @@ export const Configurable: Story = {
     imageList: images,
     photoLayout: '2up',
     caption: '2-up layout with 2 images',
+    imageCredit: 'Star Tribune staff/The Minnesota Star Tribune',
     variant: 'immersive',
+    expandable: false,
   },
 };
 
 export const AllLevels: Story = {
   args: {
     imageList: images,
+    expandable: true,
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -68,6 +74,7 @@ export const AllLevels: Story = {
             photoLayout={layout as PhotoLayoutProps['photoLayout']}
             caption={`${count}-up immersive layout showcasing ${count} related visuals arranged in a structured grid format.`}
             variant="immersive"
+            imageCredit="Star Tribune staff/The Minnesota Star Tribune"
           />
         </div>
       ))}
