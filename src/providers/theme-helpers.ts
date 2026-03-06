@@ -31,18 +31,25 @@ export function getBrandColors(brand: Brand, colorScheme: ColorScheme) {
 }
 
 /**
- * Get spacing tokens as an object accessible by key (e.g., spacing['12'] = '12px')
+ * Get spacing tokens as an object accessible by key (e.g., spacing['12'] = 12)
+ * Returns integers for use with mobile/Tamagui
  */
-export function getSpacing(): Record<string, string> {
+export function getSpacing(): Record<string, number> {
   const spacing = (spacingJson as any).spacing;
   if (!spacing) {
     return {};
   }
 
-  const spacingMap: Record<string, string> = {};
+  const spacingMap: Record<string, number> = {};
   Object.entries(spacing).forEach(([key, token]: [string, any]) => {
     if (token?.value) {
-      spacingMap[key] = token.value;
+      const value = token.value;
+      // Handle numeric values (spacing tokens are now stored as numbers)
+      if (typeof value === 'number') {
+        spacingMap[key] = Math.round(value);
+      }
+      // Skip token references like "{spacing.44}" - they'll be resolved by Style Dictionary during build
+      // and won't be available here since we're reading raw JSON
     }
   });
 
@@ -50,68 +57,24 @@ export function getSpacing(): Record<string, string> {
 }
 
 /**
- * Get border radius tokens as an object accessible by key (e.g., radius['full'] = '999px')
+ * Get border radius tokens as an object accessible by key (e.g., radius['full'] = 999)
+ * Returns integers for use with mobile/Tamagui
  */
-export function getBorderRadius(): Record<string, string> {
+export function getBorderRadius(): Record<string, number> {
   const radius = (borderRadiusJson as any).radius;
   if (!radius) {
     return {};
   }
 
-  const radiusMap: Record<string, string> = {};
+  const radiusMap: Record<string, number> = {};
   Object.entries(radius).forEach(([key, token]: [string, any]) => {
     if (token?.value) {
-      radiusMap[key] = token.value;
-    }
-  });
-
-  return radiusMap;
-}
-
-/**
- * Get spacing tokens as numbers (px suffix removed) - for use with mobile/Tamagui
- * This matches the format used in dist/mobile/themes/*.js files
- */
-export function getSpacingAsNumbers(): Record<string, number> {
-  const spacing = getSpacing();
-  const spacingMap: Record<string, number> = {};
-
-  Object.entries(spacing).forEach(([key, value]) => {
-    if (typeof value === 'string' && value.endsWith('px')) {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        spacingMap[key] = numericValue;
+      const value = token.value;
+      // Handle numeric values (border radius tokens are now stored as numbers)
+      if (typeof value === 'number') {
+        radiusMap[key] = Math.round(value);
       }
-    } else if (typeof value === 'string') {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        spacingMap[key] = numericValue;
-      }
-    }
-  });
-
-  return spacingMap;
-}
-
-/**
- * Get border radius tokens as numbers (px suffix removed) - for use with mobile/Tamagui
- * This matches the format used in dist/mobile/themes/*.js files
- */
-export function getBorderRadiusAsNumbers(): Record<string, number> {
-  const radius = getBorderRadius();
-  const radiusMap: Record<string, number> = {};
-
-  Object.entries(radius).forEach(([key, value]) => {
-    if (typeof value === 'string' && value.endsWith('px')) {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        radiusMap[key] = numericValue;
-      }
-    } else if (typeof value === 'string') {
-      const numericValue = parseFloat(value);
-      if (!isNaN(numericValue)) {
-        radiusMap[key] = numericValue;
-      }
+      // Skip token references - they'll be resolved by Style Dictionary during build
     }
   });
 
