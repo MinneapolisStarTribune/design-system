@@ -55,7 +55,7 @@ const tamaguiTypeScriptFormat = ({ dictionary, options = {} }) => {
 function getStyleDictionaryConfig(brand, mode) {
   // Only use colors from global.json, button files, and brand-specific files
   const sourceFiles = [
-    'tokens/color/global.json',
+    'tokens/primitives/color.json',
     `tokens/color/button-${mode}.json`,
   ];
   

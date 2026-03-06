@@ -42,7 +42,7 @@ function shouldRebuildTokens() {
   // Source files: all token JSON files
   const tokenSourceFiles = [
     'tokens/color/base.json',
-    'tokens/color/global.json',
+    'tokens/primitives/color.json',
     'tokens/color/button-light.json',
     'tokens/color/button-dark.json',
     'tokens/color/brand-startribune-light.json',
@@ -50,10 +50,10 @@ function shouldRebuildTokens() {
     'tokens/color/brand-varsity-light.json',
     'tokens/color/brand-varsity-dark.json',
     'tokens/color/semantic.json',
-    'tokens/text.json',
-    'tokens/border-radius.json',
-    'tokens/spacing.json',
-    'tokens/breakpoint.json',
+    'tokens/primitives/text.json',
+    'tokens/primitives/border-radius.json',
+    'tokens/primitives/spacing.json',
+    'tokens/primitives/breakpoint.json',
   ].map(file => path.join(projectRoot, file));
   
   // Output files: generated CSS files (web) and JavaScript files (mobile)
@@ -94,7 +94,7 @@ function shouldRebuildTamaguiTokens() {
   
   // Source files: Tamagui theme tokens are built from the same core color files
   const tokenSourceFiles = [
-    'tokens/color/global.json',
+    'tokens/primitives/color.json',
     'tokens/color/button-light.json',
     'tokens/color/button-dark.json',
     'tokens/color/brand-startribune-light.json',
