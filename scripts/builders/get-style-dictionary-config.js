@@ -6,9 +6,12 @@ const path = require('path');
  * 
  * 1. Always loads base tokens (global.json)
  * 2. Loads mode-specific button tokens (button-light.json or button-dark.json)
- * 3. Tries to load brand-specific tokens for the mode (brand-{brand}-{mode}.json)
- * 4. Falls back to generic brand tokens (brand-{brand}.json) if mode-specific doesn't exist
- * 5. Loads shared tokens (semantic, text, spacing, etc.)
+ * 3. Loads brand-specific color tokens for the mode (brand-{brand}-{mode}.json)
+ * 4. Loads shared tokens (text, border-radius, spacing, breakpoint)
+ * 5. Loads brand-specific semantic tokens (tokens/semantic/{brand}.json) - optional
+ * 
+ * Semantic tokens provide brand-specific styling decisions that aren't about color or fonts.
+ * Examples: photo-layout-border-radius (Star Tribune uses pointy corners, Varsity uses rounded)
  * 
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @param {string} mode - The color scheme ('light' or 'dark')
@@ -50,6 +53,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   sourceFiles.push(brandFile);
 
   // Add shared token files that apply to all brands and modes
+  // These must be loaded before semantic tokens so semantic tokens can reference them
   // Note: semantic colors are mode-specific and defined in brand files, not in a shared file
   const sharedFiles = [
     requireFile('tokens/text.json', 'Font family definitions'),
@@ -59,6 +63,16 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   ];
   
   sourceFiles.push(...sharedFiles);
+
+  // Add brand-specific semantic tokens (styling differences like border radius, etc.)
+  // These are loaded AFTER shared tokens so they can reference shared values like {radius.4}
+  // Semantic tokens provide brand-specific styling decisions (e.g., photo-layout-border-radius)
+  const semanticFile = `tokens/semantic/${brand}.json`;
+  const semanticFilePath = path.join(process.cwd(), semanticFile);
+  if (fs.existsSync(semanticFilePath)) {
+    sourceFiles.push(semanticFile);
+  }
+  // Note: semantic tokens are optional - not all brands need semantic overrides
 
   // Build formats object
   const formatsConfig = {};
