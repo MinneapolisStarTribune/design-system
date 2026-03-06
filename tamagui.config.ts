@@ -2,7 +2,7 @@
  * Tamagui Configuration
  *
  * This file maps existing design tokens to Tamagui's theme system.
- * 
+ *
  * The configuration supports:
  * - Brand switching: startribune, varsity
  * - Color scheme switching: light, dark
@@ -11,14 +11,11 @@
  */
 
 import { createTamagui, createTokens } from '@tamagui/core';
-import {
-  getSpacingAsNumbers,
-  getBorderRadiusAsNumbers,
-} from './src/providers/theme-helpers';
-import * as startribuneLight from './src/generated/themes/startribune.light';
-import * as startribuneDark from './src/generated/themes/startribune.dark';
-import * as varsityLight from './src/generated/themes/varsity.light';
-import * as varsityDark from './src/generated/themes/varsity.dark';
+import { getSpacingAsNumbers, getBorderRadiusAsNumbers } from './src/providers/theme-helpers';
+import * as startribuneLight from '@/generated/themes/startribune.light';
+import * as startribuneDark from '@/generated/themes/startribune.dark';
+import * as varsityLight from '@/generated/themes/varsity.light';
+import * as varsityDark from '@/generated/themes/varsity.dark';
 
 /**
  * Convert numeric token objects to string token objects for Tamagui
@@ -52,12 +49,16 @@ function createRadiusTokens() {
 /**
  * Extract all colors from a colors object and convert keys to camelCase
  * Just splats whatever tokens we have - no special handling for palettes vs semantic colors
- * 
+ *
  * @param colors - Color object from generated theme file
  * @returns Object with camelCase keys and string color values
  */
 function extractAllColors(
-  colors: typeof startribuneLight.colors | typeof varsityLight.colors | typeof startribuneDark.colors | typeof varsityDark.colors
+  colors:
+    | typeof startribuneLight.colors
+    | typeof varsityLight.colors
+    | typeof startribuneDark.colors
+    | typeof varsityDark.colors
 ): Record<string, string> {
   if (!colors || typeof colors !== 'object') {
     return {};
@@ -85,7 +86,7 @@ function kebabToCamel(kebab: string): string {
   if (!kebab || kebab.length === 0) {
     return kebab;
   }
-  
+
   return kebab
     .split('-')
     .filter((word) => word.length > 0) // Filter out empty strings from consecutive dashes
@@ -99,7 +100,6 @@ function kebabToCamel(kebab: string): string {
     })
     .join('');
 }
-
 
 /**
  * Create base tokens (spacing, radius) that are shared across all themes

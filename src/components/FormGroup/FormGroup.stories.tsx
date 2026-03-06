@@ -178,6 +178,23 @@ export const Configurable: Story = {
   },
 };
 
+export const LabelDescriptionCaption: Story = {
+  args: {} as any,
+  parameters: {
+    controls: { disable: true },
+  },
+  render: () => (
+    <FormGroup>
+      <FormGroup.Label>Email address</FormGroup.Label>
+      <FormGroup.Description>
+        We&apos;ll never share your email with anyone else.
+      </FormGroup.Description>
+      <FormControl.TextInput placeholderText="you@example.com" />
+      <FormGroup.Caption variant="error">Please enter a valid email address</FormGroup.Caption>
+    </FormGroup>
+  ),
+};
+
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
@@ -201,6 +218,19 @@ export const AllVariants: Story = {
             <FormGroup.Label>Email</FormGroup.Label>
             <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
             <FormControl.TextInput placeholderText="you@example.com" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Description + Caption',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
+            <FormControl.TextInput placeholderText="you@example.com" />
+            <FormGroup.Caption variant="error">
+              Please enter a valid email address
+            </FormGroup.Caption>
           </FormGroup>
         ),
       },

@@ -80,7 +80,7 @@ export const AllVariants: Story = {
         <FormControl.TextInput placeholderText="Optional field" />
       </FormGroup>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <FormGroup.Label htmlFor="standalone-input">
           Standalone label (with htmlFor)
         </FormGroup.Label>
