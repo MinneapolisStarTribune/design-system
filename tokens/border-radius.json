@@ -9,6 +9,7 @@
     "24": { "value": "24px" },
     "40": { "value": "40px" },
     "64": { "value": "64px" },
-    "full": { "value": "999px" }
+    "full": { "value": "999px" },
+    "none": { "value": "0px" }
   }
 }
