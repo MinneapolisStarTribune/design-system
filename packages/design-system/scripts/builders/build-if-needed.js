@@ -38,7 +38,7 @@ for (const { check, build } of commands) {
   if (shouldRebuild(check)) {
     console.log(`🔄 Rebuilding ${build} (source files changed)...\n`);
     try {
-      execSync(`npm run ${build}`, { stdio: 'inherit' });
+      execSync(`yarn ${build}`, { stdio: 'inherit' });
     } catch (error) {
       console.error(`\n❌ Error building ${build}`);
       process.exit(1);

@@ -20,12 +20,12 @@ jobs:
         uses: ./.github/actions/configure-workflow-node-environment
 
       - name: Build tokens
-        run: yarn tokens
+        run: yarn workspace @minneapolisstartribune/design-system tokens
 
       - name: Run unit tests with coverage
         env:
           VITEST_JUNIT_OUTPUT: ./reports/unit-junit.xml
-        run: yarn test:coverage -- --exclude "**/*.a11y.test.tsx"
+        run: yarn workspace @minneapolisstartribune/design-system test:coverage -- --exclude "**/*.a11y.test.tsx"
 
       - name: Upload unit test coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -47,14 +47,14 @@ jobs:
         if: always()
         with:
           name: "Unit Test Report"
-          path: "reports/unit-junit.xml"
+          path: "packages/design-system/reports/unit-junit.xml"
           reporter: "java-junit"
           fail-on-error: true
 
       - name: Run a11y tests with coverage
         env:
           VITEST_JUNIT_OUTPUT: ./reports/a11y-junit.xml
-        run: yarn test:a11y --coverage
+        run: yarn workspace @minneapolisstartribune/design-system test:a11y --coverage
 
       - name: Upload a11y test coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -76,6 +76,6 @@ jobs:
         if: always()
         with:
           name: "Accessibility Test Report"
-          path: "reports/a11y-junit.xml"
+          path: "packages/design-system/reports/a11y-junit.xml"
           reporter: "java-junit"
           fail-on-error: true

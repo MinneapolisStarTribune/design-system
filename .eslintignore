@@ -7,7 +7,6 @@ reports
 .storybook-static
 *.config.js
 *.config.ts
-!vitest.config.ts
+!packages/design-system/vitest.config.ts
 vitest.setup.ts
 vitest-axe.d.ts
-

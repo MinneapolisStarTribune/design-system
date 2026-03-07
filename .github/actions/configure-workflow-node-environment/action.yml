@@ -1,18 +1,24 @@
 name: Configure Workflow Node Environment
 description: Configures a Node environment with cached modules
 runs:
-  using: composite # Allows for composable actions
+  using: composite
   steps:
     - uses: actions/setup-node@v6
       with:
         node-version-file: .nvmrc
         cache: yarn
 
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
     - name: Cache Node modules installation
       uses: actions/cache@v5
       id: node-modules-cache
       with:
-        path: node_modules
+        path: |
+          node_modules
+          packages/*/node_modules
         key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
 
     - name: Install Node modules
