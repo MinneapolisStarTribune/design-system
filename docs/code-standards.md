@@ -10,6 +10,7 @@ This document serves as a living reference for code standards and conventions us
 - [Export Patterns](#export-patterns)
 - [Brand Validation](#brand-validation)
 - [Storybook Standards](#storybook-standards)
+- [Testing Standards](#testing-standards)
 - [Path Aliases](#path-aliases)
 - [Documentation Requirements](#documentation-requirements)
 
@@ -207,6 +208,44 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+```
+
+---
+
+## Testing Standards
+
+### Test Wrappers
+
+When tests need a `DesignSystemContext`, use the shared wrapper from `src/test-utils/wrappers.tsx` instead of inlining `<DesignSystemContext.Provider>`:
+
+- **`TestWrapperInDesignSystemProvider({ brand?, colorScheme? })`** — returns a wrapper component that provides `DesignSystemContext`. Defaults to `'startribune'` / `'light'`.
+
+```typescript
+import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+
+// With defaults (startribune, light)
+renderHook(() => useMyHook(), {
+  wrapper: TestWrapperInDesignSystemProvider(),
+});
+
+// With overrides — only specify what you need
+render(<MyComponent />, {
+  wrapper: TestWrapperInDesignSystemProvider({ brand: 'varsity', colorScheme: 'dark' }),
+});
+```
+
+```typescript
+// ❌ Bad - inline provider in tests
+render(
+  <DesignSystemContext.Provider value={{ brand: 'startribune', colorScheme: 'light' }}>
+    <MyComponent />
+  </DesignSystemContext.Provider>
+);
+
+// ✅ Good - shared test wrapper
+render(<MyComponent />, {
+  wrapper: TestWrapperInDesignSystemProvider(),
+});
 ```
 
 ---
