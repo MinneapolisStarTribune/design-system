@@ -21,7 +21,7 @@ describe('buildMobileFonts', () => {
     vi.restoreAllMocks();
   });
 
-  it('generates mobile font tokens for valid font tokens', async () => {
+  it('generates mobile font tokens with RN-friendly format', async () => {
     const brand = 'startribune';
     const tokenData = {
       font: {
@@ -59,10 +59,54 @@ describe('buildMobileFonts', () => {
     expect(writeFileSyncSpy).toHaveBeenCalledTimes(1);
 
     const jsContent = writeFileSyncSpy.mock.calls[0][1];
-    
-    expect(jsContent).toContain('export default');
-    expect(jsContent).toContain('"name": "Publico Text"');
-    expect(jsContent).toContain('"url": "https://fonts.startribune.com/PublicoTextWebFonts/PublicoText-Roman-Web.woff2"');
+
+    // Uses module.exports, not export default
+    expect(jsContent).toContain('module.exports');
+    expect(jsContent).not.toContain('export default');
+
+    // Uses bare font name, not CSS family stack
+    expect(jsContent).toContain('"fontFamily": "Publico Text"');
+    expect(jsContent).not.toContain('serif');
+
+    // File stem without extension
+    expect(jsContent).toContain('"file": "PublicoText-Roman-Web"');
+    expect(jsContent).not.toContain('.woff2');
+
+    // No web URLs
+    expect(jsContent).not.toContain('https://');
+
+    // Keyed by camelCase font name
+    expect(jsContent).toContain('"publicoText"');
+  });
+
+  it('generates camelCase keys for multi-word font names', async () => {
+    const tokenData = {
+      font: {
+        brand: {
+          varsity: {
+            fonts: [
+              {
+                name: 'Graphik Condensed',
+                url: 'https://fonts.test.com/',
+                variants: [{ weight: 400, style: 'normal', file: 'GraphikCondensed-Regular.woff2' }],
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    existsSyncSpy.mockImplementation((filePath) => {
+      if (filePath.includes('tokens/fonts/varsity.json')) return true;
+      return false;
+    });
+    readFileSyncSpy.mockReturnValue(JSON.stringify(tokenData));
+
+    await buildMobileFonts('varsity');
+
+    const jsContent = writeFileSyncSpy.mock.calls[0][1];
+    expect(jsContent).toContain('"graphikCondensed"');
+    expect(jsContent).toContain('"fontFamily": "Graphik Condensed"');
   });
 
   it("skips generation when token file doesn't exist", async () => {
@@ -71,7 +115,7 @@ describe('buildMobileFonts', () => {
     await buildMobileFonts('nonexistentbrand');
 
     expect(logSpy).toHaveBeenCalledWith(
-      '⚠️  No font tokens found for nonexistentbrand, skipping mobile font build...'
+      '⚠️  No font tokens found for nonexistentbrand, skipping mobile font build...',
     );
     expect(writeFileSyncSpy).not.toHaveBeenCalled();
   });
@@ -83,7 +127,7 @@ describe('buildMobileFonts', () => {
     await buildMobileFonts('startribune');
 
     expect(logSpy).toHaveBeenCalledWith(
-      '⚠️  No fonts array in tokens/fonts/startribune.json, skipping...'
+      '⚠️  No fonts array in tokens/fonts/startribune.json, skipping...',
     );
     expect(writeFileSyncSpy).not.toHaveBeenCalled();
   });
@@ -93,11 +137,13 @@ describe('buildMobileFonts', () => {
       font: {
         brand: {
           startribune: {
-            fonts: [{
-              name: 'Test Font',
-              url: 'https://fonts.test.com/',
-              variants: [{ file: 'test.woff2' }],
-            }],
+            fonts: [
+              {
+                name: 'Test Font',
+                url: 'https://fonts.test.com/',
+                variants: [{ file: 'test.woff2' }],
+              },
+            ],
           },
         },
       },
@@ -112,8 +158,12 @@ describe('buildMobileFonts', () => {
     await buildMobileFonts('startribune');
 
     const jsContent = writeFileSyncSpy.mock.calls[0][1];
-    
+
+    // Defaults applied
     expect(jsContent).toContain('"weight": 400');
     expect(jsContent).toContain('"style": "normal"');
+    // Extension stripped
+    expect(jsContent).toContain('"file": "test"');
+    expect(jsContent).not.toContain('.woff2');
   });
 });

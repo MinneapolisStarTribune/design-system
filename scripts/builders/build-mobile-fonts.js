@@ -5,11 +5,31 @@ const TOKENS_DIR_PREFIX = 'tokens/fonts';
 const OUT_DIR_PREFIX = 'dist/mobile/fonts';
 
 /**
+ * Convert a font name to a camelCase key.
+ * "Publico Text" → "publicoText", "Graphik Condensed" → "graphikCondensed"
+ */
+function toCamelCaseKey(name) {
+  return name
+    .split(/\s+/)
+    .map((word, i) =>
+      i === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    )
+    .join('');
+}
+
+/**
  * Build mobile font tokens from tokens/fonts/{brand}.json
  *
- * Reads font definitions and outputs JavaScript/TypeScript files with font information
- * for React Native consumption. React Native uses font names (not CSS font stacks)
- * and requires font files to be bundled into the app.
+ * Custom builder required because font source data uses arrays of objects with
+ * nested variant arrays — a structure Style Dictionary's token tree model cannot
+ * process. (SD requires a tree of objects with leaf { value } nodes.)
+ * build-font-faces.js (web) is custom for the same reason.
+ *
+ * Outputs a keyed object for React Native consumption:
+ * - Font family as bare name (no CSS fallback stack)
+ * - File stems without extension (RN apps bundle .ttf/.otf, not .woff2)
+ * - No web URLs (RN bundles fonts as local assets)
+ * - module.exports for consistency with other mobile outputs
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Promise<void>}
@@ -30,39 +50,33 @@ async function buildMobileFonts(brand) {
     return;
   }
 
-  // Build font tokens structure for React Native
-  // These are used for font bundling metadata - typography tokens already provide fontFamily
-  const fontsArray = fonts.map((font) => ({
-    // Font name used in React Native (fontFamily prop)
-    name: font.name,
-    // Full font family stack (for reference, not used in RN)
-    family: font.family,
-    // Base URL for font files (web URLs, but RN apps need to bundle fonts)
-    url: font.url || '',
-    // Available variants with weight, style, and file information
-    variants: (font.variants || []).map((variant) => ({
-      weight: variant.weight ?? 400,
-      style: variant.style ?? 'normal',
-      file: variant.file || '',
-      // Full URL to font file (for reference)
-      url: variant.file && font.url
-        ? `${font.url.replace(/\/?$/, '/')}${variant.file}`
-        : null,
-    })),
-  }));
+  // Build a keyed object: camelCase font name → { fontFamily, variants }
+  const fontTokens = {};
+  for (const font of fonts) {
+    const name = font.name || font.family?.split(',')[0]?.trim() || '';
+    if (!name) continue;
 
-  const fontTokens = {
-    // Array of all fonts with detailed information for bundling
-    fonts: fontsArray,
-  };
+    const key = toCamelCaseKey(name);
+    fontTokens[key] = {
+      // Bare font family name for React Native fontFamily style prop
+      fontFamily: name,
+      // Variants with weight, style, and file stem (no extension — RN apps provide .ttf/.otf)
+      variants: (font.variants || []).map((variant) => ({
+        weight: variant.weight ?? 400,
+        style: variant.style ?? 'normal',
+        file: (variant.file || '').replace(/\.[^.]+$/, ''),
+      })),
+    };
+  }
 
   // Generate JavaScript file
   const jsContent = `/**
- * Do not edit directly. Generated from ${TOKENS_DIR_PREFIX}/${brand}.json
- * Mobile font tokens for React Native - font bundling metadata
+ * Do not edit directly, this file was auto-generated.
+ * Generated from ${TOKENS_DIR_PREFIX}/${brand}.json
+ * Mobile font configuration for React Native
  */
 
-export default ${JSON.stringify(fontTokens, null, 2)};
+module.exports = ${JSON.stringify(fontTokens, null, 2)};
 `;
 
   // Ensure output directory exists
