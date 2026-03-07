@@ -28,16 +28,16 @@
 
    **Why this matters:** The design system uses a release branch workflow where features are developed on release branches (e.g., `release/v1.0`), not directly on `main`. The workflow helpers make it easy to create branches, sync with releases, and push changes. If you skip this step, you'll need to manually manage branches and may encounter merge conflicts.
 
-4. **Generate Tamagui themes (required once per clone, and whenever tokens change):**
+4. **Build design tokens (required once per clone, and whenever tokens change):**
 
-   The Tamagui config and providers import generated theme modules from `src/generated/themes/*.ts`.
-   These files are **not committed** and must be generated locally:
+   The design system reads token JSON files and generates CSS (web) and JavaScript (native) output.
+   Run this after cloning or after any token file changes:
 
    ```bash
-   yarn tokens:tamagui
+   yarn tokens
    ```
 
-   Note: `yarn test` and `yarn test:a11y` automatically run `yarn tokens:tamagui` first via
+   Note: `yarn test` and `yarn test:a11y` automatically run `yarn tokens` first via
    `pretest`/`pretest:a11y` scripts, but running it explicitly is helpful after token changes.
 
 5. **Verify your setup:**
@@ -169,7 +169,7 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 
 - `yarn dev` - Start development server (if configured)
 - `yarn storybook` - Start Storybook development server on port 6006. Automatically builds tokens/icons if needed. Use this for visual component development.
-- `yarn build` - Build the package for production. Runs token generation, Tamagui theme generation, and icon mapping, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
+- `yarn build` - Build the package for production. Runs token generation and icon mapping, then builds both web and native bundles to `/dist/web` and `/dist/mobile` respectively.
 - `yarn build:web` - Build only the web bundle to `/dist/web`
 - `yarn build:native` - Build only the native bundle to `/dist/mobile`
 - `yarn test` - Run all tests (unit + accessibility) once
@@ -184,8 +184,7 @@ Refer to [docs/code-standards.md](docs/code-standards.md) for:
 
 **Token & Asset Generation:**
 
-- `yarn tokens` - Generate design tokens from JSON files in `/tokens` to `/build`
-- `yarn tokens:tamagui` - Generate Tamagui-specific theme files in `src/generated/themes/*.ts`
+- `yarn tokens` - Generate design tokens from JSON files in `/tokens` to `/dist`
 - `yarn icons` - Generate icon mapping files from SVG files
 - `yarn fonts:fetch` - Attempt to fetch fonts from CDN (optional)
 
@@ -231,7 +230,7 @@ This repo intentionally has **three** `tsconfig` files, each with a specific rol
 
 ## Design Tokens
 
-This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables, TypeScript types, and Tamagui theme modules.
+This design system uses [Style Dictionary](https://amzn.github.io/style-dictionary/) to manage design tokens across multiple brands. Tokens are defined as JSON files and transformed into CSS variables (web) and JavaScript modules (native).
 
 ### Token File Structure
 
@@ -294,12 +293,12 @@ Style Dictionary transforms token JSON into CSS custom properties:
 
 Theme files are generated from tokens and organized by brand and color scheme:
 
-- **Star Tribune Light** - `dist/themes/startribune-light.css` (CSS) and `src/generated/themes/startribune.light.ts` (TypeScript for Tamagui)
-- **Star Tribune Dark** - `dist/themes/startribune-dark.css` and `src/generated/themes/startribune.dark.ts`
-- **Varsity Light** - `dist/themes/varsity-light.css` and `src/generated/themes/varsity.light.ts`
-- **Varsity Dark** - `dist/themes/varsity-dark.css` and `src/generated/themes/varsity.dark.ts`
+- **Star Tribune Light** - `dist/web/startribune-light.css` (CSS) / `dist/mobile/themes/startribune-light.js` (JS)
+- **Star Tribune Dark** - `dist/web/startribune-dark.css` / `dist/mobile/themes/startribune-dark.js`
+- **Varsity Light** - `dist/web/varsity-light.css` / `dist/mobile/themes/varsity-light.js`
+- **Varsity Dark** - `dist/web/varsity-dark.css` / `dist/mobile/themes/varsity-dark.js`
 
-Each CSS theme file contains all CSS variables for that brand/color scheme combination. The TypeScript theme files are consumed by `tamagui.config.ts`.
+Each CSS theme file contains all CSS variables for that brand/color scheme combination. Each JS theme file contains CommonJS module exports for React Native consumption.
 
 ### Font Tokens
 
@@ -433,7 +432,7 @@ When you publish a release, GitHub Actions will:
 
 1. ✅ Extract version from your tag (e.g., `v0.1.0` → `0.1.0`)
 2. ✅ Update `package.json` with the new version
-3. ✅ Build the package (includes token generation, icon mapping, Tamagui tokens)
+3. ✅ Build the package (includes token generation, icon mapping)
 4. ✅ Publish to GitHub Packages (consuming apps can then install this version)
 5. ✅ Commit the version bump back to `main`
 

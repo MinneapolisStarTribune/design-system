@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
-import { BrandContext } from '@/providers/brand/BrandContext';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { ComponentName } from '@/types/component-names';
 
 const TestComponent = ({ componentName }: { componentName: ComponentName }) => {
@@ -18,9 +18,9 @@ describe('useBrandValidation', () => {
   it('does not throw when the component is supported for the brand', () => {
     expect(() =>
       render(
-        <BrandContext.Provider value="startribune">
+        <DesignSystemContext.Provider value={{ brand: 'startribune', colorScheme: 'light' }}>
           <TestComponent componentName="NewsHeading" />
-        </BrandContext.Provider>
+        </DesignSystemContext.Provider>
       )
     ).not.toThrow();
   });
@@ -28,9 +28,9 @@ describe('useBrandValidation', () => {
   it('does not throw when NewsHeading is used with varsity brand', () => {
     expect(() =>
       render(
-        <BrandContext.Provider value="varsity">
+        <DesignSystemContext.Provider value={{ brand: 'varsity', colorScheme: 'light' }}>
           <TestComponent componentName="NewsHeading" />
-        </BrandContext.Provider>
+        </DesignSystemContext.Provider>
       )
     ).not.toThrow();
   });
