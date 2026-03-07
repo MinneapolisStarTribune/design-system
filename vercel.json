@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "yarn build-storybook",
-  "outputDirectory": "storybook-static",
+  "buildCommand": "yarn workspace @minneapolisstartribune/design-system build-storybook",
+  "outputDirectory": "packages/design-system/storybook-static",
   "framework": null,
   "installCommand": "yarn install",
   "github": {

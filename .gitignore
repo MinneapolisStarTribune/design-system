@@ -154,3 +154,6 @@ storybook-static
 
 # Tamagui build output
 .tamagui/
+
+# Turborepo cache
+.turbo/

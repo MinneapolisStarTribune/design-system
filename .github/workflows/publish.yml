@@ -43,21 +43,24 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           
-          # Update version
+          # Update version in the design system package
+          cd packages/design-system
           npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          cd ../..
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json package-lock.json
+          git add packages/design-system/package.json
           git commit --no-verify -m "chore: bump version to ${{ steps.version.outputs.version }}"
 
           # Push to main
           git push origin main
 
       - name: Build package
-        run: yarn build
+        run: yarn workspace @minneapolisstartribune/design-system build
 
       - name: Publish to GitHub Packages
         env:
-          # Required to authenticate when publishing to GitHub Packages registry
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+        working-directory: packages/design-system
         run: yarn publish --non-interactive

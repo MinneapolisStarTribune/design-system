@@ -30,13 +30,13 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_SYNC_TARGET: stage
-        run: node scripts/sync-versions-from-vercel.js
+        run: node packages/design-system/scripts/sync-versions-from-vercel.js
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .storybook/versions.json
+          git add packages/design-system/.storybook/versions.json
           if git diff --staged --quiet; then
             echo "No change to versions.json"
           else
