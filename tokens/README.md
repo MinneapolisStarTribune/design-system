@@ -200,7 +200,7 @@ Run `yarn tokens` to build all tokens from these source files. This generates:
 
 - CSS variables for web (`dist/web/themes/{brand}-{mode}.css`)
 - JavaScript tokens for mobile (`dist/mobile/themes/{brand}-{mode}.js`)
-- TypeScript theme files for Tamagui (`src/generated/themes/{brand}.{mode}.ts`)
+- TypeScript type declarations for native (`src/types/mobile-themes.d.ts`, `src/types/mobile-typography.d.ts`)
 
 ## Token Loading Order
 
