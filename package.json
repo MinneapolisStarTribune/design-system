@@ -39,8 +39,6 @@
   "dependencies": {
     "@tamagui/popover": "^1.100.0",
     "@tamagui/core": "^1.100.0",
-    "@tamagui/config": "^1.100.0",
-    "@tamagui/vite-plugin": "^1.100.0",
     "@vitejs/plugin-react": "^4.7.0",
     "axe-core": "^4.11.0",
     "classnames": "^2.5.1",
@@ -50,6 +48,7 @@
     "vitest-axe": "^0.1.0"
   },
   "devDependencies": {
+    "@tamagui/config": "^1.100.0",
     "@chromatic-com/storybook": "^4.1.3",
     "@storybook/addon-themes": "^10.1.11",
     "@octokit/rest": "^22.0.1",
@@ -99,7 +98,6 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "@tamagui/core": "^1.100.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-native": ">=0.73.0"
@@ -107,19 +105,18 @@
   "scripts": {
     "tokens": "node scripts/builders/build-tokens.js",
     "fonts:fetch": "node scripts/fetch-fonts.js",
-    "tokens:tamagui": "node scripts/builders/build-tamagui-tokens.js && prettier --write \"src/generated/**/*.ts\"",
     "icons": "node scripts/builders/build-icon-mapping.js && prettier --write src/components/Icon/iconOptions.ts",
     "clean:dist": "rm -rf dist",
-    "build": "npm run clean:dist && npm run tokens && npm run tokens:tamagui && npm run icons && npm run build:web && npm run build:native",
+    "build": "npm run clean:dist && npm run tokens && npm run icons && npm run build:web && npm run build:native",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
-    "pretest": "yarn tokens:tamagui",
-    "storybook": "node scripts/builders/build-if-needed.js && cross-env TAMAGUI_TARGET=web storybook dev -p 6006",
-    "build-storybook": "npm run tokens && npm run tokens:tamagui && npm run icons && storybook build",
+    "pretest": "yarn tokens",
+    "storybook": "node scripts/builders/build-if-needed.js && storybook dev -p 6006",
+    "build-storybook": "npm run tokens && npm run icons && storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "pretest:a11y": "yarn tokens:tamagui",
+    "pretest:a11y": "yarn tokens",
     "test:a11y": "vitest run a11y.test",
     "test:scripts": "vitest run scripts/*.test.js",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",

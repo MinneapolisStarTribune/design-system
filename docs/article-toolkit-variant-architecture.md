@@ -59,35 +59,25 @@ Brand and variant are independent. Brand = which design system (colors, fonts, t
 
 ### Brand theming
 
-1. **App root:** Wrap the app with `DesignSystemProvider brand="startribune" | "varsity"`.
-2. **Theme:** Provider injects brand-specific Mantine theme (colors, typography).
-3. **`data-brand`:** Provider renders `<div data-brand={brand}>` for CSS selectors.
-4. **Tokens:** Components use theme tokens (e.g. `var(--color-brand-01)`) that vary by brand.
+If a component needs a different layout (e.g padding, border radius, ect)
 
-### Brand-specific layout (when needed)
+1. **Create a new semantic token in tokens/semantic/{brand}:** Wrap the app with `DesignSystemProvider brand="startribune" | "varsity"`.
 
-If a brand needs different layout (e.g. padding, corner radius):
-
-```scss
-// Component.module.scss
-.container {
-  padding: var(--article-padding, 16px);
-  border-radius: var(--article-radius, 8px);
+```
+// tokens/semantic/startribune.json
+"photo-layout-border-radius": {
+  "description": "Border radius for photo layout components - Star Tribune uses pointy corners",
+  "value": "{radius.none}"
 }
-
-// Brand overrides via data-brand (in theme or component CSS)
-[data-brand='startribune'] .container {
-  --article-radius: 0; /* sharp edges */
-  --article-padding: 0; /* full-bleed mobile */
-}
-
-[data-brand='varsity'] .container {
-  --article-radius: 8px; /* rounded */
-  --article-padding: 16px; /* padded mobile */
+// tokens/semantic/varsity.json
+"photo-layout-border-radius": {
+  "description": "Border radius for photo layout components - Varsity uses rounded corners",
+  "value": "{radius.12}"
 }
 ```
 
-Or define brand-specific tokens in theme build and reference them in components.
+2. Run `yarn tokens`
+3. At the component level, reference your new token `var(--semantic-photo-layout-border-radius)`
 
 ### No brand prop on components
 
@@ -101,5 +91,5 @@ Components do **not** take a `brand` prop. Brand comes from context (`DesignSyst
 | ** One file per component. Use two only when DOM, props, or behavior differ. |
 | **Article Toolkit components?** | All one file with `variant` prop. |  
 | ** `DesignSystemProvider` at app root; theme + `data-brand` for styling. |
-| ** CSS with `[data-brand="…"]` or brand-specific design tokens. |
+| ** Brand-specific design tokens for |
 | **`variant?: 'standard' \| 'immersive'` from `ArticleToolkitBaseProps`; no `brand` prop. |

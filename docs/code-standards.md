@@ -10,8 +10,8 @@ This document serves as a living reference for code standards and conventions us
 - [Export Patterns](#export-patterns)
 - [Brand Validation](#brand-validation)
 - [Storybook Standards](#storybook-standards)
-- [Documentation Requirements](#documentation-requirements)
 - [Path Aliases](#path-aliases)
+- [Documentation Requirements](#documentation-requirements)
 
 ---
 
@@ -47,8 +47,7 @@ type ButtonProps = {
 
 ### Component Structure
 
-2. **Display Names**: Always set `displayName` on components for better React DevTools experience
-3. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
+1. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
 
 ---
 
@@ -116,7 +115,7 @@ export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsH
 
 // src/index.ts
 export * from './components';
-export { DesignSystemProvider, type Brand } from './providers/TamaguiProvider';
+export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvider';
 ```
 
 ---
@@ -126,24 +125,6 @@ export { DesignSystemProvider, type Brand } from './providers/TamaguiProvider';
 ### Component Registration
 
 - **All components must be registered** in `src/types/component-names.ts`
-
----
-
-## Path Aliases
-
-### Import Paths
-
-- **Use `@/*` alias**: Maps to `src/*`. Do not use relative import.
-
-### Import Examples
-
-```typescript
-// ✅ Good - using path alias
-import type { ComponentName } from '@/types/component-names';
-
-// ❌ Bad - relative imports (unless in same directory)
-import { useBrandValidation } from '../../../hooks/useBrandValidation';
-```
 
 ---
 
@@ -230,6 +211,35 @@ export const AllVariants: Story = {
 
 ---
 
+## Path Aliases
+
+### Import Paths
+
+- **Use `@/*` alias**: Maps to `src/*`. Do not use relative import.
+
+### Import Examples
+
+```typescript
+// ✅ Good - using path alias
+import type { ComponentName } from '@/types/component-names';
+
+// ❌ Bad - relative imports (unless in same directory)
+import { useBrandValidation } from '../../../hooks/useBrandValidation';
+```
+
+---
+
+## Documentation Requirements
+
+###
+
+Every time you work in this repo, do not forget to update documentation! You MUST update:
+
+- README.md - The audience is consuming repositories and their developers.
+- docs/web - The audience is consuming repositories in web environments
+- docs/native - The audience is consuming repositories in react native environments
+-
+
 ## How to Use This Document with AI Assistants
 
 ### For Cursor and Other AI Tools
@@ -240,13 +250,14 @@ To ensure AI assistants follow these standards, include this instruction in your
 Please follow the code standards documented in docs/code-standards.md when making changes to this codebase.
 Key requirements:
 - Use TypeScript strict mode patterns
-- Follow React component patterns (factory functions, displayName, brand validation)
+- Follow React component patterns (factory functions, brand validation)
 - Use path aliases (@/*) for imports
 - Format code according to Prettier config
 - Follow file naming conventions
 - Register new components in component-names.ts
 - Include JSDoc comments for public APIs
 - Create Storybook stories with exactly 2 stories: "Configurable" (first, fully interactive for UX/PM/Engineers) and "AllVariants" (second, for Chromatic regression testing)
+- Update documentation
 ```
 
 ### Cursor-Specific Instructions
@@ -277,5 +288,3 @@ This is a **living document**. When standards change:
 2. Update related code to match new standards
 3. Communicate changes to the team
 4. Update AI assistant instructions if needed
-
-**Last Updated**: 2/12/2025 by Mary M

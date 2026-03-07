@@ -39,7 +39,7 @@
 
 import type { Preview } from '@storybook/react';
 import React from 'react';
-import { DesignSystemProvider, Brand } from '../src/providers/TamaguiProvider';
+import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
@@ -128,6 +128,10 @@ const preview: Preview = {
       const theme = (context.parameters.theme || context.globals.theme || 'light') as
         | 'light'
         | 'dark';
+
+      // Expose globals for components that need brand/theme outside decorator context
+      // (e.g., ThemeAwareColorCategory reads these during render)
+      (window as any).__STORYBOOK_GLOBALS__ = { brand, theme };
 
       const layout = context.parameters.layout as string | undefined;
       const isFullscreen = layout === 'fullscreen';

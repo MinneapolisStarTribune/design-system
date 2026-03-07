@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import { TamaguiProvider } from '@tamagui/core';
-import { config } from '../../tamagui.config';
 import { Brand, ColorScheme } from './theme-helpers';
-import { BrandContext } from './brand/BrandContext';
+import { DesignSystemContext } from './DesignSystemContext';
 import { loadBrandFonts } from '../styles/fonts';
 
 export type { Brand };
@@ -20,18 +18,6 @@ export interface DesignSystemProviderProps {
   disableFontInjection?: boolean;
 }
 
-/**
- * Maps brand and color scheme to Tamagui theme name.
- * Theme names follow the pattern: `${brand}_${colorScheme}`
- *
- * @param brand - The brand (startribune | varsity)
- * @param colorScheme - The color scheme (light | dark)
- * @returns The Tamagui theme name (e.g., 'startribune_light')
- */
-function getThemeName(brand: Brand, colorScheme: ColorScheme): string {
-  return `${brand}_${colorScheme}`;
-}
-
 export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   brand,
   forceColorScheme = 'light',
@@ -47,15 +33,12 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     loadBrandFonts(brand);
   }, [brand, disableFontInjection]);
 
-  // Compute theme name from brand and color scheme
-  // Theme names in tamagui.config.ts follow pattern: ${brand}_${colorScheme}
-  const themeName = useMemo(() => getThemeName(brand, forceColorScheme), [brand, forceColorScheme]);
+  const contextValue = useMemo(
+    () => ({ brand, colorScheme: forceColorScheme }),
+    [brand, forceColorScheme]
+  );
 
   return (
-    <BrandContext.Provider value={brand}>
-      <TamaguiProvider config={config} defaultTheme={themeName}>
-        {children}
-      </TamaguiProvider>
-    </BrandContext.Provider>
+    <DesignSystemContext.Provider value={contextValue}>{children}</DesignSystemContext.Provider>
   );
 };
