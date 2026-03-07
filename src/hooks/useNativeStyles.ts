@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useNativeTokens } from './useNativeTokens';
 
-type NativeTheme = ReturnType<typeof useNativeTokens>['theme'];
+export type NativeTheme = ReturnType<typeof useNativeTokens>['theme'];
 
 /**
  * Memoises style creation against the current native theme tokens.
