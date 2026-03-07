@@ -2,10 +2,10 @@ import '@/test-utils/mockNativeTokens';
 import { renderHook } from '@testing-library/react';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 
-import { useNativeStyles } from '@/hooks/useNativeStyles';
+import { useNativeStyles, NativeTheme } from '@/hooks/useNativeStyles';
 
 // Module-level factory — mirrors how components define createStyles
-const createStyles = (theme: any) => ({
+const createStyles = (theme: NativeTheme) => ({
   heading: { color: theme.colorBackgroundBrand },
   body: { fontSize: theme.typographyArticleQuoteLarge?.fontSize },
 });
