@@ -7,7 +7,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # Cancel old runs when new commits pushed
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -20,10 +20,10 @@ jobs:
         uses: ./.github/actions/configure-workflow-node-environment
 
       - name: Run ESLint
-        run: yarn lint
+        run: yarn workspace @minneapolisstartribune/design-system lint
 
       - name: Check formatting
-        run: yarn format:check
+        run: yarn workspace @minneapolisstartribune/design-system format:check
 
       - name: Type check
-        run: yarn typecheck
+        run: yarn workspace @minneapolisstartribune/design-system typecheck

@@ -7,7 +7,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # Cancel old runs when new commits pushed
+  cancel-in-progress: true
 
 jobs:
   changes:
@@ -22,9 +22,9 @@ jobs:
         with:
           filters: |
             ui:
-              - 'src/**/*.stories.ts'
-              - 'src/**/*.stories.tsx'
-              - '.storybook/**/*'
+              - 'packages/design-system/src/**/*.stories.ts'
+              - 'packages/design-system/src/**/*.stories.tsx'
+              - 'packages/design-system/.storybook/**/*'
 
   chromatic:
     name: Run visual tests
@@ -43,4 +43,5 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true
-          autoAcceptChanges: "main"
+          autoAcceptChanges: main
+          workingDir: packages/design-system
