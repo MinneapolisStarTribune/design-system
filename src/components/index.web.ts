@@ -20,6 +20,10 @@ export {
   type ArticleBodyTextProps,
 } from './Typography/ArticleBody/ArticleBodyText/ArticleBodyText';
 export {
+  ArticleQuote,
+  type ArticleQuoteProps,
+} from './Typography/ArticleBody/ArticleQuote/web/ArticleQuote';
+export {
   EditorialSponsoredText,
   type EditorialSponsoredTextProps,
 } from './Typography/Editorial/EditorialSponsoredText/EditorialSponsoredText';
