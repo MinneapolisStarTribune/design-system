@@ -123,8 +123,9 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         ],
       },
       javascript: {
-        // Use JS transform group - Style Dictionary preserves numbers natively as numbers
-        transformGroup: 'react-native',
+        // Use name/camel + color/css from the react-native group, but skip size/object
+        // so dimension tokens stay as plain numbers (e.g. spacing2 = 2, not { original: 2, ... })
+        transforms: ['name/camel', 'color/css'],
         
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
@@ -136,8 +137,8 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
             // Examples: startribune-light.js, varsity-dark.js
             destination: `${brand}-${mode}.js`,
             
-            // Use Style Dictionary's built-in JavaScript ES6 module format
-            format: 'javascript/es6',
+            // Use Style Dictionary's built-in JavaScript flat module format
+            format: 'javascript/module-flat',
           },
         ],
       },
