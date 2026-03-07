@@ -30,6 +30,7 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
         path.resolve(__dirname, 'src/components/index.web.ts'),
+        path.resolve(__dirname, 'src/types'),
       ],
       exclude: [
         'src/**/*.test.tsx',
@@ -74,6 +75,9 @@ export default defineConfig({
     }),
   ],
   build: {
+    commonjsOptions: {
+      include: [/node_modules/, /dist\/mobile/],
+    },
     emptyOutDir: false,
     outDir: 'dist/web',
     lib: {
