@@ -1,0 +1,28 @@
+{
+  "breakpoint": {
+    "large": {
+      "columns": { "value": "12" },
+      "container-max": { "type": "dimension", "value": 1080 },
+      "gutter": { "type": "dimension", "value": 24 },
+      "margin": { "value": "flex" },
+      "max": { "type": "dimension", "value": 1600 },
+      "min": { "type": "dimension", "value": 1160 }
+    },
+    "medium": {
+      "columns": { "value": "8" },
+      "container-max": { "value": "none" },
+      "gutter": { "type": "dimension", "value": 20 },
+      "margin": { "type": "dimension", "value": 24 },
+      "max": { "type": "dimension", "value": 1159 },
+      "min": { "type": "dimension", "value": 768 }
+    },
+    "small": {
+      "columns": { "value": "8" },
+      "container-max": { "value": "none" },
+      "gutter": { "type": "dimension", "value": 12 },
+      "margin": { "type": "dimension", "value": 16 },
+      "max": { "type": "dimension", "value": 767 },
+      "min": { "type": "dimension", "value": 320 }
+    }
+  }
+}

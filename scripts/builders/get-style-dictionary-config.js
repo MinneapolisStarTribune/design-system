@@ -6,9 +6,12 @@ const path = require('path');
  * 
  * 1. Always loads base tokens (global.json)
  * 2. Loads mode-specific button tokens (button-light.json or button-dark.json)
- * 3. Tries to load brand-specific tokens for the mode (brand-{brand}-{mode}.json)
- * 4. Falls back to generic brand tokens (brand-{brand}.json) if mode-specific doesn't exist
- * 5. Loads shared tokens (semantic, text, spacing, etc.)
+ * 3. Loads brand-specific color tokens for the mode (brand-{brand}-{mode}.json)
+ * 4. Loads shared tokens (text, border-radius, spacing, breakpoint)
+ * 5. Loads brand-specific semantic tokens (tokens/semantic/{brand}.json) - optional
+ * 
+ * Semantic tokens provide brand-specific styling decisions that aren't about color or fonts.
+ * Examples: photo-layout-border-radius (Star Tribune uses pointy corners, Varsity uses rounded)
  * 
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @param {string} mode - The color scheme ('light' or 'dark')
@@ -38,7 +41,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 
   // Required base files - must exist
   const baseFiles = [
-    requireFile('tokens/color/global.json', 'Global color palettes (core colors shared across modes)'),
+    requireFile('tokens/primitives/color.json', 'Global color palettes (core colors shared across modes)'),
     requireFile(`tokens/color/button-${mode}.json`, `Mode-specific button tokens (${mode})`),
   ];
 
@@ -49,16 +52,27 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   requireFile(brandFile, `Brand-specific colors for ${brand} (${mode} mode)`);
   sourceFiles.push(brandFile);
 
-  // Add shared token files that apply to all brands and modes
+  // Add shared primitive token files that apply to all brands and modes
+  // These must be loaded before semantic tokens so semantic tokens can reference them
   // Note: semantic colors are mode-specific and defined in brand files, not in a shared file
   const sharedFiles = [
-    requireFile('tokens/text.json', 'Font family definitions'),
-    requireFile('tokens/border-radius.json', 'Border radius tokens'),
-    requireFile('tokens/spacing.json', 'Spacing tokens'),
-    requireFile('tokens/breakpoint.json', 'Breakpoint definitions'),
+    requireFile('tokens/primitives/text.json', 'Font family definitions'),
+    requireFile('tokens/primitives/border-radius.json', 'Border radius tokens'),
+    requireFile('tokens/primitives/spacing.json', 'Spacing tokens'),
+    requireFile('tokens/primitives/breakpoint.json', 'Breakpoint definitions'),
   ];
   
   sourceFiles.push(...sharedFiles);
+
+  // Add brand-specific semantic tokens (styling differences like border radius, etc.)
+  // These are loaded AFTER shared tokens so they can reference shared values like {radius.4}
+  // Semantic tokens provide brand-specific styling decisions (e.g., photo-layout-border-radius)
+  const semanticFile = `tokens/semantic/${brand}.json`;
+  const semanticFilePath = path.join(process.cwd(), semanticFile);
+  if (fs.existsSync(semanticFilePath)) {
+    sourceFiles.push(semanticFile);
+  }
+  // Note: semantic tokens are optional - not all brands need semantic overrides
 
   // Build formats object
   const formatsConfig = {};
@@ -76,7 +90,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
     
     // Source files to read tokens from (in order - later files can override earlier ones)
     source: sourceFiles,
-    
+
     // Custom format registration
     // This tells Style Dictionary to use our custom format functions
     hooks: {
@@ -88,7 +102,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
       css: {
         // Use CSS transform group - handles token reference resolution
         // This automatically resolves {color.neutral.500} references to actual hex values
-        transformGroup: 'css',
+        transformGroup: 'web',
         
         // Output directory for generated CSS files
         buildPath: `dist/web/themes/`,
@@ -102,15 +116,16 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
             
             // Use our custom format function
             format: 'css/variables',
+            "options": {
+              "outputReferences": true
+            }
           },
         ],
       },
       javascript: {
-        transformGroup: 'js',
-        // The pxToNumber transform removes 'px' from dimension values for React Native compatibility
-        transforms: [
-          'size/pxToNumber', // Custom transform: converts "14px" to 14 for React Native
-        ],
+        // Use name/camel + color/css from the react-native group, but skip size/object
+        // so dimension tokens stay as plain numbers (e.g. spacing2 = 2, not { original: 2, ... })
+        transforms: ['name/camel', 'color/css'],
         
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
@@ -122,8 +137,8 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
             // Examples: startribune-light.js, varsity-dark.js
             destination: `${brand}-${mode}.js`,
             
-            // Use Style Dictionary's built-in JavaScript ES6 module format
-            format: 'javascript/es6',
+            // Use Style Dictionary's built-in JavaScript flat module format
+            format: 'javascript/module-flat',
           },
         ],
       },

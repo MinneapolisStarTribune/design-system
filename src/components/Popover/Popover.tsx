@@ -1,5 +1,8 @@
-import React, { HTMLAttributes, ReactNode, useState } from 'react';
+import React, { HTMLAttributes, ReactNode, useContext, useMemo, useState } from 'react';
 import { Popover as TamaguiPopover } from '@tamagui/popover';
+import { TamaguiProvider } from '@tamagui/core';
+import { config } from '../../../tamagui.config';
+import { DesignSystemContext } from '../../providers/DesignSystemContext';
 import styles from './Popover.module.scss';
 import { PopoverHeading } from './PopoverHeading';
 import { PopoverBody } from './PopoverBody';
@@ -35,6 +38,14 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   ...rest
 }) => {
   const [open, setOpen] = useState(false);
+  const ctx = useContext(DesignSystemContext);
+
+  // Compute Tamagui theme name from design system context.
+  // Tamagui is scoped to this component — it is NOT a global provider.
+  const tamaguiTheme = useMemo(
+    () => `${ctx?.brand ?? 'startribune'}_${ctx?.colorScheme ?? 'light'}`,
+    [ctx?.brand, ctx?.colorScheme]
+  );
 
   const placement = POINTER_TO_PLACEMENT[pointer];
 
@@ -49,20 +60,22 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   const close = () => setOpen(false);
 
   return (
-    <PopoverContext.Provider value={{ close }}>
-      <TamaguiPopover open={open} onOpenChange={handleOpenChange} placement={placement}>
-        <TamaguiPopover.Trigger>
-          <div style={{ display: 'inline-block', cursor: 'pointer' }}>{trigger}</div>
-        </TamaguiPopover.Trigger>
+    <TamaguiProvider config={config} defaultTheme={tamaguiTheme}>
+      <PopoverContext.Provider value={{ close }}>
+        <TamaguiPopover open={open} onOpenChange={handleOpenChange} placement={placement}>
+          <TamaguiPopover.Trigger>
+            <div style={{ display: 'inline-block', cursor: 'pointer' }}>{trigger}</div>
+          </TamaguiPopover.Trigger>
 
-        <TamaguiPopover.Content trapFocus>
-          <TamaguiPopover.Arrow size="$1" />
-          <div className={styles.container} data-testid={dataTestId} {...rest}>
-            <div className={`${styles.content} ${className ?? ''}`}>{children}</div>
-          </div>
-        </TamaguiPopover.Content>
-      </TamaguiPopover>
-    </PopoverContext.Provider>
+          <TamaguiPopover.Content trapFocus>
+            <TamaguiPopover.Arrow size="$1" />
+            <div className={styles.container} data-testid={dataTestId} {...rest}>
+              <div className={`${styles.content} ${className ?? ''}`}>{children}</div>
+            </div>
+          </TamaguiPopover.Content>
+        </TamaguiPopover>
+      </PopoverContext.Provider>
+    </TamaguiProvider>
   );
 };
 

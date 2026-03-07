@@ -1,4 +1,4 @@
-import spacingJson from '../../../../../tokens/spacing.json';
+import spacingJson from '../../../../../tokens/primitives/spacing.json';
 
 export interface SpacingData {
   name: string;
@@ -7,7 +7,7 @@ export interface SpacingData {
 }
 
 interface SpacingToken {
-  value: string;
+  value: string | number;
 }
 
 interface SpacingJson {
@@ -24,16 +24,26 @@ export const spacingTokens: SpacingData[] = typedSpacingJson?.spacing
   ? Object.keys(typedSpacingJson.spacing)
       .map((name): SpacingData => {
         const token = typedSpacingJson.spacing![name];
+        // Convert numeric values to string with "px" for display
+        // Token references like "{spacing.44}" will be kept as-is (handled by Style Dictionary)
+        const rawValue = token.value;
+        const displayValue =
+          typeof rawValue === 'number'
+            ? `${rawValue}px`
+            : typeof rawValue === 'string' && !rawValue.startsWith('{')
+              ? `${rawValue}px`
+              : String(rawValue);
+
         return {
           name: `space-${name}`,
           tokenName: `--spacing-${name}`,
-          value: token.value,
+          value: displayValue,
         };
       })
       .sort((a, b) => {
-        // Sort by numeric value (extract number from value like "96px")
-        const aNum = parseInt(a.value);
-        const bNum = parseInt(b.value);
-        return bNum - aNum; // Descending order (largest first)
+        // Sort by numeric value (extract number from display value like "96px" or raw number)
+        const aNum = typeof a.value === 'string' ? parseInt(a.value) : a.value;
+        const bNum = typeof b.value === 'string' ? parseInt(b.value) : b.value;
+        return (bNum || 0) - (aNum || 0); // Descending order (largest first)
       })
   : [];

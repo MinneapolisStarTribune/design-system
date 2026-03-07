@@ -10,6 +10,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@mobile/themes': path.resolve(__dirname, 'dist/mobile/themes'),
+      '@mobile/typography': path.resolve(__dirname, 'dist/mobile/typography'),
     },
     extensions: ['.native.tsx', '.native.ts', '.tsx', '.ts', '.jsx', '.js'],
   },

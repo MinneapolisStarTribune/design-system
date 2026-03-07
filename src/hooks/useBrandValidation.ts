@@ -1,5 +1,5 @@
 import { validateComponentForBrand } from '@/providers/brand/brand-validations';
-import { BrandContext } from '@/providers/brand/BrandContext';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { ComponentName } from '@/types/component-names';
 import { useContext } from 'react';
 
@@ -18,14 +18,14 @@ import { useContext } from 'react';
  * }
  */
 export function useBrandValidation(componentName: ComponentName): void {
-  const brand = useContext(BrandContext);
+  const ctx = useContext(DesignSystemContext);
 
-  if (!brand) {
+  if (!ctx) {
     throw new Error(
       `[Brand Validation] "${componentName}" must be used within DesignSystemProvider.`
     );
   }
 
   // Throws immediately if component usage is invalid
-  validateComponentForBrand(componentName, brand);
+  validateComponentForBrand(componentName, ctx.brand);
 }

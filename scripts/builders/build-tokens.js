@@ -63,6 +63,7 @@ const buildCombinedCSS = require('./build-combined-css');
 const buildFontFaces = require('./build-font-faces');
 const buildMobileFonts = require('./build-mobile-fonts');
 const buildMobileTypography = require('./build-mobile-typography');
+const generateNativeTypes = require('./generate-native-types');
 
 /**
  * Main Build Function
@@ -143,6 +144,12 @@ async function buildTokens() {
   for (const brand of brands) {
     await buildMobileTypography(brand);
   }
+
+  // Generate TypeScript type declarations from the built JS files
+  console.log('\n==============================================');
+  console.log('Generating native TypeScript declarations...');
+
+  await generateNativeTypes();
 
   console.log('\n==============================================');
   console.log('\n✓ All tokens built successfully!\n');

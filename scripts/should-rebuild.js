@@ -42,7 +42,7 @@ function shouldRebuildTokens() {
   // Source files: all token JSON files
   const tokenSourceFiles = [
     'tokens/color/base.json',
-    'tokens/color/global.json',
+    'tokens/primitives/color.json',
     'tokens/color/button-light.json',
     'tokens/color/button-dark.json',
     'tokens/color/brand-startribune-light.json',
@@ -50,10 +50,10 @@ function shouldRebuildTokens() {
     'tokens/color/brand-varsity-light.json',
     'tokens/color/brand-varsity-dark.json',
     'tokens/color/semantic.json',
-    'tokens/text.json',
-    'tokens/border-radius.json',
-    'tokens/spacing.json',
-    'tokens/breakpoint.json',
+    'tokens/primitives/text.json',
+    'tokens/primitives/border-radius.json',
+    'tokens/primitives/spacing.json',
+    'tokens/primitives/breakpoint.json',
   ].map(file => path.join(projectRoot, file));
   
   // Output files: generated CSS files (web) and JavaScript files (mobile)
@@ -79,48 +79,6 @@ function shouldRebuildTokens() {
   
   // Get latest modification time from output files
   const latestOutputMtime = getLatestMtime(tokenOutputFiles);
-  
-  // Rebuild if source files are newer than output files
-  return latestSourceMtime > latestOutputMtime;
-}
-
-/**
- * Check if Tamagui token TypeScript files need to be rebuilt
- * @returns {boolean} True if Tamagui tokens should be rebuilt
- */
-function shouldRebuildTamaguiTokens() {
-  const projectRoot = path.join(__dirname, '..');
-  
-  // Source files: Tamagui theme tokens are built from the same core color files
-  const tokenSourceFiles = [
-    'tokens/color/global.json',
-    'tokens/color/button-light.json',
-    'tokens/color/button-dark.json',
-    'tokens/color/brand-startribune-light.json',
-    'tokens/color/brand-startribune-dark.json',
-    'tokens/color/brand-varsity-light.json',
-    'tokens/color/brand-varsity-dark.json',
-  ].map(file => path.join(projectRoot, file));
-  
-  // Output files: generated TypeScript files (format is brand.mode.ts, not brand-mode.ts)
-  const tamaguiOutputFiles = [
-    'src/generated/themes/startribune.light.ts',
-    'src/generated/themes/startribune.dark.ts',
-    'src/generated/themes/varsity.light.ts',
-    'src/generated/themes/varsity.dark.ts',
-  ].map(file => path.join(projectRoot, file));
-  
-  // Check if any output file is missing
-  const allOutputsExist = tamaguiOutputFiles.every(file => fs.existsSync(file));
-  if (!allOutputsExist) {
-    return true;
-  }
-  
-  // Get latest modification time from source files
-  const latestSourceMtime = getLatestMtime(tokenSourceFiles);
-  
-  // Get latest modification time from output files
-  const latestOutputMtime = getLatestMtime(tamaguiOutputFiles);
   
   // Rebuild if source files are newer than output files
   return latestSourceMtime > latestOutputMtime;
@@ -172,12 +130,12 @@ function shouldRebuildIcons() {
 }
 
 // Main execution
-// This script is called with a command argument: 'tokens', 'tokens:tamagui', or 'icons'
+// This script is called with a command argument: 'tokens' or 'icons'
 const command = process.argv[2];
 
 if (!command) {
   console.error('Usage: node scripts/should-rebuild.js <command>');
-  console.error('Commands: tokens, tokens:tamagui, icons');
+  console.error('Commands: tokens, icons');
   process.exit(1);
 }
 
@@ -187,15 +145,12 @@ switch (command) {
   case 'tokens':
     shouldRebuild = shouldRebuildTokens();
     break;
-  case 'tokens:tamagui':
-    shouldRebuild = shouldRebuildTamaguiTokens();
-    break;
   case 'icons':
     shouldRebuild = shouldRebuildIcons();
     break;
   default:
     console.error(`Unknown command: ${command}`);
-    console.error('Commands: tokens, tokens:tamagui, icons');
+    console.error('Commands: tokens, icons');
     process.exit(1);
 }
 

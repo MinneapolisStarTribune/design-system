@@ -9,7 +9,7 @@
  * which properly handles brand-specific and theme-aware color resolution.
  */
 
-import primitivesColorsJson from '../../../../tokens/color/global.json';
+import primitivesColorsJson from '../../../../tokens/primitives/color.json';
 import buttonColorsJson from '../../../../tokens/color/button-light.json';
 
 export interface ColorData {

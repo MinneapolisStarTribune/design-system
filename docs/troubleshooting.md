@@ -34,7 +34,7 @@ Common issues and solutions for using the design system.
 
 1. Ensure `DesignSystemProvider` is wrapping your components
 2. Verify you're using the correct brand/theme combination
-3. Ensure your React and Tamagui peer dependencies match the versions listed in `package.json`
+3. Ensure your React peer dependencies match the versions listed in `package.json`
 4. Clear your build cache and rebuild: `rm -rf node_modules/.cache && yarn build` (or `npm run build`)
 
 ### Build/Bundler Configuration Issues

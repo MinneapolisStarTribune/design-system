@@ -10,8 +10,9 @@ This document serves as a living reference for code standards and conventions us
 - [Export Patterns](#export-patterns)
 - [Brand Validation](#brand-validation)
 - [Storybook Standards](#storybook-standards)
-- [Documentation Requirements](#documentation-requirements)
+- [Testing Standards](#testing-standards)
 - [Path Aliases](#path-aliases)
+- [Documentation Requirements](#documentation-requirements)
 
 ---
 
@@ -47,8 +48,7 @@ type ButtonProps = {
 
 ### Component Structure
 
-2. **Display Names**: Always set `displayName` on components for better React DevTools experience
-3. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
+1. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
 
 ---
 
@@ -116,7 +116,7 @@ export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsH
 
 // src/index.ts
 export * from './components';
-export { DesignSystemProvider, type Brand } from './providers/TamaguiProvider';
+export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvider';
 ```
 
 ---
@@ -126,24 +126,6 @@ export { DesignSystemProvider, type Brand } from './providers/TamaguiProvider';
 ### Component Registration
 
 - **All components must be registered** in `src/types/component-names.ts`
-
----
-
-## Path Aliases
-
-### Import Paths
-
-- **Use `@/*` alias**: Maps to `src/*`. Do not use relative import.
-
-### Import Examples
-
-```typescript
-// ✅ Good - using path alias
-import type { ComponentName } from '@/types/component-names';
-
-// ❌ Bad - relative imports (unless in same directory)
-import { useBrandValidation } from '../../../hooks/useBrandValidation';
-```
 
 ---
 
@@ -230,6 +212,119 @@ export const AllVariants: Story = {
 
 ---
 
+## Native Component Patterns
+
+### Themed Styles with `useNativeStyles`
+
+Native components that need theme-aware styles should use the `useNativeStyles` hook. Define a `createStyles` factory at **module level** and pass it to the hook:
+
+```tsx
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
+
+export const MyComponent: React.FC<MyComponentProps> = ({ variant, children }) => {
+  const styles = useNativeStyles(createStyles);
+  return <Text style={styles[variant]}>{children}</Text>;
+};
+
+const createStyles =
+  StyleSheet.create({
+    primary: { color: theme.colorBackgroundBrand },
+    secondary: { color: theme.colorBackgroundBrand },
+  });
+```
+
+This pattern:
+
+- **Encapsulates memoisation** so styles are only recalculated if the colorScheme or brand changes
+- **Keeps `StyleSheet.create` at module level** the factory reference is stable across renders
+- **Infers the theme type** from the hook so token names are autocompleted and typo-checked
+
+> For direct access to `brand`, `colorScheme`, or individual tokens outside of a stylesheet, use `useNativeTokens` instead.
+---
+
+## Testing Standards
+
+### Native Test Mocks
+
+Tests that exercise code depending on `useNativeTokens` or `useNativeStyles` need mocked `@mobile` theme/typography modules. Use the shared setup file instead of inlining `vi.mock` calls:
+
+```typescript
+// ✅ Good - shared mock setup
+import '@/test-utils/mockNativeTokens';
+
+// ❌ Bad - duplicated vi.mock() blocks in every test file
+vi.mock('@mobile/themes/startribune-light.js', () => ({ ... }));
+```
+
+
+### Test Wrappers
+
+When tests need a `DesignSystemContext`, use the shared wrapper from `src/test-utils/wrappers.tsx` instead of inlining `<DesignSystemContext.Provider>`:
+
+- **`TestWrapperInDesignSystemProvider({ brand?, colorScheme? })`** — returns a wrapper component that provides `DesignSystemContext`. Defaults to `'startribune'` / `'light'`.
+
+```typescript
+import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+import '@/test-utils/mockNativeTokens'
+
+// With defaults (startribune, light)
+renderHook(() => useMyHook(), {
+  wrapper: TestWrapperInDesignSystemProvider(),
+});
+
+// With overrides — only specify what you need
+render(<MyComponent />, {
+  wrapper: TestWrapperInDesignSystemProvider({ brand: 'varsity', colorScheme: 'dark' }),
+});
+```
+
+```typescript
+// ❌ Bad - inline provider in tests
+render(
+  <DesignSystemContext.Provider value={{ brand: 'startribune', colorScheme: 'light' }}>
+    <MyComponent />
+  </DesignSystemContext.Provider>
+);
+
+// ✅ Good - shared test wrapper
+render(<MyComponent />, {
+  wrapper: TestWrapperInDesignSystemProvider(),
+});
+```
+
+---
+
+## Path Aliases
+
+### Import Paths
+
+- **Use `@/*` alias**: Maps to `src/*`. Do not use relative import.
+
+### Import Examples
+
+```typescript
+// ✅ Good - using path alias
+import type { ComponentName } from '@/types/component-names';
+
+// ❌ Bad - relative imports (unless in same directory)
+import { useBrandValidation } from '../../../hooks/useBrandValidation';
+```
+
+---
+
+## Documentation Requirements
+
+###
+
+Every time you work in this repo, do not forget to update documentation! You MUST update:
+
+- README.md - The audience is consuming repositories and their developers.
+- docs/web - The audience is consuming repositories in web environments
+- docs/native - The audience is consuming repositories in react native environments
+-
+
 ## How to Use This Document with AI Assistants
 
 ### For Cursor and Other AI Tools
@@ -240,13 +335,15 @@ To ensure AI assistants follow these standards, include this instruction in your
 Please follow the code standards documented in docs/code-standards.md when making changes to this codebase.
 Key requirements:
 - Use TypeScript strict mode patterns
-- Follow React component patterns (factory functions, displayName, brand validation)
+- Follow React component patterns (factory functions, brand validation)
 - Use path aliases (@/*) for imports
 - Format code according to Prettier config
 - Follow file naming conventions
 - Register new components in component-names.ts
 - Include JSDoc comments for public APIs
 - Create Storybook stories with exactly 2 stories: "Configurable" (first, fully interactive for UX/PM/Engineers) and "AllVariants" (second, for Chromatic regression testing)
+- Update documentation
+- ALWAYS refer to docs/native and docs/web for platform specific instructions
 ```
 
 ### Cursor-Specific Instructions
@@ -277,5 +374,3 @@ This is a **living document**. When standards change:
 2. Update related code to match new standards
 3. Communicate changes to the team
 4. Update AI assistant instructions if needed
-
-**Last Updated**: 2/12/2025 by Mary M
