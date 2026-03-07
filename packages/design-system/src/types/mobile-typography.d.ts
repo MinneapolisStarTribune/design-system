@@ -239,6 +239,8 @@ interface VarsityTypography {
   typographyUtilityTextSemiboldXxSmall: TextStyle;
 }
 
+type TypographyTokens = StartribuneTypography | VarsityTypography;
+
 declare module '@mobile/typography/startribune-typography.js' {
   const typography: StartribuneTypography;
   export = typography;
