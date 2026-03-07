@@ -45,6 +45,30 @@ Components use design tokens internally - you don't need to import tokens direct
 
 ## Hooks
 
+### `useNativeStyles`
+
+The recommended way to create theme-aware `StyleSheet` styles in native components. It memoises the result of a factory function against the current theme, so styles are only re-created when the brand or color scheme changes.
+
+Define the factory at **module level** (outside the component) so its reference is stable across renders.
+
+```tsx
+import { Text, StyleSheet } from 'react-native';
+import { useNativeStyles } from '@minneapolisstartribune/design-system/native';
+
+export const Greeting = () => {
+  const styles = useNativeStyles(createStyles);
+  return <Text style={styles.heading}>Hello</Text>;
+};
+
+const createStyles = (theme) =>
+  StyleSheet.create({
+    heading: {
+      color: theme.colorBackgroundBrand,
+      fontSize: theme.typographyArticleQuoteLarge.fontSize,
+    },
+  });
+```
+
 ### `useNativeTokens`
 
 Lower-level hook that gives direct access to the current brand, color scheme, and the full theme token object. Use this when you need the raw tokens outside of `StyleSheet.create` — for example, passing a token value as a prop or computing a derived value.
