@@ -4,3 +4,6 @@
 export * from './components/index.native';
 
 export { type Brand, DesignSystemProvider } from './providers/DesignSystemProvider';
+
+// Export hooks
+export { useNativeTokens } from './hooks/useNativeTokens';
