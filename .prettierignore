@@ -21,5 +21,4 @@ pnpm-lock.yaml
 
 # Generated files
 *.d.ts
-!src/**/*.d.ts
-
+!packages/design-system/src/**/*.d.ts
