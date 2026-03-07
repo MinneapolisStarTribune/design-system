@@ -65,6 +65,7 @@ const buildCombinedCSS = require('./build-combined-css');
 const buildFontFaces = require('./build-font-faces');
 const buildMobileFonts = require('./build-mobile-fonts');
 const buildMobileTypography = require('./build-mobile-typography');
+const generateNativeTypes = require('./generate-native-types');
 
 /**
  * Main Build Function
