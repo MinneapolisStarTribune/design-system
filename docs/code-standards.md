@@ -214,6 +214,19 @@ export const AllVariants: Story = {
 
 ## Testing Standards
 
+### Native Test Mocks
+
+Tests that exercise code depending on `useNativeTokens` or `useNativeStyles` need mocked `@mobile` theme/typography modules. Use the shared setup file instead of inlining `vi.mock` calls:
+
+```typescript
+// ✅ Good - shared mock setup
+import '@/test-utils/mockNativeTokens';
+
+// ❌ Bad - duplicated vi.mock() blocks in every test file
+vi.mock('@mobile/themes/startribune-light.js', () => ({ ... }));
+```
+
+
 ### Test Wrappers
 
 When tests need a `DesignSystemContext`, use the shared wrapper from `src/test-utils/wrappers.tsx` instead of inlining `<DesignSystemContext.Provider>`:
@@ -222,6 +235,7 @@ When tests need a `DesignSystemContext`, use the shared wrapper from `src/test-u
 
 ```typescript
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+import '@/test-utils/mockNativeTokens'
 
 // With defaults (startribune, light)
 renderHook(() => useMyHook(), {
@@ -297,6 +311,7 @@ Key requirements:
 - Include JSDoc comments for public APIs
 - Create Storybook stories with exactly 2 stories: "Configurable" (first, fully interactive for UX/PM/Engineers) and "AllVariants" (second, for Chromatic regression testing)
 - Update documentation
+- ALWAYS refer to docs/native and docs/web for platform specific instructions
 ```
 
 ### Cursor-Specific Instructions

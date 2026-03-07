@@ -43,6 +43,29 @@ function App() {
 
 Components use design tokens internally - you don't need to import tokens directly. The library handles all token consumption based on the brand and color scheme provided by `DesignSystemProvider`.
 
+## Hooks
+
+### `useNativeTokens`
+
+Lower-level hook that gives direct access to the current brand, color scheme, and the full theme token object. Use this when you need the raw tokens outside of `StyleSheet.create` — for example, passing a token value as a prop or computing a derived value.
+
+```tsx
+import { View, Text } from 'react-native';
+import { useNativeTokens } from '@minneapolisstartribune/design-system/native';
+
+function MyComponent() {
+  const { brand, colorScheme, theme } = useNativeTokens();
+
+  return (
+    <View style={{ borderRadius: theme.semanticPhotoLayoutBorderRadius }}>
+      <Text>Brand: {brand}, Scheme: {colorScheme}</Text>
+    </View>
+  );
+}
+```
+
+> **Tip**: Prefer `useNativeStyles` for stylesheet creation — it wraps `useNativeTokens` and adds memoisation automatically. Reach for `useNativeTokens` directly only when you need `brand`, `colorScheme`, or individual token values outside of a stylesheet.
+
 ## Troubleshooting
 
 See [Troubleshooting Guide](troubleshooting.md#mobile-issues) for common mobile-specific issues.
