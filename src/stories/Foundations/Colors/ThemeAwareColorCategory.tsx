@@ -6,11 +6,11 @@
  * to create data structures used by Storybook stories for displaying color palettes.
  *
  * For production code, colors should be accessed through the design system provider
- * and token utilities (e.g., Tamagui + existing token helpers), which properly handle
+ * and token utilities (e.g., CSS variables on web, useNativeTokens on native), which properly handle
  * brand-specific and theme-aware color resolution.
  */
-import React, { useMemo, useEffect, useState } from 'react';
-import { Brand, ColorScheme, getBrandColors } from '../../../providers/theme-helpers';
+import React, { useMemo } from 'react';
+import type { Brand, ColorScheme } from '../../../providers/theme-helpers';
 
 // Import token JSON files for descriptions
 import startribuneLightJson from '../../../../tokens/color/brand-startribune-light.json';
@@ -39,6 +39,61 @@ interface ThemeAwareColorCategoryProps {
   category: ColorCategory;
   categoryDisplayName?: string;
   groupBy?: (colorKey: string) => string | null; // Optional grouping function
+}
+
+/**
+ * Get a brand's color token names from the imported JSON.
+ * Returns token names in "category-key" format (e.g., "background-brand").
+ * The JSON files have structure: { color: { background: { "brand": { value: "..." }, ... }, ... } }
+ *
+ * Values are resolved from CSS variables (loaded by ThemeWrapper) rather than raw JSON,
+ * since raw JSON contains unresolved references like "{color.emerald-green.800}".
+ */
+function getBrandColorTokens(brand: Brand, colorScheme: ColorScheme): Record<string, string> {
+  let brandJson: any;
+
+  if (brand === 'startribune') {
+    brandJson = colorScheme === 'light' ? startribuneLightJson : startribuneDarkJson;
+  } else if (brand === 'varsity') {
+    brandJson = colorScheme === 'light' ? varsityLightJson : varsityDarkJson;
+  } else {
+    return {};
+  }
+
+  const colorRoot = brandJson?.color;
+  if (!colorRoot || typeof colorRoot !== 'object') {
+    return {};
+  }
+
+  const computedStyle = getComputedStyle(document.documentElement);
+  const result: Record<string, string> = {};
+
+  // Walk each category (background, text, brand, border, etc.)
+  for (const [category, categoryData] of Object.entries(colorRoot)) {
+    if (!categoryData || typeof categoryData !== 'object') continue;
+
+    // Skip metadata fields
+    for (const [key, token] of Object.entries(categoryData as Record<string, any>)) {
+      if (
+        key === '$description' ||
+        key === 'description' ||
+        key === 'overview' ||
+        key === 'dark-mode'
+      )
+        continue;
+
+      if (token && typeof token === 'object' && typeof token.value === 'string') {
+        const tokenName = `${category}-${key}`;
+        // Resolve value from CSS variables (e.g., --color-background-brand)
+        const cssValue = computedStyle.getPropertyValue(`--color-${tokenName}`).trim();
+        if (cssValue) {
+          result[tokenName] = cssValue;
+        }
+      }
+    }
+  }
+
+  return result;
 }
 
 // Helper function to format a key name (e.g., "light-default" -> "Light Default")
@@ -127,62 +182,11 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
   categoryDisplayName,
   groupBy,
 }) => {
-  // Read brand from Storybook's globals synchronously on mount, then poll for changes
-  const getBrandFromGlobals = (): Brand => {
-    try {
-      const parent = window.parent;
-      if (parent && parent !== window) {
-        const globals = (parent as any).__STORYBOOK_GLOBALS__;
-        if (globals?.brand) {
-          return globals.brand as Brand;
-        }
-      } else {
-        const globals = (window as any).__STORYBOOK_GLOBALS__;
-        if (globals?.brand) {
-          return globals.brand as Brand;
-        }
-      }
-    } catch (e) {
-      // Ignore errors
-    }
-    return 'startribune'; // Default fallback
-  };
-
-  const [brand, setBrand] = useState<Brand>(getBrandFromGlobals);
-
-  // Read color scheme from Storybook globals (theme toolbar)
-  const getColorSchemeFromGlobals = (): ColorScheme => {
-    try {
-      const parent = window.parent;
-      if (parent && parent !== window) {
-        const globals = (parent as any).__STORYBOOK_GLOBALS__;
-        if (globals?.theme === 'dark' || globals?.theme === 'light') {
-          return globals.theme as ColorScheme;
-        }
-      } else {
-        const globals = (window as any).__STORYBOOK_GLOBALS__;
-        if (globals?.theme === 'dark' || globals?.theme === 'light') {
-          return globals.theme as ColorScheme;
-        }
-      }
-    } catch (e) {
-      // Ignore errors
-    }
-    return 'light';
-  };
-
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(getColorSchemeFromGlobals);
-
-  // Poll for brand changes (Storybook updates globals when toolbar changes)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newBrand = getBrandFromGlobals();
-      const newScheme = getColorSchemeFromGlobals();
-      setBrand((current) => (current !== newBrand ? newBrand : current));
-      setColorScheme((current) => (current !== newScheme ? newScheme : current));
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
+  // Read brand and color scheme from Storybook globals (set by the preview decorator).
+  // No polling needed — the decorator re-renders the story tree when globals change.
+  const storybookGlobals = (window as any).__STORYBOOK_GLOBALS__ || {};
+  const brand = (storybookGlobals.brand || 'startribune') as Brand;
+  const colorScheme = (storybookGlobals.theme === 'dark' ? 'dark' : 'light') as ColorScheme;
 
   const categoryMetadata = useMemo(
     () => getCategoryMetadata(brand, colorScheme, category),
@@ -191,7 +195,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
 
   // Compute colors from brand/colorScheme tokens
   const colors = useMemo(() => {
-    const brandColors = getBrandColors(brand, colorScheme);
+    const brandColors = getBrandColorTokens(brand, colorScheme);
     const colorList: ColorDisplay[] = [];
 
     // Special handling for brand colors: use brand-01 .. brand-04 tokens directly

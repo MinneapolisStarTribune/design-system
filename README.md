@@ -1,6 +1,6 @@
 # design-system
 
-A React component library built with TypeScript, Tamagui, and a comprehensive design token system. Supports both web (React) and mobile (React Native) platforms.
+A React component library built with TypeScript and a comprehensive design token system. Supports both web (React) and native (React Native) platforms.
 
 ## Installation
 
@@ -56,11 +56,11 @@ yarn add @minneapolisstartribune/design-system
 
 ### Step 4: Install Peer Dependencies
 
-This package requires React, React DOM, React Native (for native usage), and Tamagui core as peer dependencies:
+This package requires React, React DOM, and React Native (for native usage) as peer dependencies:
 
 ```bash
 # Using yarn
-yarn add @tamagui/core@^1.100.0 react@^19.0.0 react-dom@^19.0.0 react-native@>=0.73.0
+yarn add react@^19.0.0 react-dom@^19.0.0 react-native@>=0.73.0
 ```
 
 ## Quick Start
@@ -89,7 +89,7 @@ function App() {
 
 See [Web Usage Documentation](docs/web.md) for more details.
 
-### Mobile (React Native)
+### Native (React Native)
 
 1. **Install the package** (see [Installation](#installation) above)
 2. **Import components from the native entry point**
@@ -108,7 +108,7 @@ function App() {
 }
 ```
 
-See [Mobile Usage Documentation](docs/mobile.md) for more details.
+See [Native Usage Documentation](docs/native.md) for more details.
 
 ## Available Components
 
@@ -241,7 +241,7 @@ yarn add @minneapolisstartribune/design-system@latest
 ## Documentation
 
 - **[Web Usage](docs/web.md)** - Complete guide for using the design system in web (React) applications
-- **[Mobile Usage](docs/mobile.md)** - Complete guide for using the design system in React Native applications
+- **[Native Usage](docs/native.md)** - Complete guide for using the design system in React Native applications
 - **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
 
 ## Still Having Issues?

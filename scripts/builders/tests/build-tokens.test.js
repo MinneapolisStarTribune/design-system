@@ -8,7 +8,7 @@
  * - Includes expected token values
  * 
  * Note: These tests run in Node.js environment (not jsdom) since they test
- * file system operations and script execution. This prevents React/Tamagui
+ * file system operations and script execution. This prevents React
  * from being loaded, which would cause errors since we're not rendering components.
  * 
  * @vitest-environment node
