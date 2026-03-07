@@ -212,6 +212,38 @@ export const AllVariants: Story = {
 
 ---
 
+## Native Component Patterns
+
+### Themed Styles with `useNativeStyles`
+
+Native components that need theme-aware styles should use the `useNativeStyles` hook. Define a `createStyles` factory at **module level** and pass it to the hook:
+
+```tsx
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
+
+export const MyComponent: React.FC<MyComponentProps> = ({ variant, children }) => {
+  const styles = useNativeStyles(createStyles);
+  return <Text style={styles[variant]}>{children}</Text>;
+};
+
+const createStyles =
+  StyleSheet.create({
+    primary: { color: theme.colorBackgroundBrand },
+    secondary: { color: theme.colorBackgroundBrand },
+  });
+```
+
+This pattern:
+
+- **Encapsulates memoisation** so styles are only recalculated if the colorScheme or brand changes
+- **Keeps `StyleSheet.create` at module level** the factory reference is stable across renders
+- **Infers the theme type** from the hook so token names are autocompleted and typo-checked
+
+> For direct access to `brand`, `colorScheme`, or individual tokens outside of a stylesheet, use `useNativeTokens` instead.
+---
+
 ## Testing Standards
 
 ### Native Test Mocks
