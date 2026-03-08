@@ -1,0 +1,7 @@
+pre-commit:
+  parallel: true
+  commands:
+    vitest:
+      glob: 'packages/design-system/src/**/*.{ts,tsx}'
+      root: packages/design-system
+      run: VITEST_REPORTERS=./scripts/minimal-reporter.ts yarn vitest related --run --passWithNoTests --no-color {staged_files}
