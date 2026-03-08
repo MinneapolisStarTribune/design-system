@@ -146,6 +146,11 @@ design-system/
    ```bash
    git add .
    git commit -m "feat: add new component"
+   ```
+
+   **Note:** When you commit, [Lefthook](https://github.com/evilmartians/lefthook) runs Prettier and ESLint on staged files (fixing format and lint), then typecheck, then Vitest related tests for changed files. If any check fails, the commit is blocked.
+
+   ```bash
    gitpushmybranch              # Sync and push to remote
    ```
 
