@@ -1,6 +1,22 @@
+# Pre-commit: fix staged files (prettier, eslint), then typecheck and vitest
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
+    # Run from repo root so {staged_files} paths (root-relative) resolve correctly
+    prettier:
+      glob: 'packages/design-system/**/*.{ts,tsx,json,md,css}'
+      run: node ./packages/design-system/node_modules/.bin/prettier --write {staged_files}
+    eslint:
+      glob: 'packages/design-system/**/*.{ts,tsx}'
+      run: node ./packages/design-system/node_modules/.bin/eslint --fix {staged_files}
+    # Re-stage fixed files so the commit includes Prettier/ESLint changes
+    restage:
+      glob: 'packages/design-system/**/*.{ts,tsx,json,md,css}'
+      run: git add {staged_files}
+    # Full project typecheck; only run when commit touches TS/TSX files
+    typecheck:
+      glob: 'packages/design-system/**/*.{ts,tsx}'
+      run: yarn turbo run typecheck --output-logs=hash-only
     vitest:
       glob: 'packages/design-system/src/**/*.{ts,tsx}'
       root: packages/design-system
