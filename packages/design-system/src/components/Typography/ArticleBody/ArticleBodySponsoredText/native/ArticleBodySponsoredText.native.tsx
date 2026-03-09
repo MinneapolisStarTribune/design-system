@@ -2,10 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import camelCase from 'lodash/camelCase';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type {
-  ArticleBodySponsoredTextProps,
-  ArticleBodySponsoredTextWeight,
-} from '../ArticleBodySponsoredText.types';
+import type { ArticleBodySponsoredTextProps } from '../ArticleBodySponsoredText.types';
 
 export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> = (props) => {
   const {
@@ -49,4 +46,7 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type { ArticleBodySponsoredTextProps, ArticleBodySponsoredTextWeight };
+export type {
+  ArticleBodySponsoredTextProps,
+  ArticleBodySponsoredTextWeight,
+} from '../ArticleBodySponsoredText.types';
