@@ -6,28 +6,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "48px",
-              "font-weight": "700",
+              "font-size": 48,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "34px",
-              "font-weight": "700",
+              "font-size": 34,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "tablet": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "40px",
-              "font-weight": "700",
+              "font-size": 40,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           }
         },
@@ -35,28 +35,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "36px",
-              "font-weight": "700",
+              "font-size": 36,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "28px",
-              "font-weight": "700",
+              "font-size": 28,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "tablet": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "30px",
-              "font-weight": "700",
+              "font-size": 30,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           }
         },
@@ -64,28 +64,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "28px",
-              "font-weight": "700",
+              "font-size": 28,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "22px",
-              "font-weight": "700",
+              "font-size": 22,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "tablet": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "24px",
-              "font-weight": "700",
+              "font-size": 24,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           }
         },
@@ -93,28 +93,28 @@
           "desktop": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "22px",
-              "font-weight": "700",
+              "font-size": 22,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "mobile": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "18px",
-              "font-weight": "700",
+              "font-size": 18,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           },
           "tablet": {
             "value": {
               "font-family": "{font.family.popular}",
-              "font-size": "20px",
-              "font-weight": "700",
+              "font-size": 20,
+              "font-weight": 700,
               "letter-spacing": "0",
-              "line-height": "1.10"
+              "line-height": 1.1
             }
           }
         }
