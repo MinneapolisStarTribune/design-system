@@ -4,23 +4,24 @@
  * All component names must be reflected here.
  * @remarks Used for brand validation and enforcement.
  */
+// @eslint-sort-array
 export const COMPONENT_NAMES = [
-  'ArticleBodySponsoredHeading',
   'ArticleBodyHeading',
+  'ArticleBodySponsoredHeading',
   'ArticleQuote',
-  'NewsHeading',
-  'NonNewsHeading',
+  'CodeBlock',
   'EnterpriseHeading',
-  'OpinionHeading',
-  'FormGroup',
   'FormControl',
-  'SponsoredHeading',
-  'PhotoLayout',
+  'FormGroup',
   'ImageGallery',
   'InlineVideo',
-  'CodeBlock',
+  'NewsHeading',
+  'NonNewsHeading',
+  'OpinionHeading',
+  'PhotoLayout',
   'PullQuote',
   'SocialEmbeds',
+  'SponsoredHeading',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];

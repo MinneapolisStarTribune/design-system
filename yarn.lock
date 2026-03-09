@@ -3238,6 +3238,7 @@ __metadata:
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^7.0.1"
     eslint-plugin-simple-import-sort: "npm:^12.1.0"
+    eslint-plugin-sort-array-values: "npm:^0.1.0"
     eslint-plugin-storybook: "npm:^10.1.11"
     eslint-plugin-unicorn: "npm:^55.0.0"
     eslint-plugin-unused-imports: "npm:^4.3.0"
@@ -9740,6 +9741,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-sort-array-values@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "eslint-plugin-sort-array-values@npm:0.1.0"
+  dependencies:
+    requireindex: "npm:^1.2.0"
+  peerDependencies:
+    eslint: ">=7"
+  checksum: 10c0/525a1e5efa23658dc4fc1f2c098b78bb57c3e3adbca7df04973c8ea57139435be17a824616cb2c321a8b206ad0a93a8edd4e560097853398572251858bc698c8
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-storybook@npm:^10.1.11":
   version: 10.1.11
   resolution: "eslint-plugin-storybook@npm:10.1.11"
@@ -15989,6 +16001,13 @@ __metadata:
     rc: "npm:~1.2.7"
     resolve: "npm:~1.7.1"
   checksum: 10c0/806cff08d8fa63f2ec9c74fa9602c86b56627a824d0a188bf777c8d82ba012a1b3c01ab6e88ffcf610713b6bc5ec8a9f9e55dc941b7606ce735e72c4d9daa059
+  languageName: node
+  linkType: hard
+
+"requireindex@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "requireindex@npm:1.2.0"
+  checksum: 10c0/7fb42aed73bf8de9acc4d6716cf07acc7fbe180e58729433bafcf702e76e7bb10e54f8266c06bfec62d752e0ac14d50e8758833de539e6f4e2cd642077866153
   languageName: node
   linkType: hard
 
