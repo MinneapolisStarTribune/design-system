@@ -308,6 +308,8 @@ interface StartribuneLightTheme {
   fontFamilyPublicoHeadline: string;
   fontFamilyPublicoHeadlineCondensed: string;
   fontFamilyPublicoText: string;
+  photoLayoutBorderRadius: number;
+  photoLayoutCaptionPaddingMobile: string;
   radius12: number;
   radius16: number;
   radius2: number;
@@ -319,7 +321,6 @@ interface StartribuneLightTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
-  semanticPhotoLayoutBorderRadius: number;
   spacing0: number;
   spacing12: number;
   spacing16: number;
@@ -648,6 +649,8 @@ interface StartribuneDarkTheme {
   fontFamilyPublicoHeadline: string;
   fontFamilyPublicoHeadlineCondensed: string;
   fontFamilyPublicoText: string;
+  photoLayoutBorderRadius: number;
+  photoLayoutCaptionPaddingMobile: string;
   radius12: number;
   radius16: number;
   radius2: number;
@@ -659,7 +662,6 @@ interface StartribuneDarkTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
-  semanticPhotoLayoutBorderRadius: number;
   spacing0: number;
   spacing12: number;
   spacing16: number;
@@ -994,6 +996,8 @@ interface VarsityLightTheme {
   fontFamilyPublicoHeadline: string;
   fontFamilyPublicoHeadlineCondensed: string;
   fontFamilyPublicoText: string;
+  photoLayoutBorderRadius: number;
+  photoLayoutCaptionPaddingMobile: string;
   radius12: number;
   radius16: number;
   radius2: number;
@@ -1005,7 +1009,6 @@ interface VarsityLightTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
-  semanticPhotoLayoutBorderRadius: number;
   spacing0: number;
   spacing12: number;
   spacing16: number;
@@ -1340,6 +1343,8 @@ interface VarsityDarkTheme {
   fontFamilyPublicoHeadline: string;
   fontFamilyPublicoHeadlineCondensed: string;
   fontFamilyPublicoText: string;
+  photoLayoutBorderRadius: number;
+  photoLayoutCaptionPaddingMobile: string;
   radius12: number;
   radius16: number;
   radius2: number;
@@ -1351,7 +1356,6 @@ interface VarsityDarkTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
-  semanticPhotoLayoutBorderRadius: number;
   spacing0: number;
   spacing12: number;
   spacing16: number;
