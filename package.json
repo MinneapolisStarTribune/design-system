@@ -23,13 +23,25 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix --filter=@minneapolisstartribune/design-system",
     "prepare": "lefthook install",
+    "storybook:native": "turbo run storybook --filter=@minneapolisstartribune/mobile-storybook",
+    "storybook:ios": "turbo run storybook:ios --filter=@minneapolisstartribune/mobile-storybook",
+    "storybook:android": "turbo run storybook:android --filter=@minneapolisstartribune/mobile-storybook",
     "storybook:web": "turbo run storybook --filter=@minneapolisstartribune/design-system",
     "test": "turbo run test",
     "test:a11y": "turbo run test:a11y --filter=@minneapolisstartribune/design-system",
     "test:coverage": "turbo run test:coverage --filter=@minneapolisstartribune/design-system",
     "test:watch": "turbo run test:watch --filter=@minneapolisstartribune/design-system",
     "tokens": "turbo run tokens --filter=@minneapolisstartribune/design-system",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook expo run:android",
+    "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook expo run:ios",
+    "build:mobile-storybook": "yarn build:ios && yarn build:android"
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "yarn@4.13.0",
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~53.0.0",
+    "react": "19.0.0",
+    "react-native": "0.79.6"
+  }
 }
