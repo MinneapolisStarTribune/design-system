@@ -18,7 +18,7 @@
  * .typography-utility-page-h1-desktop {
  *   font-family: Nohemi, sans-serif;
  *   font-weight: 600;
- *   font-size: 2.875rem;
+ *   font-size: 46px;
  *   line-height: 1.10;
  *   letter-spacing: 0.02em;
  * }
@@ -147,14 +147,9 @@ function typographyClassesFormat({ dictionary, options = {} }) {
       }
     }
 
-    // Convert pixel values to rem for better accessibility
-    // "18px" -> "1.125rem" (18/16 = 1.125)
-    if (typeof cssValue === 'string' && cssValue.endsWith('px')) {
-      const pxValue = parseFloat(cssValue);
-      if (!isNaN(pxValue)) {
-        const remValue = (pxValue / 16).toFixed(3).replace(/\.?0+$/, '');
-        cssValue = `${remValue}rem`;
-      }
+    // Font-size tokens are numeric (px); output as CSS length
+    if (cssProperty === 'font-size' && typeof cssValue === 'number') {
+      cssValue = `${cssValue}px`;
     }
 
     tokenGroups.get(key).properties[cssProperty] = cssValue;
