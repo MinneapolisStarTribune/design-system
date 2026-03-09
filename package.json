@@ -28,6 +28,7 @@
     "storybook:android": "turbo run storybook:android --filter=@minneapolisstartribune/mobile-storybook",
     "storybook:web": "turbo run storybook --filter=@minneapolisstartribune/design-system",
     "test": "turbo run test",
+    "testfile": "yarn workspace @minneapolisstartribune/design-system vitest run",
     "test:a11y": "turbo run test:a11y --filter=@minneapolisstartribune/design-system",
     "test:coverage": "turbo run test:coverage --filter=@minneapolisstartribune/design-system",
     "test:watch": "turbo run test:watch --filter=@minneapolisstartribune/design-system",
