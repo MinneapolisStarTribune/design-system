@@ -78,6 +78,22 @@ module.exports = {
       },
     },
     {
+      // React Native stories — types come from @storybook/react per RN Storybook 10 convention
+      files: ['**/*.native.stories.{ts,tsx}'],
+      rules: {
+        'storybook/no-renderer-packages': 'off',
+      },
+    },
+    {
+      // Native test files — vi.mock() factories require `require()` calls and anonymous components
+      files: ['**/native/**/*.test.{ts,tsx}'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        'react/display-name': 'off',
+      },
+    },
+    {
       // Tamagui theme and related files
       files: [
         '**/theme-helpers.ts',
