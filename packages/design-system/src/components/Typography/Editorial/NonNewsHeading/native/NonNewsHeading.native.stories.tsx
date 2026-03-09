@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NonNewsHeading } from './NonNewsHeading';
-import type { NewsHeadingImportance } from '../NewsHeading/NewsHeading.types';
-
-const importanceOptions: NewsHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+import type { Meta, StoryObj } from '@storybook/react';
+import { StyleSheet, View } from 'react-native';
+import { NonNewsHeading } from './NonNewsHeading.native';
+import { NON_NEWS_HEADING_IMPORTANCE_LEVELS } from '../NonNewsHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/Editorial/NonNewsHeading',
@@ -19,9 +18,9 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: importanceOptions,
+      options: NON_NEWS_HEADING_IMPORTANCE_LEVELS,
       description:
-        'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
+        'Semantic heading level (1-6). Controls both the heading role and typography token.',
     },
     children: {
       control: 'text',
@@ -31,7 +30,6 @@ const meta = {
 } satisfies Meta<typeof NonNewsHeading>;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
@@ -42,6 +40,10 @@ export const Configurable: Story = {
 };
 
 export const AllVariants: Story = {
+  args: {
+    importance: 1,
+    children: '',
+  },
   parameters: {
     controls: { disable: true },
     layout: 'fullscreen',
@@ -52,34 +54,23 @@ export const AllVariants: Story = {
       },
     },
   },
-  args: {
-    importance: 1,
-    children: '',
-  },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-        gap: '1.5rem 2rem',
-        alignItems: 'start',
-        width: '100%',
-      }}
-    >
-      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
-        <div
-          key={level}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            minWidth: 0,
-            overflow: 'hidden',
-          }}
-        >
+    <View style={styles.grid}>
+      {NON_NEWS_HEADING_IMPORTANCE_LEVELS.map((level) => (
+        <View key={level} style={styles.item}>
           <NonNewsHeading importance={level}>Non News Heading - h{level}</NonNewsHeading>
-        </div>
+        </View>
       ))}
-    </div>
+    </View>
   ),
 };
+
+const styles = StyleSheet.create({
+  grid: {
+    width: '100%',
+    gap: 16,
+  },
+  item: {
+    gap: 8,
+  },
+});

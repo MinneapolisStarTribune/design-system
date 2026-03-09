@@ -41,7 +41,7 @@ export {
 export {
   NonNewsHeading,
   type NonNewsHeadingProps,
-} from './Typography/Editorial/NonNewsHeading/NonNewsHeading';
+} from './Typography/Editorial/NonNewsHeading/web/NonNewsHeading';
 export {
   OpinionHeading,
   type OpinionHeadingProps,
