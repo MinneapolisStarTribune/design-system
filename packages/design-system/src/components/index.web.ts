@@ -46,6 +46,10 @@ export {
   OpinionHeading,
   type OpinionHeadingProps,
 } from './Typography/Editorial/OpinionHeading/web/OpinionHeading';
+export {
+  SponsoredHeading,
+  type SponsoredHeadingProps,
+} from './Typography/Editorial/SponsoredHeading/web/SponsoredHeading';
 export { PageHeading, type PageHeadingProps } from './Typography/Utility/PageHeading/PageHeading';
 export {
   SectionHeading,
