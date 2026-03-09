@@ -12,19 +12,19 @@
  */
 
 interface StartribuneLightTheme {
-  breakpointLargeColumns: string;
+  breakpointLargeColumns: number;
   breakpointLargeContainerMax: number;
   breakpointLargeGutter: number;
   breakpointLargeMargin: string;
   breakpointLargeMax: number;
   breakpointLargeMin: number;
-  breakpointMediumColumns: string;
+  breakpointMediumColumns: number;
   breakpointMediumContainerMax: string;
   breakpointMediumGutter: number;
   breakpointMediumMargin: number;
   breakpointMediumMax: number;
   breakpointMediumMin: number;
-  breakpointSmallColumns: string;
+  breakpointSmallColumns: number;
   breakpointSmallContainerMax: string;
   breakpointSmallGutter: number;
   breakpointSmallMargin: number;
@@ -328,19 +328,19 @@ interface StartribuneLightTheme {
 }
 
 interface StartribuneDarkTheme {
-  breakpointLargeColumns: string;
+  breakpointLargeColumns: number;
   breakpointLargeContainerMax: number;
   breakpointLargeGutter: number;
   breakpointLargeMargin: string;
   breakpointLargeMax: number;
   breakpointLargeMin: number;
-  breakpointMediumColumns: string;
+  breakpointMediumColumns: number;
   breakpointMediumContainerMax: string;
   breakpointMediumGutter: number;
   breakpointMediumMargin: number;
   breakpointMediumMax: number;
   breakpointMediumMin: number;
-  breakpointSmallColumns: string;
+  breakpointSmallColumns: number;
   breakpointSmallContainerMax: string;
   breakpointSmallGutter: number;
   breakpointSmallMargin: number;
@@ -644,19 +644,19 @@ interface StartribuneDarkTheme {
 }
 
 interface VarsityLightTheme {
-  breakpointLargeColumns: string;
+  breakpointLargeColumns: number;
   breakpointLargeContainerMax: number;
   breakpointLargeGutter: number;
   breakpointLargeMargin: string;
   breakpointLargeMax: number;
   breakpointLargeMin: number;
-  breakpointMediumColumns: string;
+  breakpointMediumColumns: number;
   breakpointMediumContainerMax: string;
   breakpointMediumGutter: number;
   breakpointMediumMargin: number;
   breakpointMediumMax: number;
   breakpointMediumMin: number;
-  breakpointSmallColumns: string;
+  breakpointSmallColumns: number;
   breakpointSmallContainerMax: string;
   breakpointSmallGutter: number;
   breakpointSmallMargin: number;
@@ -966,19 +966,19 @@ interface VarsityLightTheme {
 }
 
 interface VarsityDarkTheme {
-  breakpointLargeColumns: string;
+  breakpointLargeColumns: number;
   breakpointLargeContainerMax: number;
   breakpointLargeGutter: number;
   breakpointLargeMargin: string;
   breakpointLargeMax: number;
   breakpointLargeMin: number;
-  breakpointMediumColumns: string;
+  breakpointMediumColumns: number;
   breakpointMediumContainerMax: string;
   breakpointMediumGutter: number;
   breakpointMediumMargin: number;
   breakpointMediumMax: number;
   breakpointMediumMin: number;
-  breakpointSmallColumns: string;
+  breakpointSmallColumns: number;
   breakpointSmallContainerMax: string;
   breakpointSmallGutter: number;
   breakpointSmallMargin: number;
