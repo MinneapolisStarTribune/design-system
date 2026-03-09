@@ -43,9 +43,7 @@ export const AllVariants: Story = {
     <>
       {articleQuoteSizes.map((size) => (
         <View key={size} style={styles.variant}>
-          <ArticleQuote size={size}>
-            {args.children}
-          </ArticleQuote>
+          <ArticleQuote size={size}>{args.children}</ArticleQuote>
         </View>
       ))}
     </>
