@@ -268,6 +268,22 @@ interface StartribuneLightTheme {
   colorTextStateDisabledOnLight: string;
   colorTextStateSuccessOnDark: string;
   colorTextStateSuccessOnLight: string;
+  colorUtilityBorderDefault: string;
+  colorUtilityBorderHover: string;
+  colorUtilityForegroundDefault: string;
+  colorUtilityForegroundHover: string;
+  colorUtilityToggleActiveBorderDefault: string;
+  colorUtilityToggleActiveBorderHover: string;
+  colorUtilityToggleActiveIconDefault: string;
+  colorUtilityToggleActiveIconHover: string;
+  colorUtilityToggleActiveTextDefault: string;
+  colorUtilityToggleActiveTextHover: string;
+  colorUtilityToggleInactiveBorderDefault: string;
+  colorUtilityToggleInactiveBorderHover: string;
+  colorUtilityToggleInactiveIconDefault: string;
+  colorUtilityToggleInactiveIconHover: string;
+  colorUtilityToggleInactiveTextDefault: string;
+  colorUtilityToggleInactiveTextHover: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -316,6 +332,7 @@ interface StartribuneLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -327,6 +344,9 @@ interface StartribuneLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -588,6 +608,22 @@ interface StartribuneDarkTheme {
   colorTextStateDisabledOnLight: string;
   colorTextStateSuccessOnDark: string;
   colorTextStateSuccessOnLight: string;
+  colorUtilityBorderDefault: string;
+  colorUtilityBorderHover: string;
+  colorUtilityForegroundDefault: string;
+  colorUtilityForegroundHover: string;
+  colorUtilityToggleActiveBorderDefault: string;
+  colorUtilityToggleActiveBorderHover: string;
+  colorUtilityToggleActiveIconDefault: string;
+  colorUtilityToggleActiveIconHover: string;
+  colorUtilityToggleActiveTextDefault: string;
+  colorUtilityToggleActiveTextHover: string;
+  colorUtilityToggleInactiveBorderDefault: string;
+  colorUtilityToggleInactiveBorderHover: string;
+  colorUtilityToggleInactiveIconDefault: string;
+  colorUtilityToggleInactiveIconHover: string;
+  colorUtilityToggleInactiveTextDefault: string;
+  colorUtilityToggleInactiveTextHover: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -636,6 +672,7 @@ interface StartribuneDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -647,6 +684,9 @@ interface StartribuneDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -914,6 +954,22 @@ interface VarsityLightTheme {
   colorTextStateDisabledOnLight: string;
   colorTextStateSuccessOnDark: string;
   colorTextStateSuccessOnLight: string;
+  colorUtilityBorderDefault: string;
+  colorUtilityBorderHover: string;
+  colorUtilityForegroundDefault: string;
+  colorUtilityForegroundHover: string;
+  colorUtilityToggleActiveBorderDefault: string;
+  colorUtilityToggleActiveBorderHover: string;
+  colorUtilityToggleActiveIconDefault: string;
+  colorUtilityToggleActiveIconHover: string;
+  colorUtilityToggleActiveTextDefault: string;
+  colorUtilityToggleActiveTextHover: string;
+  colorUtilityToggleInactiveBorderDefault: string;
+  colorUtilityToggleInactiveBorderHover: string;
+  colorUtilityToggleInactiveIconDefault: string;
+  colorUtilityToggleInactiveIconHover: string;
+  colorUtilityToggleInactiveTextDefault: string;
+  colorUtilityToggleInactiveTextHover: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -962,6 +1018,7 @@ interface VarsityLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -973,6 +1030,9 @@ interface VarsityLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1240,6 +1300,22 @@ interface VarsityDarkTheme {
   colorTextStateDisabledOnLight: string;
   colorTextStateSuccessOnDark: string;
   colorTextStateSuccessOnLight: string;
+  colorUtilityBorderDefault: string;
+  colorUtilityBorderHover: string;
+  colorUtilityForegroundDefault: string;
+  colorUtilityForegroundHover: string;
+  colorUtilityToggleActiveBorderDefault: string;
+  colorUtilityToggleActiveBorderHover: string;
+  colorUtilityToggleActiveIconDefault: string;
+  colorUtilityToggleActiveIconHover: string;
+  colorUtilityToggleActiveTextDefault: string;
+  colorUtilityToggleActiveTextHover: string;
+  colorUtilityToggleInactiveBorderDefault: string;
+  colorUtilityToggleInactiveBorderHover: string;
+  colorUtilityToggleInactiveIconDefault: string;
+  colorUtilityToggleInactiveIconHover: string;
+  colorUtilityToggleInactiveTextDefault: string;
+  colorUtilityToggleInactiveTextHover: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -1288,6 +1364,7 @@ interface VarsityDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -1299,6 +1376,9 @@ interface VarsityDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }

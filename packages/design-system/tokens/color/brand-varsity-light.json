@@ -414,6 +414,16 @@
         "description": "Success text color used on light backgrounds to indicate validation passed or positive feedback",
         "value": "{color.emerald-green.800}"
       }
+    },
+    "utility-toggle": {
+      "active-icon-default": {
+        "description": "Default icon color for active utility toggle controls on light backgrounds.",
+        "value": "{color.cobalt-blue.700}"
+      },
+      "active-icon-hover": {
+        "description": "Hover icon color for active utility toggle controls on light backgrounds.",
+        "value": "{color.cobalt-blue.700}"
+      }
     }
   }
 }
