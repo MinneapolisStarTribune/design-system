@@ -57,3 +57,7 @@ export {
   UtilityBody,
   type UtilityBodyProps,
 } from './Typography/Utility/UtilityBody/native/UtilityBody.native';
+export {
+  UtilityLabel,
+  type UtilityLabelProps,
+} from './Typography/Utility/UtilityLabel/native/UtilityLabel.native';
