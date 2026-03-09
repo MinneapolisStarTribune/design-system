@@ -1,0 +1,8 @@
+.expo/
+storybook.requires.ts
+
+# Android (when present — from expo run:android / prebuild)
+android/build/
+android/.gradle/
+android/local.properties
+android/app/build/

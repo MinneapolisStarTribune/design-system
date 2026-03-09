@@ -1,0 +1,23 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@minneapolisstartribune/design-system/native": [
+        "../../packages/design-system/src/index.native"
+      ],
+      "@/*": ["../../packages/design-system/src/*"],
+      "@react-native-async-storage/async-storage": [
+        "../../node_modules/@react-native-async-storage/async-storage"
+      ],
+      "@mobile/themes/*": ["../../packages/design-system/dist/mobile/themes/*"],
+      "@mobile/typography/*": ["../../packages/design-system/dist/mobile/typography/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".rnstorybook/*.ts",
+    ".rnstorybook/*.tsx"
+  ]
+}
