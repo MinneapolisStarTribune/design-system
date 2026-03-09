@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "storybook": "expo start --dev-client",
-    "storybook:ios": "expo start --dev-client --ios",
-    "storybook:android": "expo start --dev-client --android",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "storybook": "NODE_PATH=./node_modules expo start --dev-client",
+    "storybook:ios": "NODE_PATH=./node_modules expo start --dev-client --ios",
+    "storybook:android": "NODE_PATH=./node_modules expo start --dev-client --android",
+    "android": "NODE_PATH=./node_modules expo run:android",
+    "ios": "NODE_PATH=./node_modules expo run:ios"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.0",

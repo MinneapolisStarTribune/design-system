@@ -39,7 +39,7 @@ export default defineConfig({
       '.storybook/**/*.test.{ts,tsx}',
       'scripts/**/*.test.{js,ts}',
     ],
-    exclude: ['src/**/*.stories.{ts,tsx}', 'node_modules'],
+    exclude: ['src/**/*.stories.{ts,tsx}', 'src/**/*.native.{test,a11y.test}.{ts,tsx}', 'node_modules'],
     // Override environment for script tests - they don't need jsdom/React
     testTimeout: 30000,
     css: true,
