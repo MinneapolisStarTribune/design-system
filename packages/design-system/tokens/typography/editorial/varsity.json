@@ -47,6 +47,55 @@
           "line-height": ".86"
         }
       },
+      "h1": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "34px",
+          "font-weight": "500",
+          "line-height": "1.15"
+        }
+      },
+      "h2": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "28px",
+          "font-weight": "500",
+          "line-height": "1.15"
+        }
+      },
+      "h3": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "24px",
+          "font-weight": "500",
+          "line-height": "1.15"
+        }
+      },
+      "h4": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "20px",
+          "font-weight": "500",
+          "line-height": "1.15"
+        }
+      },
+      "h5": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "18px",
+          "font-weight": "500",
+          "line-height": "1.15"
+        }
+      },
+      "h6": {
+        "value": {
+          "font-family": "{font.family.nohemi}",
+          "font-size": "18px",
+          "font-weight": "500",
+          "letter-spacing": "0.01em",
+          "line-height": "1.15"
+        }
+      },
       "italic": {
         "desktop": {
           "value": {
