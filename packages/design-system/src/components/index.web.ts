@@ -17,7 +17,7 @@ export {
 export {
   ArticleBodyText,
   type ArticleBodyTextProps,
-} from './Typography/ArticleBody/ArticleBodyText/ArticleBodyText';
+} from './Typography/ArticleBody/ArticleBodyText/web/ArticleBodyText';
 export {
   ArticleQuote,
   type ArticleQuoteProps,

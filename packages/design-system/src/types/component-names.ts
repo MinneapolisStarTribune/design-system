@@ -9,6 +9,7 @@ export const COMPONENT_NAMES = [
   'ArticleBodyHeading',
   'ArticleBodySponsoredHeading',
   'ArticleBodySponsoredText',
+  'ArticleBodyText',
   'ArticleQuote',
   'CodeBlock',
   'EnterpriseHeading',
