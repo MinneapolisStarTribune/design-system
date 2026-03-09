@@ -27,6 +27,10 @@ export {
   type EditorialSponsoredTextProps,
 } from './Typography/Editorial/EditorialSponsoredText/web/EditorialSponsoredText';
 export {
+  EditorialText,
+  type EditorialTextProps,
+} from './Typography/Editorial/EditorialText/web/EditorialText';
+export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,
 } from './Typography/Editorial/EnterpriseHeading/EnterpriseHeading';

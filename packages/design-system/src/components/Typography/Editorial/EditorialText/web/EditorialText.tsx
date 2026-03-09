@@ -1,11 +1,5 @@
-import type { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types';
 import classNames from 'classnames';
-
-export interface EditorialTextProps extends BaseProps, AccessibilityProps {
-  size: Size;
-  weight?: Extract<FontWeight, 'regular' | 'bold'>;
-  children: React.ReactNode;
-}
+import type { EditorialTextProps } from '../EditorialText.types';
 
 export const EditorialText: React.FC<EditorialTextProps> = (props) => {
   const {
@@ -25,3 +19,9 @@ export const EditorialText: React.FC<EditorialTextProps> = (props) => {
     </p>
   );
 };
+
+export type {
+  EditorialTextProps,
+  EditorialTextSize,
+  EditorialTextWeight,
+} from '../EditorialText.types';
