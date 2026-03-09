@@ -1,6 +1,11 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
 
 export {
+  ArticleBodyHeading,
+  type ArticleBodyHeadingProps,
+} from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
+export {
   ArticleQuote,
   type ArticleQuoteProps,
+  type ArticleQuoteSize,
 } from './Typography/ArticleBody/ArticleQuote/native/ArticleQuote.native';
