@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyHeading } from './ArticleBodyHeading';
-import type { ArticleBodyHeadingImportance } from './ArticleBodyHeading';
-
-const importanceOptions: ArticleBodyHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
@@ -20,7 +18,7 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: importanceOptions,
+      options: ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS,
       description:
         'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
     },
@@ -56,7 +54,7 @@ export const AllLevels: Story = {
         width: '100%',
       }}
     >
-      {(importanceOptions as ArticleBodyHeadingImportance[]).map((level) => (
+      {ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS.map((level) => (
         <div
           key={level}
           style={{
