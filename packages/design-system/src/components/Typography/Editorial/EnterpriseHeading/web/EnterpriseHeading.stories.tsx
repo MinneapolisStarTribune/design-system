@@ -1,0 +1,83 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { EnterpriseHeading } from './EnterpriseHeading';
+import { ENTERPRISE_HEADING_IMPORTANCE_LEVELS } from '../EnterpriseHeading.types';
+
+const meta = {
+  title: 'Foundations/Typography/Editorial/EnterpriseHeading',
+  component: EnterpriseHeading,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Editorial enterprise heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
+      },
+    },
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    importance: {
+      control: 'select',
+      options: ENTERPRISE_HEADING_IMPORTANCE_LEVELS,
+      description:
+        'Semantic heading level (1-6). Controls both the HTML element (h1-h6) and the typography class.',
+    },
+    children: {
+      control: 'text',
+      description: 'Heading text.',
+    },
+  },
+} satisfies Meta<typeof EnterpriseHeading>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Configurable: Story = {
+  args: {
+    importance: 1,
+    children: 'Enterprise heading example',
+  },
+};
+
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'All six heading levels in one view for comparison. Switch **Brand** in the toolbar to see different fonts.',
+      },
+    },
+  },
+  args: {
+    importance: 1,
+    children: '',
+  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+        gap: '1.5rem 2rem',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
+      {ENTERPRISE_HEADING_IMPORTANCE_LEVELS.map((level) => (
+        <div
+          key={level}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            minWidth: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <EnterpriseHeading importance={level}>Enterprise Heading - h{level}</EnterpriseHeading>
+        </div>
+      ))}
+    </div>
+  ),
+};

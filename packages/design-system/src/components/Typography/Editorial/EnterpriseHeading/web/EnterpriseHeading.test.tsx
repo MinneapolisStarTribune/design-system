@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { EnterpriseHeading } from './EnterpriseHeading';
 import { renderWithProvider } from '@/test-utils/render';
+import { EnterpriseHeading } from './EnterpriseHeading';
+import { ENTERPRISE_HEADING_IMPORTANCE_LEVELS } from '../EnterpriseHeading.types';
 
 describe('EnterpriseHeading', () => {
   it('renders with default importance (h1)', () => {
@@ -13,18 +13,17 @@ describe('EnterpriseHeading', () => {
     expect(heading).toHaveClass('typography-editorial-enterprise-h1');
   });
 
-  it('renders correct element and class for each importance level', () => {
-    const levels = [1, 2, 3, 4, 5, 6] as const;
-    levels.forEach((importance) => {
-      const { getByRole, unmount } = renderWithProvider(
+  it.each(ENTERPRISE_HEADING_IMPORTANCE_LEVELS)(
+    'renders correct element and class for importance %s',
+    (importance) => {
+      const { getByRole } = renderWithProvider(
         <EnterpriseHeading importance={importance}>Level {importance}</EnterpriseHeading>
       );
       const heading = getByRole('heading', { level: importance });
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveClass(`typography-editorial-enterprise-h${importance}`);
-      unmount();
-    });
-  });
+    }
+  );
 
   it('applies custom className', () => {
     const { getByRole } = renderWithProvider(
