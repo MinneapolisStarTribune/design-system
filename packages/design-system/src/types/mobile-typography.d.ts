@@ -150,6 +150,12 @@ interface VarsityTypography {
   typographyArticleBodyBold: TextStyle;
   typographyArticleBodyBoldItalic: TextStyle;
   typographyArticleBodyDropcap: TextStyle;
+  typographyArticleBodyH1: TextStyle;
+  typographyArticleBodyH2: TextStyle;
+  typographyArticleBodyH3: TextStyle;
+  typographyArticleBodyH4: TextStyle;
+  typographyArticleBodyH5: TextStyle;
+  typographyArticleBodyH6: TextStyle;
   typographyArticleBodyItalic: TextStyle;
   typographyArticleBodyLink: TextStyle;
   typographyArticleBodyRegular: TextStyle;
