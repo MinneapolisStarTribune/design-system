@@ -1,6 +1,9 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
-import { FontWeight, SIZES } from '../../../../types/globalTypes';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EditorialSponsoredText } from './EditorialSponsoredText';
+import {
+  EDITORIAL_SPONSORED_TEXT_SIZES,
+  EDITORIAL_SPONSORED_TEXT_WEIGHTS,
+} from '../EditorialSponsoredText.types';
 
 const meta = {
   title: 'Foundations/Typography/Editorial/EditorialSponsoredText',
@@ -12,12 +15,12 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: SIZES,
+      options: EDITORIAL_SPONSORED_TEXT_SIZES,
       description: 'The size of the editorial sponsored text',
     },
     weight: {
       control: 'select',
-      options: ['regular', 'bold'] as Extract<FontWeight, 'regular' | 'bold'>[],
+      options: EDITORIAL_SPONSORED_TEXT_WEIGHTS,
       description: 'The font weight of the editorial sponsored text',
     },
     children: {
@@ -48,30 +51,26 @@ export const AllVariants: Story = {
     weight: 'regular',
     children: 'Editorial Sponsored Text',
   },
-  render: () => {
-    const sizes = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'] as const;
-    const weights = ['regular', 'bold'] as const;
-    return (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: '1rem',
-        }}
-      >
-        {sizes.flatMap((size) =>
-          weights.map((weight) => (
-            <div
-              key={`${size}-${weight}`}
-              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
-            >
-              <EditorialSponsoredText size={size} weight={weight}>
-                Editorial sponsored text - {size} / {weight}
-              </EditorialSponsoredText>
-            </div>
-          ))
-        )}
-      </div>
-    );
-  },
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap: '1rem',
+      }}
+    >
+      {EDITORIAL_SPONSORED_TEXT_SIZES.flatMap((size) =>
+        EDITORIAL_SPONSORED_TEXT_WEIGHTS.map((weight) => (
+          <div
+            key={`${size}-${weight}`}
+            style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+          >
+            <EditorialSponsoredText size={size} weight={weight}>
+              Editorial sponsored text - {size} / {weight}
+            </EditorialSponsoredText>
+          </div>
+        ))
+      )}
+    </div>
+  ),
 };
