@@ -53,3 +53,7 @@ export {
   SectionHeading,
   type SectionHeadingProps,
 } from './Typography/Utility/SectionHeading/native/SectionHeading.native';
+export {
+  UtilityBody,
+  type UtilityBodyProps,
+} from './Typography/Utility/UtilityBody/native/UtilityBody.native';

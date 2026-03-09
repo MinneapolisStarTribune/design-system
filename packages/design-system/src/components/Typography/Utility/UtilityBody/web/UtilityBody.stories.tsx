@@ -1,10 +1,6 @@
-// UtilityBody.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
-import type { UtilityBodySize, UtilityBodyWeight } from './types';
-
-const SIZES: UtilityBodySize[] = ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'];
-const WEIGHTS: UtilityBodyWeight[] = ['regular', 'italic', 'medium', 'semibold', 'bold'];
+import { UTILITY_BODY_SIZES, UTILITY_BODY_WEIGHTS } from '../UtilityBody.types';
 
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityBody',
@@ -13,11 +9,11 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large'],
+      options: UTILITY_BODY_SIZES,
     },
     weight: {
       control: 'select',
-      options: ['regular', 'italic', 'medium', 'semibold', 'bold'],
+      options: UTILITY_BODY_WEIGHTS,
     },
   },
 } satisfies Meta<typeof UtilityBody>;
@@ -50,8 +46,8 @@ export const AllVariants: Story = {
         gap: '1rem',
       }}
     >
-      {SIZES.flatMap((size) =>
-        WEIGHTS.map((weight) => (
+      {UTILITY_BODY_SIZES.flatMap((size) =>
+        UTILITY_BODY_WEIGHTS.map((weight) => (
           <div
             key={`${size}-${weight}`}
             style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
