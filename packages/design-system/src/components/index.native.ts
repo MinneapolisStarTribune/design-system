@@ -45,3 +45,7 @@ export {
   SponsoredHeading,
   type SponsoredHeadingProps,
 } from './Typography/Editorial/SponsoredHeading/native/SponsoredHeading.native';
+export {
+  PageHeading,
+  type PageHeadingProps,
+} from './Typography/Utility/PageHeading/native/PageHeading.native';

@@ -50,7 +50,10 @@ export {
   SponsoredHeading,
   type SponsoredHeadingProps,
 } from './Typography/Editorial/SponsoredHeading/web/SponsoredHeading';
-export { PageHeading, type PageHeadingProps } from './Typography/Utility/PageHeading/PageHeading';
+export {
+  PageHeading,
+  type PageHeadingProps,
+} from './Typography/Utility/PageHeading/web/PageHeading';
 export {
   SectionHeading,
   type SectionHeadingProps,
