@@ -14,7 +14,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ['react', '@typescript-eslint', 'unicorn', 'unused-imports', 'simple-import-sort'],
+  plugins: ['react', '@typescript-eslint', 'unicorn', 'unused-imports', 'simple-import-sort', 'sort-array-values'],
   settings: {
     react: {
       version: 'detect',
@@ -114,6 +114,13 @@ module.exports = {
       files: ['packages/design-system/src/index.web.ts', 'packages/design-system/src/components/index.web.ts', 'packages/design-system/src/index.native.ts', 'packages/design-system/src/components/index.native.ts'],
       rules: {
         'simple-import-sort/exports': 'error',
+      },
+    },
+    {
+      // Component name registry - keep entries alphabetized
+      files: ['packages/design-system/src/types/component-names.ts'],
+      rules: {
+        'sort-array-values/sort-array-values': 'error',
       },
     },
   ],
