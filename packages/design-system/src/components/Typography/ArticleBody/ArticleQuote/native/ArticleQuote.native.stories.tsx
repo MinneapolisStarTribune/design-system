@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ArticleQuote } from './ArticleQuote';
+import { ArticleQuote } from './ArticleQuote.native';
 import type { ArticleQuoteSize } from '../ArticleQuote.types';
 
 const articleQuoteSizes: ArticleQuoteSize[] = ['small', 'large'];
@@ -40,18 +40,18 @@ export const AllVariants: Story = {
     controls: { disable: true },
   },
   render: (args) => (
-    <>
+    <View style={styles.list}>
       {articleQuoteSizes.map((size) => (
-        <View key={size} style={styles.variant}>
+        <View key={size}>
           <ArticleQuote size={size}>{args.children}</ArticleQuote>
         </View>
       ))}
-    </>
+    </View>
   ),
 };
 
 const styles = StyleSheet.create({
-  variant: {
-    gap: 8,
+  list: {
+    rowGap: 8,
   },
 });
