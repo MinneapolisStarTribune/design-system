@@ -37,3 +37,7 @@ export {
   OpinionHeading,
   type OpinionHeadingProps,
 } from './Typography/Editorial/OpinionHeading/native/OpinionHeading.native';
+export {
+  SponsoredHeading,
+  type SponsoredHeadingProps,
+} from './Typography/Editorial/SponsoredHeading/native/SponsoredHeading.native';
