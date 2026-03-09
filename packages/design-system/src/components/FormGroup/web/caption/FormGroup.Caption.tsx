@@ -1,11 +1,16 @@
 import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
-import { useFormGroupContext } from './FormGroupContext';
+import { useFormGroupContext } from '../../FormGroupContext';
 import { Icon } from '@/components/Icon/Icon';
+import styles from '../FormGroup.module.scss';
+import classNames from 'classnames';
+
+export const FORM_GROUP_CAPTION_VARIANTS = ['info', 'error', 'success'] as const;
+export type FormGroupCaptionVariant = (typeof FORM_GROUP_CAPTION_VARIANTS)[number];
 
 export interface FormGroupCaptionProps extends BaseProps {
   children: React.ReactNode;
-  variant: 'info' | 'error' | 'success';
+  variant: FormGroupCaptionVariant;
   id?: string;
 }
 
@@ -28,15 +33,15 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
   switch (variant) {
     case 'info':
       color = 'var(--color-text-on-light-tertiary)';
-      icon = <Icon name="information" size="small" aria-hidden />;
+      icon = <Icon name="information" size="x-small" aria-hidden />;
       break;
     case 'error':
       color = 'var(--color-text-state-attention-on-light)';
-      icon = <Icon name="error" size="small" aria-hidden />;
+      icon = <Icon name="error" size="x-small" aria-hidden />;
       break;
     case 'success':
       color = 'var(--color-text-state-success-on-light, #00854B)';
-      icon = <Icon name="check" size="small" aria-hidden />;
+      icon = <Icon name="check" size="x-small" aria-hidden />;
       break;
   }
 
@@ -44,17 +49,11 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
     <div
       id={id}
       role={role}
-      className="typography-utility-text-regular-x-small"
-      style={{
-        color,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-2)',
-        marginTop: 'var(--spacing-8)',
-      }}
+      className={classNames('typography-utility-text-regular-x-small', styles.caption)}
+      style={{ color }}
       data-testid={dataTestId}
     >
-      <span style={{ display: 'inline-flex', flexShrink: 0 }}>{icon}</span>
+      <span className={styles.icon}>{icon}</span>
       <span>{children}</span>
     </div>
   );

@@ -1,13 +1,7 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
-export {
-  FormGroup,
-  type FormGroupCaptionProps,
-  type FormGroupDescriptionProps,
-  type FormGroupLabelProps,
-  type FormGroupProps,
-} from './FormGroup/FormGroup';
+export { FormGroup, type FormGroupProps } from './FormGroup/web/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
