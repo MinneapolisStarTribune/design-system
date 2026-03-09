@@ -1287,12 +1287,6 @@ interface VarsityDarkTheme {
   textSize2xxl: string;
 }
 
-type ThemeTokens =
-  | StartribuneLightTheme
-  | StartribuneDarkTheme
-  | VarsityLightTheme
-  | VarsityDarkTheme;
-
 declare module '@mobile/themes/startribune-light.js' {
   const theme: StartribuneLightTheme;
   export = theme;
