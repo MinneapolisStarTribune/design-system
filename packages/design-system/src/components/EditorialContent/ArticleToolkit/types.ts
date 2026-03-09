@@ -4,7 +4,7 @@
  * Shared type definitions for immersive template components in the design library.
  * Used across Startribune and Varsity brands.
  *
- * @see docs/immersive-component-architecture.md
+ * @see architecture/article-toolkit-variants.md
  */
 
 import type { BaseProps, AccessibilityProps } from '@/types/globalTypes';

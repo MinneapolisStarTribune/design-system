@@ -1,6 +1,6 @@
 /**
  * Article Toolkit components for editorial content.
- * @see docs/immersive-component-architecture.md
+ * @see architecture/article-toolkit-variants.md
  */
 
 export { CodeBlock, type CodeBlockProps } from './CodeBlock/CodeBlock';
