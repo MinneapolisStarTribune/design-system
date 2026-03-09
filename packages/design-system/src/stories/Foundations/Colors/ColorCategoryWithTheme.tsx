@@ -8,8 +8,19 @@ import { loadTheme } from '../../../../.storybook/theme-wrapper';
 type Brand = 'startribune' | 'varsity';
 type ColorScheme = 'light' | 'dark';
 
+interface StorybookGlobals {
+  brand?: string;
+  theme?: string;
+}
+
+declare global {
+  interface Window {
+    __STORYBOOK_GLOBALS__?: StorybookGlobals;
+  }
+}
+
 function getGlobals(): { brand: Brand; colorScheme: ColorScheme } {
-  const g = (typeof window !== 'undefined' && (window as any).__STORYBOOK_GLOBALS__) || {};
+  const g: StorybookGlobals = (typeof window !== 'undefined' && window.__STORYBOOK_GLOBALS__) || {};
   return {
     brand: (g.brand || 'startribune') as Brand,
     colorScheme: (g.theme === 'dark' ? 'dark' : 'light') as ColorScheme,
