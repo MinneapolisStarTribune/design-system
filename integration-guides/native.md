@@ -43,11 +43,11 @@ function App() {
 
 Components use design tokens internally - you don't need to import tokens directly. The library handles all token consumption based on the brand and color scheme provided by `DesignSystemProvider`.
 
-## Hooks
+## Hooks and Helpers
 
 ### `useNativeStyles`
 
-The recommended way to create theme-aware `StyleSheet` styles in native components. It memoises the result of a factory function against the current theme, so styles are only re-created when the brand or color scheme changes.
+Base hook for theme-aware styles.
 
 Define the factory at **module level** (outside the component) so its reference is stable across renders.
 
@@ -69,26 +69,32 @@ const createStyles = (theme) =>
   });
 ```
 
-### `useNativeTokens`
+### `useNativeStylesWithDefaults`
 
-Lower-level hook that gives direct access to the current brand, color scheme, and the full theme token object. Use this when you need the raw tokens outside of `StyleSheet.create` — for example, passing a token value as a prop or computing a derived value.
+Preferred one-stop hook for typography-heavy native components. It combines:
+- theme-aware memoization from `useNativeStyles`
+- defaults (like typography color)
+- `StyleSheet.create` under the hood
 
 ```tsx
-import { View, Text } from 'react-native';
-import { useNativeTokens } from '@minneapolisstartribune/design-system/native';
+import { Text } from 'react-native';
+import {
+  useNativeStylesWithDefaults,
+} from '@minneapolisstartribune/design-system/native';
 
-function MyComponent() {
-  const { brand, colorScheme, theme } = useNativeTokens();
+export const Quote = () => {
+  const styles = useNativeStylesWithDefaults(createStyles);
+  return <Text style={styles.large}>Quote text</Text>;
+};
 
-  return (
-    <View style={{ borderRadius: theme.semanticPhotoLayoutBorderRadius }}>
-      <Text>Brand: {brand}, Scheme: {colorScheme}</Text>
-    </View>
-  );
-}
+const createStyles = (theme) =>
+  ({
+    small: { ...theme.typographyArticleQuoteSmall },
+    large: { ...theme.typographyArticleQuoteLarge },
+  });
 ```
 
-> **Tip**: Prefer `useNativeStyles` for stylesheet creation — it wraps `useNativeTokens` and adds memoisation automatically. Reach for `useNativeTokens` directly only when you need `brand`, `colorScheme`, or individual token values outside of a stylesheet.
+> **Tip**: Use `useNativeStylesWithDefaults` for text/typography components and `useNativeStyles` for everything else.
 
 ## Troubleshooting
 

@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 
@@ -39,12 +39,19 @@ describe('useNativeStyles', () => {
   });
 
   it('returns a stable reference when theme has not changed', () => {
-    const { result, rerender } = renderHook(() => useNativeStyles(createStyles), {
-      wrapper: TestWrapperInDesignSystemProvider(),
-    });
+    const { result, rerender } = renderHook(
+      ({ rerenderToken }: { rerenderToken: number }) => {
+        void rerenderToken;
+        return useNativeStyles(createStyles);
+      },
+      {
+        initialProps: { rerenderToken: 0 },
+        wrapper: TestWrapperInDesignSystemProvider(),
+      }
+    );
 
     const first = result.current;
-    rerender();
+    rerender({ rerenderToken: 1 });
     const second = result.current;
 
     expect(first).toBe(second);

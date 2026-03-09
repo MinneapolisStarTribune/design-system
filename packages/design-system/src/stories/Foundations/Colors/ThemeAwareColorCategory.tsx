@@ -6,7 +6,7 @@
  * to create data structures used by Storybook stories for displaying color palettes.
  *
  * For production code, colors should be accessed through the design system provider
- * and token utilities (e.g., CSS variables on web, useNativeTokens on native), which properly handle
+ * and token utilities (e.g., CSS variables on web, useNativeStyles on native), which properly handle
  * brand-specific and theme-aware color resolution.
  */
 import React, { useMemo } from 'react';
