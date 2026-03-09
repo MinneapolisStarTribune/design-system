@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
-
-const sponsoredWeights = ['regular', 'italic', 'semibold', 'semibold-italic'] as const;
+import type { Meta, StoryObj } from '@storybook/react';
+import { StyleSheet, View } from 'react-native';
+import { ArticleBodySponsoredText } from './ArticleBodySponsoredText.native';
+import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredText',
@@ -13,7 +13,7 @@ const meta = {
   argTypes: {
     weight: {
       control: 'select',
-      options: ['regular', 'italic', 'semibold', 'semibold-italic'],
+      options: ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS,
       description: 'The font weight of the article body sponsored text',
     },
     children: {
@@ -25,7 +25,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof ArticleBodySponsoredText>;
+type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
@@ -35,28 +35,32 @@ export const Configurable: Story = {
 };
 
 export const AllVariants: Story = {
-  parameters: {
-    controls: { disable: true },
-  },
   args: {
     weight: 'regular',
     children: 'Article body sponsored text',
   },
+  parameters: {
+    controls: { disable: true },
+  },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '1rem',
-      }}
-    >
-      {sponsoredWeights.map((weight) => (
-        <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <View style={styles.grid}>
+      {ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS.map((weight) => (
+        <View key={weight} style={styles.item}>
           <ArticleBodySponsoredText weight={weight}>
             Article body sponsored text - {weight}
           </ArticleBodySponsoredText>
-        </div>
+        </View>
       ))}
-    </div>
+    </View>
   ),
 };
+
+const styles = StyleSheet.create({
+  grid: {
+    width: '100%',
+    gap: 16,
+  },
+  item: {
+    gap: 8,
+  },
+});

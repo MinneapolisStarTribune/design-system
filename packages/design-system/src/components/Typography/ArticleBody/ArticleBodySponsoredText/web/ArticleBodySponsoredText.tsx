@@ -1,10 +1,5 @@
-import type { AccessibilityProps, BaseProps, FontWeight } from '@/types/globalTypes';
 import classNames from 'classnames';
-
-export interface ArticleBodySponsoredTextProps extends BaseProps, AccessibilityProps {
-  weight?: Extract<FontWeight, 'regular' | 'italic' | 'semibold' | 'semibold-italic'>;
-  children: React.ReactNode;
-}
+import type { ArticleBodySponsoredTextProps } from '../ArticleBodySponsoredText.types';
 
 export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> = (props) => {
   const {
@@ -14,6 +9,7 @@ export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> =
     dataTestId = 'article-body-text-sponsored',
     ...restProps
   } = props;
+
   const typographyClassName = `typography-article-body-sponsored-${weight}`;
   const combinedClassName = classNames(typographyClassName, className);
 
@@ -23,3 +19,8 @@ export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> =
     </p>
   );
 };
+
+export type {
+  ArticleBodySponsoredTextProps,
+  ArticleBodySponsoredTextWeight,
+} from '../ArticleBodySponsoredText.types';
