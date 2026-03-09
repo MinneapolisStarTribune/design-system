@@ -17,3 +17,7 @@ export {
   type ArticleQuoteProps,
   type ArticleQuoteSize,
 } from './Typography/ArticleBody/ArticleQuote/native/ArticleQuote.native';
+export {
+  EditorialSponsoredText,
+  type EditorialSponsoredTextProps,
+} from './Typography/Editorial/EditorialSponsoredText/native/EditorialSponsoredText.native';
