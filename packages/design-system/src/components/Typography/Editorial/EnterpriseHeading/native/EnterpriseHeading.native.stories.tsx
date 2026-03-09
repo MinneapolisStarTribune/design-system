@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EnterpriseHeading } from './EnterpriseHeading';
-import type { EnterpriseHeadingImportance } from './EnterpriseHeading';
-
-const importanceOptions: EnterpriseHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+import type { Meta, StoryObj } from '@storybook/react';
+import { StyleSheet, View } from 'react-native';
+import { EnterpriseHeading } from './EnterpriseHeading.native';
+import { ENTERPRISE_HEADING_IMPORTANCE_LEVELS } from '../EnterpriseHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/Editorial/EnterpriseHeading',
@@ -19,9 +18,9 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: importanceOptions,
+      options: ENTERPRISE_HEADING_IMPORTANCE_LEVELS,
       description:
-        'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
+        'Semantic heading level (1-6). Controls both the heading role and typography token.',
     },
     children: {
       control: 'text',
@@ -31,7 +30,6 @@ const meta = {
 } satisfies Meta<typeof EnterpriseHeading>;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
@@ -42,6 +40,10 @@ export const Configurable: Story = {
 };
 
 export const AllVariants: Story = {
+  args: {
+    importance: 1,
+    children: '',
+  },
   parameters: {
     controls: { disable: true },
     layout: 'fullscreen',
@@ -52,34 +54,23 @@ export const AllVariants: Story = {
       },
     },
   },
-  args: {
-    importance: 1,
-    children: '',
-  },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-        gap: '1.5rem 2rem',
-        alignItems: 'start',
-        width: '100%',
-      }}
-    >
-      {(importanceOptions as EnterpriseHeadingImportance[]).map((level) => (
-        <div
-          key={level}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            minWidth: 0,
-            overflow: 'hidden',
-          }}
-        >
+    <View style={styles.grid}>
+      {ENTERPRISE_HEADING_IMPORTANCE_LEVELS.map((level) => (
+        <View key={level} style={styles.item}>
           <EnterpriseHeading importance={level}>Enterprise Heading - h{level}</EnterpriseHeading>
-        </div>
+        </View>
       ))}
-    </div>
+    </View>
   ),
 };
+
+const styles = StyleSheet.create({
+  grid: {
+    width: '100%',
+    gap: 16,
+  },
+  item: {
+    gap: 8,
+  },
+});

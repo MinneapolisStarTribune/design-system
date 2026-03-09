@@ -25,3 +25,7 @@ export {
   EditorialText,
   type EditorialTextProps,
 } from './Typography/Editorial/EditorialText/native/EditorialText.native';
+export {
+  EnterpriseHeading,
+  type EnterpriseHeadingProps,
+} from './Typography/Editorial/EnterpriseHeading/native/EnterpriseHeading.native';
