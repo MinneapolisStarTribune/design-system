@@ -35,60 +35,99 @@ StyleDictionary.registerPreprocessor({
 });
 
 /**
- * SD Value Transform: Convert composite token values (CSS property objects)
- * to React Native format.
+ * Build a lookup map from font variant data: "FamilyName|weight|style" → PostScript-style name.
+ * Derives the RN font name from the variant file field by stripping the -Web suffix and extension.
  *
- * This transform converts kebab-case CSS keys to camelCase and px strings
- * to numbers, which SD cannot do for object-valued tokens.
+ * @param {string} brand - The brand name
+ * @returns {Record<string, string>} e.g. { "Publico Headline|400|italic": "PublicoHeadline-Italic" }
  */
-StyleDictionary.registerTransform({
-  name: 'value/mobile-breakpoint',
-  type: 'value',
-  transitive: true,
-  filter: (token) => typeof token.value === 'object' && !Array.isArray(token.value),
-  transform: (token) => {
-    const raw = token.value;
-    const result = {};
+function buildFontVariantMap(brand) {
+  const fontPath = path.join(process.cwd(), `tokens/fonts/${brand}.json`);
+  if (!fs.existsSync(fontPath)) return {};
 
-    // First pass: collect fontSize so lineHeight can be resolved to absolute px
-    let fontSize;
-    for (const [key, val] of Object.entries(raw)) {
-      if (key === 'fontSize' || key === 'font-size') {
-        fontSize = typeof val === 'string' && val.endsWith('px') ? parseFloat(val) : Number(val);
-      }
+  const fontData = JSON.parse(fs.readFileSync(fontPath, 'utf8'));
+  const fonts = fontData.font.brand[brand].fonts;
+  const map = {};
+
+  for (const font of fonts) {
+    for (const variant of font.variants) {
+      const key = `${font.name}|${variant.weight}|${variant.style}`;
+      const stem = variant.file.replace(/\.(woff2?|ttf|otf|eot)$/i, '').replace(/-Web$/, '');
+      map[key] = stem;
     }
+  }
 
-    for (const [key, val] of Object.entries(raw)) {
-      const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-
-      if (camelKey === 'fontSize' && typeof val === 'string' && val.endsWith('px')) {
-        result[camelKey] = parseFloat(val);
-      } else if (camelKey === 'lineHeight') {
-        // CSS relative multiplier (e.g. "1.15") → absolute px for RN
-        const num = parseFloat(val);
-        if (!isNaN(num) && fontSize) {
-          result[camelKey] = num <= 10 ? Math.round(fontSize * num) : num;
-        } else {
-          result[camelKey] = num;
-        }
-      } else if (camelKey === 'fontFamily' && typeof val === 'string') {
-        // Strip CSS fallbacks: "Publico Headline, serif" → "Publico Headline"
-        result[camelKey] = val.split(',')[0].trim();
-      } else {
-        result[camelKey] = val;
-      }
-    }
-    return result;
-  },
-});
+  return map;
+}
 
 /**
  * Get StyleDictionary configuration for typography tokens.
+ *
+ * Registers the value/mobile-breakpoint transform with the current brand's
+ * font variant map so fontFamily values resolve to RN-compatible names.
  *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @returns {Object} Style Dictionary configuration object
  */
 function getTypographyConfig(brand) {
+  const fontVariantMap = buildFontVariantMap(brand);
+
+  /**
+   * SD Value Transform: Convert composite token values (CSS property objects)
+   * to React Native format.
+   *
+   * - kebab-case CSS keys → camelCase
+   * - fontSize px strings → numbers
+   * - lineHeight CSS multiplier → absolute px
+   * - fontFamily CSS stack → variant-specific PostScript name via font data lookup
+   */
+  StyleDictionary.registerTransform({
+    name: 'value/mobile-breakpoint',
+    type: 'value',
+    transitive: true,
+    filter: (token) => typeof token.value === 'object' && !Array.isArray(token.value),
+    transform: (token) => {
+      const raw = token.value;
+      const result = {};
+
+      // First pass: collect fontSize, fontWeight, fontStyle for downstream resolution
+      let fontSize;
+      let fontWeight = '400';
+      let fontStyle = 'normal';
+      for (const [key, val] of Object.entries(raw)) {
+        const k = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+        if (k === 'fontSize' || k === 'font-size') {
+          fontSize = typeof val === 'string' && val.endsWith('px') ? parseFloat(val) : Number(val);
+        } else if (k === 'fontWeight' || key === 'font-weight') {
+          fontWeight = String(val);
+        } else if (k === 'fontStyle' || key === 'font-style') {
+          fontStyle = String(val);
+        }
+      }
+
+      for (const [key, val] of Object.entries(raw)) {
+        const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+
+        if (camelKey === 'fontSize' && typeof val === 'string' && val.endsWith('px')) {
+          result[camelKey] = parseFloat(val);
+        } else if (camelKey === 'lineHeight') {
+          const num = parseFloat(val);
+          if (!isNaN(num) && fontSize) {
+            result[camelKey] = num <= 10 ? Math.round(fontSize * num) : num;
+          } else {
+            result[camelKey] = num;
+          }
+        } else if (camelKey === 'fontFamily' && typeof val === 'string') {
+          const familyName = val.split(',')[0].trim();
+          const lookupKey = `${familyName}|${fontWeight}|${fontStyle}`;
+          result[camelKey] = fontVariantMap[lookupKey] || familyName;
+        } else {
+          result[camelKey] = val;
+        }
+      }
+      return result;
+    },
+  });
   const sourceFiles = [
     // Font tokens for reference resolution (e.g. {font.family.publico-text})
     'tokens/primitives/text.json',
