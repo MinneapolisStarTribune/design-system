@@ -17,6 +17,9 @@
     "build": "turbo run build",
     "build:native": "turbo run build:native --filter=@minneapolisstartribune/design-system",
     "build:web": "turbo run build:web --filter=@minneapolisstartribune/design-system",
+    "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook run android",
+    "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook run ios",
+    "build:mobile-storybook": "yarn build:ios && yarn build:android",
     "build-storybook:web": "turbo run build-storybook --filter=@minneapolisstartribune/design-system",
     "format": "turbo run format",
     "format:check": "turbo run format:check",
@@ -37,10 +40,7 @@
     "test:watch": "turbo run test:watch --filter=@minneapolisstartribune/design-system",
     "test:web": "turbo run test:web --filter=@minneapolisstartribune/design-system",
     "tokens": "turbo run tokens --filter=@minneapolisstartribune/design-system",
-    "typecheck": "turbo run typecheck",
-    "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook run android",
-    "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook run ios",
-    "build:mobile-storybook": "yarn build:ios && yarn build:android"
+    "typecheck": "turbo run typecheck"
   },
   "packageManager": "yarn@4.13.0"
 }

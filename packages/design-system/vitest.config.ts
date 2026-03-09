@@ -48,7 +48,9 @@ export default defineConfig({
       reporter: ['text', 'json', 'html', 'lcov'],
       reportsDirectory: './test-coverage',
     },
-    reporters: ['default', 'junit'],
+    reporters: process.env.VITEST_REPORTERS
+      ? process.env.VITEST_REPORTERS.split(',')
+      : ['default', 'junit'],
     outputFile: {
       junit: process.env.VITEST_JUNIT_OUTPUT || './reports/junit.xml',
     },
