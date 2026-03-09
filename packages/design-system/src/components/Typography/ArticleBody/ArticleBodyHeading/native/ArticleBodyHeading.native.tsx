@@ -1,12 +1,10 @@
 import React from 'react';
 import { Text } from 'react-native';
-import type {
-  ArticleBodyHeadingProps,
-  ArticleBodyHeadingImportance,
-} from '../ArticleBodyHeading.types';
+import type { ArticleBodyHeadingProps } from '../ArticleBodyHeading.types';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type ArticleBodyHeadingImportance = ArticleBodyHeadingProps['importance'];
 
 const importanceToStyleKey: Record<ArticleBodyHeadingImportance, StyleKey> = {
   1: 'h1',
@@ -43,4 +41,7 @@ const createStyles = (theme: NativeTheme) => ({
   h6: { ...theme.typographyArticleBodyH6 },
 });
 
-export type { ArticleBodyHeadingProps, ArticleBodyHeadingImportance };
+export type {
+  ArticleBodyHeadingProps,
+  ArticleBodyHeadingImportance,
+} from '../ArticleBodyHeading.types';
