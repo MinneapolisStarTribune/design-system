@@ -28,10 +28,9 @@ const wrapper = TestWrapperInDesignSystemProvider();
 
 describe('ArticleQuote Accessibility (native)', () => {
   it('sets accessibilityRole to "none" by default', () => {
-    render(
-      <ArticleQuote>Highlight key statements or examples within an article.</ArticleQuote>,
-      { wrapper }
-    );
+    render(<ArticleQuote>Highlight key statements or examples within an article.</ArticleQuote>, {
+      wrapper,
+    });
     const element = screen.getByTestId('article-quote');
     expect(element).toHaveAttribute('role', 'none');
   });
@@ -53,9 +52,7 @@ describe('ArticleQuote Accessibility (native)', () => {
 
   it('forwards aria-label to the underlying element', () => {
     render(
-      <ArticleQuote aria-label="Featured pull quote">
-        Custom accessible article quote
-      </ArticleQuote>,
+      <ArticleQuote aria-label="Featured pull quote">Custom accessible article quote</ArticleQuote>,
       { wrapper }
     );
     const element = screen.getByTestId('article-quote');
@@ -63,21 +60,15 @@ describe('ArticleQuote Accessibility (native)', () => {
   });
 
   it('forwards aria-describedby to the underlying element', () => {
-    render(
-      <ArticleQuote aria-describedby="quote-source">
-        Described article quote
-      </ArticleQuote>,
-      { wrapper }
-    );
+    render(<ArticleQuote aria-describedby="quote-source">Described article quote</ArticleQuote>, {
+      wrapper,
+    });
     const element = screen.getByTestId('article-quote');
     expect(element).toHaveAttribute('aria-describedby', 'quote-source');
   });
 
   it('forwards aria-hidden to the underlying element', () => {
-    render(
-      <ArticleQuote aria-hidden={true}>Hidden article quote</ArticleQuote>,
-      { wrapper }
-    );
+    render(<ArticleQuote aria-hidden={true}>Hidden article quote</ArticleQuote>, { wrapper });
     const element = screen.getByTestId('article-quote');
     expect(element).toHaveAttribute('aria-hidden', 'true');
   });

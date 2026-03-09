@@ -51,10 +51,7 @@ describe('ArticleQuote (native)', () => {
   });
 
   it('uses custom dataTestId', () => {
-    render(
-      <ArticleQuote dataTestId="custom-quote">Custom test id</ArticleQuote>,
-      { wrapper }
-    );
+    render(<ArticleQuote dataTestId="custom-quote">Custom test id</ArticleQuote>, { wrapper });
     expect(screen.getByTestId('custom-quote')).toBeInTheDocument();
   });
 
