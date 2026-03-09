@@ -219,22 +219,21 @@ export const AllVariants: Story = {
 
 ### Themed Styles with `useNativeStyles`
 
-Native components that need theme-aware styles should use the `useNativeStyles` hook.  
-For typography components, use `createNativeTypographyStylesWithDefaults` so default text color is applied automatically.
+Native components should use `useNativeStyles` for regular style factories and
+`useNativeStylesWithDefaults` for text/typography style factories.
 
 ```tsx
 import React from 'react';
 import { Text } from 'react-native';
-import { useNativeStyles } from '@/hooks/useNativeStyles';
-import { createNativeTypographyStylesWithDefaults } from '@/styles/nativeTypography';
+import { useNativeStylesWithDefaults } from '@/hooks/useNativeStyles';
 
 export const MyComponent: React.FC<MyComponentProps> = ({ variant, children }) => {
-  const styles = useNativeStyles(createStyles);
+  const styles = useNativeStylesWithDefaults(createStyles);
   return <Text style={styles[variant]}>{children}</Text>;
 };
 
 const createStyles = (theme) =>
-  createNativeTypographyStylesWithDefaults(theme, {
+  ({
     primary: { ...theme.typographyArticleQuoteSmall },
     secondary: { ...theme.typographyArticleQuoteLarge },
   });
@@ -244,10 +243,12 @@ This pattern:
 
 - **Encapsulates memoisation** so styles are only recalculated if theme tokens change
 - **Applies default typography color automatically** (`colorTextOnLightPrimary`) across variants
-- **Keeps `StyleSheet.create` centralized** in a shared helper instead of repeating it in each component
-- **Infers the theme type** from the hook so token names are autocompleted and typo-checked
+- **Keeps `StyleSheet.create` internal** to the hook so component files stay minimal
+- **Infers the theme type** so token names are autocompleted and typo-checked
 
-> For direct access to `brand`, `colorScheme`, or individual tokens outside of a stylesheet, use `useNativeTokens` instead.
+Use only these two native style hooks:
+- `useNativeStyles`
+- `useNativeStylesWithDefaults`
 ---
 
 ## Testing Standards
@@ -335,6 +336,7 @@ Every time you work in this repo, do not forget to update documentation! You MUS
 - `README.md` — audience: consuming app developers
 - `integration-guides/web.md` — audience: web consumers
 - `integration-guides/native.md` — audience: React Native consumers
+- `docs/code-standards.md` - audience: Internal Developers of this repo
 
 ## Using This Document with AI Assistants
 
