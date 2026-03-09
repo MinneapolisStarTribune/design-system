@@ -13,6 +13,7 @@ export const COMPONENT_NAMES = [
   'ArticleQuote',
   'CodeBlock',
   'EditorialSponsoredText',
+  'EditorialText',
   'EnterpriseHeading',
   'FormControl',
   'FormGroup',

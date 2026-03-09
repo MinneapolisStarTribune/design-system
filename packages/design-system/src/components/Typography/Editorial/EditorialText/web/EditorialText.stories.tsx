@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SIZES } from '@/types';
-import { EditorialText, EditorialTextProps } from './EditorialText';
-
-const weightOptions: EditorialTextProps['weight'][] = ['regular', 'bold'];
+import { EditorialText } from './EditorialText';
+import { EDITORIAL_TEXT_SIZES, EDITORIAL_TEXT_WEIGHTS } from '../EditorialText.types';
 
 const meta = {
   title: 'Foundations/Typography/Editorial/EditorialText',
@@ -14,12 +12,12 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: SIZES,
+      options: EDITORIAL_TEXT_SIZES,
       description: 'The size of the editorial text',
     },
     weight: {
       control: 'select',
-      options: weightOptions,
+      options: EDITORIAL_TEXT_WEIGHTS,
       description: 'The font weight of the editorial text',
     },
     children: {
@@ -32,7 +30,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Configurable
 export const Configurable: Story = {
   args: {
     size: 'medium',
@@ -47,12 +44,12 @@ export const AllLevels: Story = {
     weight: 'regular',
     children: 'Editorial text',
   },
-  render: (_args) => (
+  render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {SIZES.map((size) => (
+      {EDITORIAL_TEXT_SIZES.map((size) => (
         <div key={size}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {weightOptions.map((weight) => (
+            {EDITORIAL_TEXT_WEIGHTS.map((weight) => (
               <EditorialText key={weight} size={size} weight={weight}>
                 {`${size} / ${weight} editorial text`}
               </EditorialText>
