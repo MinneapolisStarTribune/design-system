@@ -2,12 +2,10 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type {
-  ArticleBodySponsoredHeadingProps,
-  ArticleBodySponsoredHeadingImportance,
-} from '../ArticleBodySponsoredHeading.types';
+import type { ArticleBodySponsoredHeadingProps } from '../ArticleBodySponsoredHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type ArticleBodySponsoredHeadingImportance = ArticleBodySponsoredHeadingProps['importance'];
 
 const importanceToStyleKey: Record<ArticleBodySponsoredHeadingImportance, StyleKey> = {
   1: 'h1',
@@ -59,4 +57,7 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type { ArticleBodySponsoredHeadingProps, ArticleBodySponsoredHeadingImportance };
+export type {
+  ArticleBodySponsoredHeadingProps,
+  ArticleBodySponsoredHeadingImportance,
+} from '../ArticleBodySponsoredHeading.types';
