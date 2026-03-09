@@ -1,17 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NonNewsHeading } from './NonNewsHeading';
-import type { NewsHeadingImportance } from '../NewsHeading/NewsHeading.types';
-
-const importanceOptions: NewsHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+import { NewsHeading } from './NewsHeading';
+import { NEWS_HEADING_IMPORTANCE_LEVELS } from '../NewsHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/NonNewsHeading',
-  component: NonNewsHeading,
+  title: 'Foundations/Typography/Editorial/NewsHeading',
+  component: NewsHeading,
   parameters: {
     docs: {
       description: {
         component:
-          'Non-editorial heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
+          'Editorial news heading. Use the **Brand** control in the toolbar to switch between Star Tribune and Varsity to see brand-specific fonts.',
       },
     },
   },
@@ -19,16 +17,16 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: importanceOptions,
+      options: NEWS_HEADING_IMPORTANCE_LEVELS,
       description:
-        'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
+        'Semantic heading level (1-6). Controls both the HTML element (h1-h6) and the typography class.',
     },
     children: {
       control: 'text',
       description: 'Heading text.',
     },
   },
-} satisfies Meta<typeof NonNewsHeading>;
+} satisfies Meta<typeof NewsHeading>;
 
 export default meta;
 
@@ -37,7 +35,7 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     importance: 1,
-    children: 'Non-news heading example',
+    children: 'News heading example',
   },
 };
 
@@ -66,7 +64,7 @@ export const AllVariants: Story = {
         width: '100%',
       }}
     >
-      {(importanceOptions as NewsHeadingImportance[]).map((level) => (
+      {NEWS_HEADING_IMPORTANCE_LEVELS.map((level) => (
         <div
           key={level}
           style={{
@@ -77,7 +75,7 @@ export const AllVariants: Story = {
             overflow: 'hidden',
           }}
         >
-          <NonNewsHeading importance={level}>Non News Heading - h{level}</NonNewsHeading>
+          <NewsHeading importance={level}>News Heading - h{level}</NewsHeading>
         </div>
       ))}
     </div>

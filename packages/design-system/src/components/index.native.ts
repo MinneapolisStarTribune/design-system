@@ -29,3 +29,7 @@ export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,
 } from './Typography/Editorial/EnterpriseHeading/native/EnterpriseHeading.native';
+export {
+  NewsHeading,
+  type NewsHeadingProps,
+} from './Typography/Editorial/NewsHeading/native/NewsHeading.native';
