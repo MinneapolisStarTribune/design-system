@@ -320,57 +320,14 @@ import { useBrandValidation } from '../../../hooks/useBrandValidation';
 
 Every time you work in this repo, do not forget to update documentation! You MUST update:
 
-- README.md - The audience is consuming repositories and their developers.
-- docs/web - The audience is consuming repositories in web environments
-- docs/native - The audience is consuming repositories in react native environments
--
+- `README.md` — audience: consuming app developers
+- `integration-guides/web.md` — audience: web consumers
+- `integration-guides/native.md` — audience: React Native consumers
 
-## How to Use This Document with AI Assistants
+## Using This Document with AI Assistants
 
-### For Cursor and Other AI Tools
-
-To ensure AI assistants follow these standards, include this instruction in your prompts or AI configuration:
-
-```
-Please follow the code standards documented in docs/code-standards.md when making changes to this codebase.
-Key requirements:
-- Use TypeScript strict mode patterns
-- Follow React component patterns (factory functions, brand validation)
-- Use path aliases (@/*) for imports
-- Format code according to Prettier config
-- Follow file naming conventions
-- Register new components in component-names.ts
-- Include JSDoc comments for public APIs
-- Create Storybook stories with exactly 2 stories: "Configurable" (first, fully interactive for UX/PM/Engineers) and "AllVariants" (second, for Chromatic regression testing)
-- Update documentation
-- ALWAYS refer to docs/native and docs/web for platform specific instructions
-```
-
-### Cursor-Specific Instructions
-
-You can also reference this file directly in Cursor:
-
-1. **In chat prompts**: Mention `@docs/code-standards.md` to include it in context
-2. **In rules**: Add a reference to this file in your `.cursorrules` file (if you use one)
-3. **In comments**: Reference specific sections when asking for code changes
-
-### Example Prompt
-
-```
-@docs/code-standards.md Please ________ following our code standards.
-Make sure to:
-- Register it in component-names.ts
-- Use brand validation
-- Include proper TypeScript types
-```
+Reference `@docs/code-standards.md` in Cursor prompts or `.cursorrules`. AI tools should also reference `integration-guides/native.md` and `integration-guides/web.md` for platform-specific patterns.
 
 ---
 
-## Keeping This Document Updated
-
-This is a **living document**. When standards change:
-
-1. Update this file immediately
-2. Update related code to match new standards
-3. Communicate changes to the team
-4. Update AI assistant instructions if needed
+This is a **living document** — update it when standards change.

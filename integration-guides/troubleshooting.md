@@ -79,7 +79,7 @@ Common issues and solutions for using the design system.
 
 **Solutions:**
 
-1. Verify your `.npmrc` or `.yarnrc` is configured correctly (see [Installation](../README.md#installation))
+1. Verify your `.npmrc` or `.yarnrc` is configured correctly (see [README Installation](../README.md#installation))
 2. Check that your GitHub token has `read:packages` scope
 3. Ensure the token hasn't expired
 4. For CI/CD, verify the token is set as a secret/environment variable

@@ -87,7 +87,7 @@ function App() {
 }
 ```
 
-See [Web Usage Documentation](docs/web.md) for more details.
+See [Web Integration Guide](integration-guides/web.md) for more details.
 
 ### Native (React Native)
 
@@ -108,7 +108,7 @@ function App() {
 }
 ```
 
-See [Native Usage Documentation](docs/native.md) for more details.
+See [Native Integration Guide](integration-guides/native.md) for more details.
 
 ## Available Components
 
@@ -240,9 +240,10 @@ yarn add @minneapolisstartribune/design-system@latest
 
 ## Documentation
 
-- **[Web Usage](docs/web.md)** - Complete guide for using the design system in web (React) applications
-- **[Native Usage](docs/native.md)** - Complete guide for using the design system in React Native applications
-- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+- **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
+- **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
+- **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
+- **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 
 ## Still Having Issues?
 

@@ -78,100 +78,27 @@ After we have bumped up our version number, the release captain will create a ne
 
 ## Setup
 
-### Step 1: Get your personalized setup path
-
-Run the bootstrap script in your terminal to see your personalized file path:
-
-```sh
-./scripts/bootstrap-git-aliases.sh
-```
-
-This will show you the exact path you need to add to your shell config. The path will be customized for your system.
-
-### Step 2: Open your shell config file
-
-Your shell config file is where your terminal settings are stored.
-
-You can use any text editor you're comfortable with:
-
-**Option A - VS Code (recommended for beginners):**
-
-```sh
-code ~/.zshrc
-```
-
-**Option B - Terminal text editors:**
-
-```sh
-vim ~/.zshrc        # Press 'i' to edit, ESC then ':wq' to save and quit
-nano ~/.zshrc       # Use Ctrl+X, then Y, then Enter to save
-```
-
-### Step 3: Add the workflow script
-
-Scroll to the bottom of the file and add these lines (use the actual path from Step 1):
-
-```bash
-# --- Repo git workflow helpers ---
-source "/Users/YOUR_USERNAME/design-system/scripts/git-workflow.sh"
-```
-
-⚠️ Notes:
-
-- Replace `/Users/YOUR_USERNAME/design-system/` with the actual path shown when you run the bootstrap script
-- Add it at the END of the file (after any existing content)
-- Don't delete anything that's already in the file
-
-### Step 4: Save the file
-
-### Step 5: Reload your shell
-
-Close and reopen your terminal, OR run:
-
-```sh
-source ~/.zshrc
-```
-
-### Step 6: Verify it worked
-
-Run this command to test:
-
-```sh
-whichrelease
-```
-
-You should see an error about no release branch pinned (that's expected!). If you see "command not found", something went wrong - check the path in Step 3.
-
-### Step 7: Set up your first release branch
-
-Before using the workflow, you need to pin a release branch:
-
-1. Checkout a release branch:
+1. Run the bootstrap script to get your personalized source path:
 
    ```sh
-   git checkout release/0.1.0
+   ./scripts/bootstrap-git-aliases.sh
    ```
 
-   (Use whatever release branch exists in this repo)
+2. Add the printed `source "..."` line to the end of `~/.zshrc` (or `~/.bashrc`).
 
-2. Pin it:
+3. Reload your shell (`source ~/.zshrc`) and verify:
 
    ```sh
+   whichrelease   # "command not found" means the path is wrong
+   ```
+
+4. Pin your first release branch:
+
+   ```sh
+   git checkout release/0.1.0   # or whichever release branch exists
    setrelease
+   whichrelease                 # should print the pinned branch
    ```
-
-3. Verify:
-   ```sh
-   whichrelease
-   ```
-   (Should show your pinned release branch)
-
-### Troubleshooting
-
-- **"command not found":** Check that the path in Step 3 is correct. Run `./scripts/bootstrap-git-aliases.sh` again to see the correct path.
-- **"permission denied":** Make sure you saved the file correctly.
-- **"No such file or directory":** The path might be wrong - run the bootstrap script again to see the correct path for your system.
-- **"Nothing happens when I run commands":** You probably copied `source "$WORKFLOW_SCRIPT"` instead of the actual path. Run the bootstrap script to see the real path, then copy that.
 
 ## Available Commands
 
