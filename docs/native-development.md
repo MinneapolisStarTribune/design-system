@@ -6,12 +6,58 @@ This guide walks you through setting up and working in a React Native environmen
 
 Before you start, ensure you have:
 
-- **Node.js 22+** and **Yarn** (see [Getting Started](getting-started.md) in this folder)
+- **Node.js 22+** and **Yarn** (see [Getting Started](getting-started.md))
 - **macOS** (required for iOS development)
-- **Xcode** (from the Mac App Store) — install **iOS** platform support when prompted. After install: open Xcode once, accept the license, and set **Command Line Tools** in Xcode → Settings → Locations.
-- **(Optional) Android Studio** — only if you need to run the Android emulator. Create at least one Virtual Device (AVD) in Device Manager.
 
-Full install details are in [apps/mobile-storybook/README.md](../apps/mobile-storybook/README.md).
+### iOS setup
+
+1. **Install Xcode** from the [Mac App Store](https://apps.apple.com/us/app/xcode/id497799835). It's a large download (~12 GB) so allow time for it to finish.
+
+2. **Open Xcode once** after installing and accept the license agreement when prompted.
+
+3. **Install Xcode Command Line Tools** (if not already installed):
+
+   ```bash
+   xcode-select --install
+   ```
+
+4. **Install an iOS Simulator runtime:** Open Xcode → **Settings** (⌘,) → **Platforms** → click the **+** button and download a recent iOS version (e.g. iOS 17+).
+
+5. **Install CocoaPods** (required by Expo for native iOS dependencies):
+
+   ```bash
+   brew install cocoapods
+   ```
+
+### Android setup
+
+Complete these steps if you plan to run `yarn build:android`:
+
+1. **Install Android Studio** from [developer.android.com/studio](https://developer.android.com/studio). The installer includes the Android SDK, Emulator, and Platform-Tools.
+
+2. **Create an Android Virtual Device (AVD):** Open Android Studio → **Device Manager** → **Create Device**. Pick a phone profile (e.g. Pixel 7) and a recent system image (API 34+).
+
+3. **Set environment variables** in `~/.zshrc` (or your shell profile):
+
+   ```bash
+   export ANDROID_HOME=$HOME/Library/Android/sdk
+   export PATH=$PATH:$ANDROID_HOME/emulator
+   export PATH=$PATH:$ANDROID_HOME/platform-tools
+   ```
+
+   Then run `source ~/.zshrc`.
+
+4. **Accept SDK licenses:**
+
+   ```bash
+   $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+   ```
+
+5. **Verify JDK 17** is available. Android Studio bundles one, but if the build complains about Java, install it with `brew install openjdk@17` and add to `~/.zshrc`:
+
+   ```bash
+   export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+   ```
 
 ### iOS Simulator: install a device (required for "press i")
 
