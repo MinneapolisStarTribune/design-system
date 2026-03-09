@@ -1,5 +1,5 @@
-import { PageHeading } from './PageHeading';
 import { renderWithProvider } from '@/test-utils/render';
+import { PageHeading } from './PageHeading';
 
 describe('PageHeading', () => {
   it('renders with required props', () => {
