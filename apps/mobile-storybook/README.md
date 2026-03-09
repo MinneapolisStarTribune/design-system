@@ -5,13 +5,13 @@ design system components.
 
 ## Prerequisites
 
-| Tool            | Version       | Notes                                       |
-| --------------- | ------------- | ------------------------------------------- |
-| Node.js         | >= 22          | see `.nvmrc` in repo root                   |
-| Yarn            | 4.x (Berry)   | use Corepack or see root `packageManager`   |
-| Xcode           | >= 15          | iOS Simulator (macOS only)                  |
-| Android Studio  | latest        | Android Emulator (optional)                 |
-| Expo CLI        | installed via `npx` | no global install needed              |
+| Tool           | Version             | Notes                                     |
+| -------------- | ------------------- | ----------------------------------------- |
+| Node.js        | >= 22               | see `.nvmrc` in repo root                 |
+| Yarn           | 4.x (Berry)         | use Corepack or see root `packageManager` |
+| Xcode          | >= 15               | iOS Simulator (macOS only)                |
+| Android Studio | latest              | Android Emulator (optional)               |
+| Expo CLI       | installed via `npx` | no global install needed                  |
 
 **First time?** See the [iOS and Android setup instructions](../docs/native-development.md#ios-setup) in the Native Development guide for full install steps (Xcode, Android Studio, environment variables, etc.).
 
@@ -29,10 +29,10 @@ yarn install        # installs all workspace dependencies
 
 This app requires a **development build** (via `expo-dev-client`). **Expo Go is not supported** — it uses its own bundled runtime and will crash on Storybook dependencies.
 
-| What you're doing | Command (from repo root) |
-|-------------------|--------------------------|
-| **Build** the native app (one-time or after native changes) | `yarn build:ios` or `yarn build:android` |
-| **Start development** (Metro dev server; use daily) | `yarn storybook:native` or `yarn storybook:ios` / `yarn storybook:android` |
+| What you're doing                                           | Command (from repo root)                                                   |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Build** the native app (one-time or after native changes) | `yarn build:ios` or `yarn build:android`                                   |
+| **Start development** (Metro dev server; use daily)         | `yarn storybook:native` or `yarn storybook:ios` / `yarn storybook:android` |
 
 ### First time setup
 
@@ -61,6 +61,7 @@ After the first build, you only need step 2 and 3. Code changes update via Fast 
 ### Why not Expo Go?
 
 Expo Go bundles its own fixed React Native runtime. This app needs:
+
 - `expo-dev-client` for custom native modules
 - A `SharedArrayBuffer` shim (in `shims.js`) that must run before Storybook loads
 - Native dependencies (`react-native-reanimated`, gesture handler, etc.) that Expo Go doesn't include
@@ -95,11 +96,11 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 
 ## Design system alias
 
-| Config            | Alias                                               | Resolves to                                          |
-| ----------------- | --------------------------------------------------- | ---------------------------------------------------- |
-| `babel.config.js` | `@minneapolisstartribune/design-system/native`      | `../../packages/design-system/src/index.native`      |
-| `babel.config.js` | `@`                                                 | `../../packages/design-system/src`                   |
-| `tsconfig.json`   | mirrors Babel aliases for IDE type-checking          |                                                      |
+| Config            | Alias                                          | Resolves to                                     |
+| ----------------- | ---------------------------------------------- | ----------------------------------------------- |
+| `babel.config.js` | `@minneapolisstartribune/design-system/native` | `../../packages/design-system/src/index.native` |
+| `babel.config.js` | `@`                                            | `../../packages/design-system/src`              |
+| `tsconfig.json`   | mirrors Babel aliases for IDE type-checking    |                                                 |
 
 ## Troubleshooting
 
@@ -112,13 +113,14 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 - **TypeScript errors in IDE** — Restart the TS server; aliases are configured
   in `tsconfig.json` and match Babel.
 - **`SharedArrayBuffer` errors** — The `shims.js` file polyfills this. Make sure `index.js` imports `./shims` before anything else.
+- > :warning: **Troubleshooting:** If you hit a sandbox sync error, run `yarn build:ios` again — it will re-run pod install automatically. Do not run `pod install` directly; it's deprecated in React Native projects. You can also run `yarn ios` from inside `apps/mobile-storybook/` as an alternative. Always run commands from either the **repo root** or `apps/mobile-storybook/` — not from `apps/mobile-storybook/ios/`.
 
 ## For engineers new to React Native
 
 - **Expo** runs the app and Metro bundler; you don't need to run a separate "backend."
 - **iOS**: Requires macOS, Xcode, and CocoaPods. See the [Native Development guide](../docs/native-development.md#ios-setup) for setup steps.
 - **Android**: Requires Android Studio, SDK, emulator, and environment variables. See the [Native Development guide](../docs/native-development.md#android-setup) for setup steps.
-- **Storybook runs inside the app**: Unlike web Storybook, the native app *is* the Storybook shell; you pick stories from the in-app list.
+- **Storybook runs inside the app**: Unlike web Storybook, the native app _is_ the Storybook shell; you pick stories from the in-app list.
 - **`storybook.requires.ts`** is generated by the Storybook Metro config when Metro starts; it's in `.gitignore` and should not be edited.
 
 ## Stage / Prod / CI
