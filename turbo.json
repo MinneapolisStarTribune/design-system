@@ -24,7 +24,15 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": []
+    },
+    "test:web": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:native": {
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "lint": {
       "outputs": []

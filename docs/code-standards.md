@@ -58,6 +58,9 @@ type ButtonProps = {
 
 - **Components**: PascalCase for component files (e.g., `Button.tsx`, `NewsHeading.tsx`)
 - **Types**: `ButtonTypes.ts` or `types/index.ts` in component directories
+- **Native component files**: use `ComponentName.native.tsx` inside `native/` directories
+- **Native test files**: use `ComponentName.native.test.tsx` and `ComponentName.native.a11y.test.tsx`
+- **Native stories**: use `ComponentName.native.stories.tsx`
 - **Hooks**: camelCase with `use` prefix (e.g., `useBrandValidation.ts`)
 - **Utilities**: camelCase (e.g., `formatDate.ts`)
 - **Directories**: PascalCase for component directories (e.g., `Button/`, `Typography/`)
@@ -66,18 +69,18 @@ type ButtonProps = {
 ### File Structure Example
 
 ```
-src/
-  components/
-    Button/
-      Button.tsx
-      Button.test.tsx
-      ButtonTypes.ts
-      index.ts
-    Typography/
-      Editorial/
-        createEditorialHeading.tsx
-        EditorialTypes.ts
-        index.ts
+ComponentName/
+  ComponentName.types.ts                    # shared props (used by both web & native)
+  web/
+    ComponentName.tsx                        # web component implementation
+    ComponentName.stories.tsx                # web storybook story
+    ComponentName.test.tsx                   # web unit test (Vitest)
+    ComponentName.a11y.test.tsx              # web a11y test (Vitest)
+  native/
+    ComponentName.native.tsx                 # native component implementation
+    ComponentName.native.stories.tsx         # native storybook story
+    ComponentName.native.test.tsx            # native unit test (Jest + RNTL)
+    ComponentName.native.a11y.test.tsx       # native a11y test (Jest + RNTL)
 ```
 
 ---
@@ -246,17 +249,24 @@ This pattern:
 
 ## Testing Standards
 
-### Native Test Mocks
+### Test Runner Split
 
-Tests that exercise code depending on `useNativeTokens` or `useNativeStyles` need mocked `@mobile` theme/typography modules. Use the shared setup file instead of inlining `vi.mock` calls:
+- **Web tests** run with **Vitest** (`@testing-library/react`, `jsdom`)
+- **Native component tests** run with **Jest + @testing-library/react-native**
+- Vitest excludes `*.native.test.tsx` and `*.native.a11y.test.tsx` files
+- Jest matches native test files by the `*.native.*` naming convention
+
+### Native Token Imports in Tests
+
+When testing hooks/components that depend on native tokens, use the real generated modules
+from `@mobile/themes/*` and `@mobile/typography/*` instead of mocking token files.
 
 ```typescript
-// ✅ Good - shared mock setup
-import '@/test-utils/mockNativeTokens';
-
-// ❌ Bad - duplicated vi.mock() blocks in every test file
-vi.mock('@mobile/themes/startribune-light.js', () => ({ ... }));
+// ✅ Good - assert against generated token modules
+import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 ```
+
+Avoid inline `vi.mock()` token stubs for native token modules in test files.
 
 
 ### Test Wrappers
@@ -267,7 +277,6 @@ When tests need a `DesignSystemContext`, use the shared wrapper from `src/test-u
 
 ```typescript
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
-import '@/test-utils/mockNativeTokens'
 
 // With defaults (startribune, light)
 renderHook(() => useMyHook(), {

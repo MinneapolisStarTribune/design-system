@@ -19,5 +19,10 @@ pre-commit:
       run: yarn turbo run typecheck --output-logs=hash-only
     vitest:
       glob: 'packages/design-system/src/**/*.{ts,tsx}'
+      exclude: 'packages/design-system/src/**/*.native.{tsx,ts}'
       root: packages/design-system
       run: VITEST_REPORTERS=./scripts/minimal-reporter.ts yarn vitest related --run --passWithNoTests --no-color {staged_files}
+    jest:
+      glob: 'packages/design-system/src/**/*.native.{tsx,ts}'
+      root: packages/design-system
+      run: yarn tokens && yarn jest --config jest.config.js --findRelatedTests --passWithNoTests {staged_files}
