@@ -4,7 +4,7 @@ import type { ComponentName } from '@/types/component-names';
 import type {
   EditorialHeadingImportance,
   EditorialHeadingProps,
-} from '@/components/Typography/Editorial';
+} from '@/components/Typography/Editorial/types';
 
 interface CreateArticleBodyHeadingOptions {
   componentName: ComponentName;
