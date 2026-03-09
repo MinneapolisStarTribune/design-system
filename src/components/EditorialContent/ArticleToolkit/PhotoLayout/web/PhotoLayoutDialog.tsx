@@ -36,33 +36,47 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
     >
       <button
         type="button"
-        className={styles.closeButton}
+        className={styles['dialog-close-button']}
         aria-label="Close expanded image"
         onClick={onClose}
       >
-        <span className={styles.closeIcon} aria-hidden>
+        <span className={styles['dialog-close-icon']} aria-hidden>
           <Icon name="close" color="on-dark-primary" />
         </span>
       </button>
 
-      <div className={styles.dialogContent}>
-        <div className={styles.dialogImageWrapper}>
+      <div className={styles['dialog-content']}>
+        <div className={styles['dialog-image-wrapper']}>
           <Image
             {...image}
             alt={image.altText}
-            className={styles.dialogImage}
+            className={styles['dialog-image']}
             imgixParams={imgixParams}
           />
         </div>
 
         {(hasCaption || hasCredit) && (
-          <aside className={styles.dialogCaption} role="region" aria-label="Image information">
-            {hasCaption && <p className="typography-utility-label-small">{caption}</p>}
+          <aside className={styles['dialog-caption']} role="region" aria-label="Image information">
+            {hasCaption && (
+              <p
+                className={classNames(
+                  'typography-utility-label-small',
+                  styles['dialog-caption-text']
+                )}
+              >
+                {caption}
+              </p>
+            )}
 
             {hasCredit && (
-              <div className={styles.creditRow}>
-                <Icon name="camera" className={styles.creditIcon} />
-                <span className={classNames('typography-utility-label-small', styles.creditText)}>
+              <div className={styles['dialog-credit-row']}>
+                <Icon name="camera" className={styles['dialog-credit-icon']} />
+                <span
+                  className={classNames(
+                    'typography-utility-label-small',
+                    styles['dialog-credit-text']
+                  )}
+                >
                   {imageCredit}
                 </span>
               </div>

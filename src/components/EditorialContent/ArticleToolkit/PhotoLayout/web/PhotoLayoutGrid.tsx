@@ -41,12 +41,12 @@ export const PhotoLayoutGrid: React.FC<PhotoLayoutGridProps> = ({
               if (openIndex === index) lastTriggerRef.current = el;
             }}
             type="button"
-            className={styles.expandButton}
+            className={styles['expand-button']}
             aria-label={`Expand image ${index + 1}`}
             aria-haspopup="dialog"
             onClick={(e) => onExpand(index, e.currentTarget)}
           >
-            <span className={styles.expandIcon} aria-hidden>
+            <span className={styles['expand-icon']} aria-hidden>
               <Icon name="expand" color="on-dark-secondary" />
             </span>
           </button>

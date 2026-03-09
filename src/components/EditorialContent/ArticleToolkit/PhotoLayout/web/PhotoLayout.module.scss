@@ -1,6 +1,6 @@
 /* Layout Container */
 
-.photoLayout {
+.photo-layout {
   /* Photo heights */
   --photo-item-height-desktop: 357px;
   --photo-item-height-tablet: 237px;
@@ -99,14 +99,14 @@
 /* Caption */
 
 @media (max-width: 480px) {
-  .caption {
+  .caption-text {
     padding: var(--photo-layout-caption-padding-mobile);
   }
 }
 
 /* Expand Button */
 
-.expandButton {
+.expand-button {
   position: absolute;
   right: var(--spacing-8);
   top: var(--spacing-8);
@@ -125,7 +125,7 @@
   }
 }
 
-.expandIcon {
+.expand-icon {
   height: 16px;
   width: 16px;
 
@@ -139,6 +139,7 @@
 
 .dialog {
   --lightbox-backdrop-bg: rgba(0, 0, 0, 0.95);
+  --caption-text-color: #ffffff;
   --credit-text-color: #afafaf;
 
   padding: 0;
@@ -154,7 +155,7 @@
   }
 }
 
-.dialogContent {
+.dialog-content {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -162,12 +163,12 @@
 }
 
 @media (min-width: 1160px) {
-  .dialogContent {
+  .dialog-content {
     flex-direction: row;
   }
 }
 
-.dialogImageWrapper {
+.dialog-image-wrapper {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -175,7 +176,7 @@
   min-height: 0;
 }
 
-.dialogImage {
+.dialog-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -183,7 +184,7 @@
 
 /* Dialog Close Button */
 
-.closeButton {
+.dialog-close-button {
   position: absolute;
   top: var(--spacing-16);
   right: var(--spacing-16);
@@ -203,7 +204,7 @@
   }
 }
 
-.closeIcon {
+.dialog-close-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -211,32 +212,36 @@
 
 /* Caption / Credit (inside dialog) */
 
-.dialogCaption {
+.dialog-caption {
   padding: var(--spacing-16);
   color: var(--color-text-on-dark-primary);
 }
 
 @media (min-width: 1160px) {
-  .dialogCaption {
+  .dialog-caption {
     align-self: flex-end;
     min-width: 240px;
     max-width: 260px;
   }
 }
 
-.creditRow {
+.dialog-credit-row {
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
   margin-top: var(--spacing-8);
 }
 
-.creditIcon {
+.dialog-credit-icon {
   width: 18px;
   height: 18px;
 }
 
-.creditIcon,
-.creditText {
-  color: var(--credit-text-color);
+.dialog-caption-text {
+  color: var(--caption-text-color) !important;
+}
+
+.dialog-credit-icon,
+.dialog-credit-text {
+  color: var(--credit-text-color) !important;
 }

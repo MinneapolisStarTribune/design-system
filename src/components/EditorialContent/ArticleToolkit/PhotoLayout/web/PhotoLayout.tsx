@@ -75,7 +75,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
       <figure
         data-testid={dataTestId}
         className={classNames(
-          styles.photoLayout,
+          styles['photo-layout'],
           styles[`layout-${photoLayout}`],
           styles[`variant-${variant}`],
           className
@@ -93,7 +93,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
         />
         {captionText && (
           <figcaption
-            className={classNames(styles.caption, 'typography-utility-label-small')}
+            className={classNames(styles['caption-text'], 'typography-utility-label-small')}
             data-testid={`${dataTestId}-caption`}
           >
             {captionText}
