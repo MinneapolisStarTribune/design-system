@@ -21,3 +21,7 @@ export {
   EditorialSponsoredText,
   type EditorialSponsoredTextProps,
 } from './Typography/Editorial/EditorialSponsoredText/native/EditorialSponsoredText.native';
+export {
+  EditorialText,
+  type EditorialTextProps,
+} from './Typography/Editorial/EditorialText/native/EditorialText.native';
