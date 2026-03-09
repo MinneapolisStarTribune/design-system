@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleQuote } from './ArticleQuote';
-import type { ArticleQuoteSize } from '../ArticleQuote.types';
-
-const articleQuoteSizes: ArticleQuoteSize[] = ['small', 'large'];
+import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleQuote',
@@ -14,7 +12,7 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: articleQuoteSizes,
+      options: ARTICLE_QUOTE_SIZES,
       description: 'Size variant - small or large',
     },
     children: {
@@ -48,7 +46,7 @@ export const AllVariants: Story = {
         maxWidth: '600px',
       }}
     >
-      {articleQuoteSizes.map((size) => (
+      {ARTICLE_QUOTE_SIZES.map((size) => (
         <div key={size} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <span
             style={{

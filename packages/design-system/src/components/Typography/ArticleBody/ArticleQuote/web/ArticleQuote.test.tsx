@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ArticleQuote } from './ArticleQuote';
+import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
 
 describe('ArticleQuote', () => {
   it('renders with default props', () => {
@@ -11,18 +12,14 @@ describe('ArticleQuote', () => {
     expect(element).toHaveClass('typography-article-quote-large');
   });
 
-  it('applies the correct class for each size', () => {
-    const sizes = ['small', 'large'] as const;
-    sizes.forEach((size) => {
-      const { unmount } = render(
-        <ArticleQuote size={size} dataTestId={`article-quote-${size}`}>
-          Quote - {size}
-        </ArticleQuote>
-      );
-      const element = screen.getByTestId(`article-quote-${size}`);
-      expect(element).toHaveClass(`typography-article-quote-${size}`);
-      unmount();
-    });
+  it.each(ARTICLE_QUOTE_SIZES)('applies the correct class for %s size', (size) => {
+    render(
+      <ArticleQuote size={size} dataTestId={`article-quote-${size}`}>
+        Quote - {size}
+      </ArticleQuote>
+    );
+    const element = screen.getByTestId(`article-quote-${size}`);
+    expect(element).toHaveClass(`typography-article-quote-${size}`);
   });
 
   it('merges custom className with typography class', () => {

@@ -158,12 +158,21 @@ Every story file must have exactly **2 stories**:
 - **Complete coverage**: Renders every variant/combination of component props
 - **No interactive controls needed**: Static render of all variants for consistent snapshots
 
+### Variant Values in Stories
+
+- This rule applies to Storybook too: do not hardcode variant arrays in `argTypes.options` or `AllVariants` loops.
+- Export typed variant constants from each component's `*.types.ts` file and reuse them in stories.
+- Reuse the same exported constants in tests so Storybook and tests stay in sync.
+
 ### Story Example
 
 ```typescript
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from './UtilityLabel';
-import { UtilityLabelSize, UtilityLabelWeight } from '../../types/globalTypes';
+import {
+  UTILITY_LABEL_SIZES,
+  UTILITY_LABEL_WEIGHTS,
+} from './UtilityLabel.types';
 
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityLabel',
@@ -175,12 +184,12 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['large', 'medium', 'small'] as UtilityLabelSize[],
+      options: UTILITY_LABEL_SIZES,
       description: 'The size of the label',
     },
     weight: {
       control: 'select',
-      options: ['regular', 'semibold'] as UtilityLabelWeight[],
+      options: UTILITY_LABEL_WEIGHTS,
       description: 'The font weight of the label',
     },
     capitalize: {
@@ -259,6 +268,28 @@ Use only these two native style hooks:
 - **Native component tests** run with **Jest + @testing-library/react-native**
 - Vitest excludes `*.native.test.tsx` and `*.native.a11y.test.tsx` files
 - Jest matches native test files by the `*.native.*` naming convention
+
+### Variant Values Must Come From Typed Sources
+
+- Do not hardcode variant arrays (for example, `['small', 'large']`) inside tests/stories.
+- Export typed constants from the component's `*.types.ts` file and reuse them everywhere.
+- For parameterized tests, use `it.each(EXPORTED_TYPED_VARIANTS)`.
+
+```typescript
+// ✅ Good - shared typed source of truth
+export const ARTICLE_QUOTE_SIZES = ['small', 'large'] as const satisfies readonly ArticleQuoteSize[];
+
+it.each(ARTICLE_QUOTE_SIZES)('renders %s', (size) => {
+  render(<ArticleQuote size={size}>Quote</ArticleQuote>);
+});
+```
+
+```typescript
+// ❌ Bad - inline/hardcoded variants in tests or stories
+it.each(['small', 'large'])('renders %s', (size) => {
+  // ...
+});
+```
 
 ### Native Token Imports in Tests
 
