@@ -9,6 +9,10 @@ export {
   type ArticleBodySponsoredTextProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredText/native/ArticleBodySponsoredText.native';
 export {
+  ArticleBodyText,
+  type ArticleBodyTextProps,
+} from './Typography/ArticleBody/ArticleBodyText/native/ArticleBodyText.native';
+export {
   ArticleQuote,
   type ArticleQuoteProps,
   type ArticleQuoteSize,
