@@ -111,7 +111,7 @@ module.exports = {
     },
     {
       // Index files - sort exports alphabetically
-      files: ['src/index.ts', 'src/components/index.ts'],
+      files: ['packages/design-system/src/index.web.ts', 'packages/design-system/src/components/index.web.ts', 'packages/design-system/src/index.native.ts', 'packages/design-system/src/components/index.native.ts'],
       rules: {
         'simple-import-sort/exports': 'error',
       },
