@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import type { ArticleQuoteProps, ArticleQuoteSize } from '../ArticleQuote.types';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 import { useNativeTokens } from '@/hooks/useNativeTokens';
+import { createNativeTypographyStylesWithDefaults } from '@/styles/nativeTypography';
 
 export const ArticleQuote: React.FC<ArticleQuoteProps> = (props) => {
   const { size = 'large', children, dataTestId = 'article-quote', ...rest } = props;
@@ -22,7 +23,7 @@ export const ArticleQuote: React.FC<ArticleQuoteProps> = (props) => {
 };
 
 const createStyles = (theme: ReturnType<typeof useNativeTokens>['theme']) =>
-  StyleSheet.create({
+  createNativeTypographyStylesWithDefaults(theme, {
     small: {
       ...theme.typographyArticleQuoteSmall,
     },
