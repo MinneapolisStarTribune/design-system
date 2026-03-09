@@ -1,6 +1,6 @@
 # Article Toolkit: Variant & Brand Architecture
 
-Guidance based on **code standards** (`docs/code-standards.md`) for when to use one file vs two files, and how to handle multiple brands.
+Guidance based on [code standards](../../../docs/code-standards.md) for when to use one file vs two files, and how to handle multiple brands.
 
 ---
 
@@ -87,9 +87,10 @@ Components do **not** take a `brand` prop. Brand comes from context (`DesignSyst
 
 ## 4. Summary
 
-| | |
-| ** One file per component. Use two only when DOM, props, or behavior differ. |
-| **Article Toolkit components?** | All one file with `variant` prop. |  
-| ** `DesignSystemProvider` at app root; theme + `data-brand` for styling. |
-| ** Brand-specific design tokens for |
-| **`variant?: 'standard' \| 'immersive'` from `ArticleToolkitBaseProps`; no `brand` prop. |
+| Question                        | Answer                                                                                               |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **One or two files?**           | One file per component. Split only when DOM, props, or behavior differ.                              |
+| **Article Toolkit components?** | All one file with a `variant` prop.                                                                  |
+| **Brand handling?**             | `DesignSystemProvider` at app root; `data-brand` for styling.                                        |
+| **Brand-specific layout?**      | Use semantic design tokens.                                                                          |
+| **Variant prop?**               | `variant?: 'standard' \| 'immersive'` from `ArticleToolkitBaseProps`; no `brand` prop on components. |

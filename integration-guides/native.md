@@ -92,4 +92,4 @@ function MyComponent() {
 
 ## Troubleshooting
 
-See [Troubleshooting Guide](troubleshooting.md#mobile-issues) for common mobile-specific issues.
+See [Troubleshooting](troubleshooting.md#mobile-issues) for common mobile-specific issues.
