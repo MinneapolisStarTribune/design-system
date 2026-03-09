@@ -45,7 +45,7 @@ export {
 export {
   OpinionHeading,
   type OpinionHeadingProps,
-} from './Typography/Editorial/OpinionHeading/OpinionHeading';
+} from './Typography/Editorial/OpinionHeading/web/OpinionHeading';
 export { PageHeading, type PageHeadingProps } from './Typography/Utility/PageHeading/PageHeading';
 export {
   SectionHeading,
