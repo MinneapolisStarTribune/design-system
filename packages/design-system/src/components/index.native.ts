@@ -34,6 +34,10 @@ export {
   type NewsHeadingProps,
 } from './Typography/Editorial/NewsHeading/native/NewsHeading.native';
 export {
+  NonNewsHeading,
+  type NonNewsHeadingProps,
+} from './Typography/Editorial/NonNewsHeading/native/NonNewsHeading.native';
+export {
   OpinionHeading,
   type OpinionHeadingProps,
 } from './Typography/Editorial/OpinionHeading/native/OpinionHeading.native';
