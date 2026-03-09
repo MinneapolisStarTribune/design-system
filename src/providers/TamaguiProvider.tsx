@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import { MantineProvider as MantineProviderBase } from '@mantine/core';
-import { createMantineTheme } from './mantine-theme';
+import { TamaguiProvider } from '@tamagui/core';
+import { config } from '../../tamagui.config';
 import { Brand, ColorScheme } from './theme-helpers';
 import { BrandContext } from './brand/BrandContext';
 import { loadBrandFonts } from '../styles/fonts';
@@ -20,6 +20,18 @@ export interface DesignSystemProviderProps {
   disableFontInjection?: boolean;
 }
 
+/**
+ * Maps brand and color scheme to Tamagui theme name.
+ * Theme names follow the pattern: `${brand}_${colorScheme}`
+ *
+ * @param brand - The brand (startribune | varsity)
+ * @param colorScheme - The color scheme (light | dark)
+ * @returns The Tamagui theme name (e.g., 'startribune_light')
+ */
+function getThemeName(brand: Brand, colorScheme: ColorScheme): string {
+  return `${brand}_${colorScheme}`;
+}
+
 export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   brand,
   forceColorScheme = 'light',
@@ -35,20 +47,15 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     loadBrandFonts(brand);
   }, [brand, disableFontInjection]);
 
-  // Recreate theme when brand or colorScheme changes
-  const theme = useMemo(
-    () => createMantineTheme(brand, forceColorScheme),
-    [brand, forceColorScheme]
-  );
+  // Compute theme name from brand and color scheme
+  // Theme names in tamagui.config.ts follow pattern: ${brand}_${colorScheme}
+  const themeName = useMemo(() => getThemeName(brand, forceColorScheme), [brand, forceColorScheme]);
 
   return (
     <BrandContext.Provider value={brand}>
-      <MantineProviderBase theme={theme} forceColorScheme={forceColorScheme}>
-        {/* data-brand enables brand-specific CSS selectors (e.g. [data-brand="startribune"] .component).
-            Theme handles colors/fonts; this attribute lets components apply brand-specific layout (padding,
-            border-radius, full-bleed) that differs across Startribune vs Varsity. */}
-        <div data-brand={brand}>{children}</div>
-      </MantineProviderBase>
+      <TamaguiProvider config={config} defaultTheme={themeName}>
+        {children}
+      </TamaguiProvider>
     </BrandContext.Provider>
   );
 };

@@ -5,9 +5,8 @@
  * This file is NOT used in production code. It processes color tokens from JSON files
  * to create data structures used by Storybook stories for displaying color palettes.
  *
- * For production code, colors should be accessed through the Mantine theme system
- * via useMantineTheme() or the DesignSystemProvider, which properly handles
- * brand-specific and theme-aware color resolution.
+ * For production code, colors should be accessed through the the DesignSystemProvider,
+ * which properly handles brand-specific and theme-aware color resolution.
  */
 
 import primitivesColorsJson from '../../../../tokens/color/global.json';
@@ -25,6 +24,11 @@ export interface PrimitiveColorFamily {
 
 // Helper function to resolve a single token reference like "{color.base.white}" to actual value
 function resolveSingleTokenReference(ref: string, additionalColors?: any): string {
+  // Bail out early if ref is not a non-empty string
+  if (!ref || typeof ref !== 'string') {
+    return '';
+  }
+
   if (!ref.startsWith('{') || !ref.endsWith('}')) {
     return ref; // Not a token reference, return as-is
   }
@@ -62,6 +66,11 @@ function resolveSingleTokenReference(ref: string, additionalColors?: any): strin
 
 // Helper function to resolve token references like "{color.base.white}" to actual values
 function resolveTokenReference(ref: string, additionalColors?: any): string {
+  // Bail out early if ref is not a non-empty string
+  if (!ref || typeof ref !== 'string') {
+    return '';
+  }
+
   // If it's a simple token reference (starts and ends with braces), resolve it directly
   if (ref.startsWith('{') && ref.endsWith('}')) {
     return resolveSingleTokenReference(ref, additionalColors);

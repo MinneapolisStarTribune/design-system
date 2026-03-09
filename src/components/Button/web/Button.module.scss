@@ -1,0 +1,270 @@
+/* Button component styles */
+.button {
+  /* Base button styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-sizing: border-box;
+  
+  /* Typography */
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  
+  /* Override typography color rules - buttons control their own text color */
+  /* This single rule applies to all button variants */
+  [class*="typography-"] {
+    color: inherit;
+  }
+  
+  /* Remove default button styles */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  
+  border: none;
+  
+  /* Size variants */
+  &.small {
+    height: 32px;
+    padding: 0 var(--spacing-12);
+  }
+  
+  &.medium {
+    height: 40px;
+    padding: 0 var(--spacing-16);
+  }
+  
+  &.large {
+    height: 52px;
+    padding: 0 var(--spacing-24);
+  }
+
+  /* Gap between icon and text when button has both */
+  &.hasIcon {
+    gap: var(--spacing-4);
+  }
+
+  /* Icon element styling */
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Icon-only button styles - perfectly round buttons with specific dimensions */
+  &.icon-only {
+    &.large {
+      height: 44px;
+      width: 44px;
+      padding: var(--spacing-6);
+    }
+    
+    &.medium {
+      height: 40px;
+      width: 40px;
+      padding: var(--spacing-8);
+    }
+    
+    &.small {
+      height: 32px;
+      width: 32px;
+      padding: var(--spacing-6);
+    }
+    
+    &.x-small {
+      height: 24px;
+      width: 24px;
+      padding: var(--spacing-4);
+    }
+  }
+  
+  /* Neutral colors */
+  &.neutral {
+    &.filled {
+      background-color: var(--color-button-neutral-filled-background);
+      color: var(--color-button-neutral-filled-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-neutral-filled-hover-background);
+        color: var(--color-button-neutral-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-neutral-outlined-background);
+      color: var(--color-button-neutral-outlined-text);
+      border: 1px solid var(--color-button-neutral-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-neutral-outlined-hover-background);
+        color: var(--color-button-neutral-outlined-hover-text);
+        border-color: var(--color-button-neutral-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-neutral-ghost-background);
+      color: var(--color-button-neutral-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-neutral-ghost-hover-background);
+        color: var(--color-button-neutral-ghost-hover-text);
+      }
+    }
+  }
+  
+  /* Brand colors */
+  &.brand {
+    &.filled {
+      background-color: var(--color-button-brand-filled-background);
+      color: var(--color-button-brand-filled-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-filled-hover-background);
+        color: var(--color-button-brand-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-brand-outlined-background);
+      color: var(--color-button-brand-outlined-text);
+      border: 1px solid var(--color-button-brand-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-outlined-hover-background);
+        color: var(--color-button-brand-outlined-hover-text);
+        border-color: var(--color-button-brand-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-brand-ghost-background);
+      color: var(--color-button-brand-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-ghost-hover-background);
+        color: var(--color-button-brand-ghost-hover-text);
+      }
+    }
+  }
+  
+  /* Brand-accent colors */
+  &.brand-accent {
+    &.filled {
+      /* Use 'background' instead of 'background-color' to support linear gradients */
+      background: var(--color-button-brand-accent-filled-background);
+      color: var(--color-button-brand-accent-filled-text);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-button-brand-accent-filled-hover-background);
+        color: var(--color-button-brand-accent-filled-hover-text);
+      }
+    }
+    
+    &.outlined {
+      background-color: var(--color-button-brand-accent-outlined-background);
+      color: var(--color-button-brand-accent-outlined-text);
+      border: 1px solid var(--color-button-brand-accent-outlined-border);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-accent-outlined-hover-background);
+        color: var(--color-button-brand-accent-outlined-hover-text);
+        border-color: var(--color-button-brand-accent-outlined-hover-border);
+      }
+    }
+    
+    &.ghost {
+      background-color: var(--color-button-brand-accent-ghost-background);
+      color: var(--color-button-brand-accent-ghost-text);
+      
+      &:hover:not(:disabled) {
+        background-color: var(--color-button-brand-accent-ghost-hover-background);
+        color: var(--color-button-brand-accent-ghost-hover-text);
+      }
+    }
+  }
+  
+  /* Gradient border for brand-accent buttons (Varsity brand only) */
+  /* 
+   * Browsers do not support linear gradients for borders natively.
+   * The CSS `border` property only accepts solid colors, and `border-image` 
+   * doesn't work with `border-radius`, which we need for rounded buttons.
+   * 
+   * Approach: Use a ::after pseudo-element with the gradient as background,
+   * then use CSS mask to "cut out" the inner content area, leaving only
+   * the padding area (the border) visible. This creates a gradient border
+   * that respects border-radius.
+   * 
+   * Gradient border is shown at rest AND on hover for Varsity brand-accent buttons.
+   * 
+   * Note: These classes are only applied when the hover-border token contains "gradient"
+   */
+  &.brand-accent-filled,
+  &.brand-accent-outlined {
+    position: relative;
+
+    /* Hide default border for outlined buttons */
+    &.brand-accent-outlined {
+      border-color: transparent !important;
+    }
+
+    /* ::after pseudo-element - creates gradient border at rest and on hover */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-full);
+      pointer-events: none;
+      z-index: 0;
+      box-sizing: border-box;
+      /* Gradient border using mask technique - mask out the content area */
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: exclude;
+      mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      padding: 1px; /* Border thickness */
+    }
+
+    /* Outlined buttons: gradient border at rest */
+    &.brand-accent-outlined::after {
+      background: var(--color-button-brand-accent-outlined-hover-border);
+    }
+
+    /* Hover state: show gradient border for filled, maintain for outlined */
+    &:hover:not(:disabled) {
+      &.brand-accent-filled {
+        background: transparent !important;
+        &::after {
+          background: var(--color-button-brand-accent-filled-hover-border);
+        }
+      }
+      &.brand-accent-outlined {
+        border-color: transparent !important;
+        &::after {
+          background: var(--color-button-brand-accent-outlined-hover-border);
+        }
+      }
+    }
+
+    /* Ensure button content is above the border */
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  /* Disabled button styles - applies to all buttons regardless of brand or variant */
+  &.disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+  }
+}

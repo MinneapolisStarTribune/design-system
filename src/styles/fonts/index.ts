@@ -9,9 +9,9 @@ const PACKAGE_NAME = '@minneapolisstartribune/design-system';
 export function getBrandFontPath(brand: Brand): string {
   switch (brand) {
     case 'startribune':
-      return `${PACKAGE_NAME}/dist/fonts/font-face/startribune.css`;
+      return `${PACKAGE_NAME}/dist/web/fonts/font-face/startribune.css`;
     case 'varsity':
-      return `${PACKAGE_NAME}/dist/fonts/font-face/varsity.css`;
+      return `${PACKAGE_NAME}/dist/web/fonts/font-face/varsity.css`;
     default:
       return '';
   }
@@ -24,9 +24,9 @@ export function getBrandFontPath(brand: Brand): string {
 function getBrandFontRelativePath(brand: Brand): string {
   switch (brand) {
     case 'startribune':
-      return './fonts/font-face/startribune.css';
+      return './web/fonts/font-face/startribune.css';
     case 'varsity':
-      return './fonts/font-face/varsity.css';
+      return './web/fonts/font-face/varsity.css';
     default:
       return '';
   }

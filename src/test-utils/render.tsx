@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
-import { DesignSystemProvider, type Brand } from '../providers/MantineProvider';
+import { DesignSystemProvider, type Brand } from '../providers/TamaguiProvider';
 import { AnalyticsProvider } from '../providers/AnalyticsProvider';
 import type { ColorScheme } from '../providers/theme-helpers';
 import type { OnTrackingEvent } from '../types/analytics';

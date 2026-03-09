@@ -3,10 +3,11 @@
  *
  * This function formats typography tokens into CSS utility classes.
  * It processes composite typography tokens and generates CSS classes with all typography properties.
+ * Also adds color property using primary text color tokens based on mode (light/dark).
  *
  * @param {Object} options - Style Dictionary format options
  * @param {Object} options.dictionary - The Style Dictionary token dictionary
- * @param {Object} options.options - Format options (may include brand)
+ * @param {Object} options.options - Format options (may include brand and mode)
  * @returns {string} Complete CSS file content with typography classes
  *
  * Example output:
@@ -20,6 +21,10 @@
  *   font-size: 2.875rem;
  *   line-height: 1.10;
  *   letter-spacing: 0.02em;
+ * }
+ * 
+ * [class*="typography-"] {
+ *   color: var(--color-text-on-light-primary);
  * }
  * ```
  */
@@ -180,6 +185,8 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     }
   });
 
+  const defaultTypographyColor = 'var(--color-text-on-light-primary)';
+
   // First, generate non-responsive classes
   nonResponsiveClasses.forEach((data) => {
     const className = `.${data.className}`;
@@ -219,7 +226,12 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     classes.push('}');
   });
 
-  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n${classes.join('\n\n')}\n`;
+  // Add a single efficient rule that applies color to all typography classes
+  // This is much more efficient than adding color to each individual class
+  // Uses attribute selector to match any class containing "typography-"
+  const colorRule = `\n/* Apply primary text color to all typography classes */\n[class*="typography-"] {\n  color: ${defaultTypographyColor};\n}\n`;
+
+  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n${classes.join('\n\n')}${colorRule}`;
 }
 
 module.exports = typographyClassesFormat;

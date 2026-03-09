@@ -1,5 +1,6 @@
 import { ComponentName } from '@/types/component-names';
 import { Brand, BRANDS } from '../theme-helpers';
+import { createDesignSystemError } from '@/utils/errorPrefix';
 
 /**
  * Components that are not supported in Star Tribune.
@@ -38,11 +39,13 @@ export function validateComponentForBrand(componentName: ComponentName, brand: B
   const unsupportedComponents = getUnsupportedComponentsForBrand(brand);
 
   if (unsupportedComponents.includes(componentName)) {
-    const supportedBrands = getSupportedBrandsForComponent(componentName);
+    const _supportedBrands = getSupportedBrandsForComponent(componentName);
 
     throw new Error(
-      `[Brand Validation] "${componentName}" is not supported for "${brand}". ` +
-        `Supported brands: ${supportedBrands.join(', ')}.`
+      createDesignSystemError(
+        'validateComponentForBrand',
+        `"${componentName}" is not supported for "${brand}".`
+      )
     );
   }
 }
