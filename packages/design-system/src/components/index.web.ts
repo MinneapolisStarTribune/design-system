@@ -13,7 +13,7 @@ export { Popover, type PopoverProps } from './Popover/Popover';
 export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
-} from './Typography/ArticleBody/ArticleBodySponsoredText/ArticleBodySponsoredText';
+} from './Typography/ArticleBody/ArticleBodySponsoredText/web/ArticleBodySponsoredText';
 export {
   ArticleBodyText,
   type ArticleBodyTextProps,

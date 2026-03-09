@@ -1,5 +1,6 @@
 import { renderWithProvider } from '@/test-utils/render';
 import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
+import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
 
 describe('ArticleBodySponsoredText', () => {
   it('uses regular weight by default', () => {
@@ -16,9 +17,9 @@ describe('ArticleBodySponsoredText', () => {
     expect(element).toHaveTextContent('Article body sponsored text');
   });
 
-  it('applies the correct typography class for each weight', () => {
-    const weights = ['regular', 'italic', 'semibold', 'semibold-italic'] as const;
-    weights.forEach((weight) => {
+  it.each(ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS)(
+    'applies the correct typography class for %s weight',
+    (weight) => {
       const { getByTestId } = renderWithProvider(
         <ArticleBodySponsoredText
           weight={weight}
@@ -30,8 +31,8 @@ describe('ArticleBodySponsoredText', () => {
 
       const element = getByTestId(`article-body-text-sponsored-${weight}`);
       expect(element).toHaveClass(`typography-article-body-sponsored-${weight}`);
-    });
-  });
+    }
+  );
 
   it('merges custom className with typography class', () => {
     const { getByTestId } = renderWithProvider(
