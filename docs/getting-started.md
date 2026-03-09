@@ -85,6 +85,7 @@ See [code-standards.md](code-standards.md) for TypeScript, component, and naming
 | `yarn build:web` | Web bundle only |
 | `yarn build:native` | Native bundle only |
 | `yarn test` | Unit + a11y tests (once) |
+| `yarn testfile <path>` | Run tests matching a path or pattern (e.g. `yarn testfile ArticleQuote/native`) |
 | `yarn test:watch` | Tests in watch mode |
 | `yarn test:a11y` | Accessibility tests only |
 | `yarn lint:fix` | Auto-fix ESLint errors |
