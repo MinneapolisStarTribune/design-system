@@ -8,15 +8,16 @@ pre-commit:
       run: node ./node_modules/.bin/prettier --write {staged_files}
     eslint:
       glob: 'packages/design-system/**/*.{ts,tsx}'
-      run: node ./node_modules/.bin/eslint --fix {staged_files}
+      run: node ./node_modules/.bin/eslint --fix --max-warnings 0 {staged_files}
     # Re-stage fixed files so the commit includes Prettier/ESLint changes
     restage:
       glob: 'packages/design-system/**/*.{ts,tsx,json,md,css}'
       run: git add {staged_files}
-    # Full project typecheck; only run when commit touches TS/TSX files
+    # Typecheck without turbo so output is just tsc errors (no turbo wrapper).
+    # Only design-system has a typecheck script; hook runs when design-system TS files are staged.
     typecheck:
       glob: 'packages/design-system/**/*.{ts,tsx}'
-      run: yarn turbo run typecheck --output-logs=hash-only
+      run: yarn workspace @minneapolisstartribune/design-system typecheck
     vitest:
       glob: 'packages/design-system/src/**/*.{ts,tsx}'
       exclude: 'packages/design-system/src/**/*.native.{tsx,ts}'
