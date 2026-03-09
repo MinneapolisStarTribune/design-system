@@ -33,7 +33,7 @@ export {
 export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,
-} from './Typography/Editorial/EnterpriseHeading/EnterpriseHeading';
+} from './Typography/Editorial/EnterpriseHeading/web/EnterpriseHeading';
 export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsHeading/NewsHeading';
 export {
   NonNewsHeading,
