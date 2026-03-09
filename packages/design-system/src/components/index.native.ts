@@ -4,4 +4,4 @@ export {
   ArticleQuote,
   type ArticleQuoteProps,
   type ArticleQuoteSize,
-} from './Typography/ArticleBody/ArticleQuote/native/ArticleQuote';
+} from './Typography/ArticleBody/ArticleQuote/native/ArticleQuote.native';
