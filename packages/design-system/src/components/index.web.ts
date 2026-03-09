@@ -34,7 +34,10 @@ export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,
 } from './Typography/Editorial/EnterpriseHeading/web/EnterpriseHeading';
-export { NewsHeading, type NewsHeadingProps } from './Typography/Editorial/NewsHeading/NewsHeading';
+export {
+  NewsHeading,
+  type NewsHeadingProps,
+} from './Typography/Editorial/NewsHeading/web/NewsHeading';
 export {
   NonNewsHeading,
   type NonNewsHeadingProps,
