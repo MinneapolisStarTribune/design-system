@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
-import { useFormGroupContext } from './FormGroupContext';
+import { useFormGroupContext } from '../../FormGroupContext';
 
 export interface FormGroupDescriptionProps extends BaseProps {
   children: React.ReactNode;

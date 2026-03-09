@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FormGroup } from './FormGroup';
-import { FormControl } from '../FormControl/FormControl';
-
-const captionVariants = ['info', 'error', 'success'] as const;
+import { FormGroup } from '../FormGroup';
+import { FormControl } from '@/components/FormControl/FormControl';
+import { FORM_GROUP_CAPTION_VARIANTS } from './FormGroup.Caption';
 
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Caption',
@@ -14,7 +13,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: captionVariants,
+      options: FORM_GROUP_CAPTION_VARIANTS,
       description: 'Caption variant',
     },
     children: {
@@ -64,7 +63,7 @@ export const AllVariants: Story = {
         gap: '1rem',
       }}
     >
-      {captionVariants.map((variant) => (
+      {FORM_GROUP_CAPTION_VARIANTS.map((variant) => (
         <FormGroup key={variant}>
           <FormGroup.Label>Email Address</FormGroup.Label>
           <FormControl.TextInput placeholderText="Enter your email" />

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
-import { FormControl } from '../FormControl/FormControl';
+
+import { FormControl } from '@/components/FormControl/FormControl';
+import {
+  FORM_GROUP_CAPTION_VARIANTS,
+  type FormGroupCaptionVariant,
+} from '@/components/FormGroup/web/caption/FormGroup.Caption';
+
 import {
   CalendarIcon,
   LocationIcon,
@@ -44,7 +50,7 @@ interface FormGroupStoryArgs {
   descriptionText: string;
   showCaption: boolean;
   captionText: string;
-  captionVariant: 'info' | 'error' | 'success';
+  captionVariant: FormGroupCaptionVariant;
   formControlType: FormControlType;
   placeholderText: string;
   inputSize: 'small' | 'medium' | 'large';
@@ -89,7 +95,7 @@ const meta = {
     },
     captionVariant: {
       control: 'select',
-      options: ['info', 'error', 'success'],
+      options: [...FORM_GROUP_CAPTION_VARIANTS],
       description: 'Caption variant',
       if: { arg: 'showCaption' },
     },
@@ -233,6 +239,19 @@ export const AllVariants: Story = {
         ),
       },
       {
+        label: 'Label + Description + Caption',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
+            <FormControl.TextInput placeholderText="you@example.com" />
+            <FormGroup.Caption variant="error">
+              Please enter a valid email address
+            </FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
         label: 'Label + Caption (info)',
         render: () => (
           <FormGroup>
@@ -249,6 +268,16 @@ export const AllVariants: Story = {
             <FormGroup.Label>Password</FormGroup.Label>
             <FormControl.TextInput type="password" placeholderText="Enter password" />
             <FormGroup.Caption variant="error">Password is required</FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Caption (success)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Password</FormGroup.Label>
+            <FormControl.TextInput type="password" placeholderText="Enter password" />
+            <FormGroup.Caption variant="success">Account created successfully</FormGroup.Caption>
           </FormGroup>
         ),
       },

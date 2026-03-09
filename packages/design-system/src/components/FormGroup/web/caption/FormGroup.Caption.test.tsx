@@ -1,5 +1,5 @@
 import { FormGroupCaption } from './FormGroup.Caption';
-import { FormGroupProvider } from './FormGroupContext';
+import { FormGroupProvider } from '../../FormGroupContext';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('FormGroupCaption', () => {
