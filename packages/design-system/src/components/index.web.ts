@@ -9,6 +9,7 @@ export {
   type FormGroupProps,
 } from './FormGroup/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
+export { Image, type ImageProps } from './Image/web/Image';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export {
   ArticleBodySponsoredText,
