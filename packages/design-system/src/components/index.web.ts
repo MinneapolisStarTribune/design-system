@@ -57,7 +57,7 @@ export {
 export {
   SectionHeading,
   type SectionHeadingProps,
-} from './Typography/Utility/SectionHeading/SectionHeading';
+} from './Typography/Utility/SectionHeading/web/SectionHeading';
 export { UtilityBody, type UtilityBodyProps } from './Typography/Utility/UtilityBody/UtilityBody';
 export {
   UtilityLabel,

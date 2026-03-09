@@ -25,6 +25,7 @@ export const COMPONENT_NAMES = [
   'PageHeading',
   'PhotoLayout',
   'PullQuote',
+  'SectionHeading',
   'SocialEmbeds',
   'SponsoredHeading',
 ] as const;
