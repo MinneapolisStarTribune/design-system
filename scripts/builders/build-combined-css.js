@@ -15,7 +15,7 @@ const path = require('path');
  * @returns {Promise<void>} Resolves when combined CSS is built
  */
 async function buildCombinedCSS(brand, mode) {
-  const fontsPath = path.join(process.cwd(), `dist/web/fonts/${brand}.css`);
+  const fontsPath = path.join(process.cwd(), `dist/web/fonts/${brand}-${mode}.css`);
   const themesPath = path.join(process.cwd(), `dist/web/themes/${brand}-${mode}.css`);
   const outputPath = path.join(process.cwd(), `dist/web/${brand}-${mode}.css`);
 
@@ -29,7 +29,7 @@ async function buildCombinedCSS(brand, mode) {
   }
 
   if (!fontsExists) {
-    console.log(`⚠️  Typography file not found for ${brand}, continuing with themes only...`);
+    console.log(`⚠️  Typography file not found for ${brand}-${mode}, continuing with themes only...`);
   }
 
   if (!themesExists) {

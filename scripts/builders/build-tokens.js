@@ -100,12 +100,14 @@ async function buildTokens() {
     }
   }
 
-  // Build typography classes (editorial + utility combined) for each brand
+  // Build typography classes (editorial + utility combined) for each brand/mode combination
   console.log('\n==============================================');
   console.log('Building typography classes...');
 
   for (const brand of brands) {
-    await buildTypographyClasses(brand);
+    for (const mode of modes) {
+      await buildTypographyClasses(brand, mode);
+    }
   }
 
   // Combine typography + themes into single files per brand/theme
