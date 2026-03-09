@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeading } from './PageHeading';
+import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/PageHeading',
@@ -11,8 +12,8 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: [1, 2, 3, 4],
-      description: 'Heading level (1–4), maps to h1–h4',
+      options: PAGE_HEADING_IMPORTANCE_LEVELS,
+      description: 'Heading level (1-4), maps to h1-h4',
     },
     children: {
       control: 'text',
@@ -50,7 +51,7 @@ export const AllVariants: Story = {
         width: '100%',
       }}
     >
-      {[1, 2, 3, 4].map((importance) => (
+      {PAGE_HEADING_IMPORTANCE_LEVELS.map((importance) => (
         <div
           key={importance}
           style={{
@@ -61,9 +62,7 @@ export const AllVariants: Story = {
             overflow: 'hidden',
           }}
         >
-          <PageHeading importance={importance as 1 | 2 | 3 | 4}>
-            Page - H{importance} Heading
-          </PageHeading>
+          <PageHeading importance={importance}>Page - H{importance} Heading</PageHeading>
         </div>
       ))}
     </div>
