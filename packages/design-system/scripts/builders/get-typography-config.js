@@ -73,13 +73,12 @@ function getTypographyConfig(brand) {
   const fontVariantMap = buildFontVariantMap(brand);
 
   /**
-   * SD Value Transform: Convert composite token values (CSS property objects)
-   * to React Native format.
+   * SD Value Transform: Convert composite typography token values to React Native format.
    *
    * - kebab-case CSS keys → camelCase
-   * - fontSize px strings → numbers
-   * - lineHeight CSS multiplier → absolute px
-   * - fontFamily CSS stack → variant-specific PostScript name via font data lookup
+   * - fontSize (number) → number
+   * - lineHeight (number, multiplier) → absolute px when ≤10, else number
+   * - fontFamily → variant-specific PostScript name via font data lookup
    */
   StyleDictionary.registerTransform({
     name: 'value/mobile-breakpoint',
@@ -90,14 +89,13 @@ function getTypographyConfig(brand) {
       const raw = token.value;
       const result = {};
 
-      // First pass: collect fontSize, fontWeight, fontStyle for downstream resolution
       let fontSize;
       let fontWeight = '400';
       let fontStyle = 'normal';
       for (const [key, val] of Object.entries(raw)) {
         const k = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
         if (k === 'fontSize' || k === 'font-size') {
-          fontSize = typeof val === 'string' && val.endsWith('px') ? parseFloat(val) : Number(val);
+          fontSize = typeof val === 'number' ? val : Number(val);
         } else if (k === 'fontWeight' || key === 'font-weight') {
           fontWeight = String(val);
         } else if (k === 'fontStyle' || key === 'font-style') {
@@ -108,15 +106,12 @@ function getTypographyConfig(brand) {
       for (const [key, val] of Object.entries(raw)) {
         const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
 
-        if (camelKey === 'fontSize' && typeof val === 'string' && val.endsWith('px')) {
-          result[camelKey] = parseFloat(val);
+        if (camelKey === 'fontSize') {
+          result[camelKey] = typeof val === 'number' ? val : Number(val);
         } else if (camelKey === 'lineHeight') {
-          const num = parseFloat(val);
-          if (!isNaN(num) && fontSize) {
-            result[camelKey] = num <= 10 ? Math.round(fontSize * num) : num;
-          } else {
-            result[camelKey] = num;
-          }
+          const num = typeof val === 'number' ? val : Number(val);
+          result[camelKey] =
+            !isNaN(num) && fontSize && num <= 10 ? Math.round(fontSize * num) : num;
         } else if (camelKey === 'fontFamily' && typeof val === 'string') {
           const familyName = val.split(',')[0].trim();
           const lookupKey = `${familyName}|${fontWeight}|${fontStyle}`;
