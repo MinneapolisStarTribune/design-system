@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
-import type { ArticleQuoteProps, ArticleQuoteSize } from '../ArticleQuote.types';
+import type { ArticleQuoteProps } from '../ArticleQuote.types';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
 
 export const ArticleQuote: React.FC<ArticleQuoteProps> = (props) => {
@@ -29,4 +29,4 @@ const createStyles = (theme: NativeTheme) => ({
   },
 });
 
-export type { ArticleQuoteProps, ArticleQuoteSize };
+export type { ArticleQuoteProps, ArticleQuoteSize } from '../ArticleQuote.types';
