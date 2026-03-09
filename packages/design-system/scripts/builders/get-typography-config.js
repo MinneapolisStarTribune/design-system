@@ -47,11 +47,33 @@ StyleDictionary.registerTransform({
   transitive: true,
   filter: (token) => typeof token.value === 'object' && !Array.isArray(token.value),
   transform: (token) => {
+    const raw = token.value;
     const result = {};
-    for (const [key, val] of Object.entries(token.value)) {
+
+    // First pass: collect fontSize so lineHeight can be resolved to absolute px
+    let fontSize;
+    for (const [key, val] of Object.entries(raw)) {
+      if (key === 'fontSize' || key === 'font-size') {
+        fontSize = typeof val === 'string' && val.endsWith('px') ? parseFloat(val) : Number(val);
+      }
+    }
+
+    for (const [key, val] of Object.entries(raw)) {
       const camelKey = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+
       if (camelKey === 'fontSize' && typeof val === 'string' && val.endsWith('px')) {
         result[camelKey] = parseFloat(val);
+      } else if (camelKey === 'lineHeight') {
+        // CSS relative multiplier (e.g. "1.15") → absolute px for RN
+        const num = parseFloat(val);
+        if (!isNaN(num) && fontSize) {
+          result[camelKey] = num <= 10 ? Math.round(fontSize * num) : num;
+        } else {
+          result[camelKey] = num;
+        }
+      } else if (camelKey === 'fontFamily' && typeof val === 'string') {
+        // Strip CSS fallbacks: "Publico Headline, serif" → "Publico Headline"
+        result[camelKey] = val.split(',')[0].trim();
       } else {
         result[camelKey] = val;
       }
