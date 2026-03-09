@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import type { RenderResult } from '@testing-library/react';
 import type { RunOptions } from 'axe-core';
+import { expect } from 'vitest';
 import { DesignSystemProvider } from '../providers/DesignSystemProvider';
 
 /**

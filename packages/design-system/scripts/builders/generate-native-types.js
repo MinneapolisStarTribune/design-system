@@ -109,8 +109,6 @@ function generateThemeTypes() {
     ` */`,
     ``,
     ...interfaces.flatMap((iface) => [iface, ``]),
-    `type ThemeTokens = ${interfaceNames.join(' | ')};`,
-    ``,
     ...moduleDecls.flatMap((decl) => [decl, ``]),
   ].join('\n');
 
@@ -170,8 +168,6 @@ function generateTypographyTypes() {
     `type TextStyle = import('react-native').TextStyle;`,
     ``,
     ...interfaces.flatMap((iface) => [iface, ``]),
-    `type TypographyTokens = ${interfaceNames.join(' | ')};`,
-    ``,
     ...moduleDecls.flatMap((decl) => [decl, ``]),
   ].join('\n');
 
