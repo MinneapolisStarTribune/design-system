@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArticleBodyText } from './ArticleBodyText';
-import { FONT_WEIGHT_STYLE } from '../../../../types/globalTypes';
-
-const articleBodyWeights = ['regular', 'italic', 'bold', 'bold-italic', 'dropcap'] as const;
+import type { Meta, StoryObj } from '@storybook/react';
+import { StyleSheet, View } from 'react-native';
+import { ArticleBodyText } from './ArticleBodyText.native';
+import { ARTICLE_BODY_TEXT_WEIGHTS } from '../ArticleBodyText.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyText',
@@ -14,7 +13,7 @@ const meta = {
   argTypes: {
     weight: {
       control: 'select',
-      options: FONT_WEIGHT_STYLE,
+      options: ARTICLE_BODY_TEXT_WEIGHTS,
       description: 'The font weight of the article body text',
     },
     children: {
@@ -26,7 +25,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof ArticleBodyText>;
+type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
@@ -36,26 +35,30 @@ export const Configurable: Story = {
 };
 
 export const AllVariants: Story = {
-  parameters: {
-    controls: { disable: true },
-  },
   args: {
     weight: 'regular',
     children: 'Article body text',
   },
+  parameters: {
+    controls: { disable: true },
+  },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '1rem',
-      }}
-    >
-      {articleBodyWeights.map((weight) => (
-        <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+    <View style={styles.grid}>
+      {ARTICLE_BODY_TEXT_WEIGHTS.map((weight) => (
+        <View key={weight} style={styles.item}>
           <ArticleBodyText weight={weight}>Article body text - {weight}</ArticleBodyText>
-        </div>
+        </View>
       ))}
-    </div>
+    </View>
   ),
 };
+
+const styles = StyleSheet.create({
+  grid: {
+    width: '100%',
+    gap: 16,
+  },
+  item: {
+    gap: 8,
+  },
+});
