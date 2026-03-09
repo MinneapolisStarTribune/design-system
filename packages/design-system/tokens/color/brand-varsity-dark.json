@@ -424,6 +424,16 @@
         "description": "Hover icon color for active utility toggle controls on dark backgrounds.",
         "value": "{color.cobalt-blue.600}"
       }
+    },
+    "utility-toggle": {
+      "active-icon-default": {
+        "description": "Default icon color for active utility toggle controls on dark backgrounds.",
+        "value": "{color.cobalt-blue.600}"
+      },
+      "active-icon-hover": {
+        "description": "Hover icon color for active utility toggle controls on dark backgrounds.",
+        "value": "{color.cobalt-blue.600}"
+      }
     }
   }
 }
