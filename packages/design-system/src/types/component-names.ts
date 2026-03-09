@@ -29,6 +29,7 @@ export const COMPONENT_NAMES = [
   'SocialEmbeds',
   'SponsoredHeading',
   'UtilityBody',
+  'UtilityLabel',
 ] as const;
 
 export type ComponentName = (typeof COMPONENT_NAMES)[number];

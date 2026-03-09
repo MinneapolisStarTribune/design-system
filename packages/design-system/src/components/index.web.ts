@@ -65,5 +65,5 @@ export {
 export {
   UtilityLabel,
   type UtilityLabelProps,
-} from './Typography/Utility/UtilityLabel/UtilityLabel';
+} from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
