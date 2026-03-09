@@ -37,11 +37,5 @@
     "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook expo run:ios",
     "build:mobile-storybook": "yarn build:ios && yarn build:android"
   },
-  "packageManager": "yarn@4.13.0",
-  "version": "1.0.0",
-  "dependencies": {
-    "expo": "~53.0.0",
-    "react": "19.0.0",
-    "react-native": "0.79.6"
-  }
+  "packageManager": "yarn@4.13.0"
 }
