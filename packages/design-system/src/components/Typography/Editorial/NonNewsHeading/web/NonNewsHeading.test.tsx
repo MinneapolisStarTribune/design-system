@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { NonNewsHeading } from './NonNewsHeading';
 import { renderWithProvider } from '@/test-utils/render';
+import { NonNewsHeading } from './NonNewsHeading';
+import { NON_NEWS_HEADING_IMPORTANCE_LEVELS } from '../NonNewsHeading.types';
 
 describe('NonNewsHeading', () => {
   it('renders with default importance (h1)', () => {
@@ -13,18 +13,17 @@ describe('NonNewsHeading', () => {
     expect(heading).toHaveClass('typography-editorial-non-news-h1');
   });
 
-  it('renders correct element and class for each importance level', () => {
-    const levels = [1, 2, 3, 4, 5, 6] as const;
-    levels.forEach((importance) => {
-      const { getByRole, unmount } = renderWithProvider(
+  it.each(NON_NEWS_HEADING_IMPORTANCE_LEVELS)(
+    'renders correct element and class for importance %s',
+    (importance) => {
+      const { getByRole } = renderWithProvider(
         <NonNewsHeading importance={importance}>Level {importance}</NonNewsHeading>
       );
       const heading = getByRole('heading', { level: importance });
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveClass(`typography-editorial-non-news-h${importance}`);
-      unmount();
-    });
-  });
+    }
+  );
 
   it('applies custom className', () => {
     const { getByRole } = renderWithProvider(
