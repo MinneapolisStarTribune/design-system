@@ -22,6 +22,7 @@ export const COMPONENT_NAMES = [
   'NewsHeading',
   'NonNewsHeading',
   'OpinionHeading',
+  'PageHeading',
   'PhotoLayout',
   'PullQuote',
   'SocialEmbeds',
