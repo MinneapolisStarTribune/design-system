@@ -1,14 +1,5 @@
-import React from 'react';
 import classNames from 'classnames';
-import { BaseProps, AccessibilityProps } from '@/types/globalTypes';
-import { UtilityBodySize, UtilityBodyWeight } from './types';
-
-export interface UtilityBodyProps extends BaseProps, AccessibilityProps {
-  size?: UtilityBodySize;
-  weight?: UtilityBodyWeight;
-  children: React.ReactNode;
-  style?: React.CSSProperties;
-}
+import type { UtilityBodyProps } from '../UtilityBody.types';
 
 export const UtilityBody: React.FC<UtilityBodyProps> = ({
   size = 'medium',
@@ -34,3 +25,5 @@ export const UtilityBody: React.FC<UtilityBodyProps> = ({
 };
 
 UtilityBody.displayName = 'UtilityBody';
+
+export type { UtilityBodyProps, UtilityBodySize, UtilityBodyWeight } from '../UtilityBody.types';
