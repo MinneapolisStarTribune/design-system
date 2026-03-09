@@ -1,14 +1,7 @@
-import { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types/globalTypes';
 import classNames from 'classnames';
-import { FC } from 'react';
+import type { EditorialSponsoredTextProps } from '../EditorialSponsoredText.types';
 
-export interface EditorialSponsoredTextProps extends BaseProps, AccessibilityProps {
-  size: Size;
-  weight?: Extract<FontWeight, 'regular' | 'bold'>;
-  children: React.ReactNode;
-}
-
-export const EditorialSponsoredText: FC<EditorialSponsoredTextProps> = (props) => {
+export const EditorialSponsoredText: React.FC<EditorialSponsoredTextProps> = (props) => {
   const {
     size,
     weight = 'regular',
@@ -26,3 +19,9 @@ export const EditorialSponsoredText: FC<EditorialSponsoredTextProps> = (props) =
     </p>
   );
 };
+
+export type {
+  EditorialSponsoredTextProps,
+  EditorialSponsoredTextSize,
+  EditorialSponsoredTextWeight,
+} from '../EditorialSponsoredText.types';

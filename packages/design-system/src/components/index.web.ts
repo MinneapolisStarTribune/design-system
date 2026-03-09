@@ -25,7 +25,7 @@ export {
 export {
   EditorialSponsoredText,
   type EditorialSponsoredTextProps,
-} from './Typography/Editorial/EditorialSponsoredText/EditorialSponsoredText';
+} from './Typography/Editorial/EditorialSponsoredText/web/EditorialSponsoredText';
 export {
   EnterpriseHeading,
   type EnterpriseHeadingProps,
