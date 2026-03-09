@@ -69,12 +69,15 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 
 1. The app is a minimal Expo project (no Expo Router).
 2. It references the design system package via a **workspace dependency**
-   (`workspace:*`) and resolves source through Babel + TypeScript path aliases
+   and resolves source through Babel + TypeScript path aliases
    pointing at `../../packages/design-system/src/index.native`.
 3. Storybook discovers stories matching
    `packages/design-system/src/**/*.native.stories.tsx`.
 4. A Storybook decorator wraps every story in `DesignSystemProvider`,
-   reading the current **brand** and **mode** from toolbar globals.
+   reading the current **brand** and **mode** from Storybook controls.
+5. Open the **Controls** addon panel in the on-device UI to switch:
+   - `brand`: `startribune` / `varsity`
+   - `mode`: `light` / `dark`
 
 ## Adding a new native story
 

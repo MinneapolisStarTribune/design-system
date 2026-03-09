@@ -63,7 +63,7 @@ yarn storybook                # Develop with hot-reload
 yarn test:watch               # Tests in watch mode (separate terminal)
 ```
 
-When you're done, commit as usual. [Lefthook](https://github.com/evilmartians/lefthook) runs Prettier, ESLint, typecheck, and related Vitest tests on staged files automatically — if anything fails, the commit is blocked.
+When you're done, commit as usual. [Lefthook](https://github.com/evilmartians/lefthook) runs Prettier, ESLint, typecheck, related Vitest tests (web), and related Jest tests (native) on staged files automatically — if anything fails, the commit is blocked.
 
 ```bash
 gitpushmybranch               # Rebase onto release + push
@@ -85,7 +85,9 @@ See [code-standards.md](code-standards.md) for TypeScript, component, and naming
 | `yarn build:web` | Web bundle only |
 | `yarn build:native` | Native bundle only |
 | `yarn test` | Unit + a11y tests (once) |
-| `yarn testfile <path>` | Run tests matching a path or pattern (e.g. `yarn testfile ArticleQuote/native`) |
+| `yarn test:web` | Web tests only (Vitest) |
+| `yarn test:native` | Native tests only (Jest + RNTL) |
+| `yarn testfile <path>` | Run one file/path; auto-routes to Vitest (web) or Jest (native `*.native.*`) |
 | `yarn test:watch` | Tests in watch mode |
 | `yarn test:a11y` | Accessibility tests only |
 | `yarn lint:fix` | Auto-fix ESLint errors |

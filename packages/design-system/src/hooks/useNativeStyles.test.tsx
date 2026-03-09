@@ -1,6 +1,6 @@
-import '@/test-utils/mockNativeTokens';
 import { renderHook } from '@testing-library/react';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 
 import { useNativeStyles, NativeTheme } from '@/hooks/useNativeStyles';
 
@@ -16,8 +16,13 @@ describe('useNativeStyles', () => {
       wrapper: TestWrapperInDesignSystemProvider(),
     });
 
-    expect(result.current.heading).toEqual({ color: '#strib-light' });
-    expect(result.current.body).toEqual({ fontSize: 24 });
+    expect(result.current.heading).toEqual({
+      color: nativeTokenFixtures.startribune.light.theme.colorBackgroundBrand,
+    });
+    expect(result.current.body).toEqual({
+      fontSize:
+        nativeTokenFixtures.startribune.light.typography.typographyArticleQuoteLarge.fontSize,
+    });
   });
 
   it('returns different styles for a different brand', () => {
@@ -25,8 +30,12 @@ describe('useNativeStyles', () => {
       wrapper: TestWrapperInDesignSystemProvider({ brand: 'varsity' }),
     });
 
-    expect(result.current.heading).toEqual({ color: '#varsity-light' });
-    expect(result.current.body).toEqual({ fontSize: 22 });
+    expect(result.current.heading).toEqual({
+      color: nativeTokenFixtures.varsity.light.theme.colorBackgroundBrand,
+    });
+    expect(result.current.body).toEqual({
+      fontSize: nativeTokenFixtures.varsity.light.typography.typographyArticleQuoteLarge.fontSize,
+    });
   });
 
   it('returns a stable reference when theme has not changed', () => {
