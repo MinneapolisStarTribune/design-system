@@ -1,9 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ArticleQuote } from './ArticleQuote.native';
-import type { ArticleQuoteSize } from '../ArticleQuote.types';
-
-const articleQuoteSizes: ArticleQuoteSize[] = ['small', 'large'];
+import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleQuote',
@@ -11,7 +9,7 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: articleQuoteSizes,
+      options: ARTICLE_QUOTE_SIZES,
       description: 'Size variant - small or large',
     },
     children: {
@@ -41,7 +39,7 @@ export const AllVariants: Story = {
   },
   render: (args) => (
     <View style={styles.list}>
-      {articleQuoteSizes.map((size) => (
+      {ARTICLE_QUOTE_SIZES.map((size) => (
         <View key={size}>
           <ArticleQuote size={size}>{args.children}</ArticleQuote>
         </View>
