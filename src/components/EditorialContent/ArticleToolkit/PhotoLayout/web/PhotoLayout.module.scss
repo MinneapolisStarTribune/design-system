@@ -21,15 +21,6 @@
   gap: var(--spacing-8);
 }
 
-/* Brand Tokens (Scoped) */
-
-.photoLayout[data-brand='startribune'] {
-  --photo-radius: var(--component-photo-layout-immersive-radius-startribune);
-}
-
-.photoLayout[data-brand='varsity'] {
-  --photo-radius: var(--component-photo-layout-immersive-radius-varsity);
-}
 /* Grid */
 
 .grid {
@@ -71,7 +62,7 @@
   position: relative;
   overflow: hidden;
   height: var(--photo-item-height-desktop);
-  border-radius: var(--photo-radius);
+  border-radius: var(--photo-layout-border-radius);
 }
 
 /* Responsive */
@@ -108,12 +99,8 @@
 /* Caption */
 
 @media (max-width: 480px) {
-  .photoLayout[data-brand='startribune'] .caption {
-    padding: 0 var(--spacing-16);
-  }
-
-  .photoLayout[data-brand='varsity'] .caption {
-    padding: 0;
+  .caption {
+    padding: var(--photo-layout-caption-padding-mobile);
   }
 }
 

@@ -3,18 +3,18 @@ const path = require('path');
 
 /**
  * Token file loading strategy:
- * 
+ *
  * 1. Always loads base tokens (global.json)
  * 2. Loads mode-specific button tokens (button-light.json or button-dark.json)
  * 3. Tries to load brand-specific tokens for the mode (brand-{brand}-{mode}.json)
  * 4. Falls back to generic brand tokens (brand-{brand}.json) if mode-specific doesn't exist
  * 5. Loads shared tokens (semantic, text, spacing, etc.)
- * 
+ *
  * @param {string} brand - The brand name ('startribune' or 'varsity')
  * @param {string} mode - The color scheme ('light' or 'dark')
  * @param {Object} formats - Custom format functions to register
  * @returns {Object} Style Dictionary configuration object
- * 
+ *
  * @example
  * const config = getStyleDictionaryConfig('startribune', 'light', { cssVariables, typographyClasses });
  * Returns config that will generate:
@@ -28,8 +28,8 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
     if (!fs.existsSync(fullPath)) {
       console.error(
         `❌ Error: Required token file not found: ${filePath}\n` +
-        `   ${fileDescription}\n` +
-        `   Expected location: ${fullPath}`
+          `   ${fileDescription}\n` +
+          `   Expected location: ${fullPath}`
       );
       throw new Error(`Missing required token file: ${filePath}`);
     }
@@ -38,7 +38,10 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 
   // Required base files - must exist
   const baseFiles = [
-    requireFile('tokens/color/global.json', 'Global color palettes (core colors shared across modes)'),
+    requireFile(
+      'tokens/color/global.json',
+      'Global color palettes (core colors shared across modes)'
+    ),
     requireFile(`tokens/color/button-${mode}.json`, `Mode-specific button tokens (${mode})`),
   ];
 
@@ -49,6 +52,11 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   requireFile(brandFile, `Brand-specific colors for ${brand} (${mode} mode)`);
   sourceFiles.push(brandFile);
 
+  // Add brand-specific semantic tokens (component-level design decisions)
+  const semanticFile = `tokens/semantic/${brand}.json`;
+  requireFile(semanticFile, `Semantic component tokens for ${brand}`);
+  sourceFiles.push(semanticFile);
+
   // Add shared token files that apply to all brands and modes
   // Note: semantic colors are mode-specific and defined in brand files, not in a shared file
   const sharedFiles = [
@@ -57,7 +65,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
     requireFile('tokens/spacing.json', 'Spacing tokens'),
     requireFile('tokens/breakpoint.json', 'Breakpoint definitions'),
   ];
-  
+
   sourceFiles.push(...sharedFiles);
 
   // Build formats object
@@ -73,33 +81,33 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
   return {
     // Verbose logging helps debug token resolution issues
     log: { verbosity: 'verbose' },
-    
+
     // Source files to read tokens from (in order - later files can override earlier ones)
     source: sourceFiles,
-    
+
     // Custom format registration
     // This tells Style Dictionary to use our custom format functions
     hooks: {
       formats: formatsConfig,
     },
-    
+
     // Platform configuration - defines output format and location
     platforms: {
       css: {
         // Use CSS transform group - handles token reference resolution
         // This automatically resolves {color.neutral.500} references to actual hex values
         transformGroup: 'css',
-        
+
         // Output directory for generated CSS files
         buildPath: `dist/web/themes/`,
-        
+
         // File generation configuration
         files: [
           {
             // Output filename: {brand}-{mode}.css
             // Examples: startribune-light.css, varsity-dark.css
             destination: `${brand}-${mode}.css`,
-            
+
             // Use our custom format function
             format: 'css/variables',
           },
@@ -111,17 +119,17 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
         transforms: [
           'size/pxToNumber', // Custom transform: converts "14px" to 14 for React Native
         ],
-        
+
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
-        
+
         // File generation configuration
         files: [
           {
             // Output filename: {brand}-{mode}.js
             // Examples: startribune-light.js, varsity-dark.js
             destination: `${brand}-${mode}.js`,
-            
+
             // Use Style Dictionary's built-in JavaScript ES6 module format
             format: 'javascript/es6',
           },
@@ -132,4 +140,3 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 }
 
 module.exports = getStyleDictionaryConfig;
-

@@ -1,10 +1,9 @@
-import React, { useMemo, useState, useRef, useEffect, useContext } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
 import { PhotoLayoutDialog } from './PhotoLayoutDialog';
 import styles from './PhotoLayout.module.scss';
-import { BrandContext } from '@/providers/brand/BrandContext';
 
 export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
   caption?: string;
@@ -39,7 +38,6 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
     [imageList, photoLayout]
   );
 
-  const brand = useContext(BrandContext) || 'startribune';
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
@@ -76,7 +74,6 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
     <>
       <figure
         data-testid={dataTestId}
-        data-brand={brand}
         className={classNames(
           styles.photoLayout,
           styles[`layout-${photoLayout}`],

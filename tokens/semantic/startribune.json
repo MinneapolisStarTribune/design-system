@@ -1,0 +1,10 @@
+{
+  "photo-layout": {
+    "border-radius": {
+      "value": "{radius.4}"
+    },
+    "caption-padding-mobile": {
+      "value": "0px 16px"
+    }
+  }
+}
