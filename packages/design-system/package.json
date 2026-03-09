@@ -130,7 +130,7 @@
     "pretest:native": "yarn tokens",
     "storybook": "node scripts/builders/build-if-needed.js && storybook dev -p 6006",
     "test": "vitest run && jest --config jest.config.js",
-    "test:a11y": "vitest run a11y.test && jest --config jest.config.js --testPathPattern native.a11y.test",
+    "test:a11y": "vitest run a11y.test && jest --config jest.config.js --testPathPatterns native.a11y.test",
     "test:coverage": "vitest run --coverage",
     "test:native": "jest --config jest.config.js",
     "test:scripts": "vitest run scripts/*.test.js",
