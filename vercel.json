@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "yarn workspace @minneapolisstartribune/design-system build-storybook",
+  "buildCommand": "corepack enable && yarn workspace @minneapolisstartribune/design-system build-storybook",
   "outputDirectory": "packages/design-system/storybook-static",
   "framework": null,
-  "installCommand": "yarn install",
+  "installCommand": "corepack enable && yarn install",
   "github": {
     "enabled": true,
     "silent": false,
