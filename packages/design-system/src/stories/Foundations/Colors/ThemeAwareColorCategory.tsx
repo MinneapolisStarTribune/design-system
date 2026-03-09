@@ -17,6 +17,8 @@ import startribuneLightJson from '../../../../tokens/color/brand-startribune-lig
 import startribuneDarkJson from '../../../../tokens/color/brand-startribune-dark.json';
 import varsityLightJson from '../../../../tokens/color/brand-varsity-light.json';
 import varsityDarkJson from '../../../../tokens/color/brand-varsity-dark.json';
+import buttonLightJson from '../../../../tokens/color/button-light.json';
+import buttonDarkJson from '../../../../tokens/color/button-dark.json';
 
 export type ColorCategory =
   | 'background'
@@ -42,9 +44,57 @@ interface ThemeAwareColorCategoryProps {
 }
 
 /**
+ * Flatten nested button token tree to one level for CSS variable lookup.
+ * Handles both shapes: { neutral: { "filled-background": { value } } } and
+ * { brand: { filled: { background: { value }, "hover-background": { value } } } }.
+ */
+function flattenButtonTokens(buttonObj: Record<string, any>): Record<string, { value: string }> {
+  const out: Record<string, { value: string }> = {};
+  if (!buttonObj || typeof buttonObj !== 'object') return out;
+
+  function walk(node: any, prefix: string) {
+    if (!node || typeof node !== 'object') return;
+    if ('value' in node && typeof node.value === 'string') {
+      out[prefix] = { value: node.value };
+      return;
+    }
+    for (const [key, val] of Object.entries(node)) {
+      if (
+        key === '$description' ||
+        key === 'description' ||
+        key === 'overview' ||
+        key === 'dark-mode' ||
+        key === '_comment'
+      )
+        continue;
+      if (val && typeof val === 'object') {
+        walk(val, prefix ? `${prefix}-${key}` : key);
+      }
+    }
+  }
+
+  for (const [variant, variantData] of Object.entries(buttonObj)) {
+    if (
+      variant === '$description' ||
+      variant === 'description' ||
+      variant === 'overview' ||
+      variant === 'dark-mode'
+    )
+      continue;
+    if (variantData && typeof variantData === 'object') {
+      walk(variantData, variant);
+    }
+  }
+  return out;
+}
+
+/**
  * Get a brand's color token names from the imported JSON.
  * Returns token names in "category-key" format (e.g., "background-brand").
  * The JSON files have structure: { color: { background: { "brand": { value: "..." }, ... }, ... } }
+ *
+ * Button tokens come from both brand JSON and button-light/dark JSON; they are merged and
+ * flattened so CSS variable names match the built theme (e.g. --color-button-neutral-filled-background).
  *
  * Values are resolved from CSS variables (loaded by ThemeWrapper) rather than raw JSON,
  * since raw JSON contains unresolved references like "{color.emerald-green.800}".
@@ -65,11 +115,20 @@ function getBrandColorTokens(brand: Brand, colorScheme: ColorScheme): Record<str
     return {};
   }
 
+  const buttonModeJson = colorScheme === 'light' ? buttonLightJson : buttonDarkJson;
+  const brandButton = colorRoot.button;
+  const modeButton = buttonModeJson?.color?.button;
+  const mergedButton: Record<string, { value: string }> = {
+    ...flattenButtonTokens(modeButton || {}),
+    ...flattenButtonTokens(brandButton || {}),
+  };
+  const colorRootWithButton = { ...colorRoot, button: mergedButton };
+
   const computedStyle = getComputedStyle(document.documentElement);
   const result: Record<string, string> = {};
 
-  // Walk each category (background, text, brand, border, etc.)
-  for (const [category, categoryData] of Object.entries(colorRoot)) {
+  // Walk each category (background, text, brand, border, button, etc.)
+  for (const [category, categoryData] of Object.entries(colorRootWithButton)) {
     if (!categoryData || typeof categoryData !== 'object') continue;
 
     // Skip metadata fields
@@ -84,7 +143,7 @@ function getBrandColorTokens(brand: Brand, colorScheme: ColorScheme): Record<str
 
       if (token && typeof token === 'object' && typeof token.value === 'string') {
         const tokenName = `${category}-${key}`;
-        // Resolve value from CSS variables (e.g., --color-background-brand)
+        // Resolve value from CSS variables (e.g., --color-background-brand, --color-button-neutral-filled-background)
         const cssValue = computedStyle.getPropertyValue(`--color-${tokenName}`).trim();
         if (cssValue) {
           result[tokenName] = cssValue;
