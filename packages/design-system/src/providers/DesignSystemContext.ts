@@ -11,7 +11,7 @@ export interface DesignSystemContextValue {
  *
  * @remarks
  * This context is provided by DesignSystemProvider and consumed by
- * hooks (useNativeTokens) and components that need brand-specific
+ * hooks (useNativeStyles / useNativeStylesWithDefaults) and components that need brand-specific
  * behavior or validation.
  */
 export const DesignSystemContext = createContext<DesignSystemContextValue | null>(null);
