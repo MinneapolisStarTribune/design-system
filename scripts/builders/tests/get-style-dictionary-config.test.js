@@ -34,10 +34,11 @@ describe('getStyleDictionaryConfig', () => {
     expect(config.platforms.javascript.files[0].destination).toBe('startribune-light.js');
 
     // Verify source files
-    expect(config.source).toHaveLength(7);
+    expect(config.source).toHaveLength(8);
     expect(config.source).toContain('tokens/color/global.json');
     expect(config.source).toContain('tokens/color/button-light.json');
     expect(config.source).toContain('tokens/color/brand-startribune-light.json');
+    expect(config.source).toContain('tokens/semantic/startribune.json');
 
     // Verify custom formats
     expect(config.hooks.formats['css/variables']).toBe(customFormats.cssVariables);
