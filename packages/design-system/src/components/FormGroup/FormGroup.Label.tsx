@@ -1,6 +1,6 @@
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
-import { UtilityBody } from '../Typography/Utility/UtilityBody/UtilityBody';
+import { UtilityBody } from '../Typography/Utility/UtilityBody/web/UtilityBody';
 import { UtilityLabel } from '../Typography/Utility/UtilityLabel/UtilityLabel';
 
 export interface FormGroupLabelProps extends BaseProps {
