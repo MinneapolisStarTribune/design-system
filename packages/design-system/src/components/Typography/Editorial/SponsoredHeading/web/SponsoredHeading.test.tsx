@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { renderWithProvider } from '@/test-utils/render';
 import { SponsoredHeading } from './SponsoredHeading';
-import { renderWithProvider } from '../../../../test-utils/render';
+import { SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../SponsoredHeading.types';
 
 describe('SponsoredHeading', () => {
   it('renders with importance 1 (h1)', () => {
@@ -15,22 +15,18 @@ describe('SponsoredHeading', () => {
     expect(heading).toHaveClass('typography-sponsored-h1');
   });
 
-  it('renders correct element and class for each importance level', () => {
-    const levels = [1, 2, 3, 4, 5, 6] as const;
-
-    levels.forEach((importance) => {
-      const { getByRole, unmount } = renderWithProvider(
+  it.each(SPONSORED_HEADING_IMPORTANCE_LEVELS)(
+    'renders correct element and class for importance %s',
+    (importance) => {
+      const { getByRole } = renderWithProvider(
         <SponsoredHeading importance={importance}>Level {importance}</SponsoredHeading>
       );
 
       const heading = getByRole('heading', { level: importance });
-
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveClass(`typography-sponsored-h${importance}`);
-
-      unmount();
-    });
-  });
+    }
+  );
 
   it('applies custom className', () => {
     const { getByRole } = renderWithProvider(
@@ -40,7 +36,6 @@ describe('SponsoredHeading', () => {
     );
 
     const heading = getByRole('heading', { level: 1 });
-
     expect(heading).toHaveClass('typography-sponsored-h1');
     expect(heading).toHaveClass('custom-class');
   });
@@ -53,7 +48,6 @@ describe('SponsoredHeading', () => {
     );
 
     const heading = getByRole('heading', { level: 1 });
-
     expect(heading).toHaveAttribute('id', 'section-title');
     expect(heading).toHaveAttribute('aria-label', 'Section title');
   });
