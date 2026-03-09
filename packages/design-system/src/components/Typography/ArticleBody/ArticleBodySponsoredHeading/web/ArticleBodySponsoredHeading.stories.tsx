@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredHeading } from './ArticleBodySponsoredHeading';
-import type { ArticleBodySponsoredHeadingImportance } from './ArticleBodySponsoredHeading';
-
-const importanceOptions: ArticleBodySponsoredHeadingImportance[] = [1, 2, 3, 4, 5, 6];
+import { ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodySponsoredHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredHeading',
@@ -12,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Article body sponsored heading (Star Tribune only). Use the **Brand** control in the toolbar—this component throws when used with Varsity.',
+          'Article body sponsored heading (Star Tribune only). Use the **Brand** control in the toolbar-this component throws when used with Varsity.',
       },
     },
   },
@@ -20,9 +18,9 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: importanceOptions,
+      options: ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS,
       description:
-        'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
+        'Semantic heading level (1-6). Controls both the HTML element (h1-h6) and the typography class.',
     },
     children: {
       control: 'text',
@@ -57,7 +55,7 @@ export const AllVariants: Story = {
         width: '100%',
       }}
     >
-      {(importanceOptions as ArticleBodySponsoredHeadingImportance[]).map((level) => (
+      {ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS.map((level) => (
         <div
           key={level}
           style={{

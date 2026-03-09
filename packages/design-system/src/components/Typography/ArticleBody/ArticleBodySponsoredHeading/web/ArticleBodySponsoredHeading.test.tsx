@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ArticleBodySponsoredHeading } from './ArticleBodySponsoredHeading';
 import { renderWithProvider } from '@/test-utils/render';
+import { ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodySponsoredHeading.types';
 
 describe('ArticleBodySponsoredHeading', () => {
   it('renders with importance 1 (h1)', () => {
@@ -15,11 +16,10 @@ describe('ArticleBodySponsoredHeading', () => {
     expect(heading).toHaveClass('typography-article-body-sponsored-h1');
   });
 
-  it('renders correct element and class for each importance level', () => {
-    const levels = [1, 2, 3, 4, 5, 6] as const;
-
-    levels.forEach((importance) => {
-      const { getByRole, unmount } = renderWithProvider(
+  it.each(ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS)(
+    'renders correct element and class for importance %s',
+    (importance) => {
+      const { getByRole } = renderWithProvider(
         <ArticleBodySponsoredHeading importance={importance}>
           Level {importance}
         </ArticleBodySponsoredHeading>
@@ -29,10 +29,8 @@ describe('ArticleBodySponsoredHeading', () => {
 
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveClass(`typography-article-body-sponsored-h${importance}`);
-
-      unmount();
-    });
-  });
+    }
+  );
 
   it('applies custom className', () => {
     const { getByRole } = renderWithProvider(
