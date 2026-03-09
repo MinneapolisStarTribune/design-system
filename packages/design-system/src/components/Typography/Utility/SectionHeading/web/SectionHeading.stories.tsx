@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionHeading } from './SectionHeading';
+import { SECTION_HEADING_IMPORTANCE_LEVELS } from '../SectionHeading.types';
 
 const meta = {
   title: 'Foundations/Typography/Utility/SectionHeading',
@@ -8,7 +9,8 @@ const meta = {
   argTypes: {
     importance: {
       control: 'select',
-      options: [1, 2, 3, 4, 5, 6],
+      options: SECTION_HEADING_IMPORTANCE_LEVELS,
+      description: 'Heading level (1-6), maps to h1-h6',
     },
   },
 } satisfies Meta<typeof SectionHeading>;
@@ -42,7 +44,7 @@ export const AllVariants: Story = {
         width: '100%',
       }}
     >
-      {[1, 2, 3, 4, 5, 6].map((importance) => (
+      {SECTION_HEADING_IMPORTANCE_LEVELS.map((importance) => (
         <div
           key={importance}
           style={{
@@ -53,9 +55,7 @@ export const AllVariants: Story = {
             overflow: 'hidden',
           }}
         >
-          <SectionHeading importance={importance as 1 | 2 | 3 | 4 | 5 | 6}>
-            Section - H{importance} Heading
-          </SectionHeading>
+          <SectionHeading importance={importance}>Section - H{importance} Heading</SectionHeading>
         </div>
       ))}
     </div>

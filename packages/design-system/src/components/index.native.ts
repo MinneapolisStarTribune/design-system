@@ -49,3 +49,7 @@ export {
   PageHeading,
   type PageHeadingProps,
 } from './Typography/Utility/PageHeading/native/PageHeading.native';
+export {
+  SectionHeading,
+  type SectionHeadingProps,
+} from './Typography/Utility/SectionHeading/native/SectionHeading.native';
