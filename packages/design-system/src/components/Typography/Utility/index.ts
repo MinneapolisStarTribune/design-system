@@ -1,1 +1,1 @@
-export { UtilityLabel } from './UtilityLabel/UtilityLabel';
+export { UtilityLabel } from './UtilityLabel/web/UtilityLabel';

@@ -1,20 +1,5 @@
-import React from 'react';
 import classNames from 'classnames';
-import {
-  AccessibilityProps,
-  BaseProps,
-  UtilityLabelSize,
-  UtilityLabelWeight,
-} from '@/types/globalTypes';
-
-export interface UtilityLabelProps extends BaseProps, AccessibilityProps {
-  size: UtilityLabelSize;
-  weight?: UtilityLabelWeight;
-  capitalize?: boolean;
-  id?: string;
-  children: React.ReactNode;
-  htmlFor?: string;
-}
+import type { UtilityLabelProps } from '../UtilityLabel.types';
 
 export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   size,
@@ -25,11 +10,8 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   dataTestId,
   ...rest
 }) => {
-  // Generate typography class name based on props
-  // Pattern: typography-utility-label-{weight}-{size}[-caps]
   const weightSegment = weight === 'regular' ? '' : `${weight}-`;
   const typographyClassName = `typography-utility-label-${weightSegment}${size}${capitalize ? '-caps' : ''}`;
-
   const combinedClassNames = classNames(typographyClassName, className);
 
   return (
@@ -38,3 +20,9 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
     </span>
   );
 };
+
+export type {
+  UtilityLabelProps,
+  UtilityLabelSize,
+  UtilityLabelWeight,
+} from '../UtilityLabel.types';
