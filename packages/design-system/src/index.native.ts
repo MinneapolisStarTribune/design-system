@@ -2,9 +2,7 @@
 // This file is sorted alphabetically.
 
 export * from './components/index.native';
-
 export { type Brand, DesignSystemProvider } from './providers/DesignSystemProvider';
 
 // Export hooks
-export { useNativeStyles } from './hooks/useNativeStyles';
-export { useNativeTokens } from './hooks/useNativeTokens';
+export { useNativeStyles, useNativeStylesWithDefaults } from './hooks/useNativeStyles';
