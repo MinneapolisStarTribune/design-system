@@ -14,6 +14,7 @@ export {
 } from './FormGroup/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
+export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
