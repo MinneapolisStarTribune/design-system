@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
 import { IconName } from '../Icon/iconNames';
+import { allModes } from '@storybook-config/modes';
 
 // Available FormControl types for the dropdown
 const FORM_CONTROL_TYPES = ['TextInput'] as const;
@@ -29,7 +30,9 @@ interface FormGroupStoryArgs {
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup',
   component: FormGroup,
-  parameters: {},
+  parameters: {
+    chromatic: { modes: allModes },
+  },
   tags: ['autodocs'],
   argTypes: {
     showLabel: {

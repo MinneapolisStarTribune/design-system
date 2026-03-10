@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyText } from './ArticleBodyText';
 import { ARTICLE_BODY_TEXT_WEIGHTS } from '../ArticleBodyText.types';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyText',
   component: ArticleBodyText,
   parameters: {
+    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

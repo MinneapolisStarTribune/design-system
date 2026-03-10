@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from './FormControl';
 import { IconName } from '../Icon/iconNames';
+import { allModes } from '@storybook-config/modes';
 
 // Custom args interface for TextInput storybook story example
 interface TextInputStoryArgs {
@@ -17,6 +18,7 @@ const meta = {
   title: 'Components/Actions & Inputs/FormControl',
   component: FormControl,
   parameters: {
+    chromatic: { modes: allModes },
     docs: {
       description: {
         component:

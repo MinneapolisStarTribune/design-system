@@ -3,11 +3,14 @@ import { Icon } from './Icon';
 import { iconOptions } from './iconOptions';
 import { IconName } from './iconNames';
 import { ICON_COLORS } from '../../types/globalTypes';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Icons',
   component: Icon,
-  parameters: {},
+  parameters: {
+    chromatic: { modes: allModes },
+  },
   tags: ['autodocs'],
   argTypes: {
     name: {
