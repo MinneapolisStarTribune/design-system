@@ -26,8 +26,8 @@
  * - /fonts/font-face/{brand}.css - @font-face definitions
  */
 
-import React, { ReactNode, useEffect, useState } from 'react';
-import { Brand } from '../src/providers/TamaguiProvider';
+import { ReactNode, useEffect, useState } from 'react';
+import { Brand } from '../src/providers/DesignSystemProvider';
 
 const FONT_LINK_PREFIX = 'storybook-font-link';
 
@@ -92,18 +92,24 @@ export const FontWrapper = ({ children, brand }: FontWrapperProps) => {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
-    setFontLoaded(false);
+    let cancelled = false;
+
+    // Defer reset so setState is not called synchronously in the effect (avoids cascading renders)
+    queueMicrotask(() => setFontLoaded(false));
 
     Promise.all(
       FONT_CSS_PATHS.map((getPath) => {
         const href = getPath(brand);
-
         const id = `${FONT_LINK_PREFIX}-font-face-${brand}`;
         return loadCss(href, id);
       })
     ).then(() => {
-      setFontLoaded(true);
+      if (!cancelled) setFontLoaded(true);
     });
+
+    return () => {
+      cancelled = true;
+    };
   }, [brand]);
 
   if (!fontLoaded) {

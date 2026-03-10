@@ -24,7 +24,7 @@ const config: StorybookConfig = {
 
   async viteFinal(baseConfig) {
     // Plugin to convert CJS theme files (module.exports) to ESM (export default)
-    // so they can be imported by tamagui.config.ts in the browser.
+    // for any code that imports dist/mobile/themes in the browser.
     // Must be pushed directly onto baseConfig.plugins — mergeConfig does not
     // reliably merge plugin arrays in all Storybook/Vite versions.
     baseConfig.plugins!.push({
