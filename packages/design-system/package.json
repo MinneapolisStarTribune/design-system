@@ -1,12 +1,19 @@
 {
   "name": "@minneapolisstartribune/design-system",
   "version": "1.0.2",
-  "main": "dist/web/design-system.es.js",
+  "main": "dist/web/root-entry-error.cjs.js",
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/root-entry-error.cjs.js",
+      "import": "./dist/web/root-entry-error.cjs.js",
+      "default": "./dist/web/root-entry-error.cjs.js"
+    },
     "./web": {
       "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/design-system.cjs.js",
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
     },
@@ -45,6 +52,7 @@
     "eslint-plugin-react": "^7.37.5",
     "path": "^0.12.7",
     "sass": "^1.97.2",
+    "swiper": "^12.1.2",
     "vitest-axe": "^0.1.0"
   },
   "devDependencies": {
@@ -117,7 +125,7 @@
     "react-native": ">=0.73.0"
   },
   "scripts": {
-    "build": "yarn clean:dist && yarn tokens && yarn icons && yarn build:web && yarn build:native",
+    "build": "yarn clean:dist && yarn tokens && yarn icons && yarn build:web && yarn build:native && node scripts/create-root-entry-error.cjs",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build-storybook": "yarn tokens && yarn icons && storybook build",

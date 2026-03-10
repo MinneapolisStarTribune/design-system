@@ -1,0 +1,153 @@
+.gallery {
+    width: 100%;
+  }
+  
+  .innerContainer {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* ─── STANDARD ──────────────────────────────────────────── */
+  
+  .standard .innerContainer {
+    max-width: 712px;
+  }
+  
+  /* In standard mode, swiper is constrained to the container width.
+     No overflow — the adjacent slides must NOT peek in. */
+  .standard .swiper {
+    overflow: hidden;
+  }
+  
+  .standard .slide {
+    width: 100%;
+  }
+  
+  /* ─── IMMERSIVE ──────────────────────────────────────────── */
+  
+  /* Pull the gallery full-width out of any article column.
+     The negative-margin trick avoids adding width > 100% to the
+     document, which is what causes the horizontal scrollbar. */
+  .immersive {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    width: 100vw;
+  }
+  
+  .immersive .innerContainer {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  
+  /* Let adjacent slides peek — overflow visible */
+  .immersive .swiper {
+    overflow: visible;
+  }
+  
+  /* Constrain each slide so neighbours are partially visible */
+  .immersive .slide {
+    max-width: 1080px;
+  }
+  
+  @media (max-width: 1024px) {
+    .immersive .slide {
+      max-width: 535px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .immersive .slide {
+      max-width: 358px;
+    }
+  }
+  
+  /* ─── IMAGE WRAPPER ──────────────────────────────────────── */
+  
+  .imageWrapper {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+  
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* ─── CAMERA COUNTER TAG ─────────────────────────────────── */
+  
+  .mediaTag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+  
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  
+    padding: 4px 8px;
+    border-radius: 4px;
+  
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    pointer-events: none;
+  }
+  
+  /* ─── BOTTOM SECTION ─────────────────────────────────────── */
+  
+  /* Standard: align bottom section to the image edges (712px) */
+  .standard .bottomSection {
+    width: 100%;
+    max-width: 712px;
+    margin: 8px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0;
+  }
+  
+  /* Immersive: align bottom section to the active (center) slide only */
+  .immersive .bottomSection {
+    max-width: 1080px;
+    margin: 8px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0;
+  }
+  
+  @media (max-width: 1024px) {
+    .immersive .bottomSection {
+      max-width: 535px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .immersive .bottomSection {
+      max-width: 358px;
+    }
+  }
+  
+  /* ─── CAPTION ────────────────────────────────────────────── */
+  
+  .caption {
+    font-size: 14px;
+    line-height: 1.4;
+    color: inherit;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* ─── PREV / NEXT CONTROLS (immersive only) ──────────────── */
+  
+  .controls {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
