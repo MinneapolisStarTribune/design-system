@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from './UtilityLabel';
 import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../UtilityLabel.types';
+
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityLabel',
   component: UtilityLabel,

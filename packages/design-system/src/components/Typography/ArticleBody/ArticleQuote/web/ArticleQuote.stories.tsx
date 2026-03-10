@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleQuote } from './ArticleQuote';
 import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleQuote',
   component: ArticleQuote,

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OpinionHeading } from './OpinionHeading';
 import { OPINION_HEADING_IMPORTANCE_LEVELS } from '../OpinionHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/Editorial/OpinionHeading',
   component: OpinionHeading,

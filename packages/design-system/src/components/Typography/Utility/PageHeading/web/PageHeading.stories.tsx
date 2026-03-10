@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeading } from './PageHeading';
 import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/PageHeading',
   component: PageHeading,

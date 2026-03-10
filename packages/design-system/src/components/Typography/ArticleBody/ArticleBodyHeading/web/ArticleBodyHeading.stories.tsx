@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyHeading } from './ArticleBodyHeading';
 import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
   component: ArticleBodyHeading,

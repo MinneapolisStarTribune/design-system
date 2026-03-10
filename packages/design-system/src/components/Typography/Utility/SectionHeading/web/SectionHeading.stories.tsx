@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionHeading } from './SectionHeading';
 import { SECTION_HEADING_IMPORTANCE_LEVELS } from '../SectionHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/Utility/SectionHeading',
   component: SectionHeading,

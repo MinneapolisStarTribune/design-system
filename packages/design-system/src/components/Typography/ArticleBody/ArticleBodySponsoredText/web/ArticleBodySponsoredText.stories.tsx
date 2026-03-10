@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
 import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredText',
   component: ArticleBodySponsoredText,

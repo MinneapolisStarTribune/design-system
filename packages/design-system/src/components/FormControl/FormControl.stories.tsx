@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from './FormControl';
 import { IconName } from '../Icon/iconNames';
+
 // Custom args interface for TextInput storybook story example
 interface TextInputStoryArgs {
   placeholderText: string;

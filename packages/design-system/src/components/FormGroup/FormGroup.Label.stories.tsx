@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
+
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Label',
   component: FormGroup.Label,

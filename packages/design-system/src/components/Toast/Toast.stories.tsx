@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps } from './Toast';
 import styles from './Toast.stories.module.scss';
+
 const meta = {
   title: 'Feedback & Status/Toast',
   component: Toast,
