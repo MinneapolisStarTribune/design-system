@@ -94,7 +94,7 @@ module.exports = {
       },
     },
     {
-      // Tamagui theme and related files
+      // Theme helpers and related files
       files: [
         '**/theme-helpers.ts',
         '**/ThemeAwareColorCategory.tsx',
