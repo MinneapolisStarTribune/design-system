@@ -1,4 +1,7 @@
-import React, { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { BRAND_VALIDATION_ERROR_PREFIX } from './BrandValidationErrorBoundary.constants';
+
+export { BRAND_VALIDATION_ERROR_PREFIX };
 
 interface Props {
   children: ReactNode;
@@ -6,18 +9,16 @@ interface Props {
 }
 
 interface State {
-  hasError: boolean;
   error: Error | null;
 }
-const BRAND_VALIDATION_PREFIX = '[Brand Validation]';
+
 /**
- * Error boundary that catches brand validation errors and displays the
- * validateComponentForBrand message in the Storybook canvas instead of
- * a generic error stack. Other errors are rethrown for normal handling.
+ * Error boundary that catches brand validation errors and displays a clear
+ * message instead of a generic error stack. Other errors are rethrown.
  */
 export class BrandValidationErrorBoundary extends Component<Props, State> {
   static getDerivedStateFromError(error: Error): Partial<State> | null {
-    if (error.message.startsWith(BRAND_VALIDATION_PREFIX)) {
+    if (error.message.startsWith(BRAND_VALIDATION_ERROR_PREFIX)) {
       return { error };
     }
     return null;
@@ -26,7 +27,7 @@ export class BrandValidationErrorBoundary extends Component<Props, State> {
   state: State = { error: null };
 
   componentDidCatch(error: Error, _errorInfo: ErrorInfo): void {
-    if (!error.message.startsWith(BRAND_VALIDATION_PREFIX)) {
+    if (!error.message.startsWith(BRAND_VALIDATION_ERROR_PREFIX)) {
       throw error;
     }
   }
@@ -35,7 +36,7 @@ export class BrandValidationErrorBoundary extends Component<Props, State> {
     const { error } = this.state;
     const { children, fallback } = this.props;
 
-    if (error?.message.startsWith(BRAND_VALIDATION_PREFIX)) {
+    if (error?.message.startsWith(BRAND_VALIDATION_ERROR_PREFIX)) {
       if (fallback) {
         return fallback(error);
       }
@@ -55,7 +56,7 @@ export class BrandValidationErrorBoundary extends Component<Props, State> {
           }}
         >
           <strong style={{ display: 'block', marginBottom: '0.25rem' }}>Brand validation</strong>
-          {error.message.replace(BRAND_VALIDATION_PREFIX, '').trim()}
+          {error.message.replace(BRAND_VALIDATION_ERROR_PREFIX, '').trim()}
         </div>
       );
     }
