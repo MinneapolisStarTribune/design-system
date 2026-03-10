@@ -13,11 +13,15 @@ import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 import { iconOptions } from '@/components/Icon/iconOptions';
 import { IconName } from '@/components/Icon/iconNames';
 import { NewsHeading } from '@/components/index.web';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Actions/Button',
   component: Button,
   tags: ['autodocs'],
+  parameters: {
+    chromatic: { modes: allModes },
+  },
   argTypes: {
     children: {
       control: 'text',
@@ -171,57 +175,21 @@ function renderButtonSection(
 }
 
 /**
- * Helper function to create a comprehensive story with all button variants for a brand/theme.
- * Includes: All Text Buttons, All Text Buttons with Icons, and All Icon Only Buttons.
+ * All button variants - used for Chromatic visual regression testing.
+ * Chromatic captures a snapshot for each brand/theme mode (star-tribune-light, star-tribune-dark,
+ * varsity-light, varsity-dark) via chromatic.modes. Use the Brand and Theme toggles in the
+ * toolbar to preview different combinations.
  */
-function createAllVariantsStory(brand: 'startribune' | 'varsity', theme: 'light' | 'dark'): Story {
-  return {
-    parameters: {
-      controls: { disable: true },
-      layout: 'fullscreen',
-      brand,
-      theme,
-    },
-    render: () => (
-      <div style={{ padding: '2rem' }}>
-        {renderButtonSection(`All ${brand} ${theme} Text Buttons`, BUTTON_SIZES, false, false)}
-        {renderButtonSection(
-          `All ${brand} ${theme} Text Buttons with Icons`,
-          BUTTON_SIZES,
-          false,
-          true
-        )}
-        {renderButtonSection(
-          `All ${brand} ${theme} Icon Only Buttons`,
-          ICON_ONLY_BUTTON_SIZES,
-          true,
-          false
-        )}
-      </div>
-    ),
-  };
-}
-
-/**
- * All button variants for Star Tribune brand (light mode) - used for Chromatic visual regression testing.
- * This story renders all combinations of variant, color, and size with the startribune brand theme in light mode.
- */
-export const AllVariantsStarTribuneLight = createAllVariantsStory('startribune', 'light');
-
-/**
- * All button variants for Star Tribune brand (dark mode) - used for Chromatic visual regression testing.
- * This story renders all combinations of variant, color, and size with the startribune brand theme in dark mode.
- */
-export const AllVariantsStarTribuneDark = createAllVariantsStory('startribune', 'dark');
-
-/**
- * All button variants for Varsity brand (light mode) - used for Chromatic visual regression testing.
- * This story renders all combinations of variant, color, and size with the varsity brand theme in light mode.
- */
-export const AllVariantsVarsityLight = createAllVariantsStory('varsity', 'light');
-
-/**
- * All button variants for Varsity brand (dark mode) - used for Chromatic visual regression testing.
- * This story renders all combinations of variant, color, and size with the varsity brand theme in dark mode.
- */
-export const AllVariantsVarsityDark = createAllVariantsStory('varsity', 'dark');
+export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
+  render: () => (
+    <div style={{ padding: '2rem' }}>
+      {renderButtonSection('All Text Buttons', BUTTON_SIZES, false, false)}
+      {renderButtonSection('All Text Buttons with Icons', BUTTON_SIZES, false, true)}
+      {renderButtonSection('All Icon Only Buttons', ICON_ONLY_BUTTON_SIZES, true, false)}
+    </div>
+  ),
+};

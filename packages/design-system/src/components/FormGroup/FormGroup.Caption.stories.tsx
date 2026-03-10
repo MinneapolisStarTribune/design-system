@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
+import { allModes } from '@storybook-config/modes';
 
 const captionVariants = ['info', 'error', 'success'] as const;
 
@@ -8,6 +9,7 @@ const meta = {
   title: 'Components/Actions & Inputs/FormGroup/Caption',
   component: FormGroup.Caption,
   parameters: {
+    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

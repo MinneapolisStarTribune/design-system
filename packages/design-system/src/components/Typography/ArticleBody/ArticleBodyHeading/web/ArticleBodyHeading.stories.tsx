@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyHeading } from './ArticleBodyHeading';
 import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
   component: ArticleBodyHeading,
   parameters: {
+    chromatic: { modes: allModes },
     layout: 'centered',
     docs: {
       description: {

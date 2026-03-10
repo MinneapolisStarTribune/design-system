@@ -43,6 +43,7 @@ import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvid
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
+import { allModes } from './modes';
 import './preview.css';
 
 import versionsList from './versions.json';
@@ -183,6 +184,9 @@ const preview: Preview = {
     },
   },
   parameters: {
+    chromatic: {
+      modes: allModes,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

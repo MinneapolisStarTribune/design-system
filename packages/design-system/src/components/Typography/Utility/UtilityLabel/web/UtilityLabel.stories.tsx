@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from './UtilityLabel';
 import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../UtilityLabel.types';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityLabel',
   component: UtilityLabel,
   parameters: {
+    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

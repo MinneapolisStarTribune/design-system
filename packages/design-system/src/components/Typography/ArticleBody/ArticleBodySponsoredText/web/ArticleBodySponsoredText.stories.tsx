@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
 import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredText',
   component: ArticleBodySponsoredText,
   parameters: {
+    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],
