@@ -21,3 +21,12 @@ export const allModes = {
     theme: 'dark',
   },
 } as const;
+
+/**
+ * Modes for components that are Star Tribune only (e.g. ArticleBodySponsoredHeading,
+ * NonNewsHeading, EnterpriseHeading). These components throw when rendered with Varsity brand.
+ */
+export const starTribuneOnlyModes = {
+  'star-tribune-light': allModes['star-tribune-light'],
+  'star-tribune-dark': allModes['star-tribune-dark'],
+} as const;

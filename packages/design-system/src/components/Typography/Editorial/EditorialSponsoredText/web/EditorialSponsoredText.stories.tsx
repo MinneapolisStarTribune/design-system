@@ -4,13 +4,11 @@ import {
   EDITORIAL_SPONSORED_TEXT_SIZES,
   EDITORIAL_SPONSORED_TEXT_WEIGHTS,
 } from '../EditorialSponsoredText.types';
-import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Foundations/Typography/Editorial/EditorialSponsoredText',
   component: EditorialSponsoredText,
   parameters: {
-    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

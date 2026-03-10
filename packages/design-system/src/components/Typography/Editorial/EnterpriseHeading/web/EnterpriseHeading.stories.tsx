@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EnterpriseHeading } from './EnterpriseHeading';
 import { ENTERPRISE_HEADING_IMPORTANCE_LEVELS } from '../EnterpriseHeading.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/Editorial/EnterpriseHeading',
   component: EnterpriseHeading,
   parameters: {
-    chromatic: { modes: allModes },
     docs: {
       description: {
         component:

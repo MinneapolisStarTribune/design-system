@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NonNewsHeading } from './NonNewsHeading';
 import { NON_NEWS_HEADING_IMPORTANCE_LEVELS } from '../NonNewsHeading.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/Editorial/NonNewsHeading',
   component: NonNewsHeading,
   parameters: {
-    chromatic: { modes: allModes },
     docs: {
       description: {
         component:

@@ -19,9 +19,6 @@ const meta = {
   title: 'Actions/Button',
   component: Button,
   tags: ['autodocs'],
-  parameters: {
-    chromatic: { modes: allModes },
-  },
   argTypes: {
     children: {
       control: 'text',
@@ -182,6 +179,7 @@ function renderButtonSection(
  */
 export const AllVariants: Story = {
   parameters: {
+    chromatic: { modes: allModes },
     controls: { disable: true },
     layout: 'fullscreen',
   },
