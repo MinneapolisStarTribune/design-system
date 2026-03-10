@@ -56,11 +56,18 @@ yarn add @minneapolisstartribune/design-system
 
 ### Step 4: Install Peer Dependencies
 
-This package requires React, React DOM, and React Native (for native usage) as peer dependencies:
+Add the ones that match your platform.
+
+**Web** (use the `/web` entry):
 
 ```bash
-# Using yarn
-yarn add react@^19.0.0 react-dom@^19.0.0 react-native@>=0.73.0
+yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
+```
+
+**Native** (use the `/native` entry):
+
+```bash
+yarn add react@19.0.0 react-native@0.73.0 @floating-ui/react-native@0.10.9
 ```
 
 ## Quick Start

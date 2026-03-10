@@ -3249,10 +3249,16 @@ __metadata:
     vitest: "npm:^3.2.4"
     vitest-axe: "npm:^0.1.0"
   peerDependencies:
+    "@floating-ui/react": ^0.27.0
+    "@floating-ui/react-native": ^0.10.0
     react: ^19.0.0
     react-dom: ^19.0.0
     react-native: ">=0.73.0"
   peerDependenciesMeta:
+    "@floating-ui/react":
+      optional: true
+    "@floating-ui/react-native":
+      optional: true
     react-dom:
       optional: true
     react-native:
