@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
 import { UTILITY_BODY_SIZES, UTILITY_BODY_WEIGHTS } from '../UtilityBody.types';
+
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityBody',
   component: UtilityBody,

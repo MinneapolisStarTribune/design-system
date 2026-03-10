@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NewsHeading } from './NewsHeading';
 import { NEWS_HEADING_IMPORTANCE_LEVELS } from '../NewsHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/Editorial/NewsHeading',
   component: NewsHeading,

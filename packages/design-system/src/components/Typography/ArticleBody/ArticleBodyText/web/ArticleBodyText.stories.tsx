@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyText } from './ArticleBodyText';
 import { ARTICLE_BODY_TEXT_WEIGHTS } from '../ArticleBodyText.types';
+
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleBodyText',
   component: ArticleBodyText,

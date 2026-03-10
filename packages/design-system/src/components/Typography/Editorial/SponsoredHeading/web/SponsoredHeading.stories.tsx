@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SponsoredHeading } from './SponsoredHeading';
 import { SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../SponsoredHeading.types';
+
 const meta = {
   title: 'Foundations/Typography/Editorial/SponsoredHeading',
   component: SponsoredHeading,
