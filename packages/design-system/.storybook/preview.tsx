@@ -34,7 +34,6 @@
 
 import type { Preview } from '@storybook/react';
 import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvider';
-import { PopoverPortalRootProvider } from '../src/components/Popover/PopoverContext';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import './preview.css';
@@ -150,15 +149,13 @@ const preview: Preview = {
             ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),
           }}
         >
-          <PopoverPortalRootProvider>
-            <ThemeWrapper brand={brand} colorScheme={theme}>
-              <FontWrapper brand={brand}>
-                <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-                  <Story />
-                </DesignSystemProvider>
-              </FontWrapper>
-            </ThemeWrapper>
-          </PopoverPortalRootProvider>
+          <ThemeWrapper brand={brand} colorScheme={theme}>
+            <FontWrapper brand={brand}>
+              <DesignSystemProvider brand={brand} forceColorScheme={theme}>
+                <Story />
+              </DesignSystemProvider>
+            </FontWrapper>
+          </ThemeWrapper>
         </div>
       );
     },
