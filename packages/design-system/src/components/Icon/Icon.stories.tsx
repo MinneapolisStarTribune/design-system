@@ -3,6 +3,7 @@ import { Icon } from './Icon';
 import { iconOptions } from './iconOptions';
 import { IconName } from './iconNames';
 import { ICON_COLORS } from '../../types/globalTypes';
+
 const meta = {
   title: 'Foundations/Icons',
   component: Icon,

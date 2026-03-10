@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EditorialText } from './EditorialText';
 import { EDITORIAL_TEXT_SIZES, EDITORIAL_TEXT_WEIGHTS } from '../EditorialText.types';
+
 const meta = {
   title: 'Foundations/Typography/Editorial/EditorialText',
   component: EditorialText,

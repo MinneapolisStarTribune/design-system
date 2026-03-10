@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
 import { IconName } from '../Icon/iconNames';
+
 // Available FormControl types for the dropdown
 const FORM_CONTROL_TYPES = ['TextInput'] as const;
 type FormControlType = (typeof FORM_CONTROL_TYPES)[number];
