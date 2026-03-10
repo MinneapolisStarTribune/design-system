@@ -34,9 +34,9 @@
 
 import type { Preview } from '@storybook/react';
 import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvider';
+import { PopoverPortalRootProvider } from '../src/components/Popover/PopoverContext';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
-import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 import './preview.css';
 
 import versionsList from './versions.json';
@@ -150,15 +150,15 @@ const preview: Preview = {
             ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),
           }}
         >
-          <ThemeWrapper brand={brand} colorScheme={theme}>
-            <FontWrapper brand={brand}>
-              <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-                <BrandValidationErrorBoundary>
+          <PopoverPortalRootProvider>
+            <ThemeWrapper brand={brand} colorScheme={theme}>
+              <FontWrapper brand={brand}>
+                <DesignSystemProvider brand={brand} forceColorScheme={theme}>
                   <Story />
-                </BrandValidationErrorBoundary>
-              </DesignSystemProvider>
-            </FontWrapper>
-          </ThemeWrapper>
+                </DesignSystemProvider>
+              </FontWrapper>
+            </ThemeWrapper>
+          </PopoverPortalRootProvider>
         </div>
       );
     },
