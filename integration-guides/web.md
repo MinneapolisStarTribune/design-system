@@ -2,6 +2,16 @@
 
 Using the design system in web (React) applications.
 
+## Dependencies
+
+For **web** (using the `/web` entry), install the pinned peer versions (match the design system’s peerDependencies):
+
+```bash
+yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
+```
+
+You do not need `react-native` or `@floating-ui/react-native`.
+
 ## Quick Start
 
 Import a theme CSS file (typography classes + CSS variables in one file), then wrap your app with `DesignSystemProvider`:

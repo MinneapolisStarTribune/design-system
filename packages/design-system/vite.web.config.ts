@@ -88,12 +88,18 @@ export default defineConfig({
       fileName: (format) => (format === 'cjs' ? 'design-system.cjs.js' : 'design-system.es.js'),
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@floating-ui/react',
+      ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
           'react/jsx-runtime': 'React',
+          '@floating-ui/react': 'FloatingUIReact',
         },
       },
     },
