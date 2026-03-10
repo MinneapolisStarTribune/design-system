@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleQuote } from './ArticleQuote';
 import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/ArticleBody/ArticleQuote',
   component: ArticleQuote,
   parameters: {
-    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

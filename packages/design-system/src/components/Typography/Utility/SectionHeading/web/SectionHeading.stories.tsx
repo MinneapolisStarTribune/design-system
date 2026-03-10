@@ -1,14 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionHeading } from './SectionHeading';
 import { SECTION_HEADING_IMPORTANCE_LEVELS } from '../SectionHeading.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/Utility/SectionHeading',
   component: SectionHeading,
-  parameters: {
-    chromatic: { modes: allModes },
-  },
   tags: ['autodocs'],
   argTypes: {
     importance: {

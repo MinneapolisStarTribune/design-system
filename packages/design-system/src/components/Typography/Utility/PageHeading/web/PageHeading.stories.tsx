@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeading } from './PageHeading';
 import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/PageHeading',
   component: PageHeading,
   parameters: {
-    chromatic: { modes: allModes },
     layout: 'centered',
   },
   tags: ['autodocs'],

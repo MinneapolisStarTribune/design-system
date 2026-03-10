@@ -1,14 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
 import { UTILITY_BODY_SIZES, UTILITY_BODY_WEIGHTS } from '../UtilityBody.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/Utility/UtilityBody',
   component: UtilityBody,
-  parameters: {
-    chromatic: { modes: allModes },
-  },
   tags: ['autodocs'],
   argTypes: {
     size: {

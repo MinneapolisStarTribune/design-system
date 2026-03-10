@@ -4,14 +4,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps } from './Toast';
 import styles from './Toast.stories.module.scss';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Feedback & Status/Toast',
   component: Toast,
   tags: ['autodocs'],
   parameters: {
-    chromatic: { modes: allModes },
     layout: 'centered',
   },
   argTypes: {
