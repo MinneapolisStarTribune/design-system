@@ -1,4 +1,5 @@
 import { validateComponentForBrand } from '@/providers/brand/brand-validations';
+import { BRAND_VALIDATION_ERROR_PREFIX } from '@/providers/BrandValidationErrorBoundary.constants';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { ComponentName } from '@/types/component-names';
 import { useContext } from 'react';
@@ -22,7 +23,7 @@ export function useBrandValidation(componentName: ComponentName): void {
 
   if (!ctx) {
     throw new Error(
-      `[Brand Validation] "${componentName}" must be used within DesignSystemProvider.`
+      `${BRAND_VALIDATION_ERROR_PREFIX} "${componentName}" must be used within DesignSystemProvider.`
     );
   }
 
