@@ -1,11 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
 import { Button } from '@/components/index.web';
+import { allModes } from '@storybook-config/modes';
 
 const meta = {
   title: 'Feedback & Status/Popover',
   component: Popover,
   tags: ['autodocs'],
+  parameters: {
+    chromatic: { modes: allModes },
+  },
   argTypes: {
     trigger: { control: false },
     children: { control: false },
