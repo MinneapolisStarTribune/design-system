@@ -12,7 +12,7 @@
  * 2. Decorator Chain:
  *    - ThemeWrapper: Loads the correct CSS theme file based on brand/colorScheme
  *    - FontWrapper: Loads brand-specific font CSS files
- *    - DesignSystemProvider: Provides Tamagui theme configuration to components
+ *    - DesignSystemProvider: Provides brand and color scheme context to components
  *    - Story: The actual story component being rendered
  *
  * 3. Theme Loading Flow:
@@ -20,25 +20,19 @@
  *    - Decorator extracts brand and colorScheme from context
  *    - ThemeWrapper loads the corresponding CSS file (e.g., startribune-light.css)
  *    - CSS variables become available in the DOM
- *    - DesignSystemProvider applies Tamagui theme based on brand and color scheme
- *    - Components can now use both CSS variables and Tamagui theme tokens
+ *    - DesignSystemProvider provides brand and color scheme to components
+ *    - Components use CSS variables and design tokens from the loaded theme
  *
- * 4. Why Both CSS Variables and Tamagui Theme?
- *    - CSS Variables: Used by CSS modules and direct CSS styling
- *    - Tamagui Theme: Used by Tamagui components via their theme system
- *    - Both are needed because they serve different purposes in the component architecture
- *
- * 5. ArgTypes Configuration:
+ * 4. ArgTypes Configuration:
  *    - Hides certain props from Storybook controls that are internal/accessibility-focused
  *
- * 6. Parameters:
+ * 5. Parameters:
  *    - Controls: Matchers for better control UI (e.g., color picker for color props)
  *    - A11y: Accessibility testing configuration
  *    - Docs: Source code display settings
  */
 
 import type { Preview } from '@storybook/react';
-import React from 'react';
 import { DesignSystemProvider, Brand } from '../src/providers/DesignSystemProvider';
 import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
@@ -48,6 +42,10 @@ import './preview.css';
 import versionsList from './versions.json';
 
 type VersionsEntry = { version: string; url: string };
+
+type StorybookGlobalsWindow = Window & {
+  __STORYBOOK_GLOBALS__?: { brand: Brand; theme: 'light' | 'dark' };
+};
 
 const versions = versionsList as VersionsEntry[];
 
@@ -105,7 +103,7 @@ const preview: Preview = {
      * 1. Reads brand and theme from story parameters first, then falls back to globals
      * 2. Wraps the story in ThemeWrapper (loads CSS variables)
      * 3. Wraps in FontWrapper (loads brand-specific fonts)
-     * 4. Wraps in DesignSystemProvider (provides Tamagui theme)
+     * 4. Wraps in DesignSystemProvider (brand and color scheme context)
      * 5. Adds padding container for visual spacing in Storybook UI
      *
      * The order matters: ThemeWrapper must be outermost so CSS variables
@@ -131,7 +129,7 @@ const preview: Preview = {
 
       // Expose globals for components that need brand/theme outside decorator context
       // (e.g., ThemeAwareColorCategory reads these during render)
-      (window as any).__STORYBOOK_GLOBALS__ = { brand, theme };
+      (window as StorybookGlobalsWindow).__STORYBOOK_GLOBALS__ = { brand, theme };
 
       const layout = context.parameters.layout as string | undefined;
       const isFullscreen = layout === 'fullscreen';
