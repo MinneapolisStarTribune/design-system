@@ -5,6 +5,9 @@ coverage
 test-coverage
 reports
 .storybook-static
+# ESLint ignores dot-directories by default; include .storybook so config and wrappers are linted
+!.storybook
+!.storybook/**
 *.config.js
 *.config.ts
 !packages/design-system/vitest.config.ts
