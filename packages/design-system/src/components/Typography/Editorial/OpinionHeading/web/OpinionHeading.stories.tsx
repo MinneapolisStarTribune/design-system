@@ -1,13 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OpinionHeading } from './OpinionHeading';
 import { OPINION_HEADING_IMPORTANCE_LEVELS } from '../OpinionHeading.types';
-import { allModes } from '@storybook-config/modes';
-
 const meta = {
   title: 'Foundations/Typography/Editorial/OpinionHeading',
   component: OpinionHeading,
   parameters: {
-    chromatic: { modes: allModes },
     docs: {
       description: {
         component:
