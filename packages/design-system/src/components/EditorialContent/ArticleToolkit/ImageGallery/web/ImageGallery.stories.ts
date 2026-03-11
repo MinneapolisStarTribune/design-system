@@ -14,8 +14,9 @@ const images = [
   {
     src: 'https://picsum.photos/1080/720?1',
     altText: 'Image 1',
-    caption: 'A beautiful landscape captured during sunset.',
-    credit: '(Photo: Star Tribune)',
+    caption:
+      'General Manager Heather Ann Mady with Moua outside the building that will house Dians Place.',
+    credit: '(Rebecca McApline/Star Tribune)',
   },
   {
     src: 'https://picsum.photos/1080/720?2',

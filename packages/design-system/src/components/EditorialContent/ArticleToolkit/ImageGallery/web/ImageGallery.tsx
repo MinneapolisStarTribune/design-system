@@ -55,6 +55,9 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
 
   if (!images?.length) return null;
 
+  const captionClassName = 'typography-utility-text-regular-x-small';
+  const mediaTagClassName = 'typography-utility-label-semibold-large';
+
   return (
     <div className={classNames(styles.gallery, styles[variant])} data-testid="image-gallery">
       <div className={styles.innerContainer}>
@@ -95,8 +98,10 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
                 {/* Camera counter — show on all slides for standard, only active for immersive */}
                 {(!isImmersive || i === activeIndex) && (
                   <div className={styles.mediaTag}>
-                    <Icon name="camera-filled" size="x-small" />
-                    {(isImmersive ? activeIndex : i) + 1}/{total}
+                    <Icon name="camera-filled" size="medium" />
+                    <span className={mediaTagClassName}>
+                      {(isImmersive ? activeIndex : i) + 1}/{total}
+                    </span>
                   </div>
                 )}
               </div>
@@ -106,7 +111,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
 
         {/* caption + controls */}
         <div className={styles.bottomSection}>
-          <div className={styles.caption}>
+          <div className={classNames(captionClassName, styles.caption)}>
             {images[activeIndex]?.caption}
             {images[activeIndex]?.credit && <> {images[activeIndex].credit}</>}
           </div>
@@ -115,19 +120,21 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
             <div className={styles.controls}>
               <Button
                 variant="ghost"
-                size="small"
+                size="medium"
                 icon="chevron-left"
                 aria-label="Previous image"
                 onClick={prev}
                 isDisabled={!isImmersive && activeIndex === 0}
+                className={styles.navButton}
               />
               <Button
                 variant="ghost"
-                size="small"
+                size="medium"
                 icon="chevron-right"
                 aria-label="Next image"
                 onClick={next}
                 isDisabled={!isImmersive && activeIndex === total - 1}
+                className={styles.navButton}
               />
             </div>
           )}
