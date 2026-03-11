@@ -35,7 +35,7 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
       icon = <Icon name="error" size="small" aria-hidden />;
       break;
     case 'success':
-      color = 'var(--color-text-state-success-on-light, #00854B)';
+      color = 'var(--color-text-state-success-on-light)';
       icon = <Icon name="check" size="small" aria-hidden />;
       break;
   }
