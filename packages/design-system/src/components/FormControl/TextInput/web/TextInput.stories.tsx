@@ -125,21 +125,33 @@ export const AllVariants: Story = {
         <span style={labelStyle}>Size: Small</span>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
-          <FormControl.TextInput placeholderText="Placeholder text" size="small" aria-label="Small" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            size="small"
+            aria-label="Small"
+          />
         </FormGroup>
       </div>
       <div style={cellStyle}>
         <span style={labelStyle}>Size: Medium (Default)</span>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
-          <FormControl.TextInput placeholderText="Placeholder text" size="medium" aria-label="Medium" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            size="medium"
+            aria-label="Medium"
+          />
         </FormGroup>
       </div>
       <div style={cellStyle}>
         <span style={labelStyle}>Size: Large</span>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
-          <FormControl.TextInput placeholderText="Placeholder text" size="large" aria-label="Large" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            size="large"
+            aria-label="Large"
+          />
         </FormGroup>
       </div>
 
@@ -163,7 +175,10 @@ export const AllVariants: Story = {
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormGroup.Description>Description of the label</FormGroup.Description>
-          <FormControl.TextInput placeholderText="Placeholder text" aria-label="Label with description" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            aria-label="Label with description"
+          />
         </FormGroup>
       </div>
 
@@ -279,7 +294,11 @@ export const AllVariants: Story = {
         <span style={labelStyle}>State: Error</span>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
-          <FormControl.TextInput placeholderText="Placeholder text" isError aria-label="Error state" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            isError
+            aria-label="Error state"
+          />
           <FormGroup.Caption variant="error">Error message</FormGroup.Caption>
         </FormGroup>
       </div>
@@ -287,7 +306,11 @@ export const AllVariants: Story = {
         <span style={labelStyle}>State: Success</span>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
-          <FormControl.TextInput placeholderText="Placeholder text" isSuccess aria-label="Success state" />
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            isSuccess
+            aria-label="Success state"
+          />
           <FormGroup.Caption variant="success">Success message</FormGroup.Caption>
         </FormGroup>
       </div>
