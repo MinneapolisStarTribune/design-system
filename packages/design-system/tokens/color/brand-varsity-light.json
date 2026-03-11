@@ -408,11 +408,11 @@
       },
       "state-success-on-dark": {
         "description": "Success text color used on dark backgrounds to indicate validation passed or positive feedback",
-        "value": "{color.emerald-green.800}"
+        "value": "{color.emerald-green.400}"
       },
       "state-success-on-light": {
         "description": "Success text color used on light backgrounds to indicate validation passed or positive feedback",
-        "value": "{color.emerald-green.400}"
+        "value": "{color.emerald-green.800}"
       }
     }
   }
