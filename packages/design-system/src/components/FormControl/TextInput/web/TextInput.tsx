@@ -9,13 +9,6 @@ import styles from './TextInput.module.scss';
 
 export type TextInputSize = NonNullable<FormControlProps['size']>;
 
-/** Icon size mapping: input small -> x-small, medium -> small, large -> medium */
-const ICON_SIZE_MAP: Record<TextInputSize, 'x-small' | 'small' | 'medium'> = {
-  small: 'x-small',
-  medium: 'small',
-  large: 'medium',
-};
-
 /** Placeholder typography by size (italic); value text uses regular when filled */
 const PLACEHOLDER_TYPOGRAPHY: Record<TextInputSize, string> = {
   small: 'typography-utility-text-italic-small',
@@ -94,8 +87,7 @@ export const TextInput: React.FC<TextInputProps> = ({
 
   const isFilled = value != null && String(value).trim().length > 0;
 
-  const iconSize = ICON_SIZE_MAP[size];
-  const iconElement = icon ? <Icon name={icon} size={iconSize} aria-hidden={true} /> : null;
+  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
 
   const leftIcon = icon && iconPosition === 'start' ? iconElement : undefined;
   const rightIcon = icon && iconPosition === 'end' ? iconElement : undefined;
@@ -104,7 +96,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   const successCheckmark =
     hasSuccess && !hasError ? (
       <span className={styles.iconSuccess} aria-hidden>
-        <Icon name="check" size={iconSize} aria-hidden />
+        <Icon name="check" size={size} aria-hidden />
       </span>
     ) : null;
 
