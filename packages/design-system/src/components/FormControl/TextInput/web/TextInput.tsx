@@ -16,6 +16,14 @@ const ICON_SIZE_MAP: Record<TextInputSize, 'x-small' | 'small' | 'medium'> = {
   large: 'medium',
 };
 
+/** Placeholder typography by size (italic); value text uses regular when filled */
+const PLACEHOLDER_TYPOGRAPHY: Record<TextInputSize, string> = {
+  small: 'typography-utility-text-italic-small',
+  medium: 'typography-utility-text-italic-medium',
+  large: 'typography-utility-text-italic-large',
+};
+
+
 export interface TextInputProps
   extends FormControlProps,
     AccessibilityProps,
@@ -120,7 +128,7 @@ export const TextInput: React.FC<TextInputProps> = ({
       <input
         type="text"
         id={inputId}
-        className={styles.input}
+        className={classNames(styles.input, PLACEHOLDER_TYPOGRAPHY[size], styles.valueTypography)}
         placeholder={placeholderText}
         disabled={isDisabled}
         value={value}
