@@ -2,8 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { FormControlProps } from '@/components/FormControl/FormControl';
 import { AccessibilityProps } from '@/types/globalTypes';
-import { Icon } from '@/components/Icon/Icon';
-import { IconName } from '@/components/Icon/iconNames';
+import { SuccessIcon } from '@/icons';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import styles from './TextInput.module.scss';
 
@@ -32,7 +31,8 @@ export interface TextInputProps
     > {
   size?: TextInputSize;
   placeholderText?: string;
-  icon?: IconName;
+  /** Optional decorative icon element (e.g. <SearchIcon />). */
+  icon?: React.ReactNode;
   iconPosition?: 'start' | 'end';
   rounded?: boolean;
   isDisabled?: boolean;
@@ -87,7 +87,8 @@ export const TextInput: React.FC<TextInputProps> = ({
 
   const isFilled = value != null && String(value).trim().length > 0;
 
-  const iconElement = icon ? <Icon name={icon} size={size} aria-hidden={true} /> : null;
+  // Icon is always decorative when provided via the simple icon prop
+  const iconElement = icon ?? null;
 
   const leftIcon = icon && iconPosition === 'start' ? iconElement : undefined;
   const rightIcon = icon && iconPosition === 'end' ? iconElement : undefined;
@@ -95,9 +96,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   // Validated/success state shows checkmark icon at end (per design spec)
   const successCheckmark =
     hasSuccess && !hasError ? (
-      <span className={styles.iconSuccess} aria-hidden>
-        <Icon name="check" size={size} aria-hidden />
-      </span>
+      <SuccessIcon aria-hidden />
     ) : null;
 
   const wrapperClasses = classNames(

@@ -1,13 +1,40 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from './FormControl';
-import { IconName } from '../Icon/iconNames';
+import CalendarIcon from '@/icons/calendar.svg?react';
+import LocationIcon from '@/icons/location.svg?react';
+import LockIcon from '@/icons/lock.svg?react';
+import MailIcon from '@/icons/mail.svg?react';
+import PhoneIcon from '@/icons/phone.svg?react';
+import SearchIcon from '@/icons/search.svg?react';
+import UserIcon from '@/icons/user.svg?react';
+
+const STORY_ICON_NAMES = [
+  'search',
+  'mail',
+  'user',
+  'lock',
+  'calendar',
+  'phone',
+  'location',
+] as const;
+type StoryIconName = (typeof STORY_ICON_NAMES)[number];
+
+const STORY_ICON_MAP: Record<StoryIconName, React.ReactNode> = {
+  search: <SearchIcon />,
+  mail: <MailIcon />,
+  user: <UserIcon />,
+  lock: <LockIcon />,
+  calendar: <CalendarIcon />,
+  phone: <PhoneIcon />,
+  location: <LocationIcon />,
+};
 
 // Custom args interface for TextInput storybook story example
 interface TextInputStoryArgs {
   placeholderText: string;
   size: 'small' | 'medium' | 'large';
   showIcon: boolean;
-  iconName: IconName;
+  iconName: StoryIconName;
   iconPosition: 'start' | 'end';
   rounded: boolean;
   isDisabled: boolean;
@@ -41,7 +68,7 @@ const meta = {
     },
     iconName: {
       control: 'select',
-      options: ['search', 'mail', 'user', 'lock', 'calendar', 'phone', 'location'] as IconName[],
+      options: [...STORY_ICON_NAMES],
       description: 'Icon to display',
       if: { arg: 'showIcon' },
     },
@@ -81,7 +108,7 @@ export const Configurable: Story = {
       <FormControl.TextInput
         placeholderText={storyArgs.placeholderText}
         size={storyArgs.size}
-        icon={storyArgs.showIcon ? storyArgs.iconName : undefined}
+        icon={storyArgs.showIcon ? STORY_ICON_MAP[storyArgs.iconName] : undefined}
         iconPosition={storyArgs.iconPosition}
         rounded={storyArgs.rounded}
         isDisabled={storyArgs.isDisabled}
@@ -99,8 +126,16 @@ export const AllVariants: Story = {
       { label: 'Small', size: 'small' as const },
       { label: 'Medium', size: 'medium' as const },
       { label: 'Large', size: 'large' as const },
-      { label: 'With icon (start)', icon: 'search' as const, iconPosition: 'start' as const },
-      { label: 'With icon (end)', icon: 'mail' as const, iconPosition: 'end' as const },
+      {
+        label: 'With icon (start)',
+        icon: <SearchIcon />,
+        iconPosition: 'start' as const,
+      },
+      {
+        label: 'With icon (end)',
+        icon: <MailIcon />,
+        iconPosition: 'end' as const,
+      },
       { label: 'Rounded', rounded: true },
       { label: 'Disabled', isDisabled: true },
     ];
