@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
+import CloseIcon from '@/icons/close.svg?react';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
@@ -16,7 +17,7 @@ export const PopoverHeading: React.FC<{
       <Button
         variant="ghost"
         size="small"
-        icon="close"
+        icon={<CloseIcon />}
         aria-label="Close popover"
         className={styles.closeButton}
         onClick={close}

@@ -137,6 +137,46 @@ All themes expose the same token names, so you can use them in CSS modules or in
 }
 ```
 
+## Icons
+
+Import only the icons you need (tree-shakeable). Icons are SVG components and accept standard SVG/React props such as `width`, `height`, `className`, `fill`, and `aria-*`.
+
+```tsx
+import { CloseIcon, SearchIcon } from '@minneapolisstartribune/design-system/web';
+```
+
+### Customizing icon color
+
+Icons use `fill="currentColor"` by default (when built with SVGR), so they inherit the parent’s text color. To set color:
+
+**1. Inherit from parent** — Put the icon inside an element that has the desired `color` (e.g. a button or a `span` with a class). The icon will match that color.
+
+```tsx
+<span style={{ color: 'var(--color-icon-on-light-primary)' }}>
+  <SearchIcon width={24} height={24} aria-hidden />
+</span>
+```
+
+**2. Explicit `fill`** — Pass a design token or any valid CSS color.
+
+```tsx
+<CloseIcon
+  width={24}
+  height={24}
+  fill="var(--color-icon-on-light-primary)"
+  aria-hidden
+/>
+```
+
+Theme CSS exposes icon tokens such as `--color-icon-on-light-primary`, `--color-icon-on-dark-primary`, `--color-icon-brand-01`, `--color-icon-state-attention-on-light`, `--color-icon-state-disabled-on-light`, etc. Use the token that matches your context (light/dark background, brand, state).
+
+**3. `className` or `style`** — Apply a class or inline style that sets `fill` (or `color` if the SVG uses `currentColor` for fill).
+
+```tsx
+<SearchIcon className="my-icon-class" />
+// .my-icon-class { fill: var(--color-icon-on-light-secondary); }
+```
+
 ## Font Loading
 
 Fonts are loaded automatically by `DesignSystemProvider`. For non-React (CSS-only) usage:

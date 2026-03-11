@@ -124,9 +124,9 @@ Displays validation messages or status information. Supports `info`, `error`, an
 **Example:**
 
 ```tsx
-<FormGroup.Caption variant="error"><Icon icon="warn">This field is required</FormGroup.Caption>
+<FormGroup.Caption variant="error">This field is required</FormGroup.Caption>
 <FormGroup.Caption variant="success">Password meets all requirements</FormGroup.Caption>
-<FormGroup.Caption variant="info"><Icon icon="info">Passwords must be at least 8 characters</FormGroup.Caption>
+<FormGroup.Caption variant="info">Passwords must be at least 8 characters</FormGroup.Caption>
 ```
 
 ---
@@ -140,7 +140,7 @@ A compound component that provides a namespace for all form control types. Each 
 **Example:**
 
 ```tsx
-<FormControl.TextInput icon="search" iconPosition="start" />
+<FormControl.TextInput />
 <FormControl.Checkbox />
 <FormControl.Radio />
 ```
