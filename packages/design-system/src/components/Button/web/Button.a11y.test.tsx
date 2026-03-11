@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button } from './Button';
+import CameraFilledIcon from '@/icons/camera-filled.svg?react';
 
 describe('Button Accessibility', () => {
   describe('static rendering', () => {
@@ -35,7 +36,7 @@ describe('Button Accessibility', () => {
 
     it('has no violations with an icon and text', async () => {
       await expectNoA11yViolations(
-        <Button onClick={() => {}} icon="camera-filled">
+        <Button onClick={() => {}} icon={<CameraFilledIcon />}>
           Button with Icon
         </Button>
       );
@@ -43,7 +44,7 @@ describe('Button Accessibility', () => {
 
     it('has no violations with an icon', async () => {
       await expectNoA11yViolations(
-        <Button onClick={() => {}} icon="camera-filled">
+        <Button onClick={() => {}} icon={<CameraFilledIcon />}>
           Button with Icon
         </Button>
       );

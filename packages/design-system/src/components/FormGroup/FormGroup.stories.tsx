@@ -1,7 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
 import { FormControl } from '../FormControl/FormControl';
-import { IconName } from '../Icon/iconNames';
+import CalendarIcon from '@/icons/calendar.svg?react';
+import LocationIcon from '@/icons/location.svg?react';
+import LockIcon from '@/icons/lock.svg?react';
+import MailIcon from '@/icons/mail.svg?react';
+import PhoneIcon from '@/icons/phone.svg?react';
+import SearchIcon from '@/icons/search.svg?react';
+import UserIcon from '@/icons/user.svg?react';
+
+const STORY_ICON_NAMES = [
+  'search',
+  'mail',
+  'user',
+  'lock',
+  'calendar',
+  'phone',
+  'location',
+] as const;
+type StoryIconName = (typeof STORY_ICON_NAMES)[number];
+
+const STORY_ICON_MAP: Record<StoryIconName, React.ReactNode> = {
+  search: <SearchIcon />,
+  mail: <MailIcon />,
+  user: <UserIcon />,
+  lock: <LockIcon />,
+  calendar: <CalendarIcon />,
+  phone: <PhoneIcon />,
+  location: <LocationIcon />,
+};
 
 // Available FormControl types for the dropdown
 const FORM_CONTROL_TYPES = ['TextInput'] as const;
@@ -20,7 +47,7 @@ interface FormGroupStoryArgs {
   placeholderText: string;
   inputSize: 'small' | 'medium' | 'large';
   showIcon: boolean;
-  iconName: IconName;
+  iconName: StoryIconName;
   iconPosition: 'start' | 'end';
   rounded: boolean;
   isDisabled: boolean;
@@ -88,7 +115,7 @@ const meta = {
     },
     iconName: {
       control: 'select',
-      options: ['search', 'mail', 'user', 'lock', 'calendar', 'phone', 'location'] as IconName[],
+      options: [...STORY_ICON_NAMES],
       description: 'Icon to display',
       if: { arg: 'showIcon' },
     },
@@ -142,7 +169,7 @@ export const Configurable: Story = {
             <FormControl.TextInput
               placeholderText={storyArgs.placeholderText}
               size={storyArgs.inputSize}
-              icon={storyArgs.showIcon ? storyArgs.iconName : undefined}
+              icon={storyArgs.showIcon ? STORY_ICON_MAP[storyArgs.iconName] : undefined}
               iconPosition={storyArgs.iconPosition}
               rounded={storyArgs.rounded}
               isDisabled={storyArgs.isDisabled}

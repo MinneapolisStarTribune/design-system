@@ -1,4 +1,5 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
+// Icons are exported from the icons barrel, so we don't need to export them here.
 export {
   FormControl,
   type FormControlProps,
@@ -12,7 +13,6 @@ export {
   type FormGroupLabelProps,
   type FormGroupProps,
 } from './FormGroup/FormGroup';
-export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {

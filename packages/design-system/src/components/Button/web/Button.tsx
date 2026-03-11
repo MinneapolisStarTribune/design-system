@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { Icon } from '@/components/Icon/Icon';
-import { IconName } from '@/components/Icon/iconNames';
-import { getIconLabel } from '@/utils/accessibilityHelpers';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps } from '@/types/globalTypes';
+import { ICON_PIXEL_SIZES, type IconSize } from '@/components/Icon/Icon.types';
 import { createDesignSystemError } from '@/utils/errorPrefix';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
@@ -29,7 +27,11 @@ export interface ButtonProps extends BaseProps {
    * Button size. Note: 'x-small' is only valid for icon-only buttons (buttons with icon but no text children).
    */
   size?: ButtonSize | 'x-small';
-  icon?: IconName;
+  /**
+   * Optional icon. For icon-only buttons, pass the icon (e.g. icon={<AvatarIcon />}).
+   * For buttons with text, use iconPosition to place it before or after the label.
+   */
+  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
   iconPosition?: 'start' | 'end';
   children?: React.ReactNode;
   isDisabled?: boolean;
@@ -67,12 +69,12 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
 }
 
 /**
- * Get icon size for a button based on button size and whether it's icon-only
+ * Get icon size token for a button based on button size and whether it's icon-only.
  */
 function getButtonIconSize(
   size: ButtonSize | 'x-small',
   isIconOnly: boolean
-): 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | undefined {
+): IconSize | undefined {
   const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
     small: 'x-small',
     medium: 'small',
@@ -97,13 +99,26 @@ function getButtonIconSize(
  */
 function getButtonAriaLabel(
   explicitAriaLabel: string | undefined,
-  children: React.ReactNode,
-  icon: IconName | undefined
+  children: React.ReactNode
 ): string | undefined {
   if (explicitAriaLabel) return explicitAriaLabel;
   if (typeof children === 'string') return children;
-  if (icon) return `${getIconLabel(icon)} icon`;
   return undefined;
+}
+
+function enhanceIcon(
+  icon: React.ReactElement<React.SVGProps<SVGSVGElement>> | undefined,
+  iconSize: IconSize | undefined
+): React.ReactElement<React.SVGProps<SVGSVGElement>> | null {
+  if (!icon || !icon.type || !iconSize) return null;
+  const pixelSize = ICON_PIXEL_SIZES[iconSize];
+  const existingClassName = icon.props.className;
+  return React.cloneElement(icon, {
+    width: pixelSize,
+    height: pixelSize,
+    'aria-hidden': true,
+    className: existingClassName ? classNames(styles.icon, existingClassName) : styles.icon,
+  });
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -125,7 +140,8 @@ export const Button: React.FC<ButtonProps> = ({
   const [hasGradientBorder, setHasGradientBorder] = useState(false);
 
   // Determine if this is an icon-only button (has icon but no text children)
-  const isIconOnly = !!icon && !children;
+  const hasAnyIcon = !!icon;
+  const isIconOnly = hasAnyIcon && !children;
 
   // Validate that x-small can only be used for icon-only buttons
   if (size === 'x-small' && !isIconOnly) {
@@ -175,21 +191,14 @@ export const Button: React.FC<ButtonProps> = ({
     setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant, tokenPrefix]);
 
-  const effectiveSize: ButtonSize | 'x-small' = size;
+  const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
-  // Get icon size and create icon element
-  const iconSize = icon ? getButtonIconSize(effectiveSize, isIconOnly) : undefined;
-  const iconElement = icon ? (
-    <Icon name={icon} size={iconSize} className={styles.icon} aria-hidden />
-  ) : null;
-
-  // Determine icon position - for icon-only buttons, always show the icon
-  const leftIcon = icon && (iconPosition === 'start' || isIconOnly) ? iconElement : null;
-  const rightIcon = icon && iconPosition === 'end' && !isIconOnly ? iconElement : null;
+  const leftIcon = isIconOnly || iconPosition === 'start' ? enhanceIcon(icon, iconSizeName) : null;
+  const rightIcon = !isIconOnly && iconPosition === 'end' ? enhanceIcon(icon, iconSizeName) : null;
 
   // Get aria-label for accessibility
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  const buttonAriaLabel = getButtonAriaLabel(ariaLabel, children, icon);
+  const buttonAriaLabel = getButtonAriaLabel(ariaLabel, children);
 
   // Apply special classes for gradient borders
   const brandAccentFilledClass =
@@ -202,11 +211,8 @@ export const Button: React.FC<ButtonProps> = ({
       : undefined;
 
   // Combine class names - use styles object for CSS modules
-  // Use effectiveSize for class name (x-small only works for icon-only, otherwise falls back to small)
   const sizeClass =
-    effectiveSize === 'x-small' && isIconOnly
-      ? styles['x-small']
-      : styles[effectiveSize as ButtonSize];
+    size === 'x-small' && isIconOnly ? styles['x-small'] : styles[size as ButtonSize];
 
   const combinedClassNames = classNames(
     styles.button,
@@ -233,7 +239,7 @@ export const Button: React.FC<ButtonProps> = ({
     >
       {leftIcon}
       {!isIconOnly && (
-        <UtilityLabel size={effectiveSize as ButtonSize} weight="semibold" capitalize={capitalize}>
+        <UtilityLabel size={size as ButtonSize} weight="semibold" capitalize={capitalize}>
           {children}
         </UtilityLabel>
       )}
