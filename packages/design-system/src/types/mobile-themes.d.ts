@@ -1302,22 +1302,22 @@ interface VarsityDarkTheme {
   textSize2xxl: string;
 }
 
-declare module "@mobile/themes/startribune-light.js" {
+declare module '@mobile/themes/startribune-light.js' {
   const theme: StartribuneLightTheme;
   export = theme;
 }
 
-declare module "@mobile/themes/startribune-dark.js" {
+declare module '@mobile/themes/startribune-dark.js' {
   const theme: StartribuneDarkTheme;
   export = theme;
 }
 
-declare module "@mobile/themes/varsity-light.js" {
+declare module '@mobile/themes/varsity-light.js' {
   const theme: VarsityLightTheme;
   export = theme;
 }
 
-declare module "@mobile/themes/varsity-dark.js" {
+declare module '@mobile/themes/varsity-dark.js' {
   const theme: VarsityDarkTheme;
   export = theme;
 }
