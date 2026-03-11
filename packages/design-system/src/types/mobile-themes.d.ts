@@ -332,6 +332,7 @@ interface StartribuneLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -343,6 +344,9 @@ interface StartribuneLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -668,6 +672,7 @@ interface StartribuneDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -679,6 +684,9 @@ interface StartribuneDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1010,6 +1018,7 @@ interface VarsityLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -1021,6 +1030,9 @@ interface VarsityLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1352,6 +1364,7 @@ interface VarsityDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -1363,6 +1376,9 @@ interface VarsityDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
