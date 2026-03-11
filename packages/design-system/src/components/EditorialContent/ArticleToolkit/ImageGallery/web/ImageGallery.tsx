@@ -56,6 +56,9 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
 
   if (!images?.length) return null;
 
+  const captionClassName = 'typography-utility-text-regular-x-small';
+  const mediaTagClassName = 'typography-utility-label-semibold-large';
+
   return (
     <div className={classNames(styles.gallery, styles[variant])} data-testid="image-gallery">
       <div className={styles.innerContainer}>
@@ -96,8 +99,10 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
                 {/* Camera counter — show on all slides for standard, only active for immersive */}
                 {(!isImmersive || i === activeIndex) && (
                   <div className={styles.mediaTag}>
-                    <Icon component={CameraFilledIcon} size="x-small" />
-                    {(isImmersive ? activeIndex : i) + 1}/{total}
+                    <Icon component={CameraFilledIcon} size="medium" />
+                    <span className={mediaTagClassName}>
+                      {(isImmersive ? activeIndex : i) + 1}/{total}
+                    </span>
                   </div>
                 )}
               </div>
@@ -107,7 +112,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
 
         {/* caption + controls */}
         <div className={styles.bottomSection}>
-          <div className={styles.caption}>
+          <div className={classNames(captionClassName, styles.caption)}>
             {images[activeIndex]?.caption}
             {images[activeIndex]?.credit && <> {images[activeIndex].credit}</>}
           </div>
@@ -121,6 +126,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
                 aria-label="Previous image"
                 onClick={prev}
                 isDisabled={!isImmersive && activeIndex === 0}
+                className={styles.navButton}
               />
               <Button
                 variant="ghost"
@@ -129,6 +135,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
                 aria-label="Next image"
                 onClick={next}
                 isDisabled={!isImmersive && activeIndex === total - 1}
+                className={styles.navButton}
               />
             </div>
           )}
