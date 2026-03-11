@@ -132,7 +132,7 @@
   color: var(--color-text-on-dark-primary);
 
   &::placeholder {
-    color: var(--color-text-on-dark-tertiary);
+    color: var(--color-text-state-disabled-on-dark);
   }
 
   &:disabled {
@@ -160,7 +160,7 @@
   padding: 0; /* Reset browser defaults - spacing comes from wrapper padding + gap */
   font-family: inherit;
   font-size: inherit;
-  line-height: inherit;
+  line-height: 1.25; /* Tighter line-height for better vertical alignment with icons */
   color: var(--color-text-on-light-primary);
   background: transparent;
   border: none;
@@ -168,7 +168,7 @@
 
   /* Placeholder uses italic typography (from PLACEHOLDER_TYPOGRAPHY class); value uses regular */
   &::placeholder {
-    color: var(--color-text-on-light-tertiary);
+    color: var(--color-text-state-disabled-on-light);
   }
 
   /* When user has typed (placeholder not shown), override to regular weight for value text */
@@ -184,12 +184,14 @@
 
 /* Icon container - leading or trailing */
 /* Gap between icon and input text is handled by wrapper's gap property */
+/* Use line-height: 0 to remove extra space from inline SVG, ensuring icon centers with text */
 .iconStart,
 .iconEnd {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  line-height: 0;
   color: var(--color-text-on-light-tertiary);
   pointer-events: none;
 }
@@ -200,6 +202,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  line-height: 0;
   color: var(--color-border-brand-01);
   pointer-events: none;
 }
