@@ -6,20 +6,16 @@ import styles from './PhotoLayout.module.scss';
 interface PhotoLayoutGridProps {
   images: ImageData[];
   expandable: boolean;
-  openIndex: number | null;
   dataTestId: string;
   imgixParams?: string;
-  lastTriggerRef: React.MutableRefObject<HTMLButtonElement | null>;
   onExpand: (index: number, el: HTMLButtonElement) => void;
 }
 
 export const PhotoLayoutGrid: React.FC<PhotoLayoutGridProps> = ({
   images,
   expandable,
-  openIndex,
   dataTestId,
   imgixParams,
-  lastTriggerRef,
   onExpand,
 }) => (
   <div className={styles.grid}>
@@ -37,12 +33,9 @@ export const PhotoLayoutGrid: React.FC<PhotoLayoutGridProps> = ({
         />
         {expandable && (
           <button
-            ref={(el) => {
-              if (openIndex === index) lastTriggerRef.current = el;
-            }}
             type="button"
             className={styles['expand-button']}
-            aria-label={`Expand image ${index + 1}`}
+            aria-label={`Expand image ${index + 1} of ${images.length}`}
             aria-haspopup="dialog"
             onClick={(e) => onExpand(index, e.currentTarget)}
           >

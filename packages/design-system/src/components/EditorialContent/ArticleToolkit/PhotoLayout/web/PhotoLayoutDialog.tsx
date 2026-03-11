@@ -21,8 +21,12 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
   dialogRef,
   onClose,
 }) => {
-  const hasCaption = caption && caption.trim() !== '';
-  const hasCredit = imageCredit && imageCredit.trim() !== '';
+  const hasCaption = Boolean(caption?.trim());
+  const hasCredit = Boolean(imageCredit?.trim());
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === dialogRef.current) onClose();
+  };
 
   return (
     <dialog
@@ -30,9 +34,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
       className={styles.dialog}
       aria-label={image.altText}
       onClose={onClose}
-      onClick={(e) => {
-        if (e.target === dialogRef.current) onClose();
-      }}
+      onClick={handleBackdropClick}
     >
       <button
         type="button"
@@ -52,6 +54,8 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
             alt={image.altText}
             className={styles['dialog-image']}
             imgixParams={imgixParams}
+            loading="eager"
+            decoding="async"
           />
         </div>
 
