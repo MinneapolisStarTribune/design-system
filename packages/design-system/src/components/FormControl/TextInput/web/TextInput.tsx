@@ -23,7 +23,6 @@ const PLACEHOLDER_TYPOGRAPHY: Record<TextInputSize, string> = {
   large: 'typography-utility-text-italic-large',
 };
 
-
 export interface TextInputProps
   extends FormControlProps,
     AccessibilityProps,
