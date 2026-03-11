@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { layoutImageCount, PhotoLayout, PhotoLayoutProps } from './PhotoLayout';
+import { layoutImageCount, PhotoLayout } from './PhotoLayout';
+import type { PhotoLayoutProps } from '../PhotoLayout.types';
 
 const meta: Meta<PhotoLayoutProps> = {
   title: 'Editorial Content/Article Toolkit/Photo Layout',
