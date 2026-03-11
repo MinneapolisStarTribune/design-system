@@ -57,6 +57,8 @@ interface StartribuneLightTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnLight: string;
+  colorBorderStateSuccessOnDark: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -264,6 +266,7 @@ interface StartribuneLightTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnLight: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -373,6 +376,8 @@ interface StartribuneDarkTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnLight: string;
+  colorBorderStateSuccessOnDark: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -580,6 +585,8 @@ interface StartribuneDarkTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnLight: string;
+  colorTextStateSuccessOnDark: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -689,6 +696,8 @@ interface VarsityLightTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnLight: string;
+  colorBorderStateSuccessOnDark: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -902,6 +911,8 @@ interface VarsityLightTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnDark: string;
+  colorTextStateSuccessOnLight: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -1011,6 +1022,8 @@ interface VarsityDarkTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnLight: string;
+  colorBorderStateSuccessOnDark: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -1224,6 +1237,8 @@ interface VarsityDarkTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnLight: string;
+  colorTextStateSuccessOnDark: string;
   colorYellow100: string;
   colorYellow200: string;
   colorYellow300: string;
@@ -1287,22 +1302,22 @@ interface VarsityDarkTheme {
   textSize2xxl: string;
 }
 
-declare module '@mobile/themes/startribune-light.js' {
+declare module "@mobile/themes/startribune-light.js" {
   const theme: StartribuneLightTheme;
   export = theme;
 }
 
-declare module '@mobile/themes/startribune-dark.js' {
+declare module "@mobile/themes/startribune-dark.js" {
   const theme: StartribuneDarkTheme;
   export = theme;
 }
 
-declare module '@mobile/themes/varsity-light.js' {
+declare module "@mobile/themes/varsity-light.js" {
   const theme: VarsityLightTheme;
   export = theme;
 }
 
-declare module '@mobile/themes/varsity-dark.js' {
+declare module "@mobile/themes/varsity-dark.js" {
   const theme: VarsityDarkTheme;
   export = theme;
 }

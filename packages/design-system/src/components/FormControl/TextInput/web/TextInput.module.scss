@@ -1,0 +1,214 @@
+/* TextInput component - single-line text input for names, emails, etc. */
+/* Uses design tokens for colors, spacing, typography */
+/* Supports both light and dark themes via .sb-dark (Storybook) or [data-theme="dark"] */
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  /* 8px gap between icon and placeholder text (Figma spec) */
+  gap: var(--spacing-8);
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: var(--radius-4);
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  background-color: var(--color-background-light-default);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  /* Size variants - Figma spec: 16px horizontal (edge to icon), 8px gap icon↔text, 12px vertical */
+  &.small {
+    height: 32px;
+    min-height: 32px;
+    padding: var(--spacing-8) var(--spacing-16);
+  }
+
+  &.medium {
+    height: 40px;
+    min-height: 40px;
+    padding: var(--spacing-12) var(--spacing-16);
+  }
+
+  &.large {
+    height: 52px;
+    min-height: 52px;
+    padding: var(--spacing-12) var(--spacing-16);
+  }
+
+  /* Rounded (pill) variant */
+  &.rounded {
+    border-radius: var(--radius-full);
+
+    /* Pill inputs need extra horizontal padding so content clears the curved ends */
+    &.small  { padding: var(--spacing-8) var(--spacing-16); }
+    &.medium { padding: var(--spacing-12) var(--spacing-20); }
+    &.large  { padding: var(--spacing-12) var(--spacing-24); }
+  }
+
+  /* Hover - darker border */
+  &:hover:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-light-subtle-02);
+  }
+
+  /* Focus - darker border + focus ring for accessibility (keyboard focus only via :focus-visible) */
+  &:focus-within .input:focus-visible {
+    outline: none;
+  }
+
+  &:has(.input:focus-visible) {
+    border-color: var(--color-border-state-focus);
+    box-shadow: 0 0 0 2px var(--color-border-state-focus);
+  }
+
+  /* Filled - subtle visual indication when value present */
+  &.filled:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-light-strong-01);
+  }
+
+  /* Error state - red border, only when error is present */
+  &.error:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-state-attention-on-light);
+  }
+
+  &.error {
+    border-color: var(--color-border-state-attention-on-light);
+  }
+
+  /* Success state - green border */
+  &.success:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-state-success-on-light);
+  }
+
+  &.success {
+    border-color: var(--color-border-state-success-on-light);
+  }
+
+  /* Disabled state - muted grey background and border, faded text */
+  &.disabled {
+    cursor: not-allowed;
+    border-color: var(--color-border-state-disabled-on-light);
+    background-color: var(--color-background-light-gray-01);
+  }
+}
+
+/* Dark theme - when sb-dark (Storybook) or data-theme="dark" is present */
+.sb-dark .wrapper,
+[data-theme='dark'] .wrapper {
+  border-color: var(--color-border-on-dark-subtle-01);
+  background-color: var(--color-background-dark-gray-01);
+
+  &:hover:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-dark-subtle-02);
+  }
+
+  &.filled:not(.disabled):not(.error):not(.success) {
+    border-color: var(--color-border-on-dark-strong-01);
+  }
+
+  &.disabled {
+    border-color: var(--color-border-state-disabled-on-dark);
+    background-color: var(--color-background-dark-gray-02);
+  }
+
+  &.error {
+    border-color: var(--color-border-state-attention-on-dark);
+  }
+
+  &.error:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-state-attention-on-dark);
+  }
+
+  &.success {
+    border-color: var(--color-border-brand-01);
+  }
+
+  &.success:has(.input:focus-visible) {
+    box-shadow: 0 0 0 2px var(--color-border-brand-01);
+  }
+}
+
+.sb-dark .input,
+[data-theme='dark'] .input {
+  color: var(--color-text-on-dark-primary);
+
+  &::placeholder {
+    color: var(--color-text-on-dark-tertiary);
+  }
+
+  &:disabled {
+    color: var(--color-text-state-disabled-on-dark);
+  }
+}
+
+.sb-dark .iconStart,
+.sb-dark .iconEnd,
+[data-theme='dark'] .iconStart,
+[data-theme='dark'] .iconEnd {
+  color: var(--color-text-on-dark-tertiary);
+}
+
+.sb-dark .iconSuccess,
+[data-theme='dark'] .iconSuccess {
+  color: var(--color-border-brand-01);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
+  padding: 0; /* Reset browser defaults - spacing comes from wrapper padding + gap */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--color-text-on-light-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-on-light-tertiary);
+  }
+
+  /* Size variants - font size (padding from wrapper) */
+  .wrapper.small & {
+    font-size: 14px;
+  }
+
+  .wrapper.medium & {
+    font-size: 16px;
+  }
+
+  .wrapper.large & {
+    font-size: 18px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--color-text-state-disabled-on-light);
+  }
+}
+
+/* Icon container - leading or trailing */
+/* Gap between icon and input text is handled by wrapper's gap property */
+.iconStart,
+.iconEnd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-on-light-tertiary);
+  pointer-events: none;
+}
+
+/* Success checkmark - green to match success border */
+.iconSuccess {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-border-brand-01);
+  pointer-events: none;
+}
+
+/* Icon inherits size from Icon component (x-small/small/medium based on input size) */
