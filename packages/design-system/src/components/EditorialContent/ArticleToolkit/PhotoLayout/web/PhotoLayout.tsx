@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import type { PhotoLayoutType } from '../../types';
+import type { PhotoLayoutProps } from '../PhotoLayout.types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
 import { PhotoLayoutDialog } from './PhotoLayoutDialog';
 import styles from './PhotoLayout.module.scss';
-import { PhotoLayoutProps } from '../PhotoLayout.types';
 
 export const layoutImageCount: Record<PhotoLayoutType, number> = {
   '2up': 2,
@@ -76,10 +76,8 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
         <PhotoLayoutGrid
           images={images}
           expandable={expandable}
-          openIndex={openIndex}
           dataTestId={dataTestId}
           imgixParams={imgixParams}
-          lastTriggerRef={lastTriggerRef}
           onExpand={handleExpand}
         />
         {captionText && (
