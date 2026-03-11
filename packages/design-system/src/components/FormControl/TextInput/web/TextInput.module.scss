@@ -119,11 +119,11 @@
   }
 
   &.success {
-    border-color: var(--color-border-brand-01);
+    border-color: var(--color-border-state-success-on-dark);
   }
 
   &.success:has(.input:focus-visible) {
-    box-shadow: 0 0 0 2px var(--color-border-brand-01);
+    box-shadow: 0 0 0 2px var(--color-border-state-success-on-dark);
   }
 }
 
@@ -149,7 +149,7 @@
 
 .sb-dark .iconSuccess,
 [data-theme='dark'] .iconSuccess {
-  color: var(--color-border-brand-01);
+  color: var(--color-border-state-success-on-dark);
 }
 
 .input {

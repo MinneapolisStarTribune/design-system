@@ -22,8 +22,8 @@ export const FormGroupDescription: React.FC<FormGroupDescriptionProps> = ({
       className="typography-utility-text-regular-x-small"
       style={{
         display: 'block',
-        marginTop: 'var(--space-2, 2px)',
-        marginBottom: 'var(--space-8, 8px)',
+        marginTop: 'var(--spacing-2, 2px)',
+        marginBottom: 'var(--spacing-8, 8px)',
       }}
     >
       {children}
