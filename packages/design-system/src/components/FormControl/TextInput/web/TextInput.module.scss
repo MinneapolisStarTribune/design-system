@@ -12,15 +12,15 @@
   position: relative;
   box-sizing: border-box;
   border-radius: var(--radius-4);
-  border: 1px solid var(--color-border-on-light-subtle-01);
+  border: 1px solid var(--color-border-on-light-subtle-02);
   background-color: var(--color-background-light-default);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
-  /* Size variants - Figma spec: 16px horizontal (edge to icon), 8px gap icon↔text, 12px vertical */
+  /* Size variants - Figma spec: 12px horizontal for small, 16px for medium/large; 8px gap icon↔text */
   &.small {
     height: 32px;
     min-height: 32px;
-    padding: var(--spacing-8) var(--spacing-16);
+    padding: var(--spacing-8) var(--spacing-12);
   }
 
   &.medium {
@@ -40,14 +40,14 @@
     border-radius: var(--radius-full);
 
     /* Pill inputs need extra horizontal padding so content clears the curved ends */
-    &.small  { padding: var(--spacing-8) var(--spacing-16); }
+    &.small  { padding: var(--spacing-8) var(--spacing-12); }
     &.medium { padding: var(--spacing-12) var(--spacing-20); }
     &.large  { padding: var(--spacing-12) var(--spacing-24); }
   }
 
   /* Hover - darker border */
   &:hover:not(.disabled):not(.error):not(.success) {
-    border-color: var(--color-border-on-light-subtle-02);
+    border-color: var(--color-border-on-light-strong-02);
   }
 
   /* Focus - darker border + focus ring for accessibility (keyboard focus only via :focus-visible) */
@@ -57,7 +57,7 @@
 
   &:has(.input:focus-visible) {
     border-color: var(--color-border-state-focus);
-    box-shadow: 0 0 0 2px var(--color-border-state-focus);
+    box-shadow: 0 0 0 1px var(--color-border-state-focus);
   }
 
   /* Filled - subtle visual indication when value present */
@@ -67,7 +67,7 @@
 
   /* Error state - red border, only when error is present */
   &.error:has(.input:focus-visible) {
-    box-shadow: 0 0 0 2px var(--color-border-state-attention-on-light);
+    box-shadow: 0 0 0 1px var(--color-border-state-attention-on-light);
   }
 
   &.error {
@@ -76,7 +76,7 @@
 
   /* Success state - green border */
   &.success:has(.input:focus-visible) {
-    box-shadow: 0 0 0 2px var(--color-border-state-success-on-light);
+    box-shadow: 0 0 0 1px var(--color-border-state-success-on-light);
   }
 
   &.success {
@@ -115,7 +115,7 @@
   }
 
   &.error:has(.input:focus-visible) {
-    box-shadow: 0 0 0 2px var(--color-border-state-attention-on-dark);
+    box-shadow: 0 0 0 1px var(--color-border-state-attention-on-dark);
   }
 
   &.success {
@@ -123,7 +123,7 @@
   }
 
   &.success:has(.input:focus-visible) {
-    box-shadow: 0 0 0 2px var(--color-border-state-success-on-dark);
+    box-shadow: 0 0 0 1px var(--color-border-state-success-on-dark);
   }
 }
 
@@ -166,21 +166,14 @@
   border: none;
   outline: none;
 
+  /* Placeholder uses italic typography (from PLACEHOLDER_TYPOGRAPHY class); value uses regular */
   &::placeholder {
     color: var(--color-text-on-light-tertiary);
   }
 
-  /* Size variants - font size (padding from wrapper) */
-  .wrapper.small & {
-    font-size: 14px;
-  }
-
-  .wrapper.medium & {
-    font-size: 16px;
-  }
-
-  .wrapper.large & {
-    font-size: 18px;
+  /* When user has typed (placeholder not shown), override to regular weight for value text */
+  &.valueTypography:not(:placeholder-shown) {
+    font-style: normal;
   }
 
   &:disabled {
