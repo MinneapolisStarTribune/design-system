@@ -1,19 +1,10 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import type { ArticleToolkitBaseProps, ImageData, PhotoLayoutType } from '../../types';
+import type { PhotoLayoutType } from '../../types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
 import { PhotoLayoutDialog } from './PhotoLayoutDialog';
 import styles from './PhotoLayout.module.scss';
-
-export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
-  caption?: string;
-  imageList: ImageData[];
-  photoLayout?: PhotoLayoutType;
-  imageCredit?: string;
-  imgixParams?: string;
-  variant?: 'immersive'; // Restricting variant to 'immersive' for now, can be expanded in the future if needed
-  expandable?: boolean;
-}
+import { PhotoLayoutProps } from '../PhotoLayout.types';
 
 export const layoutImageCount: Record<PhotoLayoutType, number> = {
   '2up': 2,
