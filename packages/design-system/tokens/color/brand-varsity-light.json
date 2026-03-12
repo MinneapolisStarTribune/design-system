@@ -398,6 +398,16 @@
         "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs.",
         "value": "{color.neutral.400}"
       }
+    },
+    "utility-toggle": {
+      "active-icon-default": {
+        "description": "Default icon color for active utility toggle controls on light backgrounds.",
+        "value": "{color.cobalt-blue.700}"
+      },
+      "active-icon-hover": {
+        "description": "Hover icon color for active utility toggle controls on light backgrounds.",
+        "value": "{color.cobalt-blue.700}"
+      }
     }
   }
 }
