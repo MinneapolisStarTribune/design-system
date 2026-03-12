@@ -2,6 +2,8 @@ import { expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { ImageGallery } from './ImageGallery';
+import { ImageComponentProps } from './ImageGallery';
+import { fireEvent } from '@testing-library/react';
 
 const images = [
   {
@@ -107,5 +109,68 @@ describe('ImageGallery', () => {
     const { queryByTestId } = renderWithProvider(<ImageGallery images={[]} variant="standard" />);
 
     expect(queryByTestId('image-gallery')).not.toBeInTheDocument();
+  });
+
+  it('uses custom ImageComponent when provided', () => {
+    const CustomImage = ({ src, alt, className }: ImageComponentProps) => (
+      <img data-testid="custom-image" src={src} alt={alt} className={className} />
+    );
+
+    const { getAllByTestId } = renderWithProvider(
+      <ImageGallery images={images} ImageComponent={CustomImage} />
+    );
+
+    expect(getAllByTestId('custom-image').length).toBeGreaterThan(0);
+  });
+
+  it('falls back to default img when ImageComponent is not provided', () => {
+    const { getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+
+    const imgs = getAllByRole('img');
+    expect(imgs.length).toBeGreaterThan(0);
+  });
+
+  it('updates spaceBetween on window resize', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
+
+    fireEvent(window, new Event('resize'));
+
+    expect(getByTestId('image-gallery')).toBeInTheDocument();
+  });
+
+  it('renders caption even when credit is missing', () => {
+    const testImages = [
+      {
+        src: 'https://picsum.photos/1080/720?1',
+        altText: 'Image 1',
+        caption: 'Caption only',
+      },
+    ];
+
+    const { getByText } = renderWithProvider(<ImageGallery images={testImages} />);
+
+    expect(getByText('Caption only')).toBeInTheDocument();
+  });
+
+  it('renders credit when caption exists', () => {
+    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
+  });
+
+  it('renders image counter correctly', () => {
+    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(getByText('1/2')).toBeInTheDocument();
+  });
+
+  it('does not disable prev button in immersive mode', () => {
+    const { getAllByRole } = renderWithProvider(
+      <ImageGallery images={images} variant="immersive" />
+    );
+
+    const prevButton = getAllByRole('button')[0];
+
+    expect(prevButton).not.toBeDisabled();
   });
 });

@@ -16,6 +16,9 @@ import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
 
 import styles from './ImageGallery.module.scss';
 
+/**
+ * Imagegallery variant props
+ */
 export type Variant = 'standard' | 'immersive';
 
 export interface ImageItem {
@@ -25,10 +28,32 @@ export interface ImageItem {
   credit?: string;
 }
 
+/**
+ * Props passed to a custom image renderer.
+ */
+export interface ImageComponentProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
+
 export interface ImageGalleryProps {
   images: ImageItem[];
   variant?: Variant;
+
+  /**
+   * Optional custom image renderer.
+   * Example: next/image or picture component.
+   */
+  ImageComponent?: React.ComponentType<ImageComponentProps>;
 }
+
+/**
+ * Default fallback image.
+ */
+const DefaultImage: React.FC<ImageComponentProps> = ({ src, alt, className }) => (
+  <img src={src} alt={alt} className={className} loading="lazy" />
+);
 
 const getSpaceBetween = (): number => {
   const width = window.innerWidth;
@@ -37,13 +62,19 @@ const getSpaceBetween = (): number => {
   return 24;
 };
 
-export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 'standard' }) => {
+export const ImageGallery: React.FC<ImageGalleryProps> = ({
+  images,
+  variant = 'standard',
+  ImageComponent,
+}) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [spaceBetween, setSpaceBetween] = useState(24);
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
+
+  const Img = ImageComponent ?? DefaultImage;
 
   useEffect(() => {
     const handleResize = () => setSpaceBetween(getSpaceBetween());
@@ -60,7 +91,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
   const mediaTagClassName = 'typography-utility-label-semibold-large';
 
   return (
-    <div className={classNames(styles.gallery, styles[variant])} data-testid="image-gallery">
+    <div
+      className={classNames(styles.gallery, styles[variant])}
+      data-testid="image-gallery"
+      role="region"
+      aria-label="Image gallery"
+    >
       <div className={styles.innerContainer}>
         <Swiper
           onSwiper={(swiper) => {
@@ -72,13 +108,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
           effect={isImmersive ? 'coverflow' : undefined}
           coverflowEffect={
             isImmersive
-              ? {
-                  rotate: 0,
-                  stretch: 0,
-                  depth: 0,
-                  modifier: 1,
-                  slideShadows: true,
-                }
+              ? { rotate: 0, stretch: 0, depth: 0, modifier: 1, slideShadows: true }
               : undefined
           }
           spaceBetween={spaceBetween}
@@ -95,8 +125,8 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
           {images.map((img, i) => (
             <SwiperSlide key={i} className={styles.slide}>
               <div className={styles.imageWrapper}>
-                <img src={img.src} alt={img.altText} className={styles.image} />
-                {/* Camera counter — show on all slides for standard, only active for immersive */}
+                <Img src={img.src} alt={img.altText} className={styles.image} />
+
                 {(!isImmersive || i === activeIndex) && (
                   <div className={styles.mediaTag}>
                     <Icon component={CameraFilledIcon} size="medium" />
@@ -110,7 +140,6 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
           ))}
         </Swiper>
 
-        {/* caption + controls */}
         <div className={styles.bottomSection}>
           <div className={classNames(captionClassName, styles.caption)}>
             {images[activeIndex]?.caption}
@@ -128,6 +157,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ images, variant = 's
                 isDisabled={!isImmersive && activeIndex === 0}
                 className={styles.navButton}
               />
+
               <Button
                 variant="ghost"
                 size="small"

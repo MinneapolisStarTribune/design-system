@@ -1,5 +1,7 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ImageGallery } from './ImageGallery';
+import { ImageComponentProps, ImageGalleryProps } from './ImageGallery';
 
 const meta: Meta<typeof ImageGallery> = {
   title: 'ArticleToolkit/ImageGallery',
@@ -38,6 +40,14 @@ const images = [
   },
 ];
 
+/**
+ * Example custom image renderer — swap this out for next/image, a <picture>
+ * element, or any other image abstraction used in your project.
+ */
+const CustomImageComponent = ({ src, alt, className }: ImageComponentProps): React.ReactElement => (
+  <img src={src} alt={alt} className={className} loading="lazy" decoding="async" />
+);
+
 export const Standard: Story = {
   args: {
     variant: 'standard',
@@ -46,6 +56,26 @@ export const Standard: Story = {
 };
 
 export const Immersive: Story = {
+  args: {
+    variant: 'immersive',
+    images,
+  },
+};
+
+export const StandardWithCustomImageComponent: Story = {
+  render: (args: ImageGalleryProps) => (
+    <ImageGallery {...args} ImageComponent={CustomImageComponent} />
+  ),
+  args: {
+    variant: 'standard',
+    images,
+  },
+};
+
+export const ImmersiveWithCustomImageComponent: Story = {
+  render: (args: ImageGalleryProps) => (
+    <ImageGallery {...args} ImageComponent={CustomImageComponent} />
+  ),
   args: {
     variant: 'immersive',
     images,
