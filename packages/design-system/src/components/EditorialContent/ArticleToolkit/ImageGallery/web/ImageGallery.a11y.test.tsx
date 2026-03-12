@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { ImageGallery } from './ImageGallery';
+import { ImageComponentProps } from './ImageGallery';
 
 const images = [
   {
@@ -53,6 +54,12 @@ describe('ImageGallery Accessibility', () => {
       await userEvent.tab();
 
       await checkA11y();
+    });
+
+    it('has no accessibility violations with custom ImageComponent', async () => {
+      const CustomImage = ({ src, alt }: ImageComponentProps) => <img src={src} alt={alt} />;
+
+      await expectNoA11yViolations(<ImageGallery images={images} ImageComponent={CustomImage} />);
     });
   });
 });
