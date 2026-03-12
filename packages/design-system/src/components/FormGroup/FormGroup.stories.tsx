@@ -29,7 +29,6 @@ interface FormGroupStoryArgs {
 const meta = {
   title: 'Components/Actions & Inputs/FormGroup',
   component: FormGroup,
-  parameters: {},
   tags: ['autodocs'],
   argTypes: {
     showLabel: {
