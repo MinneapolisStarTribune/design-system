@@ -57,6 +57,8 @@ interface StartribuneLightTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnDark: string;
+  colorBorderStateSuccessOnLight: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -264,6 +266,8 @@ interface StartribuneLightTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnDark: string;
+  colorTextStateSuccessOnLight: string;
   colorUtilityBorderDefault: string;
   colorUtilityBorderHover: string;
   colorUtilityForegroundDefault: string;
@@ -389,6 +393,8 @@ interface StartribuneDarkTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnDark: string;
+  colorBorderStateSuccessOnLight: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -596,6 +602,8 @@ interface StartribuneDarkTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnDark: string;
+  colorTextStateSuccessOnLight: string;
   colorUtilityBorderDefault: string;
   colorUtilityBorderHover: string;
   colorUtilityForegroundDefault: string;
@@ -721,6 +729,8 @@ interface VarsityLightTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnDark: string;
+  colorBorderStateSuccessOnLight: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -934,6 +944,8 @@ interface VarsityLightTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnDark: string;
+  colorTextStateSuccessOnLight: string;
   colorUtilityBorderDefault: string;
   colorUtilityBorderHover: string;
   colorUtilityForegroundDefault: string;
@@ -1059,6 +1071,8 @@ interface VarsityDarkTheme {
   colorBorderStateDisabledOnDark: string;
   colorBorderStateDisabledOnLight: string;
   colorBorderStateFocus: string;
+  colorBorderStateSuccessOnDark: string;
+  colorBorderStateSuccessOnLight: string;
   colorBrand01: string;
   colorBrand02: string;
   colorBrand03: string;
@@ -1272,6 +1286,8 @@ interface VarsityDarkTheme {
   colorTextStateAttentionOnLight: string;
   colorTextStateDisabledOnDark: string;
   colorTextStateDisabledOnLight: string;
+  colorTextStateSuccessOnDark: string;
+  colorTextStateSuccessOnLight: string;
   colorUtilityBorderDefault: string;
   colorUtilityBorderHover: string;
   colorUtilityForegroundDefault: string;

@@ -115,6 +115,14 @@
       "state-focus": {
         "description": "Functional border used to indicate interactive focus states for components — provides clear visual feedback for accessibility and navigation.",
         "value": "{color.neutral.950}"
+      },
+      "state-success-on-dark": {
+        "description": "Success border color used on dark backgrounds to indicate validation passed or positive feedback.",
+        "value": "{color.emerald-green.400}"
+      },
+      "state-success-on-light": {
+        "description": "Success border used on light backgrounds to indicate validation passed or positive feedback.",
+        "value": "{color.emerald-green.800}"
       }
     },
     "brand": {
@@ -375,6 +383,14 @@
       "state-disabled-on-light": {
         "description": "Disabled text color for use on light backgrounds — communicates inactive or non-interactive states for components and inputs.",
         "value": "{color.neutral.400}"
+      },
+      "state-success-on-dark": {
+        "description": "Success text color used on dark backgrounds to indicate validation passed or positive feedback.",
+        "value": "{color.emerald-green.400}"
+      },
+      "state-success-on-light": {
+        "description": "Success text color used on light backgrounds to indicate validation passed or positive feedback",
+        "value": "{color.emerald-green.800}"
       }
     },
     "utility-toggle": {
