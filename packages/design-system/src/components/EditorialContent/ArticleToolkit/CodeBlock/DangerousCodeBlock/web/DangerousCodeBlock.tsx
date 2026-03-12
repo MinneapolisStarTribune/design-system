@@ -76,7 +76,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
     };
   }, [content, executeScripts]);
 
-  const sizeClass = !cleanQuotes && size ? styles[`size-${size}`] : undefined;
+  const widthClass = cleanQuotes ? styles['size-full'] : size ? styles[`size-${size}`] : undefined;
 
   return (
     <div
@@ -85,7 +85,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
       className={classNames(
         styles['dangerous-code-block'],
         styles[`variant-${variant}`],
-        sizeClass,
+        widthClass,
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}
