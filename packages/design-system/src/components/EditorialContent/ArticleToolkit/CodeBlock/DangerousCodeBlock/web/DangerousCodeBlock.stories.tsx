@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DangerousCodeBlock } from './DangerousCodeBlock';
 import type { DangerousCodeBlockProps } from '../DangerousCodeBlock.types';
+import { CODE_BLOCK_SIZES } from '../../../types';
 
 const meta: Meta<typeof DangerousCodeBlock> = {
   title: 'EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock',
   component: DangerousCodeBlock,
-  parameters: {
-    layout: 'fullscreen',
-  },
+  parameters: { layout: 'fullscreen' },
   argTypes: {
     variant: {
       control: { type: 'radio' },
@@ -24,11 +23,8 @@ const meta: Meta<typeof DangerousCodeBlock> = {
     },
     size: {
       control: { type: 'radio' },
-      options: ['small', 'medium', 'large'],
+      options: CODE_BLOCK_SIZES,
       description: 'Size of the code block',
-    },
-    className: {
-      control: 'text',
     },
   },
 };
@@ -58,39 +54,32 @@ const scriptMarkup = `
 
 const createArgs = (
   variant: DangerousCodeBlockProps['variant'],
-  size: DangerousCodeBlockProps['size']
-) => ({
-  markup: baseMarkup,
-  variant,
-  size,
-  cleanQuotes: false,
-});
+  size: DangerousCodeBlockProps['size'],
+  cleanQuotes = true
+) => ({ markup: baseMarkup, variant, size, cleanQuotes });
 
-export const Configurable: Story = {
-  args: createArgs('standard', 'full'),
-};
+const renderVariantWithSizes = (variant: DangerousCodeBlockProps['variant']) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    {CODE_BLOCK_SIZES.map((size) => (
+      <div
+        key={`${variant}-${size}`}
+        style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+      >
+        <h3
+          style={{
+            textTransform: 'capitalize',
+            textAlign: 'center',
+          }}
+        >
+          {size}
+        </h3>
+        <DangerousCodeBlock {...createArgs(variant, size, false)} />
+      </div>
+    ))}
+  </div>
+);
 
-export const StandardFull: Story = { args: createArgs('standard', 'full') };
-export const StandardLarge: Story = { args: createArgs('standard', 'large') };
-export const StandardMedium: Story = { args: createArgs('standard', 'medium') };
-export const StandardInline: Story = { args: createArgs('standard', 'inline') };
-
-export const ImmersiveFull: Story = { args: createArgs('immersive', 'full') };
-export const ImmersiveLarge: Story = { args: createArgs('immersive', 'large') };
-export const ImmersiveMedium: Story = { args: createArgs('immersive', 'medium') };
-export const ImmersiveInline: Story = { args: createArgs('immersive', 'inline') };
-
-export const WithScript: Story = {
-  args: {
-    markup: scriptMarkup,
-    variant: 'standard',
-    size: 'full',
-  },
-};
-
-export const WithoutQuoteCleaning: Story = {
-  args: {
-    ...createArgs('standard', 'full'),
-    cleanQuotes: false,
-  },
-};
+// Stories
+export const Configurable: Story = { args: createArgs('standard', 'full') };
+export const Standard: Story = { render: () => renderVariantWithSizes('standard') };
+export const Immersive: Story = { render: () => renderVariantWithSizes('immersive') };
