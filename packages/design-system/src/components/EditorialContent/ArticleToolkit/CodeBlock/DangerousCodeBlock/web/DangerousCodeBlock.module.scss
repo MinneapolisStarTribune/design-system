@@ -1,0 +1,17 @@
+.dangerous-code-block {
+  position: relative;
+  margin: var(--spacing-4) 0;
+  width: 100%;
+}
+
+.variant-standard {
+  max-width: 712px;
+}
+
+.variant-immersive {
+  grid-column: 1 / -1;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+}
