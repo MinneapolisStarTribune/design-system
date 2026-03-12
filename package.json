@@ -1,6 +1,6 @@
 {
   "name": "@minneapolisstartribune/design-system",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "main": "dist/web/root-entry-error.cjs.js",
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
