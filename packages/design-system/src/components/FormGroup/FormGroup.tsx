@@ -40,17 +40,27 @@ export const FormGroup: React.FC<FormGroupProps> & {
   let hasLabel = false;
   let hasDescription = false;
   let hasCaption = false;
+  let captionVariant: 'info' | 'error' | 'success' = 'info';
 
   childrenArray.forEach((child) => {
     if (isValidElement(child)) {
       if (child.type === FormGroup.Label) hasLabel = true;
       else if (child.type === FormGroup.Description) hasDescription = true;
-      else if (child.type === FormGroup.Caption) hasCaption = true;
+      else if (child.type === FormGroup.Caption) {
+        hasCaption = true;
+        captionVariant =
+          (child.props as { variant?: 'info' | 'error' | 'success' }).variant ?? 'info';
+      }
     }
   });
 
   return (
-    <FormGroupProvider hasLabel={hasLabel} hasDescription={hasDescription} hasCaption={hasCaption}>
+    <FormGroupProvider
+      hasLabel={hasLabel}
+      hasDescription={hasDescription}
+      hasCaption={hasCaption}
+      captionVariant={captionVariant}
+    >
       <div className={classNames('form-group', className)} data-testid={dataTestId}>
         {children}
       </div>
