@@ -15,11 +15,16 @@ const meta: Meta<typeof DangerousCodeBlock> = {
     },
     cleanQuotes: {
       control: 'boolean',
-      description: 'Replace smart quotes in markup',
+      description: 'Replace smart quotes in the markup',
     },
     markup: {
       control: 'text',
       description: 'Raw HTML markup injected into the DOM',
+    },
+    size: {
+      control: { type: 'radio' },
+      options: ['small', 'medium', 'large'],
+      description: 'Size of the code block',
     },
     className: {
       control: 'text',
@@ -50,50 +55,38 @@ const scriptMarkup = `
 </script>
 `;
 
+const createArgs = (variant: 'standard' | 'immersive', size: any) => ({
+  markup: baseMarkup,
+  variant,
+  size,
+  cleanQuotes: false,
+});
+
 export const Configurable: Story = {
-  args: {
-    markup: baseMarkup,
-    variant: 'standard',
-    cleanQuotes: true,
-  },
+  args: createArgs('standard', 'full'),
 };
 
-export const StandardVariant: Story = {
-  args: {
-    markup: baseMarkup,
-    variant: 'standard',
-    cleanQuotes: true,
-  },
-};
+export const StandardFull: Story = { args: createArgs('standard', 'full') };
+export const StandardLarge: Story = { args: createArgs('standard', 'large') };
+export const StandardMedium: Story = { args: createArgs('standard', 'medium') };
+export const StandardInline: Story = { args: createArgs('standard', 'inline') };
 
-export const ImmersiveVariant: Story = {
-  args: {
-    markup: baseMarkup,
-    variant: 'immersive',
-    cleanQuotes: true,
-  },
-};
+export const ImmersiveFull: Story = { args: createArgs('immersive', 'full') };
+export const ImmersiveLarge: Story = { args: createArgs('immersive', 'large') };
+export const ImmersiveMedium: Story = { args: createArgs('immersive', 'medium') };
+export const ImmersiveInline: Story = { args: createArgs('immersive', 'inline') };
 
-export const ScriptExecution: Story = {
+export const WithScript: Story = {
   args: {
     markup: scriptMarkup,
     variant: 'standard',
-    cleanQuotes: true,
+    size: 'full',
   },
 };
 
-export const QuoteCleaningEnabled: Story = {
+export const WithoutQuoteCleaning: Story = {
   args: {
-    markup: baseMarkup,
-    variant: 'standard',
-    cleanQuotes: true,
-  },
-};
-
-export const QuoteCleaningDisabled: Story = {
-  args: {
-    markup: baseMarkup,
-    variant: 'standard',
+    ...createArgs('standard', 'full'),
     cleanQuotes: false,
   },
 };

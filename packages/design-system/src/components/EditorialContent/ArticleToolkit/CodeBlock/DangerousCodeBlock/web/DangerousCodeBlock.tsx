@@ -15,6 +15,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   markup,
   variant = 'standard',
   cleanQuotes = true,
+  size,
   className,
   dataTestId = 'dangerous-code-block',
   ...accessibilityProps
@@ -24,7 +25,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
 
   const cleanMarkup = useCallback(
     (html: string): string => {
-      if (!cleanQuotes) return html;
+      if (!html || !cleanQuotes) return html ?? '';
 
       let cleaned = html.replace(/[’‘]/g, "'");
       cleaned = cleaned.replace(/[“”″]/g, '"');
@@ -75,6 +76,8 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
     };
   }, [content, executeScripts]);
 
+  const sizeClass = !cleanQuotes && size ? styles[`size-${size}`] : undefined;
+
   return (
     <div
       ref={elRef}
@@ -82,6 +85,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
       className={classNames(
         styles['dangerous-code-block'],
         styles[`variant-${variant}`],
+        sizeClass,
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}
