@@ -2,7 +2,7 @@
   "color": {
     "base": {
       "black": { "value": "#000000" },
-      "white": { "value": "#ffffff" }
+      "white": { "value": "#666666" }
     },
     "cobalt-blue": {
       "50": { "value": "#F0F7FF" },
