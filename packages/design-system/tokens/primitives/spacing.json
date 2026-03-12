@@ -14,6 +14,7 @@
     "40": { "type": "dimension", "value": 40 },
     "44": { "type": "dimension", "value": 44 },
     "48": { "type": "dimension", "value": 48 },
+    "52": { "type": "dimension", "value": 52 },
     "56": { "type": "dimension", "value": 56 },
     "64": { "type": "dimension", "value": 64 },
     "72": { "type": "dimension", "value": 72 },
@@ -22,6 +23,9 @@
     "96": { "type": "dimension", "value": 96 },
     "button-lg": { "value": "{spacing.44}" },
     "button-md": { "value": "{spacing.40}" },
-    "button-sm": { "value": "{spacing.32}" }
+    "button-sm": { "value": "{spacing.32}" },
+    "input-lg": { "value": "{spacing.52}" },
+    "input-md": { "value": "{spacing.40}" },
+    "input-sm": { "value": "{spacing.32}" }
   }
 }

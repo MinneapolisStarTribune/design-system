@@ -1,6 +1,10 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
-export { FormControl, type FormControlProps } from './FormControl/FormControl';
-export { TextInput, type TextInputProps } from './FormControl/TextInput/TextInput';
+export {
+  FormControl,
+  type FormControlProps,
+  type FormControlSize,
+} from './FormControl/FormControl';
+export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
   type FormGroupCaptionProps,
