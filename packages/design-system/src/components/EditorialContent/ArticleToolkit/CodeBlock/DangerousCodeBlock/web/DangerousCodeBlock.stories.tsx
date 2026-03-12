@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DangerousCodeBlock } from './DangerousCodeBlock';
-import { DangerousCodeBlockProps } from '../DangerousCodeBlock.types';
+import type { DangerousCodeBlockProps } from '../DangerousCodeBlock.types';
 
 const meta: Meta<typeof DangerousCodeBlock> = {
   title: 'EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock',
