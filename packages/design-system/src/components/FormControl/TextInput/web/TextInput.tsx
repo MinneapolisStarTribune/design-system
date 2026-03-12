@@ -94,10 +94,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   const rightIcon = icon && iconPosition === 'end' ? iconElement : undefined;
 
   // Validated/success state shows checkmark icon at end (per design spec)
-  const successCheckmark =
-    hasSuccess && !hasError ? (
-      <SuccessIcon aria-hidden />
-    ) : null;
+  const successCheckmark = hasSuccess && !hasError ? <SuccessIcon aria-hidden /> : null;
 
   const wrapperClasses = classNames(
     styles.wrapper,
