@@ -40,18 +40,6 @@ const baseMarkup = `
 </div>
 `;
 
-const scriptMarkup = `
-<div id="dangerous-code-block-counter">Counter: 0</div>
-<script>
-  const el = document.getElementById("dangerous-code-block-counter");
-  let count = 0;
-  setInterval(() => {
-    count++;
-    el.innerText = "Counter: " + count;
-  }, 1000);
-</script>
-`;
-
 const createArgs = (
   variant: DangerousCodeBlockProps['variant'],
   size: DangerousCodeBlockProps['size'],
