@@ -103,7 +103,6 @@ const PopoverRoot: React.FC<PopoverProps> = ({
       if (!isControlled) setOpenState(nextOpen);
       onOpenChangeProp?.(nextOpen);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isDisabled, isControlled, onOpenChangeProp]
   );
 
@@ -112,6 +111,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
       offset(ARROW_HEIGHT + GAP),
       shift({ boundary: resolvedPortalRoot, padding: GAP }),
       flip({ boundary: resolvedPortalRoot, padding: GAP }),
+      // eslint-disable-next-line react-hooks/refs
       arrow({ element: arrowRef }),
     ],
     [resolvedPortalRoot]
@@ -180,6 +180,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           <FloatingPortal root={resolvedPortalRoot}>
             <FloatingFocusManager context={context} modal={modal}>
               <div
+                // eslint-disable-next-line react-hooks/refs
                 ref={refs.setFloating}
                 style={floatingStyles}
                 className={styles.wrapper}
