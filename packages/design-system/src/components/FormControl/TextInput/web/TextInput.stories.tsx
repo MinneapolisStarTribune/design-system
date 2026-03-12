@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from '../../FormControl';
 import { FormGroup } from '@/components/FormGroup/FormGroup';
-
-const labelStyle = {
-  display: 'block' as const,
-  fontSize: '0.75rem',
-  fontWeight: 600,
-  marginBottom: 4,
-};
+import { UtilityLabel } from '@/components/Typography/Utility';
 
 const cellStyle = { minWidth: 0 };
+
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+  <div style={{ marginBottom: 4 }}>
+    <UtilityLabel size="small" weight="semibold">{children}</UtilityLabel>
+  </div>
+);
 
 const meta = {
   title: 'Components/Actions & Inputs/TextInput',
@@ -122,7 +122,7 @@ export const AllVariants: Story = {
     >
       {/* Size */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Size: Small</span>
+        <SectionLabel>Size: Small</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -133,7 +133,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Size: Medium (Default)</span>
+        <SectionLabel>Size: Medium (Default)</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -144,7 +144,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Size: Large</span>
+        <SectionLabel>Size: Large</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -157,21 +157,21 @@ export const AllVariants: Story = {
 
       {/* Label variants */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Label: Default</span>
+        <SectionLabel>Label: Default</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput placeholderText="Placeholder text" aria-label="Default label" />
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Label: Optional</span>
+        <SectionLabel>Label: Optional</SectionLabel>
         <FormGroup>
           <FormGroup.Label optional>Label</FormGroup.Label>
           <FormControl.TextInput placeholderText="Placeholder text" aria-label="Optional label" />
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Label + Description</span>
+        <SectionLabel>Label + Description</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormGroup.Description>Description of the label</FormGroup.Description>
@@ -184,14 +184,14 @@ export const AllVariants: Story = {
 
       {/* Placeholder */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Placeholder: True</span>
+        <SectionLabel>Placeholder: True</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput placeholderText="Placeholder text" aria-label="With placeholder" />
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Placeholder: False</span>
+        <SectionLabel>Placeholder: False</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput aria-label="No placeholder" />
@@ -200,7 +200,7 @@ export const AllVariants: Story = {
 
       {/* Rounded */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Rounded</span>
+        <SectionLabel>Rounded</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -213,7 +213,7 @@ export const AllVariants: Story = {
 
       {/* Icons */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Left Icon</span>
+        <SectionLabel>Left Icon</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -225,7 +225,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Right Icon</span>
+        <SectionLabel>Right Icon</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -239,7 +239,7 @@ export const AllVariants: Story = {
 
       {/* Caption */}
       <div style={cellStyle}>
-        <span style={labelStyle}>Caption: Informational</span>
+        <SectionLabel>Caption: Informational</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput placeholderText="Placeholder text" aria-label="Info caption" />
@@ -247,7 +247,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Caption: Error</span>
+        <SectionLabel>Caption: Error</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -259,7 +259,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>Caption: Success</span>
+        <SectionLabel>Caption: Success</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -273,14 +273,14 @@ export const AllVariants: Story = {
 
       {/* States */}
       <div style={cellStyle}>
-        <span style={labelStyle}>State: Default</span>
+        <SectionLabel>State: Default</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput placeholderText="Placeholder text" aria-label="Default state" />
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>State: Filled</span>
+        <SectionLabel>State: Filled</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -291,7 +291,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>State: Error</span>
+        <SectionLabel>State: Error</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -303,7 +303,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>State: Success</span>
+        <SectionLabel>State: Success</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
@@ -315,7 +315,7 @@ export const AllVariants: Story = {
         </FormGroup>
       </div>
       <div style={cellStyle}>
-        <span style={labelStyle}>State: Disabled</span>
+        <SectionLabel>State: Disabled</SectionLabel>
         <FormGroup>
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
