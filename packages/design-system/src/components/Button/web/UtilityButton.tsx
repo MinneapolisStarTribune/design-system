@@ -7,11 +7,9 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps, Size } from '@/types/globalTypes';
-import { createDesignSystemError } from '@/utils/errorPrefix';
-
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
-export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
+export const BUTTON_VARIANTS = ['default'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
 export const BUTTON_SIZES = ['small', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
@@ -22,12 +20,11 @@ export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
 export type UtilityButtonAnalytics = Record<string, unknown>;
 
 export interface UtilityButtonProps extends BaseProps {
-variant: 'default' | 'toggle' | 'link';
+  variant: ButtonVariant;
   color?: ButtonColor;
   capitalize?: boolean;
   size?: Extract<Size, 'small' | 'large'>;
   icon?: IconName;
-  iconPosition?: 'start' | 'end';
   children?: React.ReactNode;
   isDisabled?: boolean;
   /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
@@ -39,17 +36,17 @@ variant: 'default' | 'toggle' | 'link';
 /**
  * Build CSS variable name for button tokens
  * Examples:
- * - neutral + filled -> 'button-filled'
- * - brand + outlined -> 'button-brand-outlined'
- * - brand-accent + ghost -> 'button-brand-accent-ghost'
+ * - neutral + default -> 'button-utility-default'
+ * - brand + toggle -> 'button-utility-toggle'
+ * - brand-accent + link -> 'button-utility-link'
  */
 function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
   if (color === 'neutral') {
-    return `button-${variant}`;
+    return `button-utility-${variant}`;
   } else if (color === 'brand') {
-    return `button-brand-${variant}`;
+    return `button-utility-brand-${variant}`;
   } else {
-    return `button-brand-accent-${variant}`;
+    return `button-utility-brand-accent-${variant}`;
   }
 }
 
@@ -64,41 +61,49 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
   return computed.getPropertyValue(variableName).trim() || null;
 }
 
-/**
- * Get icon size for a button based on button size and whether it's icon-only
- */
-function getButtonIconSize(
-  size: ButtonSize | 'x-small',
-  isIconOnly: boolean
-): 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | undefined {
-  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
-    small: 'x-small',
-    medium: 'small',
-    large: 'medium',
-  };
+// Original button icon sizing logic (kept for potential future use).
+// /**
+//  * Get icon size for a button based on button size and whether it's icon-only
+//  */
+// function getButtonIconSize(
+//   size: ButtonSize | 'x-small',
+//   isIconOnly: boolean
+// ): 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | undefined {
+//   const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
+//     small: 'x-small',
+//     medium: 'small',
+//     large: 'medium',
+//   };
+//
+//   const iconOnlySizeMap: Record<IconOnlyButtonSize, 'small' | 'medium' | 'large' | 'x-large'> = {
+//     'x-small': 'small',
+//     small: 'medium',
+//     medium: 'large',
+//     large: 'x-large',
+//   };
+//
+//   if (isIconOnly) {
+//     return iconOnlySizeMap[size as IconOnlyButtonSize];
+//   }
+//   return iconSizeMap[size as ButtonSize];
+// }
 
-  const iconOnlySizeMap: Record<IconOnlyButtonSize, 'small' | 'medium' | 'large' | 'x-large'> = {
-    'x-small': 'small',
-    small: 'medium',
-    medium: 'large',
-    large: 'x-large',
-  };
-
-  if (isIconOnly) {
-    return iconOnlySizeMap[size as IconOnlyButtonSize];
-  }
-  return iconSizeMap[size as ButtonSize];
+// For UtilityButton, icon size always matches button size (small or large), including icon-only.
+function getUtilityButtonIconSize(size: ButtonSize): 'small' | 'large' {
+  return size;
 }
 
 /**
- * Get button aria-label, falling back to text label or icon name
+ * Get button aria-label, falling back to label text, children, or icon name
  */
 function getButtonAriaLabel(
   explicitAriaLabel: string | undefined,
+  label: string | undefined,
   children: React.ReactNode,
   icon: IconName | undefined
 ): string | undefined {
   if (explicitAriaLabel) return explicitAriaLabel;
+  if (label) return label;
   if (typeof children === 'string') return children;
   if (icon) return `${getIconLabel(icon)} icon`;
   return undefined;
@@ -110,20 +115,20 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   variant = 'default',
   size = 'large',
   icon,
-  iconPosition = 'start',
   children,
   className,
   isDisabled,
   onClick,
   analytics: analyticsOverride,
+  label,
   ...props
 }) => {
   const { track } = useAnalytics();
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [hasGradientBorder, setHasGradientBorder] = useState(false);
 
-  // Determine if this is an icon-only button (has icon but no text children)
-  const isIconOnly = !!icon && !children;
+  // Determine if this is an icon-only button (has icon but no text label or children)
+  const isIconOnly = !!icon && !label && !children;
 
   // Validate that x-small can only be used for icon-only buttons
 //   if (size === 'x-small' && !isIconOnly) {
@@ -136,12 +141,11 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 //   }
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    const label = typeof children === 'string' ? children : undefined;
-
+    const trackingLabel = label ?? (typeof children === 'string' ? children : undefined);
     track({
       event: 'button_click',
       component: 'UtilityButton',
-      label,
+      label: trackingLabel,
       icon: icon ?? undefined,
       variant,
       color,
@@ -160,7 +164,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
     if (
       color === 'brand-accent' &&
-      (variant === 'filled' || variant === 'outlined') &&
+      (variant === 'default') &&
       buttonRef.current
     ) {
       const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
@@ -173,43 +177,37 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant, tokenPrefix]);
 
-  const effectiveSize: ButtonSize | 'x-small' = size;
-
   // Get icon size and create icon element
-  const iconSize = icon ? getButtonIconSize(effectiveSize, isIconOnly) : undefined;
+  const iconSize = icon ? getUtilityButtonIconSize(size) : undefined;
   const iconElement = icon ? (
     <Icon name={icon} size={iconSize} className={styles.icon} aria-hidden />
   ) : null;
 
-  // Determine icon position - for icon-only buttons, always show the icon
-  const leftIcon = icon && (iconPosition === 'start' || isIconOnly) ? iconElement : null;
-  const rightIcon = icon && iconPosition === 'end' && !isIconOnly ? iconElement : null;
-
   // Get aria-label for accessibility
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  const buttonAriaLabel = getButtonAriaLabel(ariaLabel, children, icon);
+  const buttonAriaLabel = getButtonAriaLabel(ariaLabel, label, children, icon);
 
   // Apply special classes for gradient borders
   const brandAccentFilledClass =
-    color === 'brand-accent' && variant === 'filled' && hasGradientBorder
+    color === 'brand-accent' && variant === 'default' && hasGradientBorder
       ? styles['brand-accent-filled']
       : undefined;
   const brandAccentOutlinedClass =
-    color === 'brand-accent' && variant === 'outlined' && hasGradientBorder
+    color === 'brand-accent' && variant === 'default' && hasGradientBorder
       ? styles['brand-accent-outlined']
       : undefined;
 
   // Combine class names - use styles object for CSS modules
   // Use effectiveSize for class name (x-small only works for icon-only, otherwise falls back to small)
-  const sizeClass =
-    effectiveSize === 'x-small' && isIconOnly
-      ? styles['x-small']
-      : styles[effectiveSize as ButtonSize];
+  // const sizeClass =
+  //   effectiveSize === 'x-small' && isIconOnly
+  //     ? styles['x-small']
+  //     : styles[effectiveSize as ButtonSize];
 
   const combinedClassNames = classNames(
     styles.button,
     styles[color],
-    sizeClass,
+    styles[size],
     styles[variant],
     brandAccentFilledClass,
     brandAccentOutlinedClass,
@@ -229,13 +227,12 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
       onClick={handleClick}
       {...props}
     >
-      {leftIcon}
+      {iconElement}
       {!isIconOnly && (
-        <UtilityLabel size={effectiveSize as ButtonSize} weight="semibold" capitalize={capitalize}>
-          {children}
+        <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
+          {label ?? children}
         </UtilityLabel>
       )}
-      {rightIcon}
     </button>
   );
 };
