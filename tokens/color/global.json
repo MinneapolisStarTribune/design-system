@@ -1,7 +1,7 @@
 {
   "color": {
     "base": {
-      "black": { "value": "#000000" },
+      "black": { "value": "#f2f2f2" },
       "white": { "value": "#ffffff" }
     },
     "cobalt-blue": {
