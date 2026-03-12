@@ -24,8 +24,8 @@
     "button-lg": { "value": "{spacing.44}" },
     "button-md": { "value": "{spacing.40}" },
     "button-sm": { "value": "{spacing.32}" },
-    "input-sm": { "value": "{spacing.32}" },
+    "input-lg": { "value": "{spacing.52}" },
     "input-md": { "value": "{spacing.40}" },
-    "input-lg": { "value": "{spacing.52}" }
+    "input-sm": { "value": "{spacing.32}" }
   }
 }
