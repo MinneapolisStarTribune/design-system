@@ -7,7 +7,9 @@ const cellStyle = { minWidth: 0 };
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{ marginBottom: 4 }}>
-    <UtilityLabel size="small" weight="semibold">{children}</UtilityLabel>
+    <UtilityLabel size="small" weight="semibold">
+      {children}
+    </UtilityLabel>
   </div>
 );
 
