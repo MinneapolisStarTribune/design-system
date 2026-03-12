@@ -22,7 +22,7 @@ const meta: Meta<typeof DangerousCodeBlock> = {
       description: 'Raw HTML markup injected into the DOM',
     },
     size: {
-      control: { type: 'radio' },
+      control: { type: 'select' },
       options: CODE_BLOCK_SIZES,
       description: 'Size of the code block',
     },
