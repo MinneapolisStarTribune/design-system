@@ -225,6 +225,7 @@ type SwiperCarouselComponent = React.FC<SwiperCarouselProps> & {
     Pagination: typeof PaginationControls;
 };
 
+
 /**
  * Reusable Swiper carousel wrapper with a compound component API.
  *
