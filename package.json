@@ -37,8 +37,8 @@
     "test:web": "turbo run test:web --filter=@minneapolisstartribune/design-system",
     "tokens": "turbo run tokens --filter=@minneapolisstartribune/design-system",
     "typecheck": "turbo run typecheck",
-    "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook expo run:android",
-    "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook expo run:ios",
+    "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook run android",
+    "build:ios": "yarn workspace @minneapolisstartribune/mobile-storybook run ios",
     "build:mobile-storybook": "yarn build:ios && yarn build:android"
   },
   "packageManager": "yarn@4.13.0"
