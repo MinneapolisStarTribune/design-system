@@ -18,20 +18,20 @@
 
   /* Size variants - Figma spec: 12px horizontal for small, 16px for medium/large; 8px gap icon↔text */
   &.small {
-    height: 32px;
-    min-height: 32px;
+    height: var(--spacing-input-sm);
+    min-height: var(--spacing-input-sm);
     padding: var(--spacing-8) var(--spacing-12);
   }
 
   &.medium {
-    height: 40px;
-    min-height: 40px;
+    height: var(--spacing-input-md);
+    min-height: var(--spacing-input-md);
     padding: var(--spacing-12) var(--spacing-16);
   }
 
   &.large {
-    height: 52px;
-    min-height: 52px;
+    height: var(--spacing-input-lg);
+    min-height: var(--spacing-input-lg);
     padding: var(--spacing-12) var(--spacing-16);
   }
 
