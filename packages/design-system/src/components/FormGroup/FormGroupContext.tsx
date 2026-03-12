@@ -5,6 +5,10 @@ interface FormGroupContextValue {
   descriptionId: string | undefined;
   captionId: string | undefined;
   inputId: string;
+  /** When caption has variant="error", TextInput can show error border */
+  hasError: boolean;
+  /** When caption has variant="success", TextInput can show success border */
+  hasSuccess: boolean;
 }
 
 const FormGroupContext = createContext<FormGroupContextValue | null>(null);
@@ -19,6 +23,7 @@ interface FormGroupProviderProps {
   hasLabel: boolean;
   hasDescription: boolean;
   hasCaption: boolean;
+  captionVariant?: 'info' | 'error' | 'success';
 }
 
 export const FormGroupProvider: React.FC<FormGroupProviderProps> = ({
@@ -26,6 +31,7 @@ export const FormGroupProvider: React.FC<FormGroupProviderProps> = ({
   hasLabel,
   hasDescription,
   hasCaption,
+  captionVariant,
 }) => {
   // Generate IDs upfront (following Rules of Hooks - always call in same order)
   const rawLabelId = useId();
@@ -43,6 +49,8 @@ export const FormGroupProvider: React.FC<FormGroupProviderProps> = ({
     descriptionId,
     captionId,
     inputId,
+    hasError: hasCaption && captionVariant === 'error',
+    hasSuccess: hasCaption && captionVariant === 'success',
   };
 
   return <FormGroupContext.Provider value={value}>{children}</FormGroupContext.Provider>;

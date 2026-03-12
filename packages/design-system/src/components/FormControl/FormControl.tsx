@@ -1,8 +1,11 @@
 import React from 'react';
-import { BaseProps } from '@/types/globalTypes';
-import { TextInput } from './TextInput/TextInput';
+import { BaseProps, Size } from '@/types/globalTypes';
+import { TextInput } from './TextInput/web/TextInput';
+
+export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
 export interface FormControlProps extends BaseProps {
+  size?: FormControlSize;
   isDisabled?: boolean;
 }
 

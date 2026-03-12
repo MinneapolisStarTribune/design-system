@@ -6,6 +6,14 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:native": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "build:web": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
     "build-storybook": {
       "dependsOn": ["build"],
       "outputs": ["storybook-static/**"]
@@ -34,7 +42,22 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "test:a11y": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "test:watch": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
     "lint": {
+      "outputs": []
+    },
+    "lint:fix": {
       "outputs": []
     },
     "typecheck": {
