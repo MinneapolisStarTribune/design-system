@@ -1,0 +1,95 @@
+.enhanced-code-block {
+  /* Breakpoints */
+  $md: 768px;
+  $lg: 1024px;
+
+  /* Standard sizes */
+  $standard-mobile: 390px;
+  $standard-tablet: 728px;
+  $standard-desktop: 712px;
+
+  /* Inline sizes */
+  $inline-mobile: 358px;
+  $inline-tablet: 528px;
+  $inline-desktop: 528px;
+
+  /* Immersive large */
+  $immersive-large-mobile: 390px;
+  $immersive-large-tablet: 720px;
+  $immersive-large-desktop: 1080px;
+
+  /* Immersive medium */
+  $immersive-medium-mobile: 390px;
+  $immersive-medium-tablet: 728px;
+  $immersive-medium-desktop: 712px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Standard variant */
+  &.variant-standard {
+    &.size-full,
+    &.size-large,
+    &.size-medium {
+      width: $standard-mobile;
+      max-width: none;
+
+      @media (min-width: $md) {
+        width: $standard-tablet;
+      }
+      @media (min-width: $lg) {
+        width: $standard-desktop;
+      }
+    }
+
+    &.size-inline {
+      width: $inline-mobile;
+      max-width: none;
+
+      @media (min-width: $md) {
+        width: $inline-tablet;
+      }
+      @media (min-width: $lg) {
+        width: $inline-desktop;
+      }
+    }
+  }
+
+  /* Immersive variant */
+  &.variant-immersive {
+    &.size-large {
+      width: $immersive-large-mobile;
+      max-width: none;
+
+      @media (min-width: $md) {
+        width: $immersive-large-tablet;
+      }
+      @media (min-width: $lg) {
+        width: $immersive-large-desktop;
+      }
+    }
+
+    &.size-medium {
+      width: $immersive-medium-mobile;
+      max-width: none;
+
+      @media (min-width: $md) {
+        width: $immersive-medium-tablet;
+      }
+      @media (min-width: $lg) {
+        width: $immersive-medium-desktop;
+      }
+    }
+
+    &.size-inline {
+      width: 100%;
+      max-width: $inline-mobile;
+      @media (min-width: $md) {
+        max-width: $inline-tablet;
+      }
+      @media (min-width: $lg) {
+        max-width: $inline-desktop;
+      }
+    }
+  }
+}
