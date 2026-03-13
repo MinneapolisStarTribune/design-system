@@ -1,0 +1,198 @@
+/* Checkbox component - design system tokens for all states */
+/* Supports neutral (default) and brand variants, unchecked/checked/indeterminate states */
+
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: inherit;
+  pointer-events: none;
+
+  /* When disabled, the label handles cursor - input is not focusable */
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Restore pointer events for the wrapper - we need clicks to reach the input */
+  .root:not(.disabled) & {
+    pointer-events: auto;
+  }
+}
+
+.visualBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: var(--radius-4);
+  border: 1px solid transparent; /* Default; unchecked uses icon for outline */
+  background-color: var(--color-checkbox-background-unselected);
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+
+  .icon {
+    line-height: 0;
+  }
+}
+
+/* Unchecked: no visualBox border — checkbox-inactive icon provides the outline */
+.root:not(.checked):not(.indeterminate) .visualBox {
+  border: none;
+  background-color: transparent;
+}
+
+.root:not(.checked):not(.indeterminate) .visualBox .icon {
+  color: var(--color-checkbox-border-unselected);
+}
+
+/* Checked/Indeterminate: icon uses selected token (white on fill) */
+.root.checked .visualBox .icon,
+.root.indeterminate .visualBox .icon {
+  color: var(--color-checkbox-icon-selected-neutral);
+}
+
+.root.brand.checked .visualBox .icon,
+.root.brand.indeterminate .visualBox .icon {
+  color: var(--color-checkbox-icon-selected-brand);
+}
+
+/* Size variants */
+.size-default .visualBox {
+  width: var(--spacing-checkbox-default);
+  height: var(--spacing-checkbox-default);
+}
+
+.size-small .visualBox {
+  width: var(--spacing-checkbox-small);
+  height: var(--spacing-checkbox-small);
+}
+
+/* Hover - unchecked (stronger icon outline) */
+.root:not(.disabled):not(.checked):not(.indeterminate):hover .visualBox .icon {
+  color: var(--color-border-on-light-strong-02);
+}
+
+/* Focus - visible focus ring */
+.root:has(.input:focus-visible) .visualBox {
+  box-shadow: 0 0 0 1px var(--color-border-state-focus);
+}
+
+.root.checked:has(.input:focus-visible) .visualBox,
+.root.indeterminate:has(.input:focus-visible) .visualBox {
+  box-shadow: 0 0 0 1px var(--color-border-state-focus);
+}
+
+/* Checked & Indeterminate - neutral variant (black/white per spec) */
+.root.neutral.checked .visualBox,
+.root.neutral.indeterminate .visualBox {
+  border-color: var(--color-checkbox-border-selected-neutral);
+  background-color: var(--color-checkbox-background-selected-neutral);
+}
+
+/* Checked & Indeterminate - brand variant (green for Strib, blue for Varsity) */
+.root.brand.checked .visualBox,
+.root.brand.indeterminate .visualBox {
+  border-color: var(--color-checkbox-border-selected-brand);
+  background-color: var(--color-checkbox-background-selected-brand);
+}
+
+/* Disabled state */
+.root.disabled .visualBox {
+  border-color: var(--color-border-state-disabled-on-light);
+  background-color: var(--color-background-light-gray-01);
+}
+
+.root.disabled:not(.checked):not(.indeterminate) .visualBox {
+  border: none;
+  background-color: transparent;
+}
+
+.root.disabled:not(.checked):not(.indeterminate) .visualBox .icon {
+  color: var(--color-border-state-disabled-on-light);
+}
+
+.root.disabled.checked .visualBox,
+.root.disabled.indeterminate .visualBox {
+  border-color: var(--color-border-state-disabled-on-light);
+  background-color: var(--color-background-light-gray-02);
+}
+
+/* Error state - unchecked uses icon color; checked/indeterminate fill turns red */
+.root.error:not(.checked):not(.indeterminate) .visualBox {
+  border: none;
+  background-color: transparent;
+}
+
+.root.error:not(.checked):not(.indeterminate) .visualBox .icon {
+  color: var(--color-border-state-attention-on-light);
+}
+
+.root.error.checked .visualBox,
+.root.error.indeterminate .visualBox {
+  border-color: var(--color-background-state-attention);
+  background-color: var(--color-background-state-attention);
+}
+
+.root.error:has(.input:focus-visible) .visualBox {
+  box-shadow: 0 0 0 1px var(--color-border-state-attention-on-light);
+}
+
+/* Label and caption - design system typography */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.label {
+  color: var(--color-text-on-light-primary);
+  cursor: inherit;
+}
+
+.root.disabled .label {
+  color: var(--color-text-state-disabled-on-light);
+}
+
+.root.disabled.error .label {
+  color: var(--color-text-state-disabled-on-light);
+}
+
+.caption {
+  color: var(--color-text-on-light-secondary);
+  cursor: inherit;
+}
+
+.root.disabled .caption {
+  color: var(--color-text-state-disabled-on-light);
+}
+
+.root.disabled.error .caption {
+  color: var(--color-text-state-disabled-on-light);
+}
+
+/* Typography applied via class names in component */

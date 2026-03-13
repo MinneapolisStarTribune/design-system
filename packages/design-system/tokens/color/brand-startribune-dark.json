@@ -206,6 +206,57 @@
         "Shared control styles (filled, outlined, ghost, utility) are defined in base colors and work across all brands and component types."
       ]
     },
+    "checkbox": {
+      "description": "Checkbox component color tokens — border, background, and icon for unselected, selected neutral, and selected brand states.",
+      "border": {
+        "unselected": {
+          "description": "Border color for unselected checkbox on dark backgrounds.",
+          "value": "{color.neutral.600}"
+        },
+        "selected": {
+          "neutral": {
+            "description": "Border color for selected neutral checkbox (dark mode: white).",
+            "value": "{color.base.white}"
+          },
+          "brand": {
+            "description": "Border color for selected brand checkbox — Star Tribune green on dark.",
+            "value": "{color.emerald-green.400}"
+          }
+        }
+      },
+      "background": {
+        "unselected": {
+          "description": "Background for unselected checkbox on dark backgrounds.",
+          "value": "rgb(0 0 0 / 0%)"
+        },
+        "selected": {
+          "neutral": {
+            "description": "Background for selected neutral checkbox (dark mode: white).",
+            "value": "{color.base.white}"
+          },
+          "brand": {
+            "description": "Background for selected brand checkbox — Star Tribune green on dark.",
+            "value": "{color.emerald-green.600}"
+          }
+        }
+      },
+      "icon": {
+        "unselected": {
+          "description": "Icon color for unselected checkbox (no icon shown).",
+          "value": "rgb(0 0 0 / 0%)"
+        },
+        "selected": {
+          "neutral": {
+            "description": "Icon color for selected neutral checkbox — black on white.",
+            "value": "{color.neutral.950}"
+          },
+          "brand": {
+            "description": "Icon color for selected brand checkbox — black on green.",
+            "value": "{color.neutral.950}"
+          }
+        }
+      }
+    },
     "icon": {
       "brand-01": {
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
