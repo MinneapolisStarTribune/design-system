@@ -2,11 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
 import { Icon } from '@/components/Icon/Icon';
-import {
-  CheckIcon,
-  CheckboxInactiveIcon,
-  MinusIcon,
-} from '@/icons';
+import { CheckIcon, CheckboxInactiveIcon, MinusIcon } from '@/icons';
 import { useId } from 'react';
 import styles from './Checkbox.module.scss';
 
