@@ -78,11 +78,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     }
   };
 
-  const iconName: IconName = indeterminate
-    ? 'minus'
-    : checked
-      ? 'check'
-      : 'checkbox-inactive';
+  const iconName: IconName = indeterminate ? 'minus' : checked ? 'check' : 'checkbox-inactive';
 
   const rootClasses = classNames(
     styles.root,

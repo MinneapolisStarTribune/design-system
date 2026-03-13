@@ -36,11 +36,7 @@ describe('Checkbox', () => {
 
   it('displays label text', () => {
     const { getByText } = renderWithProvider(
-      <FormControl.Checkbox
-        label="Subscribe to newsletter"
-        checked={false}
-        onChange={() => {}}
-      />
+      <FormControl.Checkbox label="Subscribe to newsletter" checked={false} onChange={() => {}} />
     );
 
     expect(getByText('Subscribe to newsletter')).toBeInTheDocument();
