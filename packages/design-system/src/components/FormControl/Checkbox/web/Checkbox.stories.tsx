@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { UtilityLabel } from '@/components/Typography/Utility';
 
@@ -10,6 +10,19 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     </UtilityLabel>
   </div>
 );
+
+/** Wrapper that focuses the checkbox on mount to demonstrate focus state */
+function FocusedCheckbox(props: React.ComponentProps<typeof FormControl.Checkbox>) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    containerRef.current?.querySelector<HTMLInputElement>('input')?.focus();
+  }, []);
+  return (
+    <div ref={containerRef}>
+      <FormControl.Checkbox {...props} />
+    </div>
+  );
+}
 
 const meta = {
   title: 'Components/Actions & Inputs/Checkbox',
@@ -24,6 +37,10 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
+    focus: {
+      control: 'boolean',
+      description: 'When true, checkbox can receive focus. When false, cannot be focused.',
+    },
     label: {
       control: 'text',
       description: 'Required label text',
@@ -75,6 +92,7 @@ export const Configurable: Story = {
     size: 'default',
     disabled: false,
     error: false,
+    focus: false,
   },
   render: function ConfigurableRender(args) {
     const [checked, setChecked] = useState(args.checked);
@@ -99,7 +117,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          'All variants per the design spec: neutral and brand, unchecked/checked/indeterminate, disabled, error, and size options.',
+          'All variants per the design spec: neutral and brand, unchecked/checked/indeterminate, focused, disabled, error, and size options.',
       },
     },
   },
@@ -212,6 +230,20 @@ export const AllVariants: Story = {
             variant="neutral"
             size="small"
             dataTestId="error-state"
+          />
+        </div>
+
+        {/* Focused - Unchecked (Neutral) */}
+        <div style={cellStyle}>
+          <SectionLabel>Focused / Unchecked (Neutral)</SectionLabel>
+          <FocusedCheckbox
+            label="Option"
+            checked={false}
+            onChange={() => {}}
+            variant="neutral"
+            size="default"
+            focus
+            dataTestId="focused-unchecked"
           />
         </div>
 

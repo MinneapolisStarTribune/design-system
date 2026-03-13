@@ -9,9 +9,18 @@
   position: relative;
   box-sizing: border-box;
   font-family: inherit;
+  /* No border-radius on root - focus ring has sharp corners per Figma */
 
   &.disabled {
     cursor: not-allowed;
+  }
+
+  /* Focus - box around entire checkbox + label (per design spec) */
+  &:has(.input:focus),
+  &:has(.input:focus-visible) {
+    box-shadow:
+      0 0 0 2px var(--color-background-light-default),
+      0 0 0 4px var(--color-border-state-focus);
   }
 }
 
@@ -31,6 +40,7 @@
   margin: 0;
   cursor: inherit;
   pointer-events: none;
+  outline: none; /* Remove native outline; focus ring is on .root */
 
   /* When disabled, the label handles cursor - input is not focusable */
   &:disabled {
@@ -91,21 +101,6 @@
   height: var(--spacing-checkbox-small);
 }
 
-/* Hover - unchecked (stronger icon outline) */
-.root:not(.disabled):not(.checked):not(.indeterminate):hover .visualBox .icon {
-  color: var(--color-border-on-light-strong-02);
-}
-
-/* Focus - visible focus ring */
-.root:has(.input:focus-visible) .visualBox {
-  box-shadow: 0 0 0 1px var(--color-border-state-focus);
-}
-
-.root.checked:has(.input:focus-visible) .visualBox,
-.root.indeterminate:has(.input:focus-visible) .visualBox {
-  box-shadow: 0 0 0 1px var(--color-border-state-focus);
-}
-
 /* Checked & Indeterminate - neutral variant (black/white per spec) */
 .root.neutral.checked .visualBox,
 .root.neutral.indeterminate .visualBox {
@@ -157,8 +152,11 @@
   background-color: var(--color-background-state-attention);
 }
 
-.root.error:has(.input:focus-visible) .visualBox {
-  box-shadow: 0 0 0 1px var(--color-border-state-attention-on-light);
+.root.error:has(.input:focus),
+.root.error:has(.input:focus-visible) {
+  box-shadow:
+    0 0 0 2px var(--color-background-light-default),
+    0 0 0 4px var(--color-border-state-attention-on-light);
 }
 
 /* Label and caption - design system typography */
