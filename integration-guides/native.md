@@ -2,6 +2,16 @@
 
 Complete guide for using the design system in React Native applications.
 
+## Dependencies
+
+For **native** (using the `/native` entry), install the pinned peer versions (match the design system’s peerDependencies):
+
+```bash
+yarn add react@19.0.0 react-native@0.73.0 @floating-ui/react-native@0.10.9
+```
+
+You do not need `react-dom` or `@floating-ui/react`.
+
 ## DesignSystemProvider
 
 The `DesignSystemProvider` is required for React Native apps to provide brand and color scheme context. It enables:

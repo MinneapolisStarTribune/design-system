@@ -16,31 +16,6 @@ export type AccessibilityProps = {
   'aria-hidden'?: boolean;
 };
 
-// Icon color tokens from the design system - single source of truth
-export const ICON_COLORS = [
-  'on-light-primary',
-  'on-light-secondary',
-  'on-light-tertiary',
-  'on-dark-primary',
-  'on-dark-secondary',
-  'on-dark-tertiary',
-  'state-attention-on-light',
-  'state-attention-on-dark',
-  'state-disabled-on-light',
-  'state-disabled-on-dark',
-  'brand-01',
-  'brand-02',
-  'brand-03',
-] as const;
-
-export type IconColor = (typeof ICON_COLORS)[number];
-
-export type IconSpecificProps<IconName extends string = string> = {
-  name: IconName;
-  color?: IconColor;
-  size?: Extract<Size, 'x-small' | 'small' | 'medium' | 'large' | 'x-large'>;
-};
-
 /**
  * Global size tokens for the design system
  */

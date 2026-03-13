@@ -107,23 +107,19 @@ function shouldRebuildIcons() {
     return false;
   }
   
-  // Output files: generated TypeScript files
-  const iconOutputFiles = [
-    'src/components/Icon/iconOptions.ts',
-    'src/components/Icon/iconNames.ts',
-  ].map(file => path.join(projectRoot, file));
+  // Output file: generated icons barrel
+  const iconOutputFile = path.join(projectRoot, 'src/icons/index.ts');
   
-  // Check if any output file is missing
-  const allOutputsExist = iconOutputFiles.every(file => fs.existsSync(file));
-  if (!allOutputsExist) {
+  // Check if output file exists
+  if (!fs.existsSync(iconOutputFile)) {
     return true;
   }
   
   // Get latest modification time from source files
   const latestSourceMtime = getLatestMtime(svgFiles);
   
-  // Get latest modification time from output files
-  const latestOutputMtime = getLatestMtime(iconOutputFiles);
+  // Get modification time of output file
+  const latestOutputMtime = fs.statSync(iconOutputFile).mtimeMs;
   
   // Rebuild if source files are newer than output files
   return latestSourceMtime > latestOutputMtime;

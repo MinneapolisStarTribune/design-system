@@ -4,7 +4,7 @@ import { Popover } from './Popover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../test-utils/render';
 
-describe.skip('Popover', () => {
+describe('Popover', () => {
   it('renders with trigger element', () => {
     renderWithProvider(
       <Popover trigger={<Button>Open</Button>}>
@@ -105,7 +105,7 @@ describe.skip('Popover', () => {
   it('renders divider', async () => {
     const user = userEvent.setup();
 
-    const { container } = renderWithProvider(
+    renderWithProvider(
       <Popover trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Divider />
@@ -116,14 +116,15 @@ describe.skip('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      expect(container.querySelector('[class*="divider"]')).toBeInTheDocument();
+      const divider = document.querySelector('[class*="divider"]');
+      expect(divider).toBeInTheDocument();
     });
   });
 
   it('renders divider with fullBleed enabled', async () => {
     const user = userEvent.setup();
 
-    const { container } = renderWithProvider(
+    renderWithProvider(
       <Popover trigger={<Button>Open</Button>}>
         <Popover.Divider fullBleed />
         <Popover.Body>Content</Popover.Body>
@@ -133,26 +134,26 @@ describe.skip('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      const divider = container.querySelector('[class*="divider"]');
+      const divider = document.querySelector('[class*="divider"]');
       expect(divider).toBeInTheDocument();
     });
   });
 
   it.each(['top', 'right', 'bottom', 'left'] as const)(
-    'renders with pointer position %s',
-    async (pointer) => {
+    'renders with placement %s',
+    async (placement) => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Popover trigger={<Button>Open</Button>} pointer={pointer}>
-          <Popover.Body>{pointer} content</Popover.Body>
+        <Popover trigger={<Button>Open</Button>} placement={placement}>
+          <Popover.Body>{placement} content</Popover.Body>
         </Popover>
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
 
       await waitFor(() => {
-        expect(screen.getByText(`${pointer} content`)).toBeInTheDocument();
+        expect(screen.getByText(`${placement} content`)).toBeInTheDocument();
       });
     }
   );
@@ -181,7 +182,7 @@ describe.skip('Popover', () => {
   });
 });
 
-describe.skip('Popover.Body', () => {
+describe('Popover.Body', () => {
   it('renders children', async () => {
     const user = userEvent.setup();
 
@@ -201,7 +202,7 @@ describe.skip('Popover.Body', () => {
   });
 });
 
-describe.skip('Popover.Heading', () => {
+describe('Popover.Heading', () => {
   it('renders children and close button', async () => {
     const user = userEvent.setup();
 

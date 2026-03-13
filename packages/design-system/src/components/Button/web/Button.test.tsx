@@ -1,6 +1,8 @@
 import { vi } from 'vitest';
 import { Button } from './Button';
 import { renderWithProvider } from '../../../test-utils/render';
+import CameraFilledIcon from '@/icons/camera-filled.svg?react';
+import ShareIcon from '@/icons/share.svg?react';
 
 describe('Button', () => {
   it('renders', () => {
@@ -52,7 +54,7 @@ describe('Button', () => {
 
   it('renders with an icon', () => {
     const { container } = renderWithProvider(
-      <Button onClick={vi.fn()} icon="camera-filled">
+      <Button onClick={vi.fn()} icon={<CameraFilledIcon />}>
         With Icon
       </Button>
     );
@@ -138,7 +140,7 @@ describe('Button', () => {
     it('includes icon in tracking event when present', () => {
       const mockOnTrackingEvent = vi.fn();
       const { getByTestId } = renderWithProvider(
-        <Button onClick={vi.fn()} icon="share" data-testid="button">
+        <Button onClick={vi.fn()} icon={<ShareIcon />} data-testid="button">
           Share
         </Button>,
         { mockOnTrackingEvent }
@@ -150,7 +152,7 @@ describe('Button', () => {
         expect.objectContaining({
           event: 'button_click',
           component: 'Button',
-          icon: 'share',
+          label: 'Share',
         })
       );
     });

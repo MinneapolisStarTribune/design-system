@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import type { ButtonProps } from './Button';
 import {
   Button,
   BUTTON_VARIANTS,
@@ -10,12 +11,15 @@ import {
   type IconOnlyButtonSize,
 } from './Button';
 import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
-import { iconOptions } from '@/components/Icon/iconOptions';
-import { IconName } from '@/components/Icon/iconNames';
 import { NewsHeading } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
+import { ArrowRightIcon } from '@/icons';
+import { AvatarIcon } from '@/icons';
 
-const meta = {
+/** Story-only arg for toggling demo icon in Configurable */
+type ConfigurableArgs = ButtonProps & { showIcon?: boolean };
+
+const meta: Meta<ConfigurableArgs> = {
   title: 'Actions/Button',
   component: Button,
   tags: ['autodocs'],
@@ -39,15 +43,15 @@ const meta = {
       options: [...ICON_ONLY_BUTTON_SIZES] as string[],
       description: 'The size of the button. Note: "x-small" is only valid for icon-only buttons.',
     },
-    icon: {
-      control: 'select',
-      options: Object.keys(iconOptions) as IconName[],
-      description: 'The icon to display in the button',
+    showIcon: {
+      control: 'boolean',
+      description: `Whether to show an icon (AvatarIcon in stories). In app code, pass icon={YourIcon}.`,
     },
     iconPosition: {
       control: 'select',
       options: ['start', 'end'],
-      description: 'The position of the icon relative to the text',
+      description:
+        'When the button has both icon and text, position of the icon relative to the label.',
     },
     isDisabled: {
       control: 'boolean',
@@ -58,7 +62,7 @@ const meta = {
       description: 'Whether to capitalize the button text',
     },
   },
-} satisfies Meta<typeof Button>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -70,10 +74,14 @@ export const Configurable: Story = {
     variant: 'filled',
     size: 'large',
     color: 'brand',
-    icon: undefined,
+    showIcon: false,
     iconPosition: 'end',
     isDisabled: false,
     capitalize: false,
+  } as ConfigurableArgs,
+  render: (args) => {
+    const { showIcon, ...buttonProps } = args as ConfigurableArgs;
+    return <Button {...buttonProps} icon={showIcon ? <AvatarIcon /> : undefined} />;
   },
 };
 
@@ -87,10 +95,9 @@ export const ButtonWithAnalytics: Story = {
     onClick: () => alert('Subscribed!'),
     variant: 'filled',
     color: 'brand',
-    icon: 'arrow-right',
-    iconPosition: 'end',
     analytics: { cta_type: 'subscribe', module_position: 'hero' },
   },
+  render: (args) => <Button {...args} icon={<ArrowRightIcon />} iconPosition="end" />,
   decorators: [
     (Story) => (
       <AnalyticsProvider
@@ -149,14 +156,16 @@ function renderButtonSection(
                       variant={variant}
                       color={color}
                       size={size as IconOnlyButtonSize}
-                      icon="avatar"
+                      icon={<AvatarIcon />}
+                      aria-label="Icon button"
                     />
                   ) : (
                     <Button
                       variant={variant}
                       color={color}
                       size={size as ButtonSize}
-                      icon={withIcon ? 'avatar' : undefined}
+                      icon={withIcon ? <AvatarIcon /> : undefined}
+                      iconPosition={withIcon ? 'start' : undefined}
                     >
                       {`${color} ${variant} ${size}`}
                     </Button>
