@@ -28,8 +28,7 @@
   margin-left: auto;
   margin-right: auto;
 
-  /* Standard */
-
+  /* Standard variant */
   &.variant-standard {
     &.size-full,
     &.size-large,
@@ -58,15 +57,21 @@
     }
   }
 
-  /* Immersive */
-
+  /* Immersive variant */
   &.variant-immersive {
-    &.size-full {
+    &.size-full,
+    &.size-large,
+    &.size-medium {
       width: 100vw;
-      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
       position: relative;
       left: 50%;
       transform: translateX(-50%);
+    }
+
+    &.size-full {
+      max-width: none;
     }
 
     &.size-large {
