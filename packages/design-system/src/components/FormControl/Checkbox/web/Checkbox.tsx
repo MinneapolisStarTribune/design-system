@@ -2,9 +2,19 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
 import { Icon } from '@/components/Icon/Icon';
-import { IconName } from '@/components/Icon/iconNames';
+import {
+  CheckIcon,
+  CheckboxInactiveIcon,
+  MinusIcon,
+} from '@/icons';
 import { useId } from 'react';
 import styles from './Checkbox.module.scss';
+
+const CHECKBOX_ICONS = {
+  check: CheckIcon,
+  minus: MinusIcon,
+  'checkbox-inactive': CheckboxInactiveIcon,
+} as const;
 
 export const CHECKBOX_VARIANTS = ['neutral', 'brand'] as const;
 export type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
@@ -78,7 +88,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     }
   };
 
-  const iconName: IconName = indeterminate ? 'minus' : checked ? 'check' : 'checkbox-inactive';
+  const iconKey = indeterminate ? 'minus' : checked ? 'check' : 'checkbox-inactive';
+  const IconComponent = CHECKBOX_ICONS[iconKey];
 
   const rootClasses = classNames(
     styles.root,
@@ -112,7 +123,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         />
         <span className={styles.visualBox} aria-hidden="true">
           <Icon
-            name={iconName}
+            component={IconComponent}
             size={size === 'small' ? 'small' : 'medium'}
             className={styles.icon}
             aria-hidden
