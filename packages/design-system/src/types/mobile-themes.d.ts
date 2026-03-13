@@ -107,6 +107,15 @@ interface StartribuneLightTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCheckboxBackgroundSelectedBrand: string;
+  colorCheckboxBackgroundSelectedNeutral: string;
+  colorCheckboxBackgroundUnselected: string;
+  colorCheckboxBorderSelectedBrand: string;
+  colorCheckboxBorderSelectedNeutral: string;
+  colorCheckboxBorderUnselected: string;
+  colorCheckboxIconSelectedBrand: string;
+  colorCheckboxIconSelectedNeutral: string;
+  colorCheckboxIconUnselected: string;
   colorCobaltBlue100: string;
   colorCobaltBlue200: string;
   colorCobaltBlue300: string;
@@ -332,6 +341,7 @@ interface StartribuneLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -343,6 +353,11 @@ interface StartribuneLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingCheckboxDefault: number;
+  spacingCheckboxSmall: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -443,6 +458,15 @@ interface StartribuneDarkTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCheckboxBackgroundSelectedBrand: string;
+  colorCheckboxBackgroundSelectedNeutral: string;
+  colorCheckboxBackgroundUnselected: string;
+  colorCheckboxBorderSelectedBrand: string;
+  colorCheckboxBorderSelectedNeutral: string;
+  colorCheckboxBorderUnselected: string;
+  colorCheckboxIconSelectedBrand: string;
+  colorCheckboxIconSelectedNeutral: string;
+  colorCheckboxIconUnselected: string;
   colorCobaltBlue100: string;
   colorCobaltBlue200: string;
   colorCobaltBlue300: string;
@@ -668,6 +692,7 @@ interface StartribuneDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -679,6 +704,11 @@ interface StartribuneDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingCheckboxDefault: number;
+  spacingCheckboxSmall: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -785,6 +815,15 @@ interface VarsityLightTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCheckboxBackgroundSelectedBrand: string;
+  colorCheckboxBackgroundSelectedNeutral: string;
+  colorCheckboxBackgroundUnselected: string;
+  colorCheckboxBorderSelectedBrand: string;
+  colorCheckboxBorderSelectedNeutral: string;
+  colorCheckboxBorderUnselected: string;
+  colorCheckboxIconSelectedBrand: string;
+  colorCheckboxIconSelectedNeutral: string;
+  colorCheckboxIconUnselected: string;
   colorCobaltBlue100: string;
   colorCobaltBlue200: string;
   colorCobaltBlue300: string;
@@ -1010,6 +1049,7 @@ interface VarsityLightTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -1021,6 +1061,11 @@ interface VarsityLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingCheckboxDefault: number;
+  spacingCheckboxSmall: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1127,6 +1172,15 @@ interface VarsityDarkTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCheckboxBackgroundSelectedBrand: string;
+  colorCheckboxBackgroundSelectedNeutral: string;
+  colorCheckboxBackgroundUnselected: string;
+  colorCheckboxBorderSelectedBrand: string;
+  colorCheckboxBorderSelectedNeutral: string;
+  colorCheckboxBorderUnselected: string;
+  colorCheckboxIconSelectedBrand: string;
+  colorCheckboxIconSelectedNeutral: string;
+  colorCheckboxIconUnselected: string;
   colorCobaltBlue100: string;
   colorCobaltBlue200: string;
   colorCobaltBlue300: string;
@@ -1352,6 +1406,7 @@ interface VarsityDarkTheme {
   spacing40: number;
   spacing44: number;
   spacing48: number;
+  spacing52: number;
   spacing56: number;
   spacing6: number;
   spacing64: number;
@@ -1363,6 +1418,11 @@ interface VarsityDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
+  spacingCheckboxDefault: number;
+  spacingCheckboxSmall: number;
+  spacingInputLg: number;
+  spacingInputMd: number;
+  spacingInputSm: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
