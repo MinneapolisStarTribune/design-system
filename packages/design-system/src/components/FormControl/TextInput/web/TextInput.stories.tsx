@@ -2,6 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
+import {
+  CalendarIcon,
+  LockIcon,
+  LocationIcon,
+  MailIcon,
+  PhoneIcon,
+  SearchIcon,
+  UserIcon,
+} from '@/icons';
 
 const cellStyle = { minWidth: 0 };
 
@@ -39,13 +48,13 @@ const meta = {
       control: 'select',
       mapping: {
         None: undefined,
-        Search: 'search',
-        Mail: 'mail',
-        User: 'user',
-        Lock: 'lock',
-        Calendar: 'calendar',
-        Phone: 'phone',
-        Location: 'location',
+        Search: <SearchIcon aria-hidden />,
+        Mail: <MailIcon aria-hidden />,
+        User: <UserIcon aria-hidden />,
+        Lock: <LockIcon aria-hidden />,
+        Calendar: <CalendarIcon aria-hidden />,
+        Phone: <PhoneIcon aria-hidden />,
+        Location: <LocationIcon aria-hidden />,
       },
       options: ['None', 'Search', 'Mail', 'User', 'Lock', 'Calendar', 'Phone', 'Location'],
       description: 'Optional icon',
@@ -85,7 +94,7 @@ export const Configurable: Story = {
   args: {
     placeholderText: 'Placeholder text',
     size: 'medium',
-    icon: 'calendar',
+    icon: 'Calendar',
     iconPosition: 'end',
     rounded: false,
     isDisabled: false,
@@ -220,7 +229,7 @@ export const AllVariants: Story = {
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
             placeholderText="Search User Here"
-            icon="user"
+            icon={<UserIcon aria-hidden />}
             iconPosition="start"
             aria-label="Left icon"
           />
@@ -232,7 +241,7 @@ export const AllVariants: Story = {
           <FormGroup.Label>Label</FormGroup.Label>
           <FormControl.TextInput
             placeholderText="Search User Here"
-            icon="user"
+            icon={<UserIcon aria-hidden />}
             iconPosition="end"
             aria-label="Right icon"
           />

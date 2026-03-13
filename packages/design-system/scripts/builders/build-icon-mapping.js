@@ -2,8 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 const iconsDir = path.join(__dirname, '../../src/icons');
-const iconOptionsFile = path.join(__dirname, '../../src/components/Icon/iconOptions.ts');
-const iconNamesFile = path.join(__dirname, '../../src/components/Icon/iconNames.ts');
 
 // Get all SVG files
 const svgFiles = fs
@@ -11,59 +9,32 @@ const svgFiles = fs
   .filter((file) => file.endsWith('.svg'))
   .sort();
 
-// Generate the icon mapping
 const iconNames = svgFiles
   .map((file) => file.replace(/\.svg$/i, ''))
   .filter((name) => name.length > 0 && !name.includes('\n'));
 
-// Generate TypeScript file content for iconOptions.ts
-const imports = iconNames
+// kebab-case to PascalCase + "Icon" (e.g. arrow-down -> ArrowDownIcon)
+const toPascalIcon = (name) =>
+  name
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join('') + 'Icon';
+
+// Generate icons barrel for named exports (tree-shakeable)
+const iconsBarrelLines = iconNames
   .map((name) => {
-    const importName = name.replace(/-/g, '_');
-    return `import ${importName}Component from '../../icons/${name}.svg?react';`;
+    const componentName = toPascalIcon(name);
+    return `export { default as ${componentName} } from './${name}.svg?react';`;
   })
   .join('\n');
 
-// Use unquoted key when name is a valid JS identifier (e.g. send), quoted when not (e.g. send-filled)
-const isValidIdentifier = (s) => /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(s);
-const mapping = iconNames
-  .map((name) => {
-    const importName = name.replace(/-/g, '_');
-    const key = isValidIdentifier(name) ? name : `'${name}'`;
-    return `  ${key}: ${importName}Component,`;
-  })
-  .join('\n');
-
-const iconOptionsContent = `// This file is auto-generated.
+const iconsBarrelContent = `// This file is auto-generated.
 // Do not edit manually - run 'npm run icons' to regenerate
+// Import only the icons you need for optimal bundle size (tree-shakeable).
 
-import React from 'react';
-import type { IconName } from './iconNames';
-${imports}
-
-/** SVG component type from *.svg?react imports - values are components, not strings */
-type IconSvgComponent = React.FC<React.SVGProps<SVGSVGElement>>;
-
-export const iconOptions = {
-${mapping}
-} satisfies Record<IconName, IconSvgComponent>;
+${iconsBarrelLines}
 `;
 
-// Generate TypeScript file content for iconNames.ts
-const iconNameTypes = iconNames
-  .map((name, i) => (i === iconNames.length - 1 ? `  | '${name}';` : `  | '${name}'`))
-  .join('\n');
+fs.writeFileSync(path.join(iconsDir, 'index.ts'), iconsBarrelContent, 'utf8');
+console.log(`Generated icons barrel with ${iconNames.length} icons at src/icons/index.ts`);
 
-const iconNamesContent = `// This file contains all valid icon names as a union type
-// This ensures TypeScript will error on invalid icon names
-// This file is auto-generated.
-// Do not edit manually - run 'npm run icons' to regenerate
-
-export type IconName =
-${iconNameTypes}
-`;
-
-// Write iconNames first so iconOptions can import IconName from it
-fs.writeFileSync(iconNamesFile, iconNamesContent, 'utf8');
-fs.writeFileSync(iconOptionsFile, iconOptionsContent, 'utf8');
-console.log(`Generated icon mapping with ${iconNames.length} icons`);

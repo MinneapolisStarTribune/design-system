@@ -3,6 +3,7 @@ import { mergeConfig } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import svgr from 'vite-plugin-svgr';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ const config: StorybookConfig = {
 
   async viteFinal(baseConfig) {
     // Plugin to convert CJS theme files (module.exports) to ESM (export default)
-    // so they can be imported by tamagui.config.ts in the browser.
+    // for any code that imports dist/mobile/themes in the browser.
     // Must be pushed directly onto baseConfig.plugins — mergeConfig does not
     // reliably merge plugin arrays in all Storybook/Vite versions.
     baseConfig.plugins!.push({
@@ -37,6 +38,14 @@ const config: StorybookConfig = {
         }
       },
     });
+
+    // Required so stories can import @/icons (barrel uses .svg?react)
+    baseConfig.plugins!.push(
+      svgr({
+        svgrOptions: { icon: true },
+        include: '**/*.svg?react',
+      })
+    );
 
     return mergeConfig(baseConfig, {
       resolve: {

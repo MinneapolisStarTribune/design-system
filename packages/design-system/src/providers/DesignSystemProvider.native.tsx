@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Brand, ColorScheme } from './theme-helpers';
+import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 import { DesignSystemContext } from './DesignSystemContext';
 
 export type { Brand };
@@ -27,6 +28,8 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   );
 
   return (
-    <DesignSystemContext.Provider value={contextValue}>{children}</DesignSystemContext.Provider>
+    <DesignSystemContext.Provider value={contextValue}>
+      <BrandValidationErrorBoundary>{children}</BrandValidationErrorBoundary>
+    </DesignSystemContext.Provider>
   );
 };
