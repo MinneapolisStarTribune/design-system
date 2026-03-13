@@ -32,6 +32,8 @@ export interface CheckboxProps extends BaseProps {
   disabled?: boolean;
   /** Error state - shows error styling and communicates to assistive technologies */
   error?: boolean;
+  /** When true, checkbox can receive focus. When false, cannot be focused (e.g. tabIndex=-1). */
+  focus?: boolean;
   /** Callback when checked state changes */
   onChange: (checked: boolean) => void;
 }
@@ -50,6 +52,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   size = 'default',
   disabled = false,
   error = false,
+  focus = true,
   onChange,
   className,
   dataTestId,
@@ -66,6 +69,13 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.checked);
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!focus) {
+      // Defer blur so click's change event can fire first (checkbox still toggles)
+      setTimeout(() => e.target.blur(), 0);
+    }
   };
 
   const iconName: IconName = indeterminate
@@ -96,6 +106,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           id={id}
           checked={checked}
           disabled={disabled}
+          tabIndex={focus ? undefined : -1}
+          onFocus={handleFocus}
           onChange={handleChange}
           aria-checked={indeterminate ? 'mixed' : checked}
           aria-invalid={error ? true : undefined}

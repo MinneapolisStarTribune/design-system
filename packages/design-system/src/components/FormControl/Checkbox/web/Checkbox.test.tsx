@@ -119,6 +119,40 @@ describe('Checkbox', () => {
     expect(input).toBeDisabled();
   });
 
+  it('has tabIndex=-1 when focus is false (not focusable)', () => {
+    const { getByTestId } = renderWithProvider(
+      <FormControl.Checkbox
+        label="Not focusable"
+        checked={false}
+        onChange={() => {}}
+        focus={false}
+        dataTestId="checkbox"
+      />
+    );
+
+    const input = getByTestId('checkbox').querySelector('input');
+    expect(input).toHaveAttribute('tabindex', '-1');
+  });
+
+  it('does not retain focus when focus is false and label is clicked', async () => {
+    const onChange = vi.fn();
+    const { getByTestId } = renderWithProvider(
+      <FormControl.Checkbox
+        label="Not focusable"
+        checked={false}
+        onChange={onChange}
+        focus={false}
+        dataTestId="checkbox"
+      />
+    );
+
+    const checkbox = getByTestId('checkbox');
+    await userEvent.click(checkbox);
+    expect(onChange).toHaveBeenCalledWith(true);
+    // Input should not have focus (blurred immediately)
+    expect(checkbox.querySelector('input')).not.toHaveFocus();
+  });
+
   it('does not call onChange when disabled and clicked', async () => {
     const onChange = vi.fn();
     const { getByTestId } = renderWithProvider(
