@@ -185,6 +185,10 @@
   cursor: inherit;
 }
 
+.root.error .caption {
+  color: var(--color-text-state-attention-on-light);
+}
+
 .root.disabled .caption {
   color: var(--color-text-state-disabled-on-light);
 }
