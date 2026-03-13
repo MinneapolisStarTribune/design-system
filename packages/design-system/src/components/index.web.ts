@@ -72,3 +72,9 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export {
+  Toast,
+  TOAST_VARIANTS,
+  type ToastProps,
+  type ToastVariant,
+} from '@/components/Toast/Toast';
