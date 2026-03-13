@@ -207,53 +207,53 @@
       ]
     },
     "checkbox": {
-      "description": "Checkbox component color tokens — border, background, and icon for unselected, selected neutral, and selected brand states.",
-      "border": {
-        "unselected": {
-          "description": "Border color for unselected checkbox on dark backgrounds.",
-          "value": "{color.neutral.600}"
-        },
-        "selected": {
-          "neutral": {
-            "description": "Border color for selected neutral checkbox (dark mode: white).",
-            "value": "{color.base.white}"
-          },
-          "brand": {
-            "description": "Border color for selected brand checkbox — Star Tribune green on dark.",
-            "value": "{color.emerald-green.400}"
-          }
-        }
-      },
       "background": {
-        "unselected": {
-          "description": "Background for unselected checkbox on dark backgrounds.",
-          "value": "rgb(0 0 0 / 0%)"
-        },
         "selected": {
-          "neutral": {
-            "description": "Background for selected neutral checkbox (dark mode: white).",
-            "value": "{color.base.white}"
-          },
           "brand": {
             "description": "Background for selected brand checkbox — Star Tribune green on dark.",
             "value": "{color.emerald-green.600}"
+          },
+          "neutral": {
+            "description": "Background for selected neutral checkbox (dark mode: white).",
+            "value": "{color.base.white}"
           }
+        },
+        "unselected": {
+          "description": "Background for unselected checkbox on dark backgrounds.",
+          "value": "rgb(0 0 0 / 0%)"
         }
       },
-      "icon": {
-        "unselected": {
-          "description": "Icon color for unselected checkbox (no icon shown).",
-          "value": "rgb(0 0 0 / 0%)"
-        },
+      "border": {
         "selected": {
-          "neutral": {
-            "description": "Icon color for selected neutral checkbox — black on white.",
-            "value": "{color.neutral.950}"
+          "brand": {
+            "description": "Border color for selected brand checkbox — Star Tribune green on dark.",
+            "value": "{color.emerald-green.400}"
           },
+          "neutral": {
+            "description": "Border color for selected neutral checkbox (dark mode: white).",
+            "value": "{color.base.white}"
+          }
+        },
+        "unselected": {
+          "description": "Border color for unselected checkbox on dark backgrounds.",
+          "value": "{color.neutral.600}"
+        }
+      },
+      "description": "Checkbox component color tokens — border, background, and icon for unselected, selected neutral, and selected brand states.",
+      "icon": {
+        "selected": {
           "brand": {
             "description": "Icon color for selected brand checkbox — black on green.",
             "value": "{color.neutral.950}"
+          },
+          "neutral": {
+            "description": "Icon color for selected neutral checkbox — black on white.",
+            "value": "{color.neutral.950}"
           }
+        },
+        "unselected": {
+          "description": "Icon color for unselected checkbox (no icon shown).",
+          "value": "rgb(0 0 0 / 0%)"
         }
       }
     },
