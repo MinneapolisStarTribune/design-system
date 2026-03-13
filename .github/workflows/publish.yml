@@ -59,10 +59,17 @@ jobs:
           git checkout main
           git fetch origin main
           git reset --hard origin/main
+<<<<<<< HEAD
 
           # Update version in the design system package
           cd packages/design-system
           yarn version ${{ steps.version.outputs.version }}
+=======
+          
+          # Update version in the design system package
+          cd packages/design-system
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+>>>>>>> d15ab7c93c770c0468ec1d4234d94af7b6ac4bb7
           cd ../..
 
           git config user.name "github-actions[bot]"
@@ -84,3 +91,8 @@ jobs:
         run: yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+<<<<<<< HEAD
+=======
+        working-directory: packages/design-system
+        run: yarn publish --non-interactive
+>>>>>>> d15ab7c93c770c0468ec1d4234d94af7b6ac4bb7

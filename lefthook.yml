@@ -26,4 +26,8 @@ pre-commit:
     jest:
       glob: 'packages/design-system/src/**/*.native.{tsx,ts}'
       root: packages/design-system
+<<<<<<< HEAD
       run: yarn tokens >/dev/null && yarn jest --config jest.config.js --findRelatedTests --passWithNoTests {staged_files}
+=======
+      run: yarn tokens >/dev/null && yarn jest --config jest.config.js --findRelatedTests --passWithNoTests {staged_files}
+>>>>>>> d15ab7c93c770c0468ec1d4234d94af7b6ac4bb7

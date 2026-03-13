@@ -97,11 +97,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "^0.73.0",
-<<<<<<< HEAD
     "react-test-renderer": "19.0.0",
-=======
-    "react-test-renderer": "^19.2.4",
->>>>>>> 330d8d45 (Rip out Tamagui - bundle size is too big for web)
     "sass": "^1.97.2",
     "storybook": "^10.1.11",
     "style-dictionary": "^4.4.0",
@@ -127,14 +123,6 @@
     "@floating-ui/react-native": {
       "optional": true
     },
-    "react-dom": {
-      "optional": true
-    },
-    "react-native": {
-      "optional": true
-    }
-  },
-  "peerDependenciesMeta": {
     "react-dom": {
       "optional": true
     },
