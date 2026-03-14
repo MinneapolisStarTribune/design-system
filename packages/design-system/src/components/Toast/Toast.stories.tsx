@@ -151,17 +151,14 @@ function ToastRendererDemo() {
   );
 }
 
-export const WithRenderer: Story = {
-  args: {
-    title: '',
-    onClose: () => {},
-  },
+export const WithRenderer = {
   parameters: {
     layout: 'centered',
+    controls: { disable: true },
     docs: {
       description: {
         story:
-          'Wrap your app with `ToastProvider` and use `useToast()` to show toasts from anywhere. Toasts appear in a fixed top-right container.',
+          'Wrap your app with `ToastRenderer` and use `useToast()` to show toasts from anywhere. Toasts appear in a fixed bottom-right container.',
       },
     },
   },
@@ -170,4 +167,4 @@ export const WithRenderer: Story = {
       <ToastRendererDemo />
     </ToastRenderer>
   ),
-};
+} satisfies Omit<Story, 'args'>;
