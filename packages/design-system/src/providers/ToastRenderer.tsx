@@ -13,7 +13,7 @@ export type ShowToastRenderOptions = {
   dataTestId?: string;
 };
 
-type ToastItem = ShowToastRenderOptions & { id: string };
+type ToastItem = ShowToastRenderOptions & { id: string; exiting?: boolean };
 
 export interface ToastContextValue {
   showToast: (options: ShowToastRenderOptions) => string;
@@ -49,26 +49,34 @@ export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRo
   const idRef = useRef(0);
   const durationTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
-  const hideToast = useCallback((id: string) => {
-    const timeouts = durationTimeoutsRef.current;
-    const timeout = timeouts.get(id);
-    if (timeout) {
-      clearTimeout(timeout);
-      timeouts.delete(id);
-    }
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
+  const hideToast = useCallback(
+    (id: string) => {
+      const timeouts = durationTimeoutsRef.current;
+      const timeout = timeouts.get(id);
+      if (timeout) {
+        clearTimeout(timeout);
+        timeouts.delete(id);
+      }
+      setToasts((prev) =>
+        prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
+      );
+    },
+    [durationTimeoutsRef]
+  );
 
   const showToast = useCallback((options: ShowToastRenderOptions): string => {
     const id = `toast-${++idRef.current}`;
     const item: ToastItem = { ...options, id };
     setToasts((prev) => [...prev, item]);
 
-    if (options.duration != null && options.duration > 0) {
+    const duration = options.duration ?? 5000;
+    if (duration > 0) {
       const timeout = setTimeout(() => {
         durationTimeoutsRef.current.delete(id);
-        setToasts((prev) => prev.filter((t) => t.id !== id));
-      }, options.duration);
+        setToasts((prev) =>
+          prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
+        );
+      }, duration);
       durationTimeoutsRef.current.set(id, timeout);
     }
 
@@ -89,6 +97,7 @@ export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRo
           role="region"
           aria-label="Notifications"
           data-testid="toast-container"
+          aria-live="polite"
         >
           {toasts.map((toast) => (
             <Toast
