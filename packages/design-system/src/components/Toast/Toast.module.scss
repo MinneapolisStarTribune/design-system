@@ -1,7 +1,8 @@
-/* Container – fixed top-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
+/* Container – fixed bottom-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
+
 .container {
   position: fixed;
-  top: var(--spacing-16);
+  bottom: var(--spacing-16);
   right: var(--spacing-16);
   z-index: 9999;
   display: flex;
@@ -25,6 +26,18 @@
   border-radius: var(--radius-8);
   box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px 2px rgba(0, 0, 0, 0.06);
   max-width: 100%;
+}
+
+/* Exit transition – slide out and fade when dismissing */
+@keyframes toastExit {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toastExiting {
+  animation: toastExit 0.12s ease-out forwards;
 }
 
 .content {

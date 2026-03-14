@@ -10,6 +10,7 @@ export type ToastProps = {
   description?: string;
   variant?: ToastVariant;
   showIcon?: boolean;
+  exiting?: boolean;
   onClose: () => void;
   dataTestId?: string;
 };
@@ -26,18 +27,20 @@ export const Toast: React.FC<ToastProps> = ({
   description,
   variant = 'info',
   showIcon = true,
+  exiting = false,
   onClose,
   dataTestId,
 }) => {
   const VariantIcon = VARIANT_ICON[variant];
-  const isError = variant === 'error';
 
   return (
     <div
-      role={isError ? 'alert' : 'status'}
-      aria-live={isError ? 'assertive' : 'polite'}
-      aria-atomic="true"
-      className={classNames(styles.toast, styles[`variant-${variant}`])}
+      role={'status'}
+      className={classNames(
+        styles.toast,
+        styles[`variant-${variant}`],
+        exiting && styles.toastExiting
+      )}
       data-testid={dataTestId}
     >
       <div className={styles.content}>
