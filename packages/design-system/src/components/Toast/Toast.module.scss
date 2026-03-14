@@ -1,7 +1,8 @@
-/* Container – fixed top-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
+/* Container – fixed bottom-right stack. Uses: spacing (16, 12, 32), no shadow/radius tokens. */
+
 .container {
   position: fixed;
-  top: var(--spacing-16);
+  bottom: var(--spacing-16);
   right: var(--spacing-16);
   z-index: 9999;
   display: flex;
