@@ -28,6 +28,18 @@
   max-width: 100%;
 }
 
+/* Exit transition – slide out and fade when dismissing */
+@keyframes toastExit {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toastExiting {
+  animation: toastExit 0.12s ease-out forwards;
+}
+
 .content {
   display: flex;
   align-items: flex-start;
