@@ -131,11 +131,10 @@ function ToastRendererDemo() {
             title: 'Saved',
             description: 'Your changes were saved.',
             variant: 'success',
-            duration: 5000,
           })
         }
       >
-        Show success (auto-dismiss 5s)
+        Show success (auto-dismiss)
       </button>
       <button type="button" onClick={() => showToast({ title: 'Warning', variant: 'warning' })}>
         Show warning

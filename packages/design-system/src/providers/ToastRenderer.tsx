@@ -22,6 +22,10 @@ export interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
+/** Total time until toast is removed. Exit animation runs for the last EXIT_DURATION_MS. */
+const DEFAULT_DISPLAY_DURATION_MS = 5000;
+const EXIT_DURATION_MS = 120;
+
 export interface ToastProviderProps {
   children: React.ReactNode;
   /** When set, the toast container portals into this element instead of document.body (e.g. for Storybook or tests). */
@@ -41,45 +45,51 @@ export interface ToastProviderProps {
  *
  * // In any component:
  * const { showToast, hideToast } = useToast();
- * showToast({ title: 'Saved', variant: 'success', duration: 5000 });
+ * showToast({ title: 'Saved', variant: 'success' });
  */
 
 export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRoot }) => {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
-  const durationTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const timeoutsRef = useRef<
+    Map<string, { exit: ReturnType<typeof setTimeout>; remove: ReturnType<typeof setTimeout> }>
+  >(new Map());
 
-  const hideToast = useCallback(
-    (id: string) => {
-      const timeouts = durationTimeoutsRef.current;
-      const timeout = timeouts.get(id);
-      if (timeout) {
-        clearTimeout(timeout);
-        timeouts.delete(id);
-      }
-      setToasts((prev) =>
-        prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
-      );
-    },
-    [durationTimeoutsRef]
-  );
+  const hideToast = useCallback((id: string) => {
+    const ids = timeoutsRef.current.get(id);
+    if (ids) {
+      clearTimeout(ids.exit);
+      clearTimeout(ids.remove);
+      timeoutsRef.current.delete(id);
+    }
+    setToasts((prev) =>
+      prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
+    );
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    }, EXIT_DURATION_MS);
+  }, []);
 
   const showToast = useCallback((options: ShowToastRenderOptions): string => {
     const id = `toast-${++idRef.current}`;
-    const item: ToastItem = { ...options, id };
-    setToasts((prev) => [...prev, item]);
+    setToasts((prev) => [...prev, { ...options, id }]);
 
-    const duration = options.duration ?? 5000;
+    const duration = options.duration ?? DEFAULT_DISPLAY_DURATION_MS;
     if (duration > 0) {
-      const timeout = setTimeout(() => {
-        durationTimeoutsRef.current.delete(id);
-        setToasts((prev) =>
-          prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
-        );
-      }, duration);
-      durationTimeoutsRef.current.set(id, timeout);
+      // Start EXIT_DURATION_MS so animation finishes when we remove at duration
+      const whenToStartExitMs = Math.max(0, duration - EXIT_DURATION_MS);
+      timeoutsRef.current.set(id, {
+        exit: setTimeout(() => {
+          setToasts((prev) =>
+            prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
+          );
+        }, whenToStartExitMs),
+        remove: setTimeout(() => {
+          timeoutsRef.current.delete(id);
+          setToasts((prev) => prev.filter((toast) => toast.id !== id));
+        }, duration),
+      });
     }
-
     return id;
   }, []);
 
@@ -106,6 +116,7 @@ export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRo
               description={toast.description}
               variant={toast.variant}
               showIcon={toast.showIcon}
+              exiting={toast.exiting}
               onClose={() => hideToast(toast.id)}
               dataTestId={toast.dataTestId}
             />

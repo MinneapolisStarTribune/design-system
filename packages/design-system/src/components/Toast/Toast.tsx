@@ -10,6 +10,7 @@ export type ToastProps = {
   description?: string;
   variant?: ToastVariant;
   showIcon?: boolean;
+  exiting?: boolean;
   onClose: () => void;
   dataTestId?: string;
 };
@@ -26,6 +27,7 @@ export const Toast: React.FC<ToastProps> = ({
   description,
   variant = 'info',
   showIcon = true,
+  exiting = false,
   onClose,
   dataTestId,
 }) => {
@@ -34,7 +36,11 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <div
       role={'status'}
-      className={classNames(styles.toast, styles[`variant-${variant}`])}
+      className={classNames(
+        styles.toast,
+        styles[`variant-${variant}`],
+        exiting && styles.toastExiting
+      )}
       data-testid={dataTestId}
     >
       <div className={styles.content}>
