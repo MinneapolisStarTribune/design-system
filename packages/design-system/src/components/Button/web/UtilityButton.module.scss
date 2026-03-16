@@ -1,12 +1,11 @@
 /* Button component styles */
 .button {
   /* Base button styles */
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
   cursor: pointer;
-  box-sizing: border-box;
   border: 1px solid var(--color-border-on-light-subtle-01, #E3E5E8);
   background: var(--color-background-light-default, #FFF);
   
@@ -61,7 +60,7 @@
   
   &.large {
     height: 40px;
-    padding: 0 var(--spacing-16);
+    padding: 0 var(--space-16, 16px);
   }
 
   /* Gap between icon and text when button has both */
