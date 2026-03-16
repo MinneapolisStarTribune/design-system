@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import classNames from 'classnames';
 import { Icon } from '@/components/Icon/Icon';
 import { IconName } from '@/components/Icon/iconNames';
@@ -55,13 +55,13 @@ export interface UtilityButtonProps extends BaseProps {
 /**
  * Get CSS variable value from computed styles
  */
-function getCSSVariable(element: HTMLElement | null, variableName: string): string | null {
-  if (!element || typeof window === 'undefined') {
-    return null;
-  }
-  const computed = window.getComputedStyle(element);
-  return computed.getPropertyValue(variableName).trim() || null;
-}
+// function getCSSVariable(element: HTMLElement | null, variableName: string): string | null {
+//   if (!element || typeof window === 'undefined') {
+//     return null;
+//   }
+//   const computed = window.getComputedStyle(element);
+//   return computed.getPropertyValue(variableName).trim() || null;
+// }
 
 //Large button + icon = small icon size (16x16)
 //Large button icon only = medium (20x20)
@@ -123,7 +123,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 }) => {
   const { track } = useAnalytics();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [hasGradientBorder, setHasGradientBorder] = useState(false);
+  // const [hasGradientBorder, setHasGradientBorder] = useState(false);
 
   // Determine if this is an icon-only button (has icon but no text label or children)
   const isIconOnly = !!icon && !label && !children;
@@ -157,23 +157,23 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
   // Check for gradient borders on brand-accent buttons (only for filled and outlined)
   // This checks if the hover-border token contains "gradient" (for Varsity brand)
-  useEffect(() => {
-    let nextHasGradientBorder = false;
+  // useEffect(() => {
+  //   let nextHasGradientBorder = false;
 
-    if (
-      color === 'brand-accent' &&
-      (variant === 'default') &&
-      buttonRef.current
-    ) {
-      const hoverBorderVar = `--color-button-utility-hover-border`;
-      const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
-      // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
-      nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
-    }
+  //   if (
+  //     color === 'brand-accent' &&
+  //     (variant === 'default') &&
+  //     buttonRef.current
+  //   ) {
+  //     const hoverBorderVar = `--color-button-utility-hover-border`;
+  //     const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
+  //     // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
+  //     nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
+  //   }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setHasGradientBorder(nextHasGradientBorder);
-  }, [color, variant]);
+  //   // eslint-disable-next-line react-hooks/set-state-in-effect
+  //   setHasGradientBorder(nextHasGradientBorder);
+  // }, [color, variant]);
 
   const effectiveSize: ButtonSize = size;
 
@@ -188,14 +188,14 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   const buttonAriaLabel = getButtonAriaLabel(ariaLabel, label, children, icon);
 
   // Apply special classes for gradient borders
-  const brandAccentFilledClass =
-    color === 'brand-accent' && variant === 'default' && hasGradientBorder
-      ? styles['brand-accent-filled']
-      : undefined;
-  const brandAccentOutlinedClass =
-    color === 'brand-accent' && variant === 'default' && hasGradientBorder
-      ? styles['brand-accent-outlined']
-      : undefined;
+  // const brandAccentFilledClass =
+  //   color === 'brand-accent' && variant === 'default' && hasGradientBorder
+  //     ? styles['brand-accent-filled']
+  //     : undefined;
+  // const brandAccentOutlinedClass =
+  //   color === 'brand-accent' && variant === 'default' && hasGradientBorder
+  //     ? styles['brand-accent-outlined']
+  //     : undefined;
 
   // Combine class names - use styles object for CSS modules
   // Use effectiveSize for class name (x-small only works for icon-only, otherwise falls back to small)
@@ -207,8 +207,8 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     styles[color],
     sizeClass,
     styles[variant],
-    brandAccentFilledClass,
-    brandAccentOutlinedClass,
+    // brandAccentFilledClass,
+    // brandAccentOutlinedClass,
     isIconOnly && styles['icon-only'],
     icon && !isIconOnly && styles.hasIcon, // Add class when button has icon + text
     isDisabled && styles.disabled,
