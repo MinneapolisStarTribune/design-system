@@ -22,14 +22,6 @@
     color: inherit;
   }
 
-  // Focused styles
-  // border-radius: var(--border-radius-full, 999px);
-  // border: 1px solid var(--component-button-utility-border-on-light-default, #E3E5E8);
-  // background: var(--color-background-light-default, #FFF);
-  
-  // /* focus-border/on-light */
-  // box-shadow: 0 0 0 2px var(--color-background-light-default, #FFF), 0 0 0 4px var(--color-border-state-focus-on-light, #0D0D0D);
-  
   /* Remove default button styles */
   appearance: none;
   -webkit-appearance: none;
@@ -37,6 +29,27 @@
   
   &:hover:not(:disabled) {
     border: 1px solid var(--component-button-utility-border-on-light-hover, #0D0D0D);
+  }
+
+  &:focus-visible:not(:disabled),
+  &:focus:not(:disabled) {
+    border-radius: var(--border-radius-full, 999px);
+    border: 1px solid var(--component-button-utility-border-on-light-default, #E3E5E8);
+    background: var(--color-background-light-default, #FFF);
+    box-shadow:
+      0 0 0 2px var(--color-background-light-default, #FFF),
+      0 0 0 4px var(--color-border-state-focus-on-light, #0D0D0D);
+    outline: none; // optional, if you want to suppress the browser default
+  }
+
+  /* Storybook-only helper class to visually show focus without actual DOM focus */
+  &.storybook-focus {
+    border-radius: var(--border-radius-full, 999px);
+    border: 1px solid var(--component-button-utility-border-on-light-default, #E3E5E8);
+    background: var(--color-background-light-default, #FFF);
+    box-shadow:
+      0 0 0 2px var(--color-background-light-default, #FFF),
+      0 0 0 4px var(--color-border-state-focus-on-light, #0D0D0D);
   }
   
   /* Size variants */
