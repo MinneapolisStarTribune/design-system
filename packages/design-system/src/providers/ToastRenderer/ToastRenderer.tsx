@@ -33,17 +33,19 @@ export interface ToastProviderProps {
 }
 
 /**
- * Global toast provider. Wrap your app with ToastRenderer, then use useToast() to show
- * or hide toasts. FloatingPortal only controls where the container is mounted (e.g. body);
- * showToast and hideToast control which toasts are visible.
+ * Global toast provider. Place ToastRenderer near your other providers (e.g. DesignSystemProvider)
+ * at the app root so any component can use useToast(). Toasts portal to document.body and stack
+ * bottom-right with newest on top.
  *
  * @example
- * // In app root:
- * <ToastRenderer>
- *   <App />
- * </ToastRenderer>
+ * // In app root, next to other providers:
+ * <DesignSystemProvider brand="startribune">
+ *   <ToastRenderer>
+ *     <App />
+ *   </ToastRenderer>
+ * </DesignSystemProvider>
  *
- * // In any component:
+ * // In any child component:
  * const { showToast, hideToast } = useToast();
  * showToast({ title: 'Saved', variant: 'success' });
  */
