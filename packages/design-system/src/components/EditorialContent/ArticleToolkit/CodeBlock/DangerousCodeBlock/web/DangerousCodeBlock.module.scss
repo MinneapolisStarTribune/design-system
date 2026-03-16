@@ -1,5 +1,7 @@
 .dangerous-code-block {
-  width: 100%;
+  * {
+    box-sizing: border-box;
+  }
 
   /* Breakpoints */
   $md: 768px;
@@ -10,104 +12,17 @@
   $standard-tablet: 728px;
   $standard-desktop: 712px;
 
-  /* Inline sizes */
-  $inline-mobile: 358px;
-  $inline-tablet: 528px;
-  $inline-desktop: 528px;
-
-  /* Immersive large */
-  $immersive-large-mobile: 390px;
-  $immersive-large-tablet: 720px;
-  $immersive-large-desktop: 1080px;
-
-  /* Immersive medium */
-  $immersive-medium-mobile: 390px;
-  $immersive-medium-tablet: 728px;
-  $immersive-medium-desktop: 712px;
-
-  margin-left: auto;
-  margin-right: auto;
-
   /* Standard variant */
-  &.variant-standard {
-    &.size-full,
-    &.size-large,
-    &.size-medium {
-      max-width: $standard-mobile;
-
-      @media (min-width: $md) {
-        max-width: $standard-tablet;
-      }
-
-      @media (min-width: $lg) {
-        max-width: $standard-desktop;
-      }
-    }
-
-    &.size-inline {
-      max-width: $inline-mobile;
-
-      @media (min-width: $md) {
-        max-width: $inline-tablet;
-      }
-
-      @media (min-width: $lg) {
-        max-width: $inline-desktop;
-      }
-    }
+  &.variant-standard,
+  &.variant-immersive {
+    position: relative;
   }
 
   /* Immersive variant */
   &.variant-immersive {
-    &.size-full,
-    &.size-large,
-    &.size-medium {
-      width: 100vw;
-      margin-left: 0;
-      margin-right: 0;
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    &.size-full {
-      max-width: none;
-    }
-
-    &.size-large {
-      max-width: $immersive-large-mobile;
-
-      @media (min-width: $md) {
-        max-width: $immersive-large-tablet;
-      }
-
-      @media (min-width: $lg) {
-        max-width: $immersive-large-desktop;
-      }
-    }
-
-    &.size-medium {
-      max-width: $immersive-medium-mobile;
-
-      @media (min-width: $md) {
-        max-width: $immersive-medium-tablet;
-      }
-
-      @media (min-width: $lg) {
-        max-width: $immersive-medium-desktop;
-      }
-    }
-
-    &.size-inline {
-      max-width: $inline-mobile;
-
-      @media (min-width: $md) {
-        max-width: $inline-tablet;
-      }
-
-      @media (min-width: $lg) {
-        max-width: $inline-desktop;
-      }
-    }
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
   }
 }

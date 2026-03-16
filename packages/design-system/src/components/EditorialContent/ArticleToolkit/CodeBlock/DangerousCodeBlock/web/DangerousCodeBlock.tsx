@@ -15,7 +15,6 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   markup,
   variant = 'standard',
   cleanQuotes = true,
-  size,
   className,
   dataTestId = 'dangerous-code-block',
   ...accessibilityProps
@@ -76,16 +75,13 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
     };
   }, [content, executeScripts]);
 
-  const widthClass = cleanQuotes ? styles['size-full'] : size ? styles[`size-${size}`] : undefined;
-
   return (
     <div
       ref={elRef}
       data-testid={dataTestId}
       className={classNames(
         styles['dangerous-code-block'],
-        styles[`variant-${variant}`],
-        widthClass,
+        !cleanQuotes && styles[`variant-${variant}`],
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}
