@@ -32,10 +32,15 @@ export const Toast: React.FC<ToastProps> = ({
   dataTestId,
 }) => {
   const VariantIcon = VARIANT_ICON[variant];
+  const isError = variant === 'error';
+  const liveRegionRole = isError ? 'alert' : 'status';
+  const ariaLive = isError ? 'assertive' : 'polite';
 
   return (
     <div
-      role={'status'}
+      role={liveRegionRole}
+      aria-live={ariaLive}
+      aria-atomic="true"
       className={classNames(
         styles.toast,
         styles[`variant-${variant}`],
