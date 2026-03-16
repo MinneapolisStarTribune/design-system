@@ -13,8 +13,9 @@
   $standard-desktop: 712px;
 
   /* Standard variant */
-  &.variant-standard {
-    max-width: 100%;
+  &.variant-standard,
+  &.variant-immersive {
+    position: relative;
   }
 
   /* Immersive variant */
