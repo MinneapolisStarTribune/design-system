@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from './FormGroupContext';
-import { Icon } from '@/components/Icon/Icon';
+import { CheckIcon, ErrorIcon, InformationIcon } from '@/icons';
 
 export interface FormGroupCaptionProps extends BaseProps {
   children: React.ReactNode;
@@ -28,15 +28,15 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
   switch (variant) {
     case 'info':
       color = 'var(--color-text-on-light-tertiary)';
-      icon = <Icon name="information" size="small" aria-hidden />;
+      icon = <InformationIcon aria-hidden />;
       break;
     case 'error':
       color = 'var(--color-text-state-attention-on-light)';
-      icon = <Icon name="error" size="small" aria-hidden />;
+      icon = <ErrorIcon aria-hidden />;
       break;
     case 'success':
-      color = 'var(--color-text-state-success-on-light)';
-      icon = <Icon name="check" size="small" aria-hidden />;
+      color = 'var(--color-text-state-success-on-light, #00854B)';
+      icon = <CheckIcon aria-hidden />;
       break;
   }
 

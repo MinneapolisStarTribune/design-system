@@ -1,7 +1,5 @@
 import classNames from 'classnames';
-
-import { Icon } from '../Icon/Icon';
-import type { IconName } from '../Icon/iconNames';
+import { CloseIcon, ErrorIcon, InformationIcon, SuccessIcon, WarningIcon } from '@/icons';
 import styles from './Toast.module.scss';
 
 export const TOAST_VARIANTS = ['info', 'success', 'warning', 'error'] as const;
@@ -16,12 +14,12 @@ export type ToastProps = {
   dataTestId?: string;
 };
 
-const VARIANT_ICON: Record<ToastVariant, IconName> = {
-  info: 'information',
-  success: 'success',
-  warning: 'warning',
-  error: 'error',
-};
+const VARIANT_ICON = {
+  info: InformationIcon,
+  success: SuccessIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+} as const;
 
 export const Toast: React.FC<ToastProps> = ({
   title,
@@ -31,7 +29,7 @@ export const Toast: React.FC<ToastProps> = ({
   onClose,
   dataTestId,
 }) => {
-  const iconName = VARIANT_ICON[variant];
+  const VariantIcon = VARIANT_ICON[variant];
   const isError = variant === 'error';
 
   return (
@@ -45,7 +43,7 @@ export const Toast: React.FC<ToastProps> = ({
       <div className={styles.content}>
         {showIcon === true && (
           <span className={styles.icon} aria-hidden>
-            <Icon name={iconName} size="medium" />
+            <VariantIcon />
           </span>
         )}
         <div className={styles.text}>
@@ -67,7 +65,7 @@ export const Toast: React.FC<ToastProps> = ({
         className={styles.closeButton}
         onClick={onClose}
       >
-        <Icon name="close" size="small" />
+        <CloseIcon />
       </button>
     </div>
   );

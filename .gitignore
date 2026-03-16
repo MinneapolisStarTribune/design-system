@@ -152,9 +152,6 @@ storybook-static
 .env
 .npmrc
 
-# Tamagui build output
-.tamagui/
-
 # Turborepo cache
 .turbo/
 
