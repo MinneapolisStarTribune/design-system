@@ -102,6 +102,7 @@ function renderUtilityButtonSection(
                       icon: withIcon ? 'avatar' : undefined,
                       // Only non-icon-only buttons should render the text label.
                       ...(withIcon ? {} : { label: 'Share' }),
+                      isDisabled: color === BUTTON_COLORS[BUTTON_COLORS.length - 1],
                       className:
                         showFocusedExample &&
                         color === 'brand' &&
@@ -160,6 +161,7 @@ function renderUtilityButtonTextRightSection(
                   size={size}
                   icon="avatar"
                   label="Share"
+                  isDisabled={color === BUTTON_COLORS[BUTTON_COLORS.length - 1]}
                   className={
                     showFocusedExample &&
                     color === 'brand' &&
