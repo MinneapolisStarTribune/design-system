@@ -26,11 +26,6 @@ const meta = {
       options: ['default'] as string[],
       description: 'The variant of the utility button',
     },
-    color: {
-      control: 'select',
-      options: [...BUTTON_COLORS] as string[],
-      description: 'The color token for the utility button',
-    },
     size: {
       control: 'select',
       options: [...BUTTON_SIZES] as string[],
@@ -53,10 +48,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    label: 'Utility action',
+    label: 'Share',
     onClick: () => alert('Utility button clicked'),
     variant: 'default',
-    size: 'medium',
+    size: 'large',
     color: 'neutral',
     icon: undefined,
     isDisabled: false,
@@ -103,11 +98,11 @@ function renderUtilityButtonSection(
                   color={color}
                   size={size}
                   icon={withIcon ? 'avatar' : undefined}
-                  label={withIcon ? '' : `${color} ${size}`}
+                  label="Share"
                   className={
                     showFocusedExample &&
                     color === 'brand' &&
-                    (size === 'small' || size === 'medium')
+                    (size === 'small' || size === 'large')
                       ? styles['storybook-focus']
                       : undefined
                   }
@@ -160,11 +155,11 @@ function renderUtilityButtonTextRightSection(
                   color={color}
                   size={size}
                   icon="avatar"
-                  label={`${color} ${size}`}
+                  label="Share"
                   className={
                     showFocusedExample &&
                     color === 'brand' &&
-                    (size === 'small' || size === 'medium')
+                    (size === 'small' || size === 'large')
                       ? styles['storybook-focus']
                       : undefined
                   }
@@ -180,9 +175,9 @@ function renderUtilityButtonTextRightSection(
 
 export const AllUtilityButtons: Story = {
   args: {
-    label: 'Utility action',
+    label: 'Share',
     variant: 'default',
-    size: 'small',
+    size: 'large',
     color: 'neutral',
   },
   parameters: {
