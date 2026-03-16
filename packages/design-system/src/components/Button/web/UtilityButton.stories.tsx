@@ -6,6 +6,7 @@ import {
   BUTTON_SIZES,
   type ButtonSize,
 } from './UtilityButton';
+import styles from './UtilityButton.module.scss';
 import { iconOptions } from '@/components/Icon/iconOptions';
 import { IconName } from '@/components/Icon/iconNames';
 import { NewsHeading } from '@/components/index.web';
@@ -40,11 +41,6 @@ const meta = {
       options: Object.keys(iconOptions) as IconName[],
       description: 'Optional icon to display in the utility button',
     },
-    iconPosition: {
-      control: 'select',
-      options: ['start', 'end'],
-      description: 'The position of the icon relative to the label',
-    },
     isDisabled: {
       control: 'boolean',
       description: 'Whether the utility button is disabled',
@@ -60,10 +56,9 @@ export const Configurable: Story = {
     label: 'Utility action',
     onClick: () => alert('Utility button clicked'),
     variant: 'default',
-    size: 'large',
+    size: 'medium',
     color: 'neutral',
     icon: undefined,
-    iconPosition: 'end',
     isDisabled: false,
   },
 };
@@ -71,7 +66,8 @@ export const Configurable: Story = {
 function renderUtilityButtonSection(
   title: string,
   sizes: readonly ButtonSize[],
-  withIcon: boolean
+  withIcon: boolean,
+  showFocusedExample: boolean = false
 ) {
   return (
     <div>
@@ -107,8 +103,14 @@ function renderUtilityButtonSection(
                   color={color}
                   size={size}
                   icon={withIcon ? 'avatar' : undefined}
-                  iconPosition="start"
                   label={withIcon ? '' : `${color} ${size}`}
+                  className={
+                    showFocusedExample &&
+                    color === 'brand' &&
+                    (size === 'small' || size === 'medium')
+                      ? styles['storybook-focus']
+                      : undefined
+                  }
                 />
               </div>
             ))}
@@ -121,7 +123,8 @@ function renderUtilityButtonSection(
 
 function renderUtilityButtonTextRightSection(
   title: string,
-  sizes: readonly ButtonSize[]
+  sizes: readonly ButtonSize[],
+  showFocusedExample: boolean = false
 ) {
   return (
     <div>
@@ -157,8 +160,14 @@ function renderUtilityButtonTextRightSection(
                   color={color}
                   size={size}
                   icon="avatar"
-                  iconPosition="end"
                   label={`${color} ${size}`}
+                  className={
+                    showFocusedExample &&
+                    color === 'brand' &&
+                    (size === 'small' || size === 'medium')
+                      ? styles['storybook-focus']
+                      : undefined
+                  }
                 />
               </div>
             ))}
@@ -170,6 +179,12 @@ function renderUtilityButtonTextRightSection(
 }
 
 export const AllUtilityButtons: Story = {
+  args: {
+    label: 'Utility action',
+    variant: 'default',
+    size: 'small',
+    color: 'neutral',
+  },
   parameters: {
     chromatic: { modes: allModes },
     controls: { disable: true },
@@ -177,9 +192,13 @@ export const AllUtilityButtons: Story = {
   },
   render: () => (
     <div style={{ padding: '2rem' }}>
-      {renderUtilityButtonSection('Utility buttons', BUTTON_SIZES, false)}
-      {renderUtilityButtonSection('Utility buttons icon only', BUTTON_SIZES, true)}
-      {renderUtilityButtonTextRightSection('Utility buttons with icon and label', BUTTON_SIZES)}
+      {renderUtilityButtonSection('Utility buttons', BUTTON_SIZES, false, true)}
+      {renderUtilityButtonSection('Utility buttons icon only', BUTTON_SIZES, true, true)}
+      {renderUtilityButtonTextRightSection(
+        'Utility buttons with icon and label',
+        BUTTON_SIZES,
+        true
+      )}
     </div>
   ),
 };
