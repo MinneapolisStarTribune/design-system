@@ -227,7 +227,11 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     >
       {iconElement}
       {!isIconOnly && (
-        <UtilityLabel size={effectiveSize as ButtonSize} weight="semibold" capitalize={capitalize}>
+        <UtilityLabel
+          size={effectiveSize === 'large' ? 'medium' : effectiveSize}
+          weight="semibold"
+          capitalize={capitalize}
+        >
           {label ?? children}
         </UtilityLabel>
       )}
