@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
 import { Icon } from '@/components/Icon/Icon';
+import type { IconComponent as IconComponentType } from '@/components/Icon/Icon.types';
+import { UtilityLabel } from '@/components/Typography/Utility';
 import { CheckIcon, CheckboxInactiveIcon, MinusIcon } from '@/icons';
 import { useId } from 'react';
 import styles from './Checkbox.module.scss';
@@ -119,7 +121,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         />
         <span className={styles.visualBox} aria-hidden="true">
           <Icon
-            component={IconComponent}
+            component={IconComponent as IconComponentType}
             size={size === 'small' ? 'small' : 'medium'}
             className={styles.icon}
             aria-hidden
@@ -127,16 +129,13 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         </span>
       </span>
       <span className={styles.content}>
-        <span
-          className={classNames(
-            styles.label,
-            size === 'default'
-              ? 'typography-utility-label-regular-medium'
-              : 'typography-utility-label-regular-small'
-          )}
+        <UtilityLabel
+          size={size === 'default' ? 'medium' : 'small'}
+          weight="regular"
+          className={styles.label}
         >
           {label}
-        </span>
+        </UtilityLabel>
         {caption && (
           <span
             id={`${id}-caption`}
