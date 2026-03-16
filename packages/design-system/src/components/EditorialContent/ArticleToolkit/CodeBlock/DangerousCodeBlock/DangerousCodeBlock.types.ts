@@ -1,7 +1,4 @@
-import type {
-  ArticleToolkitBaseProps,
-  CodeBlockSizeType,
-} from '@/components/EditorialContent/ArticleToolkit/types';
+import type { ArticleToolkitBaseProps } from '@/components/EditorialContent/ArticleToolkit/types';
 
 export interface DangerousCodeBlockProps extends ArticleToolkitBaseProps {
   /*
@@ -13,8 +10,4 @@ export interface DangerousCodeBlockProps extends ArticleToolkitBaseProps {
    * @default true
    */
   cleanQuotes?: boolean;
-  /**
-   * Size variant (used only when cleanQuotes is false).
-   */
-  size?: CodeBlockSizeType;
 }
