@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FloatingPortal } from '@floating-ui/react';
 import { Toast } from '@/components/Toast/Toast';
 import type { ToastVariant } from '@/components/Toast/Toast';
@@ -54,22 +62,23 @@ export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRo
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const idRef = useRef(0);
   const timeoutsRef = useRef<
-    Map<string, { exit: ReturnType<typeof setTimeout>; remove: ReturnType<typeof setTimeout> }>
+    Map<string, { exit?: ReturnType<typeof setTimeout>; remove?: ReturnType<typeof setTimeout> }>
   >(new Map());
 
   const hideToast = useCallback((id: string) => {
-    const ids = timeoutsRef.current.get(id);
-    if (ids) {
-      clearTimeout(ids.exit);
-      clearTimeout(ids.remove);
-      timeoutsRef.current.delete(id);
+    const existing = timeoutsRef.current.get(id);
+    if (existing) {
+      if (existing.exit) clearTimeout(existing.exit);
+      if (existing.remove) clearTimeout(existing.remove);
     }
     setToasts((prev) =>
       prev.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast))
     );
-    setTimeout(() => {
+    const removeTimeout = setTimeout(() => {
+      timeoutsRef.current.delete(id);
       setToasts((prev) => prev.filter((toast) => toast.id !== id));
     }, EXIT_DURATION_MS);
+    timeoutsRef.current.set(id, { remove: removeTimeout });
   }, []);
 
   const showToast = useCallback((options: ShowToastRenderOptions): string => {
@@ -93,6 +102,17 @@ export const ToastRenderer: React.FC<ToastProviderProps> = ({ children, portalRo
       });
     }
     return id;
+  }, []);
+
+  useEffect(() => {
+    const ref = timeoutsRef;
+    return () => {
+      ref.current.forEach((timeouts) => {
+        if (timeouts.exit) clearTimeout(timeouts.exit);
+        if (timeouts.remove) clearTimeout(timeouts.remove);
+      });
+      ref.current.clear();
+    };
   }, []);
 
   const value: ToastContextValue = useMemo(
