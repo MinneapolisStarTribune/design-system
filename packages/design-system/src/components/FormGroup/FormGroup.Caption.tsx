@@ -28,15 +28,15 @@ export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
   switch (variant) {
     case 'info':
       color = 'var(--color-text-on-light-tertiary)';
-      icon = <InformationIcon aria-hidden />;
+      icon = <InformationIcon size="small" aria-hidden />;
       break;
     case 'error':
       color = 'var(--color-text-state-attention-on-light)';
-      icon = <ErrorIcon aria-hidden />;
+      icon = <ErrorIcon size="small" aria-hidden />;
       break;
     case 'success':
       color = 'var(--color-text-state-success-on-light, #00854B)';
-      icon = <CheckIcon aria-hidden />;
+      icon = <CheckIcon size="small" aria-hidden />;
       break;
   }
 
