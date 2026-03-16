@@ -32,8 +32,6 @@ export const ICON_COLOR_TOKENS = {
 
 export type IconColor = keyof typeof ICON_COLOR_TOKENS;
 
-export type IconComponent = React.ComponentType<SVGProps<SVGSVGElement>>;
-
 /**
  * Props for wrapped icon components exported from the design system.
  * Consumers choose from predetermined size and color tokens.
@@ -42,3 +40,5 @@ export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height' 
   size?: IconSize;
   color?: IconColor;
 };
+
+export type IconComponent = React.ComponentType<SVGProps<SVGSVGElement>>;

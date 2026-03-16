@@ -153,6 +153,12 @@ async function buildTokens() {
     fs.rmSync(themesDir, { recursive: true, force: true });
   }
 
+  // Generate TypeScript type declarations from the built JS files
+  console.log('\n==============================================');
+  console.log('Generating native TypeScript declarations...');
+
+  await generateNativeTypes();
+
   console.log('\n==============================================');
   console.log('\n✓ All tokens built successfully!\n');
 }
