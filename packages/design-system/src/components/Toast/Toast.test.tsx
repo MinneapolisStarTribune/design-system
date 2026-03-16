@@ -39,6 +39,14 @@ describe('Toast', () => {
     expect(getByRole('status')).toBeInTheDocument();
   });
 
+  it('has role="status" for error variant', () => {
+    const { getByRole } = renderWithProvider(
+      <Toast title="Something went wrong" variant="error" onClose={vi.fn()} />
+    );
+
+    expect(getByRole('status')).toBeInTheDocument();
+  });
+
   it('renders icon when showIcon is true', () => {
     const { container } = renderWithProvider(
       <Toast title="With icon" showIcon onClose={vi.fn()} />

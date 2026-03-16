@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps } from './Toast';
-import { ToastRenderer, useToast } from '@/providers/ToastRenderer';
+import { ToastRenderer, useToast } from '@/providers/ToastRenderer/ToastRenderer';
 import styles from './Toast.stories.module.scss';
 
 const meta = {
