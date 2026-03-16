@@ -4,16 +4,16 @@ import { Icon } from '@/components/Icon/Icon';
 import { IconName } from '@/components/Icon/iconNames';
 import { getIconLabel } from '@/utils/accessibilityHelpers';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import styles from './Button.module.scss';
+import styles from './UtilityButton.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps, Size } from '@/types/globalTypes';
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['default'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
-export const BUTTON_SIZES = ['small', 'large'] as const;
+export const BUTTON_SIZES = ['small', 'medium'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
-export const ICON_ONLY_BUTTON_SIZES = ['small', 'large'] as const;
+export const ICON_ONLY_BUTTON_SIZES = ['small', 'medium'] as const;
 export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
 
 /** Extra data to merge into the tracking event. Use for per-utility-button context (e.g. cta_type, module_position). */
@@ -23,7 +23,7 @@ export interface UtilityButtonProps extends BaseProps {
   variant: ButtonVariant;
   color?: ButtonColor;
   capitalize?: boolean;
-  size?: Extract<Size, 'small' | 'large'>;
+  size?: Extract<Size, 'small' | 'medium'>;
   icon?: IconName;
   children?: React.ReactNode;
   isDisabled?: boolean;
@@ -36,19 +36,21 @@ export interface UtilityButtonProps extends BaseProps {
 /**
  * Build CSS variable name for button tokens
  * Examples:
- * - neutral + default -> 'button-utility-default'
- * - brand + toggle -> 'button-utility-toggle'
+ * - neutral + default -> 'button-utility-border-default'
+ * - brand + toggle -> 'button-utility-border-toggle'
  * - brand-accent + link -> 'button-utility-link'
  */
-function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
-  if (color === 'neutral') {
-    return `button-utility-${variant}`;
-  } else if (color === 'brand') {
-    return `button-utility-brand-${variant}`;
-  } else {
-    return `button-utility-brand-accent-${variant}`;
-  }
-}
+// function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
+//   if (color === 'neutral') {
+//     return `button-utility-border-${variant}`;
+//   } else if (color === 'brand') {
+//     return `button-utility-brand-${variant}`;
+//   } else {
+//     return `button-utility-brand-accent-${variant}`;
+//   }
+// }
+
+// component-button-utility-border-default
 
 /**
  * Get CSS variable value from computed styles
@@ -88,8 +90,8 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
 //   return iconSizeMap[size as ButtonSize];
 // }
 
-// For UtilityButton, icon size always matches button size (small or large), including icon-only.
-function getUtilityButtonIconSize(size: ButtonSize): 'small' | 'large' {
+// For UtilityButton, icon size always matches the button size (small | medium).
+function getUtilityButtonIconSize(size: ButtonSize): Extract<Size, 'small' | 'medium'> {
   return size;
 }
 
@@ -113,7 +115,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   color = 'neutral',
   capitalize = false,
   variant = 'default',
-  size = 'large',
+  size = 'medium',
   icon,
   children,
   className,
@@ -155,7 +157,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   };
 
   // Build token prefix for CSS variables
-  const tokenPrefix = getButtonTokenPrefix(color, variant);
+  // const tokenPrefix = getButtonTokenPrefix(color, variant);
 
   // Check for gradient borders on brand-accent buttons (only for filled and outlined)
   // This checks if the hover-border token contains "gradient" (for Varsity brand)
@@ -167,7 +169,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
       (variant === 'default') &&
       buttonRef.current
     ) {
-      const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
+      const hoverBorderVar = `--color-button-utility-hover-border`;
       const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
       // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
       nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
@@ -175,7 +177,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHasGradientBorder(nextHasGradientBorder);
-  }, [color, variant, tokenPrefix]);
+  }, [color, variant]);
 
   // Get icon size and create icon element
   const iconSize = icon ? getUtilityButtonIconSize(size) : undefined;
@@ -205,10 +207,13 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   //     : styles[effectiveSize as ButtonSize];
 
   const combinedClassNames = classNames(
+    'color-button-utility-active-icon-hover',
     styles.button,
     styles[color],
     styles[size],
     styles[variant],
+    // Global style token class for utility button default border
+    // 'component-button-utility-border-default',
     brandAccentFilledClass,
     brandAccentOutlinedClass,
     isIconOnly && styles['icon-only'],
