@@ -19,10 +19,9 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
       className={classNames(
         styles['enhanced-code-block'],
         styles[`variant-${variant}`],
-        styles[`size-${size}`]
+        !cleanQuotes && styles[`size-${size}`]
       )}
       variant={variant}
-      size={size}
       cleanQuotes={cleanQuotes}
       {...rest}
     />

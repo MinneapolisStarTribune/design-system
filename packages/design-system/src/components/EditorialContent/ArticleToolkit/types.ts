@@ -88,3 +88,9 @@ export interface ImageUrlTransformContext {
   width?: number;
   aspectRatio?: string;
 }
+
+/**
+ * Code block size variants for the CodeBlock component.
+ */
+export const CODE_BLOCK_SIZES = ['full', 'large', 'medium', 'inline'] as const;
+export type CodeBlockSizeType = (typeof CODE_BLOCK_SIZES)[number];

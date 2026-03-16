@@ -6,6 +6,7 @@ import { CODE_BLOCK_SIZES, ARTICLE_BODY_VARIANTS } from '../../../types';
 const meta: Meta<typeof EnhancedCodeBlock> = {
   title: 'EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock',
   component: EnhancedCodeBlock,
+  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
   },
@@ -38,9 +39,9 @@ type Story = StoryObj<typeof EnhancedCodeBlock>;
 // Sample markup for enhanced code blocks (no quote cleaning)
 const enhancedCodeBlockMarkup = `
   <div style="padding: 20px; background-color: #e3f2fd; border: 2px solid #2196F3; border-radius: 8px; width: 100%;">
-    <h3>Enhanced Code Block</h3>
-    <p>This is an enhanced code block with sizing options.</p>
-    <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 24px;">
+    <h3 class="typography-article-body-h3">Enhanced Code Block</h3>
+    <p class="typography-editorial-text-regular-medium">This is an enhanced code block with sizing options.</p>
+    <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" class="typography-editorial-text-regular-medium">
       Interactive Content Area
     </div>
     <script>
@@ -64,16 +65,8 @@ const renderVariantWithSizes = (variant: EnhancedCodeBlockProps['variant']) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', padding: '48px 0' }}>
     {CODE_BLOCK_SIZES.map((size) => (
       <div key={`${variant}-${size}`}>
-        <h3
-          style={{
-            textTransform: 'capitalize',
-            textAlign: 'center',
-            marginBottom: '16px',
-            fontFamily: 'sans-serif',
-            color: '#333',
-          }}
-        >
-          {size} Size Widget
+        <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
+          {size}
         </h3>
         <EnhancedCodeBlock {...createArgs(variant, size, false)} />
       </div>
