@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FormControl } from '../../FormControl';
+import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import {
