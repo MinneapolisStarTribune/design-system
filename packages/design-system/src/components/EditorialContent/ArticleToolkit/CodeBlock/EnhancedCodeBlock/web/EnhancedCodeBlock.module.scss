@@ -23,70 +23,77 @@
   $immersive-medium-tablet: 728px;
   $immersive-medium-desktop: 712px;
 
-  margin-left: auto;
-  margin-right: auto;
-
   /* Standard variant */
   &.variant-standard {
+    position: relative;
     &.size-full,
     &.size-large,
     &.size-medium {
-      width: $standard-mobile;
-      max-width: none;
+      max-width: $standard-mobile;
 
       @media (min-width: $md) {
-        width: $standard-tablet;
+        max-width: $standard-tablet;
       }
+
       @media (min-width: $lg) {
-        width: $standard-desktop;
+        max-width: $standard-desktop;
       }
     }
 
     &.size-inline {
-      width: $inline-mobile;
-      max-width: none;
+      max-width: $inline-mobile;
 
       @media (min-width: $md) {
-        width: $inline-tablet;
+        max-width: $inline-tablet;
       }
+
       @media (min-width: $lg) {
-        width: $inline-desktop;
+        max-width: $inline-desktop;
       }
     }
   }
 
   /* Immersive variant */
   &.variant-immersive {
-    &.size-large {
-      width: $immersive-large-mobile;
+    position: relative;
+    &.size-full {
+      width: 100%;
       max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    &.size-large {
+      max-width: $immersive-large-mobile;
 
       @media (min-width: $md) {
-        width: $immersive-large-tablet;
+        max-width: $immersive-large-tablet;
       }
+
       @media (min-width: $lg) {
-        width: $immersive-large-desktop;
+        max-width: $immersive-large-desktop;
       }
     }
 
     &.size-medium {
-      width: $immersive-medium-mobile;
-      max-width: none;
+      max-width: $immersive-medium-mobile;
 
       @media (min-width: $md) {
-        width: $immersive-medium-tablet;
+        max-width: $immersive-medium-tablet;
       }
+
       @media (min-width: $lg) {
-        width: $immersive-medium-desktop;
+        max-width: $immersive-medium-desktop;
       }
     }
 
     &.size-inline {
-      width: 100%;
       max-width: $inline-mobile;
+
       @media (min-width: $md) {
         max-width: $inline-tablet;
       }
+
       @media (min-width: $lg) {
         max-width: $inline-desktop;
       }

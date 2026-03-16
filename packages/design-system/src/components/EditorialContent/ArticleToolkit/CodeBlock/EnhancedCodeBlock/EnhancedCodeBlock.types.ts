@@ -1,3 +1,6 @@
+import type { CodeBlockSizeType } from '../../types';
 import type { DangerousCodeBlockProps } from '../DangerousCodeBlock/DangerousCodeBlock.types';
 
-export type EnhancedCodeBlockProps = Omit<DangerousCodeBlockProps, 'className'>;
+export interface EnhancedCodeBlockProps extends DangerousCodeBlockProps {
+  size?: CodeBlockSizeType;
+}
