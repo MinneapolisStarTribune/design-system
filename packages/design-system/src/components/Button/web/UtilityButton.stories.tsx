@@ -94,17 +94,21 @@ function renderUtilityButtonSection(
                 }}
               >
                 <UtilityButton
-                  variant="default"
-                  color={color}
-                  size={size}
-                  icon={withIcon ? 'avatar' : undefined}
-                  label="Share"
-                  className={
-                    showFocusedExample &&
-                    color === 'brand' &&
-                    (size === 'small' || size === 'large')
-                      ? styles['storybook-focus']
-                      : undefined
+                  {
+                    ...({
+                      variant: 'default',
+                      color,
+                      size,
+                      icon: withIcon ? 'avatar' : undefined,
+                      // Only non-icon-only buttons should render the text label.
+                      ...(withIcon ? {} : { label: 'Share' }),
+                      className:
+                        showFocusedExample &&
+                        color === 'brand' &&
+                        (size === 'small' || size === 'large')
+                          ? styles['storybook-focus']
+                          : undefined,
+                    } as any)
                   }
                 />
               </div>

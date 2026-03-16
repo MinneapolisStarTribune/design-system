@@ -63,36 +63,32 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
   return computed.getPropertyValue(variableName).trim() || null;
 }
 
-// Original button icon sizing logic (kept for potential future use).
-// /**
-//  * Get icon size for a button based on button size and whether it's icon-only
-//  */
-// function getButtonIconSize(
-//   size: ButtonSize | 'x-small',
-//   isIconOnly: boolean
-// ): 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | undefined {
-//   const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
-//     small: 'x-small',
-//     medium: 'small',
-//     large: 'medium',
-//   };
-//
-//   const iconOnlySizeMap: Record<IconOnlyButtonSize, 'small' | 'medium' | 'large' | 'x-large'> = {
-//     'x-small': 'small',
-//     small: 'medium',
-//     medium: 'large',
-//     large: 'x-large',
-//   };
-//
-//   if (isIconOnly) {
-//     return iconOnlySizeMap[size as IconOnlyButtonSize];
-//   }
-//   return iconSizeMap[size as ButtonSize];
-// }
+//Large button + icon = small icon size (16x16)
+//Large button icon only = medium (20x20)
+//small button + icon = xsmall (14x14)
+//small button icon only = small (16x16)
 
-// For UtilityButton, icon size always matches the button size (small | medium).
-function getUtilityButtonIconSize(size: ButtonSize): Extract<Size, 'small' | 'large'> {
-  return size;
+/**
+ * Get icon size for a button based on button size and whether it's icon-only
+ */
+function getButtonIconSize(
+  size: ButtonSize | 'x-small',
+  isIconOnly: boolean
+): 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | undefined {
+  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
+    small: 'x-small',
+    large: 'small',
+  };
+
+  const iconOnlySizeMap: Record<IconOnlyButtonSize, 'small' | 'medium' | 'large' | 'x-large'> = {
+    small: 'small',
+    large: 'medium',
+  };
+
+  if (isIconOnly) {
+    return iconOnlySizeMap[size as IconOnlyButtonSize];
+  }
+  return iconSizeMap[size as ButtonSize];
 }
 
 /**
@@ -133,14 +129,14 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   const isIconOnly = !!icon && !label && !children;
 
   // Validate that x-small can only be used for icon-only buttons
-//   if (size === 'x-small' && !isIconOnly) {
-//     throw new Error(
-//       createDesignSystemError(
-//         'UtilityButton',
-//         'x-small size is only valid for icon-only buttons. Please either remove the text children or use a different size.'
-//       )
-//     );
-//   }
+  // if (size === 'x-small' && !isIconOnly) {
+  //   throw new Error(
+  //     createDesignSystemError(
+  //       'UtilityButton',
+  //       'x-small size is only valid for icon-only buttons. Please either remove the text children or use a different size.'
+  //     )
+  //   );
+  // }
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const trackingLabel = label ?? (typeof children === 'string' ? children : undefined);
@@ -179,8 +175,10 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant]);
 
+  const effectiveSize: ButtonSize = size;
+
   // Get icon size and create icon element
-  const iconSize = icon ? getUtilityButtonIconSize(size) : undefined;
+  const iconSize = icon ? getButtonIconSize(effectiveSize, isIconOnly) : undefined;
   const iconElement = icon ? (
     <Icon name={icon} size={iconSize} className={styles.icon} aria-hidden />
   ) : null;
@@ -201,19 +199,14 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
   // Combine class names - use styles object for CSS modules
   // Use effectiveSize for class name (x-small only works for icon-only, otherwise falls back to small)
-  // const sizeClass =
-  //   effectiveSize === 'x-small' && isIconOnly
-  //     ? styles['x-small']
-  //     : styles[effectiveSize as ButtonSize];
+  const sizeClass = styles[effectiveSize as ButtonSize];
 
   const combinedClassNames = classNames(
     'color-button-utility-active-icon-hover',
     styles.button,
     styles[color],
-    styles[size],
+    sizeClass,
     styles[variant],
-    // Global style token class for utility button default border
-    // 'component-button-utility-border-default',
     brandAccentFilledClass,
     brandAccentOutlinedClass,
     isIconOnly && styles['icon-only'],
@@ -234,7 +227,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     >
       {iconElement}
       {!isIconOnly && (
-        <UtilityLabel size={size} weight="semibold" capitalize={capitalize}>
+        <UtilityLabel size={effectiveSize as ButtonSize} weight="semibold" capitalize={capitalize}>
           {label ?? children}
         </UtilityLabel>
       )}
