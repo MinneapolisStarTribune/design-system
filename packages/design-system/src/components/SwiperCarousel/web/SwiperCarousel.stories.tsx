@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SwiperCarousel } from './SwiperCarousel';
-import React from 'react';
 
 const meta: Meta<typeof SwiperCarousel> = {
   title: 'Components/SwiperCarousel',
