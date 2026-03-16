@@ -11,9 +11,9 @@ export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['default'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
-export const BUTTON_SIZES = ['small', 'medium'] as const;
+export const BUTTON_SIZES = ['small', 'large'] as const;
 export type ButtonSize = (typeof BUTTON_SIZES)[number];
-export const ICON_ONLY_BUTTON_SIZES = ['small', 'medium'] as const;
+export const ICON_ONLY_BUTTON_SIZES = ['small', 'large'] as const;
 export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
 
 /** Extra data to merge into the tracking event. Use for per-utility-button context (e.g. cta_type, module_position). */
@@ -23,7 +23,7 @@ export interface UtilityButtonProps extends BaseProps {
   variant: ButtonVariant;
   color?: ButtonColor;
   capitalize?: boolean;
-  size?: Extract<Size, 'small' | 'medium'>;
+  size?: Extract<Size, 'small' | 'large'>;
   icon?: IconName;
   children?: React.ReactNode;
   isDisabled?: boolean;
@@ -91,7 +91,7 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
 // }
 
 // For UtilityButton, icon size always matches the button size (small | medium).
-function getUtilityButtonIconSize(size: ButtonSize): Extract<Size, 'small' | 'medium'> {
+function getUtilityButtonIconSize(size: ButtonSize): Extract<Size, 'small' | 'large'> {
   return size;
 }
 
@@ -115,7 +115,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   color = 'neutral',
   capitalize = false,
   variant = 'default',
-  size = 'medium',
+  size = 'large',
   icon,
   children,
   className,
