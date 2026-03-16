@@ -1,0 +1,33 @@
+/* CheckboxGroup - design system spacing tokens between checkboxes */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  box-sizing: border-box;
+}
+
+.flatMode {
+  /* Simple vertical list - gap handles spacing between checkboxes */
+}
+
+.categoryMode {
+  gap: var(--spacing-12);
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.categoryHeader {
+  /* Parent checkbox - no extra styling needed */
+}
+
+.categoryOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding-left: var(--spacing-24);
+}

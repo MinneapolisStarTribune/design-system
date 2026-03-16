@@ -91,7 +91,7 @@ export const Configurable: Story = {
     variant: 'brand',
     size: 'default',
     disabled: false,
-    error: false,
+    error: true,
     focus: false,
   },
   render: function ConfigurableRender(args) {

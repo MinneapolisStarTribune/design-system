@@ -124,6 +124,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
             component={IconComponent as IconComponentType}
             size={size === 'small' ? 'small' : 'medium'}
             className={styles.icon}
+            style={{ color: 'var(--checkbox-icon-color)' }}
             aria-hidden
           />
         </span>
