@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { FormControl } from '@/components/FormControl/FormControl';
-import { FormGroup } from '@/components/FormGroup/FormGroup';
+import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 
 describe('TextInput Accessibility', () => {
   describe('standalone', () => {

@@ -1,5 +1,5 @@
 import { FormGroupDescription } from './FormGroup.Description';
-import { FormGroupProvider } from './FormGroupContext';
+import { FormGroupProvider } from '../../FormGroupContext';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('FormGroupDescription', () => {
