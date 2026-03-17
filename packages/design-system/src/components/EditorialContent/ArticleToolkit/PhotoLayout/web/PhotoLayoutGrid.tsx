@@ -1,6 +1,6 @@
 import React from 'react';
 import { ExpandIcon } from '@/icons';
-import { Icon, Image } from '@/components/index.web';
+import { Image } from '@/components/index.web';
 import type { ImageData } from '../../types';
 import styles from './PhotoLayout.module.scss';
 
@@ -41,8 +41,7 @@ export const PhotoLayoutGrid: React.FC<PhotoLayoutGridProps> = ({
             onClick={(e) => onExpand(index, e.currentTarget)}
           >
             <span className={styles['expand-icon']} aria-hidden>
-              {/* To Do: Add color support */}
-              <Icon component={ExpandIcon} size="small" aria-hidden />
+              <ExpandIcon size="small" aria-hidden color="on-dark-primary" />
             </span>
           </button>
         )}
