@@ -16,3 +16,57 @@
     align-self: flex-end;
   }
 }
+
+/* Horizontal orientation: 3-track subgrid so all inputs and the button share a baseline */
+.formHorizontal {
+  display: grid;
+  grid-template-rows:
+    [above-start]   auto   /* label + description, bottom-anchored per group */
+    [input-start]   auto   /* shared — all inputs and button lock to this row */
+    [caption-start] auto;  /* expands only when a caption is present */
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0 var(--spacing-12);
+  align-items: end;
+
+  :global(.form-group) {
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: subgrid;
+  };
+
+  :global(.form-group__above) {
+    grid-row: above-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: var(--spacing-4);
+    margin-bottom: 0;
+  }
+
+  :global(.form-group__control) {
+    grid-row: input-start;
+  }
+
+  :global(.form-group__caption) {
+    grid-row: caption-start;
+  }
+
+  :global(.form-group__caption[aria-hidden]) {
+    display: none;
+  }
+  
+  .formButtonWrap {
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: subgrid;
+    align-items: end;
+    width: fit-content;
+  
+    .formButton {
+      grid-row: input-start;
+      align-self: anchor-center;
+      width: fit-content
+    }
+  }
+}

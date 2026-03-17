@@ -38,6 +38,29 @@ export const Vertical: Story = {
     </Form>
   ),
 };
+export const Horizontal: Story = {
+  args: {
+    orientation: 'horizontal',
+  } as React.ComponentProps<typeof Form>,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Best for:** search bars, newsletter CTAs, inline filters — anywhere a single action applies to one or a small number of fields.\n\n' +
+          '**Avoid for:** multiple unrelated fields, radio groups, or checkbox groups. Use vertical layout instead.',
+      },
+    },
+  },
+  render: (args) => (
+    <Form {...args} onSubmit={(e) => e.preventDefault()}>
+      <FormGroup>
+        <FormGroup.Label>Email</FormGroup.Label>
+        <FormControl.TextInput placeholderText="Enter your email" />
+      </FormGroup>
+      <Form.Button>Submit</Form.Button>
+    </Form>
+  ),
+};
 
 type FormOrientation = React.ComponentProps<typeof Form>['orientation'];
 

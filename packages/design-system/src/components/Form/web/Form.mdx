@@ -43,6 +43,26 @@ Fields stack with 16px gap. The submit button sits at the bottom-right. Use this
 </Form>
 ```
 
+### Horizontal
+
+All inputs and the submit button sit on one row, with labels and descriptions stacked above each input. The bottom edge of every input is aligned with the bottom edge of the button — this holds even when individual groups have descriptions above or error captions below.
+
+```tsx
+<Form onSubmit={handleSubmit} orientation="horizontal">
+  <FormGroup>
+    <FormGroup.Label>Email</FormGroup.Label>
+    <FormControl.TextInput name="email" />
+  </FormGroup>
+  <Form.Button>Subscribe</Form.Button>
+</Form>
+```
+
+**Best for:** search bars, newsletter CTAs, inline filters — anywhere a single action applies to one or a small number of fields.
+
+**Avoid for:** multiple unrelated fields, radio groups, or checkbox groups. Use vertical layout instead.
+
+> **How the alignment works:** horizontal layout uses a 3-track CSS subgrid. Each `FormGroup` participates in shared `above` (label + description), `input`, and `caption` row tracks. This means a description in one group or an error caption in another can never push the inputs out of alignment — the input track is shared and fixed.
+
 ## Submitting
 
 Always use `Form.Button` inside `Form` for the submit action. It renders a `type="submit"` button and receives the correct layout treatment for whichever orientation you're using.
