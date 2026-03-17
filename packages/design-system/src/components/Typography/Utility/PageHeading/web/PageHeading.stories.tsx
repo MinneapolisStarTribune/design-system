@@ -3,7 +3,7 @@ import { PageHeading } from './PageHeading';
 import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/PageHeading',
+  title: 'Foundations/Typography/Utility/PageHeading',
   component: PageHeading,
   parameters: {
     layout: 'centered',

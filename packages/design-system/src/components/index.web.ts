@@ -1,10 +1,6 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export {
-  FormControl,
-  type FormControlProps,
-  type FormControlSize,
-} from './FormControl/FormControl';
+export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
@@ -12,7 +8,7 @@ export {
   type FormGroupDescriptionProps,
   type FormGroupLabelProps,
   type FormGroupProps,
-} from './FormGroup/FormGroup';
+} from './FormGroup/web/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Image, type ImageProps } from './Image/web/Image';
 export { Popover, type PopoverProps } from './Popover/Popover';
@@ -74,3 +70,9 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export {
+  Toast,
+  TOAST_VARIANTS,
+  type ToastProps,
+  type ToastVariant,
+} from '@/components/Toast/Toast';
