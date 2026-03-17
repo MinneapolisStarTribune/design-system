@@ -4,7 +4,7 @@ import { NonNewsHeading } from './NonNewsHeading.native';
 import { NON_NEWS_HEADING_IMPORTANCE_LEVELS } from '../NonNewsHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/NonNewsHeading',
+  title: 'Typography/Editorial/NonNewsHeading',
   component: NonNewsHeading,
   parameters: {
     docs: {
@@ -14,7 +14,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',
