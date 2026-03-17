@@ -5,7 +5,6 @@ import { ARTICLE_BODY_VARIANTS } from '../../../types';
 const meta: Meta<typeof DangerousCodeBlock> = {
   title: 'EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock',
   component: DangerousCodeBlock,
-  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
   },
