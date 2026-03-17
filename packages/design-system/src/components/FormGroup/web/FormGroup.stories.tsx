@@ -223,7 +223,16 @@ export const AllVariants: Story = {
         label: 'Label only',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>Label only</FormGroup.Label>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Placeholder" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label (optional)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label optional>Email</FormGroup.Label>
             <FormControl.TextInput placeholderText="Placeholder" />
           </FormGroup>
         ),
@@ -285,8 +294,12 @@ export const AllVariants: Story = {
         label: 'With icon',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>With icon</FormGroup.Label>
-            <FormControl.TextInput placeholderText="Search" icon="search" iconPosition="start" />
+            <FormGroup.Label>Search</FormGroup.Label>
+            <FormControl.TextInput
+              placeholderText="Search"
+              icon={<SearchIcon />}
+              iconPosition="start"
+            />
           </FormGroup>
         ),
       },
