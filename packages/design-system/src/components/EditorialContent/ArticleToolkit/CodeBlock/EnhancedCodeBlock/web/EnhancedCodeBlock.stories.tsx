@@ -4,7 +4,7 @@ import type { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
 import { CODE_BLOCK_SIZES, ARTICLE_BODY_VARIANTS } from '../../../types';
 
 const meta: Meta<typeof EnhancedCodeBlock> = {
-  title: 'EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock',
+  title: 'Editorial Content/Article Toolkit/Code Block/Enhanced Code Block',
   component: EnhancedCodeBlock,
   tags: ['autodocs'],
   parameters: {
