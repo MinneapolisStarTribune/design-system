@@ -1,6 +1,6 @@
 import { expectNoA11yViolations } from '@/test-utils/a11y';
 import { FormGroupCaption } from './FormGroup.Caption';
-import { FormGroupProvider } from './FormGroupContext';
+import { FormGroupProvider } from '../../FormGroupContext';
 
 describe('FormGroupCaption Accessibility', () => {
   describe('static rendering', () => {

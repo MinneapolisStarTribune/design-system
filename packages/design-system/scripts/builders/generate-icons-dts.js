@@ -20,10 +20,13 @@ const toPascalIcon = (name) =>
     .join('') + 'Icon';
 
 const lines = [
-  "// Auto-generated. Do not edit manually.",
-  "import type { FC, SVGProps } from 'react';",
-  "",
-  ...iconNames.map((name) => `export const ${toPascalIcon(name)}: FC<SVGProps<SVGSVGElement>>;`),
+  '// Auto-generated. Do not edit manually.',
+  "import type { FC } from 'react';",
+  "import type { IconWrapperProps } from '../components/Icon/Icon.types';",
+  '',
+  ...iconNames.map((name) => `export const ${toPascalIcon(name)}: FC<IconWrapperProps>;`),
+  '',
+  "export type { IconWrapperProps, IconSize, IconColor } from '../components/Icon/Icon.types';",
 ];
 
 fs.writeFileSync(outFile, lines.join('\n') + '\n', 'utf8');

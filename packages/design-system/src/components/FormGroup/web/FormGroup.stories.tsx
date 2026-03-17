@@ -1,13 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormGroup } from './FormGroup';
-import { FormControl } from '../FormControl/FormControl';
-import CalendarIcon from '@/icons/calendar.svg?react';
-import LocationIcon from '@/icons/location.svg?react';
-import LockIcon from '@/icons/lock.svg?react';
-import MailIcon from '@/icons/mail.svg?react';
-import PhoneIcon from '@/icons/phone.svg?react';
-import SearchIcon from '@/icons/search.svg?react';
-import UserIcon from '@/icons/user.svg?react';
+
+import { FormControl } from '@/components/FormControl/FormControl';
+import {
+  FORM_GROUP_CAPTION_VARIANTS,
+  type FormGroupCaptionVariant,
+} from '@/components/FormGroup/web/caption/FormGroup.Caption';
+
+import {
+  CalendarIcon,
+  LocationIcon,
+  LockIcon,
+  MailIcon,
+  PhoneIcon,
+  SearchIcon,
+  UserIcon,
+} from '@/icons';
 
 const STORY_ICON_NAMES = [
   'search',
@@ -42,7 +50,7 @@ interface FormGroupStoryArgs {
   descriptionText: string;
   showCaption: boolean;
   captionText: string;
-  captionVariant: 'info' | 'error' | 'success';
+  captionVariant: FormGroupCaptionVariant;
   formControlType: FormControlType;
   placeholderText: string;
   inputSize: 'small' | 'medium' | 'large';
@@ -87,7 +95,7 @@ const meta = {
     },
     captionVariant: {
       control: 'select',
-      options: ['info', 'error', 'success'],
+      options: [...FORM_GROUP_CAPTION_VARIANTS],
       description: 'Caption variant',
       if: { arg: 'showCaption' },
     },
@@ -215,7 +223,16 @@ export const AllVariants: Story = {
         label: 'Label only',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>Label only</FormGroup.Label>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Placeholder" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label (optional)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label optional>Email</FormGroup.Label>
             <FormControl.TextInput placeholderText="Placeholder" />
           </FormGroup>
         ),
@@ -227,6 +244,19 @@ export const AllVariants: Story = {
             <FormGroup.Label>Email</FormGroup.Label>
             <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
             <FormControl.TextInput placeholderText="you@example.com" />
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label + Description + Caption',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Email</FormGroup.Label>
+            <FormGroup.Description>We&apos;ll never share your email</FormGroup.Description>
+            <FormControl.TextInput placeholderText="you@example.com" />
+            <FormGroup.Caption variant="error">
+              Please enter a valid email address
+            </FormGroup.Caption>
           </FormGroup>
         ),
       },
@@ -251,11 +281,25 @@ export const AllVariants: Story = {
         ),
       },
       {
+        label: 'Label + Caption (success)',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Password</FormGroup.Label>
+            <FormControl.TextInput type="password" placeholderText="Enter password" />
+            <FormGroup.Caption variant="success">Account created successfully</FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
         label: 'With icon',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>With icon</FormGroup.Label>
-            <FormControl.TextInput placeholderText="Search" icon="search" iconPosition="start" />
+            <FormGroup.Label>Search</FormGroup.Label>
+            <FormControl.TextInput
+              placeholderText="Search"
+              icon={<SearchIcon />}
+              iconPosition="start"
+            />
           </FormGroup>
         ),
       },
