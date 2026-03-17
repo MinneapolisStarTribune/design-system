@@ -15,16 +15,16 @@ export interface CheckboxCategory {
   options: CheckboxOption[];
 }
 
-export interface CheckboxGroupProps extends BaseProps {
+export type CheckboxGroupProps = BaseProps & {
   value: string[];
-  /** Use either 'options' for flat mode OR 'categories' for grouped mode. If 'categories' is provided, 'options' is ignored. */
-  options?: CheckboxOption[];
-  categories?: CheckboxCategory[];
   color?: 'neutral' | 'brand';
   disabled?: boolean;
   error?: boolean;
   onChange: (values: string[]) => void;
-}
+} & (
+    | { options: CheckboxOption[]; categories?: never } // flat mode
+    | { categories: CheckboxCategory[]; options?: never } // category mode
+  );
 
 function getCategoryState(
   category: CheckboxCategory,
@@ -40,7 +40,7 @@ function getCategoryState(
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   value,
-  options = [],
+  options,
   categories,
   color = 'neutral',
   disabled = false,
@@ -131,7 +131,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     );
   }
 
-  const flatOptions = options;
+  const flatOptions = options ?? [];
   return (
     <div
       className={classNames(styles.root, styles.flatMode, className)}

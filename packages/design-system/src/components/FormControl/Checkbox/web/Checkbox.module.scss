@@ -57,28 +57,28 @@
    We set the correct token per state so the Icon can override via style. */
 .root {
   --checkbox-icon-color: var(--color-checkbox-border-unchecked);
-}
-.root.checked .visualBox,
-.root.indeterminate .visualBox {
-  --checkbox-icon-color: var(--color-checkbox-icon-selected-neutral);
-}
-.root.brand.checked .visualBox,
-.root.brand.indeterminate .visualBox {
-  --checkbox-icon-color: var(--color-checkbox-icon-selected-brand);
-}
-.root.disabled:not(.checked):not(.indeterminate) .visualBox {
-  --checkbox-icon-color: var(--color-border-state-disabled-on-light);
-}
-.root.disabled.checked .visualBox,
-.root.disabled.indeterminate .visualBox {
-  --checkbox-icon-color: var(--color-text-state-disabled-on-light);
-}
-.root.error:not(.checked):not(.indeterminate) .visualBox {
-  --checkbox-icon-color: var(--color-border-state-attention-on-light);
-}
-.root.error.checked .visualBox,
-.root.error.indeterminate .visualBox {
-  --checkbox-icon-color: var(--color-base-white);
+  &:is(.checked, .indeterminate) .visualBox {
+    --checkbox-icon-color: var(--color-checkbox-icon-selected-neutral);
+  }
+  &.brand:is(.checked, .indeterminate) .visualBox {
+    --checkbox-icon-color: var(--color-checkbox-icon-selected-brand);
+  }
+  &.disabled {
+    &:not(.checked):not(.indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-border-state-disabled-on-light);
+    }
+    &:is(.checked, .indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-text-state-disabled-on-light);
+    }
+  }
+  &.error {
+    &:not(.checked):not(.indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-border-state-attention-on-light);
+    }
+    &:is(.checked, .indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-base-white);
+    }
+  }
 }
 
 .visualBox {
