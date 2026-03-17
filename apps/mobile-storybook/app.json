@@ -13,6 +13,9 @@
     },
     "plugins": [
       "expo-dev-client"
-    ]
+    ],
+    "android": {
+      "package": "com.anonymous.mobilestorybook"
+    }
   }
 }
