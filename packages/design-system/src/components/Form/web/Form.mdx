@@ -1,0 +1,123 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as FormStories from './Form.stories';
+
+<Meta of={FormStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Form
+
+`<Form>` is an optional layout wrapper that turns our form UI components into a real HTML `<form>`. Use it when you need a semantic form element, native submit behavior, and consistent field and button layout.
+
+## Architecture
+
+The form system is layered — you can use as much or as little as you need:
+
+```
+| Layer                       | What it does                                                                                     | Required? |
+| --------------------------- | ------------------------------------------------------------------------------------------------ | --------- |
+| `FormGroup` + `FormControl` | Layout, spacing, and accessibility wiring between label, description, input, and caption         | Always    |
+| `Form`                      | Semantic `<form>` element, `onSubmit` handler, and layout for vertical or horizontal orientation | Optional  |
+| `useFormLogic`              | Controlled field state, validation, and a ready-made `handleSubmit`                              | Optional  |
+```
+
+`FormGroup` and `FormControl` work standalone — drop them in any container and accessibility (`aria-labelledby`, `aria-describedby`) still works correctly. `Form` is what you add when you want a real submittable form.
+
+## Form orientations
+
+### Vertical (default)
+
+Fields stack with 16px gap. The submit button sits at the bottom-right. Use this for most forms: sign-in, sign-up, settings, checkout.
+
+```tsx
+<Form onSubmit={handleSubmit}>
+  <FormGroup>
+    <FormGroup.Label>Email</FormGroup.Label>
+    <FormControl.TextInput name="email" />
+  </FormGroup>
+  <FormGroup>
+    <FormGroup.Label>Password</FormGroup.Label>
+    <FormControl.TextInput name="password" type="password" />
+  </FormGroup>
+  <Form.Button>Sign in</Form.Button>
+</Form>
+```
+
+## Submitting
+
+Always use `Form.Button` inside `Form` for the submit action. It renders a `type="submit"` button and receives the correct layout treatment for whichever orientation you're using.
+
+Pressing Enter/Return while focused in any input will also submit the form natively, as long as `Form.Button` is present.
+
+## Form logic with `useFormLogic`
+
+`useFormLogic` is an optional hook that gives you controlled field state, validation, and a `handleSubmit` function ready to pass to `<Form>`. Use it when you don't want to wire up form state yourself.
+
+```tsx
+const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
+  initialValues: { email: '' },
+  validate: (values) => {
+    const errors: Record<string, string> = {};
+    if (!values.email) errors.email = 'Email is required';
+    return errors;
+  },
+});
+
+<Form onSubmit={handleSubmit}>
+  <FormGroup>
+    <FormGroup.Label>Email</FormGroup.Label>
+    <FormControl.TextInput
+      name="email"
+      value={values.email}
+      onChange={(e) => handleChange('email', e.target.value)}
+      onBlur={() => handleBlur('email')}
+    />
+    {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
+  </FormGroup>
+  <Form.Button>Submit</Form.Button>
+</Form>;
+```
+
+Skip the hook if you're already using React Hook Form, Formik, or your own `useState` — just pass your own `handleSubmit` to `<Form onSubmit={...}>` directly.
+
+### React Native
+
+`useFormLogic` is platform-agnostic. On React Native there is no `<form>` or DOM change event, so:
+
+- **Field updates:** Use `handleChange(field, value)` instead of `handleChangeEvent`. Wire your text input’s `onChangeText` (or equivalent) to `(value) => handleChange('fieldName', value)`.
+- **Submit:** Use `handleSubmit()` with no arguments, or `handleSubmitPress`. Pass the latter to your submit button: `onPress={handleSubmitPress}`. Both run the same validation and `onSubmit` flow.
+
+```tsx
+const { values, errors, handleChange, handleBlur, handleSubmitPress } = useFormLogic({ ... });
+
+<TextInput
+  value={values.email}
+  onChangeText={(value) => handleChange('email', value)}
+  onBlur={() => handleBlur('email')}
+/>
+<Button onPress={handleSubmitPress} title="Submit" />
+```
+
+## Exports
+
+```
+| Export                    | Description                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `Form`                    | Layout wrapper; renders a semantic `<form>` and handles orientation.                                                    |
+| `Form.Button`             | Submit button for use inside `Form`. Renders a design-system `Button` with `type="submit"`.                             |
+| `FormProps`               | Props for `Form` (e.g. `orientation`, `onSubmit`, `children`).                                                          |
+| `useFormLogic`            | Hook for controlled values, errors, and `handleSubmit`; optional.                                                       |
+| `FormValidationErrors<T>` | Type: object of field names to error strings (from `validate`).                                                         |
+| `UseFormLogicOptions<T>`  | Type: Options passed to `useFormLogic` (`initialValues`, `onSubmit`, `validate`, `validateOnSubmit`, `validateOnBlur`). |
+| `UseFormLogicReturn<T>`   | Type: Return type of `useFormLogic` (`values`, `errors`, `handleChange`, `handleBlur`, `handleSubmit`, `handleSubmitPress`, etc.). |
+```
+
+Use the types when you need to annotate wrappers, options, or return values (e.g. a custom hook that returns the same shape as `useFormLogic`).
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />

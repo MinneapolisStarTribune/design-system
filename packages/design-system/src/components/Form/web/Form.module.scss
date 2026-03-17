@@ -1,0 +1,18 @@
+/**
+ * Form layout styles.
+ * Optional wrapper for form-level layout: vertical (stacked) or horizontal (inline).
+ */
+
+.form {
+  display: flex;
+  gap: var(--spacing-16);
+}
+
+.formVertical {
+  flex-direction: column;
+
+  /* Button aligns to bottom-right in vertical layout */
+  .formButton {
+    align-self: flex-end;
+  }
+}
