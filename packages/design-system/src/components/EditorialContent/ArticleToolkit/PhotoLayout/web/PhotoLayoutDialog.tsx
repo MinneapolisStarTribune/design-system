@@ -44,7 +44,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
         onClick={onClose}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
-          <CloseIcon size="large" aria-hidden color='on-dark-primary' />
+          <CloseIcon size="large" aria-hidden color="on-dark-primary" />
         </span>
       </button>
 
