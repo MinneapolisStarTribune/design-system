@@ -4,7 +4,7 @@ import { ArticleBodyHeading } from './ArticleBodyHeading.native';
 import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
+  title: 'Typography/ArticleBody/ArticleBodyHeading',
   component: ArticleBodyHeading,
   argTypes: {
     importance: {
