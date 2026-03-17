@@ -81,3 +81,30 @@ export const ImmersiveWithCustomImageComponent: Story = {
     images,
   },
 };
+
+export const WithIntrinsicSizing: Story = {
+  args: {
+    variant: 'standard',
+    images: [
+      {
+        src: 'https://picsum.photos/1080/720?1',
+        altText: 'Landscape',
+        width: 1080,
+        height: 720,
+        caption: 'Explicit dimensions prevent layout shift.',
+      },
+      {
+        src: 'https://picsum.photos/800/1200?2',
+        altText: 'Portrait',
+        width: 800,
+        height: 1200,
+      },
+      {
+        src: 'https://picsum.photos/1200/600?3',
+        altText: 'Wide',
+        width: 1200,
+        height: 600,
+      },
+    ],
+  },
+};

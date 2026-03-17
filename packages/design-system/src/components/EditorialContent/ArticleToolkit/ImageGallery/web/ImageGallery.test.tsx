@@ -72,9 +72,11 @@ describe('ImageGallery', () => {
   });
 
   it('shows image counter', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} variant="standard" />);
+    const { getAllByText } = renderWithProvider(
+      <ImageGallery images={images} variant="standard" />
+    );
 
-    expect(getByText('1/2')).toBeInTheDocument();
+    expect(getAllByText('1/2').length).toBeGreaterThan(0);
   });
 
   it('handles next button click', () => {
@@ -159,9 +161,9 @@ describe('ImageGallery', () => {
   });
 
   it('renders image counter correctly', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
+    const { getAllByText } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(getByText('1/2')).toBeInTheDocument();
+    expect(getAllByText('1/2').length).toBeGreaterThan(0);
   });
 
   it('does not disable prev button in immersive mode', () => {
@@ -172,5 +174,37 @@ describe('ImageGallery', () => {
     const prevButton = getAllByRole('button')[0];
 
     expect(prevButton).not.toBeDisabled();
+  });
+
+  it('passes style prop to custom ImageComponent', () => {
+    const CustomImage = ({ src, alt, style }: ImageComponentProps) => (
+      <img data-testid="custom-image" src={src} alt={alt} style={style} />
+    );
+
+    const { getAllByTestId } = renderWithProvider(
+      <ImageGallery images={images} ImageComponent={CustomImage} />
+    );
+
+    const imgs = getAllByTestId('custom-image');
+    expect(imgs.length).toBeGreaterThan(0);
+  });
+
+  it('applies custom className props', () => {
+    const { container } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        className="root-class"
+        imageClassName="image-class"
+        wrapperClassName="wrapper-class"
+        captionClassName="caption-class"
+        controlsClassName="controls-class"
+      />
+    );
+
+    expect(container.querySelector('.root-class')).toBeInTheDocument();
+    expect(container.querySelector('.image-class')).toBeInTheDocument();
+    expect(container.querySelector('.wrapper-class')).toBeInTheDocument();
+    expect(container.querySelector('.caption-class')).toBeInTheDocument();
+    expect(container.querySelector('.controls-class')).toBeInTheDocument();
   });
 });

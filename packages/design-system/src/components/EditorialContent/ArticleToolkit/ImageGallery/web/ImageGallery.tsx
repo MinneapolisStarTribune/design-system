@@ -1,24 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, A11y, Pagination, EffectCoverflow } from 'swiper/modules';
+import { Navigation, A11y, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
 import classNames from 'classnames';
 
 import { Button } from '../../../../Button/web/Button';
-import { Icon } from '@/components/Icon/Icon';
 import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
 
 import styles from './ImageGallery.module.scss';
 
-/**
- * Imagegallery variant props
- */
 export type Variant = 'standard' | 'immersive';
 
 export interface ImageItem {
@@ -26,33 +21,48 @@ export interface ImageItem {
   altText: string;
   caption?: string;
   credit?: string;
+  width?: number;
+  height?: number;
 }
 
-/**
- * Props passed to a custom image renderer.
- */
 export interface ImageComponentProps {
   src: string;
   alt: string;
   className?: string;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
 }
 
 export interface ImageGalleryProps {
   images: ImageItem[];
   variant?: Variant;
-
-  /**
-   * Optional custom image renderer.
-   * Example: next/image or picture component.
-   */
   ImageComponent?: React.ComponentType<ImageComponentProps>;
+
+  className?: string;
+  imageClassName?: string;
+  wrapperClassName?: string;
+  captionClassName?: string;
+  controlsClassName?: string;
 }
 
-/**
- * Default fallback image.
- */
-const DefaultImage: React.FC<ImageComponentProps> = ({ src, alt, className }) => (
-  <img src={src} alt={alt} className={className} loading="lazy" />
+const DefaultImage: React.FC<ImageComponentProps> = ({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  style,
+}) => (
+  <img
+    src={src}
+    alt={alt}
+    className={className}
+    loading="lazy"
+    width={width}
+    height={height}
+    style={style}
+  />
 );
 
 const getSpaceBetween = (): number => {
@@ -66,6 +76,11 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   images,
   variant = 'standard',
   ImageComponent,
+  className,
+  imageClassName,
+  wrapperClassName,
+  captionClassName,
+  controlsClassName,
 }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,7 +88,6 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
-
   const Img = ImageComponent ?? DefaultImage;
 
   useEffect(() => {
@@ -87,85 +101,80 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
 
   if (!images?.length) return null;
 
-  const captionClassName = 'typography-utility-text-regular-x-small';
-  const mediaTagClassName = 'typography-utility-label-semibold-large';
-
   return (
     <div
-      className={classNames(styles.gallery, styles[variant])}
       data-testid="image-gallery"
-      role="region"
-      aria-label="Image gallery"
+      className={classNames(styles.gallery, styles[variant], className)}
     >
       <div className={styles.innerContainer}>
         <Swiper
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
-          modules={[Navigation, A11y, Pagination, EffectCoverflow]}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          modules={[Navigation, A11y, Pagination]}
           slidesPerView={isImmersive ? 'auto' : 1}
           centeredSlides={isImmersive}
-          effect={isImmersive ? 'coverflow' : undefined}
-          coverflowEffect={
-            isImmersive
-              ? { rotate: 0, stretch: 0, depth: 0, modifier: 1, slideShadows: true }
-              : undefined
-          }
           spaceBetween={spaceBetween}
           loop={isImmersive}
-          allowTouchMove={false}
-          grabCursor={false}
-          watchSlidesProgress
+          allowTouchMove
+          autoHeight={false}
+          pagination={{ clickable: true }}
           onSlideChange={(swiper) => {
             const i = isImmersive ? swiper.realIndex : swiper.activeIndex;
             setActiveIndex(i);
           }}
           className={styles.swiper}
         >
-          {images.map((img, i) => (
-            <SwiperSlide key={i} className={styles.slide}>
-              <div className={styles.imageWrapper}>
-                <Img src={img.src} alt={img.altText} className={styles.image} />
+          {images.map((img, i) => {
+            const width = img.width ?? 1080;
+            const height = img.height ?? 720;
 
-                {(!isImmersive || i === activeIndex) && (
+            return (
+              <SwiperSlide key={i} className={styles.slide}>
+                <div className={classNames(styles.imageWrapper, wrapperClassName)}>
+                  <Img
+                    src={img.src}
+                    alt={img.altText}
+                    className={classNames(styles.image, imageClassName)}
+                    width={width}
+                    height={height}
+                  />
+
                   <div className={styles.mediaTag}>
-                    <Icon component={CameraFilledIcon} size="medium" />
-                    <span className={mediaTagClassName}>
+                    <CameraFilledIcon color="on-dark-primary" size="medium" />
+                    <span>
                       {(isImmersive ? activeIndex : i) + 1}/{total}
                     </span>
                   </div>
-                )}
-              </div>
-            </SwiperSlide>
-          ))}
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         <div className={styles.bottomSection}>
-          <div className={classNames(captionClassName, styles.caption)}>
+          <div className={classNames(styles.caption, captionClassName)}>
             {images[activeIndex]?.caption}
             {images[activeIndex]?.credit && <> {images[activeIndex].credit}</>}
           </div>
 
           {total > 1 && (
-            <div className={styles.controls}>
+            <div className={classNames(styles.controls, controlsClassName)}>
               <Button
                 variant="ghost"
-                size="small"
+                size="medium"
                 icon={<ChevronLeftIcon />}
-                aria-label="Previous image"
                 onClick={prev}
                 isDisabled={!isImmersive && activeIndex === 0}
                 className={styles.navButton}
+                aria-label="Previous image"
               />
-
               <Button
                 variant="ghost"
-                size="small"
+                size="medium"
                 icon={<ChevronRightIcon />}
-                aria-label="Next image"
                 onClick={next}
                 isDisabled={!isImmersive && activeIndex === total - 1}
                 className={styles.navButton}
+                aria-label="Next image"
               />
             </div>
           )}
