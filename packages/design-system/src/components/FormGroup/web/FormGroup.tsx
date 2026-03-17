@@ -1,18 +1,28 @@
-// NOTE - THIS IS A STUBBED OUT COMPONENT ONLY.
-// PLEASE SEE https://minneapolisstartribune.atlassian.net/browse/SUS-140 FOR MORE INFORMATION.
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
-import { FormGroupLabel, type FormGroupLabelProps } from './FormGroup.Label';
-import { FormGroupDescription, type FormGroupDescriptionProps } from './FormGroup.Description';
-import { FormGroupCaption, type FormGroupCaptionProps } from './FormGroup.Caption';
-import { FormGroupProvider } from './FormGroupContext';
+import { FormGroupLabel, type FormGroupLabelProps } from './label/FormGroup.Label';
+import {
+  FormGroupDescription,
+  type FormGroupDescriptionProps,
+} from './description/FormGroup.Description';
+import { FormGroupCaption, type FormGroupCaptionProps } from './caption/FormGroup.Caption';
+import { FormGroupProvider } from '../FormGroupContext';
+import styles from './FormGroup.module.scss';
 
-export interface FormGroupProps extends BaseProps {
+export interface FormGroupRootProps extends BaseProps {
   children: React.ReactNode;
 }
 
-export const FormGroup: React.FC<FormGroupProps> & {
+/** Type map for FormGroup prop types. In consuming apps use FormGroupProps['Props'], FormGroupProps['Label'], etc. */
+export interface FormGroupProps {
+  Props: FormGroupRootProps;
+  Label: FormGroupLabelProps;
+  Description: FormGroupDescriptionProps;
+  Caption: FormGroupCaptionProps;
+}
+
+export const FormGroup: React.FC<FormGroupProps['Props']> & {
   Label: React.FC<FormGroupLabelProps>;
   Description: React.FC<FormGroupDescriptionProps>;
   Caption: React.FC<FormGroupCaptionProps>;
@@ -40,7 +50,7 @@ export const FormGroup: React.FC<FormGroupProps> & {
   let hasLabel = false;
   let hasDescription = false;
   let hasCaption = false;
-  let captionVariant: 'info' | 'error' | 'success' = 'info';
+  let _captionVariant: 'info' | 'error' | 'success' = 'info';
 
   childrenArray.forEach((child) => {
     if (isValidElement(child)) {
@@ -48,20 +58,15 @@ export const FormGroup: React.FC<FormGroupProps> & {
       else if (child.type === FormGroup.Description) hasDescription = true;
       else if (child.type === FormGroup.Caption) {
         hasCaption = true;
-        captionVariant =
+        _captionVariant =
           (child.props as { variant?: 'info' | 'error' | 'success' }).variant ?? 'info';
       }
     }
   });
 
   return (
-    <FormGroupProvider
-      hasLabel={hasLabel}
-      hasDescription={hasDescription}
-      hasCaption={hasCaption}
-      captionVariant={captionVariant}
-    >
-      <div className={classNames('form-group', className)} data-testid={dataTestId}>
+    <FormGroupProvider hasLabel={hasLabel} hasDescription={hasDescription} hasCaption={hasCaption}>
+      <div className={classNames(styles['form-group'], className)} data-testid={dataTestId}>
         {children}
       </div>
     </FormGroupProvider>
@@ -73,7 +78,7 @@ FormGroup.Label = FormGroupLabel;
 FormGroup.Description = FormGroupDescription;
 FormGroup.Caption = FormGroupCaption;
 
-// Export types so they come from one place
-export type { FormGroupCaptionProps } from './FormGroup.Caption';
-export type { FormGroupDescriptionProps } from './FormGroup.Description';
-export type { FormGroupLabelProps } from './FormGroup.Label';
+// Export types so they come from one place (individual types for internal/deep imports)
+export type { FormGroupCaptionProps } from './caption/FormGroup.Caption';
+export type { FormGroupDescriptionProps } from './description/FormGroup.Description';
+export type { FormGroupLabelProps } from './label/FormGroup.Label';

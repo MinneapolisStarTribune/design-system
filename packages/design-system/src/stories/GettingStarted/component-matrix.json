@@ -1,0 +1,186 @@
+[
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Button",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "",
+    "topLevel": "Actions"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "FormControl",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "FormGroup",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "TextInput",
+            "native": false,
+            "web": true
+          }
+        ]
+      },
+      {
+        "name": "FormGroup",
+        "rows": [
+          {
+            "component": "Caption",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Description",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Label",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "Actions & Inputs",
+    "topLevel": "Components"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Popover",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Toast",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "",
+    "topLevel": "Feedback & Status"
+  },
+  {
+    "groups": [
+      {
+        "name": "ArticleBody",
+        "rows": [
+          {
+            "component": "ArticleBodyHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "ArticleBodySponsoredHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "ArticleBodySponsoredText",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "ArticleBodyText",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "ArticleQuote",
+            "native": true,
+            "web": true
+          }
+        ]
+      },
+      {
+        "name": "Editorial",
+        "rows": [
+          {
+            "component": "EditorialSponsoredText",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "EditorialText",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "EnterpriseHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "NewsHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "NonNewsHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "OpinionHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "SponsoredHeading",
+            "native": true,
+            "web": true
+          }
+        ]
+      },
+      {
+        "name": "Utility",
+        "rows": [
+          {
+            "component": "PageHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "SectionHeading",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "UtilityBody",
+            "native": true,
+            "web": true
+          },
+          {
+            "component": "UtilityLabel",
+            "native": true,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "Typography",
+    "topLevel": "Foundations"
+  }
+]

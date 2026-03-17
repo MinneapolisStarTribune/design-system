@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps } from './Toast';
+import { ToastRenderer, useToast } from '@/providers/ToastRenderer/ToastRenderer';
 import styles from './Toast.stories.module.scss';
 
 const meta = {
@@ -110,3 +111,60 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+
+function ToastRendererDemo() {
+  const { showToast } = useToast();
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 280 }}>
+      <button
+        type="button"
+        onClick={() =>
+          showToast({ title: 'Info', description: 'From global provider', variant: 'info' })
+        }
+      >
+        Show info toast
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          showToast({
+            title: 'Saved',
+            description: 'Your changes were saved.',
+            variant: 'success',
+          })
+        }
+      >
+        Show success (auto-dismiss)
+      </button>
+      <button type="button" onClick={() => showToast({ title: 'Warning', variant: 'warning' })}>
+        Show warning
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          showToast({ title: 'Error', description: 'Something went wrong.', variant: 'error' })
+        }
+      >
+        Show error
+      </button>
+    </div>
+  );
+}
+
+export const WithRenderer = {
+  parameters: {
+    layout: 'centered',
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Wrap your app with `ToastRenderer` and use `useToast()` to show toasts from anywhere. Toasts appear in a fixed bottom-right container.',
+      },
+    },
+  },
+  render: () => (
+    <ToastRenderer>
+      <ToastRendererDemo />
+    </ToastRenderer>
+  ),
+} satisfies Omit<Story, 'args'>;

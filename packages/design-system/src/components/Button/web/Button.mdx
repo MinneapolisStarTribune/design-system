@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta of={ButtonStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Edit the markdown below. Do not remove the blocks at the bottom of the file. */}
+
+# Button
+
+Buttons trigger user actions and are available in multiple sizes, types, and emphasis levels, with optional icons. Button types define purpose and brand context, while emphasis controls visual weight and presentation.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=7-3)
+
+## Usage guidelines
+
+### Color
+
+- **Neutral:** The standard button style used for most actions across the product.
+- **Brand:** Brand buttons are used for high-priority calls to action, such as subscription prompts. They help reinforce brand identity and should be used sparingly to preserve visual hierarchy and emphasis. Use brand buttons when an action is critical to business goals and needs to stand out from neutral UI.
+- **Brand-Accent:** Brand accent buttons are a specialized variant of brand buttons and are intended only for use on dark brand backgrounds to maintain proper contrast and brand impact. Because of their strong visual weight, brand accent buttons should be used very selectively.
+
+### Variant
+
+- **Filled:** Filled buttons use a solid background to provide strong visual presence. They work well when an action needs to be clearly distinguishable from surrounding content.
+- **Outlined:** Outline buttons use a stroked container with minimal fill. They are useful in layouts where a lighter visual treatment is preferred or when pairing multiple actions.
+- **Ghost:** Ghost buttons use minimal styling and rely primarily on text and subtle interaction states. They are well suited for situations where visual weight should be kept low or when pairing multiple actions.
+
+### Size
+
+- **Small:** Used in dense layouts, mobile UI, or anywhere vertical space is limited.
+- **Medium:** Standard size for most UI actions across both brands.
+- **Large:** High-impact option used primarily in marketing or promotional contexts.
+
+### Icons
+
+Icon Buttons offer a compact way to surface common actions. Use them for recognizable, quick actions (like close, add or share) or anywhere a lighter, space-efficient control is needed.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+{/* Do not remove the line below — it renders a divider between the doucmentation and stories. */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />

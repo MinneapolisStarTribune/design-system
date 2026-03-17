@@ -1,0 +1,42 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as DangerousCodeBlockStories from './DangerousCodeBlock.stories';
+
+<Meta of={DangerousCodeBlockStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# DangerousCodeBlock
+
+The **DangerousCodeBlock** component renders raw HTML using React's `dangerouslySetInnerHTML` and executes any `<script>` elements contained within the markup.  
+**Security warning:** Only use markup from trusted sources, as this component bypasses React's standard HTML escaping and can execute scripts.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=1528-6976)
+
+## Usage guidelines
+
+### When to use
+- Render raw HTML content safely when you control or trust the source.
+- Display dynamic or external HTML snippets in a controlled environment.
+- Execute inline scripts or scripts from trusted sources for interactive demos or previews.
+
+### When to avoid
+- Never pass untrusted or user-generated content.
+- Avoid for general-purpose HTML rendering where security is a concern.
+- Do not use to inject third-party scripts dynamically from unknown sources.
+
+### Props
+- **markup** – the HTML content to render.
+- **variant** – controls styling; e.g., `standard` (default) or `immersive`.
+- **cleanQuotes** – converts smart quotes to straight quotes when `true` (default: `true`).
+- **className** – add custom styles.
+- **dataTestId** – used for testing; defaults to `dangerous-code-block`.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+{/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+---
+
+<Primary />
+<Controls />
+<Stories />

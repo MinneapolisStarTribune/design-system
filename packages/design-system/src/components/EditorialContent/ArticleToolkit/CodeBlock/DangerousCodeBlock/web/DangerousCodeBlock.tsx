@@ -81,7 +81,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
       data-testid={dataTestId}
       className={classNames(
         styles['dangerous-code-block'],
-        !cleanQuotes && styles[`variant-${variant}`],
+        styles[`variant-${variant}`],
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}

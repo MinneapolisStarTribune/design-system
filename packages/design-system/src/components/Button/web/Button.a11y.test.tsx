@@ -2,7 +2,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button } from './Button';
-import CameraFilledIcon from '@/icons/camera-filled.svg?react';
+import { CameraFilledIcon } from '@/icons';
 
 describe('Button Accessibility', () => {
   describe('static rendering', () => {
