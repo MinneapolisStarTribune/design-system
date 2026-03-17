@@ -1,5 +1,6 @@
 export interface BaseProps {
   className?: string | string[];
+  style?: React.CSSProperties;
   dataTestId?: string; // this will likely have defaults set at the component level
 }
 

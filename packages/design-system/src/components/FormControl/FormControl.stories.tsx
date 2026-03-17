@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormControl } from './FormControl';
-import CalendarIcon from '@/icons/calendar.svg?react';
-import LocationIcon from '@/icons/location.svg?react';
-import LockIcon from '@/icons/lock.svg?react';
-import MailIcon from '@/icons/mail.svg?react';
-import PhoneIcon from '@/icons/phone.svg?react';
-import SearchIcon from '@/icons/search.svg?react';
-import UserIcon from '@/icons/user.svg?react';
+import {
+  CalendarIcon,
+  LocationIcon,
+  LockIcon,
+  MailIcon,
+  PhoneIcon,
+  SearchIcon,
+  UserIcon,
+} from '@/icons';
 
 const STORY_ICON_NAMES = [
   'search',
