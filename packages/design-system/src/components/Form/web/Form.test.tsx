@@ -36,6 +36,17 @@ describe('Form', () => {
     const form = screen.getByTestId('f');
     expect(form.className.split(' ').some((c) => c.includes('formVertical'))).toBe(true);
   });
+
+  it('applies horizontal class when orientation is horizontal', () => {
+    renderWithProvider(
+      <Form dataTestId="f" orientation="horizontal" onSubmit={vi.fn()}>
+        <span>X</span>
+      </Form>
+    );
+
+    const form = screen.getByTestId('f');
+    expect(form.className.split(' ').some((c) => c.includes('formHorizontal'))).toBe(true);
+  });
 });
 
 describe('Form + useFormLogic integration', () => {
