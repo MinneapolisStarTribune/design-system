@@ -3,7 +3,7 @@ import { DangerousCodeBlock } from './DangerousCodeBlock';
 import { ARTICLE_BODY_VARIANTS } from '../../../types';
 
 const meta: Meta<typeof DangerousCodeBlock> = {
-  title: 'EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock',
+  title: 'Editorial Content/Article Toolkit/Code Block/Dangerous Code Block',
   component: DangerousCodeBlock,
   parameters: {
     layout: 'fullscreen',
