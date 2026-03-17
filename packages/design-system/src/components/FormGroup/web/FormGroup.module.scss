@@ -29,6 +29,18 @@
       display: inline-flex;
       flex-shrink: 0;
     }
+
+    &-info {
+      color: var(--color-text-on-light-tertiary);
+    }
+
+    &-error {
+      color: var(--color-text-state-attention-on-light);
+    }
+
+    &-success {
+      color: var(--color-text-state-success-on-light);
+    }
   }
 
   .description {
