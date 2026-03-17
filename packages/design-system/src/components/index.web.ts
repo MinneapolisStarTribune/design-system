@@ -10,6 +10,7 @@ export {
   type FormGroupProps,
 } from './FormGroup/web/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
+export { Image, type ImageProps } from './Image/web/Image';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {
