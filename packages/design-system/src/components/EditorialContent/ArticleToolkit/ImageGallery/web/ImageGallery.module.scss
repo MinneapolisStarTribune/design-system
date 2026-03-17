@@ -7,14 +7,24 @@
   margin: 0 auto;
 }
 
-/* ─── STANDARD ──────────────────────────────────────────── */
+/* STANDARD */
 
 .standard .innerContainer {
   max-width: 712px;
 }
 
-/* In standard mode, swiper is constrained to the container width.
-     No overflow — the adjacent slides must NOT peek in. */
+@media (max-width: 1024px) {
+  .standard .innerContainer {
+    max-width: 535px;
+  }
+}
+
+@media (max-width: 640px) {
+  .standard .innerContainer {
+    max-width: 390px;
+  }
+}
+
 .standard .swiper {
   overflow: hidden;
 }
@@ -23,11 +33,8 @@
   width: 100%;
 }
 
-/* ─── IMMERSIVE ──────────────────────────────────────────── */
+/* IMMERSIVE */
 
-/* Pull the gallery full-width out of any article column.
-     The negative-margin trick avoids adding width > 100% to the
-     document, which is what causes the horizontal scrollbar. */
 .immersive {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
@@ -40,29 +47,29 @@
   overflow: hidden;
 }
 
-/* Let adjacent slides peek — overflow visible */
 .immersive .swiper {
   overflow: visible;
 }
 
-/* Constrain each slide so neighbours are partially visible */
+/* ✅ FIXED */
 .immersive .slide {
-  max-width: 1080px;
+  width: 1080px;
+  max-width: 100%;
 }
 
 @media (max-width: 1024px) {
   .immersive .slide {
-    max-width: 535px;
+    width: 535px;
   }
 }
 
 @media (max-width: 640px) {
   .immersive .slide {
-    max-width: 358px;
+    width: 358px;
   }
 }
 
-/* ─── IMAGE WRAPPER ──────────────────────────────────────── */
+/* IMAGE */
 
 .imageWrapper {
   position: relative;
@@ -78,53 +85,49 @@
   border-radius: var(--semantic-photo-layout-border-radius);
 }
 
-/* ─── CAMERA COUNTER TAG ─────────────────────────────────── */
+/* TAG */
 
 .mediaTag {
   position: absolute;
   bottom: var(--spacing-16);
   left: var(--spacing-16);
-
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-4);
-
   padding: var(--spacing-4) var(--spacing-6);
   border-radius: var(--radius-6);
-
   background: #0000004d;
   color: var(--color-base-white);
   font-size: var(--spacing-16);
   font-weight: 600;
-  line-height: 1;
-  pointer-events: none;
-
-  span {
-    color: var(--color-base-white);
-  }
 }
 
-/* ─── BOTTOM SECTION ─────────────────────────────────────── */
+/* BOTTOM */
 
-/* Standard: align bottom section to the image edges (712px) */
 .standard .bottomSection {
-  width: 100%;
   max-width: 712px;
   margin: 8px auto 0;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 0;
 }
 
-/* Immersive: align bottom section to the active (center) slide only */
+@media (max-width: 1024px) {
+  .standard .bottomSection {
+    max-width: 535px;
+  }
+}
+
+@media (max-width: 640px) {
+  .standard .bottomSection {
+    max-width: 390px;
+  }
+}
+
 .immersive .bottomSection {
   max-width: 1080px;
   margin: 8px auto 0;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 0;
 }
 
 @media (max-width: 1024px) {
@@ -135,30 +138,23 @@
 
 @media (max-width: 640px) {
   .immersive .bottomSection {
-    max-width: 358px;
+    max-width: 390px;
   }
 }
 
-/* ─── CAPTION ────────────────────────────────────────────── */
-
-.caption {
-  color: var(--color-text-on-light-secondary) !important;
-  flex: 1;
-  min-width: 0;
-}
-
-/* ─── PREV / NEXT CONTROLS (immersive only) ──────────────── */
+/* CONTROLS */
 
 .controls {
   display: flex;
   gap: var(--spacing-4);
-  flex-shrink: 0;
   margin-left: var(--spacing-16);
 }
 
 .navButton {
   border: 1px solid var(--color-border-on-dark-subtle-01);
 }
+
+/* SWIPER */
 
 .swiper {
   position: relative;
@@ -167,7 +163,4 @@
 :global(.swiper-pagination) {
   position: absolute;
   bottom: 8px;
-  left: 0;
-  right: 0;
-  z-index: 2;
 }
