@@ -1,5 +1,5 @@
 import { FormGroupLabel } from './FormGroup.Label';
-import { FormGroupProvider } from './FormGroupContext';
+import { FormGroupProvider } from '../../FormGroupContext';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('FormGroupLabel', () => {

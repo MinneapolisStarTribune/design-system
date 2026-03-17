@@ -1,0 +1,37 @@
+<!--
+  REUSABLE TEMPLATE FOR COMPONENT DOCS
+  Copy this file to your component folder, rename to ComponentName.mdx,
+  then:
+  1. Replace "ComponentStories" and "./Component.stories" with your component's story file.
+  2. Edit only the "Designer-editable section" below — use markdown (links, bold, lists, etc.).
+  3. Do NOT remove or edit the import block or the Storybook blocks at the bottom.
+-->
+
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ComponentStories from './Component.stories';
+
+<Meta of={ComponentStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# Definition (Replace with component name)
+
+Describe what the component is and when to use it. Use **bold** for emphasis and [links](/path) where helpful.
+
+You can add multiple paragraphs, lists, and subheadings.
+
+## Usage guidelines
+
+- Use this component for ...
+- Avoid using it when ...
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+{/* Do not remove the line below — it renders a divider between the doucmentation and. */}
+***
+
+{/* Do not remove the blocks below — they render the interactive story and controls. */}
+<Primary />
+<Controls />
+<Stories />

@@ -28,6 +28,8 @@ export const ICON_COLOR_TOKENS = {
   'state-attention-on-light': 'var(--color-icon-state-attention-on-light)',
   'state-disabled-on-dark': 'var(--color-icon-state-disabled-on-dark)',
   'state-disabled-on-light': 'var(--color-icon-state-disabled-on-light)',
+  'state-success-on-dark': 'var(--color-icon-state-success-on-dark)',
+  'state-success-on-light': 'var(--color-icon-state-success-on-light)',
 } as const;
 
 export type IconColor = keyof typeof ICON_COLOR_TOKENS;
