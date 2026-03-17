@@ -17,7 +17,8 @@ export {
   type FormGroupDescriptionProps,
   type FormGroupLabelProps,
   type FormGroupProps,
-} from './FormGroup/FormGroup';
+} from './FormGroup/web/FormGroup';
+export { Icon, type IconProps } from './Icon/Icon';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {
@@ -77,3 +78,9 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export {
+  Toast,
+  TOAST_VARIANTS,
+  type ToastProps,
+  type ToastVariant,
+} from '@/components/Toast/Toast';
