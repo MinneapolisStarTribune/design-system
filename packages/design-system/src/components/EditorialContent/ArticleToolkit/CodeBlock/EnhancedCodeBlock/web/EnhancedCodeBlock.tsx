@@ -11,7 +11,8 @@ import type { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
 export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
   size = 'full',
   variant = 'standard',
-  cleanQuotes = false,
+  cleanQuotes = true,
+  dataTestId = 'enhanced-code-block',
   ...rest
 }) => {
   return (
@@ -23,6 +24,7 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
       )}
       variant={variant}
       cleanQuotes={cleanQuotes}
+      dataTestId={dataTestId}
       {...rest}
     />
   );

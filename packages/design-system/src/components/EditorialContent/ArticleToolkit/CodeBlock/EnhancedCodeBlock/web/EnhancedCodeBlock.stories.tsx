@@ -6,7 +6,6 @@ import { CODE_BLOCK_SIZES, ARTICLE_BODY_VARIANTS } from '../../../types';
 const meta: Meta<typeof EnhancedCodeBlock> = {
   title: 'Editorial Content/Article Toolkit/Code Block/Enhanced Code Block',
   component: EnhancedCodeBlock,
-  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
   },

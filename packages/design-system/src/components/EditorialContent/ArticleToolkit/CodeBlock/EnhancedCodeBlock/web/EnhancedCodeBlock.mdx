@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as EnhancedCodeBlockStories from './EnhancedCodeBlock.stories';
+
+<Meta of={EnhancedCodeBlockStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# EnhancedCodeBlock
+
+The **EnhancedCodeBlock** component wraps `DangerousCodeBlock` and applies additional styles for layout variants and sizes.  
+It is ideal for article content where styled or interactive code blocks are needed.  
+**Security warning:** Only use markup from trusted sources, as this component bypasses React's standard HTML escaping and can execute scripts.
+
+[Figma Comps](https://www.figma.com/file/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=1528-6976)
+
+## Usage guidelines
+
+### When to use
+
+- Display code blocks in articles with enhanced layout and styling.
+- Show interactive code snippets with scripts or special formatting.
+- Choose `standard` or `immersive` variants for article body alignment and emphasis.
+
+### When to avoid
+
+- Avoid if raw HTML is untrusted or user-generated.
+- Do not use for simple, plain code snippets where a `pre/code` block suffices.
+- Avoid using interactive scripts unless you control the source content.
+
+### Props
+
+- **markup** – the HTML content to render.
+- **variant** – controls styling; e.g., `standard` (default) or `immersive`.
+- **size** – code block size: e.g., `full`, `large`, `medium`, `inline`.
+- **cleanQuotes** – converts smart quotes to straight quotes when `true` (default: `true`).
+- **className** – add custom styles.
+- **dataTestId** – used for testing; defaults to `enhanced-code-block`.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+---
+
+<Primary />
+<Controls />
+<Stories />
