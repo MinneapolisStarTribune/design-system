@@ -160,7 +160,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
             <div className={classNames(styles.controls, controlsClassName)}>
               <Button
                 variant="ghost"
-                size="medium"
+                size="large"
                 icon={<ChevronLeftIcon />}
                 onClick={prev}
                 isDisabled={!isImmersive && activeIndex === 0}
@@ -169,7 +169,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
               />
               <Button
                 variant="ghost"
-                size="medium"
+                size="large"
                 icon={<ChevronRightIcon />}
                 onClick={next}
                 isDisabled={!isImmersive && activeIndex === total - 1}
