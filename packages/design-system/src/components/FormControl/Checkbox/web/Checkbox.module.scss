@@ -53,6 +53,34 @@
   }
 }
 
+/* Scoped variable for icon color — wrapped icons default to on-light-primary which is white in dark mode.
+   We set the correct token per state so the Icon can override via style. */
+.root {
+  --checkbox-icon-color: var(--color-checkbox-border-unchecked);
+  &:is(.checked, .indeterminate) .visualBox {
+    --checkbox-icon-color: var(--color-checkbox-icon-selected-neutral);
+  }
+  &.brand:is(.checked, .indeterminate) .visualBox {
+    --checkbox-icon-color: var(--color-checkbox-icon-selected-brand);
+  }
+  &.disabled {
+    &:not(.checked):not(.indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-border-state-disabled-on-light);
+    }
+    &:is(.checked, .indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-text-state-disabled-on-light);
+    }
+  }
+  &.error {
+    &:not(.checked):not(.indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-border-state-attention-on-light);
+    }
+    &:is(.checked, .indeterminate) .visualBox {
+      --checkbox-icon-color: var(--color-base-white);
+    }
+  }
+}
+
 .visualBox {
   display: flex;
   align-items: center;
@@ -61,7 +89,7 @@
   box-sizing: border-box;
   border-radius: var(--radius-4);
   border: 1px solid transparent; /* Default; unchecked uses icon for outline */
-  background-color: var(--color-checkbox-background-unselected);
+  background-color: var(--color-checkbox-background-unchecked);
   transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 
   .icon {
@@ -76,7 +104,7 @@
 }
 
 .root:not(.checked):not(.indeterminate) .visualBox .icon {
-  color: var(--color-checkbox-border-unselected);
+  color: var(--color-checkbox-border-unchecked);
 }
 
 /* Checked/Indeterminate: icon uses selected token (white on fill) */
