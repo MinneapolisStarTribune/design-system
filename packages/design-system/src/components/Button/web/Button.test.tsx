@@ -1,8 +1,7 @@
 import { vi } from 'vitest';
 import { Button } from './Button';
 import { renderWithProvider } from '../../../test-utils/render';
-import CameraFilledIcon from '@/icons/camera-filled.svg?react';
-import ShareIcon from '@/icons/share.svg?react';
+import { CameraFilledIcon, ShareIcon } from '@/icons';
 
 describe('Button', () => {
   it('renders', () => {
