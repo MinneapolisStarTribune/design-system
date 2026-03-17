@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Image } from '@/components/index.web';
+import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';
 import type { ImageData } from '../../types';
 import styles from './PhotoLayout.module.scss';
@@ -44,8 +44,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
         onClick={onClose}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
-          {/* Todo - Add color support */}
-          <Icon component={CloseIcon} size="small" aria-hidden />
+          <CloseIcon size="large" aria-hidden color='on-dark-primary' />
         </span>
       </button>
 
@@ -76,13 +75,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
 
             {hasCredit && (
               <div className={styles['dialog-credit-row']}>
-                {/* Todo - Add color support */}
-                <Icon
-                  component={CameraIcon}
-                  size="small"
-                  aria-hidden
-                  className={styles['dialog-credit-icon']}
-                />
+                <CameraIcon size="medium" aria-hidden className={styles['dialog-credit-icon']} />
                 <span
                   className={classNames(
                     'typography-utility-label-small',

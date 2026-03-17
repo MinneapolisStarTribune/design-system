@@ -5,7 +5,6 @@ import type { PhotoLayoutProps } from '../PhotoLayout.types';
 const meta: Meta<PhotoLayoutProps> = {
   title: 'Editorial Content/Article Toolkit/Photo Layout',
   component: PhotoLayout,
-  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

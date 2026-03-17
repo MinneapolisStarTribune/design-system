@@ -139,7 +139,7 @@
 
 .dialog {
   --lightbox-backdrop-bg: rgba(0, 0, 0, 0.95);
-  --caption-text-color: var(--color-text-on-dark-primary);
+  --caption-text-color: var(--color-icon-on-dark-primary);
   --credit-text-color: var(--color-text-on-dark-tertiary);
 
   padding: 0;
@@ -214,7 +214,7 @@
 
 .dialog-caption {
   padding: var(--spacing-16);
-  color: var(--color-text-on-dark-primary);
+  color: var(--color-icon-on-dark-primary);
 }
 
 @media (min-width: 1160px) {
