@@ -25,7 +25,6 @@
 
   /* Standard variant */
   &.variant-standard {
-    position: relative;
     &.size-full,
     &.size-large,
     &.size-medium {
@@ -55,12 +54,9 @@
 
   /* Immersive variant */
   &.variant-immersive {
-    position: relative;
     &.size-full {
       width: 100%;
       max-width: none;
-      margin-left: 0;
-      margin-right: 0;
     }
 
     &.size-large {
