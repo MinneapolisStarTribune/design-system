@@ -4,7 +4,7 @@ import { ArticleBodySponsoredHeading } from './ArticleBodySponsoredHeading.nativ
 import { ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodySponsoredHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredHeading',
+  title: 'Typography/ArticleBody/ArticleBodySponsoredHeading',
   component: ArticleBodySponsoredHeading,
   argTypes: {
     importance: {
