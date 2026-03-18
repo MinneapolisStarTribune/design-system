@@ -1,8 +1,12 @@
 {
   "semantic": {
-    "photo-layout-border-radius": {
-      "description": "Border radius for photo layout components - Varsity uses rounded corners",
-      "value": "{radius.12}"
+    "photo-layout": {
+      "border-radius": {
+        "value": "{radius.16}"
+      },
+      "caption-padding-mobile": {
+        "value": "0px"
+      }
     }
   }
 }

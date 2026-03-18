@@ -214,12 +214,12 @@
             "value": "{color.emerald-green.800}"
           },
           "neutral": {
-            "description": "Background for selected neutral checkbox (light mode: black).",
+            "description": "Background for selected neutral checkbox (light mode: black fill).",
             "value": "{color.neutral.950}"
           }
         },
-        "unselected": {
-          "description": "Background for unselected checkbox.",
+        "unchecked": {
+          "description": "Background for unchecked checkbox.",
           "value": "{color.base.white}"
         }
       },
@@ -230,16 +230,16 @@
             "value": "{color.emerald-green.800}"
           },
           "neutral": {
-            "description": "Border color for selected neutral checkbox (light mode: black).",
+            "description": "Border color for selected neutral checkbox (light mode: black outline).",
             "value": "{color.neutral.950}"
           }
         },
-        "unselected": {
-          "description": "Border color for unselected checkbox.",
+        "unchecked": {
+          "description": "Border color for unchecked checkbox (default state).",
           "value": "{color.neutral.400}"
         }
       },
-      "description": "Checkbox component color tokens — border, background, and icon for unselected, selected neutral, and selected brand states.",
+      "description": "Checkbox component color tokens — border, background, and icon for unchecked, selected neutral, and selected brand states.",
       "icon": {
         "selected": {
           "brand": {
@@ -247,12 +247,12 @@
             "value": "{color.base.white}"
           },
           "neutral": {
-            "description": "Icon color for selected neutral checkbox — white on black.",
+            "description": "Icon color for selected neutral checkbox — white checkmark on black (light mode).",
             "value": "{color.base.white}"
           }
         },
-        "unselected": {
-          "description": "Icon color for unselected checkbox (no icon shown).",
+        "unchecked": {
+          "description": "Icon color for unchecked checkbox (no icon shown).",
           "value": "rgb(0 0 0 / 0%)"
         }
       }

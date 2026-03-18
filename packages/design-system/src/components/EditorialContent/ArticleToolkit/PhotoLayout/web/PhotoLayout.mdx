@@ -1,0 +1,47 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as PhotoLayoutStories from './PhotoLayout.stories';
+
+<Meta of={PhotoLayoutStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# PhotoLayout
+
+The **PhotoLayout** component arranges multiple images into structured grids within editorial content. It currently supports 2-up, 3-up, or 4-up immersive layouts, captions, image credits, and expandable behavior for storytelling.  
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2449-73924)
+
+## Usage guidelines
+
+### When to use
+- Display multiple related images in a clean, organized grid.
+- Highlight editorial content or immersive article visuals.
+- Provide captions and photo credits consistently.
+
+### When to avoid
+- Avoid for single images that do not require a structured layout.
+- Do not use for unrelated images where grid consistency is not needed.
+
+### Props
+
+- **imageList** – Array of images `{ src: string, altText: string }`.
+- **photoLayout** – Grid type: `'2up' | '3up' | '4up'`.
+- **caption** – Optional text describing the images.
+- **imageCredit** – Optional credit line for images.
+- **variant** – Article variant: `'immersive'` currently supported. 
+- **expandable** – Boolean to allow expanding images for immersive view.
+
+### Layout Notes
+- `2up`, `3up`, and `4up` layouts adjust automatically based on the number of images and container width.
+- When `expandable` is true, users can click to see larger versions of images in immersive view.
+- Captions and image credits are recommended for editorial consistency.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+{/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+---
+
+<Primary />
+<Controls />
+<Stories />
