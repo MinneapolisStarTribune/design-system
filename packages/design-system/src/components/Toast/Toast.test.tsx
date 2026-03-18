@@ -39,12 +39,15 @@ describe('Toast', () => {
     expect(getByRole('status')).toBeInTheDocument();
   });
 
-  it('has role="alert" for error variant', () => {
+  it('has role="alert" and aria-live="assertive" for error variant', () => {
     const { getByRole } = renderWithProvider(
-      <Toast title="Error" variant="error" onClose={vi.fn()} />
+      <Toast title="Something went wrong" variant="error" onClose={vi.fn()} />
     );
 
-    expect(getByRole('alert')).toBeInTheDocument();
+    const alert = getByRole('alert');
+    expect(alert).toBeInTheDocument();
+    expect(alert).toHaveAttribute('aria-live', 'assertive');
+    expect(alert).toHaveAttribute('aria-atomic', 'true');
   });
 
   it('renders icon when showIcon is true', () => {

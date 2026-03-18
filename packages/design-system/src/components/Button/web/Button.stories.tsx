@@ -22,7 +22,6 @@ type ConfigurableArgs = ButtonProps & { showIcon?: boolean };
 const meta: Meta<ConfigurableArgs> = {
   title: 'Actions/Button',
   component: Button,
-  tags: ['autodocs'],
   argTypes: {
     children: {
       control: 'text',

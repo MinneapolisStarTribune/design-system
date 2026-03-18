@@ -57,6 +57,8 @@
  * 10. Generates mobile typography tokens from tokens/typography/ to dist/mobile/typography/{brand}-typography.js (React Native)
  */
 
+const fs = require('fs');
+const path = require('path');
 const buildThemeTokens = require('./build-theme-tokens');
 const buildTypographyClasses = require('./build-typography-classes');
 const buildCombinedCSS = require('./build-combined-css');
@@ -143,6 +145,12 @@ async function buildTokens() {
 
   for (const brand of brands) {
     await buildMobileTypography(brand);
+  }
+
+  // Clean up intermediate web theme files – consumers only need the combined CSS
+  const themesDir = path.join(process.cwd(), 'dist/web/themes');
+  if (fs.existsSync(themesDir)) {
+    fs.rmSync(themesDir, { recursive: true, force: true });
   }
 
   // Generate TypeScript type declarations from the built JS files

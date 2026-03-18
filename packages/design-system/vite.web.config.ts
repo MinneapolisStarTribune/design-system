@@ -30,6 +30,9 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
         path.resolve(__dirname, 'src/components/index.web.ts'),
+        path.resolve(__dirname, 'src/components/Icon/Icon.tsx'),
+        path.resolve(__dirname, 'src/components/Icon/Icon.types.ts'),
+        path.resolve(__dirname, 'src/icons/index.ts'),
         path.resolve(__dirname, 'src/types'),
       ],
       exclude: [
@@ -82,9 +85,10 @@ export default defineConfig({
     outDir: 'dist/web',
     lib: {
       entry: 'src/index.web.ts',
-      formats: ['es'],
+      // Emit both ESM and CJS bundles so consumers can use either `import` or `require`.
+      formats: ['es', 'cjs'],
       name: 'DesignSystem',
-      fileName: () => 'design-system.es.js',
+      fileName: (format) => (format === 'cjs' ? 'design-system.cjs.js' : 'design-system.es.js'),
     },
     rollupOptions: {
       external: [
