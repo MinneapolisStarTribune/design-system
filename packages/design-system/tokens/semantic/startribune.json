@@ -1,6 +1,9 @@
 {
   "semantic": {
     "photo-layout": {
+      "aspect-ratio": {
+        "value": "3 / 2"
+      },
       "border-radius": {
         "value": "{radius.4}"
       },

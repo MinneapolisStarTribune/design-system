@@ -17,6 +17,7 @@
 .grid {
   display: grid;
   gap: var(--spacing-8);
+  align-items: start;
 }
 
 .layout-2up .grid,
@@ -51,8 +52,9 @@
 .item {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  aspect-ratio: var(--semantic-photo-layout-aspect-ratio);
   border-radius: var(--semantic-photo-layout-border-radius);
-  aspect-ratio: 3 / 2;
 }
 
 /* Image */
@@ -61,10 +63,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 /* Caption */
+
+.caption-text {
+  color: var(--color-text-on-light-secondary);
+}
 
 @media (max-width: 480px) {
   .caption-text {
