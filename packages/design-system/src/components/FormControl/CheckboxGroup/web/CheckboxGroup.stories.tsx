@@ -85,9 +85,7 @@ export const Configurable: Story = {
           dataTestId="checkbox-group-configurable"
         />
         {args.error && (
-          <FormGroup.Caption variant="error">
-            Select an option below to continue
-          </FormGroup.Caption>
+          <FormGroup.Caption variant="error">Select an option below to continue</FormGroup.Caption>
         )}
       </FormGroup>
     );
