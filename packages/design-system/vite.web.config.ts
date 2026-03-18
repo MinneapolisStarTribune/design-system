@@ -76,6 +76,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    cssCodeSplit: false,
     commonjsOptions: {
       include: [/node_modules/, /dist\/mobile/],
     },
@@ -102,6 +103,8 @@ export default defineConfig({
           'react/jsx-runtime': 'React',
           '@floating-ui/react': 'FloatingUIReact',
         },
+        assetFileNames: (assetInfo) =>
+          assetInfo.names?.some((n) => n.endsWith('.css')) ? 'components.css' : 'assets/[name]-[hash][extname]',
       },
     },
     target: 'esnext',

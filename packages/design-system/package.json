@@ -10,6 +10,7 @@
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
     },
+    "./web/components.css": "./dist/web/components.css",
     "./web/*": {
       "default": "./dist/web/*"
     },
