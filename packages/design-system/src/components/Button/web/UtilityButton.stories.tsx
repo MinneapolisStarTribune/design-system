@@ -1,11 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import {
-  UtilityButton,
-  BUTTON_COLORS,
-  BUTTON_SIZES,
-  type ButtonSize,
-} from './UtilityButton';
+import { UtilityButton, BUTTON_COLORS, BUTTON_SIZES, type ButtonSize } from './UtilityButton';
 import styles from './UtilityButton.module.scss';
 import { iconOptions } from '@/components/Icon/iconOptions';
 import { IconName } from '@/components/Icon/iconNames';
@@ -94,23 +89,21 @@ function renderUtilityButtonSection(
                 }}
               >
                 <UtilityButton
-                  {
-                    ...({
-                      variant: 'default',
-                      color,
-                      size,
-                      icon: withIcon ? 'avatar' : undefined,
-                      // Only non-icon-only buttons should render the text label.
-                      ...(withIcon ? {} : { label: 'Share' }),
-                      isDisabled: color === BUTTON_COLORS[BUTTON_COLORS.length - 1],
-                      className:
-                        showFocusedExample &&
-                        color === 'brand' &&
-                        (size === 'small' || size === 'large')
-                          ? styles['storybook-focus']
-                          : undefined,
-                    } as any)
-                  }
+                  {...({
+                    variant: 'default',
+                    color,
+                    size,
+                    icon: withIcon ? 'avatar' : undefined,
+                    // Only non-icon-only buttons should render the text label.
+                    ...(withIcon ? {} : { label: 'Share' }),
+                    isDisabled: color === BUTTON_COLORS[BUTTON_COLORS.length - 1],
+                    className:
+                      showFocusedExample &&
+                      color === 'brand' &&
+                      (size === 'small' || size === 'large')
+                        ? styles['storybook-focus']
+                        : undefined,
+                  } as any)}
                 />
               </div>
             ))}
@@ -203,4 +196,3 @@ export const AllUtilityButtons: Story = {
     </div>
   ),
 };
-
