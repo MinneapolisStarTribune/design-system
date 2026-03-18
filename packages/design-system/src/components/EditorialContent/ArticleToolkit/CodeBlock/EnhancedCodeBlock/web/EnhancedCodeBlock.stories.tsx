@@ -36,9 +36,10 @@ export default meta;
 type Story = StoryObj<typeof EnhancedCodeBlock>;
 
 // Sample markup for enhanced code blocks (no quote cleaning)
-const enhancedCodeBlockMarkup = `
+const enhancedCodeBlockMarkup = (size: EnhancedCodeBlockProps['size']) => {
+  return `
   <div style="padding: 20px; background-color: #e3f2fd; border: 2px solid #2196F3; border-radius: 8px; width: 100%;">
-    <h3 class="typography-article-body-h3">Enhanced Code Block</h3>
+    <h3 class="typography-article-body-h3">Enhanced Code Block <span style="text-transform: capitalize;">(${size})</span></h3>
     <p class="typography-editorial-text-regular-medium">This is an enhanced code block with sizing options.</p>
     <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;" class="typography-editorial-text-regular-medium">
       Interactive Content Area
@@ -48,13 +49,14 @@ const enhancedCodeBlockMarkup = `
     </script>
   </div>
 `;
+};
 
 const createArgs = (
   variant: EnhancedCodeBlockProps['variant'],
   size: EnhancedCodeBlockProps['size'],
   cleanQuotes = false
 ) => ({
-  markup: enhancedCodeBlockMarkup,
+  markup: enhancedCodeBlockMarkup(size),
   variant,
   size,
   cleanQuotes,
@@ -64,9 +66,6 @@ const renderVariantWithSizes = (variant: EnhancedCodeBlockProps['variant']) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', padding: '48px 0' }}>
     {CODE_BLOCK_SIZES.map((size) => (
       <div key={`${variant}-${size}`}>
-        <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
-          {size}
-        </h3>
         <EnhancedCodeBlock {...createArgs(variant, size, false)} />
       </div>
     ))}
