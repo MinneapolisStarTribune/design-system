@@ -4,6 +4,10 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import svgr from 'vite-plugin-svgr';
+import {
+  getCodeEditorStaticDirs,
+  getExtraStaticDir,
+} from 'storybook-addon-code-editor/getStaticDirs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,13 +19,19 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/addon-docs',
     '@storybook/addon-a11y',
-    '@storybook/addon-vitest',
+    'storybook-addon-code-editor',
   ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
   },
-  staticDirs: ['../dist/web'],
+  staticDirs: [
+    ...getCodeEditorStaticDirs(__filename),
+    // Extra static files sometimes needed by Monaco for its ES module loader.
+    // Docs: https://storybook.js.org/addons/storybook-addon-code-editor
+    getExtraStaticDir('monaco-editor/esm'),
+    '../dist/web',
+  ],
 
   async viteFinal(baseConfig) {
     // Plugin to convert CJS theme files (module.exports) to ESM (export default)
