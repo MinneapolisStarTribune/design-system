@@ -10,7 +10,6 @@ import { allModes } from '@storybook-config/modes';
 const meta = {
   title: 'Actions/UtilityButton',
   component: UtilityButton,
-  tags: ['autodocs'],
   argTypes: {
     label: {
       control: 'text',
