@@ -1,15 +1,6 @@
 /* Layout Container */
 
 .photo-layout {
-  /* Photo heights */
-  --photo-item-height-desktop: 357px;
-  --photo-item-height-tablet: 237px;
-  --photo-item-height-mobile: 127px;
-
-  --photo-feature-height-desktop: 720px;
-  --photo-feature-height-tablet: 480px;
-  --photo-feature-height-mobile: 260px;
-
   /* Button backgrounds */
   --overlay-button-bg: rgba(34, 34, 34, 0.3);
   --overlay-button-bg-hover: rgba(34, 34, 34, 0.5);
@@ -43,7 +34,6 @@
 
 .layout-3up .item:nth-child(1) {
   grid-column: 1 / -1;
-  height: var(--photo-feature-height-desktop);
 }
 
 /*
@@ -56,35 +46,13 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-/* Item (Immersive Variant) */
+/* Item */
 
-.variant-immersive .item {
+.item {
   position: relative;
   overflow: hidden;
-  height: var(--photo-item-height-desktop);
   border-radius: var(--semantic-photo-layout-border-radius);
-}
-
-/* Responsive */
-
-@media (max-width: 768px) {
-  .variant-immersive .item {
-    height: var(--photo-item-height-tablet);
-  }
-
-  .layout-3up .variant-immersive .item:nth-child(1) {
-    height: var(--photo-feature-height-tablet);
-  }
-}
-
-@media (max-width: 480px) {
-  .variant-immersive .item {
-    height: var(--photo-item-height-mobile);
-  }
-
-  .layout-3up .variant-immersive .item:nth-child(1) {
-    height: var(--photo-feature-height-mobile);
-  }
+  aspect-ratio: 3 / 2;
 }
 
 /* Image */
