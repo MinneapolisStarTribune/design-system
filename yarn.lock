@@ -1389,6 +1389,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/standalone@npm:^7.27.0":
+  version: 7.29.2
+  resolution: "@babel/standalone@npm:7.29.2"
+  checksum: 10c0/a01a2134651b9132454bd1a7d93c6f183cf60f281087d252e0d7ca800c14619b4a72336767e315e2fd58700582d481ff684453e0659a1ad5c828b4823b9aee32
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.0.0, @babel/template@npm:^7.25.0, @babel/template@npm:^7.28.6, @babel/template@npm:^7.3.3":
   version: 7.28.6
   resolution: "@babel/template@npm:7.28.6"
@@ -3240,6 +3247,7 @@ __metadata:
     react-test-renderer: "npm:19.0.0"
     sass: "npm:^1.97.2"
     storybook: "npm:^10.1.11"
+    storybook-addon-code-editor: "npm:^6.1.3"
     style-dictionary: "npm:^4.4.0"
     typescript: "npm:^5.8.3"
     vite: "npm:^6.0.0"
@@ -13245,6 +13253,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"monaco-editor@npm:0.52.2":
+  version: 0.52.2
+  resolution: "monaco-editor@npm:0.52.2"
+  checksum: 10c0/5a92da64f1e2ab375c0ce99364137f794d057c97bed10ecc65a08d6e6846804b8ecbd377eacf01e498f7dfbe1b21e8be64f728256681448f0484df90e767b435
+  languageName: node
+  linkType: hard
+
 "mrmime@npm:^2.0.0":
   version: 2.0.1
   resolution: "mrmime@npm:2.0.1"
@@ -16081,6 +16096,23 @@ __metadata:
     es-errors: "npm:^1.3.0"
     internal-slot: "npm:^1.1.0"
   checksum: 10c0/de4e45706bb4c0354a4b1122a2b8cc45a639e86206807ce0baf390ee9218d3ef181923fa4d2b67443367c491aa255c5fbaa64bb74648e3c5b48299928af86c09
+  languageName: node
+  linkType: hard
+
+"storybook-addon-code-editor@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "storybook-addon-code-editor@npm:6.1.3"
+  dependencies:
+    "@babel/standalone": "npm:^7.27.0"
+    monaco-editor: "npm:0.52.2"
+  peerDependencies:
+    "@types/react": 17.x.x || 18.x.x || 19.x.x
+    react: 17.x.x || 18.x.x || 19.x.x
+    storybook: 10.x.x
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/8216b22feeeb014f2ede26f1155cb505453bc25199a564927143b5de35286371c9d3ad853433ec74febb9c66825dbf7baeb0f2899216c4acc91024648b68402c
   languageName: node
   linkType: hard
 
