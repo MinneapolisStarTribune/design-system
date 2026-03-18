@@ -131,7 +131,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       </span>
       <span className={styles.content}>
         <UtilityLabel
-          size={size === 'default' ? 'medium' : 'small'}
+          size={size === 'default' ? 'large' : 'medium'}
           weight="regular"
           className={styles.label}
         >
