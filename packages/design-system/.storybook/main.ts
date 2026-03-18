@@ -15,12 +15,7 @@ const __dirname = path.dirname(__filename);
 const config: StorybookConfig = {
   // Include all stories, exclude native stories
   stories: ['../src/**/*.mdx', '../src/**/!(*.native).stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [
-    '@chromatic-com/storybook',
-    '@storybook/addon-docs',
-    '@storybook/addon-a11y',
-    'storybook-addon-code-editor',
-  ],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', 'storybook-addon-code-editor'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
