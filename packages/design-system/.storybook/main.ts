@@ -14,7 +14,11 @@ const __dirname = path.dirname(__filename);
 
 const config: StorybookConfig = {
   // Include all stories, exclude native stories
-  stories: ['../src/**/*.mdx', '../src/**/!(*.native).stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    '../src/**/GettingStarted.mdx', // default page
+    '../src/**/*.mdx',
+    '../src/**/!(*.native).stories.@(js|jsx|mjs|ts|tsx)',
+  ],
   addons: ['@storybook/addon-docs', '@storybook/addon-a11y', 'storybook-addon-code-editor'],
   framework: {
     name: '@storybook/react-vite',
