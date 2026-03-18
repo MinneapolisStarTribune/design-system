@@ -240,8 +240,8 @@
             "value": "{color.base.white}"
           }
         },
-        "unselected": {
-          "description": "Background for unselected checkbox on dark backgrounds.",
+        "unchecked": {
+          "description": "Background for unchecked checkbox on dark backgrounds.",
           "value": "rgb(0 0 0 / 0%)"
         }
       },
@@ -256,12 +256,12 @@
             "value": "{color.base.white}"
           }
         },
-        "unselected": {
-          "description": "Border color for unselected checkbox on dark backgrounds.",
+        "unchecked": {
+          "description": "Border color for unchecked checkbox on dark backgrounds.",
           "value": "{color.neutral.600}"
         }
       },
-      "description": "Checkbox component color tokens — border, background, and icon for unselected, selected neutral, and selected brand states. Strib Varsity uses cobalt blue for brand.",
+      "description": "Checkbox component color tokens — border, background, and icon for unchecked, selected neutral, and selected brand states. Strib Varsity uses cobalt blue for brand.",
       "icon": {
         "selected": {
           "brand": {
@@ -273,8 +273,8 @@
             "value": "{color.neutral.950}"
           }
         },
-        "unselected": {
-          "description": "Icon color for unselected checkbox (no icon shown).",
+        "unchecked": {
+          "description": "Icon color for unchecked checkbox (no icon shown).",
           "value": "rgb(0 0 0 / 0%)"
         }
       }
