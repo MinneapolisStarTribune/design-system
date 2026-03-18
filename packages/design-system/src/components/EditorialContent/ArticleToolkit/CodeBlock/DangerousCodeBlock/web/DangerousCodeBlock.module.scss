@@ -1,0 +1,39 @@
+.dangerous-code-block {
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Breakpoints */
+  $md: 768px;
+  $lg: 1024px;
+
+  /* Standard - article body width */
+  $standard-mobile: 390px;
+  $standard-tablet: 728px;
+  $standard-desktop: 712px;
+
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Standard variant */
+  &.variant-standard {
+    max-width: $standard-mobile;
+
+    @media (min-width: $md) {
+      max-width: $standard-tablet;
+    }
+
+    @media (min-width: $lg) {
+      max-width: $standard-desktop;
+    }
+  }
+
+  /* Immersive variant - full-width breakout */
+  &.variant-immersive {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

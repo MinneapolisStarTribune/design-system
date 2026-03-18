@@ -3,6 +3,12 @@ name: Publish Design System
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 1.2.3). Required when run manually; ignored when triggered by a release.'
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -24,13 +30,24 @@ jobs:
           registry-url: 'https://npm.pkg.github.com/'
           scope: '@minneapolisstartribune'
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install dependencies
         run: yarn install
 
-      - name: Extract version from tag
+      - name: Extract version from tag or input
         id: version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            if [ -z "${{ github.event.inputs.version }}" ]; then
+              echo "::error::When running manually, you must provide the 'version' input (e.g. 1.2.3)."
+              exit 1
+            fi
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=${GITHUB_REF#refs/tags/v}
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Publishing version: $VERSION"
 
@@ -42,10 +59,10 @@ jobs:
           git checkout main
           git fetch origin main
           git reset --hard origin/main
-          
+
           # Update version in the design system package
           cd packages/design-system
-          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          yarn version --new-version ${{ steps.version.outputs.version }}
           cd ../..
 
           git config user.name "github-actions[bot]"
@@ -56,11 +73,14 @@ jobs:
           # Push to main
           git push origin main
 
+      - name: Install dependencies (after version bump)
+        run: yarn install
+
       - name: Build package
         run: yarn workspace @minneapolisstartribune/design-system build
 
       - name: Publish to GitHub Packages
+        working-directory: packages/design-system
+        run: yarn npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
-        working-directory: packages/design-system
-        run: yarn publish --non-interactive

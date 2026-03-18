@@ -58,10 +58,11 @@ function shouldRebuildTokens() {
   
   // Output files: generated CSS files (web) and JavaScript files (mobile)
   const tokenOutputFiles = [
-    'dist/web/themes/startribune-light.css',
-    'dist/web/themes/startribune-dark.css',
-    'dist/web/themes/varsity-light.css',
-    'dist/web/themes/varsity-dark.css',
+    // Final combined web CSS outputs (not intermediate theme files)
+    'dist/web/startribune-light.css',
+    'dist/web/startribune-dark.css',
+    'dist/web/varsity-light.css',
+    'dist/web/varsity-dark.css',
     'dist/mobile/themes/startribune-light.js',
     'dist/mobile/themes/startribune-dark.js',
     'dist/mobile/themes/varsity-light.js',

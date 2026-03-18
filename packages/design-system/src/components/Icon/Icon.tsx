@@ -1,6 +1,12 @@
 import React from 'react';
 import type { SVGProps } from 'react';
-import { ICON_PIXEL_SIZES, type IconSize, type IconComponent } from './Icon.types';
+import {
+  ICON_COLOR_TOKENS,
+  ICON_PIXEL_SIZES,
+  type IconComponent,
+  type IconSize,
+  type IconWrapperProps,
+} from './Icon.types';
 
 export type IconProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height'> & {
   size?: IconSize;
@@ -11,3 +17,28 @@ export const Icon: React.FC<IconProps> = ({ component: Component, size = 'medium
   const pixel = ICON_PIXEL_SIZES[size];
   return <Component width={pixel} height={pixel} {...rest} />;
 };
+
+/**
+ * Creates a wrapped icon component that accepts design-system size and semantic color props.
+ * Default size: medium. Default color: on-light-primary.
+ * Use e.g. <CameraIcon size="small" color="on-dark-secondary" />.
+ */
+export function createIconWrapper(Component: IconComponent): React.FC<IconWrapperProps> {
+  const WrappedIcon: React.FC<IconWrapperProps> = ({
+    size = 'medium',
+    color = 'on-light-primary',
+    style,
+    ...rest
+  }) => {
+    const pixel = ICON_PIXEL_SIZES[size];
+    const resolvedStyle: React.CSSProperties = {
+      width: pixel,
+      height: pixel,
+      color: ICON_COLOR_TOKENS[color],
+      ...style,
+    };
+    return <Component width={pixel} height={pixel} style={resolvedStyle} {...rest} />;
+  };
+  WrappedIcon.displayName = `Icon(${Component.displayName ?? Component.name ?? 'Unknown'})`;
+  return WrappedIcon;
+}
