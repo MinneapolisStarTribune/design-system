@@ -26,11 +26,24 @@ list_release_branches() {
   git branch -r --list 'origin/release/*' | sed 's|origin/||; s|^[[:space:]]*||' | sort -V
 }
 
+# Real path to .release-branch inside $GIT_DIR (works from any subdirectory)
+_release_pin_file() {
+  local git_dir
+  git_dir=$(git rev-parse --git-dir 2>/dev/null) || return 1
+  if [[ "$git_dir" != /* ]]; then
+    local top
+    top=$(git rev-parse --show-toplevel 2>/dev/null) || return 1
+    git_dir="${top%/}/$git_dir"
+  fi
+  echo "$git_dir/.release-branch"
+}
+
 # Get the active release branch (must be pinned)
 get_release_branch() {
   verify_correct_repo || return 1
   
-  local pin_file=".git/.release-branch"
+  local pin_file
+  pin_file=$(_release_pin_file) || return 1
   
   # Pin file is required
   if [[ ! -f "$pin_file" ]]; then
@@ -67,7 +80,8 @@ setrelease() {
     return 1
   fi
   
-  local pin_file=".git/.release-branch"
+  local pin_file
+  pin_file=$(_release_pin_file) || return 1
   echo "$current_branch" > "$pin_file"
   echo "✅ Pinned release branch: $current_branch"
 }
@@ -130,7 +144,8 @@ newbranch() {
 whichrelease() {
   verify_correct_repo || return 1
   
-  local pin_file=".git/.release-branch"
+  local pin_file
+  pin_file=$(_release_pin_file) || return 1
   
   if [[ ! -f "$pin_file" ]]; then
     echo "❌ No release branch pinned"
