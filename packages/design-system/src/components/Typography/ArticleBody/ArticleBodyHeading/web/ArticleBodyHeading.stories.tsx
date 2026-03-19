@@ -3,7 +3,7 @@ import { ArticleBodyHeading } from './ArticleBodyHeading';
 import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleBodyHeading',
+  title: 'Typography/ArticleBody/ArticleBodyHeading',
   component: ArticleBodyHeading,
   parameters: {
     layout: 'centered',
@@ -14,7 +14,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',
