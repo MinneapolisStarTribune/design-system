@@ -39,9 +39,9 @@ This component supports multiple layout patterns without additional configuratio
 
 ### Split layout (Image gallery)
 
-- Caption aligned left
-- Navigation aligned right
-- Default pagination inside carousel
+- Caption aligned left  
+- Navigation aligned right  
+- Default pagination inside carousel  
 
 Used in: Image gallery, editorial media blocks
 
@@ -49,9 +49,9 @@ Used in: Image gallery, editorial media blocks
 
 ### Centered controls (Cards layout)
 
-- Pagination + navigation grouped
-- Center aligned
-- Uses `variant="custom"`
+- Pagination + navigation grouped  
+- Center aligned  
+- Uses custom pagination  
 
 Used in: Card carousels, newsletters, collections
 
@@ -59,9 +59,9 @@ Used in: Card carousels, newsletters, collections
 
 ### Top controls (The Latest)
 
-- Title on left
-- Navigation on right
-- Placed above carousel
+- Title on left  
+- Navigation on right  
+- Placed above carousel  
 
 Used in: Section-based layouts
 
@@ -69,8 +69,8 @@ Used in: Section-based layouts
 
 ### Right-aligned navigation
 
-- Only navigation controls
-- No pagination
+- Only navigation controls  
+- No pagination  
 
 Used in: Minimal carousel layouts
 
@@ -78,13 +78,13 @@ Used in: Minimal carousel layouts
 
 ## Pagination behavior
 
-Pagination is controlled via the `Pagination` subcomponent:
+Pagination is controlled via both **prop + subcomponent**:
 
 - No pagination  
   → Do not include `<SwiperCarousel.Pagination />`
 
 - Default pagination (swiper dots)  
-  → `<SwiperCarousel.Pagination />`
+  → Use `showPagination` + `<SwiperCarousel.Pagination />`
 
 - Custom pagination (Figma style)  
   → `<SwiperCarousel.Pagination variant="custom" />`
@@ -93,11 +93,11 @@ Pagination is controlled via the `Pagination` subcomponent:
 
 ## Navigation behavior
 
-- Navigation is optional
+- Navigation is optional  
 - Automatically:
-  - Disables at boundaries
-  - Adjusts size responsively
-- Can be placed anywhere inside the component
+  - Disables at boundaries  
+  - Adjusts size responsively  
+- Can be placed anywhere inside the component  
 
 ---
 
@@ -106,6 +106,7 @@ Pagination is controlled via the `Pagination` subcomponent:
 - `Navigation` and `Pagination` must be used **inside `SwiperCarousel`**
 - Layout is controlled using standard CSS (flex, grid, positioning)
 - This component does **not enforce layout**
+- Default breakpoints are applied internally for consistent spacing
 - Always compose layouts externally
 
 ---
