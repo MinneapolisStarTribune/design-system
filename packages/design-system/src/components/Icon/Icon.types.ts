@@ -6,6 +6,9 @@ export const ICON_PIXEL_SIZES = {
   medium: '20px',
   large: '24px',
   'x-large': '32px',
+  /** Checkbox-specific: default 12px, small 10px */
+  'checkbox-default': '12px',
+  'checkbox-small': '10px',
 } as const;
 
 export type IconSize = keyof typeof ICON_PIXEL_SIZES;
@@ -43,4 +46,6 @@ export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height' 
   color?: IconColor;
 };
 
-export type IconComponent = React.ComponentType<SVGProps<SVGSVGElement>>;
+export type IconComponent = React.ComponentType<
+  SVGProps<SVGSVGElement> & { size?: IconSize }
+>;

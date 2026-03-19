@@ -85,18 +85,7 @@
 
   .icon {
     line-height: 0;
-    /* Checkbox icon sizes: default 12px, small 10px */
   }
-}
-
-.size-default .visualBox .icon {
-  width: 12px;
-  height: 12px;
-}
-
-.size-small .visualBox .icon {
-  width: 10px;
-  height: 10px;
 }
 
 /* Unchecked: use visualBox border (not icon) so border-radius is consistent 4px */
@@ -198,7 +187,7 @@
   cursor: inherit;
 }
 
-.caption {
+.content .caption {
   color: var(--color-text-on-light-tertiary);
   cursor: inherit;
 }

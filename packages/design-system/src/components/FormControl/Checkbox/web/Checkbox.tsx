@@ -122,7 +122,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         <span className={styles.visualBox} aria-hidden="true">
           <Icon
             component={IconComponent as IconComponentType}
-            size={size === 'small' ? 'small' : 'medium'}
+            size={size === 'small' ? 'checkbox-small' : 'checkbox-default'}
             className={styles.icon}
             style={{ color: 'var(--checkbox-icon-color)' }}
             aria-hidden

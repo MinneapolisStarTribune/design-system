@@ -226,8 +226,8 @@
       "border": {
         "selected": {
           "brand": {
-            "description": "Border color for selected brand checkbox — Star Tribune green.",
-            "value": "{color.emerald-green.600}"
+            "description": "Border color for selected brand checkbox — Star Tribune green (light mode).",
+            "value": "{color.emerald-green.800}"
           },
           "neutral": {
             "description": "Border color for selected neutral checkbox (light mode: black outline).",
