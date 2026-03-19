@@ -46,6 +46,4 @@ export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height' 
   color?: IconColor;
 };
 
-export type IconComponent = React.ComponentType<
-  SVGProps<SVGSVGElement> & { size?: IconSize }
->;
+export type IconComponent = React.ComponentType<SVGProps<SVGSVGElement> & { size?: IconSize }>;
