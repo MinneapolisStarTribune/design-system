@@ -79,6 +79,8 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
+export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export {
   Toast,
   TOAST_VARIANTS,

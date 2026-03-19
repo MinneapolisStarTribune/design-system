@@ -1,125 +1,187 @@
-import React, { useRef, useState, useCallback, useMemo } from 'react';
-import { Swiper as SwiperReact, SwiperSlide } from 'swiper/react';
-import { A11y } from 'swiper/modules';
+'use client';
+
+import React, { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { A11y, Pagination as SwiperPagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
-import classNames from 'classnames';
-import { ChevronLeftIcon, ChevronRightIcon } from '@/icons';
-import { Button } from '@/index.web';
-
 import 'swiper/css';
+import 'swiper/css/pagination';
+
+import classNames from 'classnames';
+
+import { Button } from '@/index.web';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/icons';
+
+import { SwiperContext, useSwiperContext } from './SwiperCarousel.context';
+import { useResponsiveSize } from '@/hooks/useResponsiveSize';
+
+import type {
+  SwiperCarouselProps,
+  PaginationProps,
+  NavigationProps,
+  CarouselChild,
+} from './SwiperCarousel.types';
 
 import styles from './SwiperCarousel.module.scss';
 
-export interface SwiperCarouselProps {
-  children: React.ReactNode;
-  pagination?: boolean;
-  slidesPerView?: number | 'auto';
-  spaceBetween?: number;
-  loop?: boolean;
-  centeredSlides?: boolean;
-  className?: string;
-}
+/* ---------------- ROOT ---------------- */
 
-export const SwiperCarousel: React.FC<SwiperCarouselProps> = ({
+const Root: React.FC<SwiperCarouselProps> = ({
   children,
-  pagination = false,
   slidesPerView = 'auto',
-  spaceBetween = 20,
+  spaceBetween = 16,
+  breakpoints,
   loop = false,
   centeredSlides = false,
   className,
 }) => {
-  const swiperRef = useRef<SwiperType | null>(null);
-
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+  const [totalSlides, setTotalSlides] = useState(0);
 
-  const slides = useMemo(
-    () =>
-      React.Children.map(children, (child, i) => (
-        <SwiperSlide key={i} className={styles.slide}>
-          {child}
-        </SwiperSlide>
-      )) ?? [],
-    [children]
-  );
+  const allChildren = React.Children.toArray(children) as CarouselChild[];
 
-  const total = slides.length;
+  let firstSlideIndex = -1;
 
-  const updateNavState = useCallback(
-    (swiper: SwiperType) => {
-      const index = loop ? swiper.realIndex : swiper.activeIndex;
+  allChildren.forEach((child, index) => {
+    if (firstSlideIndex === -1 && child?.type?.displayName === 'SwiperSlideWrapper') {
+      firstSlideIndex = index;
+    }
+  });
 
-      setActiveIndex(index);
-      setCanPrev(!swiper.isBeginning);
-      setCanNext(!swiper.isEnd);
-    },
-    [loop]
-  );
+  const beforeSwiper = firstSlideIndex > -1 ? allChildren.slice(0, firstSlideIndex) : [];
 
-  const prev = () => swiperRef.current?.slidePrev();
-  const next = () => swiperRef.current?.slideNext();
+  const slides = allChildren.filter((child) => child?.type?.displayName === 'SwiperSlideWrapper');
+
+  const afterSwiper = allChildren
+    .slice(firstSlideIndex)
+    .filter((child) => child?.type?.displayName !== 'SwiperSlideWrapper');
+
+  let paginationVariant: 'default' | 'custom' | null = null;
+
+  allChildren.forEach((child) => {
+    if (child?.type?.displayName === 'SwiperPagination') {
+      paginationVariant = child.props?.variant ?? 'default';
+    }
+  });
 
   return (
-    <div className={classNames(styles.root, className)}>
-      <SwiperReact
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        modules={[A11y]}
-        slidesPerView={slidesPerView}
-        spaceBetween={spaceBetween}
-        loop={loop}
-        centeredSlides={centeredSlides}
-        watchSlidesProgress
-        observer
-        observeParents
-        onSlideChange={updateNavState}
-        className={styles.swiper}
-      >
-        {slides}
-      </SwiperReact>
+    <SwiperContext.Provider
+      value={{
+        swiper: swiperInstance,
+        activeIndex,
+        isBeginning,
+        isEnd,
+        totalSlides,
+      }}
+    >
+      <div className={classNames(styles.container, className)}>
+        {beforeSwiper}
 
-      <div className={styles.bottom}>
-        {pagination && (
-          <div className={styles.dots}>
-            {Array.from({ length: total }).map((_, i) => (
-              <button
-                key={i}
-                className={classNames(styles.dot, {
-                  [styles.dotActive]: i === activeIndex,
-                })}
-                onClick={() => swiperRef.current?.slideTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
+        <Swiper
+          modules={[A11y, SwiperPagination]}
+          slidesPerView={slidesPerView}
+          spaceBetween={spaceBetween}
+          breakpoints={breakpoints}
+          loop={loop}
+          centeredSlides={centeredSlides}
+          onSwiper={(swiper) => {
+            setSwiperInstance(swiper);
+            setTotalSlides(swiper.slides.length);
+          }}
+          onSlideChange={(swiper) => {
+            const index = loop ? swiper.realIndex : swiper.activeIndex;
+            setActiveIndex(index);
+            setIsBeginning(swiper.isBeginning);
+            setIsEnd(swiper.isEnd);
+          }}
+          pagination={paginationVariant === 'default' ? { clickable: true } : false}
+        >
+          {slides}
+        </Swiper>
 
-        <div className={styles.controls}>
-          <Button
-            variant="ghost"
-            size="medium"
-            icon={<ChevronLeftIcon />}
-            aria-label="Previous"
-            onClick={prev}
-            isDisabled={!loop && !canPrev}
-            className={styles.navButton}
-          />
-
-          <Button
-            variant="ghost"
-            size="medium"
-            icon={<ChevronRightIcon />}
-            aria-label="Next"
-            onClick={next}
-            isDisabled={!loop && !canNext}
-            className={styles.navButton}
-          />
-        </div>
+        {afterSwiper}
       </div>
+    </SwiperContext.Provider>
+  );
+};
+
+/* ---------------- SLIDE ---------------- */
+
+const Slide: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <SwiperSlide className={styles.slide}>{children}</SwiperSlide>
+);
+
+Slide.displayName = 'SwiperSlideWrapper';
+
+/* ---------------- PAGINATION ---------------- */
+
+const Pagination: React.FC<PaginationProps> = ({ variant = 'default' }) => {
+  const { swiper, activeIndex, totalSlides } = useSwiperContext();
+
+  if (variant === 'default') return null;
+  if (!swiper || totalSlides <= 1) return null;
+
+  return (
+    <div className={styles.pagination}>
+      {Array.from({ length: totalSlides }).map((_, i) => (
+        <span
+          key={i}
+          className={classNames(styles.dot, {
+            [styles.active]: i === activeIndex,
+          })}
+          onClick={() => swiper.slideTo(i)}
+        />
+      ))}
     </div>
   );
 };
+
+Pagination.displayName = 'SwiperPagination';
+
+/* ---------------- NAVIGATION ---------------- */
+
+const NavigationComponent: React.FC<NavigationProps> = ({ className, size }) => {
+  const { swiper, isBeginning, isEnd } = useSwiperContext();
+
+  const resolvedSize = useResponsiveSize(size);
+
+  if (!swiper) return null;
+
+  return (
+    <div className={classNames(styles.navigation, className)}>
+      <Button
+        variant="ghost"
+        size={resolvedSize}
+        icon={<ChevronLeftIcon />}
+        onClick={() => swiper.slidePrev()}
+        isDisabled={isBeginning}
+        className={styles.navButton}
+        aria-label="Previous slide"
+      />
+
+      <Button
+        variant="ghost"
+        size={resolvedSize}
+        icon={<ChevronRightIcon />}
+        onClick={() => swiper.slideNext()}
+        isDisabled={isEnd}
+        className={styles.navButton}
+        aria-label="Next slide"
+      />
+    </div>
+  );
+};
+
+NavigationComponent.displayName = 'SwiperNavigation';
+
+/* ---------------- EXPORT ---------------- */
+
+export const SwiperCarousel = Object.assign(Root, {
+  Slide,
+  Pagination,
+  Navigation: NavigationComponent,
+});

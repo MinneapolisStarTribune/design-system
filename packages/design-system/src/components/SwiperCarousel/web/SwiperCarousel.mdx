@@ -1,0 +1,119 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ComponentStories from './SwiperCarousel.stories';
+
+<Meta of={ComponentStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# SwiperCarousel
+
+**SwiperCarousel** is a flexible, reusable carousel component built on top of Swiper.
+
+It provides core carousel behavior (scrolling, pagination, navigation) while allowing **full control over layout composition**.
+
+Unlike fixed carousel components, this component is **layout-agnostic**, meaning:
+- You decide where controls appear
+- You control how they are arranged
+- It adapts to multiple use cases (image gallery, cards, editorial layouts, etc.)
+
+---
+
+## Usage guidelines
+
+- Use this component when you need a **horizontal scrollable content area**
+- Compose layouts using:
+  - `SwiperCarousel.Slide`
+  - `SwiperCarousel.Pagination`
+  - `SwiperCarousel.Navigation`
+- Place controls (pagination, navigation, captions) **anywhere inside the component**
+- The order of children determines visual placement:
+  - Before slides → renders above
+  - Slides → rendered inside carousel
+  - After slides → renders below
+
+---
+
+## Layout flexibility
+
+This component supports multiple layout patterns without additional configuration.
+
+### Split layout (Image gallery)
+
+- Caption aligned left
+- Navigation aligned right
+- Default pagination inside carousel
+
+Used in: Image gallery, editorial media blocks
+
+---
+
+### Centered controls (Cards layout)
+
+- Pagination + navigation grouped
+- Center aligned
+- Uses `variant="custom"`
+
+Used in: Card carousels, newsletters, collections
+
+---
+
+### Top controls (The Latest)
+
+- Title on left
+- Navigation on right
+- Placed above carousel
+
+Used in: Section-based layouts
+
+---
+
+### Right-aligned navigation
+
+- Only navigation controls
+- No pagination
+
+Used in: Minimal carousel layouts
+
+---
+
+## Pagination behavior
+
+Pagination is controlled via the `Pagination` subcomponent:
+
+- No pagination  
+  → Do not include `<SwiperCarousel.Pagination />`
+
+- Default pagination (swiper dots)  
+  → `<SwiperCarousel.Pagination />`
+
+- Custom pagination (Figma style)  
+  → `<SwiperCarousel.Pagination variant="custom" />`
+
+---
+
+## Navigation behavior
+
+- Navigation is optional
+- Automatically:
+  - Disables at boundaries
+  - Adjusts size responsively
+- Can be placed anywhere inside the component
+
+---
+
+## Important notes
+
+- `Navigation` and `Pagination` must be used **inside `SwiperCarousel`**
+- Layout is controlled using standard CSS (flex, grid, positioning)
+- This component does **not enforce layout**
+- Always compose layouts externally
+
+---
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+***
+
+<Primary />
+<Controls />
+<Stories />

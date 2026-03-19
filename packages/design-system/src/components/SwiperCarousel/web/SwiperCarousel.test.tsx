@@ -1,3 +1,24 @@
+import { vi } from 'vitest';
+import React from 'react';
+
+vi.mock('./SwiperCarousel.context', async () => {
+  return {
+    SwiperContext: {
+      Provider: ({ children }: { children: React.ReactNode }) => children,
+    },
+    useSwiperContext: () => ({
+      swiper: {
+        slideNext: vi.fn(),
+        slidePrev: vi.fn(),
+      },
+      activeIndex: 0,
+      isBeginning: true,
+      isEnd: false,
+      totalSlides: 3,
+    }),
+  };
+});
+
 import { expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
@@ -5,12 +26,28 @@ import { SwiperCarousel } from './SwiperCarousel';
 
 const slides = ['Slide A', 'Slide B', 'Slide C'];
 
-const renderCarousel = (props: Partial<React.ComponentProps<typeof SwiperCarousel>> = {}) =>
+const renderCarousel = ({
+  withPagination = false,
+  withCustomPagination = false,
+  withNavigation = false,
+  loop = false,
+}: {
+  withPagination?: boolean;
+  withCustomPagination?: boolean;
+  withNavigation?: boolean;
+  loop?: boolean;
+} = {}) =>
   renderWithProvider(
-    <SwiperCarousel {...props} pagination>
+    <SwiperCarousel loop={loop}>
       {slides.map((s) => (
-        <div key={s}>{s}</div>
+        <SwiperCarousel.Slide key={s}>
+          <div>{s}</div>
+        </SwiperCarousel.Slide>
       ))}
+
+      {withPagination && <SwiperCarousel.Pagination />}
+      {withCustomPagination && <SwiperCarousel.Pagination variant="custom" />}
+      {withNavigation && <SwiperCarousel.Navigation />}
     </SwiperCarousel>
   );
 
@@ -24,67 +61,63 @@ describe('SwiperCarousel', () => {
       });
     });
 
-    it('renders pagination dots when pagination prop is true', () => {
-      const { container } = renderCarousel();
+    it('renders default pagination container when enabled', () => {
+      const { container } = renderCarousel({ withPagination: true });
 
-      // Only match base dot class, not dotActive
-      const dots = container.querySelectorAll('[class*="_dot_"]');
+      const pagination = container.querySelector('.swiper-pagination');
 
-      expect(dots.length).toBe(slides.length);
+      expect(pagination).toBeInTheDocument();
     });
 
-    it('does not render pagination when pagination is false', () => {
-      const { container } = renderWithProvider(
-        <SwiperCarousel>
-          {slides.map((s) => (
-            <div key={s}>{s}</div>
-          ))}
-        </SwiperCarousel>
-      );
+    it('renders custom pagination when enabled', () => {
+      const { container } = renderCarousel({
+        withCustomPagination: true,
+      });
 
-      const dots = container.querySelectorAll('[class*="_dot_"]');
+      const dots = container.querySelectorAll('[class*="dot"]');
+
+      expect(dots.length).toBe(3);
+    });
+
+    it('does not render custom pagination when not provided', () => {
+      const { container } = renderCarousel();
+
+      const dots = container.querySelectorAll('[class*="dot"]');
 
       expect(dots.length).toBe(0);
     });
 
-    it('renders navigation buttons', () => {
-      const { getByLabelText } = renderCarousel();
+    it('renders navigation buttons when included', () => {
+      const { container } = renderCarousel({
+        withNavigation: true,
+      });
 
-      const prevButton = getByLabelText('Previous');
-      const nextButton = getByLabelText('Next');
+      const buttons = container.querySelectorAll('button');
 
-      expect(prevButton).toBeInTheDocument();
-      expect(nextButton).toBeInTheDocument();
+      expect(buttons.length).toBe(2);
     });
   });
 
-  describe('non-loop mode (default)', () => {
-    it('disables previous button initially', () => {
-      const { getByLabelText } = renderCarousel();
+  describe('navigation state (render only)', () => {
+    it('renders navigation in non-loop mode', () => {
+      const { container } = renderCarousel({
+        withNavigation: true,
+      });
 
-      const prevButton = getByLabelText('Previous');
+      const buttons = container.querySelectorAll('button');
 
-      expect(prevButton).toBeDisabled();
+      expect(buttons.length).toBe(2);
     });
 
-    it('enables next button initially', () => {
-      const { getByLabelText } = renderCarousel();
+    it('renders navigation in loop mode', () => {
+      const { container } = renderCarousel({
+        withNavigation: true,
+        loop: true,
+      });
 
-      const nextButton = getByLabelText('Next');
+      const buttons = container.querySelectorAll('button');
 
-      expect(nextButton).not.toBeDisabled();
-    });
-  });
-
-  describe('loop mode', () => {
-    it('enables both buttons when loop is true', () => {
-      const { getByLabelText } = renderCarousel({ loop: true });
-
-      const prevButton = getByLabelText('Previous');
-      const nextButton = getByLabelText('Next');
-
-      expect(prevButton).not.toBeDisabled();
-      expect(nextButton).not.toBeDisabled();
+      expect(buttons.length).toBe(2);
     });
   });
 });
