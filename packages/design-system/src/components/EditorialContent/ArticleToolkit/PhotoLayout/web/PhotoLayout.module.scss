@@ -67,9 +67,8 @@
   display: block;
 }
 
-/* Caption */
-
-.caption-text {
+/* Caption - override typography rule ([class*="typography-"]) */
+.photo-layout .caption-text {
   color: var(--color-text-on-light-secondary);
 }
 
