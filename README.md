@@ -257,3 +257,4 @@ yarn add @minneapolisstartribune/design-system@latest
 - Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples
 - Review component source code in the repository
 - Open an issue on GitHub with details about your setup and error messages
+- Reach out to the team in Slack
