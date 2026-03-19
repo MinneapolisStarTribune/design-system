@@ -81,7 +81,7 @@ After we have bumped up our version number, the release captain will create a ne
 1. Run the bootstrap script to get your personalized source path:
 
    ```sh
-   ./scripts/bootstrap-git-aliases.sh
+   ./packages/design-system/scripts/bootstrap-git-aliases.sh
    ```
 
 2. Add the printed `source "..."` line to the end of `~/.zshrc` (or `~/.bashrc`).
