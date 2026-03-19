@@ -1,41 +1,74 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-import { UtilityButton, BUTTON_COLORS, BUTTON_SIZES, type ButtonSize } from './UtilityButton';
-import styles from './UtilityButton.module.scss';
-import { iconOptions } from '@/components/Icon/iconOptions';
-import { IconName } from '@/components/Icon/iconNames';
-import { NewsHeading } from '@/components/index.web';
+import {
+  UtilityButton,
+  UTILITY_BUTTON_VARIANTS,
+  UTILITY_BUTTON_SIZES,
+  type UtilityButtonSize,
+} from './UtilityButton';
+import { Share02Icon } from '@/icons';
 import { allModes } from '@storybook-config/modes';
 
-const meta = {
-  title: 'Actions/UtilityButton',
+/** Story-only args for configurable demo */
+type ConfigurableArgs = {
+  label?: string;
+  ariaLabel?: string;
+  variant: (typeof UTILITY_BUTTON_VARIANTS)[number];
+  size: UtilityButtonSize;
+  showIcon: boolean;
+  iconPosition: 'start' | 'end';
+  isDisabled: boolean;
+  onClick: () => void;
+};
+
+const meta: Meta<ConfigurableArgs> = {
+  title: 'Components/Actions & Inputs/UtilityButton',
   component: UtilityButton,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'A compact, lightweight control designed for dense UI surfaces like navigation bars, toolbars, and cards. Supports icon-only and icon + label configurations. Pill shape with transparent background.',
+      },
+    },
+  },
   argTypes: {
     label: {
       control: 'text',
-      description: 'The utility button label text',
+      description: 'Button label. Omit for icon-only button.',
+    },
+    ariaLabel: {
+      control: 'text',
+      description: 'Required for icon-only buttons. Screen reader label.',
     },
     variant: {
       control: 'select',
-      options: ['default'] as string[],
-      description: 'The variant of the utility button',
+      options: [...UTILITY_BUTTON_VARIANTS] as string[],
+      description: 'Visual style variant. Only "default" is implemented in this ticket.',
     },
     size: {
       control: 'select',
-      options: [...BUTTON_SIZES] as string[],
-      description: 'The size of the utility button',
+      options: [...UTILITY_BUTTON_SIZES] as string[],
+      description: 'Button size',
     },
-    icon: {
+    showIcon: {
+      control: 'boolean',
+      description: 'Whether to show an icon (Share icon)',
+    },
+    iconPosition: {
       control: 'select',
-      options: Object.keys(iconOptions) as IconName[],
-      description: 'Optional icon to display in the utility button',
+      options: ['start', 'end'],
+      description: 'Position of icon relative to label',
     },
     isDisabled: {
       control: 'boolean',
-      description: 'Whether the utility button is disabled',
+      description: 'Whether the button is disabled',
+    },
+    onClick: {
+      action: 'clicked',
+      description: 'Click handler',
     },
   },
-} satisfies Meta<typeof UtilityButton>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -43,155 +76,68 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     label: 'Share',
-    onClick: () => alert('Utility button clicked'),
+    ariaLabel: 'Share',
     variant: 'default',
     size: 'large',
-    color: 'neutral',
-    icon: undefined,
+    showIcon: true,
+    iconPosition: 'start',
     isDisabled: false,
+    onClick: () => {},
+  } as ConfigurableArgs,
+  render: (args) => {
+    const { showIcon, ariaLabel, ...buttonProps } = args as ConfigurableArgs;
+    const icon = showIcon ? <Share02Icon /> : undefined;
+    const resolvedAriaLabel = !buttonProps.label && icon ? ariaLabel : undefined;
+    return <UtilityButton {...buttonProps} icon={icon} aria-label={resolvedAriaLabel} />;
   },
 };
 
-function renderUtilityButtonSection(
-  title: string,
-  sizes: readonly ButtonSize[],
-  withIcon: boolean,
-  showFocusedExample: boolean = false
-) {
-  return (
-    <div>
-      <NewsHeading importance={2}>{title}</NewsHeading>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.5rem',
-        }}
-      >
-        {BUTTON_COLORS.map((color) => (
-          <div
-            key={color}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${sizes.length}, 1fr)`,
-              gap: '1rem',
-            }}
-          >
-            {sizes.map((size) => (
-              <div
-                key={`${color}-${size}`}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: '8px',
-                }}
-              >
-                <UtilityButton
-                  {...({
-                    variant: 'default',
-                    color,
-                    size,
-                    icon: withIcon ? 'avatar' : undefined,
-                    // Only non-icon-only buttons should render the text label.
-                    ...(withIcon ? {} : { label: 'Share' }),
-                    isDisabled: color === BUTTON_COLORS[BUTTON_COLORS.length - 1],
-                    className:
-                      showFocusedExample &&
-                      color === 'brand' &&
-                      (size === 'small' || size === 'large')
-                        ? styles['storybook-focus']
-                        : undefined,
-                  } as any)}
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function renderUtilityButtonTextRightSection(
-  title: string,
-  sizes: readonly ButtonSize[],
-  showFocusedExample: boolean = false
-) {
-  return (
-    <div>
-      <NewsHeading importance={2}>{title}</NewsHeading>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1.5rem',
-        }}
-      >
-        {BUTTON_COLORS.map((color) => (
-          <div
-            key={color}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${sizes.length}, 1fr)`,
-              gap: '1rem',
-            }}
-          >
-            {sizes.map((size) => (
-              <div
-                key={`${color}-${size}-text-right`}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: '8px',
-                }}
-              >
-                <UtilityButton
-                  variant="default"
-                  color={color}
-                  size={size}
-                  icon="avatar"
-                  label="Share"
-                  isDisabled={color === BUTTON_COLORS[BUTTON_COLORS.length - 1]}
-                  className={
-                    showFocusedExample &&
-                    color === 'brand' &&
-                    (size === 'small' || size === 'large')
-                      ? styles['storybook-focus']
-                      : undefined
-                  }
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export const AllUtilityButtons: Story = {
-  args: {
-    label: 'Share',
-    variant: 'default',
-    size: 'large',
-    color: 'neutral',
-  },
+/**
+ * All UtilityButton variants - used for Chromatic visual regression testing.
+ */
+export const AllVariants: Story = {
   parameters: {
     chromatic: { modes: allModes },
     controls: { disable: true },
     layout: 'fullscreen',
   },
   render: () => (
-    <div style={{ padding: '2rem' }}>
-      {renderUtilityButtonSection('Utility buttons', BUTTON_SIZES, false, true)}
-      {renderUtilityButtonSection('Utility buttons icon only', BUTTON_SIZES, true, true)}
-      {renderUtilityButtonTextRightSection(
-        'Utility buttons with icon and label',
-        BUTTON_SIZES,
-        true
-      )}
+    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>
+          Default - Icon + Label
+        </h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <UtilityButton label="Share" icon={<Share02Icon />} size="small" />
+          <UtilityButton label="Share" icon={<Share02Icon />} size="large" />
+          <UtilityButton label="Share" icon={<Share02Icon />} size="small" iconPosition="end" />
+          <UtilityButton label="Share" icon={<Share02Icon />} size="large" iconPosition="end" />
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>Icon Only</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+          <UtilityButton icon={<Share02Icon />} size="small" aria-label="Share" />
+          <UtilityButton icon={<Share02Icon />} size="large" aria-label="Share" />
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>
+          Label Only (no icon)
+        </h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <UtilityButton label="Share" size="small" />
+          <UtilityButton label="Share" size="large" />
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>Disabled</h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <UtilityButton label="Share" icon={<Share02Icon />} size="small" isDisabled />
+          <UtilityButton label="Share" icon={<Share02Icon />} size="large" isDisabled />
+          <UtilityButton icon={<Share02Icon />} size="large" aria-label="Share" isDisabled />
+        </div>
+      </div>
     </div>
   ),
 };
