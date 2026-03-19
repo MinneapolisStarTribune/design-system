@@ -83,8 +83,9 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   controlsClassName,
 }) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentImageProgress, setCurrentImageProgress] = useState(1);
   const [spaceBetween, setSpaceBetween] = useState(24);
+  const [buttonSize, setButtonSize] = useState<'medium' | 'large'>('large');
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
@@ -96,11 +97,30 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const updateButtonSize = () => {
+      const width = window.innerWidth;
+
+      if (width < 1024) {
+        setButtonSize('medium'); // mobile + tablet
+      } else {
+        setButtonSize('large'); // desktop
+      }
+    };
+
+    updateButtonSize();
+    window.addEventListener('resize', updateButtonSize);
+
+    return () => window.removeEventListener('resize', updateButtonSize);
+  }, []);
+
   const next = () => swiperRef.current?.slideNext();
   const prev = () => swiperRef.current?.slidePrev();
 
-  if (!images?.length) return null;
+  const captionsTypography = 'typography-utility-text-regular-x-small';
+  const mediaTagTypography = 'typography-utility-label-semibold-large';
 
+  if (!images?.length) return null;
   return (
     <div
       data-testid="image-gallery"
@@ -115,11 +135,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           spaceBetween={spaceBetween}
           loop={isImmersive}
           allowTouchMove
-          autoHeight={false}
+          autoHeight={true}
           pagination={{ clickable: true }}
           onSlideChange={(swiper) => {
-            const i = isImmersive ? swiper.realIndex : swiper.activeIndex;
-            setActiveIndex(i);
+            const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
+
+            setCurrentImageProgress(normalizedIndex + 1);
           }}
           className={styles.swiper}
         >
@@ -129,7 +150,14 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
 
             return (
               <SwiperSlide key={i} className={styles.slide}>
-                <div className={classNames(styles.imageWrapper, wrapperClassName)}>
+                <div
+                  className={classNames(styles.imageWrapper, wrapperClassName)}
+                  style={
+                    img.width && img.height
+                      ? { aspectRatio: `${img.width} / ${img.height}` }
+                      : undefined
+                  }
+                >
                   <Img
                     src={img.src}
                     alt={img.altText}
@@ -137,48 +165,51 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
                     width={width}
                     height={height}
                   />
-
-                  <div className={styles.mediaTag}>
-                    <CameraFilledIcon color="on-dark-primary" size="medium" />
-                    <span>
-                      {(isImmersive ? activeIndex : i) + 1}/{total}
-                    </span>
-                  </div>
                 </div>
               </SwiperSlide>
             );
           })}
         </Swiper>
 
-        <div className={styles.bottomSection}>
-          <div className={classNames(styles.caption, captionClassName)}>
-            {images[activeIndex]?.caption}
-            {images[activeIndex]?.credit && <> {images[activeIndex].credit}</>}
+        {!isImmersive && (
+          <div className={styles.mediaTag}>
+            <CameraFilledIcon color="on-dark-primary" size="medium" />
+            <span className={mediaTagTypography}>
+              {currentImageProgress}/{total}
+            </span>
           </div>
-
-          {total > 1 && (
-            <div className={classNames(styles.controls, controlsClassName)}>
-              <Button
-                variant="ghost"
-                size="large"
-                icon={<ChevronLeftIcon />}
-                onClick={prev}
-                isDisabled={!isImmersive && activeIndex === 0}
-                className={styles.navButton}
-                aria-label="Previous image"
-              />
-              <Button
-                variant="ghost"
-                size="large"
-                icon={<ChevronRightIcon />}
-                onClick={next}
-                isDisabled={!isImmersive && activeIndex === total - 1}
-                className={styles.navButton}
-                aria-label="Next image"
-              />
-            </div>
+        )}
+      </div>
+      <div className={styles.bottomSection}>
+        <div className={classNames(styles.caption, captionsTypography, captionClassName)}>
+          {images[currentImageProgress - 1]?.caption}
+          {images[currentImageProgress - 1]?.credit && (
+            <> {images[currentImageProgress - 1].credit}</>
           )}
         </div>
+
+        {total > 1 && (
+          <div className={classNames(styles.controls, controlsClassName)}>
+            <Button
+              variant="ghost"
+              size={buttonSize}
+              icon={<ChevronLeftIcon />}
+              onClick={prev}
+              isDisabled={!isImmersive && currentImageProgress === 1}
+              className={styles.navButton}
+              aria-label="Previous image"
+            />
+            <Button
+              variant="ghost"
+              size={buttonSize}
+              icon={<ChevronRightIcon />}
+              onClick={next}
+              isDisabled={!isImmersive && currentImageProgress === total}
+              className={styles.navButton}
+              aria-label="Next image"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@
 .innerContainer {
   width: 100%;
   margin: 0 auto;
+  position: relative;
 }
 
 /* STANDARD */
@@ -35,6 +36,8 @@
 
 /* IMMERSIVE */
 
+/* IMMERSIVE */
+
 .immersive {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
@@ -51,7 +54,6 @@
   overflow: visible;
 }
 
-/* ✅ FIXED */
 .immersive .slide {
   width: 1080px;
   max-width: 100%;
@@ -61,11 +63,19 @@
   .immersive .slide {
     width: 535px;
   }
+
+  .immersive .bottomSection {
+    max-width: 535px;
+  }
 }
 
 @media (max-width: 640px) {
   .immersive .slide {
-    width: 358px;
+    width: 390px;
+  }
+
+  .immersive .bottomSection {
+    max-width: 390px;
   }
 }
 
@@ -97,9 +107,10 @@
   padding: var(--spacing-4) var(--spacing-6);
   border-radius: var(--radius-6);
   background: #0000004d;
-  color: var(--color-base-white);
-  font-size: var(--spacing-16);
-  font-weight: 600;
+  z-index: 1;
+  span {
+    color: var(--color-base-white);
+  }
 }
 
 /* BOTTOM */
@@ -109,6 +120,7 @@
   margin: 8px auto 0;
   display: flex;
   justify-content: space-between;
+  gap: var(--spacing-20)
 }
 
 @media (max-width: 1024px) {
@@ -125,7 +137,7 @@
 
 .immersive .bottomSection {
   max-width: 1080px;
-  margin: 8px auto 0;
+  margin: var(--spacing-8) auto 0;
   display: flex;
   justify-content: space-between;
 }
@@ -163,4 +175,8 @@
 :global(.swiper-pagination) {
   position: absolute;
   bottom: 8px;
+}
+
+.caption{
+  color: var(--color-text-on-light-secondary) !important;
 }
