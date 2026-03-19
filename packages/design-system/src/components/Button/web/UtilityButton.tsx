@@ -14,10 +14,17 @@ export type UtilityButtonSize = Extract<Size, 'small' | 'large'>;
 
 /**
  * Utility button icon size mapping.
- * Small: 16px, Large: 24px (per Figma spec).
+ * - Large + label: small (16px)
+ * - Large + icon-only: medium (20px)
+ * - Small + label: x-small (14px)
+ * - Small + icon-only: small (16px)
  */
-function getUtilityButtonIconSize(size: UtilityButtonSize): IconSize {
-  return size === 'small' ? 'small' : 'large';
+function getUtilityButtonIconSize(size: UtilityButtonSize, isIconOnly: boolean): IconSize {
+  if (size === 'large') {
+    return isIconOnly ? 'medium' : 'small';
+  }
+
+  return isIconOnly ? 'small' : 'x-small';
 }
 
 /**
@@ -26,8 +33,7 @@ function getUtilityButtonIconSize(size: UtilityButtonSize): IconSize {
  */
 function getUtilityButtonAriaLabel(
   explicitAriaLabel: string | undefined,
-  label: string | undefined,
-  isIconOnly: boolean
+  label: string | undefined
 ): string | undefined {
   if (explicitAriaLabel) return explicitAriaLabel;
   if (label) return label;
@@ -41,9 +47,20 @@ function enhanceIcon(
 ): React.ReactElement<React.SVGProps<SVGSVGElement>> {
   const pixelSize = ICON_PIXEL_SIZES[iconSize];
   const existingClassName = icon.props.className;
+  // Icons from createIconWrapper set width/height via inline `style` (default medium = 20px).
+  // Those styles override width/height attributes, so merge style and force our dimensions.
+  const existingStyle = icon.props.style;
+  const mergedStyle: React.CSSProperties = {
+    ...(typeof existingStyle === 'object' && existingStyle !== null && !Array.isArray(existingStyle)
+      ? existingStyle
+      : {}),
+    width: pixelSize,
+    height: pixelSize,
+  };
   return React.cloneElement(icon, {
     width: pixelSize,
     height: pixelSize,
+    style: mergedStyle,
     'aria-hidden': true,
     className: existingClassName ? classNames(styles.icon, existingClassName) : styles.icon,
   });
@@ -75,14 +92,14 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   const hasIcon = !!icon;
   const isIconOnly = hasIcon && !label;
 
-  const iconSize = hasIcon ? getUtilityButtonIconSize(size) : undefined;
+  const iconSize = hasIcon ? getUtilityButtonIconSize(size, isIconOnly) : undefined;
   const leftIcon =
     hasIcon && (isIconOnly || iconPosition === 'start') ? enhanceIcon(icon!, iconSize!) : null;
   const rightIcon =
     hasIcon && !isIconOnly && iconPosition === 'end' ? enhanceIcon(icon!, iconSize!) : null;
 
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label, isIconOnly);
+  const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
 
   const combinedClassNames = classNames(
     styles.utilityButton,
