@@ -90,6 +90,14 @@ export {
   type CandyBarRendererProps,
 } from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
 export {
+  UtilityButton,
+  UTILITY_BUTTON_SIZES,
+  UTILITY_BUTTON_VARIANTS,
+  type UtilityButtonProps,
+  type UtilityButtonSize,
+  type UtilityButtonVariant,
+} from '@/components/Button/web/UtilityButton';
+export {
   Toast,
   TOAST_VARIANTS,
   type ToastProps,
