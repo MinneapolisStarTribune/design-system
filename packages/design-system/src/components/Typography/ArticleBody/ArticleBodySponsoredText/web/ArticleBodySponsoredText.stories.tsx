@@ -3,12 +3,11 @@ import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
 import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleBodySponsoredText',
+  title: 'Typography/ArticleBody/ArticleBodySponsoredText',
   component: ArticleBodySponsoredText,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     weight: {
       control: 'select',

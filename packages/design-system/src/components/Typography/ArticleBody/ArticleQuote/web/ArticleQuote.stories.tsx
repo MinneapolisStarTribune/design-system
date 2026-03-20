@@ -3,12 +3,11 @@ import { ArticleQuote } from './ArticleQuote';
 import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleQuote',
+  title: 'Typography/ArticleBody/ArticleQuote',
   component: ArticleQuote,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

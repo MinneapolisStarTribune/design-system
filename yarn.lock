@@ -1389,6 +1389,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/standalone@npm:^7.27.0":
+  version: 7.29.2
+  resolution: "@babel/standalone@npm:7.29.2"
+  checksum: 10c0/a01a2134651b9132454bd1a7d93c6f183cf60f281087d252e0d7ca800c14619b4a72336767e315e2fd58700582d481ff684453e0659a1ad5c828b4823b9aee32
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.0.0, @babel/template@npm:^7.25.0, @babel/template@npm:^7.28.6, @babel/template@npm:^7.3.3":
   version: 7.28.6
   resolution: "@babel/template@npm:7.28.6"
@@ -1512,21 +1519,6 @@ __metadata:
     stream: "npm:^0.0.3"
     util: "npm:^0.12.5"
   checksum: 10c0/88b573e52afe2f14b0c06f1f4337883ccf3155b7c3f667af8ead248b84ba2743e4eee90eb283ec967a8486576509bb6d42ce1c43714253f70ee23c5e5e24bc73
-  languageName: node
-  linkType: hard
-
-"@chromatic-com/storybook@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "@chromatic-com/storybook@npm:4.1.3"
-  dependencies:
-    "@neoconfetti/react": "npm:^1.0.0"
-    chromatic: "npm:^13.3.3"
-    filesize: "npm:^10.0.12"
-    jsonfile: "npm:^6.1.0"
-    strip-ansi: "npm:^7.1.0"
-  peerDependencies:
-    storybook: ^0.0.0-0 || ^9.0.0 || ^9.1.0-0 || ^9.2.0-0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0
-  checksum: 10c0/31d1cc7e98489238a22c7560677bf07235b87c48dc1f39faf1fdc7dda2f41221709c10af2a5fcb10e46bea7b80cc81badf08aba7015f0c5b8d0a9e037e92e1bf
   languageName: node
   linkType: hard
 
@@ -3181,7 +3173,6 @@ __metadata:
   resolution: "@minneapolisstartribune/design-system@workspace:packages/design-system"
   dependencies:
     "@babel/core": "npm:^7.29.0"
-    "@chromatic-com/storybook": "npm:^4.1.3"
     "@floating-ui/react": "npm:0.27.19"
     "@floating-ui/react-native": "npm:0.10.9"
     "@octokit/rest": "npm:^22.0.1"
@@ -3189,9 +3180,7 @@ __metadata:
     "@react-native/jest-preset": "npm:0.85.0-nightly-20260219-44901aaf9"
     "@storybook/addon-a11y": "npm:^10.1.11"
     "@storybook/addon-docs": "npm:^10.1.11"
-    "@storybook/addon-onboarding": "npm:^10.1.11"
     "@storybook/addon-themes": "npm:^10.1.11"
-    "@storybook/addon-vitest": "npm:^10.1.11"
     "@storybook/react-vite": "npm:^10.1.11"
     "@svgr/core": "npm:^8.1.0"
     "@testing-library/jest-dom": "npm:^6.9.1"
@@ -3240,6 +3229,7 @@ __metadata:
     react-test-renderer: "npm:19.0.0"
     sass: "npm:^1.97.2"
     storybook: "npm:^10.1.11"
+    storybook-addon-code-editor: "npm:^6.1.3"
     style-dictionary: "npm:^4.4.0"
     swiper: "npm:^12.1.2"
     typescript: "npm:^5.8.3"
@@ -3305,13 +3295,6 @@ __metadata:
     "@emnapi/runtime": "npm:^1.4.3"
     "@tybys/wasm-util": "npm:^0.10.0"
   checksum: 10c0/6d07922c0613aab30c6a497f4df297ca7c54e5b480e00035e0209b872d5c6aab7162fc49477267556109c2c7ed1eb9c65a174e27e9b87568106a87b0a6e3ca7d
-  languageName: node
-  linkType: hard
-
-"@neoconfetti/react@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@neoconfetti/react@npm:1.0.0"
-  checksum: 10c0/dfa487965b69f88b39562ccd910114cd68b00a90c7eb79cfb1a483c7ac717b720f9f095e5aea13cef8a9b9bea05533d380ddff5e44d3bc3f7dc4d5c66716765c
   languageName: node
   linkType: hard
 
@@ -4854,15 +4837,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-onboarding@npm:^10.1.11":
-  version: 10.2.0
-  resolution: "@storybook/addon-onboarding@npm:10.2.0"
-  peerDependencies:
-    storybook: ^10.2.0
-  checksum: 10c0/888e665fd0c530efe9deb39fe3bd2288f35ba3e7c4e6de88cb0ba32cfc38615b629854e8c351eeb3c699b82b47b0537fef34073ac2422268e1498431dda8db8c
-  languageName: node
-  linkType: hard
-
 "@storybook/addon-ondevice-actions@npm:^10.1.11":
   version: 10.2.3
   resolution: "@storybook/addon-ondevice-actions@npm:10.2.3"
@@ -4908,31 +4882,6 @@ __metadata:
   peerDependencies:
     storybook: ^10.2.14
   checksum: 10c0/733b05fe19567a34289c6b59f4cc9b796523a2c5a9183b6eb50730d02b456c8a82620d3b2ecf01ac5880bf44fc5d5be4663f2025935920260db70639a434e5c6
-  languageName: node
-  linkType: hard
-
-"@storybook/addon-vitest@npm:^10.1.11":
-  version: 10.2.0
-  resolution: "@storybook/addon-vitest@npm:10.2.0"
-  dependencies:
-    "@storybook/global": "npm:^5.0.0"
-    "@storybook/icons": "npm:^2.0.1"
-  peerDependencies:
-    "@vitest/browser": ^3.0.0 || ^4.0.0
-    "@vitest/browser-playwright": ^4.0.0
-    "@vitest/runner": ^3.0.0 || ^4.0.0
-    storybook: ^10.2.0
-    vitest: ^3.0.0 || ^4.0.0
-  peerDependenciesMeta:
-    "@vitest/browser":
-      optional: true
-    "@vitest/browser-playwright":
-      optional: true
-    "@vitest/runner":
-      optional: true
-    vitest:
-      optional: true
-  checksum: 10c0/a88f956a36ed35996adc648672486bb97701e9f6737e7db7b2173434a3ad17406077851d221118e4cc23ee4f1f5a39c76528d44e283a369fc0de43b91bfec387
   languageName: node
   linkType: hard
 
@@ -9570,13 +9519,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filesize@npm:^10.0.12":
-  version: 10.1.6
-  resolution: "filesize@npm:10.1.6"
-  checksum: 10c0/9a196d64da4e947b8c0d294be09a3dfa7a634434a1fc5fb3465f1c9acc1237ea0363f245ba6e24477ea612754d942bc964d86e0e500905a72e9e0e17ae1bbdbc
-  languageName: node
-  linkType: hard
-
 "fill-range@npm:^7.1.1":
   version: 7.1.1
   resolution: "fill-range@npm:7.1.1"
@@ -11838,7 +11780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonfile@npm:^6.0.1, jsonfile@npm:^6.1.0":
+"jsonfile@npm:^6.0.1":
   version: 6.2.0
   resolution: "jsonfile@npm:6.2.0"
   dependencies:
@@ -13243,6 +13185,13 @@ __metadata:
     pkg-types: "npm:^1.3.1"
     ufo: "npm:^1.6.1"
   checksum: 10c0/f174b844ae066c71e9b128046677868e2e28694f0bbeeffbe760b2a9d8ff24de0748d0fde6fabe706700c1d2e11d3c0d7a53071b5ea99671592fac03364604ab
+  languageName: node
+  linkType: hard
+
+"monaco-editor@npm:0.52.2":
+  version: 0.52.2
+  resolution: "monaco-editor@npm:0.52.2"
+  checksum: 10c0/5a92da64f1e2ab375c0ce99364137f794d057c97bed10ecc65a08d6e6846804b8ecbd377eacf01e498f7dfbe1b21e8be64f728256681448f0484df90e767b435
   languageName: node
   linkType: hard
 
@@ -16085,6 +16034,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"storybook-addon-code-editor@npm:^6.1.3":
+  version: 6.1.3
+  resolution: "storybook-addon-code-editor@npm:6.1.3"
+  dependencies:
+    "@babel/standalone": "npm:^7.27.0"
+    monaco-editor: "npm:0.52.2"
+  peerDependencies:
+    "@types/react": 17.x.x || 18.x.x || 19.x.x
+    react: 17.x.x || 18.x.x || 19.x.x
+    storybook: 10.x.x
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/8216b22feeeb014f2ede26f1155cb505453bc25199a564927143b5de35286371c9d3ad853433ec74febb9c66825dbf7baeb0f2899216c4acc91024648b68402c
+  languageName: node
+  linkType: hard
+
 "storybook@npm:^10.1.11":
   version: 10.2.0
   resolution: "storybook@npm:10.2.0"
@@ -16272,7 +16238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strip-ansi@npm:^7.0.1, strip-ansi@npm:^7.1.0":
+"strip-ansi@npm:^7.0.1":
   version: 7.1.2
   resolution: "strip-ansi@npm:7.1.2"
   dependencies:

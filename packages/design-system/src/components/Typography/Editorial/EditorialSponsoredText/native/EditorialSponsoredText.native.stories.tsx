@@ -7,12 +7,11 @@ import {
 } from '../EditorialSponsoredText.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/EditorialSponsoredText',
+  title: 'Typography/Editorial/EditorialSponsoredText',
   component: EditorialSponsoredText,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
