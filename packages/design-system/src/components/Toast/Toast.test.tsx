@@ -85,4 +85,51 @@ describe('Toast', () => {
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
+
+  describe('analytics', () => {
+    it('emits tracking event on dismiss when AnalyticsProvider is present', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByRole } = renderWithProvider(
+        <Toast title="Success" variant="success" onClose={vi.fn()} />,
+        { mockOnTrackingEvent }
+      );
+
+      const closeButton = getByRole('button', { name: 'Dismiss notification' });
+      closeButton.click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledTimes(1);
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'toast_dismiss',
+          component: 'Toast',
+          title: 'Success',
+          variant: 'success',
+        })
+      );
+    });
+
+    it('merges analytics prop into tracking event', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByRole } = renderWithProvider(
+        <Toast
+          title="Info"
+          onClose={vi.fn()}
+          analytics={{ notification_type: 'promo', module_name: 'header' }}
+        />,
+        { mockOnTrackingEvent }
+      );
+
+      const closeButton = getByRole('button', { name: 'Dismiss notification' });
+      closeButton.click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'toast_dismiss',
+          component: 'Toast',
+          notification_type: 'promo',
+          module_name: 'header',
+        })
+      );
+    });
+  });
 });

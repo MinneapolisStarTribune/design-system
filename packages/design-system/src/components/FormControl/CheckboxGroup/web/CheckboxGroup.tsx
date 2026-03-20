@@ -21,6 +21,8 @@ export type CheckboxGroupProps = BaseProps & {
   disabled?: boolean;
   error?: boolean;
   onChange: (values: string[]) => void;
+  /** Per-group tracking data merged into each Checkbox event. Use to distinguish groups (e.g. form_field, module_name). */
+  analytics?: Record<string, unknown>;
 } & (
     | { options: CheckboxOption[]; categories?: never } // flat mode
     | { categories: CheckboxCategory[]; options?: never } // category mode
@@ -46,6 +48,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   disabled = false,
   error = false,
   onChange,
+  analytics: analyticsOverride,
   className,
   dataTestId,
 }) => {
@@ -106,6 +109,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                   disabled={disabled}
                   error={error}
                   onChange={() => toggleCategory(category)}
+                  analytics={{ ...analyticsOverride, option_value: category.parentOption.value, is_category: true }}
                   dataTestId={`${dataTestId ?? 'checkbox-group'}-category-${category.parentOption.value}`}
                 />
               </div>
@@ -120,6 +124,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                     disabled={disabled}
                     error={error}
                     onChange={(checked) => toggleValue(option.value, checked)}
+                    analytics={{ ...analyticsOverride, option_value: option.value }}
                     dataTestId={`${dataTestId ?? 'checkbox-group'}-option-${option.value}`}
                   />
                 ))}
@@ -148,6 +153,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
           disabled={disabled}
           error={error}
           onChange={(checked) => toggleValue(option.value, checked)}
+          analytics={{ ...analyticsOverride, option_value: option.value }}
           dataTestId={`${dataTestId ?? 'checkbox-group'}-option-${option.value}`}
         />
       ))}
