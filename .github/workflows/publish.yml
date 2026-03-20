@@ -25,6 +25,8 @@ jobs:
 
       - name: Set up Node with authentication
         uses: actions/setup-node@v4
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
         with:
           node-version-file: .nvmrc
           registry-url: 'https://npm.pkg.github.com/'
@@ -82,5 +84,3 @@ jobs:
       - name: Publish to GitHub Packages
         working-directory: packages/design-system
         run: yarn npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
