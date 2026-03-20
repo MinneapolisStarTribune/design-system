@@ -90,9 +90,9 @@ export {
   type CandyBarRendererProps,
 } from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
 export {
-  UtilityButton,
   UTILITY_BUTTON_SIZES,
   UTILITY_BUTTON_VARIANTS,
+  UtilityButton,
   type UtilityButtonProps,
   type UtilityButtonSize,
   type UtilityButtonVariant,
