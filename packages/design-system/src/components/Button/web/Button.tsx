@@ -20,6 +20,7 @@ export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
 export type ButtonAnalytics = Record<string, unknown>;
 
 export interface ButtonProps extends BaseProps {
+  type?: 'button' | 'submit' | 'reset';
   color?: ButtonColor;
   capitalize?: boolean;
   variant?: ButtonVariant;
@@ -122,6 +123,7 @@ function enhanceIcon(
 }
 
 export const Button: React.FC<ButtonProps> = ({
+  type = 'button',
   color = 'neutral',
   capitalize = false,
   variant = 'filled',
@@ -230,7 +232,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       ref={buttonRef}
-      type="button"
+      type={type}
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
       className={combinedClassNames || undefined}

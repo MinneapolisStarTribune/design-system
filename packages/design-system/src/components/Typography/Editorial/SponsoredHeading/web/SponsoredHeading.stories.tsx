@@ -3,7 +3,7 @@ import { SponsoredHeading } from './SponsoredHeading';
 import { SPONSORED_HEADING_IMPORTANCE_LEVELS } from '../SponsoredHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/SponsoredHeading',
+  title: 'Typography/Editorial/SponsoredHeading',
   component: SponsoredHeading,
   parameters: {
     docs: {
@@ -13,7 +13,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

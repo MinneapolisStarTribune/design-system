@@ -434,7 +434,7 @@
       },
       "on-light-tertiary": {
         "description": "Tertiary text color for use on light backgrounds — used for low-emphasis content such as labels, metadata, or helper text.",
-        "value": "{color.neutral.600}"
+        "value": "{color.neutral.700}"
       },
       "overview": [
         "Primary, secondary, and tertiary tokens establish clear emphasis levels, guiding typographic hierarchy across layouts.",

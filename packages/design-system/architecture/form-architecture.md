@@ -4,32 +4,34 @@ This document covers the form components in our design system: `Form`, `FormGrou
 
 ## Overview
 
-The form architecture follows a **compound component pattern** with clear separation of concerns. Each component has a specific responsibility, making the system flexible, maintainable, and accessible.
+The form architecture follows a **compound component pattern** with clear separation of concerns. Each component has a specific responsibility, making the system flexible, maintainable, and accessible. Use as much or as little as you need:
 
 ```
-Form (future - form-level concerns)
+Form (Optional - semantic <form>, layout, and onSubmit)
   └── FormGroup (layout & accessibility wiring)
       ├── FormGroup.Label (semantic label)
       ├── FormGroup.Description (helpful context)
-      ├── FormControl.TextInput (actual input control)
       └── FormGroup.Caption (validation/status messages)
+  └── FormControl (actual input/controls)
+      ├── FormControl.TextInput (basic text input)
+      ├── FormControl.CheckboxGroup (a group of checkboxes)
+  └── Form.Button (Optional - type="submit", layout-aware)
+  └── useFormLogic (Optional - adds controlled state and validation)
 ```
 
 ## Component Responsibilities
 
-### Form (Future Component - this is mostly sketching out ideas)
+### Form (Optional)
 
 **Location:** `src/components/Form/Form.tsx`
 
-Form handles form-level concerns like validation coordination, submission handling, and layout. It wraps multiple FormGroups and always includes a submit button at the bottom.
+`FormGroup` + `FormControl` work standalone in any container. `Form` adds the semantic form element and layout. `useFormLogic` adds controlled state and validation — or bring your own (React Hook Form, Formik, `useState`).
 
 **What it does:**
 
-- Manages validation state across all FormGroups
-- Handles form submission (prevents default, validates, calls `onSubmit`)
-- Coordinates error display (form-level and field-level)
-- Controls layout via `orientation` prop (vertical by default, or horizontal for inline forms)
-- Manages submit button state (disabled during submission, shows loading)
+Controls layout via `orientation` prop (vertical by default, or horizontal for inline forms)
+
+Validation state lives in the **app** (or in `useFormLogic`). `Form` does not own it.
 
 **Example Usage:**
 
