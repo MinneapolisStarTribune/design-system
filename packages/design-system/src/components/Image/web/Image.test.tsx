@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { Image } from './Image';
 
@@ -49,5 +50,52 @@ describe('Image', () => {
     expect(element).toHaveAttribute('height', height);
     expect(element).toHaveAttribute('width', width);
     expect(element).toHaveAttribute('loading', loading);
+  });
+
+  describe('analytics', () => {
+    it('emits image_click when onClick is provided and image is clicked', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const onClick = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <Image src="https://example.com/image.jpg" alt="Example" onClick={onClick} />,
+        { mockOnTrackingEvent }
+      );
+
+      getByTestId('image').click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledTimes(1);
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'image_click',
+          component: 'Image',
+          alt: 'Example',
+        })
+      );
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('merges analytics prop into tracking event', () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <Image
+          src="https://example.com/image.jpg"
+          alt="Hero"
+          onClick={() => {}}
+          analytics={{ module_name: 'hero', position: 1 }}
+        />,
+        { mockOnTrackingEvent }
+      );
+
+      getByTestId('image').click();
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'image_click',
+          component: 'Image',
+          module_name: 'hero',
+          position: 1,
+        })
+      );
+    });
   });
 });

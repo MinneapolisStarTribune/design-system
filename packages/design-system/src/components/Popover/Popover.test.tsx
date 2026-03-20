@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
@@ -178,6 +179,83 @@ describe('Popover', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Content')).toBeInTheDocument();
+    });
+  });
+
+  describe('analytics', () => {
+    it('emits popover_open when trigger is clicked', async () => {
+      const mockOnTrackingEvent = vi.fn();
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <Popover trigger={<Button>Open</Button>}>
+          <Popover.Body>Content</Popover.Body>
+        </Popover>,
+        { mockOnTrackingEvent }
+      );
+
+      await user.click(screen.getByText('Open'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'popover_open',
+          component: 'Popover',
+          placement: 'bottom',
+        })
+      );
+    });
+
+    it('emits popover_close when close button is clicked', async () => {
+      const mockOnTrackingEvent = vi.fn();
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <Popover trigger={<Button>Open</Button>}>
+          <Popover.Heading>Title</Popover.Heading>
+          <Popover.Body>Content</Popover.Body>
+        </Popover>,
+        { mockOnTrackingEvent }
+      );
+
+      await user.click(screen.getByText('Open'));
+      await waitFor(() => screen.getByText('Content'));
+      mockOnTrackingEvent.mockClear();
+
+      await user.click(screen.getByLabelText('Close popover'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'popover_close',
+          component: 'Popover',
+          placement: 'bottom',
+        })
+      );
+    });
+
+    it('merges analytics prop into tracking events', async () => {
+      const mockOnTrackingEvent = vi.fn();
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <Popover
+          trigger={<Button>Open</Button>}
+          analytics={{ module_name: 'user_menu', trigger_context: 'avatar' }}
+        >
+          <Popover.Body>Content</Popover.Body>
+        </Popover>,
+        { mockOnTrackingEvent }
+      );
+
+      await user.click(screen.getByText('Open'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'popover_open',
+          component: 'Popover',
+          module_name: 'user_menu',
+          trigger_context: 'avatar',
+        })
+      );
     });
   });
 });

@@ -11,6 +11,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import {
   arrow,
   autoUpdate,
@@ -64,6 +65,8 @@ export type PopoverProps = {
   portalRoot?: HTMLElement | null;
   /** Accessible label for the popover dialog. Provide this when no PopoverHeading is rendered. */
   'aria-label'?: string;
+  /** Per-popover tracking data merged into open/close events. Use to distinguish popovers (e.g. module_name, trigger_context). */
+  analytics?: Record<string, unknown>;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label'>;
 
 const ARROW_HEIGHT = 8;
@@ -84,8 +87,10 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   onOpenChange: onOpenChangeProp,
   portalRoot: portalRootProp,
   'aria-label': ariaLabel,
+  analytics: analyticsOverride,
   ...rest
 }) => {
+  const { track } = useAnalytics();
   const [openState, setOpenState] = useState(false);
   const arrowRef = useRef<SVGSVGElement>(null);
   const headingId = useId();
@@ -100,10 +105,16 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (isDisabled && nextOpen) return;
+      track({
+        event: nextOpen ? 'popover_open' : 'popover_close',
+        component: 'Popover',
+        placement,
+        ...analyticsOverride,
+      });
       if (!isControlled) setOpenState(nextOpen);
       onOpenChangeProp?.(nextOpen);
     },
-    [isDisabled, isControlled, onOpenChangeProp]
+    [isDisabled, isControlled, onOpenChangeProp, track, placement, analyticsOverride]
   );
 
   const middleware = useMemo(

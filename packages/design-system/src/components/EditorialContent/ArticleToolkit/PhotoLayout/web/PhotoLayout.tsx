@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import type { PhotoLayoutType } from '../../types';
 import type { PhotoLayoutProps } from '../PhotoLayout.types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
@@ -29,6 +30,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
     [imageList, photoLayout]
   );
 
+  const { track } = useAnalytics();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
@@ -57,6 +59,14 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
     lastTriggerRef.current?.focus();
   };
   const handleExpand = (index: number, el: HTMLButtonElement) => {
+    const expandedImage = images[index];
+    track({
+      event: 'photo_layout_expand',
+      component: 'PhotoLayout',
+      image_index: index,
+      image_alt: expandedImage?.altText,
+      layout_type: photoLayout,
+    });
     lastTriggerRef.current = el;
     setOpenIndex(index);
   };
