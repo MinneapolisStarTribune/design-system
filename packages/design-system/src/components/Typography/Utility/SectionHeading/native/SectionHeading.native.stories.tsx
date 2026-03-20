@@ -4,9 +4,8 @@ import { SectionHeading } from './SectionHeading.native';
 import { SECTION_HEADING_IMPORTANCE_LEVELS } from '../SectionHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Utility/SectionHeading',
+  title: 'Typography/Utility/SectionHeading',
   component: SectionHeading,
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

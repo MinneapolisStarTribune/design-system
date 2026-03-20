@@ -1,0 +1,48 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Playground } from 'storybook-addon-code-editor';
+import * as WebDS from '@/index.web';
+import { ThemeCssLoader } from './ThemeCssLoader';
+
+<Meta title="Code Editor" />
+
+# Code Editor
+
+Curious to try out our components? Below is an interactive code editor — import as many components as you'd like and play around. Changes render in real time, so you can explore props, compositions, and edge cases without leaving the docs.
+
+<Playground
+  id="getting-started-web-any-component"
+  height="1200px"
+  availableImports={{
+    '@minneapolisstartribune/design-system/web': WebDS,
+    'getting-started/ThemeCssLoader': { ThemeCssLoader },
+  }}
+  modifyEditor={(monaco, editor) => {
+    // editor docs: https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.IStandaloneCodeEditor.html
+    // monaco docs: https://microsoft.github.io/monaco-editor/api/modules/monaco.html
+    editor.getModel().updateOptions({ tabSize: 2 });
+    monaco.editor.setTheme('vs-dark');
+  }}
+  code={`import { ThemeCssLoader } from 'getting-started/ThemeCssLoader';
+// Always import from the root web entry point
+import { Button, DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
+        
+const brand = 'startribune';
+const colorScheme = 'light';
+        
+export default () => {
+
+    const handleClick = () => {
+        alert("You clicked me!")
+    }
+
+    return (
+        <DesignSystemProvider brand={brand} forceColorScheme={colorScheme}>
+            <ThemeCssLoader brand={brand} colorScheme={colorScheme} />
+            <Button variant="outlined" color="brand" size="medium" onClick={handleClick}>
+                Click me
+            </Button>
+        </DesignSystemProvider>
+    );
+
+}`}
+/>
