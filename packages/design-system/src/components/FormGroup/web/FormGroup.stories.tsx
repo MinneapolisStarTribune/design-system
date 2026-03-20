@@ -62,9 +62,8 @@ interface FormGroupStoryArgs {
 }
 
 const meta = {
-  title: 'Components/Actions & Inputs/FormGroup',
+  title: 'Forms/FormGroup',
   component: FormGroup,
-  tags: ['autodocs'],
   argTypes: {
     showLabel: {
       control: 'boolean',
