@@ -110,8 +110,8 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     className
   );
 
-  // Map UtilityButton size to UtilityLabel size (small->small, large->large)
-  const labelSize = size === 'small' ? 'small' : 'large';
+  // Map UtilityButton size to UtilityLabel size (large button uses medium label typography per spec)
+  const labelSize = size === 'small' ? 'small' : 'medium';
 
   return (
     <button
