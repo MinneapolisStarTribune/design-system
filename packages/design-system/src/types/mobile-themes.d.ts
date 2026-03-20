@@ -328,6 +328,7 @@ interface StartribuneLightTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
@@ -680,6 +681,7 @@ interface StartribuneDarkTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
@@ -1038,6 +1040,7 @@ interface VarsityLightTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
@@ -1396,6 +1399,7 @@ interface VarsityDarkTheme {
   radius8: number;
   radiusFull: number;
   radiusNone: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
