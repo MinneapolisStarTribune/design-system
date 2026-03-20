@@ -1,0 +1,77 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as FormGroupStories from './FormGroup.stories';
+
+<Meta of={FormGroupStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# FormGroup
+
+`<FormGroup>` is the field-level composition unit for forms. It groups one control with optional label, description, and caption, and wires those elements together for accessibility.
+
+For overall form architecture and orientation behavior, see `Form.mdx`. This page focuses only on using `FormGroup` correctly.
+
+## What to put in a `FormGroup`
+
+Use this shape for each field:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Email</FormGroup.Label>
+  <FormGroup.Description>Used for account notifications</FormGroup.Description>
+  <FormControl.TextInput name="email" />
+  {error && <FormGroup.Caption variant="error">Email is required</FormGroup.Caption>}
+</FormGroup>
+```
+
+- `Label` is required.
+- `Description` is an optional helper text shown above the control.
+- `Caption` is optional status/validation text shown below the control.
+- The control can be any compatible input component (`FormControl.TextInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, etc).
+
+## Accessibility contract
+
+`FormGroup` automatically coordinates `aria-labelledby` and `aria-describedby` between the control and any present text elements (`Label`, `Description`, `Caption`). This keeps screen reader output correct without requiring manual ID wiring in consuming apps.
+
+Implementation detail: only rendered subcomponents are included in the ARIA chain, so missing description/caption nodes are not referenced.
+
+## Layout behavior
+
+`FormGroup` internals always render vertically stacked. Thus, you will see label, then description underneath it, and the FormControl underneath that.
+
+We do not support horizontal FormGroup layouts where the label and FormControl are on the same line.
+
+## Common patterns
+
+Field with required validation:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Password</FormGroup.Label>
+  <FormControl.TextInput type="password" isError />
+  {error && <FormGroup.Caption variant="error">Password is required</FormGroup.Caption>}
+</FormGroup>
+```
+
+Optional field:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Company</FormGroup.Label>
+  <FormControl.TextInput />
+</FormGroup>
+```
+
+## Exports
+
+- `FormGroup`: root field wrapper
+- `FormGroup.Label`: label row
+- `FormGroup.Description`: helper/description row
+- `FormGroup.Caption`: validation/status row
+- `FormGroupProps`: type map for root and subcomponent props
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

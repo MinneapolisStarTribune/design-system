@@ -23,7 +23,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-  title: 'Components/Actions & Inputs/TextInput',
+  title: 'Forms/FormControl/TextInput',
   component: FormControl.TextInput,
   parameters: {
     docs: {
@@ -33,7 +33,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     placeholderText: {
       control: 'text',
