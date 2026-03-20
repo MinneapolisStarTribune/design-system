@@ -83,4 +83,4 @@ jobs:
         working-directory: packages/design-system
         run: yarn npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
