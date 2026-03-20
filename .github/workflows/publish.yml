@@ -62,7 +62,7 @@ jobs:
 
           # Update version in the design system package
           cd packages/design-system
-          yarn version --new-version ${{ steps.version.outputs.version }}
+          yarn version ${{ steps.version.outputs.version }} --immediate
           cd ../..
 
           git config user.name "github-actions[bot]"
