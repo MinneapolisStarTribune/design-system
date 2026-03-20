@@ -85,7 +85,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   const swiperRef = useRef<SwiperType | null>(null);
   const [currentImageProgress, setCurrentImageProgress] = useState(1);
   const [spaceBetween, setSpaceBetween] = useState(24);
-  const [buttonSize, setButtonSize] = useState<'medium' | 'large'>('large');
+  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
@@ -102,7 +102,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
       const width = window.innerWidth;
 
       if (width < 1024) {
-        setButtonSize('medium'); // mobile + tablet
+        setButtonSize('small'); // mobile + tablet
       } else {
         setButtonSize('large'); // desktop
       }
@@ -136,7 +136,6 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           loop={isImmersive}
           allowTouchMove
           autoHeight={true}
-          pagination={{ clickable: true }}
           onSlideChange={(swiper) => {
             const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
 
