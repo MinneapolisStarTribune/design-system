@@ -1,15 +1,20 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
 export {
+  Form,
+  FormButton,
+  type FormProps,
+  type FormValidationErrors,
+  useFormLogic,
+  type UseFormLogicOptions,
+  type UseFormLogicReturn,
+} from './Form';
+export {
   type CheckboxCategory,
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
-export {
-  FormControl,
-  type FormControlProps,
-  type FormControlSize,
-} from './FormControl/FormControl';
+export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
