@@ -106,7 +106,6 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     styles[variant],
     styles[size],
     isIconOnly && styles['icon-only'],
-    hasIcon && !isIconOnly && styles.hasIcon,
     isDisabled && styles.disabled,
     className
   );
