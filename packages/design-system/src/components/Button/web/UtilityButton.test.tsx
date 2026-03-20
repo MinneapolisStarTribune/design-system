@@ -53,7 +53,12 @@ describe('UtilityButton', () => {
 
   it('applies icon-only class when icon is present without label', () => {
     const { getByTestId } = renderWithProvider(
-      <UtilityButton icon={<Share02Icon />} aria-label="Share" onClick={vi.fn()} data-testid="utility-button" />
+      <UtilityButton
+        icon={<Share02Icon />}
+        aria-label="Share"
+        onClick={vi.fn()}
+        data-testid="utility-button"
+      />
     );
 
     const classNames = getByTestId('utility-button').className.split(/\s+/);
