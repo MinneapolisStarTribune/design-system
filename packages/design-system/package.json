@@ -1,6 +1,6 @@
 {
   "name": "@minneapolisstartribune/design-system",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "dist/web/design-system.es.js",
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
