@@ -16,4 +16,3 @@ throw new Error(${JSON.stringify(message)});
 `;
 
 fs.writeFileSync(filePath, contents);
-

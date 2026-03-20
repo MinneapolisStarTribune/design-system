@@ -1,0 +1,68 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ImageGalleryStories from './ImageGallery.stories';
+
+<Meta of={ImageGalleryStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Edit the markdown below. Do not remove the blocks at the bottom of the file. */}
+
+# Image Gallery
+
+Displays a collection of images with optional captions, credits, and navigation controls. Supports both standard (inline) and immersive (full-bleed) layouts.
+
+## Usage guidelines
+
+### Variant
+
+- **Standard:** Constrained to article width. Use for inline editorial content.
+- **Immersive:** Full-bleed layout with centered active image and adjacent image peek. Use for visual storytelling.
+
+### Layout behavior
+
+- Layout is controlled via CSS using a fixed aspect ratio (`3 / 2`) on the image wrapper.
+- Images fill the container using `object-fit: cover`.
+- Immersive mode uses centered slides with partial visibility of adjacent images (no 3D/coverflow effects).
+
+### Image sizing
+
+- Provide `width` and `height` to help the browser reserve space and reduce layout shift.
+- The layout itself is not driven by these values; CSS controls the rendered aspect ratio.
+
+### Custom image component
+
+You can pass a custom `ImageComponent` (e.g. Next.js Image or `<picture>`).
+
+The component will receive:
+
+- `src`
+- `alt`
+- `className`
+- `width`
+- `height`
+- `style`
+
+Use the `style` prop if you need to control rendering (e.g. custom aspect ratio or object fit behavior).
+
+### Styling hooks
+
+The component exposes className props for customization:
+
+- `className` – root container
+- `imageClassName` – image element
+- `wrapperClassName` – image wrapper
+- `captionClassName` – caption text
+- `controlsClassName` – navigation controls
+
+### Accessibility
+
+- Always provide meaningful `altText`
+- Navigation buttons include aria labels
+- Gallery is announced as a region
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />
