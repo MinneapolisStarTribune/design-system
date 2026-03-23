@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { CloseIcon, ErrorIcon, InformationIcon, SuccessIcon, WarningIcon } from '@/icons';
 import styles from './Toast.module.scss';
 
@@ -13,8 +12,6 @@ export type ToastProps = {
   showIcon?: boolean;
   exiting?: boolean;
   onClose: () => void;
-  /** Per-toast tracking data merged into the dismiss event. Use to distinguish toasts (e.g. notification_type, module_name). */
-  analytics?: Record<string, unknown>;
   dataTestId?: string;
 };
 
@@ -32,22 +29,9 @@ export const Toast: React.FC<ToastProps> = ({
   showIcon = true,
   exiting = false,
   onClose,
-  analytics: analyticsOverride,
   dataTestId,
 }) => {
-  const { track } = useAnalytics();
   const VariantIcon = VARIANT_ICON[variant];
-
-  const handleClose = () => {
-    track({
-      event: 'toast_dismiss',
-      component: 'Toast',
-      title,
-      variant,
-      ...analyticsOverride,
-    });
-    onClose();
-  };
   const isError = variant === 'error';
   const liveRegionRole = isError ? 'alert' : 'status';
   const ariaLive = isError ? 'assertive' : 'polite';
@@ -87,7 +71,7 @@ export const Toast: React.FC<ToastProps> = ({
         type="button"
         aria-label="Dismiss notification"
         className={styles.closeButton}
-        onClick={handleClose}
+        onClick={onClose}
       >
         <CloseIcon />
       </button>

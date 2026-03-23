@@ -1,5 +1,4 @@
 import React from 'react';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';
 import type { ImageData } from '../../types';
@@ -23,17 +22,9 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
   dialogRef,
   onClose,
 }) => {
-  const { track } = useAnalytics();
   const hasCaption = Boolean(caption?.trim());
 
-  const handleClose = () => {
-    track({
-      event: 'photo_layout_dialog_close',
-      component: 'PhotoLayoutDialog',
-      image_alt: image.altText,
-    });
-    onClose();
-  };
+  const handleClose = () => onClose();
   const hasCredit = Boolean(imageCredit?.trim());
 
   const handleBackdropClick = (e: React.MouseEvent) => {
