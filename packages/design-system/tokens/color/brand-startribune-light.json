@@ -211,7 +211,7 @@
         "selected": {
           "brand": {
             "description": "Background for selected brand checkbox — Star Tribune green.",
-            "value": "{color.emerald-green.600}"
+            "value": "{color.emerald-green.800}"
           },
           "neutral": {
             "description": "Background for selected neutral checkbox (light mode: black fill).",
