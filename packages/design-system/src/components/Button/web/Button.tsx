@@ -170,9 +170,13 @@ export const Button: React.FC<ButtonProps> = ({
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
   const leftIcon =
-    isIconOnly || iconPosition === 'start' ? enhanceButtonIcon(icon, iconSizeName, styles.icon) : null;
+    isIconOnly || iconPosition === 'start'
+      ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
+      : null;
   const rightIcon =
-    !isIconOnly && iconPosition === 'end' ? enhanceButtonIcon(icon, iconSizeName, styles.icon) : null;
+    !isIconOnly && iconPosition === 'end'
+      ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
+      : null;
 
   // Get aria-label for accessibility
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
