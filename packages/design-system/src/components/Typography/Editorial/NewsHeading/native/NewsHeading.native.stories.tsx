@@ -4,7 +4,7 @@ import { NewsHeading } from './NewsHeading.native';
 import { NEWS_HEADING_IMPORTANCE_LEVELS } from '../NewsHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/NewsHeading',
+  title: 'Typography/Editorial/NewsHeading',
   component: NewsHeading,
   parameters: {
     docs: {
@@ -14,7 +14,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

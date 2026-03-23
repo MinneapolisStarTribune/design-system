@@ -4,7 +4,7 @@ import { OpinionHeading } from './OpinionHeading.native';
 import { OPINION_HEADING_IMPORTANCE_LEVELS } from '../OpinionHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/OpinionHeading',
+  title: 'Typography/Editorial/OpinionHeading',
   component: OpinionHeading,
   parameters: {
     docs: {
@@ -14,7 +14,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

@@ -48,10 +48,11 @@ Most apps only need **Option 1**.
 
 ## Quick Start
 
-Import a theme CSS file (typography classes + CSS variables in one file), then wrap your app with `DesignSystemProvider`:
+Import component styles, then a theme CSS file (typography classes + CSS variables in one file), then wrap your app with `DesignSystemProvider`:
 
 ```tsx
 import '@minneapolisstartribune/design-system/web/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/components.css';
 import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/web';
 
 function App() {
@@ -82,6 +83,7 @@ The `brand` prop must match the CSS file brand; `forceColorScheme` must match th
 
 ```tsx
 import { useEffect, useState } from 'react';
+import '@minneapolisstartribune/design-system/web/components.css';
 import { DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
 
 function App() {
@@ -160,12 +162,7 @@ Icons use `fill="currentColor"` by default (when built with SVGR), so they inher
 **2. Explicit `fill`** — Pass a design token or any valid CSS color.
 
 ```tsx
-<CloseIcon
-  width={24}
-  height={24}
-  fill="var(--color-icon-on-light-primary)"
-  aria-hidden
-/>
+<CloseIcon width={24} height={24} fill="var(--color-icon-on-light-primary)" aria-hidden />
 ```
 
 Theme CSS exposes icon tokens such as `--color-icon-on-light-primary`, `--color-icon-on-dark-primary`, `--color-icon-brand-01`, `--color-icon-state-attention-on-light`, `--color-icon-state-disabled-on-light`, etc. Use the token that matches your context (light/dark background, brand, state).
@@ -188,9 +185,10 @@ loadBrandFonts('startribune');
 
 ## Setup Checklist
 
-- [ ] Import CSS: `@minneapolisstartribune/design-system/web/{brand}-{scheme}.css`
+- [ ] Import theme CSS: `@minneapolisstartribune/design-system/web/{brand}-{scheme}.css`
+- [ ] Import component styles: `@minneapolisstartribune/design-system/web/components.css`
 - [ ] Wrap with `<DesignSystemProvider brand="..." forceColorScheme="...">`
-- [ ] Ensure `brand`/`forceColorScheme` props match the imported CSS file
+- [ ] Ensure `brand`/`forceColorScheme` props match the imported theme CSS file
 - [ ] Import CSS **before** components render (top of entry file)
 
 **Verify:** In DevTools, `getComputedStyle(document.documentElement).getPropertyValue('--color-text-primary')` should return a value.

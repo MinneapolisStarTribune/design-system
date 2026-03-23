@@ -2,17 +2,23 @@
   display: flex;
   flex-direction: column;
 
+  // Spacing between "above" (label + optional description) and the control in vertical layout.
+  // - Label-only: gap is provided by this margin-bottom.
+  // - Label + description: gap is provided by the description's own margin-bottom, so we
+  //   remove the wrapper margin when a real description is present.
+  :global(.form-group__above) {
+    margin-bottom: var(--spacing-8);
+
+    &:has(.description:not([aria-hidden])) {
+      margin-bottom: 0;
+    }
+  }
+
   .label {
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
     gap: 4px;
-    margin-bottom: var(--spacing-8);
-
-    // When Description follows, don't add margin
-    &:has(+ .description) {
-      margin-bottom: 0;
-    }
 
     .optional {
       margin: 0;
@@ -48,5 +54,10 @@
     margin-top: var(--spacing-2);
     margin-bottom: var(--spacing-8);
     color: var(--color-text-on-light-secondary);
+  }
+
+  // Empty placeholder slots take no space and generate no gap
+  > [aria-hidden] {
+    display: none;
   }
 }
