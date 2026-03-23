@@ -4,12 +4,11 @@ import { EditorialText } from './EditorialText.native';
 import { EDITORIAL_TEXT_SIZES, EDITORIAL_TEXT_WEIGHTS } from '../EditorialText.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/EditorialText',
+  title: 'Typography/Editorial/EditorialText',
   component: EditorialText,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',

@@ -1,4 +1,18 @@
 [
-  { "url": "https://your-storybook-v0-0-11.vercel.app", "version": "v0.0.11" },
-  { "url": "https://your-storybook-v0-0-10.vercel.app", "version": "v0.0.10" }
+  {
+    "version": "release/1.2.0",
+    "url": "https://design-system-fykkx0unk-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "release/1.1.0",
+    "url": "https://design-system-ozt8it1fp-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "release/0.2.0",
+    "url": "https://design-system-7jwk6xpud-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "release/0.1.0",
+    "url": "https://design-system-8tmvkwcx4-startribune-team-one.vercel.app"
+  }
 ]

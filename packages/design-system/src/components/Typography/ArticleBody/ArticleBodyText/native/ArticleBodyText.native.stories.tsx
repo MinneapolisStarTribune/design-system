@@ -4,12 +4,11 @@ import { ArticleBodyText } from './ArticleBodyText.native';
 import { ARTICLE_BODY_TEXT_WEIGHTS } from '../ArticleBodyText.types';
 
 const meta = {
-  title: 'Foundations/Typography/ArticleBody/ArticleBodyText',
+  title: 'Typography/ArticleBody/ArticleBodyText',
   component: ArticleBodyText,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     weight: {
       control: 'select',

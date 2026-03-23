@@ -4,9 +4,8 @@ import { PageHeading } from './PageHeading.native';
 import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Utility/PageHeading',
+  title: 'Typography/Utility/PageHeading',
   component: PageHeading,
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

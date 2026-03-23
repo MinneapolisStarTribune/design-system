@@ -26,48 +26,92 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
   Label: React.FC<FormGroupLabelProps>;
   Description: React.FC<FormGroupDescriptionProps>;
   Caption: React.FC<FormGroupCaptionProps>;
-} = ({ children, className, dataTestId }) => {
+} = ({ children, className }) => {
   /**
-   * First pass: Identify which children are present BEFORE calling any hooks.
+   * WHY WE SCAN CHILDREN BEFORE RENDERING
    *
-   * We need unique, stable IDs for accessibility attributes (`aria-labelledby`, `aria-describedby`)
-   * that connect form controls to their labels, descriptions, and captions.
+   * We need to do two things before we can render:
+   *   1. Know which subcomponents are present so we can wire up accessibility attributes.
+   *   2. Extract each child into a named slot so the CSS subgrid layout works correctly
+   *      for horizontal orientation.
    *
-   * React's Rules of Hooks require that hooks are called in the same order on every render.
-   * We cannot conditionally call `useId()` based on what children are present, as this would
-   * violate the rules of hooks and cause React errors.
+   * ACCESSIBILITY (aria-labelledby / aria-describedby)
+   * Form controls need to be programmatically associated with their label, description,
+   * and caption so screen readers can announce them correctly. We do this by generating
+   * stable IDs (via useId in FormGroupProvider) and passing them to the control via
+   * aria-labelledby and aria-describedby. We pass `hasLabel`, `hasDescription`, and
+   * `hasCaption` flags to FormGroupProvider so it only exposes an ID for elements that
+   * actually exist — a control shouldn't point to an ID that isn't in the DOM.
    *
-   * Therefore, we do a two-pass approach:
-   * 1. First pass (here): Identify which subcomponents exist (Label, Description, Caption)
-   *    without calling any hooks. This happens before any hook calls.
-   * 2. Second pass (in FormGroupProvider): Always call `useId()` three times unconditionally,
-   *    but only expose the IDs when the corresponding element is present (based on the flags
-   *    we pass down).
+   * React's Rules of Hooks mean we cannot call useId() conditionally, so we always call
+   * it three times inside FormGroupProvider unconditionally, and then selectively expose
+   * each ID based on the flags we pass in.
+   *
+   * SUBGRID SLOTTING
+   * When a FormGroup is wrapped in a <Form> parent and has a horizontal orientation,
+   * it uses a 3-track CSS subgrid so that all inputs across every FormGroup align to the
+   * same row, regardless of whether individual groups have labels, descriptions, or captions.
+   *
+   * For this to work, every FormGroup must output exactly 3 wrapper divs in the same
+   * order — above (label + description), control, caption — even when some are empty.
+   * CSS grid assigns children to tracks by DOM position, so a missing div would shift
+   * every subsequent child onto the wrong track, breaking alignment across the whole row.
+   *
+   * Empty slots are rendered as aria-hidden divs so they occupy the correct grid track
+   * without contributing layout height or being announced by assistive technology.
    */
   const childrenArray = Children.toArray(children);
 
-  // Track which subcomponents are present (used to determine which IDs to expose in FormGroupProvider)
-  let hasLabel = false;
-  let hasDescription = false;
-  let hasCaption = false;
-  let _captionVariant: 'info' | 'error' | 'success' = 'info';
+  let hasLabel = false,
+    hasDescription = false,
+    hasCaption = false;
+  const slots = {
+    label: null as React.ReactNode,
+    description: null as React.ReactNode,
+    control: null as React.ReactNode,
+    caption: null as React.ReactNode,
+  };
 
   childrenArray.forEach((child) => {
-    if (isValidElement(child)) {
-      if (child.type === FormGroup.Label) hasLabel = true;
-      else if (child.type === FormGroup.Description) hasDescription = true;
-      else if (child.type === FormGroup.Caption) {
-        hasCaption = true;
-        _captionVariant =
-          (child.props as { variant?: 'info' | 'error' | 'success' }).variant ?? 'info';
-      }
+    if (!isValidElement(child)) {
+      if (slots.control == null) slots.control = child;
+      return;
+    }
+    if (child.type === FormGroup.Label) {
+      hasLabel = true;
+      slots.label = child;
+    } else if (child.type === FormGroup.Description) {
+      hasDescription = true;
+      slots.description = child;
+    } else if (child.type === FormGroup.Caption) {
+      hasCaption = true;
+      slots.caption = child;
+    } else if (slots.control == null) {
+      slots.control = child;
     }
   });
 
+  const slot = (slotClass: string, content: React.ReactNode) =>
+    content != null ? (
+      <div className={slotClass}>{content}</div>
+    ) : (
+      <div className={slotClass} aria-hidden />
+    );
+
   return (
     <FormGroupProvider hasLabel={hasLabel} hasDescription={hasDescription} hasCaption={hasCaption}>
-      <div className={classNames(styles['form-group'], className)} data-testid={dataTestId}>
-        {children}
+      <div className={classNames(styles['form-group'], 'form-group', className)}>
+        {slot(
+          'form-group__above',
+          slots.label || slots.description ? (
+            <>
+              {slots.label}
+              {slots.description}
+            </>
+          ) : null
+        )}
+        {slot('form-group__control', slots.control)}
+        {slot('form-group__caption', slots.caption)}
       </div>
     </FormGroupProvider>
   );
