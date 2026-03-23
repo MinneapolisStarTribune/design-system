@@ -20,6 +20,7 @@ export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
 export type ButtonAnalytics = Record<string, unknown>;
 
 export interface ButtonProps extends BaseProps {
+  type?: 'button' | 'submit' | 'reset';
   color?: ButtonColor;
   capitalize?: boolean;
   variant?: ButtonVariant;
@@ -113,15 +114,21 @@ function enhanceIcon(
   if (!icon || !icon.type || !iconSize) return null;
   const pixelSize = ICON_PIXEL_SIZES[iconSize];
   const existingClassName = icon.props.className;
+  const existingStyle = icon.props.style;
   return React.cloneElement(icon, {
     width: pixelSize,
     height: pixelSize,
     'aria-hidden': true,
     className: existingClassName ? classNames(styles.icon, existingClassName) : styles.icon,
+    style: {
+      ...existingStyle,
+      color: 'inherit',
+    },
   });
 }
 
 export const Button: React.FC<ButtonProps> = ({
+  type = 'button',
   color = 'neutral',
   capitalize = false,
   variant = 'filled',
@@ -230,7 +237,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       ref={buttonRef}
-      type="button"
+      type={type}
       aria-label={buttonAriaLabel}
       disabled={isDisabled}
       className={combinedClassNames || undefined}

@@ -3,7 +3,7 @@ import { EnterpriseHeading } from './EnterpriseHeading';
 import { ENTERPRISE_HEADING_IMPORTANCE_LEVELS } from '../EnterpriseHeading.types';
 
 const meta = {
-  title: 'Foundations/Typography/Editorial/EnterpriseHeading',
+  title: 'Typography/Editorial/EnterpriseHeading',
   component: EnterpriseHeading,
   parameters: {
     docs: {
@@ -13,7 +13,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     importance: {
       control: 'select',

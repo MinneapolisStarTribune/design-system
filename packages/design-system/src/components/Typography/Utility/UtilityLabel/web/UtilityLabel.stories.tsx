@@ -3,12 +3,11 @@ import { UtilityLabel } from './UtilityLabel';
 import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../UtilityLabel.types';
 
 const meta = {
-  title: 'Foundations/Typography/Utility/UtilityLabel',
+  title: 'Typography/Utility/UtilityLabel',
   component: UtilityLabel,
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
