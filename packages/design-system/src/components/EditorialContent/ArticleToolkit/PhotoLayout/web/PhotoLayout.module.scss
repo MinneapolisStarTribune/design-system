@@ -57,6 +57,12 @@
   border-radius: var(--semantic-photo-layout-border-radius);
 }
 
+@media (max-width: 480px) {
+  .item {
+    border-radius: var(--semantic-photo-layout-border-radius-mobile);
+  }
+}
+
 /* Image */
 
 .image {

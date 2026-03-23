@@ -7,6 +7,9 @@
       "border-radius": {
         "value": "{radius.none}"
       },
+      "border-radius-mobile": {
+        "value": "{radius.none}"
+      },
       "caption-padding-mobile": {
         "value": "0px 16px"
       }
