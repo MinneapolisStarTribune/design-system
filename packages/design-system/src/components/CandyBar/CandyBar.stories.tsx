@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { PropsWithChildren } from 'react';
+import { useState } from 'react';
 import { Form } from '@/components/Form';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { MailIcon } from '@/icons';
 import { CandyBar } from './CandyBar';
+import { CandyBarRenderer, type CandyBarRendererItem } from './CandyBarRenderer/CandyBarRenderer';
 import storyStyles from './CandyBar.stories.module.scss';
 
 const meta = {
@@ -14,6 +17,12 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     theme: 'dark' as const,
+    docs: {
+      description: {
+        story:
+          '**Default** uses `CandyBarRenderer` (`activeItem` + `onDismiss`) like production (portal, transitions, focus). `CandyBar` is the inner chrome around `children`.',
+      },
+    },
   },
   argTypes: {
     children: { control: false },
@@ -50,7 +59,8 @@ const meta = {
             Web Page Content
           </UtilityLabel>
         </div>
-        <div style={{ flexShrink: 0, width: '100%' }}>
+        {/* Mount point for CandyBarRenderer (bar itself portals to `document.body`, fixed bottom). */}
+        <div style={{ flexShrink: 0, width: '100%', minHeight: 0 }}>
           <Story />
         </div>
       </div>
@@ -107,9 +117,24 @@ function NewsletterSample({ headlineClassName }: { headlineClassName: string }) 
   );
 }
 
+// TODO: Swap for SnackProvider when it exists (keep `activeItem` + `onDismiss` → `CandyBarRenderer`).
+function CandyBarRendererStory({ children }: PropsWithChildren) {
+  const [active, setActive] = useState<CandyBarRendererItem | null>({
+    id: 'story',
+    children,
+  });
+
+  if (!active) {
+    return <div style={{ flexShrink: 0, width: '100%', minHeight: 0 }} />;
+  }
+
+  return <CandyBarRenderer activeItem={active} onDismiss={() => setActive(null)} />;
+}
+
 export const Default: Story = {
   args: {
     children: <NewsletterSample headlineClassName="typography-utility-page-h4" />,
     onClose: () => {},
   },
+  render: (args) => <CandyBarRendererStory>{args.children}</CandyBarRendererStory>,
 } satisfies Story;
