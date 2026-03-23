@@ -7,11 +7,12 @@ export type CandyBarProps = {
   children: React.ReactNode;
   onClose: () => void;
   className?: string;
+  style?: React.CSSProperties;
 };
 
-export const CandyBar: React.FC<CandyBarProps> = ({ children, onClose, className }) => {
+export const CandyBar: React.FC<CandyBarProps> = ({ children, onClose, className, style }) => {
   return (
-    <div className={classNames(styles.candyBar, className)}>
+    <div className={classNames(styles.candyBar, className)} style={style}>
       <div className={styles.content}>{children}</div>
       <button
         type="button"
