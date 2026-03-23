@@ -22,21 +22,15 @@ const images = [
 describe('ImageGallery Accessibility', () => {
   describe('static rendering', () => {
     it('has no accessibility violations in standard variant', async () => {
-      await expectNoA11yViolations(
-        <ImageGallery images={images} variant="standard" />
-      );
+      await expectNoA11yViolations(<ImageGallery images={images} variant="standard" />);
     });
 
     it('has no accessibility violations in immersive variant', async () => {
-      await expectNoA11yViolations(
-        <ImageGallery images={images} variant="immersive" />
-      );
+      await expectNoA11yViolations(<ImageGallery images={images} variant="immersive" />);
     });
 
     it('has no accessibility violations with single image', async () => {
-      await expectNoA11yViolations(
-        <ImageGallery images={[images[0]]} variant="standard" />
-      );
+      await expectNoA11yViolations(<ImageGallery images={[images[0]]} variant="standard" />);
     });
   });
 
@@ -71,9 +65,7 @@ describe('ImageGallery Accessibility', () => {
         <img src={src} alt={alt} {...rest} />
       );
 
-      await expectNoA11yViolations(
-        <ImageGallery images={images} ImageComponent={CustomImage} />
-      );
+      await expectNoA11yViolations(<ImageGallery images={images} ImageComponent={CustomImage} />);
     });
   });
 });
