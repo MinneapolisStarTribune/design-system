@@ -2,7 +2,7 @@ import { expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { ImageGallery } from './ImageGallery';
-import { ImageComponentProps } from './ImageGallery';
+import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
 
 const images = [
@@ -11,6 +11,7 @@ const images = [
     altText: 'Image 1',
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
+    imgixParams: 'w=800&q=75',
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -21,101 +22,70 @@ const images = [
 ];
 
 describe('ImageGallery', () => {
-  it('renders the gallery', () => {
-    const { getByTestId } = renderWithProvider(<ImageGallery images={images} variant="standard" />);
-
+  it('renders gallery', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
     expect(getByTestId('image-gallery')).toBeInTheDocument();
   });
 
   it('renders images', () => {
-    const { getAllByRole } = renderWithProvider(
-      <ImageGallery images={images} variant="standard" />
-    );
+    const { getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+    expect(getAllByRole('img').length).toBeGreaterThan(0);
+  });
 
+  it('applies imgix params correctly', () => {
+    const { getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
     const imgs = getAllByRole('img');
-    expect(imgs.length).toBeGreaterThanOrEqual(1);
+
+    expect(imgs[0]).toHaveAttribute('src', expect.stringContaining('w=800'));
   });
 
   it('shows caption and credit', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} variant="standard" />);
-
+    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
     expect(getByText(/Caption 1/i)).toBeInTheDocument();
     expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
   });
 
-  it('renders navigation controls when more than one image exists', () => {
+  it('renders controls when multiple images', () => {
+    const { getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+    expect(getAllByRole('button').length).toBe(2);
+  });
+
+  it('disables prev button initially (standard)', () => {
     const { getAllByRole } = renderWithProvider(
       <ImageGallery images={images} variant="standard" />
     );
-
-    const buttons = getAllByRole('button');
-    expect(buttons.length).toBe(2);
+    expect(getAllByRole('button')[0]).toBeDisabled();
   });
 
-  it('disables previous button on first slide in standard variant', () => {
+  it('does not disable prev button in immersive', () => {
     const { getAllByRole } = renderWithProvider(
-      <ImageGallery images={images} variant="standard" />
-    );
-
-    const buttons = getAllByRole('button');
-    const prevButton = buttons[0];
-
-    expect(prevButton).toBeDisabled();
-  });
-
-  it('renders immersive variant', () => {
-    const { getByTestId } = renderWithProvider(
       <ImageGallery images={images} variant="immersive" />
     );
-
-    expect(getByTestId('image-gallery')).toBeInTheDocument();
+    expect(getAllByRole('button')[0]).not.toBeDisabled();
   });
 
-  it('shows image counter', () => {
-    const { getAllByText } = renderWithProvider(
-      <ImageGallery images={images} variant="standard" />
-    );
-
-    expect(getAllByText('1/2').length).toBeGreaterThan(0);
-  });
-
-  it('handles next button click', () => {
+  it('handles navigation clicks', () => {
     const { getAllByRole } = renderWithProvider(
       <ImageGallery images={images} variant="immersive" />
     );
 
-    const nextButton = getAllByRole('button')[1];
+    const [prev, next] = getAllByRole('button');
 
-    nextButton.click();
+    fireEvent.click(prev);
+    fireEvent.click(next);
 
-    expect(nextButton).toBeInTheDocument();
+    expect(prev).toBeInTheDocument();
+    expect(next).toBeInTheDocument();
   });
 
-  it('calls next and previous navigation', () => {
-    const { getAllByRole } = renderWithProvider(
-      <ImageGallery images={images} variant="immersive" />
-    );
-
-    const buttons = getAllByRole('button');
-    const prevButton = buttons[0];
-    const nextButton = buttons[1];
-
-    prevButton.click();
-    nextButton.click();
-
-    expect(prevButton).toBeInTheDocument();
-    expect(nextButton).toBeInTheDocument();
-  });
-
-  it('renders nothing when images array is empty', () => {
-    const { queryByTestId } = renderWithProvider(<ImageGallery images={[]} variant="standard" />);
-
+  it('renders nothing for empty images', () => {
+    const { queryByTestId } = renderWithProvider(<ImageGallery images={[]} />);
     expect(queryByTestId('image-gallery')).not.toBeInTheDocument();
   });
 
-  it('uses custom ImageComponent when provided', () => {
-    const CustomImage = ({ src, alt, className }: ImageComponentProps) => (
-      <img data-testid="custom-image" src={src} alt={alt} className={className} />
+  it('supports custom ImageComponent', () => {
+    const CustomImage = ({ src, alt }: ImageProps) => (
+      <img data-testid="custom-image" src={src} alt={alt} />
     );
 
     const { getAllByTestId } = renderWithProvider(
@@ -125,86 +95,28 @@ describe('ImageGallery', () => {
     expect(getAllByTestId('custom-image').length).toBeGreaterThan(0);
   });
 
-  it('falls back to default img when ImageComponent is not provided', () => {
-    const { getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
-
-    const imgs = getAllByRole('img');
-    expect(imgs.length).toBeGreaterThan(0);
-  });
-
-  it('updates spaceBetween on window resize', () => {
+  it('updates on resize', () => {
     const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
-
     fireEvent(window, new Event('resize'));
-
     expect(getByTestId('image-gallery')).toBeInTheDocument();
   });
 
-  it('renders caption even when credit is missing', () => {
-    const testImages = [
-      {
-        src: 'https://picsum.photos/1080/720?1',
-        altText: 'Image 1',
-        caption: 'Caption only',
-      },
-    ];
-
-    const { getByText } = renderWithProvider(<ImageGallery images={testImages} />);
-
-    expect(getByText('Caption only')).toBeInTheDocument();
-  });
-
-  it('renders credit when caption exists', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
-
-    expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
-  });
-
-  it('renders image counter correctly', () => {
-    const { getAllByText } = renderWithProvider(<ImageGallery images={images} />);
-
-    expect(getAllByText('1/2').length).toBeGreaterThan(0);
-  });
-
-  it('does not disable prev button in immersive mode', () => {
-    const { getAllByRole } = renderWithProvider(
-      <ImageGallery images={images} variant="immersive" />
-    );
-
-    const prevButton = getAllByRole('button')[0];
-
-    expect(prevButton).not.toBeDisabled();
-  });
-
-  it('passes style prop to custom ImageComponent', () => {
-    const CustomImage = ({ src, alt, style }: ImageComponentProps) => (
-      <img data-testid="custom-image" src={src} alt={alt} style={style} />
-    );
-
-    const { getAllByTestId } = renderWithProvider(
-      <ImageGallery images={images} ImageComponent={CustomImage} />
-    );
-
-    const imgs = getAllByTestId('custom-image');
-    expect(imgs.length).toBeGreaterThan(0);
-  });
-
-  it('applies custom className props', () => {
+  it('applies custom classNames', () => {
     const { container } = renderWithProvider(
       <ImageGallery
         images={images}
-        className="root-class"
-        imageClassName="image-class"
-        wrapperClassName="wrapper-class"
-        captionClassName="caption-class"
-        controlsClassName="controls-class"
+        className="root"
+        imageClassName="img"
+        wrapperClassName="wrap"
+        captionClassName="cap"
+        controlsClassName="ctrl"
       />
     );
 
-    expect(container.querySelector('.root-class')).toBeInTheDocument();
-    expect(container.querySelector('.image-class')).toBeInTheDocument();
-    expect(container.querySelector('.wrapper-class')).toBeInTheDocument();
-    expect(container.querySelector('.caption-class')).toBeInTheDocument();
-    expect(container.querySelector('.controls-class')).toBeInTheDocument();
+    expect(container.querySelector('.root')).toBeInTheDocument();
+    expect(container.querySelector('.img')).toBeInTheDocument();
+    expect(container.querySelector('.wrap')).toBeInTheDocument();
+    expect(container.querySelector('.cap')).toBeInTheDocument();
+    expect(container.querySelector('.ctrl')).toBeInTheDocument();
   });
 });

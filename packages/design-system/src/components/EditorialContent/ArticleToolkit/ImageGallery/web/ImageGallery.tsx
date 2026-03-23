@@ -11,6 +11,7 @@ import classNames from 'classnames';
 
 import { Button } from '../../../../Button/web/Button';
 import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
+import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import styles from './ImageGallery.module.scss';
 
@@ -23,22 +24,13 @@ export interface ImageItem {
   credit?: string;
   width?: number;
   height?: number;
-}
-
-export interface ImageComponentProps {
-  src: string;
-  alt: string;
-  className?: string;
-  width?: number;
-  height?: number;
-  style?: React.CSSProperties;
+  imgixParams?: string;
 }
 
 export interface ImageGalleryProps {
   images: ImageItem[];
   variant?: Variant;
-  ImageComponent?: React.ComponentType<ImageComponentProps>;
-
+  ImageComponent?: React.ComponentType<ImageProps>;
   className?: string;
   imageClassName?: string;
   wrapperClassName?: string;
@@ -46,26 +38,12 @@ export interface ImageGalleryProps {
   controlsClassName?: string;
 }
 
-const DefaultImage: React.FC<ImageComponentProps> = ({
-  src,
-  alt,
-  className,
-  width,
-  height,
-  style,
-}) => (
-  <img
-    src={src}
-    alt={alt}
-    className={className}
-    loading="lazy"
-    width={width}
-    height={height}
-    style={style}
-  />
-);
-
+/**
+ * SSR-safe spacing helper
+ */
 const getSpaceBetween = (): number => {
+  if (typeof window === 'undefined') return 24;
+
   const width = window.innerWidth;
   if (width < 640) return 8;
   if (width < 1024) return 16;
@@ -83,44 +61,47 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   controlsClassName,
 }) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const [currentImageProgress, setCurrentImageProgress] = useState(1);
-  const [spaceBetween, setSpaceBetween] = useState(24);
+
+  const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
+  const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
   const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
-  const Img = ImageComponent ?? DefaultImage;
 
+  const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
+
+  /**
+   * Single resize listener (optimized + SSR safe)
+   */
   useEffect(() => {
-    const handleResize = () => setSpaceBetween(getSpaceBetween());
+    const handleResize = (): void => {
+      if (typeof window === 'undefined') return;
+
+      const width = window.innerWidth;
+
+      setSpaceBetween(getSpaceBetween());
+      setButtonSize(width < 1024 ? 'small' : 'large');
+    };
+
+    handleResize();
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const updateButtonSize = () => {
-      const width = window.innerWidth;
-
-      if (width < 1024) {
-        setButtonSize('small'); // mobile + tablet
-      } else {
-        setButtonSize('large'); // desktop
-      }
-    };
-
-    updateButtonSize();
-    window.addEventListener('resize', updateButtonSize);
-
-    return () => window.removeEventListener('resize', updateButtonSize);
-  }, []);
-
-  const next = () => swiperRef.current?.slideNext();
-  const prev = () => swiperRef.current?.slidePrev();
+  const next = (): void => {
+    swiperRef.current?.slideNext();
+  };
+  const prev = (): void => {
+    swiperRef.current?.slidePrev();
+  };
 
   const captionsTypography = 'typography-utility-text-regular-x-small';
   const mediaTagTypography = 'typography-utility-label-semibold-large';
 
   if (!images?.length) return null;
+
   return (
     <div
       data-testid="image-gallery"
@@ -128,27 +109,29 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
     >
       <div className={styles.innerContainer}>
         <Swiper
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          onSwiper={(swiper: SwiperType) => {
+            swiperRef.current = swiper;
+          }}
           modules={[Navigation, A11y, Pagination]}
           slidesPerView={isImmersive ? 'auto' : 1}
           centeredSlides={isImmersive}
           spaceBetween={spaceBetween}
           loop={isImmersive}
           allowTouchMove
-          autoHeight={true}
-          onSlideChange={(swiper) => {
+          autoHeight
+          onSlideChange={(swiper: SwiperType) => {
             const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
 
             setCurrentImageProgress(normalizedIndex + 1);
           }}
           className={styles.swiper}
         >
-          {images.map((img, i) => {
+          {images.map((img) => {
             const width = img.width ?? 1080;
             const height = img.height ?? 720;
 
             return (
-              <SwiperSlide key={i} className={styles.slide}>
+              <SwiperSlide key={img.src} className={styles.slide}>
                 <div
                   className={classNames(styles.imageWrapper, wrapperClassName)}
                   style={
@@ -160,9 +143,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
                   <Img
                     src={img.src}
                     alt={img.altText}
+                    imgixParams={img.imgixParams} // ✅ passed correctly
                     className={classNames(styles.image, imageClassName)}
                     width={width}
                     height={height}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </SwiperSlide>
@@ -179,6 +165,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           </div>
         )}
       </div>
+
       <div className={styles.bottomSection}>
         <div className={classNames(styles.caption, captionsTypography, captionClassName)}>
           {images[currentImageProgress - 1]?.caption}
