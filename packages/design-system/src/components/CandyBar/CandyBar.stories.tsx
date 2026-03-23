@@ -14,12 +14,6 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     theme: 'dark' as const,
-    /** Docs tab: compact preview height. */
-    docs: {
-      story: {
-        height: 'min(320px, 42vh)',
-      },
-    },
   },
   argTypes: {
     children: { control: false },
@@ -29,13 +23,12 @@ const meta = {
     (Story) => (
       <div
         style={{
-          /* Column flex: bar last row. */
-          minHeight: 'min(420px, 72vh)',
+          minHeight: '100vh',
           width: '100%',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'var(--color-base-white, #ffffff)',
+          backgroundColor: 'var(--color-base-white, #fff)',
         }}
       >
         <div
