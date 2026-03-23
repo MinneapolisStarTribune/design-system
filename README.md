@@ -81,8 +81,10 @@ yarn add react@19.0.0 react-native@0.73.0 @floating-ui/react-native@0.10.9
 
 ```tsx
 // main.tsx or App.tsx
-// Single import includes both typography classes and CSS variables
+// Theme: typography classes + CSS variables
 import '@minneapolisstartribune/design-system/web/startribune-light.css';
+// Component styles
+import '@minneapolisstartribune/design-system/web/components.css';
 import { DesignSystemProvider, Button } from '@minneapolisstartribune/design-system/web';
 
 function App() {

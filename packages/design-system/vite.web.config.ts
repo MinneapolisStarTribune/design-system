@@ -2,7 +2,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import svgr from 'vite-plugin-svgr';
 import dts from 'vite-plugin-dts';
 
@@ -19,7 +18,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    cssInjectedByJsPlugin(),
     svgr({
       svgrOptions: {
         icon: true,
@@ -78,6 +76,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    cssCodeSplit: false,
     commonjsOptions: {
       include: [/node_modules/, /dist\/mobile/],
     },
@@ -104,6 +103,8 @@ export default defineConfig({
           'react/jsx-runtime': 'React',
           '@floating-ui/react': 'FloatingUIReact',
         },
+        assetFileNames: (assetInfo) =>
+          assetInfo.names?.some((n) => n.endsWith('.css')) ? 'components.css' : 'assets/[name]-[hash][extname]',
       },
     },
     target: 'esnext',
