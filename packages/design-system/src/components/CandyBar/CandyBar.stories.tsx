@@ -13,11 +13,13 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
-    /**
-     * Dark color scheme loads tokens where neutral filled Button is light-on-dark (white pill).
-     * Light scheme uses dark filled neutral — wrong on the CandyBar without overrides.
-     */
     theme: 'dark' as const,
+    /** Docs tab: compact preview height. */
+    docs: {
+      story: {
+        height: 'min(320px, 42vh)',
+      },
+    },
   },
   argTypes: {
     children: { control: false },
@@ -27,42 +29,35 @@ const meta = {
     (Story) => (
       <div
         style={{
-          minHeight: '100vh',
-          maxHeight: '100vh',
-          position: 'relative',
+          /* Column flex: bar last row. */
+          minHeight: 'min(420px, 72vh)',
+          width: '100%',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
-          /* Mock “document” surface while story uses dark theme tokens for the bar */
           backgroundColor: 'var(--color-base-white, #ffffff)',
         }}
       >
         <div
           style={{
-            display: 'flex',
             flex: 1,
+            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            alignSelf: 'stretch',
             minHeight: 0,
-            /* Reserve space for fixed CandyBar (~min-height + padding) so label centers above it */
-            paddingBottom: 'clamp(120px, 22vh, 200px)',
+            width: '100%',
             boxSizing: 'border-box',
           }}
         >
-          <UtilityLabel size="large" weight="semibold">
+          <UtilityLabel
+            size="large"
+            weight="semibold"
+            style={{ color: 'var(--color-base-black, #000000)' }}
+          >
             Web Page Content
           </UtilityLabel>
         </div>
-        <div
-          style={{
-            position: 'fixed',
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1000,
-          }}
-        >
+        <div style={{ flexShrink: 0, width: '100%' }}>
           <Story />
         </div>
       </div>
