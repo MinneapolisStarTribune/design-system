@@ -19,15 +19,7 @@ export const Image: React.FC<ImageProps> = ({
 }) => {
   const finalSrc = imgixParams ? `${src}?${imgixParams}` : src;
 
-  return (
-    <img
-      src={finalSrc}
-      alt={alt}
-      data-testid={dataTestId}
-      onClick={onClick}
-      {...rest}
-    />
-  );
+  return <img src={finalSrc} alt={alt} data-testid={dataTestId} onClick={onClick} {...rest} />;
 };
 
 Image.displayName = 'Image';

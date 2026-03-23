@@ -180,7 +180,6 @@ describe('Popover', () => {
       expect(screen.getByText('Content')).toBeInTheDocument();
     });
   });
-
 });
 
 describe('Popover.Body', () => {

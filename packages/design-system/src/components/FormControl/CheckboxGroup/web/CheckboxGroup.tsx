@@ -109,7 +109,11 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                   disabled={disabled}
                   error={error}
                   onChange={() => toggleCategory(category)}
-                  analytics={{ ...analyticsOverride, option_value: category.parentOption.value, is_category: true }}
+                  analytics={{
+                    ...analyticsOverride,
+                    option_value: category.parentOption.value,
+                    is_category: true,
+                  }}
                   dataTestId={`${dataTestId ?? 'checkbox-group'}-category-${category.parentOption.value}`}
                 />
               </div>

@@ -85,5 +85,4 @@ describe('Toast', () => {
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
-
 });
