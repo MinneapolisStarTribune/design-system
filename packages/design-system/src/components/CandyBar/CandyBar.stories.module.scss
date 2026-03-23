@@ -79,7 +79,6 @@
 }
 
 /* Narrow viewports */
-
 @media (max-width: 420px) {
   .newsletterGrid {
     grid-template-columns: auto minmax(0, 1fr) auto;
