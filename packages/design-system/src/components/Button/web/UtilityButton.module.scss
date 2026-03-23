@@ -3,6 +3,8 @@
 /* Pill shape, transparent background, border + foreground color tokens */
 
 .utilityButton {
+  --utility-button-icon-color: currentColor;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -50,11 +52,13 @@
     height: 40px;
   }
 
+  > svg,
   .icon {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: var(--utility-button-icon-color);
   }
 
   /* Default variant - outlined style with utility tokens */
@@ -70,6 +74,56 @@
     &:focus-visible {
       outline: 2px solid var(--color-button-neutral-utility-hover-border);
       outline-offset: 2px;
+    }
+  }
+
+  &.toggle {
+    border: 1px solid;
+
+    &:focus-visible {
+      outline-offset: 2px;
+    }
+  }
+
+  &.toggleInactive {
+    border-color: var(--color-utility-toggle-inactive-border-default);
+    color: var(--color-utility-toggle-inactive-text-default);
+    --utility-button-icon-color: var(--color-utility-toggle-inactive-icon-default);
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-utility-toggle-inactive-border-hover);
+      color: var(--color-utility-toggle-inactive-text-hover);
+      --utility-button-icon-color: var(--color-utility-toggle-inactive-icon-hover);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-utility-toggle-inactive-border-hover);
+    }
+  }
+
+  &.toggleActive {
+    border-color: var(--color-utility-toggle-active-border-default);
+    color: var(--color-utility-toggle-active-text-default);
+    --utility-button-icon-color: var(--color-utility-toggle-active-icon-default);
+
+    > svg path,
+    .icon path {
+      fill: var(--color-utility-toggle-active-icon-default);
+    }
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-utility-toggle-active-border-hover);
+      color: var(--color-utility-toggle-active-text-hover);
+      --utility-button-icon-color: var(--color-utility-toggle-active-icon-hover);
+
+      > svg path,
+      .icon path {
+        fill: var(--color-utility-toggle-active-icon-hover);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-utility-toggle-active-border-hover);
     }
   }
 

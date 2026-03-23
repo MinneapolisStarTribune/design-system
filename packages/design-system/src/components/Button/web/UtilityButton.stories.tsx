@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ComponentType } from 'react';
 import {
   UtilityButton,
   UTILITY_BUTTON_VARIANTS,
   UTILITY_BUTTON_SIZES,
   type UtilityButtonSize,
 } from './UtilityButton';
-import { Share02Icon } from '@/icons';
+import { BookmarkFilledIcon, BookmarkIcon, Share02Icon } from '@/icons';
 import { allModes } from '@storybook-config/modes';
 
 /** Story-only args for configurable demo */
@@ -13,6 +14,7 @@ type ConfigurableArgs = {
   label?: string;
   ariaLabel?: string;
   variant: (typeof UTILITY_BUTTON_VARIANTS)[number];
+  active: boolean;
   size: UtilityButtonSize;
   showIcon: boolean;
   iconPosition: 'start' | 'end';
@@ -22,7 +24,7 @@ type ConfigurableArgs = {
 
 const meta: Meta<ConfigurableArgs> = {
   title: 'Components/Actions & Inputs/UtilityButton',
-  component: UtilityButton,
+  component: UtilityButton as unknown as ComponentType<ConfigurableArgs>,
   parameters: {
     docs: {
       description: {
@@ -43,7 +45,11 @@ const meta: Meta<ConfigurableArgs> = {
     variant: {
       control: 'select',
       options: [...UTILITY_BUTTON_VARIANTS] as string[],
-      description: 'Visual style variant. Only "default" is implemented in this ticket.',
+      description: 'Visual style variant.',
+    },
+    active: {
+      control: 'boolean',
+      description: 'Toggle state. Required when variant is "toggle".',
     },
     size: {
       control: 'select',
@@ -78,6 +84,7 @@ export const Configurable: Story = {
     label: 'Share',
     ariaLabel: 'Share',
     variant: 'default',
+    active: false,
     size: 'large',
     showIcon: true,
     iconPosition: 'start',
@@ -85,10 +92,37 @@ export const Configurable: Story = {
     onClick: () => {},
   } as ConfigurableArgs,
   render: (args) => {
-    const { showIcon, ariaLabel, ...buttonProps } = args as ConfigurableArgs;
+    const { showIcon, ariaLabel } = args as ConfigurableArgs;
     const icon = showIcon ? <Share02Icon /> : undefined;
-    const resolvedAriaLabel = !buttonProps.label && icon ? ariaLabel : undefined;
-    return <UtilityButton {...buttonProps} icon={icon} aria-label={resolvedAriaLabel} />;
+    const resolvedAriaLabel = !args.label && icon ? ariaLabel : undefined;
+    if (args.variant === 'toggle') {
+      return (
+        <UtilityButton
+          label={args.label}
+          variant="toggle"
+          active={args.active}
+          size={args.size}
+          iconPosition={args.iconPosition}
+          isDisabled={args.isDisabled}
+          onClick={args.onClick}
+          icon={icon}
+          aria-label={resolvedAriaLabel}
+        />
+      );
+    }
+
+    return (
+      <UtilityButton
+        label={args.label}
+        variant={args.variant}
+        size={args.size}
+        iconPosition={args.iconPosition}
+        isDisabled={args.isDisabled}
+        onClick={args.onClick}
+        icon={icon}
+        aria-label={resolvedAriaLabel}
+      />
+    );
   },
 };
 
@@ -136,6 +170,29 @@ export const AllVariants: Story = {
           <UtilityButton label="Share" icon={<Share02Icon />} size="small" isDisabled />
           <UtilityButton label="Share" icon={<Share02Icon />} size="large" isDisabled />
           <UtilityButton icon={<Share02Icon />} size="large" aria-label="Share" isDisabled />
+        </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>
+          Toggle (inactive / active)
+        </h3>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+          <UtilityButton label="Save" icon={<BookmarkIcon />} variant="toggle" active={false} />
+          <UtilityButton label="Saved" icon={<BookmarkFilledIcon />} variant="toggle" active />
+          <UtilityButton
+            label="Save"
+            icon={<BookmarkIcon />}
+            variant="toggle"
+            active={false}
+            isDisabled
+          />
+          <UtilityButton
+            label="Saved"
+            icon={<BookmarkFilledIcon />}
+            variant="toggle"
+            active
+            isDisabled
+          />
         </div>
       </div>
     </div>

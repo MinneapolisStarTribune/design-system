@@ -28,8 +28,7 @@ function getUtilityButtonIconSize(size: UtilityButtonSize, isIconOnly: boolean):
   return isIconOnly ? 'small' : 'x-small';
 }
 
-export interface UtilityButtonProps extends BaseProps {
-  variant?: UtilityButtonVariant;
+interface UtilityButtonBaseProps extends BaseProps {
   size?: UtilityButtonSize;
   /** Optional icon element (e.g. icon={<Share02Icon />}) */
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
@@ -40,9 +39,23 @@ export interface UtilityButtonProps extends BaseProps {
   label?: string;
 }
 
+type UtilityButtonToggleProps = UtilityButtonBaseProps & {
+  variant: 'toggle';
+  /** Controls active/inactive visual state for toggle variant. */
+  active: boolean;
+};
+
+type UtilityButtonNonToggleProps = UtilityButtonBaseProps & {
+  variant?: Exclude<UtilityButtonVariant, 'toggle'>;
+  active?: never;
+};
+
+export type UtilityButtonProps = UtilityButtonToggleProps | UtilityButtonNonToggleProps;
+
 export const UtilityButton: React.FC<UtilityButtonProps> = ({
   variant = 'default',
   size = 'large',
+  active,
   icon,
   iconPosition = 'start',
   isDisabled,
@@ -66,10 +79,13 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
   const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
+  const toggleStateClass =
+    variant === 'toggle' ? (active ? styles.toggleActive : styles.toggleInactive) : undefined;
 
   const combinedClassNames = classNames(
     styles.utilityButton,
     styles[variant],
+    toggleStateClass,
     styles[size],
     isIconOnly && styles['icon-only'],
     isDisabled && styles.disabled,
