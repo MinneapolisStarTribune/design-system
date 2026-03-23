@@ -143,7 +143,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
                   <Img
                     src={img.src}
                     alt={img.altText}
-                    imgixParams={img.imgixParams} // ✅ passed correctly
+                    imgixParams={img.imgixParams}
                     className={classNames(styles.image, imageClassName)}
                     width={width}
                     height={height}
