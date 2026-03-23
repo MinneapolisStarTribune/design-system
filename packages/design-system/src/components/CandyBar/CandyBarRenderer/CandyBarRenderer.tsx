@@ -38,25 +38,25 @@ export const CandyBarRenderer: React.FC<CandyBarRendererProps> = ({
     duration: 200,
     common: {
       position: 'fixed',
-      left: '50%',
+      insetInline: 0,
       bottom: 'max(0px, env(safe-area-inset-bottom))',
       zIndex: 10000,
-      width: 'min(calc(100% - 48px), 1440px)',
+      width: '100%',
       maxWidth: '100%',
       boxSizing: 'border-box',
       pointerEvents: 'auto',
     },
     initial: {
       opacity: 0,
-      transform: 'translate(-50%, 16px)',
+      transform: 'translateY(16px)',
     },
     open: {
       opacity: 1,
-      transform: 'translate(-50%, 0)',
+      transform: 'translateY(0)',
     },
     close: {
       opacity: 0,
-      transform: 'translate(-50%, 16px)',
+      transform: 'translateY(16px)',
     },
   });
 

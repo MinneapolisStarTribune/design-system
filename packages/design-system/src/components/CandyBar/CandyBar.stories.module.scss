@@ -1,0 +1,87 @@
+/* CandyBar — Storybook-only newsletter mock.
+   Grid: [ icon | copy (368px) | form ] (3x2 grid)
+ */
+
+.newsletterGrid {
+  display: grid;
+  grid-template-columns: auto 368px auto;
+  grid-template-rows: auto auto;
+  align-items: start;
+  width: fit-content;
+  max-width: 100%;
+  column-gap: var(--spacing-24);
+  row-gap: var(--spacing-8);
+}
+
+/* Column 1 — mail icon tile */
+.newsletterColIcon {
+  display: flex;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: start;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-56);
+  height: var(--spacing-56);
+  overflow: hidden;
+  border-radius: var(--spacing-12);
+  background-color: var(--color-emerald-green-500);
+
+  svg {
+    width: var(--spacing-40) !important;
+    height: var(--spacing-40) !important;
+  }
+}
+
+/* Column 2 — copy: headline row + body row */
+.newsletterColCopyHeadline,
+.newsletterColCopyBody {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.newsletterColCopyHeadline {
+  grid-row: 1;
+}
+
+.newsletterColCopyBody {
+  grid-row: 2;
+}
+
+.newsletterHeadline {
+  text-transform: uppercase;
+}
+
+.newsletterBodyText {
+  font-size: var(--typography-text-size-14);
+  line-height: 120%;
+}
+
+/* Column 3 — form (spans both rows, top-aligned) */
+.newsletterColForm {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: start;
+  min-width: 0;
+
+  .newsletterForm {
+    min-width: 0;
+    gap: 0 var(--spacing-8);
+  }
+}
+
+/* Email field */
+.newsletterEmailInput {
+  flex-shrink: 0;
+  width: 271px;
+  max-width: 100%;
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-8) var(--spacing-12) !important;
+}
+
+/* Narrow viewports */
+
+@media (max-width: 420px) {
+  .newsletterGrid {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
