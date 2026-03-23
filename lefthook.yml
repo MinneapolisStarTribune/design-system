@@ -1,3 +1,9 @@
+# Pre-push: run format:check so CI doesn't fail on unformatted files
+pre-push:
+  commands:
+    format-check:
+      run: yarn format:check
+
 # Pre-commit: fix staged files (prettier, eslint), then typecheck and vitest
 pre-commit:
   parallel: false
