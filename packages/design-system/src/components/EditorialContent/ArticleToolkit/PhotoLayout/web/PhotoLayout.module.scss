@@ -83,34 +83,3 @@
     padding: var(--semantic-photo-layout-caption-padding-mobile);
   }
 }
-
-/* Expand Button */
-
-.expand-button {
-  position: absolute;
-  right: var(--spacing-8);
-  top: var(--spacing-8);
-  background: var(--overlay-button-bg);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background: var(--overlay-button-bg-hover);
-  }
-}
-
-.expand-icon {
-  height: 16px;
-  width: 16px;
-
-  svg {
-    height: 100%;
-    width: 100%;
-  }
-}
