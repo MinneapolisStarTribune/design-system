@@ -47,6 +47,8 @@ export function enhanceButtonIcon(
       : {}),
     width: pixelSize,
     height: pixelSize,
+    /* Override Icon wrapper default token so paths using currentColor match button foreground */
+    color: 'inherit',
   };
 
   return React.cloneElement(icon, {
