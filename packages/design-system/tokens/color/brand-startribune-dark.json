@@ -210,7 +210,7 @@
       "background": {
         "selected": {
           "brand": {
-            "description": "Background for selected brand checkbox — Star Tribune green on dark.",
+            "description": "Background for selected brand checkbox — Star Tribune green (dark mode).",
             "value": "{color.emerald-green.600}"
           },
           "neutral": {
@@ -226,8 +226,8 @@
       "border": {
         "selected": {
           "brand": {
-            "description": "Border color for selected brand checkbox — Star Tribune green on dark.",
-            "value": "{color.emerald-green.400}"
+            "description": "Border color for selected brand checkbox — Star Tribune green (dark mode).",
+            "value": "{color.emerald-green.600}"
           },
           "neutral": {
             "description": "Border color for selected neutral checkbox (dark mode: white).",

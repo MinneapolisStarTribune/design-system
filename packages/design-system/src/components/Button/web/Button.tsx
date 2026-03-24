@@ -114,11 +114,16 @@ function enhanceIcon(
   if (!icon || !icon.type || !iconSize) return null;
   const pixelSize = ICON_PIXEL_SIZES[iconSize];
   const existingClassName = icon.props.className;
+  const existingStyle = icon.props.style;
   return React.cloneElement(icon, {
     width: pixelSize,
     height: pixelSize,
     'aria-hidden': true,
     className: existingClassName ? classNames(styles.icon, existingClassName) : styles.icon,
+    style: {
+      ...existingStyle,
+      color: 'inherit',
+    },
   });
 }
 
