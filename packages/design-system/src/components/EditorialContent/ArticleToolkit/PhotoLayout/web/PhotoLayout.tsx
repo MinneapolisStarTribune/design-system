@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import type { PhotoLayoutType } from '../../types';
 import type { PhotoLayoutProps } from '../PhotoLayout.types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
-import { PhotoLayoutDialog } from './PhotoLayoutDialog';
+import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
 import styles from './PhotoLayout.module.scss';
 
 export const layoutImageCount: Record<PhotoLayoutType, number> = {
@@ -52,7 +52,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
     };
   }, [image]);
 
-  const close = () => {
+  const onClose = () => {
     setOpenIndex(null);
     lastTriggerRef.current?.focus();
   };
@@ -91,13 +91,13 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
       </figure>
 
       {image && (
-        <PhotoLayoutDialog
+        <ImageDialog
           caption={caption}
           image={image}
-          imageCredit={imageCredit}
+          credit={imageCredit}
           imgixParams={imgixParams}
           dialogRef={dialogRef}
-          onClose={close}
+          onClose={onClose}
         />
       )}
     </>
