@@ -1,7 +1,8 @@
-import { ExpandIcon, Image } from '@/index.web';
-import styles from './InlineImage.module.scss';
-import { ImageData } from '../../types';
 import React from 'react';
+import { Image } from '@/index.web';
+import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
+import { type ImageData } from '../../types';
+import styles from './InlineImage.module.scss';
 
 interface InlineImageContentProps {
   image: ImageData;
@@ -35,19 +36,7 @@ export const InlineImageContent: React.FC<InlineImageContentProps> = ({
         style={{ ...style, objectFit }}
       />
 
-      {expandable && (
-        <button
-          type="button"
-          className={styles['expand-button']}
-          aria-label="Expand image"
-          aria-haspopup="dialog"
-          onClick={(e) => onExpand(e.currentTarget)}
-        >
-          <span className={styles['expand-icon']} aria-hidden>
-            <ExpandIcon size="small" aria-hidden color="on-dark-primary" />
-          </span>
-        </button>
-      )}
+      {expandable && <ExpandButton onClick={(e) => onExpand(e.currentTarget)} />}
     </div>
   );
 };

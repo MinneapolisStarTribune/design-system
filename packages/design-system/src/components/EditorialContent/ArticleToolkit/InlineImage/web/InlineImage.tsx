@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
 import { InlineImageContent } from './InlineImageContent';
+import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
 
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,
@@ -81,6 +82,14 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           </figcaption>
         )}
       </figure>
+      <ImageDialog
+        image={image}
+        caption={caption}
+        credit={credit}
+        imgixParams={imgixParams}
+        dialogRef={dialogRef}
+        onClose={onClose}
+      />
     </>
   );
 };
