@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { Image } from './Image';
 
@@ -49,5 +50,16 @@ describe('Image', () => {
     expect(element).toHaveAttribute('height', height);
     expect(element).toHaveAttribute('width', width);
     expect(element).toHaveAttribute('loading', loading);
+  });
+
+  it('calls onClick when image is clicked', () => {
+    const onClick = vi.fn();
+    const { getByTestId } = renderWithProvider(
+      <Image src="https://example.com/image.jpg" alt="Example" onClick={onClick} />
+    );
+
+    getByTestId('image').click();
+
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });
