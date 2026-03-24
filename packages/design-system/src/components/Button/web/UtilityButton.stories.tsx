@@ -21,7 +21,7 @@ type ConfigurableArgs = {
 };
 
 const meta: Meta<ConfigurableArgs> = {
-  title: 'Components/Actions & Inputs/UtilityButton',
+  title: 'Actions/Utility Button',
   component: UtilityButton,
   parameters: {
     docs: {
