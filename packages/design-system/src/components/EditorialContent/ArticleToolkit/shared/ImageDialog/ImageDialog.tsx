@@ -5,13 +5,14 @@ import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
 import classNames from 'classnames';
 
-interface ImageDialogProps {
+export interface ImageDialogProps {
   image: ImageData;
   caption?: string;
   credit?: string;
   imgixParams?: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   onClose: () => void;
+  dataTestId?: string;
 }
 
 export const ImageDialog: React.FC<ImageDialogProps> = ({
@@ -21,6 +22,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   imgixParams,
   dialogRef,
   onClose,
+  dataTestId = 'image-dialog',
 }) => {
   const hasCaption = Boolean(caption?.trim());
   const hasCredit = Boolean(credit?.trim());
@@ -36,12 +38,14 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
       aria-label={image.altText}
       onClose={onClose}
       onClick={handleBackdropClick}
+      data-testid={dataTestId}
     >
       <button
         type="button"
         className={styles['dialog-close-button']}
         aria-label="Close expanded image"
         onClick={onClose}
+        data-testid={`${dataTestId}-close-button`}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
           <CloseIcon size="large" aria-hidden color="on-dark-primary" />

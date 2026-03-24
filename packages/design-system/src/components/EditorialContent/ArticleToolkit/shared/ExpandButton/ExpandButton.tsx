@@ -7,6 +7,7 @@ interface ExpandButtonProps {
   ariaLabel?: string;
   color?: IconColor;
   size?: IconSize;
+  dataTestId?: string;
 }
 
 export const ExpandButton: React.FC<ExpandButtonProps> = ({
@@ -14,6 +15,7 @@ export const ExpandButton: React.FC<ExpandButtonProps> = ({
   ariaLabel = 'Expand image',
   color = 'on-dark-primary',
   size = 'small',
+  dataTestId = 'expand-button',
 }) => {
   return (
     <button
@@ -22,6 +24,7 @@ export const ExpandButton: React.FC<ExpandButtonProps> = ({
       aria-label={ariaLabel}
       aria-haspopup="dialog"
       onClick={onClick}
+      data-testid={dataTestId}
     >
       <span className={styles['expand-icon']} aria-hidden>
         <ExpandIcon size={size} aria-hidden color={color} />
