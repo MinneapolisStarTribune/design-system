@@ -79,5 +79,12 @@ export const Immersive: Story = {
 };
 
 export const WithExpandable: Story = {
-  render: () => renderVariants('immersive', true),
+  args: {
+    image,
+    size: 'full',
+    variant: 'standard',
+    caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
+    credit: 'Star Tribune staff/The Minnesota Star Tribune',
+    expandable: true,
+  },
 };
