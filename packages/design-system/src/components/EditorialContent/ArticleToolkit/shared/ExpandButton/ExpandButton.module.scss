@@ -4,8 +4,8 @@
   top: var(--spacing-8);
   background: var(--overlay-button-bg);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border: none;
   outline: none;
   cursor: pointer;
@@ -19,8 +19,11 @@
 }
 
 .expand-icon {
-  height: 16px;
-  width: 16px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   svg {
     height: 100%;

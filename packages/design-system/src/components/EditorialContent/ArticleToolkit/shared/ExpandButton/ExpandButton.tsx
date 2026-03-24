@@ -14,7 +14,7 @@ export const ExpandButton: React.FC<ExpandButtonProps> = ({
   onClick,
   ariaLabel = 'Expand image',
   color = 'on-dark-primary',
-  size = 'small',
+  size = 'large',
   dataTestId = 'expand-button',
 }) => {
   return (
