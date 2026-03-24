@@ -75,6 +75,23 @@
       outline: 2px solid var(--color-button-neutral-utility-hover-border);
       outline-offset: 2px;
     }
+
+    /*
+     * Icons may keep design-specified path fills in source (see icon docs). CSS fill overrides
+     * those attributes so glyphs match this button's foreground tokens in light and dark.
+     */
+    > svg path,
+    .icon path {
+      fill: currentColor;
+    }
+  }
+
+  /* Same path treatment when link variant adds its own text/icon tokens */
+  &.link {
+    > svg path,
+    .icon path {
+      fill: currentColor;
+    }
   }
 
   &.toggle {

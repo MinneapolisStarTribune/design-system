@@ -47,9 +47,8 @@ export function enhanceButtonIcon(
       : {}),
     width: pixelSize,
     height: pixelSize,
-    // Let button variants optionally override icon color via CSS variable.
-    // Falls back to inherited text color when no override is provided.
-    color: 'var(--utility-button-icon-color, inherit)',
+    /* Override Icon wrapper default token so paths using currentColor match button foreground */
+    color: 'inherit',
   };
 
   return React.cloneElement(icon, {

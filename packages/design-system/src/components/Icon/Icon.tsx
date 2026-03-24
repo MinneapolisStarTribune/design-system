@@ -27,17 +27,24 @@ export function createIconWrapper(Component: IconComponent): React.FC<IconWrappe
   const WrappedIcon: React.FC<IconWrapperProps> = ({
     size = 'medium',
     color = 'on-light-primary',
+    // Button may pass in width, height props to override the default size.
+    width,
+    height,
     style,
     ...rest
   }) => {
     const pixel = ICON_PIXEL_SIZES[size];
+    const resolvedWidth = width ?? pixel;
+    const resolvedHeight = height ?? pixel;
     const resolvedStyle: React.CSSProperties = {
-      width: pixel,
-      height: pixel,
+      width: resolvedWidth,
+      height: resolvedHeight,
       color: ICON_COLOR_TOKENS[color],
       ...style,
     };
-    return <Component width={pixel} height={pixel} style={resolvedStyle} {...rest} />;
+    return (
+      <Component width={resolvedWidth} height={resolvedHeight} style={resolvedStyle} {...rest} />
+    );
   };
   WrappedIcon.displayName = `Icon(${Component.displayName ?? Component.name ?? 'Unknown'})`;
   return WrappedIcon;
