@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage';
 import { INLINE_IMAGE_SIZES } from '../../types';
