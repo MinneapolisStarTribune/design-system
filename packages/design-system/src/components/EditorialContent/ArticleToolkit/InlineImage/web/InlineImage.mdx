@@ -1,0 +1,45 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as InlineImageStories from './InlineImage.stories';
+
+<Meta of={InlineImageStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# InlineImage
+
+The **InlineImage** component renders a single image within editorial content, supporting captions, credits and optional expand functionality for immersive viewing.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2449-30086)
+
+## Usage guidelines
+
+### When to use
+
+- Display a single image within editorial content.
+- Provide additional context using captions and image credits.
+- Enable expandable behavior for immersive viewing.
+
+### When to avoid
+
+- Avoid when displaying multiple images in a structured grid.
+
+### Props
+
+- **image** – Image object `{ src: string, altText: string }`.
+- **caption** – Optional descriptive text for the image.
+- **credit** – Optional credit line for the image.
+- **size** – Controls image width: `'large' | 'medium' | 'full' | 'inline'`.
+- **variant** – Article variant: `'standard' | 'immersive'`.
+- **expandable** – Enables click-to-expand behavior for immersive viewing.
+- **imgixParams** – Optional image transformation parameters.
+- **objectFit** – Controls image fit: `'cover' | 'contain'`.
+- **dataTestId** – Optional data-testid attribute for testing.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
+<Primary />
+<Controls />
+<Stories />
