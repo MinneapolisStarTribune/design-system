@@ -23,10 +23,12 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
   onClose,
 }) => {
   const hasCaption = Boolean(caption?.trim());
+
+  const handleClose = () => onClose();
   const hasCredit = Boolean(imageCredit?.trim());
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === dialogRef.current) onClose();
+    if (e.target === dialogRef.current) handleClose();
   };
 
   return (
@@ -34,14 +36,14 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
       ref={dialogRef}
       className={styles.dialog}
       aria-label={image.altText}
-      onClose={onClose}
+      onClose={handleClose}
       onClick={handleBackdropClick}
     >
       <button
         type="button"
         className={styles['dialog-close-button']}
         aria-label="Close expanded image"
-        onClick={onClose}
+        onClick={handleClose}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
           <CloseIcon size="large" aria-hidden color="on-dark-primary" />
