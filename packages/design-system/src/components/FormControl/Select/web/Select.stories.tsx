@@ -37,7 +37,6 @@ const meta = {
       },
     },
   },
-  tags: ['autodocs'],
   argTypes: {
     size: {
       control: 'select',
