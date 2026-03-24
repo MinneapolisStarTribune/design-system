@@ -330,7 +330,9 @@ interface StartribuneLightTheme {
   radiusNone: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
+  semanticPhotoLayoutBorderRadiusMobile: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
@@ -684,7 +686,9 @@ interface StartribuneDarkTheme {
   radiusNone: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
+  semanticPhotoLayoutBorderRadiusMobile: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
@@ -1044,7 +1048,9 @@ interface VarsityLightTheme {
   radiusNone: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
+  semanticPhotoLayoutBorderRadiusMobile: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
@@ -1404,7 +1410,9 @@ interface VarsityDarkTheme {
   radiusNone: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: number;
+  semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
+  semanticPhotoLayoutBorderRadiusMobile: number;
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;

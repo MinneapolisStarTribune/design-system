@@ -9,8 +9,14 @@
       }
     },
     "photo-layout": {
+      "aspect-ratio": {
+        "value": "3 / 2"
+      },
       "border-radius": {
-        "value": "{radius.16}"
+        "value": "{radius.12}"
+      },
+      "border-radius-mobile": {
+        "value": "{radius.8}"
       },
       "caption-padding-mobile": {
         "value": "0px"

@@ -15,8 +15,7 @@
     cursor: not-allowed;
   }
 
-  /* Focus - box around entire checkbox + label (per design spec) */
-  &:has(.input:focus),
+  /* Focus - only on keyboard focus, not on click */
   &:has(.input:focus-visible) {
     box-shadow:
       0 0 0 2px var(--color-background-light-default),
@@ -63,14 +62,6 @@
   &.brand:is(.checked, .indeterminate) .visualBox {
     --checkbox-icon-color: var(--color-checkbox-icon-selected-brand);
   }
-  &.disabled {
-    &:not(.checked):not(.indeterminate) .visualBox {
-      --checkbox-icon-color: var(--color-border-state-disabled-on-light);
-    }
-    &:is(.checked, .indeterminate) .visualBox {
-      --checkbox-icon-color: var(--color-text-state-disabled-on-light);
-    }
-  }
   &.error {
     &:not(.checked):not(.indeterminate) .visualBox {
       --checkbox-icon-color: var(--color-border-state-attention-on-light);
@@ -97,14 +88,15 @@
   }
 }
 
-/* Unchecked: no visualBox border — checkbox-inactive icon provides the outline */
+/* Unchecked: use visualBox border (not icon) so border-radius is consistent 4px */
 .root:not(.checked):not(.indeterminate) .visualBox {
-  border: none;
+  border: 1px solid var(--color-checkbox-border-unchecked);
   background-color: transparent;
 }
 
 .root:not(.checked):not(.indeterminate) .visualBox .icon {
-  color: var(--color-checkbox-border-unchecked);
+  /* Hide icon — visualBox border provides outline with consistent 4px radius */
+  visibility: hidden;
 }
 
 /* Checked/Indeterminate: icon uses selected token (white on fill) */
@@ -144,29 +136,14 @@
 }
 
 /* Disabled state */
-.root.disabled .visualBox {
-  border-color: var(--color-border-state-disabled-on-light);
-  background-color: var(--color-background-light-gray-01);
+/* Disabled state - 40% opacity (matches Button component) */
+.root.disabled {
+  opacity: 0.4;
 }
 
-.root.disabled:not(.checked):not(.indeterminate) .visualBox {
-  border: none;
-  background-color: transparent;
-}
-
-.root.disabled:not(.checked):not(.indeterminate) .visualBox .icon {
-  color: var(--color-border-state-disabled-on-light);
-}
-
-.root.disabled.checked .visualBox,
-.root.disabled.indeterminate .visualBox {
-  border-color: var(--color-border-state-disabled-on-light);
-  background-color: var(--color-background-light-gray-02);
-}
-
-/* Error state - unchecked uses icon color; checked/indeterminate fill turns red */
+/* Error state - only border turns red, not fill or focus ring */
 .root.error:not(.checked):not(.indeterminate) .visualBox {
-  border: none;
+  border: 1px solid var(--color-border-state-attention-on-light);
   background-color: transparent;
 }
 
@@ -176,22 +153,32 @@
 
 .root.error.checked .visualBox,
 .root.error.indeterminate .visualBox {
-  border-color: var(--color-background-state-attention);
-  background-color: var(--color-background-state-attention);
+  border-color: var(--color-border-state-attention-on-light);
+  background-color: var(--color-checkbox-background-selected-brand);
 }
 
-.root.error:has(.input:focus),
-.root.error:has(.input:focus-visible) {
-  box-shadow:
-    0 0 0 2px var(--color-background-light-default),
-    0 0 0 4px var(--color-border-state-attention-on-light);
+.root.error.checked .visualBox .icon,
+.root.error.indeterminate .visualBox .icon {
+  color: var(--color-checkbox-icon-selected-brand);
 }
+
+.root.neutral.error.checked .visualBox,
+.root.neutral.error.indeterminate .visualBox {
+  background-color: var(--color-checkbox-background-selected-neutral);
+}
+
+.root.neutral.error.checked .visualBox .icon,
+.root.neutral.error.indeterminate .visualBox .icon {
+  color: var(--color-checkbox-icon-selected-neutral);
+}
+
+/* Error state: focus ring does not change to red — stays default */
 
 /* Label and caption - design system typography */
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: var(--spacing-4);
   min-width: 0;
 }
 
@@ -200,29 +187,11 @@
   cursor: inherit;
 }
 
-.root.disabled .label {
-  color: var(--color-text-state-disabled-on-light);
-}
-
-.root.disabled.error .label {
-  color: var(--color-text-state-disabled-on-light);
-}
-
-.caption {
-  color: var(--color-text-on-light-secondary);
+.content .caption {
+  color: var(--color-text-on-light-tertiary);
   cursor: inherit;
 }
 
-.root.error .caption {
-  color: var(--color-text-state-attention-on-light);
-}
-
-.root.disabled .caption {
-  color: var(--color-text-state-disabled-on-light);
-}
-
-.root.disabled.error .caption {
-  color: var(--color-text-state-disabled-on-light);
-}
+/* Caption does not turn red in error state — only checkbox border changes */
 
 /* Typography applied via class names in component */
