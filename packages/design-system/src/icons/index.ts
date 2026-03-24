@@ -134,7 +134,6 @@ import SettingsFilledIconRaw from './settings-filled.svg?react';
 import SettingsIconRaw from './settings.svg?react';
 import Share02IconRaw from './share-02.svg?react';
 import ShareIconRaw from './share.svg?react';
-import Shared02IconRaw from './shared-02.svg?react';
 import ShootingStarDownRightFilledIconRaw from './shooting-star-down-right-filled.svg?react';
 import ShootingStarDownRightIconRaw from './shooting-star-down-right.svg?react';
 import SocialFacebookCircleIconRaw from './social-facebook-circle.svg?react';
@@ -414,7 +413,6 @@ export const SettingsFilledIcon = createIconWrapper(SettingsFilledIconRaw);
 export const SettingsIcon = createIconWrapper(SettingsIconRaw);
 export const Share02Icon = createIconWrapper(Share02IconRaw);
 export const ShareIcon = createIconWrapper(ShareIconRaw);
-export const Shared02Icon = createIconWrapper(Shared02IconRaw);
 export const ShootingStarDownRightFilledIcon = createIconWrapper(
   ShootingStarDownRightFilledIconRaw
 );
