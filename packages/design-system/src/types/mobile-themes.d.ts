@@ -232,6 +232,9 @@ interface StartribuneLightTheme {
   colorRed800: string;
   colorRed900: string;
   colorRed950: string;
+  colorSelectBackground: string;
+  colorSelectHover: string;
+  colorSelectScrollbar: string;
   colorSemanticErrorBackground: string;
   colorSemanticErrorForeground: string;
   colorSemanticInfoBackground: string;
@@ -584,6 +587,9 @@ interface StartribuneDarkTheme {
   colorRed800: string;
   colorRed900: string;
   colorRed950: string;
+  colorSelectBackground: string;
+  colorSelectHover: string;
+  colorSelectScrollbar: string;
   colorSemanticErrorBackground: string;
   colorSemanticErrorForeground: string;
   colorSemanticInfoBackground: string;
@@ -942,6 +948,9 @@ interface VarsityLightTheme {
   colorRed800: string;
   colorRed900: string;
   colorRed950: string;
+  colorSelectBackground: string;
+  colorSelectHover: string;
+  colorSelectScrollbar: string;
   colorSemanticErrorBackground: string;
   colorSemanticErrorForeground: string;
   colorSemanticInfoBackground: string;
@@ -1300,6 +1309,9 @@ interface VarsityDarkTheme {
   colorRed800: string;
   colorRed900: string;
   colorRed950: string;
+  colorSelectBackground: string;
+  colorSelectHover: string;
+  colorSelectScrollbar: string;
   colorSemanticErrorBackground: string;
   colorSemanticErrorForeground: string;
   colorSemanticInfoBackground: string;
