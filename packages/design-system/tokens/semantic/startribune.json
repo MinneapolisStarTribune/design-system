@@ -1,8 +1,14 @@
 {
   "semantic": {
     "photo-layout": {
+      "aspect-ratio": {
+        "value": "3 / 2"
+      },
       "border-radius": {
-        "value": "{radius.4}"
+        "value": "{radius.none}"
+      },
+      "border-radius-mobile": {
+        "value": "{radius.none}"
       },
       "caption-padding-mobile": {
         "value": "0px 16px"
