@@ -84,11 +84,6 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
-export { CandyBar, type CandyBarProps } from '@/components/CandyBar/CandyBar';
-export {
-  CandyBarRenderer,
-  type CandyBarRendererProps,
-} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
 export {
   UTILITY_BUTTON_SIZES,
   UTILITY_BUTTON_VARIANTS,
@@ -97,6 +92,11 @@ export {
   type UtilityButtonSize,
   type UtilityButtonVariant,
 } from '@/components/Button/web/UtilityButton';
+export { CandyBar, type CandyBarProps } from '@/components/CandyBar/CandyBar';
+export {
+  CandyBarRenderer,
+  type CandyBarRendererProps,
+} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
 export {
   Toast,
   TOAST_VARIANTS,
