@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Pagination as SwiperPagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -68,16 +68,19 @@ const Root: React.FC<SwiperCarouselProps> = ({
     }
   });
 
+  const contextValue = useMemo(
+    () => ({
+      swiper: swiperInstance,
+      activeIndex,
+      isBeginning,
+      isEnd,
+      totalSlides,
+    }),
+    [swiperInstance, activeIndex, isBeginning, isEnd, totalSlides]
+  );
+
   return (
-    <SwiperContext.Provider
-      value={{
-        swiper: swiperInstance,
-        activeIndex,
-        isBeginning,
-        isEnd,
-        totalSlides,
-      }}
-    >
+    <SwiperContext.Provider value={contextValue}>
       <div className={classNames(styles.container, className)}>
         {beforeSwiper}
 

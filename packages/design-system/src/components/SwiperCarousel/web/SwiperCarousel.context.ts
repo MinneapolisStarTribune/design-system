@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 
-interface SwiperContextType {
+export interface SwiperContextType {
   swiper: SwiperType | null;
   activeIndex: number;
   isBeginning: boolean;
@@ -9,12 +9,12 @@ interface SwiperContextType {
   totalSlides: number;
 }
 
-export const SwiperContext = createContext<SwiperContextType>({
-  swiper: null,
-  activeIndex: 0,
-  isBeginning: true,
-  isEnd: false,
-  totalSlides: 0,
-});
+export const SwiperContext = createContext<SwiperContextType | null>(null);
 
-export const useSwiperContext = () => useContext(SwiperContext);
+export const useSwiperContext = () => {
+  const ctx = useContext(SwiperContext);
+  if (!ctx) {
+    throw new Error('useSwiperContext must be used within SwiperCarousel');
+  }
+  return ctx;
+};

@@ -1,21 +1,22 @@
 import { vi } from 'vitest';
-import React from 'react';
 
 vi.mock('./SwiperCarousel.context', async () => {
-  return {
-    SwiperContext: {
-      Provider: ({ children }: { children: React.ReactNode }) => children,
+  const React = await vi.importActual<typeof import('react')>('react');
+
+  const mockValue = {
+    swiper: {
+      slideNext: vi.fn(),
+      slidePrev: vi.fn(),
     },
-    useSwiperContext: () => ({
-      swiper: {
-        slideNext: vi.fn(),
-        slidePrev: vi.fn(),
-      },
-      activeIndex: 0,
-      isBeginning: true,
-      isEnd: false,
-      totalSlides: 3,
-    }),
+    activeIndex: 0,
+    isBeginning: true,
+    isEnd: false,
+    totalSlides: 3,
+  };
+
+  return {
+    SwiperContext: React.createContext(mockValue),
+    useSwiperContext: () => mockValue,
   };
 });
 
