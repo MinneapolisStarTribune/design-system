@@ -20,6 +20,7 @@ describe('ImageDialog', () => {
         dialogRef={dialogRef}
         onClose={onClose}
         dataTestId={testId}
+        isOpen
         {...props}
       />
     );
