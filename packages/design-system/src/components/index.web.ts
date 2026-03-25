@@ -87,6 +87,19 @@ export { Button, type ButtonProps } from '@/components/Button/web/Button';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export {
+  UTILITY_BUTTON_SIZES,
+  UTILITY_BUTTON_VARIANTS,
+  UtilityButton,
+  type UtilityButtonProps,
+  type UtilityButtonSize,
+  type UtilityButtonVariant,
+} from '@/components/Button/web/UtilityButton';
+export { CandyBar, type CandyBarProps } from '@/components/CandyBar/CandyBar';
+export {
+  CandyBarRenderer,
+  type CandyBarRendererProps,
+} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
+export {
   Toast,
   TOAST_VARIANTS,
   type ToastProps,

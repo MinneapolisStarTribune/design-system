@@ -1,0 +1,85 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as TextInputStories from './TextInput.stories';
+
+<Meta of={TextInputStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# TextInput
+
+`FormControl.TextInput` is the default single-line text field for freeform input (email, username, search, IDs, etc).
+
+For label/description/caption composition, use it inside `FormGroup`. This page focuses on `TextInput` behavior and API, not broader form architecture.
+
+## Canonical usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Email</FormGroup.Label>
+  <FormControl.TextInput
+    name="email"
+    type="email"
+    placeholderText="you@example.com"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+</FormGroup>
+```
+
+## State and validation
+
+- `isError`: applies error styling and sets `aria-invalid` by default.
+- `isSuccess`: applies success styling and shows a success check icon when not in error.
+- `isDisabled`: disables input interaction and applies disabled styling.
+- `name`: is defaulted to `text` unless specified otherwise.
+
+Typical pattern with validation messaging:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Password</FormGroup.Label>
+  <FormControl.TextInput
+    name="password"
+    type="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    isError={Boolean(errors.password)}
+  />
+  {errors.password && <FormGroup.Caption variant="error">{errors.password}</FormGroup.Caption>}
+</FormGroup>
+```
+
+## Accessibility behavior
+
+When rendered inside `FormGroup`, `TextInput` automatically inherits:
+
+- `aria-labelledby` from `FormGroup.Label`
+- `aria-describedby` from `FormGroup.Description` and/or `FormGroup.Caption`
+- generated control `id` used for field association
+
+When used outside `FormGroup`, pass accessibility props directly (`aria-label` or `aria-labelledby`, plus `aria-describedby` as needed).
+
+## Visual variants
+
+- `size`: `small` | `medium` (default) | `large`
+- `rounded`: rounded corner style
+- `icon` with `iconPosition`: decorative leading/trailing icon
+- `placeholderText`: placeholder copy when empty
+
+## Notes for consuming repositories
+
+- Prefer controlled usage (`value` + `onChange`) for predictable integration with app state, validation, and analytics.
+- Pass standard HTML input attributes directly (`name`, `type`, `autoComplete`, `inputMode`, `maxLength`, etc).
+- Keep field semantics (`Label`, `Description`, `Caption`) in `FormGroup` rather than duplicating that logic at the control layer.
+
+## Exports
+
+- `TextInput`: the concrete text input component
+- `TextInputProps`: props interface for the component
+- `TextInputSize`: size union (`small` | `medium` | `large`)
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

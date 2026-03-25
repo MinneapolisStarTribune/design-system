@@ -75,6 +75,8 @@ Open a PR. CI runs lint, tests, typecheck, and deploys a Storybook preview autom
 
 See [code-standards.md](code-standards.md) for TypeScript, component, and naming conventions.
 
+**Icons** — SVG sources and the `yarn icons` workflow are documented in [icons.md](icons.md).
+
 ### Available Commands
 
 | Command | What it does |

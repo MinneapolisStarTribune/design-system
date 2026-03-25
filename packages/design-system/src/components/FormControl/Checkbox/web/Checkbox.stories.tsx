@@ -25,7 +25,7 @@ function FocusedCheckbox(props: React.ComponentProps<typeof FormControl.Checkbox
 }
 
 const meta = {
-  title: 'Components/Actions & Inputs/Checkbox',
+  title: 'Forms/FormControl/Checkbox',
   component: FormControl.Checkbox,
   parameters: {
     docs: {

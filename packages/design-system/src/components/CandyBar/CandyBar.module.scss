@@ -1,0 +1,50 @@
+.candyBar {
+  --candy-bar-text: var(--color-text-on-dark-primary);
+  --candy-bar-background: var(--color-background-dark-default, #0d0d0d);
+
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  min-height: 124px;
+  padding: var(--spacing-32) var(--spacing-16);
+  box-sizing: border-box;
+  color: var(--candy-bar-text);
+  background: var(--candy-bar-background);
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  /* UtilityLabel inside <button> inherits button token color */
+  [class*='typography-'] {
+    color: var(--candy-bar-text);
+  }
+  button {
+    [class*='typography-'] {
+      color: inherit;
+    }
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-8);
+  right: var(--spacing-8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--spacing-40);
+  height: var(--spacing-40);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}

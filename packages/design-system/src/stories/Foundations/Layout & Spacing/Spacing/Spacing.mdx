@@ -5,7 +5,7 @@ import { spacingTokens } from './spacingData';
 
 # Spacing
 
-Spacing tokens define consistent spacing values used throughout the design system. These tokens are available as CSS custom properties and can be used with Tailwind CSS utilities.
+Spacing tokens define consistent spacing values used throughout the design system. These tokens are available as CSS custom properties.
 
 ## Usage
 
@@ -20,20 +20,6 @@ Spacing tokens can be used in several ways:
   gap: var(--spacing-8);
 }
 ```
-
-### Tailwind CSS Utilities
-
-Tailwind v4 automatically generates utilities from spacing tokens. Simply use the numeric value - Tailwind will automatically use the corresponding CSS custom property:
-
-```jsx
-<div className="ds:p-16 ds:m-24 ds:gap-8">
-  {/* Automatically uses var(--spacing-16), var(--spacing-24), var(--spacing-8) */}
-</div>
-```
-
-**How it works:** When you write `ds:p-16`, Tailwind automatically maps it to `var(--spacing-16)`. This happens automatically - no need to write `p-[var(--spacing-16)]` or reference the CSS variable directly.
-
-**Note:** This project uses the `ds:` prefix for all Tailwind utilities.
 
 ## Spacing Scale
 
@@ -56,10 +42,26 @@ The spacing scale ranges from `0` to `96px`, providing a comprehensive set of sp
       <div style={{ minWidth: '120px', fontWeight: '600', marginRight: '1rem' }}>
         {spacing.name}
       </div>
-      <div style={{ minWidth: '150px', fontFamily: 'monospace', color: '#666', fontSize: '0.875rem', marginRight: '1rem' }}>
+      <div
+        style={{
+          minWidth: '150px',
+          fontFamily: 'monospace',
+          color: '#666',
+          fontSize: '0.875rem',
+          marginRight: '1rem',
+        }}
+      >
         {spacing.tokenName}
       </div>
-      <div style={{ minWidth: '80px', fontFamily: 'monospace', color: '#666', fontSize: '0.875rem', marginRight: '2rem' }}>
+      <div
+        style={{
+          minWidth: '80px',
+          fontFamily: 'monospace',
+          color: '#666',
+          fontSize: '0.875rem',
+          marginRight: '2rem',
+        }}
+      >
         {spacing.value}
       </div>
       <div
@@ -122,4 +124,3 @@ The spacing scale ranges from `0` to `96px`, providing a comprehensive set of sp
     </div>
   ))}
 </div>
-

@@ -4,7 +4,7 @@ import { FormControl } from '@/components/FormControl/FormControl';
 import { FORM_GROUP_CAPTION_VARIANTS } from './FormGroup.Caption';
 
 const meta = {
-  title: 'Components/Actions & Inputs/FormGroup/Caption',
+  title: 'Forms/FormGroup/Caption',
   component: FormGroup.Caption,
   parameters: {
     layout: 'centered',

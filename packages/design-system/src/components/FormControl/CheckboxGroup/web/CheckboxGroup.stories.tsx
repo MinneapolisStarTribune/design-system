@@ -14,7 +14,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const meta = {
-  title: 'Components/Actions & Inputs/CheckboxGroup',
+  title: 'Forms/FormControl/CheckboxGroup',
   component: FormControl.CheckboxGroup,
   parameters: {
     docs: {
