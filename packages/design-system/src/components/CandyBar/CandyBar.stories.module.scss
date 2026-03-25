@@ -5,6 +5,8 @@
 .showCandyBarAgain {
   width: fit-content;
   max-width: 100%;
+  display: block;
+  margin: var(--spacing-20) auto;
 }
 
 .newsletterGrid {
