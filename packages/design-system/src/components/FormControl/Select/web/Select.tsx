@@ -48,7 +48,6 @@ export const Select: React.FC<SelectProps> = ({
 
   const isFilled = !!selectedOption;
 
-  // ✅ FIX: never allow empty label
   const displayLabel = isFilled ? selectedOption!.label : placeholderText;
 
   const listboxId = `${inputId}-listbox`;
@@ -148,9 +147,9 @@ export const Select: React.FC<SelectProps> = ({
       id={inputId}
       role="combobox"
       aria-expanded={isOpen}
-      aria-haspopup="listbox" // ✅ added
+      aria-haspopup="listbox"
       aria-labelledby={ariaLabelledBy}
-      aria-label={!ariaLabelledBy ? placeholderText : undefined} // ✅ fixed
+      aria-label={!ariaLabelledBy ? placeholderText : undefined}
       aria-controls={isOpen ? listboxId : undefined}
       aria-describedby={ariaDescribedBy}
       aria-activedescendant={activeIndex >= 0 ? `${inputId}-option-${activeIndex}` : undefined}
@@ -161,7 +160,7 @@ export const Select: React.FC<SelectProps> = ({
     >
       <button
         type="button"
-        aria-label={placeholderText} // ✅ fixed
+        aria-label={placeholderText}
         className={classNames(styles.selectTrigger, triggerTypographyClass)}
         onClick={handleToggle}
         disabled={isDisabled}
