@@ -1,0 +1,71 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+
+<Meta title="Forms/FormControl" />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# FormControl
+
+`FormControl` is a namespaced entry point for concrete input controls.
+
+It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.Checkbox`, or `FormControl.CheckboxGroup`.
+
+For field wiring and labeling semantics, pair controls with `FormGroup`. For submit/layout semantics, use `Form`.
+
+See documentation in each subcomponent for specific documentation.
+
+## Usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Email</FormGroup.Label>
+  <FormGroup.Description>Used for account notifications</FormGroup.Description>
+  <FormControl.TextInput
+    name="email"
+    type="email"
+    autoComplete="email"
+    placeholderText="you@example.com"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+</FormGroup>
+```
+
+Checkbox:
+
+```tsx
+<FormGroup>
+  <FormControl.Checkbox label="I agree to the terms" checked={checked} onChange={setChecked}/>
+</FormGroup>
+```
+
+Checkbox group:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Interests</FormGroup.Label>
+  <FormControl.CheckboxGroup
+    options={[
+      { label: 'Product updates', value: 'updates' },
+      { label: 'Events', value: 'events' },
+    ]}
+  />
+</FormGroup>
+```
+
+## API model for consuming apps
+
+- **Namespace pattern:** import one symbol and select a concrete control via static members.
+- **State ownership:** controls support controlled usage (`value`/`checked`, `onChange`) and can integrate with your existing form state solution.
+- **Cross-control consistency:** shared concerns like sizing and disabled behavior are aligned across the family where applicable.
+
+## Exports
+
+- `FormControl`: namespace container for form controls
+- `FormControl.TextInput`: text input control
+- `FormControl.Checkbox`: checkbox control
+- `FormControl.CheckboxGroup`: grouped checkbox control
+- `FormControlProps`: base props type for the namespace entry
+- `FormControlSize`: size union used by applicable controls
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}

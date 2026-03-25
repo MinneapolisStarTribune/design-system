@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { FormControlProps } from '@/components/FormControl/FormControl';
 import { AccessibilityProps } from '@/types/globalTypes';
 import { SuccessIcon } from '@/icons';
@@ -44,6 +45,8 @@ export interface TextInputProps
   'aria-labelledby'?: string;
   /** Override invalid state for screen readers */
   'aria-invalid'?: boolean;
+  /** Per-input tracking data merged into the blur event. Use to distinguish inputs (e.g. form_field, module_name). */
+  analytics?: Record<string, unknown>;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -64,8 +67,11 @@ export const TextInput: React.FC<TextInputProps> = ({
   id: idProp,
   value,
   onChange,
+  onBlur,
+  analytics: analyticsOverride,
   ...props
 }) => {
+  const { track } = useAnalytics();
   const formGroupContext = useFormGroupContext();
 
   // Error state: use prop when provided, else fall back to FormGroup context (caption variant error)
@@ -86,6 +92,16 @@ export const TextInput: React.FC<TextInputProps> = ({
   const ariaInvalid = ariaInvalidProp ?? (hasError ? true : undefined);
 
   const isFilled = value != null && String(value).trim().length > 0;
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    track({
+      event: 'text_input_blur',
+      component: 'TextInput',
+      value_length: value != null ? String(value).length : 0,
+      ...analyticsOverride,
+    });
+    onBlur?.(e);
+  };
 
   // Icon is always decorative when provided via the simple icon prop
   const iconElement = icon ?? null;
@@ -120,6 +136,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         disabled={isDisabled}
         value={value}
         onChange={onChange}
+        onBlur={handleBlur}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}

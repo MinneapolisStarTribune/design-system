@@ -109,6 +109,51 @@ On click (base payload + any `analytics` prop):
 />
 ```
 
+### Checkbox
+
+On change (base payload + any `analytics` prop):
+
+```json
+{
+  "component": "Checkbox",
+  "event": "checkbox_change",
+  "label": "Subscribe to newsletter",
+  "checked": true,
+  "variant": "neutral"
+}
+```
+
+**Per-checkbox custom data:** Pass the `analytics` prop to add context-specific fields.
+
+### CheckboxGroup
+
+CheckboxGroup passes `analytics` to each child Checkbox. Events include `option_value` and `is_category` (for category mode):
+
+```json
+{
+  "component": "Checkbox",
+  "event": "checkbox_change",
+  "label": "Option A",
+  "checked": true,
+  "option_value": "a",
+  "form_field": "preferences"
+}
+```
+
+### TextInput
+
+On blur (when user leaves the field):
+
+```json
+{
+  "component": "TextInput",
+  "event": "text_input_blur",
+  "value_length": 42
+}
+```
+
+**Per-input custom data:** Pass the `analytics` prop (e.g. `form_field`, `module_name`).
+
 ## Optional: Dev Warning
 
 Set `warnWhenUnhandled={true}` in development to see console warnings when components emit events but no handler is provided. Helps catch missing AnalyticsProvider during migration.
