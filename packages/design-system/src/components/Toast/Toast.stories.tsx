@@ -114,7 +114,7 @@ function ToastWithClose(props: ToastProps) {
       {open ? (
         <Toast {...toastProps} onClose={() => setOpen(false)} />
       ) : (
-        <button type="button" onClick={() => setOpen(true)}>
+        <button type="button" className={styles.showToastAgain} onClick={() => setOpen(true)}>
           Show toast again
         </button>
       )}
