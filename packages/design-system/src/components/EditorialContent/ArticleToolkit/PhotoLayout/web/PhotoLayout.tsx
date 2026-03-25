@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import classNames from 'classnames';
 import type { PhotoLayoutType } from '../../types';
 import type { PhotoLayoutProps } from '../PhotoLayout.types';
@@ -35,27 +35,11 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
   const image = openIndex !== null ? images[openIndex] : null;
   const captionText = [caption, imageCredit && `(${imageCredit})`].filter(Boolean).join(' ');
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (image) {
-      dialog.showModal();
-      document.body.style.overflow = 'hidden';
-    } else if (dialog.open) {
-      dialog.close();
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      if (dialog.open) dialog.close();
-      document.body.style.overflow = '';
-    };
-  }, [image]);
-
   const onClose = () => {
     setOpenIndex(null);
     lastTriggerRef.current?.focus();
   };
+
   const handleExpand = (index: number, el: HTMLButtonElement) => {
     lastTriggerRef.current = el;
     setOpenIndex(index);
@@ -97,6 +81,8 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
           credit={imageCredit}
           imgixParams={imgixParams}
           dialogRef={dialogRef}
+          isOpen={openIndex !== null}
+          dataTestId={`${dataTestId}-dialog`}
           onClose={onClose}
         />
       )}

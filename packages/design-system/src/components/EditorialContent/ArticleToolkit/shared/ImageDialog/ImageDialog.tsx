@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';
 import { type ImageData } from '../../types';
@@ -11,9 +11,25 @@ export interface ImageDialogProps {
   credit?: string;
   imgixParams?: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
+  isOpen: boolean;
   onClose: () => void;
   dataTestId?: string;
 }
+
+// Keep track of active scroll locks
+const activeScrollLocks = new Set<string>();
+
+const lockScroll = (modalId: string) => {
+  activeScrollLocks.add(modalId);
+  document.body.style.overflow = 'hidden';
+};
+
+const unlockScroll = (modalId: string) => {
+  activeScrollLocks.delete(modalId);
+  if (activeScrollLocks.size === 0) {
+    document.body.style.overflow = '';
+  }
+};
 
 export const ImageDialog: React.FC<ImageDialogProps> = ({
   image,
@@ -21,12 +37,32 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   credit,
   imgixParams,
   dialogRef,
+  isOpen,
   onClose,
   dataTestId = 'image-dialog',
 }) => {
   const hasCaption = Boolean(caption?.trim());
   const hasCredit = Boolean(credit?.trim());
   const dialogTitleId = `${dataTestId}-title`;
+
+  // Lock scroll when dialog is open
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      dialog.showModal();
+      lockScroll(dataTestId);
+    } else if (dialog.open) {
+      dialog.close();
+      unlockScroll(dataTestId);
+    }
+
+    return () => {
+      if (dialog.open) dialog.close();
+      unlockScroll(dataTestId);
+    };
+  }, [dataTestId, dialogRef, isOpen]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === dialogRef.current) onClose();
