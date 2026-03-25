@@ -1,34 +1,34 @@
 import React from 'react';
 import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';
-import type { ImageData } from '../../types';
-import styles from './PhotoLayout.module.scss';
+import { type ImageData } from '../../types';
+import styles from './ImageDialog.module.scss';
 import classNames from 'classnames';
 
-interface PhotoLayoutDialogProps {
+export interface ImageDialogProps {
   image: ImageData;
   caption?: string;
-  imageCredit?: string;
+  credit?: string;
   imgixParams?: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   onClose: () => void;
+  dataTestId?: string;
 }
 
-export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
+export const ImageDialog: React.FC<ImageDialogProps> = ({
   image,
   caption,
-  imageCredit,
+  credit,
   imgixParams,
   dialogRef,
   onClose,
+  dataTestId = 'image-dialog',
 }) => {
   const hasCaption = Boolean(caption?.trim());
-
-  const handleClose = () => onClose();
-  const hasCredit = Boolean(imageCredit?.trim());
+  const hasCredit = Boolean(credit?.trim());
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === dialogRef.current) handleClose();
+    if (e.target === dialogRef.current) onClose();
   };
 
   return (
@@ -36,14 +36,16 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
       ref={dialogRef}
       className={styles.dialog}
       aria-label={image.altText}
-      onClose={handleClose}
+      onClose={onClose}
       onClick={handleBackdropClick}
+      data-testid={dataTestId}
     >
       <button
         type="button"
         className={styles['dialog-close-button']}
         aria-label="Close expanded image"
-        onClick={handleClose}
+        onClick={onClose}
+        data-testid={`${dataTestId}-close-button`}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
           <CloseIcon size="large" aria-hidden color="on-dark-primary" />
@@ -84,7 +86,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
                     styles['dialog-credit-text']
                   )}
                 >
-                  {imageCredit}
+                  {credit}
                 </span>
               </div>
             )}
@@ -95,4 +97,4 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
   );
 };
 
-PhotoLayoutDialog.displayName = 'PhotoLayoutDialog';
+ImageDialog.displayName = 'ImageDialog';

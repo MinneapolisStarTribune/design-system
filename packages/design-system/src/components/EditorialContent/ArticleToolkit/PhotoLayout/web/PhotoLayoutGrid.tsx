@@ -1,8 +1,8 @@
 import React from 'react';
-import { ExpandIcon } from '@/icons';
 import { Image } from '@/components/index.web';
 import type { ImageData } from '../../types';
 import styles from './PhotoLayout.module.scss';
+import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
 
 interface PhotoLayoutGridProps {
   images: ImageData[];
@@ -33,17 +33,10 @@ export const PhotoLayoutGrid: React.FC<PhotoLayoutGridProps> = ({
           tabIndex={0}
         />
         {expandable && (
-          <button
-            type="button"
-            className={styles['expand-button']}
-            aria-label={`Expand image ${index + 1} of ${images.length}`}
-            aria-haspopup="dialog"
+          <ExpandButton
             onClick={(e) => onExpand(index, e.currentTarget)}
-          >
-            <span className={styles['expand-icon']} aria-hidden>
-              <ExpandIcon size="small" aria-hidden color="on-dark-primary" />
-            </span>
-          </button>
+            ariaLabel={`Expand image ${index + 1} of ${images.length}`}
+          />
         )}
       </div>
     ))}
