@@ -143,7 +143,7 @@ const preview: Preview = {
       return (
         <div
           style={{
-            padding: '1rem',
+            padding: isFullscreen ? '0' : '1rem',
             backgroundColor,
             minHeight: '100%',
             ...(isFullscreen && { width: '100%', boxSizing: 'border-box' }),

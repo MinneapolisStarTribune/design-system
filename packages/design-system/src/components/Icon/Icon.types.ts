@@ -41,7 +41,7 @@ export type IconColor = keyof typeof ICON_COLOR_TOKENS;
  * Props for wrapped icon components exported from the design system.
  * Consumers choose from predetermined size and color tokens.
  */
-export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height' | 'color'> & {
+export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'color'> & {
   size?: IconSize;
   color?: IconColor;
 };
