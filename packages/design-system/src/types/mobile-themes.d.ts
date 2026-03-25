@@ -710,11 +710,8 @@ interface StartribuneDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
-<<<<<<< HEAD
   spacingCheckboxDefault: number;
   spacingCheckboxSmall: number;
-=======
->>>>>>> 860690e (have ugly uncolored and wrong size buttons working)
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
@@ -1073,11 +1070,8 @@ interface VarsityLightTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
-<<<<<<< HEAD
   spacingCheckboxDefault: number;
   spacingCheckboxSmall: number;
-=======
->>>>>>> 860690e (have ugly uncolored and wrong size buttons working)
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
@@ -1436,11 +1430,8 @@ interface VarsityDarkTheme {
   spacingButtonLg: number;
   spacingButtonMd: number;
   spacingButtonSm: number;
-<<<<<<< HEAD
   spacingCheckboxDefault: number;
   spacingCheckboxSmall: number;
-=======
->>>>>>> 860690e (have ugly uncolored and wrong size buttons working)
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
