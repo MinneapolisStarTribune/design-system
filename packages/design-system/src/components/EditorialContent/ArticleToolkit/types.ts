@@ -88,3 +88,8 @@ export interface ImageUrlTransformContext {
   width?: number;
   aspectRatio?: string;
 }
+/**
+ * Inline image sizes: full, large, medium, inline
+ */
+export const INLINE_IMAGE_SIZES = ['full', 'large', 'medium', 'inline'] as const;
+export type InlineImageSizeType = (typeof INLINE_IMAGE_SIZES)[number];

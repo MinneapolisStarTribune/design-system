@@ -1,5 +1,13 @@
 {
   "semantic": {
+    "inline-image": {
+      "aspect-ratio": {
+        "value": "3/2"
+      },
+      "border-radius": {
+        "value": "0px"
+      }
+    },
     "photo-layout": {
       "aspect-ratio": {
         "value": "3 / 2"
