@@ -49,7 +49,9 @@ const meta: Meta<ConfigurableArgs> = {
     },
     active: {
       control: 'boolean',
-      description: 'Toggle state. Required when variant is "toggle".',
+      description:
+        'Pressed/active visuals (icon and text tokens). Only used when variant is "toggle"; default and link variants ignore this prop.',
+      if: { arg: 'variant', eq: 'toggle' },
     },
     size: {
       control: 'select',
