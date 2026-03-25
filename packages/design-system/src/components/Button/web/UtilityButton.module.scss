@@ -107,10 +107,20 @@
     color: var(--color-utility-toggle-inactive-text-default);
     --utility-button-icon-color: var(--color-utility-toggle-inactive-icon-default);
 
+    > svg path,
+    .icon path {
+      fill: var(--color-utility-toggle-inactive-icon-default);
+    }
+
     &:hover:not(:disabled) {
       border-color: var(--color-utility-toggle-inactive-border-hover);
       color: var(--color-utility-toggle-inactive-text-hover);
       --utility-button-icon-color: var(--color-utility-toggle-inactive-icon-hover);
+
+      > svg path,
+      .icon path {
+        fill: var(--color-utility-toggle-inactive-icon-hover);
+      }
     }
 
     &:focus-visible {
