@@ -26,6 +26,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
 }) => {
   const hasCaption = Boolean(caption?.trim());
   const hasCredit = Boolean(credit?.trim());
+  const dialogTitleId = `${dataTestId}-title`;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === dialogRef.current) onClose();
@@ -36,10 +37,14 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
       ref={dialogRef}
       className={styles.dialog}
       aria-label={image.altText}
+      aria-labelledby={dialogTitleId}
       onClose={onClose}
       onClick={handleBackdropClick}
       data-testid={dataTestId}
     >
+      <h2 id={dialogTitleId} className={styles['dialog-title-sr-only']}>
+        Expanded image view
+      </h2>
       <button
         type="button"
         className={styles['dialog-close-button']}

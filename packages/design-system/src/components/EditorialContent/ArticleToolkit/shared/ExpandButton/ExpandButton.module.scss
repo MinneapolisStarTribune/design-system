@@ -16,6 +16,11 @@
   &:hover {
     background: var(--overlay-button-bg-hover);
   }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 2px;
+  }
 }
 
 .expand-icon {
