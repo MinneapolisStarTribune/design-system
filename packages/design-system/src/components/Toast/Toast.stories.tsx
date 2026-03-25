@@ -132,7 +132,7 @@ export const Configurable: Story = {
     onClose: () => {},
     dataTestId: 'toast-demo',
   },
-  // Named function so Storybook can bind Docs/Canvas controls to args
+  // Named function so Storybook can bind Docs controls to args
   render: function ConfigurableToast(args) {
     return <ToastWithClose {...args} />;
   },
@@ -150,14 +150,7 @@ export const AllVariants: Story = {
       },
     },
   },
-  args: {
-    title: 'Status message',
-    description: 'Brief supporting text can go here.',
-    variant: 'info',
-    showIcon: true,
-    onClose: () => {},
-    dataTestId: 'toast-all-variants',
-  },
+  args: { title: 'All variants', onClose: () => {} },
   render: () => (
     <div className={styles.list}>
       {TOAST_VARIANTS.map((variant) => {
