@@ -107,6 +107,9 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
       data-testid="image-gallery"
       className={classNames(styles.gallery, styles[variant], className)}
     >
+      <span aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+        {`Image ${currentImageProgress} of ${total}`}
+      </span>
       <div className={styles.innerContainer}>
         <Swiper
           onSwiper={(swiper: SwiperType) => {
@@ -129,6 +132,10 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           {images.map((img) => {
             const width = img.width ?? 1080;
             const height = img.height ?? 720;
+
+            if (!img.altText?.trim()) {
+              console.warn('ImageGallery: missing altText for image', img.src);
+            }
 
             return (
               <SwiperSlide key={img.src} className={styles.slide}>
@@ -183,7 +190,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
               onClick={prev}
               isDisabled={!isImmersive && currentImageProgress === 1}
               className={styles.navButton}
-              aria-label="Previous image"
+              aria-label={`Previous image (${Math.max(currentImageProgress - 1, 1)} of ${total})`}
             />
             <Button
               variant="ghost"
@@ -192,7 +199,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
               onClick={next}
               isDisabled={!isImmersive && currentImageProgress === total}
               className={styles.navButton}
-              aria-label="Next image"
+              aria-label={`Next image (${Math.min(currentImageProgress + 1, total)} of ${total})`}
             />
           </div>
         )}

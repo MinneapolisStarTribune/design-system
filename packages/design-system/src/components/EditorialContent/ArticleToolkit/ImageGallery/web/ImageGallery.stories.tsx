@@ -27,6 +27,30 @@ const images = [
     caption: 'Second image example.',
     credit: '(Photo: Star Tribune)',
   },
+  {
+    src: 'https://picsum.photos/1080/720?3',
+    altText: 'Image 3',
+    caption: 'Second image example.',
+    credit: '(Photo: Star Tribune)',
+  },
+  {
+    src: 'https://picsum.photos/1080/720?3',
+    altText: 'Image 3',
+    caption: 'Second image example.',
+    credit: '(Photo: Star Tribune)',
+  },
+  {
+    src: 'https://picsum.photos/1080/720?4',
+    altText: 'Image 4',
+    caption: 'Second image example.',
+    credit: '(Photo: Star Tribune)',
+  },
+  {
+    src: 'https://picsum.photos/1080/720?5',
+    altText: 'Image 5',
+    caption: 'Second image example.',
+    credit: '(Photo: Star Tribune)',
+  },
 ];
 
 const CustomImage = ({ src, alt, ...rest }: ImageProps): React.ReactElement => (
