@@ -10,7 +10,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   image,
   size = 'medium',
   caption,
-  altText,
   className,
   credit,
   dataTestId = 'inline-image',
@@ -65,7 +64,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         {...accessibilityProps}
       >
         <InlineImageContent
-          image={{ ...image, altText: image.altText || altText || '' }}
+          image={image}
           imgixParams={imgixParams}
           expandable={expandable}
           onExpand={onExpand}

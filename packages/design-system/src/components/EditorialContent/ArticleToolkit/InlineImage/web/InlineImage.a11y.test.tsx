@@ -10,7 +10,6 @@ describe('InlineImage Accessibility', () => {
     await expectNoA11yViolations(
       <InlineImage
         image={{ src: '', altText: '' }}
-        altText="Alternative text for the image"
         caption="Caption for the image"
         credit="Credit for the image"
         expandable
