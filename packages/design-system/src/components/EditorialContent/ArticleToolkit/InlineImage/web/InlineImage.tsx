@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
 import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
@@ -23,24 +23,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
   const captionText = [caption, credit && `(${credit})`].filter(Boolean).join(' ');
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    if (isOpen) {
-      dialog.showModal();
-      document.body.style.overflow = 'hidden';
-    } else if (dialog.open) {
-      dialog.close();
-      document.body.style.overflow = '';
-    }
-
-    return () => {
-      if (dialog.open) dialog.close();
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
 
   const onExpand = (el: HTMLButtonElement) => {
     lastTriggerRef.current = el;
@@ -87,7 +69,9 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         credit={credit}
         imgixParams={imgixParams}
         dialogRef={dialogRef}
+        isOpen={isOpen}
         onClose={onClose}
+        dataTestId={`${dataTestId}-dialog`}
       />
     </>
   );
