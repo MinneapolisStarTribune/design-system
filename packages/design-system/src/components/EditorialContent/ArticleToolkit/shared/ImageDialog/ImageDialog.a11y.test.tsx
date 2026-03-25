@@ -7,7 +7,12 @@ describe('ImageDialog Accessibility', () => {
   const onClose = vi.fn();
   it('has no accessibility violations', async () => {
     await expectNoA11yViolations(
-      <ImageDialog image={{ src: '', altText: '' }} dialogRef={dialogRef} onClose={onClose} />
+      <ImageDialog
+        image={{ src: '', altText: '' }}
+        dialogRef={dialogRef}
+        onClose={onClose}
+        isOpen
+      />
     );
   });
 
@@ -19,6 +24,7 @@ describe('ImageDialog Accessibility', () => {
         credit="Credit for the image"
         dialogRef={dialogRef}
         onClose={onClose}
+        isOpen
       />
     );
   });
@@ -30,6 +36,7 @@ describe('ImageDialog Accessibility', () => {
         imgixParams="w=800&h=500&fit=crop&auto=format,compress&q=75"
         dialogRef={dialogRef}
         onClose={onClose}
+        isOpen
       />
     );
   });
