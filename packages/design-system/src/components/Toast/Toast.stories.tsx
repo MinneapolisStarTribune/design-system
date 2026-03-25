@@ -3,7 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps, ToastVariant } from './Toast';
-import { ToastRenderer, useToast } from '@/components/Toast/ToastRenderer/ToastRenderer';
+import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
+import { useToast } from '@/providers/SnackProvider/SnackProvider';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import styles from './Toast.stories.module.scss';
 
@@ -194,13 +195,13 @@ export const AllVariants: Story = {
 };
 
 function ToastRendererDemo() {
-  const { showToast } = useToast();
+  const { show } = useToast();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 280 }}>
       <button
         type="button"
         onClick={() =>
-          showToast({ title: 'Info', description: 'From global provider', variant: 'info' })
+          show({ title: 'Info', description: 'From global provider', variant: 'info' })
         }
       >
         Show info toast
@@ -208,7 +209,7 @@ function ToastRendererDemo() {
       <button
         type="button"
         onClick={() =>
-          showToast({
+          show({
             title: 'Saved',
             description: 'Your changes were saved.',
             variant: 'success',
@@ -217,13 +218,13 @@ function ToastRendererDemo() {
       >
         Show success (auto-dismiss)
       </button>
-      <button type="button" onClick={() => showToast({ title: 'Warning', variant: 'warning' })}>
+      <button type="button" onClick={() => show({ title: 'Warning', variant: 'warning' })}>
         Show warning
       </button>
       <button
         type="button"
         onClick={() =>
-          showToast({ title: 'Error', description: 'Something went wrong.', variant: 'error' })
+          show({ title: 'Error', description: 'Something went wrong.', variant: 'error' })
         }
       >
         Show error
@@ -239,13 +240,13 @@ export const WithRenderer = {
     docs: {
       description: {
         story:
-          'Wrap your app with `ToastRenderer` and use `useToast()` to show toasts from anywhere. Toasts appear in a fixed bottom-right container.',
+          'Wrap your app with `DesignSystemProvider` (it mounts `SnackProvider`). Use `useToast()` to show toasts from anywhere. Toasts appear in a fixed bottom-right container.',
       },
     },
   },
   render: () => (
-    <ToastRenderer>
+    <DesignSystemProvider brand="startribune" forceColorScheme="light">
       <ToastRendererDemo />
-    </ToastRenderer>
+    </DesignSystemProvider>
   ),
 } satisfies Omit<Story, 'args'>;
