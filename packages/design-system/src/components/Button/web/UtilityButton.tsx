@@ -5,7 +5,11 @@ import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps } from '@/types/globalTypes';
 import type { Size } from '@/types/globalTypes';
 import { type IconSize } from '@/components/Icon/Icon.types';
-import { enhanceButtonIcon, getUtilityButtonAriaLabel } from '../Helpers';
+import {
+  enhanceButtonIcon,
+  getUtilityButtonAriaLabel,
+  resolveUtilityToggleActiveIcon,
+} from '../Helpers';
 
 export const UTILITY_BUTTON_VARIANTS = ['default', 'toggle', 'link'] as const;
 export type UtilityButtonVariant = (typeof UTILITY_BUTTON_VARIANTS)[number];
@@ -67,14 +71,15 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   const hasIcon = !!icon;
   const isIconOnly = hasIcon && !label;
 
+  const displayIcon = resolveUtilityToggleActiveIcon(icon, variant, active) ?? icon;
   const iconSize = hasIcon ? getUtilityButtonIconSize(size, isIconOnly) : undefined;
   const leftIcon =
     hasIcon && (isIconOnly || iconPosition === 'start')
-      ? enhanceButtonIcon(icon, iconSize, styles.icon)
+      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
       : null;
   const rightIcon =
     hasIcon && !isIconOnly && iconPosition === 'end'
-      ? enhanceButtonIcon(icon, iconSize, styles.icon)
+      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
       : null;
 
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
