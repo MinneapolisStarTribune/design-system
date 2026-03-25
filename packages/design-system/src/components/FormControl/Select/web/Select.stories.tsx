@@ -14,16 +14,16 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const OPTIONS = [
-  { value: '1', label: 'Option' },
-  { value: '2', label: 'Option' },
-  { value: '3', label: 'Option' },
-  { value: '4', label: 'Option' },
-  { value: '5', label: 'Option' },
-  { value: '6', label: 'Option' },
-  { value: '7', label: 'Option' },
-  { value: '8', label: 'Option' },
-  { value: '9', label: 'Option' },
-  { value: '10', label: 'Option', disabled: true },
+  { value: '1', label: 'Option-1' },
+  { value: '2', label: 'Option-2' },
+  { value: '3', label: 'Option-3' },
+  { value: '4', label: 'Option-4' },
+  { value: '5', label: 'Option-5' },
+  { value: '6', label: 'Option-6' },
+  { value: '7', label: 'Option-7' },
+  { value: '8', label: 'Option-8' },
+  { value: '9', label: 'Option-9' },
+  { value: '10', label: 'Option-0', disabled: true },
 ];
 
 const meta = {
@@ -38,26 +38,13 @@ const meta = {
     },
   },
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['small', 'medium', 'large'],
-    },
-    radius: {
-      control: 'select',
-      options: ['pointy', 'rounded'],
-    },
-    isDisabled: {
-      control: 'boolean',
-    },
-    isError: {
-      control: 'boolean',
-    },
-    placeholderText: {
-      control: 'text',
-    },
-    showPlaceholder: {
-      control: 'boolean',
-    },
+    size: { control: 'select', options: ['small', 'medium', 'large'] },
+    radius: { control: 'select', options: ['pointy', 'rounded'] },
+    isDisabled: { control: 'boolean' },
+    isError: { control: 'boolean' },
+    placeholderText: { control: 'text' },
+    showPlaceholder: { control: 'boolean' },
+    value: { control: 'text' },
   },
 } satisfies Meta<typeof FormControl.Select>;
 
@@ -65,7 +52,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const ConfigurableComponent = (args: Partial<SelectProps>) => {
-  const [value, setValue] = useState<string | undefined>();
+  const [internalValue, setInternalValue] = useState<string | undefined>();
+
+  const isControlled = args.value !== undefined;
+  const value = isControlled ? args.value : internalValue;
 
   return (
     <FormGroup>
@@ -76,10 +66,17 @@ const ConfigurableComponent = (args: Partial<SelectProps>) => {
         options={OPTIONS}
         {...args}
         value={value}
-        onChange={setValue}
+        onChange={(val: string) => {
+          if (!isControlled) setInternalValue(val);
+          args.onChange?.(val);
+        }}
       />
 
-      <FormGroup.Caption variant="info">Informational message</FormGroup.Caption>
+      {args.isError ? (
+        <FormGroup.Caption variant="error">Error message</FormGroup.Caption>
+      ) : (
+        <FormGroup.Caption variant="info">Informational message</FormGroup.Caption>
+      )}
     </FormGroup>
   );
 };
@@ -222,7 +219,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Filled</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} value="us" />
+            <FormControl.Select options={OPTIONS} value="1" />
           </FormGroup>
         </div>
 
