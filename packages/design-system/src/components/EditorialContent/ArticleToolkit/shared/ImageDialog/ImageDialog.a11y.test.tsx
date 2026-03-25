@@ -2,6 +2,11 @@ import React from 'react';
 import { expectNoA11yViolations } from '@/test-utils/a11y';
 import { ImageDialog } from './ImageDialog';
 
+beforeEach(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn();
+  HTMLDialogElement.prototype.close = vi.fn();
+});
+
 describe('ImageDialog Accessibility', () => {
   const dialogRef = React.createRef<HTMLDialogElement>();
   const onClose = vi.fn();

@@ -2,6 +2,11 @@ import { renderWithProvider } from '@/test-utils/render';
 import { ImageDialog, ImageDialogProps } from './ImageDialog';
 import React from 'react';
 
+beforeEach(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn();
+  HTMLDialogElement.prototype.close = vi.fn();
+});
+
 describe('ImageDialog', () => {
   const image = {
     src: 'https://picsum.photos/id/1018/1200/800',
