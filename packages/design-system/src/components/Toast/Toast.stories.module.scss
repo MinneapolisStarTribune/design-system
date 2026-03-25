@@ -1,11 +1,42 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-32);
+  max-width: 420px;
+  text-align: left;
 }
 
-.variantGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-8);
+.variant {
+  &Group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+
+    &Header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+
+      &Heading {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0 var(--spacing-4);
+
+        &Code {
+          color: var(--color-text-on-light-secondary, #525252);
+        }
+      }
+
+      &Purpose {
+        margin: 0;
+        max-width: 100%;
+      }
+    }
+    &Toasts {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-8);
+    }
+  }
 }
