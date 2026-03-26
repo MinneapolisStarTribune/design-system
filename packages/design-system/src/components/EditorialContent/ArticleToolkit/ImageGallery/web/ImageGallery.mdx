@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ImageGalleryStories from './ImageGallery.stories';
+
+<Meta of={ImageGalleryStories} />
+
+# Image Gallery
+
+Displays a collection of images with optional captions, credits, and navigation controls. Supports both standard (inline) and immersive (full-bleed) layouts.
+
+## Usage guidelines
+
+### Variant
+
+- **Standard:** Constrained to article width. Use for inline editorial content.
+- **Immersive:** Full-bleed layout with centered active image and adjacent image peek.
+
+### Layout behavior
+
+- Uses CSS aspect ratio to prevent layout shift.
+- Images scale responsively with consistent layout.
+- Immersive mode centers active slide with adjacent previews.
+
+### Image sizing
+
+- Provide `width` and `height` to reserve layout space and prevent CLS.
+- Internally uses `aspect-ratio` for better responsive stability.
+
+### Imgix support
+
+- Pass `imgixParams` to optimize images (compression, cropping, etc.).
+- Example: `w=800&h=500&fit=crop&auto=format,compress`
+
+### Custom image component
+
+You can override rendering using `ImageComponent`.
+
+It receives:
+
+- `src`
+- `alt`
+- `width`
+- `height`
+- `className`
+- All native `<img>` props (via spread)
+
+### Styling hooks
+
+- `className` – root container
+- `imageClassName` – image element
+- `wrapperClassName` – image wrapper
+- `captionClassName` – caption text
+- `controlsClassName` – navigation controls
+
+### Accessibility
+
+- Provide meaningful `altText`
+- Buttons include aria-labels
+
+---
+
+<Primary />
+<Controls />
+<Stories />
