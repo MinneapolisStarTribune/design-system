@@ -5,8 +5,15 @@
   "module": "dist/web/design-system.es.js",
   "types": "dist/web/index.web.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/root-entry-error.cjs.js",
+      "import": "./dist/web/root-entry-error.cjs.js",
+      "default": "./dist/web/root-entry-error.cjs.js"
+    },
     "./web": {
       "types": "./dist/web/index.web.d.ts",
+      "require": "./dist/web/design-system.cjs.js",
       "import": "./dist/web/design-system.es.js",
       "default": "./dist/web/design-system.es.js"
     },
@@ -39,7 +46,8 @@
     "node": ">=22"
   },
   "dependencies": {
-    "classnames": "^2.5.1"
+    "classnames": "^2.5.1",
+    "swiper": "^12.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -129,7 +137,7 @@
     }
   },
   "scripts": {
-    "build": "yarn clean:dist && yarn tokens && yarn icons && yarn build:web && yarn build:icons && yarn build:native",
+    "build": "yarn clean:dist && yarn tokens && yarn icons && yarn build:web && yarn build:native && node scripts/create-root-entry-error.cjs",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build:icons": "cross-env NODE_ENV=production vite build --config vite.icons.config.ts && node scripts/builders/generate-icons-dts.js",
