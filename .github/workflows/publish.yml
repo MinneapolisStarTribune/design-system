@@ -72,6 +72,9 @@ jobs:
           yarn version ${{ steps.version.outputs.version }} --immediate
           cd ../..
 
+          git config user.name "ci-branch-protection-bypass[bot]"
+          git config user.email "ci-branch-protection-bypass[bot]@users.noreply.github.com"
+
           git add packages/design-system/package.json
           git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
 
