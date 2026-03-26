@@ -8,11 +8,6 @@ const meta: Meta<typeof SwiperCarousel> = {
 
   parameters: {
     layout: 'padded',
-    docs: {
-      source: {
-        type: 'dynamic', // ✅ keep dynamic globally
-      },
-    },
   },
 
   args: {
