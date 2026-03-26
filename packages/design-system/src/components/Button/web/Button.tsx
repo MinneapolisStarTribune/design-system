@@ -4,8 +4,9 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps } from '@/types/globalTypes';
-import { ICON_PIXEL_SIZES, type IconSize } from '@/components/Icon/Icon.types';
+import { type IconSize } from '@/components/Icon/Icon.types';
 import { createDesignSystemError } from '@/utils/errorPrefix';
+import { enhanceButtonIcon, getButtonAriaLabel } from '../Helpers';
 
 export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
@@ -95,38 +96,6 @@ function getButtonIconSize(
   return iconSizeMap[size as ButtonSize];
 }
 
-/**
- * Get button aria-label, falling back to text label or icon name
- */
-function getButtonAriaLabel(
-  explicitAriaLabel: string | undefined,
-  children: React.ReactNode
-): string | undefined {
-  if (explicitAriaLabel) return explicitAriaLabel;
-  if (typeof children === 'string') return children;
-  return undefined;
-}
-
-function enhanceIcon(
-  icon: React.ReactElement<React.SVGProps<SVGSVGElement>> | undefined,
-  iconSize: IconSize | undefined
-): React.ReactElement<React.SVGProps<SVGSVGElement>> | null {
-  if (!icon || !icon.type || !iconSize) return null;
-  const pixelSize = ICON_PIXEL_SIZES[iconSize];
-  const existingClassName = icon.props.className;
-  const existingStyle = icon.props.style;
-  return React.cloneElement(icon, {
-    width: pixelSize,
-    height: pixelSize,
-    'aria-hidden': true,
-    className: existingClassName ? classNames(styles.icon, existingClassName) : styles.icon,
-    style: {
-      ...existingStyle,
-      color: 'inherit',
-    },
-  });
-}
-
 export const Button: React.FC<ButtonProps> = ({
   type = 'button',
   color = 'neutral',
@@ -200,8 +169,14 @@ export const Button: React.FC<ButtonProps> = ({
 
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
-  const leftIcon = isIconOnly || iconPosition === 'start' ? enhanceIcon(icon, iconSizeName) : null;
-  const rightIcon = !isIconOnly && iconPosition === 'end' ? enhanceIcon(icon, iconSizeName) : null;
+  const leftIcon =
+    isIconOnly || iconPosition === 'start'
+      ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
+      : null;
+  const rightIcon =
+    !isIconOnly && iconPosition === 'end'
+      ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
+      : null;
 
   // Get aria-label for accessibility
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
