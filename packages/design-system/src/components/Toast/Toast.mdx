@@ -1,0 +1,75 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ToastStories from './Toast.stories';
+
+import './Toast.docs.css';
+
+<Meta of={ToastStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Toast
+
+Toasts surface short, time-sensitive messages without blocking the page. They provide feedback in response to a user action or system event, and are used for confirmations, warnings, and errors that should be easy to scan and dismiss. They appear in a fixed screen location, do not shift layout, and automatically dismiss after 4–6 seconds. Toasts pause on hover or focus and include a manual close button.
+
+## Anatomy
+
+1. **Icon (optional)** — Reinforces meaning and aligns with semantic state. Toggle **Show icon** in controls to show or hide it; when visible, the icon matches **Variant** (info, success, warning, error).
+2. **Title** — Primary message. Keep it concise, clear, and scannable (**Title** control).
+3. **Description (optional)** — Supporting context in one short sentence (**Description** control). Omit when the title alone is enough.
+4. **Close button** — Shown by default for manual dismissal (omit with `showCloseButton={false}` only when necessary). The **onClose** handler runs when the user dismisses. With **`ToastRenderer`** + **`useToast()`**, toasts may also auto-dismiss; the inline `Toast` does not implement duration on its own.
+
+## Types
+
+Choose a variant that matches the situation. The `variant` prop uses `info`, `success`, `warning`, and `error` (see **Configurable** controls).
+
+<table className="toast-doc-types-table">
+  <thead>
+    <tr>
+      <th>Variant</th>
+      <th>When to use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Informational</strong> (<code>info</code>)
+      </td>
+      <td>Used for neutral awareness or contextual system feedback.</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Success</strong> (<code>success</code>)
+      </td>
+      <td>Confirms that an action completed successfully.</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Warning</strong> (<code>warning</code>)
+      </td>
+      <td>Communicates a potential issue that does not block progress. Use sparingly.</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Error</strong> (<code>error</code>)
+      </td>
+      <td>
+        Communicates a failure that is temporary or system-generated. Should not be used for errors that require user correction.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Usage
+
+- Prefer **Variant** for semantic meaning (success after save, error on failure, etc.).
+- Keep **Description** to a single sentence when used.
+- For global, stacked toasts in a fixed region (e.g. bottom-right), see the **With renderer** story and wrap your app with `ToastRenderer`.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+{/* Primary + Controls use the first story (Configurable); meta `layout` is centered. */}
+<Primary />
+<Controls />
+<Stories />
