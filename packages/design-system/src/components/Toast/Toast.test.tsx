@@ -85,4 +85,20 @@ describe('Toast', () => {
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
+
+  it('does not render dismiss control when showCloseButton is false', () => {
+    const { queryByRole } = renderWithProvider(
+      <Toast title="Static" onClose={vi.fn()} showCloseButton={false} />
+    );
+
+    expect(queryByRole('button', { name: 'Dismiss notification' })).not.toBeInTheDocument();
+  });
+
+  it('renders no SVGs when showIcon and showCloseButton are false', () => {
+    const { container } = renderWithProvider(
+      <Toast title="No icons" showIcon={false} showCloseButton={false} onClose={vi.fn()} />
+    );
+
+    expect(container.querySelectorAll('svg')).toHaveLength(0);
+  });
 });

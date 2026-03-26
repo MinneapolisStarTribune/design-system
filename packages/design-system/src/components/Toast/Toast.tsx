@@ -10,6 +10,8 @@ export type ToastProps = {
   description?: string;
   variant?: ToastVariant;
   showIcon?: boolean;
+  /** When false, the dismiss control is hidden (e.g. static variant grids in Storybook). Default true. */
+  showCloseButton?: boolean;
   exiting?: boolean;
   onClose: () => void;
   dataTestId?: string;
@@ -27,6 +29,7 @@ export const Toast: React.FC<ToastProps> = ({
   description,
   variant = 'info',
   showIcon = true,
+  showCloseButton = true,
   exiting = false,
   onClose,
   dataTestId,
@@ -51,7 +54,7 @@ export const Toast: React.FC<ToastProps> = ({
       <div className={styles.content}>
         {showIcon === true && (
           <span className={styles.icon} aria-hidden>
-            <VariantIcon />
+            <VariantIcon style={{ color: 'inherit' }} />
           </span>
         )}
         <div className={styles.text}>
@@ -67,14 +70,16 @@ export const Toast: React.FC<ToastProps> = ({
           )}
         </div>
       </div>
-      <button
-        type="button"
-        aria-label="Dismiss notification"
-        className={styles.closeButton}
-        onClick={onClose}
-      >
-        <CloseIcon />
-      </button>
+      {showCloseButton ? (
+        <button
+          type="button"
+          aria-label="Dismiss notification"
+          className={styles.closeButton}
+          onClick={onClose}
+        >
+          <CloseIcon style={{ color: 'inherit' }} />
+        </button>
+      ) : null}
     </div>
   );
 };

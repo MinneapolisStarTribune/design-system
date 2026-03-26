@@ -44,6 +44,12 @@ describe('Toast Accessibility', () => {
         <Toast title="Test toast" onClose={() => {}} dataTestId="toast-a11y-test" />
       );
     });
+
+    it('has no violations when dismiss control is hidden (static demo)', async () => {
+      await expectNoA11yViolations(
+        <Toast title="Static grid" onClose={() => {}} showCloseButton={false} variant="info" />
+      );
+    });
   });
 
   describe('interactive states', () => {
