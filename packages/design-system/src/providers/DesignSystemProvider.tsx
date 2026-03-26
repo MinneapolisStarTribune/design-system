@@ -3,6 +3,7 @@ import { Brand, ColorScheme } from './theme-helpers';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 import { DesignSystemContext } from './DesignSystemContext';
 import { loadBrandFonts } from '../styles/fonts';
+import { SnackProvider } from './SnackProvider/SnackProvider';
 
 export type { Brand };
 
@@ -41,7 +42,9 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
 
   return (
     <DesignSystemContext.Provider value={contextValue}>
-      <BrandValidationErrorBoundary>{children}</BrandValidationErrorBoundary>
+      <BrandValidationErrorBoundary>
+        <SnackProvider>{children}</SnackProvider>
+      </BrandValidationErrorBoundary>
     </DesignSystemContext.Provider>
   );
 };

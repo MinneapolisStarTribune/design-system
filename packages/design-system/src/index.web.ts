@@ -5,8 +5,10 @@ export * from '@/icons';
 export { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 export { type Brand, DesignSystemProvider } from '@/providers/DesignSystemProvider';
 export {
-  type ShowToastRenderOptions,
-  ToastRenderer,
+  Snack,
+  SnackProvider,
+  useCandyBar,
+  useSnack,
   useToast,
-} from '@/providers/ToastRenderer/ToastRenderer';
+} from '@/providers/SnackProvider/SnackProvider';
 export { getBrandFontPath, loadBrandFonts } from '@/styles/fonts';
