@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { BaseProps } from '@/types/globalTypes';
 import { Icon } from '@/components/Icon/Icon';
 import type { IconComponent as IconComponentType } from '@/components/Icon/Icon.types';
@@ -44,6 +45,8 @@ export interface CheckboxProps extends BaseProps {
   focus?: boolean;
   /** Callback when checked state changes */
   onChange: (checked: boolean) => void;
+  /** Per-checkbox tracking data merged into the event. Use to distinguish checkboxes (e.g. form_field, module_name). */
+  analytics?: Record<string, unknown>;
 }
 
 /**
@@ -62,9 +65,11 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   error = false,
   focus = true,
   onChange,
+  analytics: analyticsOverride,
   className,
   dataTestId,
 }) => {
+  const { track } = useAnalytics();
   const inputRef = useRef<HTMLInputElement>(null);
   const id = useId();
 
@@ -76,7 +81,16 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   }, [indeterminate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.checked);
+    const newChecked = e.target.checked;
+    track({
+      event: 'checkbox_change',
+      component: 'Checkbox',
+      label,
+      checked: newChecked,
+      variant,
+      ...analyticsOverride,
+    });
+    onChange(newChecked);
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -122,7 +136,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         <span className={styles.visualBox} aria-hidden="true">
           <Icon
             component={IconComponent as IconComponentType}
-            size={size === 'small' ? 'small' : 'medium'}
+            size={size === 'small' ? 'checkbox-small' : 'checkbox-default'}
             className={styles.icon}
             style={{ color: 'var(--checkbox-icon-color)' }}
             aria-hidden
@@ -131,7 +145,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       </span>
       <span className={styles.content}>
         <UtilityLabel
-          size={size === 'default' ? 'medium' : 'small'}
+          size={size === 'default' ? 'large' : 'medium'}
           weight="regular"
           className={styles.label}
         >

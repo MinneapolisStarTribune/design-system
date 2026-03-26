@@ -3,8 +3,10 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-12);
   box-sizing: border-box;
+  /* 16px gap between group label and list (8px margin collapse + 8px padding) */
+  padding-top: var(--spacing-8);
 }
 
 .flatMode {
@@ -18,7 +20,7 @@
 .category {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-12);
 }
 
 .categoryHeader {
@@ -28,6 +30,6 @@
 .categoryOptions {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-12);
   padding-left: var(--spacing-24);
 }

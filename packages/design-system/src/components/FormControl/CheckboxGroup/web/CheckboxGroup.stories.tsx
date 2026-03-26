@@ -84,6 +84,9 @@ export const Configurable: Story = {
           options={args.options ?? flatOptions}
           dataTestId="checkbox-group-configurable"
         />
+        {args.error && (
+          <FormGroup.Caption variant="error">Select an option below to continue</FormGroup.Caption>
+        )}
       </FormGroup>
     );
   },
@@ -194,13 +197,19 @@ export const AllVariants: Story = {
         </div>
         <div style={cellStyle}>
           <SectionLabel>Error</SectionLabel>
-          <FormControl.CheckboxGroup
-            value={[]}
-            onChange={() => {}}
-            options={flatOptions}
-            error
-            dataTestId="all-variants-error"
-          />
+          <FormGroup>
+            <FormGroup.Label>Select options</FormGroup.Label>
+            <FormControl.CheckboxGroup
+              value={[]}
+              onChange={() => {}}
+              options={flatOptions}
+              error
+              dataTestId="all-variants-error"
+            />
+            <FormGroup.Caption variant="error">
+              Select an option below to continue
+            </FormGroup.Caption>
+          </FormGroup>
         </div>
       </div>
     );

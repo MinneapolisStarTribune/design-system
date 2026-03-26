@@ -164,4 +164,57 @@ describe('Checkbox', () => {
     await userEvent.click(getByTestId('checkbox'));
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  describe('analytics', () => {
+    it('emits tracking event on change when AnalyticsProvider is present', async () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <FormControl.Checkbox
+          label="Subscribe"
+          checked={false}
+          onChange={() => {}}
+          dataTestId="checkbox"
+        />,
+        { mockOnTrackingEvent }
+      );
+
+      await userEvent.click(getByTestId('checkbox'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledTimes(1);
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'checkbox_change',
+          component: 'Checkbox',
+          label: 'Subscribe',
+          checked: true,
+          variant: 'neutral',
+        })
+      );
+    });
+
+    it('merges analytics prop into tracking event', async () => {
+      const mockOnTrackingEvent = vi.fn();
+      const { getByTestId } = renderWithProvider(
+        <FormControl.Checkbox
+          label="Option"
+          checked={false}
+          onChange={() => {}}
+          analytics={{ form_field: 'preferences', module_name: 'settings' }}
+          dataTestId="checkbox"
+        />,
+        { mockOnTrackingEvent }
+      );
+
+      await userEvent.click(getByTestId('checkbox'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'checkbox_change',
+          component: 'Checkbox',
+          form_field: 'preferences',
+          module_name: 'settings',
+        })
+      );
+    });
+  });
 });

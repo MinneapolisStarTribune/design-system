@@ -1,0 +1,69 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Providers/SnackProvider" />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Snack provider
+
+**SnackProvider** is the single place the design system mounts **toasts** and the **candy bar**. It keeps one shared context and one mount point for both systems. On web, **`DesignSystemProvider`** wraps your app with **`SnackProvider`**, so you usually do not add it yourself.
+
+Use it when you need to show feedback from anywhere in the tree: short **toasts** (bottom-right, queued, auto-dismiss by default) or a **site candy bar** (full width at the bottom, one at a time, stays until dismissed).
+
+## Slots
+
+| Slot | Behavior |
+| --- | --- |
+| **`Snack.toast`** | Queue: many toasts at once. Default **5s** auto-dismiss (you can override `duration`). |
+| **`Snack.candybar`** | Single slot: each **`show()`** replaces the current bar. **No** auto-dismiss. |
+
+Slot names are exported on **`Snack`** so you avoid magic strings.
+
+## Usage
+
+Import from **`@minneapolisstartribune/design-system/web`** (same entry as other web exports).
+
+**Preferred:** convenience hooks (same behavior as `useSnack` with a fixed slot).
+
+```tsx
+import { useToast, useCandyBar } from '@minneapolisstartribune/design-system/web';
+
+function Example() {
+  const { show: showToast } = useToast();
+  const { show: showCandyBar } = useCandyBar();
+
+  return (
+    <>
+      <button type="button" onClick={() => showToast({ title: 'Saved', variant: 'success' })}>
+        Toast
+      </button>
+      <button
+        type="button"
+        onClick={() => showCandyBar({ children: <span>Site notice</span> })}
+      >
+        Candy bar
+      </button>
+    </>
+  );
+}
+```
+
+**Explicit slot API:**
+
+```tsx
+import { Snack, useSnack } from '@minneapolisstartribune/design-system/web';
+
+const { show: showToast, hide: hideToast } = useSnack(Snack.toast);
+const { show: showCandyBar, hide: hideCandyBar } = useSnack(Snack.candybar);
+```
+
+Hooks must run **under** **`SnackProvider`** (provided by **`DesignSystemProvider`** on web). Calling them outside throws a clear error.
+
+## Related docs
+
+- **Toast** — **Feedback & Status → Toast** (variants, layout, controls).
+- **Candy bar** — **Feedback & Status → CandyBar**.
+
+For a live example of global toasts, open **Toast → With renderer** in Storybook.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}

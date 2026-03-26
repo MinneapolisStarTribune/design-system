@@ -1,0 +1,54 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as CandyBarStories from './CandyBar.stories';
+
+import './CandyBar.docs.css';
+
+<Meta of={CandyBarStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Candy bar
+
+The candy bar is a full-width, persistent strip anchored to the bottom of the viewport. It is meant for site-level notices (for example newsletter signup or policy messages), not for transient feedback. It stays on screen until the user dismisses it or your app clears it; it does not auto-dismiss. In product, mount **`CandyBarRenderer`** once and drive **`activeItem`** / **`onDismiss`** from your snack or slot layer.
+
+## Anatomy
+
+1. **Content** — The main region for copy and actions. In **Configurable**, choose **Content preset** (newsletter layout vs. simple text) and edit **Simple message** when preset is simple.
+2. **Close** — Dismiss control in the top-right; it calls **`onClose`** (wired to **`onDismiss`** when using **`CandyBarRenderer`**).
+
+## Usage
+
+- Prefer **`CandyBarRenderer`** for portal placement, focus management, enter/exit motion, and Escape to dismiss (see **With renderer**).
+- Use **Configurable** to tweak **`className`**, **`style`**, and inner content while the bar is embedded in the story layout (inline **`CandyBar`**, not the portal shell).
+
+<table className="candybar-doc-table">
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>CandyBar</code>
+      </td>
+      <td>Chrome around <code>children</code>, close button, and optional <code>className</code> / <code>style</code>.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>CandyBarRenderer</code>
+      </td>
+      <td>Portal + dialog semantics + Floating UI; renders one <code>CandyBar</code> when <code>activeItem</code> is set.</td>
+    </tr>
+  </tbody>
+</table>
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+{/* Primary + Controls use Configurable; meta layout is fullscreen. */}
+<Primary />
+<Controls />
+<Stories />

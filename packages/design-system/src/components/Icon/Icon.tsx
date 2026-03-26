@@ -15,7 +15,7 @@ export type IconProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height'> & {
 
 export const Icon: React.FC<IconProps> = ({ component: Component, size = 'medium', ...rest }) => {
   const pixel = ICON_PIXEL_SIZES[size];
-  return <Component width={pixel} height={pixel} {...rest} />;
+  return <Component width={pixel} height={pixel} size={size} {...rest} />;
 };
 
 /**
