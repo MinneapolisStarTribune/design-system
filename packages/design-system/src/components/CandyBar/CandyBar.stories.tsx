@@ -194,7 +194,7 @@ export const Configurable: Story = {
   },
 };
 
-// TODO: Swap for SnackProvider when it exists (keep `activeItem` + `onDismiss` → `CandyBarRenderer`).
+// Story-level state adapter for CandyBarRenderer behavior in docs.
 function CandyBarRendererStory({ children }: PropsWithChildren) {
   const [active, setActive] = useState<CandyBarRendererItem | null>({
     id: 'story',
