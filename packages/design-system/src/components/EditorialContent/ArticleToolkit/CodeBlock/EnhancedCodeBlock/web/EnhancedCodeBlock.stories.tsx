@@ -83,13 +83,39 @@ const renderVariantWithSizes: Story['render'] = (args) => {
   );
 };
 
+const dataSource = (variant: ArticleBodyVariant, size: CodeBlockSizeType, cleanQuotes = false) => {
+  const markup = enhancedCodeBlockMarkup(size).trim().replace(/[’‘]/g, "'").replace(/[“”″]/g, '"');
+  return {
+    docs: {
+      source: {
+        type: 'code' as const,
+        language: 'tsx',
+        code: `
+<EnhancedCodeBlock
+  variant="${variant}"
+  size="${size}"
+  cleanQuotes={${cleanQuotes}}
+  markup="${markup}"
+/>
+`,
+      },
+    },
+  };
+};
+
 // Stories
-export const Configurable: Story = { args: createArgs('standard', 'full') };
+export const Configurable: Story = {
+  args: { variant: 'standard' },
+  render: renderVariantWithSizes,
+  parameters: dataSource('standard', 'full', false),
+};
 export const Standard: Story = {
   args: { variant: 'standard' },
   render: renderVariantWithSizes,
+  parameters: dataSource('standard', 'full', false),
 };
 export const Immersive: Story = {
   args: { variant: 'immersive' },
   render: renderVariantWithSizes,
+  parameters: dataSource('immersive', 'full', false),
 };
