@@ -1,7 +1,5 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Story } from '@storybook/addon-docs/blocks';
 import * as ToastStories from './Toast.stories';
-
-import './Toast.docs.css';
 
 <Meta of={ToastStories} />
 
@@ -10,6 +8,8 @@ import './Toast.docs.css';
 # Toast
 
 Toasts surface short, time-sensitive messages without blocking the page. They provide feedback in response to a user action or system event, and are used for confirmations, warnings, and errors that should be easy to scan and dismiss. They appear in a fixed screen location, do not shift layout, and automatically dismiss after 4–6 seconds. Toasts pause on hover or focus and include a manual close button.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components)
 
 ## Anatomy
 
@@ -22,7 +22,7 @@ Toasts surface short, time-sensitive messages without blocking the page. They pr
 
 Choose a variant that matches the situation. The `variant` prop uses `info`, `success`, `warning`, and `error` (see **Configurable** controls).
 
-<table className="toast-doc-types-table">
+<table>
   <thead>
     <tr>
       <th>Variant</th>
@@ -63,13 +63,27 @@ Choose a variant that matches the situation. The `variant` prop uses `info`, `su
 
 - Prefer **Variant** for semantic meaning (success after save, error on failure, etc.).
 - Keep **Description** to a single sentence when used.
-- For global, stacked toasts in a fixed region (e.g. bottom-right), see the **With renderer** story and wrap your app with `ToastRenderer`.
+- For global, stacked toasts in a fixed region (e.g. bottom-right), wrap your app with `DesignSystemProvider` and call `useToast()` from `@minneapolisstartribune/design-system/web`.
+- In Storybook, provider setup already comes from preview; see **With renderer** for a live hook-driven example.
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 ---
 
-{/* Primary + Controls use the first story (Configurable); meta `layout` is centered. */}
-<Primary />
-<Controls />
-<Stories />
+## Configurable
+
+<Canvas>
+  <Story of={ToastStories.Configurable} />
+</Canvas>
+
+## All Variants
+
+<Canvas>
+  <Story of={ToastStories.AllVariants} />
+</Canvas>
+
+## With Renderer
+
+<Canvas>
+  <Story of={ToastStories.WithRenderer} />
+</Canvas>
