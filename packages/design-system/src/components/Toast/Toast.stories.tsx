@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Toast, TOAST_VARIANTS } from './Toast';
 import type { ToastProps, ToastVariant } from './Toast';
-import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
 import { useToast } from '@/providers/SnackProvider/SnackProvider';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import styles from './Toast.stories.module.scss';
@@ -240,13 +239,9 @@ export const WithRenderer = {
     docs: {
       description: {
         story:
-          'Wrap your app with `DesignSystemProvider` (it mounts `SnackProvider`). Use `useToast()` to show toasts from anywhere. Toasts appear in a fixed bottom-right container.',
+          'Storybook already provides `DesignSystemProvider` (and `SnackProvider`) via preview. Use `useToast()` to show toasts from anywhere; toasts appear in a fixed bottom-right container.',
       },
     },
   },
-  render: () => (
-    <DesignSystemProvider brand="startribune" forceColorScheme="light">
-      <ToastRendererDemo />
-    </DesignSystemProvider>
-  ),
+  render: () => <ToastRendererDemo />,
 } satisfies Omit<Story, 'args'>;
