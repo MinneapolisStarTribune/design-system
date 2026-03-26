@@ -72,7 +72,6 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
     <dialog
       ref={dialogRef}
       className={styles.dialog}
-      aria-label={image.altText}
       aria-labelledby={dialogTitleId}
       onClose={onClose}
       onClick={handleBackdropClick}
