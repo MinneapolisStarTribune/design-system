@@ -37,54 +37,60 @@ const image = {
   altText: 'Alternative text for the image',
 };
 
-const renderVariants = (variant: InlineImageProps['variant'], expandable = false) => {
+const renderVariants: Story['render'] = (args) => {
+  const { variant = 'standard', size = 'full', expandable = false } = args;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {INLINE_IMAGE_SIZES.map((size) => (
-        <div key={`${size}-${variant}`}>
-          <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
-            {variant} ({size})
-          </h3>
-          <InlineImage
-            image={image}
-            size={size}
-            variant={variant}
-            caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
-            credit="Star Tribune staff/The Minnesota Star Tribune"
-            expandable={expandable}
-          />
-        </div>
-      ))}
+    <div style={{ padding: '48px 0' }}>
+      <InlineImage
+        image={image}
+        size={size}
+        variant={variant}
+        caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+        credit="Star Tribune staff/The Minnesota Star Tribune"
+        expandable={expandable}
+      />
     </div>
   );
 };
 
-export const Configurable: Story = {
-  args: {
-    image,
-    size: 'medium',
-    variant: 'standard',
-    caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
-    credit: 'Star Tribune staff/The Minnesota Star Tribune',
-    expandable: false,
+const staticSource = (variant: InlineImageProps['variant'], expandable = false) => ({
+  docs: {
+    source: {
+      code: `
+<InlineImage
+  image={${JSON.stringify(image)}}
+  size="full"
+  variant="${variant}"
+  caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+  credit="Star Tribune staff/The Minnesota Star Tribune"
+  expandable={${expandable}}
+/>
+`,
+    },
   },
+});
+
+export const Configurable: Story = {
+  render: renderVariants,
+  parameters: staticSource('standard', false),
 };
 
 export const Standard: Story = {
-  render: () => renderVariants('standard'),
+  args: { variant: 'standard' },
+  render: renderVariants,
+  parameters: staticSource('standard'),
 };
 
 export const Immersive: Story = {
-  render: () => renderVariants('immersive'),
+  args: { variant: 'immersive' },
+  render: renderVariants,
+  parameters: staticSource('immersive'),
 };
 
 export const WithExpandable: Story = {
   args: {
-    image,
-    size: 'full',
-    variant: 'standard',
-    caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
-    credit: 'Star Tribune staff/The Minnesota Star Tribune',
     expandable: true,
   },
+  render: renderVariants,
+  parameters: staticSource('standard', true),
 };
