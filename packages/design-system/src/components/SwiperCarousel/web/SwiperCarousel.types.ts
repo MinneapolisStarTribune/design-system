@@ -10,7 +10,6 @@ export interface SwiperCarouselProps {
   loop?: boolean;
   centeredSlides?: boolean;
   className?: string;
-  showPagination?: boolean;
 }
 
 export type NavigationSize = 'medium' | 'large';

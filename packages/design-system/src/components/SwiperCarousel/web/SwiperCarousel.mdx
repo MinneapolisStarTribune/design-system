@@ -1,9 +1,7 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls, Stories } from '@storybook/addon-docs/blocks';
 import * as ComponentStories from './SwiperCarousel.stories';
 
 <Meta of={ComponentStories} />
-
-{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
 
 # SwiperCarousel
 
@@ -11,110 +9,49 @@ import * as ComponentStories from './SwiperCarousel.stories';
 
 It provides core carousel behavior (scrolling, pagination, navigation) while allowing **full control over layout composition**.
 
-Unlike fixed carousel components, this component is **layout-agnostic**, meaning:
-- You decide where controls appear
-- You control how they are arranged
-- It adapts to multiple use cases (image gallery, cards, editorial layouts, etc.)
-
----
-
 ## Usage guidelines
 
-- Use this component when you need a **horizontal scrollable content area**
+- Use for horizontal scrollable content
 - Compose layouts using:
   - `SwiperCarousel.Slide`
   - `SwiperCarousel.Pagination`
   - `SwiperCarousel.Navigation`
-- Place controls (pagination, navigation, captions) **anywhere inside the component**
-- The order of children determines visual placement:
-  - Before slides → renders above
-  - Slides → rendered inside carousel
-  - After slides → renders below
-
----
+- Order of children controls layout
 
 ## Layout flexibility
 
-This component supports multiple layout patterns without additional configuration.
+### Image gallery
+- Caption left
+- Navigation right
+- Pagination inside
 
-### Split layout (Image gallery)
+### Cards layout
+- Centered pagination + navigation
 
-- Caption aligned left  
-- Navigation aligned right  
-- Default pagination inside carousel  
-
-Used in: Image gallery, editorial media blocks
-
----
-
-### Centered controls (Cards layout)
-
-- Pagination + navigation grouped  
-- Center aligned  
-- Uses custom pagination  
-
-Used in: Card carousels, newsletters, collections
-
----
-
-### Top controls (The Latest)
-
-- Title on left  
-- Navigation on right  
-- Placed above carousel  
-
-Used in: Section-based layouts
-
----
-
-### Right-aligned navigation
-
-- Only navigation controls  
-- No pagination  
-
-Used in: Minimal carousel layouts
-
----
+### Top controls
+- Title left
+- Navigation right
 
 ## Pagination behavior
 
-Pagination is controlled via both **prop + subcomponent**:
-
-- No pagination  
-  → Do not include `<SwiperCarousel.Pagination />`
-
-- Default pagination (swiper dots)  
-  → Use `showPagination` + `<SwiperCarousel.Pagination />`
-
-- Custom pagination (Figma style)  
-  → `<SwiperCarousel.Pagination variant="custom" />`
-
----
+- No pagination → omit component  
+- Default → `<SwiperCarousel.Pagination />`  
+- Custom → `<SwiperCarousel.Pagination variant="custom" />`  
 
 ## Navigation behavior
 
-- Navigation is optional  
-- Automatically:
-  - Disables at boundaries  
-  - Adjusts size responsively  
-- Can be placed anywhere inside the component  
+- Optional
+- Auto disables at boundaries
+- Can be placed anywhere
 
----
+## Playground
 
-## Important notes
+<Canvas of={ComponentStories.Default} />
 
-- `Navigation` and `Pagination` must be used **inside `SwiperCarousel`**
-- Layout is controlled using standard CSS (flex, grid, positioning)
-- This component does **not enforce layout**
-- Default breakpoints are applied internally for consistent spacing
-- Always compose layouts externally
+## Props
 
----
-
-{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
-
-***
-
-<Primary />
 <Controls />
+
+## All Examples
+
 <Stories />

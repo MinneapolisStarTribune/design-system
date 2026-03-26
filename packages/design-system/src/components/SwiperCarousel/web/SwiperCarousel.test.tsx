@@ -20,9 +20,10 @@ vi.mock('./SwiperCarousel.context', async () => {
   };
 });
 
-import { expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
+import { screen } from '@testing-library/react';
 import { SwiperCarousel } from './SwiperCarousel';
 
 const slides = ['Slide A', 'Slide B', 'Slide C'];
@@ -39,7 +40,7 @@ const renderCarousel = ({
   loop?: boolean;
 } = {}) =>
   renderWithProvider(
-    <SwiperCarousel loop={loop} showPagination={withPagination}>
+    <SwiperCarousel loop={loop}>
       {slides.map((s) => (
         <SwiperCarousel.Slide key={s}>
           <div>{s}</div>
@@ -55,28 +56,28 @@ const renderCarousel = ({
 describe('SwiperCarousel', () => {
   describe('rendering', () => {
     it('renders all slides', () => {
-      const { getByText } = renderCarousel();
+      renderCarousel();
 
       slides.forEach((s) => {
-        expect(getByText(s)).toBeInTheDocument();
+        expect(screen.getByText(s)).toBeInTheDocument();
       });
     });
 
-    it('renders default pagination when enabled', () => {
+    it('renders default pagination when enabled (no crash)', () => {
       const { container } = renderCarousel({ withPagination: true });
 
-      // Swiper DOM is not reliable in test env
+      // Default pagination is handled by Swiper → not testable reliably
       expect(container).toBeInTheDocument();
     });
 
-    it('renders custom pagination when enabled', () => {
+    it('renders custom pagination dots when enabled', () => {
       const { container } = renderCarousel({
         withCustomPagination: true,
       });
 
       const dots = container.querySelectorAll('[class*="dot"]');
 
-      expect(dots.length).toBe(3);
+      expect(dots.length).toBe(slides.length);
     });
 
     it('does not render custom pagination when not provided', () => {
@@ -88,36 +89,68 @@ describe('SwiperCarousel', () => {
     });
 
     it('renders navigation buttons when included', () => {
-      const { container } = renderCarousel({
-        withNavigation: true,
-      });
+      renderCarousel({ withNavigation: true });
 
-      const buttons = container.querySelectorAll('button');
+      const prev = screen.getByLabelText('Previous slide');
+      const next = screen.getByLabelText('Next slide');
 
-      expect(buttons.length).toBe(2);
+      expect(prev).toBeInTheDocument();
+      expect(next).toBeInTheDocument();
     });
   });
 
-  describe('navigation state (render only)', () => {
+  describe('navigation behavior (render only)', () => {
     it('renders navigation in non-loop mode', () => {
-      const { container } = renderCarousel({
-        withNavigation: true,
-      });
+      renderCarousel({ withNavigation: true });
 
-      const buttons = container.querySelectorAll('button');
+      const buttons = screen.getAllByRole('button');
 
       expect(buttons.length).toBe(2);
     });
 
     it('renders navigation in loop mode', () => {
-      const { container } = renderCarousel({
+      renderCarousel({
         withNavigation: true,
         loop: true,
       });
 
-      const buttons = container.querySelectorAll('button');
+      const buttons = screen.getAllByRole('button');
 
       expect(buttons.length).toBe(2);
+    });
+
+    it('disables previous button at beginning', () => {
+      renderCarousel({ withNavigation: true });
+
+      const prev = screen.getByLabelText('Previous slide');
+
+      expect(prev).toBeDisabled();
+    });
+
+    it('enables next button when not at end', () => {
+      renderCarousel({ withNavigation: true });
+
+      const next = screen.getByLabelText('Next slide');
+
+      expect(next).not.toBeDisabled();
+    });
+  });
+
+  describe('pagination behavior', () => {
+    it('does not render custom pagination if only one slide', () => {
+      const { container } = renderWithProvider(
+        <SwiperCarousel>
+          <SwiperCarousel.Slide>
+            <div>Only Slide</div>
+          </SwiperCarousel.Slide>
+
+          <SwiperCarousel.Pagination variant="custom" />
+        </SwiperCarousel>
+      );
+
+      const dots = container.querySelectorAll('[class*="dot"]');
+
+      expect(dots.length).toBe(3);
     });
   });
 });

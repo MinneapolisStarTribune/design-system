@@ -5,8 +5,36 @@ import { SwiperCarousel } from './SwiperCarousel';
 const meta: Meta<typeof SwiperCarousel> = {
   title: 'Components/SwiperCarousel',
   component: SwiperCarousel,
+
   parameters: {
     layout: 'padded',
+    docs: {
+      source: {
+        type: 'dynamic', // ✅ keep dynamic globally
+      },
+    },
+  },
+
+  args: {
+    slidesPerView: 'auto',
+    spaceBetween: 16,
+    loop: false,
+    centeredSlides: false,
+  },
+
+  argTypes: {
+    slidesPerView: {
+      control: { type: 'radio' },
+      options: ['auto', 1, 2, 3],
+    },
+    spaceBetween: {
+      control: { type: 'number' },
+    },
+    loop: { control: 'boolean' },
+    centeredSlides: { control: 'boolean' },
+    breakpoints: { control: false },
+    className: { control: false },
+    children: { control: false },
   },
 };
 
@@ -38,8 +66,8 @@ const items = Array.from({ length: 6 }, (_, i) => i + 1);
  * Default carousel with pagination
  */
 export const Default: Story = {
-  render: () => (
-    <SwiperCarousel slidesPerView="auto" spaceBetween={16} showPagination>
+  render: (args) => (
+    <SwiperCarousel {...args}>
       {items.map((i) => (
         <SwiperCarousel.Slide key={i}>
           <DemoCard index={i} />
@@ -54,14 +82,37 @@ export const Default: Story = {
       </div>
     </SwiperCarousel>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  {items.map((i) => (
+    <SwiperCarousel.Slide key={i}>
+      <DemoCard index={i} />
+    </SwiperCarousel.Slide>
+  ))}
+
+  <SwiperCarousel.Pagination />
+
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <span>Captions</span>
+    <SwiperCarousel.Navigation />
+  </div>
+</SwiperCarousel>
+        `,
+      },
+    },
+  },
 };
 
 /**
  * Custom pagination centered with navigation
  */
 export const CustomPagination: Story = {
-  render: () => (
-    <SwiperCarousel slidesPerView="auto" spaceBetween={16} loop>
+  args: { loop: true },
+  render: (args) => (
+    <SwiperCarousel {...args}>
       {items.map((i) => (
         <SwiperCarousel.Slide key={i}>
           <DemoCard index={i} />
@@ -88,8 +139,8 @@ export const CustomPagination: Story = {
  * No pagination with navigation
  */
 export const NoPagination: Story = {
-  render: () => (
-    <SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  render: (args) => (
+    <SwiperCarousel {...args}>
       {items.map((i) => (
         <SwiperCarousel.Slide key={i}>
           <DemoCard index={i} />
@@ -102,14 +153,38 @@ export const NoPagination: Story = {
       </div>
     </SwiperCarousel>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  {items.map((i) => (
+    <SwiperCarousel.Slide key={i}>
+      <DemoCard index={i} />
+    </SwiperCarousel.Slide>
+  ))}
+
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <span>Captions</span>
+    <SwiperCarousel.Navigation />
+  </div>
+</SwiperCarousel>
+        `,
+      },
+    },
+  },
 };
 
 /**
  * Image gallery (single slide view)
  */
 export const ImageGalleryStandard: Story = {
-  render: () => (
-    <SwiperCarousel slidesPerView={1} spaceBetween={0} showPagination>
+  args: {
+    slidesPerView: 1,
+    spaceBetween: 0,
+  },
+  render: (args) => (
+    <SwiperCarousel {...args}>
       {items.map((i) => (
         <SwiperCarousel.Slide key={i}>
           <div
@@ -142,14 +217,52 @@ export const ImageGalleryStandard: Story = {
       </div>
     </SwiperCarousel>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: ` <SwiperCarousel {...args}>
+      {items.map((i) => (
+        <SwiperCarousel.Slide key={i}>
+          <div
+            style={{
+              width: '100%',
+              height: 300,
+              background: '#ddd',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 600,
+            }}
+          >
+            Image {i}
+          </div>
+        </SwiperCarousel.Slide>
+      ))}
+
+      <SwiperCarousel.Pagination />
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: 8,
+        }}
+      >
+        <span>Image caption goes here</span>
+        <SwiperCarousel.Navigation />
+      </div>
+    </SwiperCarousel>`,
+      },
+    },
+  },
 };
 
 /**
  * Top controls layout
  */
 export const Layout_TopControls: Story = {
-  render: () => (
-    <SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  render: (args) => (
+    <SwiperCarousel {...args}>
       <div
         style={{
           display: 'flex',
@@ -169,4 +282,24 @@ export const Layout_TopControls: Story = {
       ))}
     </SwiperCarousel>
   ),
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div>The Latest</div>
+    <SwiperCarousel.Navigation />
+  </div>
+
+  {items.map((i) => (
+    <SwiperCarousel.Slide key={i}>
+      <DemoCard index={i} />
+    </SwiperCarousel.Slide>
+  ))}
+</SwiperCarousel>
+        `,
+      },
+    },
+  },
 };

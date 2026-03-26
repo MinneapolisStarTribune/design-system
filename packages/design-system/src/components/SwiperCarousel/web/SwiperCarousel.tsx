@@ -94,6 +94,11 @@ const Root: React.FC<SwiperCarouselProps> = ({
           onSwiper={(swiper) => {
             setSwiperInstance(swiper);
             setTotalSlides(swiper.slides.length);
+
+            const isScrollable = swiper.snapGrid.length > 1;
+
+            setIsBeginning(!isScrollable || swiper.isBeginning);
+            setIsEnd(!isScrollable || swiper.isEnd);
           }}
           onSlideChange={(swiper) => {
             const index = loop ? swiper.realIndex : swiper.activeIndex;
@@ -131,11 +136,14 @@ const Pagination: React.FC<PaginationProps> = ({ variant = 'default' }) => {
   return (
     <div className={styles.pagination}>
       {Array.from({ length: totalSlides }).map((_, i) => (
-        <span
+        <button
           key={i}
+          type="button"
           className={classNames(styles.dot, {
             [styles.active]: i === activeIndex,
           })}
+          aria-label={`Go to slide ${i + 1} of ${totalSlides}`}
+          aria-current={i === activeIndex ? 'true' : undefined}
           onClick={() => swiper.slideTo(i)}
         />
       ))}
