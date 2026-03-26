@@ -23,6 +23,7 @@ export const Select: React.FC<SelectProps> = ({
   id: idProp,
   'aria-labelledby': ariaLabelledByProp,
   'aria-describedby': ariaDescribedByProp,
+  dataTestId,
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -43,11 +44,9 @@ export const Select: React.FC<SelectProps> = ({
   const ariaDescribedBy = ariaDescribedByProp ?? describedBy;
 
   const selectedOption = value ? options.find((o) => o.value === value) : undefined;
-
   const selectedIndex = options.findIndex((o) => o.value === value);
 
   const isFilled = !!selectedOption;
-
   const displayLabel = isFilled ? selectedOption!.label : placeholderText;
 
   const listboxId = `${inputId}-listbox`;
@@ -109,7 +108,12 @@ export const Select: React.FC<SelectProps> = ({
 
       case 'ArrowUp':
         e.preventDefault();
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : 0));
+        if (!isOpen) {
+          setIsOpen(true);
+          setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        } else {
+          setActiveIndex((prev) => (prev > 0 ? prev - 1 : 0));
+        }
         break;
 
       case 'Enter':
@@ -157,6 +161,7 @@ export const Select: React.FC<SelectProps> = ({
       tabIndex={0}
       onKeyDown={handleKeyDown}
       className={containerClasses}
+      data-testid={dataTestId}
     >
       <button
         type="button"

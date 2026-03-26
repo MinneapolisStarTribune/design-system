@@ -33,6 +33,11 @@
     box-shadow: 0 0 0 1px var(--color-border-state-focus);
   }
 
+  &:focus-within:not(.isDisabled):not(.isOpen) {
+    border-color: var(--color-border-state-focus);
+    box-shadow: 0 0 0 1px var(--color-border-state-focus);
+  }
+
   &.isError {
     border-color: var(--color-red-600);
   }
@@ -57,6 +62,10 @@
   background: transparent;
   border: none;
   cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .selectContainer.sizeSmall .selectTrigger {
@@ -84,7 +93,7 @@
   position: absolute;
   top: calc(100% + var(--spacing-8));
   left: 0;
-  width: 100%; // ensures same width as trigger
+  width: 100%;
   padding: var(--spacing-4);
   margin: 0;
   list-style: none;
