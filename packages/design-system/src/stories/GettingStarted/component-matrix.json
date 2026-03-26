@@ -13,6 +13,11 @@
             "component": "Utility Button",
             "native": false,
             "web": true
+          },
+          {
+            "component": "Link",
+            "native": false,
+            "web": true
           }
         ]
       }
