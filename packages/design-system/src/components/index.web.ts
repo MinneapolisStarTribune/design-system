@@ -84,6 +84,14 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export {
+  UTILITY_BUTTON_SIZES,
+  UTILITY_BUTTON_VARIANTS,
+  UtilityButton,
+  type UtilityButtonProps,
+  type UtilityButtonSize,
+  type UtilityButtonVariant,
+} from '@/components/Button/web/UtilityButton';
 export { CandyBar, type CandyBarProps } from '@/components/CandyBar/CandyBar';
 export {
   CandyBarRenderer,
