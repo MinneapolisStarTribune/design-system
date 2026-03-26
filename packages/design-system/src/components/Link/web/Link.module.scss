@@ -1,0 +1,109 @@
+/* Utility text link: UtilityBody medium sizes, optional icon, token-based states */
+/* Disabled opacity matches Checkbox; focus is a thin outline per Link Figma (not Checkbox double ring). */
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* Grid/flex parents blockify inline-flex and stretch items to column width — outline would span full cell */
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--spacing-0, 0);
+  text-decoration: none;
+  color: var(--color-text-on-light-primary);
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  gap: var(--spacing-2);
+
+  /*
+   * Theme files set `[class*="typography-"] { color: primary }`, which wins over
+   * inheriting from `.link` — breaks disabled / visited. Force label to follow root.
+   */
+  [class*='typography-'] {
+    color: inherit !important;
+  }
+
+  &:hover:not(.disabled) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* Focus: tight 1px rectangle (Figma) — primary text color on light / dark; not shown when disabled */
+  &:focus-visible:not(.disabled) {
+    outline: 1px solid var(--color-text-on-light-primary);
+    outline-offset: 1px;
+  }
+
+  &:visited:not(.disabled) {
+    color: var(--color-text-on-light-secondary);
+  }
+
+  /* Disabled: 40% opacity on primary foreground — matches Checkbox `.root.disabled` */
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: none;
+    color: var(--color-text-on-light-primary);
+  }
+
+  /*
+   * Icon box: spacing tokens + layout breakpoints from theme CSS (`yarn tokens` → `--spacing-*`, `--breakpoint-*`).
+   * SVGs from `Icon` use inline width/height; box + !important fill the slot.
+   */
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: inherit;
+    width: var(--spacing-14);
+    height: var(--spacing-14);
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+      width: 100% !important;
+      height: 100% !important;
+      color: inherit !important;
+    }
+
+    svg path {
+      fill: currentColor;
+    }
+  }
+
+  @media (min-width: var(--breakpoint-medium-min)) {
+    .icon {
+      width: var(--spacing-16);
+      height: var(--spacing-16);
+    }
+  }
+
+  @media (min-width: var(--breakpoint-large-min)) {
+    .icon {
+      width: var(--spacing-20);
+      height: var(--spacing-20);
+    }
+  }
+}
+
+:global(.sb-dark) .link {
+  color: var(--color-text-on-dark-primary);
+
+  &:focus-visible:not(.disabled) {
+    outline-color: var(--color-text-on-dark-primary);
+  }
+
+  &:visited:not(.disabled) {
+    color: var(--color-text-on-dark-secondary);
+  }
+
+  &.disabled {
+    color: var(--color-text-on-dark-primary);
+    opacity: 0.4;
+  }
+}

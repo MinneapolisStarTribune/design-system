@@ -162,6 +162,27 @@
         "name": "",
         "rows": [
           {
+            "component": "Link",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "InlineLink",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "Link",
+    "topLevel": "Typography"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
             "component": "ArticleBodyHeading",
             "native": true,
             "web": true
