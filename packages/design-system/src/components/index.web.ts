@@ -25,6 +25,7 @@ export {
 } from './FormGroup/web/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Image, type ImageProps } from './Image/web/Image';
+export { Link, type LinkProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {

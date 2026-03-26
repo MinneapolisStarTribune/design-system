@@ -19,6 +19,7 @@ export const COMPONENT_NAMES = [
   'FormGroup',
   'ImageGallery',
   'InlineVideo',
+  'Link',
   'NewsHeading',
   'NonNewsHeading',
   'OpinionHeading',
