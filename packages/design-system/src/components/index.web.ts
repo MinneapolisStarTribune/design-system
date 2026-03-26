@@ -97,6 +97,8 @@ export {
   CandyBarRenderer,
   type CandyBarRendererProps,
 } from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
+export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
+export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export {
   Toast,
   TOAST_VARIANTS,

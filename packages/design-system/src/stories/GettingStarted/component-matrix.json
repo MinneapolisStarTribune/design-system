@@ -8,6 +8,11 @@
             "component": "Button",
             "native": false,
             "web": true
+          },
+          {
+            "component": "Utility Button",
+            "native": false,
+            "web": true
           }
         ]
       }
@@ -21,51 +26,36 @@
         "name": "",
         "rows": [
           {
-            "component": "FormControl",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "FormGroup",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "TextInput",
+            "component": "Photo Layout",
             "native": false,
             "web": true
           }
         ]
       },
       {
-        "name": "FormGroup",
+        "name": "Code Block",
         "rows": [
           {
-            "component": "Caption",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Description",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Label",
+            "component": "Dangerous Code Block",
             "native": false,
             "web": true
           }
         ]
       }
     ],
-    "subCategory": "Actions & Inputs",
-    "topLevel": "Components"
+    "subCategory": "Article Toolkit",
+    "topLevel": "Editorial Content"
   },
   {
     "groups": [
       {
         "name": "",
         "rows": [
+          {
+            "component": "CandyBar",
+            "native": false,
+            "web": true
+          },
           {
             "component": "Popover",
             "native": false,
@@ -85,7 +75,91 @@
   {
     "groups": [
       {
-        "name": "ArticleBody",
+        "name": "",
+        "rows": [
+          {
+            "component": "Form (Optional Layout & Logic Wrapper)",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "FormGroup",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "",
+    "topLevel": "Forms"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Checkbox",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "CheckboxGroup",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "TextInput",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "FormControl",
+    "topLevel": "Forms"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Caption",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "FormGroup",
+    "topLevel": "Forms"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Icons",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Image",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "",
+    "topLevel": "Foundations"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
         "rows": [
           {
             "component": "ArticleBodyHeading",
@@ -113,9 +187,15 @@
             "web": true
           }
         ]
-      },
+      }
+    ],
+    "subCategory": "ArticleBody",
+    "topLevel": "Typography"
+  },
+  {
+    "groups": [
       {
-        "name": "Editorial",
+        "name": "",
         "rows": [
           {
             "component": "EditorialSponsoredText",
@@ -153,9 +233,15 @@
             "web": true
           }
         ]
-      },
+      }
+    ],
+    "subCategory": "Editorial",
+    "topLevel": "Typography"
+  },
+  {
+    "groups": [
       {
-        "name": "Utility",
+        "name": "",
         "rows": [
           {
             "component": "PageHeading",
@@ -180,7 +266,7 @@
         ]
       }
     ],
-    "subCategory": "Typography",
-    "topLevel": "Foundations"
+    "subCategory": "Utility",
+    "topLevel": "Typography"
   }
 ]

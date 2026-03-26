@@ -1,0 +1,57 @@
+import { Meta, Canvas, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ComponentStories from './SwiperCarousel.stories';
+
+<Meta of={ComponentStories} />
+
+# SwiperCarousel
+
+**SwiperCarousel** is a flexible, reusable carousel component built on top of Swiper.
+
+It provides core carousel behavior (scrolling, pagination, navigation) while allowing **full control over layout composition**.
+
+## Usage guidelines
+
+- Use for horizontal scrollable content
+- Compose layouts using:
+  - `SwiperCarousel.Slide`
+  - `SwiperCarousel.Pagination`
+  - `SwiperCarousel.Navigation`
+- Order of children controls layout
+
+## Layout flexibility
+
+### Image gallery
+- Caption left
+- Navigation right
+- Pagination inside
+
+### Cards layout
+- Centered pagination + navigation
+
+### Top controls
+- Title left
+- Navigation right
+
+## Pagination behavior
+
+- No pagination → omit component  
+- Default → `<SwiperCarousel.Pagination />`  
+- Custom → `<SwiperCarousel.Pagination variant="custom" />`  
+
+## Navigation behavior
+
+- Optional
+- Auto disables at boundaries
+- Can be placed anywhere
+
+## Playground
+
+<Canvas of={ComponentStories.Default} />
+
+## Props
+
+<Controls />
+
+## All Examples
+
+<Stories />

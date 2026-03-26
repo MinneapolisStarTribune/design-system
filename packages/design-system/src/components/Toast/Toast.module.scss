@@ -65,7 +65,6 @@
   min-width: 0;
 }
 
-
 /* Variant colors – shared structure, different color tokens */
 @mixin variant-colors($background, $foreground, $description: null) {
   background: $background;
@@ -75,6 +74,10 @@
   .icon,
   .title {
     color: $foreground;
+  }
+
+  .icon svg {
+    fill: currentColor;
   }
 
   /* Description uses secondary color when provided, otherwise foreground */
