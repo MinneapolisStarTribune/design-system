@@ -79,34 +79,34 @@ See [code-standards.md](code-standards.md) for TypeScript, component, and naming
 
 ### Available Commands
 
-| Command | What it does |
-|---------|-------------|
-| `yarn storybook:web` | Web Storybook on `:6006` (auto-builds tokens/icons) |
-| `yarn storybook:ios` | IOS Storybook |
-| `yarn build` | Production build → `/dist/web` + `/dist/mobile` |
-| `yarn build:web` | Web bundle only |
-| `yarn build:native` | Native bundle only |
-| `yarn test` | Unit + a11y tests (once) |
-| `yarn test:web` | Web tests only (Vitest) |
-| `yarn test:native` | Native tests only (Jest + RNTL) |
+| Command                | What it does                                                                 |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `yarn storybook:web`   | Web Storybook on `:6006` (auto-builds tokens/icons)                          |
+| `yarn storybook:ios`   | IOS Storybook                                                                |
+| `yarn build`           | Production build → `/dist/web` + `/dist/mobile`                              |
+| `yarn build:web`       | Web bundle only                                                              |
+| `yarn build:native`    | Native bundle only                                                           |
+| `yarn test`            | Unit + a11y tests (once)                                                     |
+| `yarn test:web`        | Web tests only (Vitest)                                                      |
+| `yarn test:native`     | Native tests only (Jest + RNTL)                                              |
 | `yarn testfile <path>` | Run one file/path; auto-routes to Vitest (web) or Jest (native `*.native.*`) |
-| `yarn test:watch` | Tests in watch mode |
-| `yarn test:a11y` | Accessibility tests only |
-| `yarn lint:fix` | Auto-fix ESLint errors |
-| `yarn format` | Prettier |
-| `yarn typecheck` | TypeScript check (no emit) |
-| `yarn tokens` | Regenerate tokens from JSON |
-| `yarn icons` | Regenerate icon mappings from SVGs |
+| `yarn test:watch`      | Tests in watch mode                                                          |
+| `yarn test:a11y`       | Accessibility tests only                                                     |
+| `yarn lint:fix`        | Auto-fix ESLint errors                                                       |
+| `yarn format`          | Prettier                                                                     |
+| `yarn typecheck`       | TypeScript check (no emit)                                                   |
+| `yarn tokens`          | Regenerate tokens from JSON                                                  |
+| `yarn icons`           | Regenerate icon mappings from SVGs                                           |
 
 Git workflow helpers (after [setup](git-workflow.md)):
 
-| Command | What it does |
-|---------|-------------|
-| `setrelease` | Pin current branch as your release target |
-| `whichrelease` | Show pinned release branch |
-| `newbranch <name>` | Branch from pinned release |
-| `syncmybranch` | Rebase onto release (no push) |
-| `gitpushmybranch` | Rebase + push |
+| Command            | What it does                              |
+| ------------------ | ----------------------------------------- |
+| `setrelease`       | Pin current branch as your release target |
+| `whichrelease`     | Show pinned release branch                |
+| `newbranch <name>` | Branch from pinned release                |
+| `syncmybranch`     | Rebase onto release (no push)             |
+| `gitpushmybranch`  | Rebase + push                             |
 
 ## TypeScript Configuration
 
@@ -149,20 +149,22 @@ Every story file has exactly two stories: **"Configurable"** (interactive contro
 
 ### Deployments (Vercel)
 
-| Environment | URL | Trigger |
-|-------------|-----|---------|
-| Production | [design-system.startribune.com](https://design-system.startribune.com) | Merge to `main` |
-| Stage | [stage](https://design-system-env-stage-startribune-team-one.vercel.app/) | Merge to lowest `release/*` |
-| Preview | Unique URL per PR (posted as comment) | Every PR push |
+| Environment | URL                                                                       | Trigger                     |
+| ----------- | ------------------------------------------------------------------------- | --------------------------- |
+| Production  | [design-system.startribune.com](https://design-system.startribune.com)    | Merge to `main`             |
+| Stage       | [stage](https://design-system-env-stage-startribune-team-one.vercel.app/) | Merge to lowest `release/*` |
+| Preview     | Unique URL per PR (posted as comment)                                     | Every PR push               |
 
 ## Releases
 
 Published via [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository). Anyone with write access can create one.
 
-1. Merge PRs to `main`
-2. GitHub → Releases → "Draft a new release"
-3. Create a semver tag (`v0.1.0`, `v0.0.8`, etc.)
+1. Create a PR from the release branch into `main`
+2. Once changes are in main, go to GitHub → Releases → "Draft a new release"
+3. Create a semver tag (`0.1.0`, `0.0.8`, etc.)
 4. Write release notes (new features, breaking changes, fixes)
 5. Publish
+6. Once the `Publish` action has succeeded create a new release branch off of main and push that to Github
+   6a. Update our scrum team channel with the new release version name.
 
 CI automatically extracts the version, updates `package.json`, builds, publishes to GitHub Packages, and commits the version bump back to `main`. No local `yarn publish` needed.
