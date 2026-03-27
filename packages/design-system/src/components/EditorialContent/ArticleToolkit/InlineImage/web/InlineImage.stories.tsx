@@ -8,8 +8,29 @@ const meta: Meta<InlineImageProps> = {
   component: InlineImage,
   parameters: {
     layout: 'centered',
+    docs: {
+      source: {
+        type: 'dynamic',
+      },
+    },
   },
   argTypes: {
+    image: {
+      control: 'object',
+      description: 'Image data for the inline image',
+    },
+    caption: {
+      control: 'text',
+      description: 'Caption for the inline image',
+    },
+    credit: {
+      control: 'text',
+      description: 'Credit for the inline image',
+    },
+    purchaseLink: {
+      control: 'text',
+      description: 'Purchase link for the inline image',
+    },
     size: {
       control: 'select',
       options: INLINE_IMAGE_SIZES,
@@ -22,6 +43,15 @@ const meta: Meta<InlineImageProps> = {
     },
     expandable: {
       control: 'boolean',
+    },
+    objectFit: {
+      control: 'radio',
+      options: ['cover', 'contain'],
+      description: 'Object fit for the inline image',
+    },
+    imgixParams: {
+      control: 'object',
+      description: 'Imgix parameters for the inline image',
     },
   },
 };
