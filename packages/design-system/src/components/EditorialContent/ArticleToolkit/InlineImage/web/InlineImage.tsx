@@ -17,6 +17,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   objectFit = 'cover',
   style,
   variant = 'standard',
+  purchaseLink,
   ...accessibilityProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +61,14 @@ export const InlineImage: React.FC<InlineImageProps> = ({
             data-testid={`${dataTestId}-caption`}
           >
             {captionText}
+            {purchaseLink && (
+              <>
+                <span className={styles['purchase-link-separator']}>•</span>
+                <a href={purchaseLink} className={styles['purchase-link']}>
+                  Buy Reprint
+                </a>
+              </>
+            )}
           </figcaption>
         )}
       </figure>

@@ -1,9 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { InlineImageProps } from '../InlineImage.types';
+import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage';
-import { INLINE_IMAGE_SIZES } from '../../types';
-
-const variant: InlineImageProps['variant'][] = ['standard', 'immersive'];
+import { ARTICLE_BODY_VARIANTS, INLINE_IMAGE_SIZES } from '../../types';
 
 const meta: Meta<InlineImageProps> = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -19,7 +17,7 @@ const meta: Meta<InlineImageProps> = {
     },
     variant: {
       control: 'radio',
-      options: variant,
+      options: Object.values(ARTICLE_BODY_VARIANTS),
       description: 'Article body variant: standard or immersive.',
     },
     expandable: {
@@ -37,60 +35,57 @@ const image = {
   altText: 'Alternative text for the image',
 };
 
-const renderVariants: Story['render'] = (args) => {
-  const { variant = 'standard', size = 'full', expandable = false } = args;
+const defaultArgs: InlineImageProps = {
+  image,
+  caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
+  credit: 'Star Tribune staff/The Minnesota Star Tribune',
+  variant: 'standard',
+  size: 'medium',
+  expandable: false,
+};
+
+const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
+  ...defaultArgs,
+  ...overrides,
+});
+
+const render = (args: InlineImageProps) => {
+  return <InlineImage {...args} />;
+};
+
+const renderVariants = (args: InlineImageProps) => {
   return (
-    <div style={{ padding: '48px 0' }}>
-      <InlineImage
-        image={image}
-        size={size}
-        variant={variant}
-        caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
-        credit="Star Tribune staff/The Minnesota Star Tribune"
-        expandable={expandable}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {INLINE_IMAGE_SIZES.map((size) => (
+        <div key={`${size}-${args.variant}`}>
+          <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
+            {args.variant} ({size})
+          </h3>
+          <InlineImage {...args} size={size} />
+        </div>
+      ))}
     </div>
   );
 };
 
-const staticSource = (variant: InlineImageProps['variant'], expandable = false) => ({
-  docs: {
-    source: {
-      code: `
-<InlineImage
-  image={${JSON.stringify(image)}}
-  size="full"
-  variant="${variant}"
-  caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
-  credit="Star Tribune staff/The Minnesota Star Tribune"
-  expandable={${expandable}}
-/>
-`,
-    },
-  },
-});
-
 export const Configurable: Story = {
-  render: renderVariants,
-  parameters: staticSource('standard', false),
+  args: storyArgs(),
 };
 
 export const Standard: Story = {
-  args: { variant: 'standard' },
+  args: storyArgs({ variant: 'standard' }),
   render: renderVariants,
-  parameters: staticSource('standard'),
 };
 
 export const Immersive: Story = {
-  args: { variant: 'immersive' },
+  args: storyArgs({ variant: 'immersive' }),
   render: renderVariants,
-  parameters: staticSource('immersive'),
 };
 
 export const WithExpandable: Story = {
-  args: {
-    expandable: true,
-  },
-  render: renderVariants,
-  parameters: staticSource('standard', true),
+  args: storyArgs({ expandable: true }),
+};
+
+export const WithPurchaseLink: Story = {
+  args: storyArgs({ purchaseLink: 'https://www.startribune.com/photos' }),
 };

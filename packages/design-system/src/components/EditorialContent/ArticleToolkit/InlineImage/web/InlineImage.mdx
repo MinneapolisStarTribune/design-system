@@ -9,8 +9,41 @@ import * as InlineImageStories from './InlineImage.stories';
 # InlineImage
 
 The **InlineImage** component renders a single image within editorial content, supporting captions, credits and optional expand functionality for immersive viewing.
+It is designed for use inside article layouts and adapts to both standard (constrained column) and immersive (full-bleed) variants across four size options: `full`, `large`, `medium`, and `inline`.
+When `expandable` is enabled, readers can open the image in a full-screen dialog for a closer look.
 
 [Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2449-30086)
+
+## Anatomy
+
+1. **Image** — The primary visual element.
+2. **Caption** — A short description that provides context, explains what is happening, or clarifies significance. Appears directly below the image. Attribution must always follow the caption and must always be enclosed in parentheses.
+3. **Photo Credit** — Photographer attribution. The attribution must always follow the caption and is always enclosed in parentheses.
+4. **Photo Purchase Link (optional)** — A subtle link that can be appended after the photo caption. Only appears when photo purchase is available.
+5. **Expand Button (optional)** — A visual indicator that lets users know they can expand the image.
+
+## Variants
+
+### Standard
+
+Used within the Standard Article template. Best for traditional news articles where imagery supports but does not dominate the story.
+
+### Immersive
+
+Used within the Immersive Article template. Best for feature stories, investigations, and narratives where imagery plays a stronger editorial role.
+
+## Configurations
+
+### Expandable
+
+Used within the Standard Article template. Best for traditional news articles where imagery supports but does not dominate the story.
+
+### Sizes
+
+- **Full** (`full`) — Spans the full content column. Use for lead or hero-level images where the visual deserves maximum prominence.
+- **Large** (`large`) — Slightly inset from full width. Works well for impactful supporting visuals that need room to breathe without taking over the layout.
+- **Medium** (`medium`) — The default size. A balanced width suited to most inline editorial images.
+- **Inline** (`inline`) — A narrow, text-adjacent image. Best for portraits, headshots, or tight supplemental visuals that sit alongside a body of text.
 
 ## Usage guidelines
 
@@ -24,11 +57,12 @@ The **InlineImage** component renders a single image within editorial content, s
 
 - Avoid when displaying multiple images in a structured grid.
 
-### Props
+## Props
 
 - **image** – Image object `{ src: string, altText: string }`.
 - **caption** – Optional descriptive text for the image.
 - **credit** – Optional credit line for the image.
+- **purchaseLink** – Optional link for purchasing photo reprints.
 - **size** – Controls image width: `'large' | 'medium' | 'full' | 'inline'`.
 - **variant** – Article variant: `'standard' | 'immersive'`.
 - **expandable** – Enables click-to-expand behavior for immersive viewing.

@@ -6,4 +6,5 @@ export interface InlineImageProps extends Omit<ArticleToolkitMediaProps, 'altTex
   size?: InlineImageSizeType;
   imgixParams?: string;
   objectFit?: 'cover' | 'contain';
+  purchaseLink?: string;
 }

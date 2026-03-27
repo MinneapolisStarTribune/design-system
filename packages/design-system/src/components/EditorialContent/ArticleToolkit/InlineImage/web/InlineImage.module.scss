@@ -102,3 +102,21 @@
 .caption-text {
   color: var(--color-text-on-light-secondary);
 }
+
+.purchase-link-separator {
+  margin: 0 var(--spacing-4);
+}
+
+.purchase-link {
+  color: var(--color-text-on-light-secondary);
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-color: var(--color-border-brand-01);
+  text-decoration-thickness: auto;
+  text-underline-offset: 17%;
+  text-underline-position: from-font;
+
+  &:hover {
+    color: var(--color-border-brand-01);
+  }
+}
