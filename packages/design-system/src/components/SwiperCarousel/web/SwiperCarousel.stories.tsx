@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { SwiperCarousel } from './SwiperCarousel';
+import { FormGroup, SectionHeading, SwiperCarouselProps, UtilityBody } from '@/index.web';
+import { NavigationProps } from './SwiperCarousel.types';
 
 const meta: Meta<typeof SwiperCarousel> = {
   title: 'Components/SwiperCarousel',
@@ -72,7 +74,9 @@ export const Default: Story = {
       <SwiperCarousel.Pagination />
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span>Captions</span>
+        <FormGroup>
+          <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
+        </FormGroup>
         <SwiperCarousel.Navigation />
       </div>
     </SwiperCarousel>
@@ -91,7 +95,9 @@ export const Default: Story = {
   <SwiperCarousel.Pagination />
 
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <span>Captions</span>
+    <FormGroup>
+          <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
+        </FormGroup>
     <SwiperCarousel.Navigation />
   </div>
 </SwiperCarousel>
@@ -198,8 +204,6 @@ export const ImageGalleryStandard: Story = {
         </SwiperCarousel.Slide>
       ))}
 
-      <SwiperCarousel.Pagination />
-
       <div
         style={{
           display: 'flex',
@@ -207,7 +211,7 @@ export const ImageGalleryStandard: Story = {
           marginTop: 8,
         }}
       >
-        <span>Image caption goes here</span>
+        <UtilityBody size="small">Image caption (Utility body)</UtilityBody>
         <SwiperCarousel.Navigation />
       </div>
     </SwiperCarousel>
@@ -234,8 +238,6 @@ export const ImageGalleryStandard: Story = {
         </SwiperCarousel.Slide>
       ))}
 
-      <SwiperCarousel.Pagination />
-
       <div
         style={{
           display: 'flex',
@@ -243,7 +245,7 @@ export const ImageGalleryStandard: Story = {
           marginTop: 8,
         }}
       >
-        <span>Image caption goes here</span>
+        <UtilityBody size='small'>Image caption (Utility body)</UtilityBody>
         <SwiperCarousel.Navigation />
       </div>
     </SwiperCarousel>`,
@@ -266,7 +268,7 @@ export const Layout_TopControls: Story = {
           marginBottom: 12,
         }}
       >
-        <div style={{ fontWeight: 700 }}>The Latest</div>
+        <SectionHeading importance={3}>The Latest</SectionHeading>
         <SwiperCarousel.Navigation />
       </div>
 
@@ -283,7 +285,7 @@ export const Layout_TopControls: Story = {
         code: `
 <SwiperCarousel slidesPerView="auto" spaceBetween={16}>
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <div>The Latest</div>
+    <SectionHeading importance={1}>The Latest</SectionHeading>
     <SwiperCarousel.Navigation />
   </div>
 
@@ -292,6 +294,82 @@ export const Layout_TopControls: Story = {
       <DemoCard index={i} />
     </SwiperCarousel.Slide>
   ))}
+</SwiperCarousel>
+        `,
+      },
+    },
+  },
+};
+
+type NavigationStoryArgs = SwiperCarouselProps & NavigationProps;
+
+export const NavigationControls: StoryObj<NavigationStoryArgs> = {
+  args: {
+    slidesPerView: 'auto',
+    spaceBetween: 16,
+    loop: false,
+    centeredSlides: false,
+    size: 'large',
+  },
+
+  render: ({ size, buttonProps, prevButtonProps, nextButtonProps, ...args }) => (
+    <SwiperCarousel {...args}>
+      {items.map((i) => (
+        <SwiperCarousel.Slide key={i}>
+          <DemoCard index={i} />
+        </SwiperCarousel.Slide>
+      ))}
+
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <span>Custom Navigation</span>
+
+        <SwiperCarousel.Navigation
+          size={size}
+          buttonProps={buttonProps}
+          prevButtonProps={prevButtonProps}
+          nextButtonProps={nextButtonProps}
+        />
+      </div>
+    </SwiperCarousel>
+  ),
+
+  argTypes: {
+    size: {
+      control: { type: 'radio' },
+      options: ['small', 'medium', 'large'],
+    },
+    buttonProps: {
+      control: 'object',
+    },
+    prevButtonProps: {
+      control: 'object',
+    },
+    nextButtonProps: {
+      control: 'object',
+    },
+  },
+
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+  {items.map((i) => (
+    <SwiperCarousel.Slide key={i}>
+      <DemoCard index={i} />
+    </SwiperCarousel.Slide>
+  ))}
+
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <span>Custom Navigation</span>
+
+    <SwiperCarousel.Navigation
+      size="large"
+      buttonProps={{ variant: 'ghost' }}
+      prevButtonProps={{ 'aria-label': 'Previous slide' }}
+      nextButtonProps={{ 'aria-label': 'Next slide' }}
+    />
+  </div>
 </SwiperCarousel>
         `,
       },

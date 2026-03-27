@@ -155,10 +155,34 @@ Pagination.displayName = 'SwiperPagination';
 
 /* ---------------- NAVIGATION ---------------- */
 
-const NavigationComponent: React.FC<NavigationProps> = ({ className, size }) => {
+const NavigationComponent: React.FC<NavigationProps> = ({
+  className,
+  size,
+  buttonProps,
+  prevButtonProps,
+  nextButtonProps,
+}) => {
   const { swiper, isBeginning, isEnd } = useSwiperContext();
 
-  const resolvedSize = useResponsiveSize(size);
+  const responsiveSize = useResponsiveSize(size);
+
+  const [autoSize, setAutoSize] = React.useState<'small' | 'large'>('large');
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (typeof window === 'undefined') return;
+
+      const width = window.innerWidth;
+      setAutoSize(width < 1024 ? 'small' : 'large');
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const finalSize = size ? responsiveSize : autoSize;
 
   if (!swiper) return null;
 
@@ -166,22 +190,26 @@ const NavigationComponent: React.FC<NavigationProps> = ({ className, size }) => 
     <div className={classNames(styles.navigation, className)}>
       <Button
         variant="ghost"
-        size={resolvedSize}
+        size={finalSize}
         icon={<ChevronLeftIcon />}
         onClick={() => swiper.slidePrev()}
         isDisabled={isBeginning}
         className={styles.navButton}
         aria-label="Previous slide"
+        {...buttonProps}
+        {...prevButtonProps}
       />
 
       <Button
         variant="ghost"
-        size={resolvedSize}
+        size={finalSize}
         icon={<ChevronRightIcon />}
         onClick={() => swiper.slideNext()}
         isDisabled={isEnd}
         className={styles.navButton}
         aria-label="Next slide"
+        {...buttonProps}
+        {...nextButtonProps}
       />
     </div>
   );
