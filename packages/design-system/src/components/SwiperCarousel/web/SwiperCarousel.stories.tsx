@@ -149,7 +149,7 @@ export const NoPagination: Story = {
       ))}
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span>Captions</span>
+        <UtilityBody size="x-small">Image caption (Utility body (x-small))</UtilityBody>
         <SwiperCarousel.Navigation />
       </div>
     </SwiperCarousel>
@@ -166,7 +166,7 @@ export const NoPagination: Story = {
   ))}
 
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <span>Captions</span>
+    <UtilityBody size="x-small">Image caption (Utility body (x-small))</UtilityBody>
     <SwiperCarousel.Navigation />
   </div>
 </SwiperCarousel>
@@ -321,7 +321,7 @@ export const NavigationControls: StoryObj<NavigationStoryArgs> = {
       ))}
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span>Custom Navigation</span>
+        <UtilityBody size="medium">Image caption (Utility body (medium))</UtilityBody>
 
         <SwiperCarousel.Navigation
           size={size}
@@ -361,8 +361,7 @@ export const NavigationControls: StoryObj<NavigationStoryArgs> = {
   ))}
 
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <span>Custom Navigation</span>
-
+    <UtilityBody size="medium">Image caption (Utility body (medium))</UtilityBody>
     <SwiperCarousel.Navigation
       size="large"
       buttonProps={{ variant: 'ghost' }}
