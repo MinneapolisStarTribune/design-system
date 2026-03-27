@@ -63,7 +63,7 @@ const ConfigurableComponent = (args: Partial<SelectProps>) => {
 
       <FormControl.Select
         id="select-configurable"
-        options={OPTIONS}
+        options={args.options ?? OPTIONS}
         {...args}
         value={value}
         onChange={(val: string) => {

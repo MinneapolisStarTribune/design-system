@@ -25,6 +25,8 @@ export const Select: React.FC<SelectProps> = ({
   'aria-describedby': ariaDescribedByProp,
   dataTestId,
 }) => {
+  const safeOptions = React.useMemo(() => (Array.isArray(options) ? options : []), [options]);
+
   const rootRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -43,11 +45,11 @@ export const Select: React.FC<SelectProps> = ({
 
   const ariaDescribedBy = ariaDescribedByProp ?? describedBy;
 
-  const selectedOption = value ? options.find((o) => o.value === value) : undefined;
-  const selectedIndex = options.findIndex((o) => o.value === value);
+  const selectedOption = value ? safeOptions.find((o) => o.value === value) : undefined;
+  const selectedIndex = safeOptions.findIndex((o) => o.value === value);
 
   const isFilled = !!selectedOption;
-  const displayLabel = isFilled ? selectedOption!.label : placeholderText;
+  const displayLabel = isFilled ? selectedOption?.label : placeholderText;
 
   const listboxId = `${inputId}-listbox`;
 
@@ -75,6 +77,10 @@ export const Select: React.FC<SelectProps> = ({
     }
   }, [activeIndex]);
 
+  useEffect(() => {
+    optionRefs.current = [];
+  }, [safeOptions]);
+
   const handleToggle = () => {
     if (isDisabled) return;
 
@@ -85,8 +91,8 @@ export const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const handleSelect = (option: SelectOption) => {
-    if (option.disabled) return;
+  const handleSelect = (option: SelectOption | undefined) => {
+    if (!option || option.disabled) return;
     onChange?.(option.value);
     setIsOpen(false);
     setActiveIndex(-1);
@@ -102,7 +108,7 @@ export const Select: React.FC<SelectProps> = ({
           setIsOpen(true);
           setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
         } else {
-          setActiveIndex((prev) => (prev < options.length - 1 ? prev + 1 : prev));
+          setActiveIndex((prev) => (prev < safeOptions.length - 1 ? prev + 1 : prev));
         }
         break;
 
@@ -121,7 +127,7 @@ export const Select: React.FC<SelectProps> = ({
         if (!isOpen) {
           setIsOpen(true);
         } else if (activeIndex >= 0) {
-          handleSelect(options[activeIndex]);
+          handleSelect(safeOptions[activeIndex]);
         }
         break;
 
@@ -193,7 +199,7 @@ export const Select: React.FC<SelectProps> = ({
           role="listbox"
           className={classNames(styles.selectDropdown, optionTypographyClass)}
         >
-          {options.map((option, index) => {
+          {safeOptions.map((option, index) => {
             const isSelected = option.value === value;
             const isActive = index === activeIndex;
 
