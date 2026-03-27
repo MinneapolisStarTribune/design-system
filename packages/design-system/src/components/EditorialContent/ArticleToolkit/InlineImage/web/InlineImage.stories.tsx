@@ -49,10 +49,6 @@ const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps 
   ...overrides,
 });
 
-const render = (args: InlineImageProps) => {
-  return <InlineImage {...args} />;
-};
-
 const renderVariants = (args: InlineImageProps) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
