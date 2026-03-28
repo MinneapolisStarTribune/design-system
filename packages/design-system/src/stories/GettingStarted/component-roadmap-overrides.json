@@ -1,0 +1,23 @@
+{
+  "Checkbox": {
+    "native": false,
+    "web": true
+  },
+  "CheckboxGroup": {
+    "native": false,
+    "web": true
+  },
+  "FormGroup.Caption": {
+    "native": false,
+    "web": true
+  },
+  "FormGroup.Description": {
+    "native": false,
+    "web": true
+  },
+  "FormGroup.Label": {
+    "native": false,
+    "web": true
+  },
+  "_comment": "Manual platform overrides. Keys must match \"name\" in component-roadmap-planned.json. Override wins over barrel auto-detection."
+}
