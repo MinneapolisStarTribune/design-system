@@ -1,5 +1,11 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
 
+export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
+export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
+export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
+export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
+export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
@@ -18,8 +24,14 @@ export {
 } from './FormGroup/native/label/FormGroup.Label.native';
 export {
   ArticleBodyHeading,
+  type ArticleBodyHeadingImportance,
   type ArticleBodyHeadingProps,
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
+export {
+  ArticleBodySponsoredHeading,
+  type ArticleBodySponsoredHeadingImportance,
+  type ArticleBodySponsoredHeadingProps,
+} from './Typography/ArticleBody/ArticleBodySponsoredHeading/native/ArticleBodySponsoredHeading.native';
 export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
