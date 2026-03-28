@@ -175,7 +175,7 @@ export const ComponentRoadmap = () => {
         done: stats.totalDone,
         planned: stats.total,
         pct: totalPct,
-        label: `${stats.totalDone} of ${stats.total} Components fully built`,
+        label: `${stats.totalDone} of ${stats.total} Components Fully Built`,
       };
     }
     if (platformFilter === 'web') {
@@ -183,14 +183,14 @@ export const ComponentRoadmap = () => {
         done: stats.webDone,
         planned: stats.webPlanned,
         pct: webPct,
-        label: `${stats.webDone} of ${stats.webPlanned} Web Components built`,
+        label: `${stats.webDone} of ${stats.webPlanned} Web Components Built`,
       };
     }
     return {
       done: stats.nativeDone,
       planned: stats.nativePlanned,
       pct: nativePct,
-      label: `${stats.nativeDone} of ${stats.nativePlanned} Native Components built`,
+      label: `${stats.nativeDone} of ${stats.nativePlanned} Native Components Built`,
     };
   }, [platformFilter, stats, totalPct, webPct, nativePct]);
 
@@ -279,7 +279,7 @@ export const ComponentRoadmap = () => {
     cardStyle: MetricCardStyle;
   }[] = [
     {
-      label: 'Web components',
+      label: 'Web Components',
       done: stats.webDone,
       planned: stats.webPlanned,
       pct: webPct,
@@ -289,7 +289,7 @@ export const ComponentRoadmap = () => {
       },
     },
     {
-      label: 'Native components',
+      label: 'Native Components',
       done: stats.nativeDone,
       planned: stats.nativePlanned,
       pct: nativePct,
@@ -299,7 +299,7 @@ export const ComponentRoadmap = () => {
       },
     },
     {
-      label: 'Fully complete',
+      label: 'Fully Complete',
       done: stats.totalDone,
       planned: stats.total,
       pct: totalPct,
@@ -473,11 +473,11 @@ export const ComponentRoadmap = () => {
                   </UtilityLabel>
                   {isComplete ? (
                     <UtilityLabel size="small" weight="semibold" className={styles.completeBadge}>
-                      🎉 complete
+                      🎉 Complete
                     </UtilityLabel>
                   ) : (
                     <UtilityLabel size="small" className={styles.textTertiary}>
-                      {doneSlots}/{totalSlots} built
+                      {doneSlots}/{totalSlots} Built
                     </UtilityLabel>
                   )}
                 </div>
@@ -544,7 +544,7 @@ export const ComponentRoadmap = () => {
                               size="small"
                               className={classNames(styles.badge, styles.badgeDone)}
                             >
-                              Both platforms built ✓
+                              Both Platforms Built ✓
                             </UtilityLabel>
                           ) : (
                             <>
