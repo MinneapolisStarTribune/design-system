@@ -1,0 +1,255 @@
+/**
+ * Component Roadmap — Storybook-only layout. Uses design tokens (--spacing-*, --color-*, --radius-*).
+ */
+
+/* --- Shared primitives --- */
+
+.cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.textSecondary {
+  color: var(--color-text-on-light-secondary, #525252);
+}
+
+.textTertiary {
+  color: var(--color-text-on-light-tertiary, #737373);
+}
+
+.wrap {
+  font-size: 0.875rem;
+  color: var(--color-text-on-light-primary, inherit);
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--spacing-32, 2rem) 0;
+}
+
+.progressRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--spacing-6) !important;
+}
+
+.masterBar {
+  height: var(--spacing-8);
+  background: var(--color-background-light-gray-01, rgba(0, 0, 0, 0.08));
+  border-radius: var(--radius-full);
+  margin-bottom: var(--spacing-6) !important;
+}
+
+.masterBarFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-text-state-success-on-light, #1a7f4b);
+  transition: width 0.5s ease;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-16);
+  margin-bottom: var(--spacing-24) !important;
+}
+
+.metaGridTwoCols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.metricCard {
+  background: var(--color-background-light-gray-01, rgba(0, 0, 0, 0.04));
+  border-radius: var(--radius-8);
+  padding: var(--spacing-12) var(--spacing-16);
+  border-top: 3px solid var(--roadmap-accent, var(--color-icon-brand-02));
+}
+
+.metricLabel {
+  display: block;
+  margin-bottom: var(--spacing-6) !important;
+}
+
+.metricValue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--spacing-4);
+  color: var(--roadmap-metric-color, var(--color-text-on-light-primary));
+  margin-bottom: var(--spacing-4) !important;
+}
+
+.metricValueMain,
+.metricFraction {
+  color: inherit;
+}
+
+.metricFraction {
+  opacity: 0.4;
+}
+
+.metricSub {
+  display: block;
+  margin-bottom: var(--spacing-4) !important;
+}
+
+.miniBar {
+  height: 3px;
+  background: var(--color-background-light-gray-01, rgba(0, 0, 0, 0.08));
+  border-radius: var(--radius-full);
+  margin-top: var(--spacing-8);
+}
+
+.miniBarFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--roadmap-accent, var(--color-icon-brand-02));
+  transition: width 0.5s ease;
+}
+
+.filterBar {
+  display: flex;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-24) !important;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/**
+ * Outline + density overrides for `Button` ghost. Selected state must win over DS ghost tokens.
+ */
+.filterPill {
+  border: 0.5px solid var(--color-border-on-light-subtle-02);
+  min-height: auto !important;
+  height: auto !important;
+  padding-block: var(--spacing-4) !important;
+  padding-inline: var(--spacing-12) !important;
+}
+
+.filterPillActive {
+  background: var(--color-text-on-light-primary, rgba(0, 0, 0, 0.85)) !important;
+  color: var(--color-text-on-dark-primary, #fff) !important;
+  border-color: transparent !important;
+}
+
+.divider {
+  width: 1px;
+  height: var(--spacing-16);
+  background: var(--color-border-on-light-subtle-01, rgba(0, 0, 0, 0.15));
+  margin: 0 var(--spacing-4) !important;
+}
+
+.section {
+  margin-bottom: var(--spacing-20) !important;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-8) 0;
+  border: 0;
+  border-bottom: 0.5px solid var(--color-border-on-light-subtle-01, rgba(0, 0, 0, 0.12));
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+.sectionBar {
+  width: 72px;
+  height: var(--spacing-4);
+  background: var(--color-background-light-gray-01);
+  border-radius: var(--radius-full);
+}
+
+.sectionBarFill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.4s ease;
+  background: var(--color-background-brand-subtle);
+  border: 0.5px solid var(--color-border-on-light-subtle-02);
+}
+
+.sectionBarFillComplete {
+  background: var(--color-background-brand);
+}
+
+.sectionPct {
+  min-width: 28px;
+  text-align: right;
+}
+
+.chevron {
+  flex-shrink: 0;
+  display: block;
+  opacity: 0.55;
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.completeBadge {
+  padding: var(--spacing-2) var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--color-background-brand);
+  color: var(--color-text-state-success-on-light);
+}
+
+.componentRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-6);
+  border-radius: var(--radius-6);
+}
+
+.componentName {
+  opacity: 0.6;
+}
+
+.componentNameDone {
+  opacity: 1;
+}
+
+.toBuildLabel {
+  font-style: italic;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--color-border-on-light-subtle-02, rgba(0, 0, 0, 0.18));
+}
+
+.dotDone {
+  background: var(--color-text-state-success-on-light);
+}
+
+.badgeWrap {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.badge {
+  padding: var(--spacing-2) var(--spacing-6);
+  border-radius: var(--radius-4);
+}
+
+.badgeDone {
+  background: var(--color-button-brand-accent-filled-background);
+  border: none;
+}
+
+.badgeTodo {
+  background: var(--color-background-light-gray-01);
+  color: var(--color-text-on-light-secondary);
+  border: 0.5px solid var(--color-border-on-light-subtle-02);
+}
