@@ -1,4 +1,13 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import confetti from 'canvas-confetti';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MutableRefObject,
+  type ReactNode,
+} from 'react';
 import classNames from 'classnames';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityLabel } from '@/components/Typography/Utility';
@@ -40,6 +49,74 @@ type MetricCardStyle = CSSProperties & {
   '--roadmap-accent'?: string;
   '--roadmap-metric-color'?: string;
 };
+
+/** One light burst when a 100%-complete category first scrolls into view (Status: All). */
+function RoadmapSectionJoyWrap({
+  cat,
+  isComplete,
+  filter,
+  platformFilter,
+  joyFiredRef,
+  className,
+  children,
+}: {
+  cat: string;
+  isComplete: boolean;
+  filter: StatusFilter;
+  platformFilter: PlatformFilter;
+  joyFiredRef: MutableRefObject<Set<string>>;
+  className?: string;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || filter !== 'all' || !isComplete) return;
+
+    const key = `${platformFilter}::${cat}`;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+        if (joyFiredRef.current.has(key)) return;
+        if (typeof window.matchMedia === 'function') {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+          if (reduce.matches) return;
+        }
+        joyFiredRef.current.add(key);
+
+        const r = el.getBoundingClientRect();
+        const origin = {
+          x: (r.left + r.width / 2) / window.innerWidth,
+          y: (r.top + Math.min(r.height * 0.35, 120)) / window.innerHeight,
+        };
+
+        confetti({
+          origin,
+          particleCount: 28,
+          spread: 48,
+          startVelocity: 18,
+          gravity: 1.05,
+          scalar: 0.72,
+          ticks: 140,
+          zIndex: 10_000,
+          colors: ['#0d9488', '#2563eb', '#7c3aed', '#16a34a', '#ca8a04'],
+        });
+      },
+      { threshold: 0.28, rootMargin: '0px 0px -8% 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [cat, filter, isComplete, joyFiredRef, platformFilter]);
+
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+}
 
 export const ComponentRoadmap = () => {
   const [filter, setFilter] = useState<StatusFilter>('all');
@@ -117,6 +194,65 @@ export const ComponentRoadmap = () => {
     };
   }, [platformFilter, stats, totalPct, webPct, nativePct]);
 
+  const confettiFiredForPlatform = useRef<PlatformFilter | null>(null);
+  const sectionJoyFired = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const statusIsAll = filter === 'all';
+    const platformOk =
+      platformFilter === 'all' || platformFilter === 'web' || platformFilter === 'native';
+    const atFullProgress = scopedProgress.pct === 100;
+
+    if (!statusIsAll || !platformOk) {
+      confettiFiredForPlatform.current = null;
+      return;
+    }
+    if (!atFullProgress) {
+      confettiFiredForPlatform.current = null;
+      return;
+    }
+
+    if (confettiFiredForPlatform.current === platformFilter) return;
+    confettiFiredForPlatform.current = platformFilter;
+
+    const count = 110;
+    const defaults = { origin: { y: 0.72 }, zIndex: 10_000 };
+
+    confetti({
+      ...defaults,
+      particleCount: Math.floor(count * 0.35),
+      spread: 46,
+      startVelocity: 28,
+      scalar: 0.9,
+      ticks: 200,
+      colors: ['#0d9488', '#2563eb', '#7c3aed', '#ea580c', '#eab308'],
+    });
+    setTimeout(() => {
+      confetti({
+        ...defaults,
+        particleCount: Math.floor(count * 0.25),
+        angle: 60,
+        spread: 55,
+        startVelocity: 35,
+        scalar: 0.85,
+        ticks: 180,
+        colors: ['#0d9488', '#2563eb', '#7c3aed'],
+      });
+    }, 120);
+    setTimeout(() => {
+      confetti({
+        ...defaults,
+        particleCount: Math.floor(count * 0.25),
+        angle: 120,
+        spread: 55,
+        startVelocity: 35,
+        scalar: 0.85,
+        ticks: 180,
+        colors: ['#ea580c', '#eab308', '#16a34a'],
+      });
+    }, 120);
+  }, [filter, platformFilter, scopedProgress.pct]);
+
   const filtered = useMemo(() => {
     let list = components;
     if (platformFilter === 'web') list = list.filter((c) => c.platform.includes('web'));
@@ -143,7 +279,7 @@ export const ComponentRoadmap = () => {
     cardStyle: MetricCardStyle;
   }[] = [
     {
-      label: 'Web Components',
+      label: 'Web components',
       done: stats.webDone,
       planned: stats.webPlanned,
       pct: webPct,
@@ -153,7 +289,7 @@ export const ComponentRoadmap = () => {
       },
     },
     {
-      label: 'Native Components',
+      label: 'Native components',
       done: stats.nativeDone,
       planned: stats.nativePlanned,
       pct: nativePct,
@@ -163,7 +299,7 @@ export const ComponentRoadmap = () => {
       },
     },
     {
-      label: 'Fully Complete',
+      label: 'Fully complete',
       done: stats.totalDone,
       planned: stats.total,
       pct: totalPct,
@@ -309,7 +445,15 @@ export const ComponentRoadmap = () => {
           if (catFiltered.length === 0) return null;
 
           return (
-            <div key={cat} className={styles.section}>
+            <RoadmapSectionJoyWrap
+              key={cat}
+              cat={cat}
+              isComplete={isComplete}
+              filter={filter}
+              platformFilter={platformFilter}
+              joyFiredRef={sectionJoyFired}
+              className={styles.section}
+            >
               <button
                 type="button"
                 className={styles.sectionHeader}
@@ -434,7 +578,7 @@ export const ComponentRoadmap = () => {
                   })}
                 </div>
               )}
-            </div>
+            </RoadmapSectionJoyWrap>
           );
         })}
       </div>

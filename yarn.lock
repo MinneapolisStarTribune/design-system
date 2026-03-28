@@ -3188,6 +3188,7 @@ __metadata:
     "@testing-library/react-native": "npm:^13.3.3"
     "@testing-library/user-event": "npm:^14.6.1"
     "@types/babel__core": "npm:^7"
+    "@types/canvas-confetti": "npm:^1"
     "@types/jest": "npm:^30.0.0"
     "@types/lodash": "npm:^4"
     "@types/node": "npm:^25.0.10"
@@ -3202,6 +3203,7 @@ __metadata:
     autoprefixer: "npm:^10.4.21"
     axe-core: "npm:^4.11.0"
     babel-jest: "npm:^30.2.0"
+    canvas-confetti: "npm:^1.9.4"
     chromatic: "npm:^13.3.3"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^10.0.0"
@@ -5383,6 +5385,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/canvas-confetti@npm:^1":
+  version: 1.9.0
+  resolution: "@types/canvas-confetti@npm:1.9.0"
+  checksum: 10c0/ffe2c674d466b8e13472c81ab2a97056f3433fd40a3513dbc1bb76764e4e7c3ff0a2a58d37b16ea6a245c831077c553db321b069dda6572eab59f2be61137b2e
+  languageName: node
+  linkType: hard
+
 "@types/chai@npm:^5.2.2":
   version: 5.2.3
   resolution: "@types/chai@npm:5.2.3"
@@ -7328,6 +7337,13 @@ __metadata:
   version: 1.0.30001763
   resolution: "caniuse-lite@npm:1.0.30001763"
   checksum: 10c0/4524f6ae15a18c8510849e43baed01441940c50cab29687cba62dde6354a49549d5bcb7f79b864dadf3f0c8c342038c63131cdb64af382a501593106b1d0028b
+  languageName: node
+  linkType: hard
+
+"canvas-confetti@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "canvas-confetti@npm:1.9.4"
+  checksum: 10c0/08f11b5fa20b365922108828d7488f9b3eac2afdf39bc478339268c1250b5215df82682d7074520a3f0f72f4728f9703bbc937dcfe793f196b44e6e8ac0b1f7b
   languageName: node
   linkType: hard
 
