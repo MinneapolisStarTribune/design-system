@@ -108,35 +108,6 @@ export const Default: Story = {
 };
 
 /**
- * Custom pagination centered with navigation
- */
-export const CustomPagination: Story = {
-  args: { loop: true },
-  render: (args) => (
-    <SwiperCarousel {...args}>
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <DemoCard index={i} />
-        </SwiperCarousel.Slide>
-      ))}
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-          <SwiperCarousel.Pagination variant="custom" />
-        </div>
-        <SwiperCarousel.Navigation />
-      </div>
-    </SwiperCarousel>
-  ),
-};
-
-/**
  * No pagination with navigation
  */
 export const NoPagination: Story = {
@@ -370,6 +341,52 @@ export const NavigationControls: StoryObj<NavigationStoryArgs> = {
     />
   </div>
 </SwiperCarousel>
+        `,
+      },
+    },
+  },
+};
+
+/**
+ * No arrows & no pagination (not enough items to scroll)
+ */
+export const NoScroll_NoControls: Story = {
+  render: (args) => {
+    const smallItems = [1, 2]; // 👈 not enough to scroll
+
+    return (
+      <SwiperCarousel {...args}>
+        {smallItems.map((i) => (
+          <SwiperCarousel.Slide key={i}>
+            <DemoCard index={i} />
+          </SwiperCarousel.Slide>
+        ))}
+
+        {/* Pagination should auto-hide */}
+        <SwiperCarousel.Pagination />
+
+        {/* Navigation should auto-hide */}
+        <SwiperCarousel.Navigation />
+      </SwiperCarousel>
+    );
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<SwiperCarousel {...args}>
+        {smallItems.map((i) => (
+          <SwiperCarousel.Slide key={i}>
+            <DemoCard index={i} />
+          </SwiperCarousel.Slide>
+        ))}
+
+        {/* Pagination should auto-hide */}
+        <SwiperCarousel.Pagination />
+
+        {/* Navigation should auto-hide */}
+        <SwiperCarousel.Navigation />
+      </SwiperCarousel>
         `,
       },
     },
