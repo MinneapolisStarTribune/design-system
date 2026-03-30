@@ -8,7 +8,11 @@ describe('InlineLink Accessibility', () => {
   it('has no violations in article body', async () => {
     await expectNoA11yViolations(
       <ArticleBodyText>
-        See <InlineLink brand="startribune" href="https://example.com">this link</InlineLink> for more.
+        See{' '}
+        <InlineLink brand="startribune" href="https://example.com">
+          this link
+        </InlineLink>{' '}
+        for more.
       </ArticleBodyText>
     );
   });

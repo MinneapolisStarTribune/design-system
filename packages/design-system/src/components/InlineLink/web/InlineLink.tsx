@@ -14,7 +14,9 @@ import type { InlineLinkProps } from '../InlineLink.types';
  * </ArticleBodyText>
  * ```
  */
-export const InlineLink: React.FC<InlineLinkProps> = (props) => <Link variant="inline" {...props} />;
+export const InlineLink: React.FC<InlineLinkProps> = (props) => (
+  <Link variant="inline" {...props} />
+);
 
 InlineLink.displayName = 'InlineLink';
 

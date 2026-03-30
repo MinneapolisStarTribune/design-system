@@ -42,9 +42,7 @@ export const Link: React.FC<LinkProps> = (props) => {
   const rootClass = classNames(
     styles.link,
     isInline && styles.inline,
-    isInline &&
-      brand &&
-      (brand === 'startribune' ? styles.brandStartribune : styles.brandVarsity),
+    isInline && brand && (brand === 'startribune' ? styles.brandStartribune : styles.brandVarsity),
     disabled && styles.disabled,
     className
   );

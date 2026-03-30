@@ -19,7 +19,8 @@ const meta: Meta<StoryArgs> = {
   argTypes: {
     children: {
       control: 'text',
-      description: 'Link label (inherits typography from parent — **ArticleBodyText** in this story)',
+      description:
+        'Link label (inherits typography from parent — **ArticleBodyText** in this story)',
     },
     brand: {
       control: false,
@@ -57,9 +58,8 @@ export const Configurable: Story = {
     return (
       <ArticleBodyText>
         This sentence includes an{' '}
-        <InlineLink {...linkProps} icon={showIcon ? <ArrowRightIcon /> : undefined} />
-        {' '}
-        inside article body text so font inherits correctly.
+        <InlineLink {...linkProps} icon={showIcon ? <ArrowRightIcon /> : undefined} /> inside
+        article body text so font inherits correctly.
       </ArticleBodyText>
     );
   },

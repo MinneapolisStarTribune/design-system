@@ -32,18 +32,26 @@ function figmaEditorialSizeKey(dsSize: string): string {
 
 function VariantCaption({ label }: { label: string }) {
   return (
-    <div className={classNames('typography-utility-text-regular-xx-small', styles.variantCaption)}>{label}</div>
+    <div className={classNames('typography-utility-text-regular-xx-small', styles.variantCaption)}>
+      {label}
+    </div>
   );
 }
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className={classNames('typography-utility-text-semibold-small', styles.sectionHeading)}>{children}</h2>
+    <h2 className={classNames('typography-utility-text-semibold-small', styles.sectionHeading)}>
+      {children}
+    </h2>
   );
 }
 
 function SubHeading({ children }: { children: React.ReactNode }) {
-  return <h3 className={classNames('typography-utility-text-medium-x-small', styles.subHeading)}>{children}</h3>;
+  return (
+    <h3 className={classNames('typography-utility-text-medium-x-small', styles.subHeading)}>
+      {children}
+    </h3>
+  );
 }
 
 const sample = (brand: InlineLinkBrand) => (
@@ -64,14 +72,15 @@ export interface InlineLinkTypographyVariantShowcaseProps {
 /**
  * Renders **every** DS-supported parent + size/weight combo used with **`InlineLink`** (Storybook **All variants**).
  */
-export const InlineLinkTypographyVariantShowcase: React.FC<InlineLinkTypographyVariantShowcaseProps> = ({
-  brand = 'startribune',
-}) => {
+export const InlineLinkTypographyVariantShowcase: React.FC<
+  InlineLinkTypographyVariantShowcaseProps
+> = ({ brand = 'startribune' }) => {
   return (
     <div className={styles.showcaseRoot}>
       <p className={classNames('typography-utility-text-regular-small', styles.intro)}>
-        Each cell is one **text variant** (parent + props). **`InlineLink`** only sets **`brand`** (here:{' '}
-        <strong>{brand}</strong>). Toggle Storybook **Brand** / **theme** for <code>color.link</code> checks.
+        Each cell is one **text variant** (parent + props). **`InlineLink`** only sets **`brand`**
+        (here: <strong>{brand}</strong>). Toggle Storybook **Brand** / **theme** for{' '}
+        <code>color.link</code> checks.
       </p>
 
       <SectionHeading>EditorialText — editorial/text / (regular | bold) / xxs…xl</SectionHeading>
@@ -93,7 +102,9 @@ export const InlineLinkTypographyVariantShowcase: React.FC<InlineLinkTypographyV
         </React.Fragment>
       ))}
 
-      <SectionHeading>ArticleBodyText — editorial/article/body / (regular | italic | bold | bold-italic)</SectionHeading>
+      <SectionHeading>
+        ArticleBodyText — editorial/article/body / (regular | italic | bold | bold-italic)
+      </SectionHeading>
       <div className={styles.variantGrid}>
         {ARTICLE_BODY_TEXT_WEIGHTS_FOR_INLINE.map((weight) => (
           <div key={weight} className={styles.variantRow}>
@@ -127,7 +138,8 @@ export const InlineLinkTypographyVariantShowcase: React.FC<InlineLinkTypographyV
       ))}
 
       <SectionHeading>
-        ArticleBodySponsoredText — editorial/article/body/sponsored / (regular | italic | semibold | semibold-italic)
+        ArticleBodySponsoredText — editorial/article/body/sponsored / (regular | italic | semibold |
+        semibold-italic)
       </SectionHeading>
       <div className={styles.variantGrid}>
         {ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS.map((weight) => (
@@ -140,10 +152,14 @@ export const InlineLinkTypographyVariantShowcase: React.FC<InlineLinkTypographyV
         ))}
       </div>
 
-      <SectionHeading>UtilityBody — utility/text / (regular | medium | semibold) / xx-small…x-large</SectionHeading>
+      <SectionHeading>
+        UtilityBody — utility/text / (regular | medium | semibold) / xx-small…x-large
+      </SectionHeading>
       {UTILITY_BODY_WEIGHTS_FOR_INLINE.map((weight) => (
         <React.Fragment key={weight}>
-          <SubHeading>weight=&quot;{weight}&quot; → utility/text/{weight}/…</SubHeading>
+          <SubHeading>
+            weight=&quot;{weight}&quot; → utility/text/{weight}/…
+          </SubHeading>
           <div className={styles.variantGrid}>
             {UTILITY_BODY_SIZES.map((size) => (
               <div key={`${weight}-${size}`} className={styles.variantRow}>

@@ -8,7 +8,10 @@ describe('InlineLink (web)', () => {
   it('renders as anchor with href', () => {
     render(
       <ArticleBodyText>
-        Text <InlineLink brand="startribune" href="/article">link</InlineLink>
+        Text{' '}
+        <InlineLink brand="startribune" href="/article">
+          link
+        </InlineLink>
       </ArticleBodyText>
     );
     const el = screen.getByRole('link', { name: 'link' });

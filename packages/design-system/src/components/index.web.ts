@@ -37,12 +37,7 @@ export {
   type FigmaEditorialSizeToken,
   type InlineLinkTypographyFamilyId,
 } from './InlineLink/inlineLinkTypographyMatrix';
-export {
-  Link,
-  type LinkInlineProps,
-  type LinkProps,
-  type LinkUtilityProps,
-} from './Link/web/Link';
+export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export {
