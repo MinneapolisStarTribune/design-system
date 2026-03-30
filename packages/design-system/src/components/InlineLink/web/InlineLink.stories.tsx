@@ -70,7 +70,8 @@ type Story = StoryObj<typeof meta>;
 function ConfigurableInner(props: InlineLinkProps) {
   return (
     <>
-      This sentence includes an <InlineLink {...props} /> inside running text so font inherits correctly.
+      This sentence includes an <InlineLink {...props} /> inside running text so font inherits
+      correctly.
     </>
   );
 }
