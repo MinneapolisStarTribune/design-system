@@ -89,6 +89,77 @@
       height: var(--spacing-20);
     }
   }
+
+  /*
+   * Inline variant: inherits parent typography; default + hover + visited underlined (Figma matrix).
+   * Underline offset/thickness use em so they track font size (Figma: 16% / 8% of font size for editorial link spec).
+   */
+  &.inline {
+    margin: 0;
+    font: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    vertical-align: baseline;
+    text-decoration: underline;
+    text-decoration-skip-ink: auto;
+    text-underline-offset: 0.16em;
+    text-decoration-thickness: 0.08em;
+    text-decoration-color: currentColor;
+
+    [class*='typography-'] {
+      color: inherit !important;
+    }
+
+    &:hover:not(.disabled) {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.08em;
+      text-decoration-color: currentColor;
+    }
+
+    &:focus-visible:not(.disabled) {
+      outline: 1px solid currentColor;
+      outline-offset: 1px;
+    }
+
+    &:visited:not(.disabled) {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.08em;
+      text-decoration-color: currentColor;
+    }
+
+    &.disabled {
+      text-decoration: none;
+    }
+
+    .inlineLabel {
+      color: inherit !important;
+    }
+  }
+
+  /*
+   * Underline color follows color.link.underline per state (not currentColor):
+   * default → underline/default, hover → underline/hover, visited → underline/visited.
+   * :visited:not(:hover) so hover tokens win when a visited link is hovered.
+   */
+  &.inline.brandStartribune,
+  &.inline.brandVarsity {
+    color: var(--color-link-text-default);
+    text-decoration-color: var(--color-link-underline-default);
+
+    &:hover:not(.disabled) {
+      color: var(--color-link-text-hover);
+      text-decoration-color: var(--color-link-underline-hover);
+    }
+
+    &:visited:not(.disabled):not(:hover) {
+      color: var(--color-link-text-visited);
+      text-decoration-color: var(--color-link-underline-visited);
+    }
+  }
 }
 
 :global(.sb-dark) .link {
@@ -107,3 +178,12 @@
     opacity: 0.4;
   }
 }
+
+:global(.sb-dark) .link.inline {
+  color: inherit;
+
+  &:focus-visible:not(.disabled) {
+    outline-color: currentColor;
+  }
+}
+

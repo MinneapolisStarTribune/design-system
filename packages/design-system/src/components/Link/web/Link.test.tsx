@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Link } from './Link';
+import { ArticleBodyText } from '@/components/Typography/ArticleBody/ArticleBodyText/web/ArticleBodyText';
 
 describe('Link (web)', () => {
   it('renders as anchor with href', () => {
@@ -47,6 +48,30 @@ describe('Link (web)', () => {
       </Link>
     );
     expect(screen.getByText('Label')).toHaveClass(expectedClass);
+  });
+
+  it('renders variant inline without Utility Body typography class', () => {
+    render(
+      <ArticleBodyText>
+        <Link variant="inline" brand="startribune" href="/inline">
+          inline
+        </Link>
+      </ArticleBodyText>
+    );
+    const inner = screen.getByText('inline');
+    expect(inner.tagName.toLowerCase()).toBe('span');
+    expect(inner).not.toHaveClass('typography-utility-text-medium-small');
+  });
+
+  it('renders as native button without href when `as="button"`', () => {
+    render(
+      <Link as="button" size="medium" href="/ignored-for-button">
+        Action
+      </Link>
+    );
+    const el = screen.getByRole('button', { name: 'Action' });
+    expect(el).not.toHaveAttribute('href');
+    expect(el).toHaveAttribute('type', 'button');
   });
 
   it('renders with `as` component instead of a native anchor', () => {

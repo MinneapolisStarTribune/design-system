@@ -173,6 +173,12 @@ interface StartribuneLightTheme {
   colorLime800: string;
   colorLime900: string;
   colorLime950: string;
+  colorLinkTextDefault: string;
+  colorLinkTextHover: string;
+  colorLinkTextVisited: string;
+  colorLinkUnderlineDefault: string;
+  colorLinkUnderlineHover: string;
+  colorLinkUnderlineVisited: string;
   colorNavyBlue100: string;
   colorNavyBlue200: string;
   colorNavyBlue300: string;
@@ -334,6 +340,7 @@ interface StartribuneLightTheme {
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
+  spacing14: number;
   spacing16: number;
   spacing2: number;
   spacing20: number;
@@ -527,6 +534,12 @@ interface StartribuneDarkTheme {
   colorLime800: string;
   colorLime900: string;
   colorLime950: string;
+  colorLinkTextDefault: string;
+  colorLinkTextHover: string;
+  colorLinkTextVisited: string;
+  colorLinkUnderlineDefault: string;
+  colorLinkUnderlineHover: string;
+  colorLinkUnderlineVisited: string;
   colorNavyBlue100: string;
   colorNavyBlue200: string;
   colorNavyBlue300: string;
@@ -688,6 +701,7 @@ interface StartribuneDarkTheme {
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
+  spacing14: number;
   spacing16: number;
   spacing2: number;
   spacing20: number;
@@ -887,6 +901,12 @@ interface VarsityLightTheme {
   colorLime800: string;
   colorLime900: string;
   colorLime950: string;
+  colorLinkTextDefault: string;
+  colorLinkTextHover: string;
+  colorLinkTextVisited: string;
+  colorLinkUnderlineDefault: string;
+  colorLinkUnderlineHover: string;
+  colorLinkUnderlineVisited: string;
   colorNavyBlue100: string;
   colorNavyBlue200: string;
   colorNavyBlue300: string;
@@ -1048,6 +1068,7 @@ interface VarsityLightTheme {
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
+  spacing14: number;
   spacing16: number;
   spacing2: number;
   spacing20: number;
@@ -1247,6 +1268,12 @@ interface VarsityDarkTheme {
   colorLime800: string;
   colorLime900: string;
   colorLime950: string;
+  colorLinkTextDefault: string;
+  colorLinkTextHover: string;
+  colorLinkTextVisited: string;
+  colorLinkUnderlineDefault: string;
+  colorLinkUnderlineHover: string;
+  colorLinkUnderlineVisited: string;
   colorNavyBlue100: string;
   colorNavyBlue200: string;
   colorNavyBlue300: string;
@@ -1408,6 +1435,7 @@ interface VarsityDarkTheme {
   semanticPhotoLayoutCaptionPaddingMobile: string;
   spacing0: number;
   spacing12: number;
+  spacing14: number;
   spacing16: number;
   spacing2: number;
   spacing20: number;

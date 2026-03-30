@@ -1,0 +1,50 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as InlineLinkStories from './InlineLink.stories';
+
+<Meta of={InlineLinkStories} />
+
+# InlineLink
+
+Use **InlineLink** for hyperlinks **inside** running text (editorial, article body, sponsored, utility typography). It **inherits** font size, weight, and family from the parent. **Visited** styles (`color.link` visited tokens) apply when the browser has the same **`href`** in history—if a URL looks “always visited,” try a unique `href`, another browser profile, or a private window when reviewing default/hover in Storybook. The **default** state is always **underlined**; underline **offset** and **thickness** scale with font size (`0.16em` / `0.08em`, matching Figma’s 16% / 8% for the editorial link spec). Text and underline **colors** come from **`color.link`** tokens (`--color-link-text-*` and `--color-link-underline-*`), which map to **Star Tribune** (emerald / forest) or **Varsity** (cobalt) per the loaded brand theme and light/dark mode.
+
+## How brands choose typography (with `InlineLink`)
+
+1. **Match the Figma text style** to a **Typography** component and **`size` / `weight`** (same as when there is no link).
+2. **Wrap the sentence** in that component; put **`InlineLink`** only around the linked words.
+3. Set **`brand="startribune"`** or **`"varsity"`** on **`InlineLink`** and load the matching **theme CSS** in the app so **`color.link`** resolves correctly.
+4. **`InlineLink` never receives font size or weight** — inheritance only.
+
+Exported string **`HOW_BRANDS_CHOOSE_INLINE_PARENT_TYPOGRAPHY`** (same content) plus **`INLINE_LINK_STORYBOOK_PREVIEW_HREF`** for Storybook-style unvisited URLs are available from **`@minneapolisstartribune/design-system/web`**.
+
+## Typographic parents (Figma ↔ DS)
+
+**Do not** add sizes or weights to **`InlineLink`** — the **parent typography component** supplies the class / tokens (e.g. `typography-editorial-text-regular-medium`). Figma labels like `xxs` / `md` map to DS `size` props (`xx-small`, `medium`, …); see **`FIGMA_EDITORIAL_SIZE_TO_DS`** and **`INLINE_LINK_TYPOGRAPHY_FAMILIES`** export from `@minneapolisstartribune/design-system/web` (reference only).
+
+Story **All variants** lists **every** parent × size/weight combination with a Figma-style caption; use **`ARTICLE_BODY_TEXT_WEIGHTS_FOR_INLINE`** and **`UTILITY_BODY_WEIGHTS_FOR_INLINE`** in code when you need the same lists programmatically.
+
+| Figma area                           | DS component               | What you set on the parent                                         |
+| ------------------------------------ | -------------------------- | ------------------------------------------------------------------ |
+| `editorial/text/regular/xxs` … `xl`  | `EditorialText`            | `weight="regular"` + `size` (`xx-small` … `x-large`)               |
+| `editorial/article/body/…`           | `ArticleBodyText`          | `weight`: `regular` \| `italic` \| `bold` \| `bold-italic`         |
+| `editorial/text/sponsored/regular/…` | `EditorialSponsoredText`   | `weight="regular"` + `size`                                        |
+| `editorial/article/body/sponsored/…` | `ArticleBodySponsoredText` | `weight`: `regular` \| `italic` \| `semibold` \| `semibold-italic` |
+| `utility/text/regular/…`             | `UtilityBody`              | `weight="regular"` + `size`                                        |
+| `utility/text/medium/…`              | `UtilityBody`              | `weight="medium"` + `size`                                         |
+| `utility/text/semibold/…`            | `UtilityBody`              | `weight="semibold"` + `size`                                       |
+
+**Always:** wrap **`InlineLink`** inside the typography component that matches the Figma style (parent sets size/weight; **`InlineLink`** sets **`brand`**, **`href`**, optional **`icon`**). Story **All variants** is a **full reference grid** (every parent × size/weight); use the Storybook **Brand** / **theme** toolbar to preview Star Tribune vs Varsity and light vs dark.
+
+For standalone utility CTAs (“Read more”) with fixed Utility Body styles, use **`Link`** under **Actions**.
+
+## Props
+
+- **`brand`** — `'startribune' | 'varsity'` — selects the interactive color palette.
+- **`as`**, **`href`**, **`disabled`**, **`icon`**, **`iconPosition`** — same patterns as **`Link`**.
+
+Implementation: **`InlineLink`** renders **`Link variant="inline"`** (shared behavior and styles in `Link.module.scss`).
+
+## Stories
+
+<Primary />
+<Controls />
+<Stories />

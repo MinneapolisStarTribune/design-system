@@ -2,10 +2,16 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArrowRightIcon } from '@/icons';
 import { LINK_ICON_POSITIONS, LINK_SIZES } from '../Link.types';
 import { Link } from './Link';
-import type { LinkProps } from '../Link.types';
+import type { LinkUtilityProps } from '../Link.types';
 import storyStyles from './Link.stories.module.scss';
 
-type StoryArgs = LinkProps & { showIcon: boolean; useAsNextLike: boolean };
+/**
+ * Storybook-only stand-in for `Link`’s `as` prop: real `as` is `ElementType`, which controls can’t edit.
+ * Maps **`a`** → native anchor, **`nextLink`** → mock `next/link` (omit this control entirely if you don’t need that preview).
+ */
+type StoryAsControl = 'a' | 'nextLink';
+
+type StoryArgs = Omit<LinkUtilityProps, 'as'> & { showIcon: boolean; as: StoryAsControl };
 
 const meta: Meta<StoryArgs> = {
   title: 'Actions/Link',
@@ -40,15 +46,11 @@ const meta: Meta<StoryArgs> = {
       control: 'boolean',
       description: 'Story helper: show ArrowRightIcon (pass `icon` in app code)',
     },
-    useAsNextLike: {
-      control: 'boolean',
-      description:
-        "When on, this story sets `as` to a mock `next/link` (you do **not** fill the `as` control). In app code: `import NextLink from 'next/link'` then `as={NextLink}`.",
-    },
     as: {
-      control: false,
+      control: 'select',
+      options: ['a', 'nextLink'],
       description:
-        'Not used in Storybook — use **useAsNextLike** above. In your app, pass a component: `as={NextLink}`.',
+        'Story-only: **`a`** = `<a>`. **`nextLink`** = mock `next/link` (in app: `import NextLink from \'next/link\'` then `as={NextLink}`). **`button`** is not listed here — pass `as="button"` in source.',
     },
     icon: {
       control: false,
@@ -60,8 +62,8 @@ const meta: Meta<StoryArgs> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Mimics `next/link` props (`href`, `className`, `children`) for Storybook only. */
-function StoryNextLinkLike({
+/** Minimal stand-in for `next/link` in Storybook (same `href` + children contract). */
+function StoryMockNextLink({
   href,
   className,
   children,
@@ -71,7 +73,7 @@ function StoryNextLinkLike({
   children: React.ReactNode;
 }) {
   return (
-    <a href={href} className={className} data-testid="story-as-next-like">
+    <a href={href} className={className} data-testid="story-mock-next-link">
       {children}
     </a>
   );
@@ -85,14 +87,14 @@ export const Configurable: Story = {
     disabled: false,
     iconPosition: 'end',
     showIcon: false,
-    useAsNextLike: false,
+    as: 'a',
   },
   render: (args) => {
-    const { showIcon, useAsNextLike, as: _ignoredAs, icon: _ignoredIcon, ...linkProps } = args;
+    const { showIcon, as: asControl, icon: _ignoredIcon, ...linkProps } = args;
     return (
       <Link
         {...linkProps}
-        as={useAsNextLike ? StoryNextLinkLike : undefined}
+        as={asControl === 'nextLink' ? StoryMockNextLink : 'a'}
         icon={showIcon ? <ArrowRightIcon /> : undefined}
       />
     );
@@ -101,23 +103,17 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   parameters: {
+    layout: 'fullscreen',
     controls: { disable: true },
     docs: {
       description: {
         story:
-          'Each tile shows **Default** and **Focus** (simulated focus ring for static preview). **Disabled** tiles only show default — focus does not apply.',
+          'Responsive **grid** (fullscreen canvas): each tile shows **Default** and **Focus** (simulated focus ring). **Disabled** tiles only show default — focus does not apply.',
       },
     },
   },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-        gap: '1.5rem',
-        alignItems: 'start',
-      }}
-    >
+    <div className={storyStyles.allVariantsGrid}>
       {LINK_SIZES.flatMap((size) =>
         LINK_ICON_POSITIONS.flatMap((iconPosition) =>
           [false, true].flatMap((disabled) =>

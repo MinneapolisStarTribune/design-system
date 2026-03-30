@@ -466,6 +466,37 @@
         "value": "{color.emerald-green.800}"
       }
     },
+    "link": {
+      "description": "Inline link — text and underline colors for default, hover, and visited states (dark backgrounds).",
+      "text": {
+        "default": {
+          "description": "Default link text on dark backgrounds.",
+          "value": "{color.base.white}"
+        },
+        "hover": {
+          "description": "Hovered link text color on dark backgrounds.",
+          "value": "{color.cobalt-blue.600}"
+        },
+        "visited": {
+          "description": "Visited link text color on dark backgrounds.",
+          "value": "{color.cobalt-blue.400}"
+        }
+      },
+      "underline": {
+        "default": {
+          "description": "Default underline color on dark backgrounds.",
+          "value": "{color.cobalt-blue.600}"
+        },
+        "hover": {
+          "description": "Hovered underline color on dark backgrounds.",
+          "value": "{color.cobalt-blue.600}"
+        },
+        "visited": {
+          "description": "Visited underline color on dark backgrounds.",
+          "value": "{color.cobalt-blue.400}"
+        }
+      }
+    },
     "utility-toggle": {
       "active-icon-default": {
         "description": "Default icon color for active utility toggle controls on dark backgrounds.",

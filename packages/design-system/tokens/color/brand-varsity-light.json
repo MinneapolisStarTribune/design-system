@@ -466,6 +466,37 @@
         "value": "{color.emerald-green.800}"
       }
     },
+    "link": {
+      "description": "Inline link — text and underline colors for default, hover, and visited states (light backgrounds).",
+      "text": {
+        "default": {
+          "description": "Default link text on light backgrounds (#000000 per Figma color/link/text/default).",
+          "value": "{color.base.black}"
+        },
+        "hover": {
+          "description": "Hovered link text color on light backgrounds.",
+          "value": "{color.cobalt-blue.700}"
+        },
+        "visited": {
+          "description": "Visited link text color on light backgrounds.",
+          "value": "{color.cobalt-blue.900}"
+        }
+      },
+      "underline": {
+        "default": {
+          "description": "Default underline color on light backgrounds.",
+          "value": "{color.cobalt-blue.700}"
+        },
+        "hover": {
+          "description": "Hovered underline color on light backgrounds.",
+          "value": "{color.cobalt-blue.700}"
+        },
+        "visited": {
+          "description": "Visited underline color on light backgrounds.",
+          "value": "{color.cobalt-blue.900}"
+        }
+      }
+    },
     "utility-toggle": {
       "active-icon-default": {
         "description": "Default icon color for active utility toggle controls on light backgrounds.",

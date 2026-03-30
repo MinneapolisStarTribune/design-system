@@ -18,6 +18,7 @@ export const COMPONENT_NAMES = [
   'FormControl',
   'FormGroup',
   'ImageGallery',
+  'InlineLink',
   'InlineVideo',
   'Link',
   'NewsHeading',
