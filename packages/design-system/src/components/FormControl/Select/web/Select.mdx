@@ -1,0 +1,152 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './Select.stories';
+
+<Meta of={SelectStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Select
+
+Select inputs allow users to choose a single value from a predefined list of options. They are used in forms and settings where the available choices are known and constrained. Select inputs support multiple sizes, optional labels and descriptions, placeholder text, and validation feedback for required or missing selections.
+
+`<Select>` allows users to choose a single option from a dropdown list. It supports keyboard navigation, multiple sizes, states, and integrates with `FormGroup` for accessibility.
+
+## Architecture
+Layer	What it does	Required?
+FormGroup + FormControl	Layout, labels, descriptions, accessibility	Recommended
+Select	Dropdown behavior and selection	Always
+
+| Layer                   | What it does                                | Required?   |
+| ----------------------- | ------------------------------------------- | ----------- |
+| FormGroup + FormControl | Layout, labels, descriptions, accessibility | Recommended |
+| Select                  | Dropdown behavior and selection             | Always      |
+
+`Select` works standalone, but when wrapped in `FormGroup`, it automatically connects labels and descriptions via `aria` attributes.
+
+## Basic usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormControl.Select
+    id="country"
+    options={[
+      { value: 'us', label: 'United States' },
+      { value: 'ca', label: 'Canada' },
+    ]}
+  />
+</FormGroup>
+```
+
+## Controlled usage
+
+```tsx
+const [value, setValue] = useState<string | undefined>();
+
+<FormControl.Select
+  id="country"
+  value={value}
+  onChange={setValue}
+  options={OPTIONS}
+/>
+```
+
+## Sizes
+
+```tsx
+<FormControl.Select size="small" />
+<FormControl.Select size="medium" />
+<FormControl.Select size="large" />
+```
+
+## Radius
+
+```tsx
+<FormControl.Select rounded />
+```
+
+## Placeholder behavior
+
+```tsx
+<FormControl.Select placeholderText="Select an option" />
+<FormControl.Select showPlaceholder={false} />
+```
+
+## States
+
+```tsx
+<FormControl.Select options={OPTIONS} />
+<FormControl.Select value="us" options={OPTIONS} />
+<FormControl.Select isDisabled options={OPTIONS} />
+```
+
+## Error state
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormControl.Select isError options={OPTIONS} />
+  <FormGroup.Caption variant="error">
+    This field is required
+  </FormGroup.Caption>
+</FormGroup>
+```
+
+## Accessibility
+
+* role="combobox" with aria-expanded
+* aria-controls links combobox to listbox
+* aria-activedescendant for keyboard navigation
+* aria-labelledby via FormGroup
+* fallback aria-label when no label is provided
+
+# Keyboard interaction
+| Key         | Behavior              |
+| ----------- | --------------------- |
+| ArrowDown   | Open / move down      |
+| ArrowUp     | Move up               |
+| Enter       | Select option         |
+| Escape      | Close dropdown        |
+
+## Integration with FormGroup
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormGroup.Description>
+    Choose your country
+  </FormGroup.Description>
+
+  <FormControl.Select options={OPTIONS} />
+
+  <FormGroup.Caption variant="info">
+    Informational message
+  </FormGroup.Caption>
+</FormGroup>
+```
+
+## Exports
+
+| Export         | Description               |
+| -------------- | ------------------------- |
+| `Select`       | Dropdown select component |
+| `SelectProps`  | Props interface           |
+| `SelectOption` | Option type               |
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+## Playground
+
+<Canvas>
+  <Story of={SelectStories.Configurable} />
+</Canvas>
+
+---
+
+## All Variants
+
+<Canvas>
+  <Story of={SelectStories.AllVariants} />
+</Canvas>

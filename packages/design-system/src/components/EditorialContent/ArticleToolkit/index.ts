@@ -22,3 +22,7 @@ export {
   PHOTO_LAYOUT_TYPES,
   type PhotoLayoutType,
 } from './types';
+export { DangerousCodeBlock } from './CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
+export type { DangerousCodeBlockProps } from './CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
+export { EnhancedCodeBlock } from './CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
+export type { EnhancedCodeBlockProps } from './CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
