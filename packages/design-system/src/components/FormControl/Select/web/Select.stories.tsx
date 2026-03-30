@@ -63,8 +63,8 @@ const ConfigurableComponent = (args: Partial<SelectProps>) => {
 
       <FormControl.Select
         id="select-configurable"
-        options={args.options ?? OPTIONS}
         {...args}
+        options={args.options ?? OPTIONS}
         value={value}
         onChange={(val: string) => {
           if (!isControlled) setInternalValue(val);
