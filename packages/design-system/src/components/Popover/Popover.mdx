@@ -1,0 +1,66 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as PopoverStories from './Popover.stories';
+
+<Meta of={PopoverStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Popover
+
+Popovers provide lightweight, focused surfaces for quick actions or supplemental context. They open on click or focus, can include text, links, and simple actions, and now support richer content through a flexible slot—such as menu items or form controls. Popovers auto-size to their content, reposition as needed, and close when the user clicks outside, presses Escape, or completes an action.
+
+## Anatomy
+
+1. **Container** — The outer surface that holds the popover content and handles positioning and elevation.  
+2. **Close button** — Allows users to manually dismiss the popover.  
+3. **Title (optional)** — Helps users understand the purpose of the popover.  
+4. **Description** — Primary supporting text.  
+5. **Header divider (optional)** — Separates header from content when needed.  
+6. **Custom content (optional)** — Flexible slot for menus, actions, or forms.  
+7. **Pointer** — Directional arrow connecting popover to trigger.
+
+## Usage
+
+- Use for contextual actions or supplementary information
+- Keep content concise and scannable
+- Use composition (`Popover.Heading`, `Popover.Body`, etc.) for layout control
+- Add a divider when separating header and content
+- Provide `aria-label` when no heading is present
+- Avoid overcrowding content — prefer simple, focused interactions
+
+<table>
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Popover</code></td>
+      <td>Handles positioning, visibility, interactions, and portal rendering.</td>
+    </tr>
+    <tr>
+      <td><code>Popover.Heading</code></td>
+      <td>Optional title section with close button.</td>
+    </tr>
+    <tr>
+      <td><code>Popover.Description</code></td>
+      <td>Primary text content.</td>
+    </tr>
+    <tr>
+      <td><code>Popover.Body</code></td>
+      <td>Container for custom or scrollable content.</td>
+    </tr>
+    <tr>
+      <td><code>Popover.Divider</code></td>
+      <td>Visual separator between sections.</td>
+    </tr>
+  </tbody>
+</table>
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />
