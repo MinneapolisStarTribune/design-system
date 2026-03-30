@@ -25,10 +25,6 @@ export interface NavigationProps {
   nextButtonProps?: Partial<ButtonProps>;
 }
 
-export interface PaginationProps {
-  variant?: 'default' | 'custom';
-}
-
 export type CarouselChild = React.ReactElement<{
   variant?: 'default' | 'custom';
 }> & {
