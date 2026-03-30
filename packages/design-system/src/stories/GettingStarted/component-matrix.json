@@ -13,6 +13,11 @@
             "component": "Utility Button",
             "native": false,
             "web": true
+          },
+          {
+            "component": "Link",
+            "native": false,
+            "web": true
           }
         ]
       }
@@ -155,6 +160,27 @@
     ],
     "subCategory": "",
     "topLevel": "Foundations"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Link",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "InlineLink",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "Link",
+    "topLevel": "Typography"
   },
   {
     "groups": [
