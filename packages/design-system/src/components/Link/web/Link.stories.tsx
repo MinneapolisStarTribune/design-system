@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArrowRightIcon } from '@/icons';
 import { LINK_ICON_POSITIONS, LINK_SIZES } from '../Link.types';
@@ -15,7 +16,8 @@ type StoryArgs = Omit<LinkUtilityProps, 'as'> & { showIcon: boolean; as: StoryAs
 
 const meta: Meta<StoryArgs> = {
   title: 'Actions/Link',
-  component: Link,
+  /** Story-only args (`as`, `showIcon`) are mapped in `render`; `Link`’s real `as` is `ElementType`. */
+  component: Link as ComponentType<StoryArgs>,
   parameters: {
     layout: 'centered',
   },
