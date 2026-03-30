@@ -76,9 +76,7 @@ function wrapConfigurable(inner: ReactNode, variant: InlineLinkStorybookTypograp
 
   switch (parent) {
     case 'articleBody':
-      return (
-        <ArticleBodyText weight={weight as ArticleBodyTextWeight}>{inner}</ArticleBodyText>
-      );
+      return <ArticleBodyText weight={weight as ArticleBodyTextWeight}>{inner}</ArticleBodyText>;
     case 'editorial':
       return (
         <EditorialText size="medium" weight={weight as EditorialTextWeight}>
