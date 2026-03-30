@@ -1,49 +1,91 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';
-import type { ImageData } from '../../types';
-import styles from './PhotoLayout.module.scss';
+import { type ImageData } from '../../types';
+import styles from './ImageDialog.module.scss';
 import classNames from 'classnames';
 
-interface PhotoLayoutDialogProps {
+export interface ImageDialogProps {
   image: ImageData;
   caption?: string;
-  imageCredit?: string;
+  credit?: string;
   imgixParams?: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
+  isOpen: boolean;
   onClose: () => void;
+  dataTestId?: string;
 }
 
-export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
+// Keep track of active scroll locks
+const activeScrollLocks = new Set<string>();
+
+const lockScroll = (modalId: string) => {
+  activeScrollLocks.add(modalId);
+  document.body.style.overflow = 'hidden';
+};
+
+const unlockScroll = (modalId: string) => {
+  activeScrollLocks.delete(modalId);
+  if (activeScrollLocks.size === 0) {
+    document.body.style.overflow = '';
+  }
+};
+
+export const ImageDialog: React.FC<ImageDialogProps> = ({
   image,
   caption,
-  imageCredit,
+  credit,
   imgixParams,
   dialogRef,
+  isOpen,
   onClose,
+  dataTestId = 'image-dialog',
 }) => {
   const hasCaption = Boolean(caption?.trim());
+  const hasCredit = Boolean(credit?.trim());
+  const dialogTitleId = `${dataTestId}-title`;
 
-  const handleClose = () => onClose();
-  const hasCredit = Boolean(imageCredit?.trim());
+  // Lock scroll when dialog is open
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      dialog.showModal();
+      lockScroll(dataTestId);
+    } else if (dialog.open) {
+      dialog.close();
+      unlockScroll(dataTestId);
+    }
+
+    return () => {
+      if (dialog.open) dialog.close();
+      unlockScroll(dataTestId);
+    };
+  }, [dataTestId, dialogRef, isOpen]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === dialogRef.current) handleClose();
+    if (e.target === dialogRef.current) onClose();
   };
 
   return (
     <dialog
       ref={dialogRef}
       className={styles.dialog}
-      aria-label={image.altText}
-      onClose={handleClose}
+      aria-labelledby={dialogTitleId}
+      onClose={onClose}
       onClick={handleBackdropClick}
+      data-testid={dataTestId}
     >
+      <h2 id={dialogTitleId} className={styles['dialog-title-sr-only']}>
+        Expanded image view
+      </h2>
       <button
         type="button"
         className={styles['dialog-close-button']}
         aria-label="Close expanded image"
-        onClick={handleClose}
+        onClick={onClose}
+        data-testid={`${dataTestId}-close-button`}
       >
         <span className={styles['dialog-close-icon']} aria-hidden>
           <CloseIcon size="large" aria-hidden color="on-dark-primary" />
@@ -84,7 +126,7 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
                     styles['dialog-credit-text']
                   )}
                 >
-                  {imageCredit}
+                  {credit}
                 </span>
               </div>
             )}
@@ -95,4 +137,4 @@ export const PhotoLayoutDialog: React.FC<PhotoLayoutDialogProps> = ({
   );
 };
 
-PhotoLayoutDialog.displayName = 'PhotoLayoutDialog';
+ImageDialog.displayName = 'ImageDialog';
