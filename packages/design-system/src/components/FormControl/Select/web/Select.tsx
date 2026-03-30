@@ -5,10 +5,6 @@ import styles from './Select.module.scss';
 import { SelectProps, SelectOption } from './Select.types';
 import { ChevronDownIcon } from '@/icons';
 
-const triggerTypographyClass = 'typography-utility-text-regular-medium';
-const optionTypographyClass = 'typography-utility-text-regular-medium';
-const placeholderTypographyClass = 'typography-utility-text-italic-medium';
-
 export const Select: React.FC<SelectProps> = ({
   options,
   value,
@@ -52,6 +48,24 @@ export const Select: React.FC<SelectProps> = ({
   const displayLabel = isFilled ? selectedOption?.label : placeholderText;
 
   const listboxId = `${inputId}-listbox`;
+
+  const triggerTypographyClass = classNames({
+    'typography-utility-text-regular-small': size === 'small',
+    'typography-utility-text-regular-medium': size === 'medium',
+    'typography-utility-text-regular-large': size === 'large',
+  });
+
+  const optionTypographyClass = classNames({
+    'typography-utility-text-regular-small': size === 'small',
+    'typography-utility-text-regular-medium': size === 'medium',
+    'typography-utility-text-regular-large': size === 'large',
+  });
+
+  const placeholderTypographyClass = classNames({
+    'typography-utility-text-italic-small': size === 'small',
+    'typography-utility-text-italic-medium': size === 'medium',
+    'typography-utility-text-italic-large': size === 'large',
+  });
 
   useEffect(() => {
     if (!isOpen) return;
