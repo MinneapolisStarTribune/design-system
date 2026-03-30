@@ -1,0 +1,25 @@
+/*
+ * Simulates focus ring for All variants (Chromatic / static preview).
+ * Matches `Link.module.scss` — not for production use.
+ */
+
+/* Full-width Storybook canvas so `auto-fill` can produce multiple columns */
+.allVariantsGrid {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100%;
+  padding: var(--spacing-24) var(--spacing-32) var(--spacing-48);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-24);
+  align-items: start;
+}
+
+.forceFocusRing {
+  outline: 1px solid var(--color-text-on-light-primary);
+  outline-offset: 1px;
+}
+
+:global(.sb-dark) .forceFocusRing {
+  outline-color: var(--color-text-on-dark-primary);
+}
