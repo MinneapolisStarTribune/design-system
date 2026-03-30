@@ -59,21 +59,38 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Publishing version: $VERSION"
 
+      - name: Generate component matrix
+        working-directory: packages/design-system
+        run: yarn generate:component-matrix
+
+      - name: Commit component matrix if changed
+        env:
+          HUSKY: 0
+        run: |
+          git config user.name "ci-branch-protection-bypass[bot]"
+          git config user.email "ci-branch-protection-bypass[bot]@users.noreply.github.com"
+
+          # Ensure we're on main branch and up to date
+          git checkout main
+          git fetch origin main
+
+          git add packages/design-system/src/stories/GettingStarted/component-matrix.json
+          if git diff --cached --quiet; then
+            echo "Component matrix unchanged."
+          else
+            git commit -m "chore: update component matrix"
+            git push origin main
+          fi
+
       - name: Update package.json version
         env:
           HUSKY: 0
         run: |
-          # Ensure we're on main branch and up to date
-          git checkout main
-          git fetch origin main
 
           # Update version in the design system package
           cd packages/design-system
           yarn version ${{ steps.version.outputs.version }} --immediate
           cd ../..
-
-          git config user.name "ci-branch-protection-bypass[bot]"
-          git config user.email "ci-branch-protection-bypass[bot]@users.noreply.github.com"
 
           git add packages/design-system/package.json
           git commit -m "chore: bump version to ${{ steps.version.outputs.version }}"
