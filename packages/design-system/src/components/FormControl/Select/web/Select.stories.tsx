@@ -27,7 +27,7 @@ const OPTIONS = [
 ];
 
 const meta = {
-  title: 'Components/Actions & Inputs/Select',
+  title: 'Forms/FormControl/Select',
   component: FormControl.Select,
   parameters: {
     docs: {
@@ -39,7 +39,7 @@ const meta = {
   },
   argTypes: {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
-    radius: { control: 'select', options: ['pointy', 'rounded'] },
+    rounded: { control: 'boolean' },
     isDisabled: { control: 'boolean' },
     isError: { control: 'boolean' },
     placeholderText: { control: 'text' },
@@ -84,7 +84,7 @@ const ConfigurableComponent = (args: Partial<SelectProps>) => {
 export const Configurable: Story = {
   args: {
     size: 'medium',
-    radius: 'pointy',
+    rounded: false,
     isDisabled: false,
     isError: false,
     placeholderText: 'Select an option',
@@ -139,7 +139,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Pointy</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} radius="pointy" />
+            <FormControl.Select options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -147,7 +147,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Rounded</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} radius="rounded" />
+            <FormControl.Select options={OPTIONS} rounded />
           </FormGroup>
         </div>
 
@@ -284,7 +284,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Pointy</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} radius="pointy" />
+            <FormControl.Select options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -292,7 +292,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Rounded</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} radius="rounded" />
+            <FormControl.Select options={OPTIONS} rounded />
           </FormGroup>
         </div>
 

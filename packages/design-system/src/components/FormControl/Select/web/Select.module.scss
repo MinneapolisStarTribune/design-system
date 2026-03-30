@@ -46,6 +46,9 @@
     cursor: not-allowed;
     background: var(--color-background-light-gray-01);
     border-color: var(--color-border-state-disabled-on-light);
+    span {
+      color: var(--color-text-state-disabled-on-light);
+    }
   }
 }
 

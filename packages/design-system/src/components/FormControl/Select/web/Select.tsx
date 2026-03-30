@@ -16,7 +16,7 @@ export const Select: React.FC<SelectProps> = ({
   placeholderText = 'Select an option',
   showPlaceholder = true,
   size = 'medium',
-  radius = 'pointy',
+  rounded = false,
   isDisabled = false,
   isError,
   className,
@@ -142,7 +142,7 @@ export const Select: React.FC<SelectProps> = ({
     styles.selectContainer,
     styles[`size${size[0].toUpperCase()}${size.slice(1)}`],
     {
-      [styles.isRounded]: radius === 'rounded',
+      [styles.isRounded]: rounded,
       [styles.isDisabled]: isDisabled,
       [styles.isError]: hasError,
       [styles.isOpen]: isOpen,
@@ -189,7 +189,10 @@ export const Select: React.FC<SelectProps> = ({
         </span>
 
         <span className={styles.selectIcon} aria-hidden>
-          <ChevronDownIcon size={size} color="on-light-primary" />
+          <ChevronDownIcon
+            size={size}
+            color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}
+          />
         </span>
       </button>
 

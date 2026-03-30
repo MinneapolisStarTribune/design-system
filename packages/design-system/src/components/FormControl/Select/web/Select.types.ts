@@ -14,7 +14,7 @@ export interface SelectProps extends FormControlProps {
   placeholderText?: string;
   showPlaceholder?: boolean;
   size?: 'small' | 'medium' | 'large';
-  radius?: 'pointy' | 'rounded';
+  rounded?: boolean;
   isDisabled?: boolean;
   isError?: boolean;
 
