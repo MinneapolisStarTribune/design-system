@@ -25,18 +25,18 @@ export {
 } from './FormGroup/web/FormGroup';
 export { Icon, type IconProps } from './Icon/Icon';
 export { Image, type ImageProps } from './Image/web/Image';
-export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export {
   ARTICLE_BODY_TEXT_WEIGHTS_FOR_INLINE,
   FIGMA_EDITORIAL_SIZE_TO_DS,
   FIGMA_UTILITY_SIZE_TO_DS,
+  type FigmaEditorialSizeToken,
   HOW_BRANDS_CHOOSE_INLINE_PARENT_TYPOGRAPHY,
   INLINE_LINK_STORYBOOK_PREVIEW_HREF,
   INLINE_LINK_TYPOGRAPHY_FAMILIES,
-  UTILITY_BODY_WEIGHTS_FOR_INLINE,
-  type FigmaEditorialSizeToken,
   type InlineLinkTypographyFamilyId,
+  UTILITY_BODY_WEIGHTS_FOR_INLINE,
 } from './InlineLink/inlineLinkTypographyMatrix';
+export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
