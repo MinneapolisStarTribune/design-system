@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { SwiperCarousel } from './SwiperCarousel';
 import { FormGroup, SectionHeading, SwiperCarouselProps, UtilityBody } from '@/index.web';
-import { NavigationProps } from './SwiperCarousel.types';
+import type { NavigationProps } from './SwiperCarousel.types';
 
 const meta: Meta<typeof SwiperCarousel> = {
   title: 'Components/SwiperCarousel',
@@ -58,11 +58,16 @@ const DemoCard = ({ index }: { index: number }) => (
 );
 
 const items = Array.from({ length: 6 }, (_, i) => i + 1);
+const smallItems = [1, 2];
 
-/**
- * Default carousel with pagination
- */
-export const Default: Story = {
+const sectionLabelStyle = {
+  marginBottom: 12,
+  color: 'var(--color-text-on-light-secondary)',
+} as const;
+const sectionGap = { display: 'flex', flexDirection: 'column' as const, gap: 48 };
+
+/** Interactive playground — tweak Swiper props via Controls. */
+export const Configurable: Story = {
   render: (args) => (
     <SwiperCarousel {...args}>
       {items.map((i) => (
@@ -107,174 +112,21 @@ export const Default: Story = {
   },
 };
 
-/**
- * No pagination with navigation
- */
-export const NoPagination: Story = {
-  render: (args) => (
-    <SwiperCarousel {...args}>
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <DemoCard index={i} />
-        </SwiperCarousel.Slide>
-      ))}
-
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <UtilityBody size="x-small">Image caption (Utility body (x-small))</UtilityBody>
-        <SwiperCarousel.Navigation />
-      </div>
-    </SwiperCarousel>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `
-<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
-  {items.map((i) => (
-    <SwiperCarousel.Slide key={i}>
-      <DemoCard index={i} />
-    </SwiperCarousel.Slide>
-  ))}
-
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <UtilityBody size="x-small">Image caption (Utility body (x-small))</UtilityBody>
-    <SwiperCarousel.Navigation />
-  </div>
-</SwiperCarousel>
-        `,
-      },
-    },
-  },
-};
-
-/**
- * Image gallery (single slide view)
- */
-export const ImageGalleryStandard: Story = {
-  args: {
-    slidesPerView: 1,
-    spaceBetween: 0,
-  },
-  render: (args) => (
-    <SwiperCarousel {...args}>
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <div
-            style={{
-              width: '100%',
-              height: 300,
-              background: '#ddd',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600,
-            }}
-          >
-            Image {i}
-          </div>
-        </SwiperCarousel.Slide>
-      ))}
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: 8,
-        }}
-      >
-        <UtilityBody size="small">Image caption (Utility body)</UtilityBody>
-        <SwiperCarousel.Navigation />
-      </div>
-    </SwiperCarousel>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: ` <SwiperCarousel {...args}>
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <div
-            style={{
-              width: '100%',
-              height: 300,
-              background: '#ddd',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 600,
-            }}
-          >
-            Image {i}
-          </div>
-        </SwiperCarousel.Slide>
-      ))}
-
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: 8,
-        }}
-      >
-        <UtilityBody size='small'>Image caption (Utility body)</UtilityBody>
-        <SwiperCarousel.Navigation />
-      </div>
-    </SwiperCarousel>`,
-      },
-    },
-  },
-};
-
-/**
- * Top controls layout
- */
-export const Layout_TopControls: Story = {
-  render: (args) => (
-    <SwiperCarousel {...args}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 12,
-        }}
-      >
-        <SectionHeading importance={3}>The Latest</SectionHeading>
-        <SwiperCarousel.Navigation />
-      </div>
-
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <DemoCard index={i} />
-        </SwiperCarousel.Slide>
-      ))}
-    </SwiperCarousel>
-  ),
-  parameters: {
-    docs: {
-      source: {
-        code: `
-<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <SectionHeading importance={1}>The Latest</SectionHeading>
-    <SwiperCarousel.Navigation />
-  </div>
-
-  {items.map((i) => (
-    <SwiperCarousel.Slide key={i}>
-      <DemoCard index={i} />
-    </SwiperCarousel.Slide>
-  ))}
-</SwiperCarousel>
-        `,
-      },
-    },
-  },
-};
-
 type NavigationStoryArgs = SwiperCarouselProps & NavigationProps;
 
-export const NavigationControls: StoryObj<NavigationStoryArgs> = {
+/** Static reference: pagination, no pagination, image gallery, top controls, nav sizing, no-scroll. */
+export const AllVariants: StoryObj<NavigationStoryArgs> = {
+  name: 'All variants',
+  parameters: {
+    controls: { disable: true },
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'Layout patterns previously split across separate stories: pagination + caption, UtilityBody caption, single-slide gallery, heading + nav, customizable navigation size, and auto-hidden controls when there are not enough slides.',
+      },
+    },
+  },
   args: {
     slidesPerView: 'auto',
     spaceBetween: 16,
@@ -282,113 +134,142 @@ export const NavigationControls: StoryObj<NavigationStoryArgs> = {
     centeredSlides: false,
     size: 'large',
   },
-
   render: ({ size, buttonProps, prevButtonProps, nextButtonProps, ...args }) => (
-    <SwiperCarousel {...args}>
-      {items.map((i) => (
-        <SwiperCarousel.Slide key={i}>
-          <DemoCard index={i} />
-        </SwiperCarousel.Slide>
-      ))}
+    <div style={sectionGap}>
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          With pagination + FormGroup caption
+        </p>
+        <SwiperCarousel {...args}>
+          {items.map((i) => (
+            <SwiperCarousel.Slide key={i}>
+              <DemoCard index={i} />
+            </SwiperCarousel.Slide>
+          ))}
+          <SwiperCarousel.Pagination />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <FormGroup>
+              <FormGroup.Caption variant="info">
+                Captions (Formgroup.caption Used)
+              </FormGroup.Caption>
+            </FormGroup>
+            <SwiperCarousel.Navigation />
+          </div>
+        </SwiperCarousel>
+      </section>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <UtilityBody size="medium">Image caption (Utility body (medium))</UtilityBody>
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          No pagination — UtilityBody caption (x-small)
+        </p>
+        <SwiperCarousel {...args}>
+          {items.map((i) => (
+            <SwiperCarousel.Slide key={`np-${i}`}>
+              <DemoCard index={i} />
+            </SwiperCarousel.Slide>
+          ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <UtilityBody size="x-small">Image caption (Utility body (x-small))</UtilityBody>
+            <SwiperCarousel.Navigation />
+          </div>
+        </SwiperCarousel>
+      </section>
 
-        <SwiperCarousel.Navigation
-          size={size}
-          buttonProps={buttonProps}
-          prevButtonProps={prevButtonProps}
-          nextButtonProps={nextButtonProps}
-        />
-      </div>
-    </SwiperCarousel>
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          Image gallery (slidesPerView: 1)
+        </p>
+        <SwiperCarousel {...args} slidesPerView={1} spaceBetween={0}>
+          {items.map((i) => (
+            <SwiperCarousel.Slide key={`ig-${i}`}>
+              <div
+                style={{
+                  width: '100%',
+                  height: 300,
+                  background: '#ddd',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600,
+                }}
+              >
+                Image {i}
+              </div>
+            </SwiperCarousel.Slide>
+          ))}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: 8,
+            }}
+          >
+            <UtilityBody size="small">Image caption (Utility body)</UtilityBody>
+            <SwiperCarousel.Navigation />
+          </div>
+        </SwiperCarousel>
+      </section>
+
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          Top controls — SectionHeading + Navigation
+        </p>
+        <SwiperCarousel {...args}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 12,
+            }}
+          >
+            <SectionHeading importance={3}>The Latest</SectionHeading>
+            <SwiperCarousel.Navigation />
+          </div>
+          {items.map((i) => (
+            <SwiperCarousel.Slide key={`tc-${i}`}>
+              <DemoCard index={i} />
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      </section>
+
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          Navigation — size + optional button props (medium caption)
+        </p>
+        <SwiperCarousel {...args}>
+          {items.map((i) => (
+            <SwiperCarousel.Slide key={`nav-${i}`}>
+              <DemoCard index={i} />
+            </SwiperCarousel.Slide>
+          ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <UtilityBody size="medium">Image caption (Utility body (medium))</UtilityBody>
+            <SwiperCarousel.Navigation
+              size={size}
+              buttonProps={buttonProps}
+              prevButtonProps={prevButtonProps}
+              nextButtonProps={nextButtonProps}
+            />
+          </div>
+        </SwiperCarousel>
+      </section>
+
+      <section>
+        <p className="typography-utility-text-regular-small" style={sectionLabelStyle}>
+          Not enough slides — pagination and navigation auto-hide
+        </p>
+        <SwiperCarousel {...args}>
+          {smallItems.map((i) => (
+            <SwiperCarousel.Slide key={`ns-${i}`}>
+              <DemoCard index={i} />
+            </SwiperCarousel.Slide>
+          ))}
+          <SwiperCarousel.Pagination />
+          <SwiperCarousel.Navigation />
+        </SwiperCarousel>
+      </section>
+    </div>
   ),
-
-  argTypes: {
-    size: {
-      control: { type: 'radio' },
-      options: ['small', 'medium', 'large'],
-    },
-    buttonProps: {
-      control: 'object',
-    },
-    prevButtonProps: {
-      control: 'object',
-    },
-    nextButtonProps: {
-      control: 'object',
-    },
-  },
-
-  parameters: {
-    docs: {
-      source: {
-        code: `
-<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
-  {items.map((i) => (
-    <SwiperCarousel.Slide key={i}>
-      <DemoCard index={i} />
-    </SwiperCarousel.Slide>
-  ))}
-
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <UtilityBody size="medium">Image caption (Utility body (medium))</UtilityBody>
-    <SwiperCarousel.Navigation
-      size="large"
-      buttonProps={{ variant: 'ghost' }}
-      prevButtonProps={{ 'aria-label': 'Previous slide' }}
-      nextButtonProps={{ 'aria-label': 'Next slide' }}
-    />
-  </div>
-</SwiperCarousel>
-        `,
-      },
-    },
-  },
-};
-
-/**
- * No arrows & no pagination (not enough items to scroll)
- */
-export const NoScroll_NoControls: Story = {
-  render: (args) => {
-    const smallItems = [1, 2]; // 👈 not enough to scroll
-
-    return (
-      <SwiperCarousel {...args}>
-        {smallItems.map((i) => (
-          <SwiperCarousel.Slide key={i}>
-            <DemoCard index={i} />
-          </SwiperCarousel.Slide>
-        ))}
-
-        {/* Pagination should auto-hide */}
-        <SwiperCarousel.Pagination />
-
-        {/* Navigation should auto-hide */}
-        <SwiperCarousel.Navigation />
-      </SwiperCarousel>
-    );
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: `
-<SwiperCarousel {...args}>
-        {smallItems.map((i) => (
-          <SwiperCarousel.Slide key={i}>
-            <DemoCard index={i} />
-          </SwiperCarousel.Slide>
-        ))}
-
-        {/* Pagination should auto-hide */}
-        <SwiperCarousel.Pagination />
-
-        {/* Navigation should auto-hide */}
-        <SwiperCarousel.Navigation />
-      </SwiperCarousel>
-        `,
-      },
-    },
-  },
 };
