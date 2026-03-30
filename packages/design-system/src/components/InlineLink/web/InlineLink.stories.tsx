@@ -1,32 +1,33 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredText } from '@/components/Typography/ArticleBody/ArticleBodySponsoredText/web/ArticleBodySponsoredText';
+import type { ArticleBodySponsoredTextWeight } from '@/components/Typography/ArticleBody/ArticleBodySponsoredText/ArticleBodySponsoredText.types';
 import { ArticleBodyText } from '@/components/Typography/ArticleBody/ArticleBodyText/web/ArticleBodyText';
+import type { ArticleBodyTextWeight } from '@/components/Typography/ArticleBody/ArticleBodyText/ArticleBodyText.types';
 import { EditorialSponsoredText } from '@/components/Typography/Editorial/EditorialSponsoredText/web/EditorialSponsoredText';
+import type { EditorialSponsoredTextWeight } from '@/components/Typography/Editorial/EditorialSponsoredText/EditorialSponsoredText.types';
 import { EditorialText } from '@/components/Typography/Editorial/EditorialText/web/EditorialText';
+import type { EditorialTextWeight } from '@/components/Typography/Editorial/EditorialText/EditorialText.types';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
-import { INLINE_LINK_STORYBOOK_PREVIEW_HREF } from '../inlineLinkTypographyMatrix';
+import type { UtilityBodyWeight } from '@/components/Typography/Utility/UtilityBody/UtilityBody.types';
+import {
+  INLINE_LINK_STORYBOOK_PREVIEW_HREF,
+  INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANTS,
+  INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANT_LABELS,
+  parseInlineLinkStorybookTypographyVariant,
+  type InlineLinkStorybookTypographyVariant,
+} from '../inlineLinkTypographyMatrix';
 import type { InlineLinkProps } from '../InlineLink.types';
 import { InlineLink } from './InlineLink';
 import { InlineLinkTypographyVariantShowcase } from './InlineLinkTypographyVariantShowcase';
 
 const INLINE_LINK_PREVIEW_HREF = INLINE_LINK_STORYBOOK_PREVIEW_HREF;
 
-const TYPOGRAPHY_PARENTS = [
-  'articleBody',
-  'editorial',
-  'editorialSponsored',
-  'articleBodySponsored',
-  'utility',
-] as const;
-
-type TypographyParent = (typeof TYPOGRAPHY_PARENTS)[number];
-
-type StoryArgs = InlineLinkProps & { typographyParent: TypographyParent };
+type StoryArgs = InlineLinkProps & { typographyVariant: InlineLinkStorybookTypographyVariant };
 
 const meta: Meta<StoryArgs> = {
   title: 'Typography/InlineLink',
-  /** `typographyParent` is story-only; `InlineLink` props match `InlineLinkProps`. */
+  /** `typographyVariant` is story-only; `InlineLink` props match `InlineLinkProps`. */
   component: InlineLink as ComponentType<StoryArgs>,
   parameters: {
     layout: 'centered',
@@ -34,21 +35,15 @@ const meta: Meta<StoryArgs> = {
   argTypes: {
     children: {
       control: 'text',
-      description: 'Linked phrase (inherits font from the typography parent below)',
+      description: 'Linked phrase (inherits font from the typography preset below)',
     },
-    typographyParent: {
-      name: 'Typography parent',
+    typographyVariant: {
+      name: 'Typography (parent + weight)',
       control: 'select',
-      options: [...TYPOGRAPHY_PARENTS],
-      labels: {
-        articleBody: 'ArticleBodyText',
-        editorial: 'EditorialText (medium, regular)',
-        editorialSponsored: 'EditorialSponsoredText (medium, regular)',
-        articleBodySponsored: 'ArticleBodySponsoredText (regular)',
-        utility: 'UtilityBody (medium, regular)',
-      },
+      options: [...INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANTS],
+      labels: INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANT_LABELS,
       description:
-        'Which **typography component** wraps the sentence — **`InlineLink`** inherits size/weight from it.',
+        'Parent component and **weight** (editorial + utility use **medium** size in this story). See **All variants** for every size × weight.',
     },
     brand: {
       control: false,
@@ -76,43 +71,55 @@ function ConfigurableInner(props: InlineLinkProps) {
   );
 }
 
+function wrapConfigurable(inner: ReactNode, variant: InlineLinkStorybookTypographyVariant) {
+  const { parent, weight } = parseInlineLinkStorybookTypographyVariant(variant);
+
+  switch (parent) {
+    case 'articleBody':
+      return (
+        <ArticleBodyText weight={weight as ArticleBodyTextWeight}>{inner}</ArticleBodyText>
+      );
+    case 'editorial':
+      return (
+        <EditorialText size="medium" weight={weight as EditorialTextWeight}>
+          {inner}
+        </EditorialText>
+      );
+    case 'editorialSponsored':
+      return (
+        <EditorialSponsoredText size="medium" weight={weight as EditorialSponsoredTextWeight}>
+          {inner}
+        </EditorialSponsoredText>
+      );
+    case 'articleBodySponsored':
+      return (
+        <ArticleBodySponsoredText weight={weight as ArticleBodySponsoredTextWeight}>
+          {inner}
+        </ArticleBodySponsoredText>
+      );
+    case 'utility':
+      return (
+        <UtilityBody size="medium" weight={weight as UtilityBodyWeight}>
+          {inner}
+        </UtilityBody>
+      );
+    default:
+      return <ArticleBodyText>{inner}</ArticleBodyText>;
+  }
+}
+
 export const Configurable: Story = {
   args: {
     children: 'inline link',
     brand: 'startribune',
     href: INLINE_LINK_PREVIEW_HREF,
     disabled: false,
-    typographyParent: 'articleBody',
+    typographyVariant: 'articleBody::regular',
   },
   render: (args) => {
-    const { typographyParent, ...inlineProps } = args;
+    const { typographyVariant, ...inlineProps } = args;
     const inner = <ConfigurableInner {...inlineProps} />;
-    switch (typographyParent) {
-      case 'articleBody':
-        return <ArticleBodyText>{inner}</ArticleBodyText>;
-      case 'editorial':
-        return (
-          <EditorialText size="medium" weight="regular">
-            {inner}
-          </EditorialText>
-        );
-      case 'editorialSponsored':
-        return (
-          <EditorialSponsoredText size="medium" weight="regular">
-            {inner}
-          </EditorialSponsoredText>
-        );
-      case 'articleBodySponsored':
-        return <ArticleBodySponsoredText weight="regular">{inner}</ArticleBodySponsoredText>;
-      case 'utility':
-        return (
-          <UtilityBody size="medium" weight="regular">
-            {inner}
-          </UtilityBody>
-        );
-      default:
-        return <ArticleBodyText>{inner}</ArticleBodyText>;
-    }
+    return wrapConfigurable(inner, typographyVariant);
   },
 };
 

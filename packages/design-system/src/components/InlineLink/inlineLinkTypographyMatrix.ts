@@ -107,3 +107,70 @@ export const ARTICLE_BODY_TEXT_WEIGHTS_FOR_INLINE = [
 
 /** Utility “text” families for links: regular / medium / semibold × six sizes */
 export const UTILITY_BODY_WEIGHTS_FOR_INLINE = ['regular', 'medium', 'semibold'] as const;
+
+/**
+ * Storybook **Configurable** presets: `parent::weight` (weight includes italic/semibold variants where applicable).
+ * Fixed `medium` size for editorial + utility rows in the story; **All variants** still lists every size.
+ */
+export const INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANTS = [
+  'articleBody::regular',
+  'articleBody::italic',
+  'articleBody::bold',
+  'articleBody::bold-italic',
+  'editorial::regular',
+  'editorial::bold',
+  'editorialSponsored::regular',
+  'editorialSponsored::bold',
+  'articleBodySponsored::regular',
+  'articleBodySponsored::italic',
+  'articleBodySponsored::semibold',
+  'articleBodySponsored::semibold-italic',
+  'utility::regular',
+  'utility::medium',
+  'utility::semibold',
+] as const;
+
+export type InlineLinkStorybookTypographyVariant =
+  (typeof INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANTS)[number];
+
+export type InlineLinkStorybookTypographyParent =
+  | 'articleBody'
+  | 'editorial'
+  | 'editorialSponsored'
+  | 'articleBodySponsored'
+  | 'utility';
+
+type StorybookLabelMap = Record<InlineLinkStorybookTypographyVariant, string>;
+
+export const INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANT_LABELS = {
+  'articleBody::regular': 'ArticleBodyText — regular',
+  'articleBody::italic': 'ArticleBodyText — italic',
+  'articleBody::bold': 'ArticleBodyText — bold',
+  'articleBody::bold-italic': 'ArticleBodyText — bold italic',
+  'editorial::regular': 'EditorialText — regular (medium)',
+  'editorial::bold': 'EditorialText — bold (medium)',
+  'editorialSponsored::regular': 'EditorialSponsoredText — regular (medium)',
+  'editorialSponsored::bold': 'EditorialSponsoredText — bold (medium)',
+  'articleBodySponsored::regular': 'ArticleBodySponsoredText — regular',
+  'articleBodySponsored::italic': 'ArticleBodySponsoredText — italic',
+  'articleBodySponsored::semibold': 'ArticleBodySponsoredText — semibold',
+  'articleBodySponsored::semibold-italic': 'ArticleBodySponsoredText — semibold italic',
+  'utility::regular': 'UtilityBody — regular (medium)',
+  'utility::medium': 'UtilityBody — medium (medium)',
+  'utility::semibold': 'UtilityBody — semibold (medium)',
+} satisfies StorybookLabelMap;
+
+const SEP = '::';
+
+export function parseInlineLinkStorybookTypographyVariant(
+  v: InlineLinkStorybookTypographyVariant
+): { parent: InlineLinkStorybookTypographyParent; weight: string } {
+  const i = v.indexOf(SEP);
+  if (i === -1) {
+    return { parent: 'articleBody', weight: 'regular' };
+  }
+  return {
+    parent: v.slice(0, i) as InlineLinkStorybookTypographyParent,
+    weight: v.slice(i + SEP.length),
+  };
+}

@@ -32,8 +32,13 @@ export {
   type FigmaEditorialSizeToken,
   HOW_BRANDS_CHOOSE_INLINE_PARENT_TYPOGRAPHY,
   INLINE_LINK_STORYBOOK_PREVIEW_HREF,
+  INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANT_LABELS,
+  INLINE_LINK_STORYBOOK_TYPOGRAPHY_VARIANTS,
   INLINE_LINK_TYPOGRAPHY_FAMILIES,
+  type InlineLinkStorybookTypographyParent,
+  type InlineLinkStorybookTypographyVariant,
   type InlineLinkTypographyFamilyId,
+  parseInlineLinkStorybookTypographyVariant,
   UTILITY_BODY_WEIGHTS_FOR_INLINE,
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
