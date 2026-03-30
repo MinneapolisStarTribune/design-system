@@ -8,6 +8,7 @@ export interface SwiperContextType {
   activeIndex: number;
   isBeginning: boolean;
   isEnd: boolean;
+  currentPage: number;
   totalSlides: number;
 }
 
