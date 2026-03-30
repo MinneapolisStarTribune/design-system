@@ -32,14 +32,14 @@ Story **All variants** lists **every** parent × size/weight combination with a 
 | `utility/text/medium/…`              | `UtilityBody`              | `weight="medium"` + `size`                                         |
 | `utility/text/semibold/…`            | `UtilityBody`              | `weight="semibold"` + `size`                                       |
 
-**Always:** wrap **`InlineLink`** inside the typography component that matches the Figma style (parent sets size/weight; **`InlineLink`** sets **`brand`**, **`href`**, optional **`icon`**). Story **All variants** is a **full reference grid** (every parent × size/weight); use the Storybook **Brand** / **theme** toolbar to preview Star Tribune vs Varsity and light vs dark.
+**Always:** wrap **`InlineLink`** inside the typography component that matches the Figma style (parent sets size/weight; **`InlineLink`** sets **`brand`**, **`href`**). Icons are not supported on inline links — use **`Link`** (Actions) for optional leading/trailing icons. Story **All variants** is a **full reference grid** (every parent × size/weight); use the Storybook **Brand** / **theme** toolbar to preview Star Tribune vs Varsity and light vs dark.
 
 For standalone utility CTAs (“Read more”) with fixed Utility Body styles, use **`Link`** under **Actions**.
 
 ## Props
 
 - **`brand`** — `'startribune' | 'varsity'` — selects the interactive color palette.
-- **`as`**, **`href`**, **`disabled`**, **`icon`**, **`iconPosition`** — same patterns as **`Link`**.
+- **`as`**, **`href`**, **`disabled`** — same patterns as **`Link`**. (**`icon`** / **`iconPosition`** are only on **`Link`**, not **`InlineLink`**.)
 
 Implementation: **`InlineLink`** renders **`Link variant="inline"`** (shared behavior and styles in `Link.module.scss`).
 

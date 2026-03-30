@@ -25,8 +25,6 @@ export const Link: React.FC<LinkProps> = (props) => {
     children,
     href,
     disabled = false,
-    icon,
-    iconPosition = 'end',
     className,
     dataTestId,
     onClick,
@@ -38,6 +36,9 @@ export const Link: React.FC<LinkProps> = (props) => {
     size: _size,
     ...anchorRest
   } = props as LinkUtilityProps & Partial<LinkInlineProps>;
+
+  const icon = isInline ? undefined : (props as LinkUtilityProps).icon;
+  const iconPosition = isInline ? 'end' : ((props as LinkUtilityProps).iconPosition ?? 'end');
 
   const rootClass = classNames(
     styles.link,

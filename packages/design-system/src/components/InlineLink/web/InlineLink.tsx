@@ -5,7 +5,7 @@ import type { InlineLinkProps } from '../InlineLink.types';
 /**
  * Inline text link for use inside editorial, article body, sponsored, or utility typography.
  * Implemented as **`Link variant="inline"`** — inherits font from the parent; hover and visited
- * colors follow **`brand`** (Star Tribune vs Varsity).
+ * colors follow **`brand`** (Star Tribune vs Varsity). Icons are not supported; use **`Link`** for optional icons.
  *
  * @example
  * ```tsx

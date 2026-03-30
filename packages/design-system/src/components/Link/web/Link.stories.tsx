@@ -12,7 +12,8 @@ import storyStyles from './Link.stories.module.scss';
  */
 type StoryAsControl = 'a' | 'nextLink';
 
-type StoryArgs = Omit<LinkUtilityProps, 'as'> & { showIcon: boolean; as: StoryAsControl };
+/** Omit `icon` so Storybook never merges a serialized `icon` onto `Link` — `showIcon` maps to `icon` in `render`. */
+type StoryArgs = Omit<LinkUtilityProps, 'as' | 'icon'> & { showIcon: boolean; as: StoryAsControl };
 
 const meta: Meta<StoryArgs> = {
   title: 'Actions/Link',
@@ -54,10 +55,6 @@ const meta: Meta<StoryArgs> = {
       description:
         'Story-only: **`a`** = `<a>`. **`nextLink`** = mock `next/link` (in app: `import NextLink from \'next/link\'` then `as={NextLink}`). **`button`** is not listed here — pass `as="button"` in source.',
     },
-    icon: {
-      control: false,
-      description: 'Use **showIcon** in this story; in app code pass an icon node to `icon`.',
-    },
   },
 };
 
@@ -92,11 +89,12 @@ export const Configurable: Story = {
     as: 'a',
   },
   render: (args) => {
-    const { showIcon, as: asControl, icon: _ignoredIcon, ...linkProps } = args;
+    const { showIcon, as: asControl, iconPosition = 'end', ...linkProps } = args;
     return (
       <Link
         {...linkProps}
         as={asControl === 'nextLink' ? StoryMockNextLink : 'a'}
+        iconPosition={iconPosition}
         icon={showIcon ? <ArrowRightIcon /> : undefined}
       />
     );

@@ -1,6 +1,10 @@
+import type { ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArrowRightIcon } from '@/icons';
+import { ArticleBodySponsoredText } from '@/components/Typography/ArticleBody/ArticleBodySponsoredText/web/ArticleBodySponsoredText';
 import { ArticleBodyText } from '@/components/Typography/ArticleBody/ArticleBodyText/web/ArticleBodyText';
+import { EditorialSponsoredText } from '@/components/Typography/Editorial/EditorialSponsoredText/web/EditorialSponsoredText';
+import { EditorialText } from '@/components/Typography/Editorial/EditorialText/web/EditorialText';
+import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
 import { INLINE_LINK_STORYBOOK_PREVIEW_HREF } from '../inlineLinkTypographyMatrix';
 import type { InlineLinkProps } from '../InlineLink.types';
 import { InlineLink } from './InlineLink';
@@ -8,19 +12,43 @@ import { InlineLinkTypographyVariantShowcase } from './InlineLinkTypographyVaria
 
 const INLINE_LINK_PREVIEW_HREF = INLINE_LINK_STORYBOOK_PREVIEW_HREF;
 
-type StoryArgs = InlineLinkProps & { showIcon: boolean };
+const TYPOGRAPHY_PARENTS = [
+  'articleBody',
+  'editorial',
+  'editorialSponsored',
+  'articleBodySponsored',
+  'utility',
+] as const;
+
+type TypographyParent = (typeof TYPOGRAPHY_PARENTS)[number];
+
+type StoryArgs = InlineLinkProps & { typographyParent: TypographyParent };
 
 const meta: Meta<StoryArgs> = {
   title: 'Typography/InlineLink',
-  component: InlineLink,
+  /** `typographyParent` is story-only; `InlineLink` props match `InlineLinkProps`. */
+  component: InlineLink as ComponentType<StoryArgs>,
   parameters: {
     layout: 'centered',
   },
   argTypes: {
     children: {
       control: 'text',
+      description: 'Linked phrase (inherits font from the typography parent below)',
+    },
+    typographyParent: {
+      name: 'Typography parent',
+      control: 'select',
+      options: [...TYPOGRAPHY_PARENTS],
+      labels: {
+        articleBody: 'ArticleBodyText',
+        editorial: 'EditorialText (medium, regular)',
+        editorialSponsored: 'EditorialSponsoredText (medium, regular)',
+        articleBodySponsored: 'ArticleBodySponsoredText (regular)',
+        utility: 'UtilityBody (medium, regular)',
+      },
       description:
-        'Link label (inherits typography from parent — **ArticleBodyText** in this story)',
+        'Which **typography component** wraps the sentence — **`InlineLink`** inherits size/weight from it.',
     },
     brand: {
       control: false,
@@ -33,16 +61,19 @@ const meta: Meta<StoryArgs> = {
         'Browsers match **:visited** when this exact URL is in history—common URLs (e.g. startribune.com) often look “always visited.” Use a unique URL or a private window to preview default/hover.',
     },
     disabled: { control: 'boolean' },
-    iconPosition: { control: 'select', options: ['start', 'end'] },
-    showIcon: {
-      control: 'boolean',
-      description: 'Story helper: trailing ArrowRightIcon',
-    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+function ConfigurableInner(props: InlineLinkProps) {
+  return (
+    <>
+      This sentence includes an <InlineLink {...props} /> inside running text so font inherits correctly.
+    </>
+  );
+}
 
 export const Configurable: Story = {
   args: {
@@ -50,18 +81,37 @@ export const Configurable: Story = {
     brand: 'startribune',
     href: INLINE_LINK_PREVIEW_HREF,
     disabled: false,
-    iconPosition: 'end',
-    showIcon: false,
+    typographyParent: 'articleBody',
   },
   render: (args) => {
-    const { showIcon, ...linkProps } = args;
-    return (
-      <ArticleBodyText>
-        This sentence includes an{' '}
-        <InlineLink {...linkProps} icon={showIcon ? <ArrowRightIcon /> : undefined} /> inside
-        article body text so font inherits correctly.
-      </ArticleBodyText>
-    );
+    const { typographyParent, ...inlineProps } = args;
+    const inner = <ConfigurableInner {...inlineProps} />;
+    switch (typographyParent) {
+      case 'articleBody':
+        return <ArticleBodyText>{inner}</ArticleBodyText>;
+      case 'editorial':
+        return (
+          <EditorialText size="medium" weight="regular">
+            {inner}
+          </EditorialText>
+        );
+      case 'editorialSponsored':
+        return (
+          <EditorialSponsoredText size="medium" weight="regular">
+            {inner}
+          </EditorialSponsoredText>
+        );
+      case 'articleBodySponsored':
+        return <ArticleBodySponsoredText weight="regular">{inner}</ArticleBodySponsoredText>;
+      case 'utility':
+        return (
+          <UtilityBody size="medium" weight="regular">
+            {inner}
+          </UtilityBody>
+        );
+      default:
+        return <ArticleBodyText>{inner}</ArticleBodyText>;
+    }
   },
 };
 

@@ -35,9 +35,6 @@ interface LinkShared extends BaseProps, AccessibilityProps, LinkAnchorOmit {
   href?: string;
   className?: string;
   disabled?: boolean;
-  iconPosition?: LinkIconPosition;
-  /** Optional icon (e.g. design-system icon); place with `iconPosition`. */
-  icon?: ReactNode;
 }
 
 /** Standalone Utility Body link (Actions/Link). */
@@ -45,6 +42,9 @@ export interface LinkUtilityProps extends LinkShared {
   variant?: 'utility' | undefined;
   size: LinkSize;
   children: string;
+  iconPosition?: LinkIconPosition;
+  /** Optional icon (e.g. design-system icon); place with `iconPosition`. */
+  icon?: ReactNode;
 }
 
 /** Inline link: inherits parent typography; use via `InlineLink` or `Link variant="inline"`. */
