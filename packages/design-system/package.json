@@ -1,8 +1,8 @@
 {
   "name": "@minneapolisstartribune/design-system",
   "version": "1.3.1",
-  "main": "dist/web/index.web.cjs",
-  "module": "dist/web/index.web.js",
+  "main": "dist/web/index.web.cjs.js",
+  "module": "dist/web/index.web.es.js",
   "types": "dist/web/index.web.d.ts",
   "exports": {
     ".": {
@@ -13,9 +13,9 @@
     },
     "./web": {
       "types": "./dist/web/index.web.d.ts",
-      "require": "./dist/web/index.web.cjs",
-      "import": "./dist/web/index.web.js",
-      "default": "./dist/web/index.web.js"
+      "require": "./dist/web/index.web.cjs.js",
+      "import": "./dist/web/index.web.es.js",
+      "default": "./dist/web/index.web.es.js"
     },
     "./web/components.css": "./dist/web/components.css",
     "./web/*": {

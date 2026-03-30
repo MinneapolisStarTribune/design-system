@@ -100,8 +100,8 @@ export default defineConfig({
         exports: 'named',
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: `[name].${format === 'cjs' ? 'cjs' : 'js'}`,
-        chunkFileNames: `[name].${format === 'cjs' ? 'cjs' : 'js'}`,
+        entryFileNames: `[name].[format].js`,
+        chunkFileNames: `[name].[format].js`,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
