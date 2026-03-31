@@ -1,0 +1,73 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as LinkStories from './Link.stories';
+
+<Meta of={LinkStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Link
+
+Utility links are low-profile, text-style navigation controls. They use **Utility Body** typography at **medium** weight in **small**, **medium**, or **large** sizes, with an optional **leading** or **trailing** icon (never both). Use them when the action is navigational, space is limited, or a full **Button** would be too heavy.
+
+## When to use
+
+- The action is **navigation** (another page, route, or URL), not a primary in-place command.
+- You need a **subtle CTA** (e.g. “Read more”, “See all”).
+- You are linking to supporting content (help, policies, secondary pages).
+
+## Anatomy
+
+1. **Label** — Short, single-line text (`children`). Typography uses Utility Body **medium** weight mapped to Figma tokens: `small` → `utility/text/medium/x-small`, `medium` → `utility/text/medium/small`, `large` → `utility/text/medium/medium`.
+2. **Icon (optional)** — Reinforces meaning or direction. Spacing between label and icon follows design tokens by size (e.g. large / medium / small gaps). Icons inherit the link’s foreground color across states.
+
+## Sizes
+
+| `size`   | Utility Body token (`utility/text/medium/…`) | Typical use                                      |
+| -------- | --------------------------------------------- | ------------------------------------------------ |
+| `small`  | `x-small`                                     | Dense UI, metadata rows, compact toolbars        |
+| `medium` | `small`                                       | **Default** — most product UI                    |
+| `large`  | `medium`                                      | Prominent inline or hero-adjacent links          |
+
+## States (web)
+
+- **Default** — Primary text color; no underline.
+- **Hover** — Underline (not on **disabled**).
+- **Focus** — Keyboard only (`:focus-visible:not(.disabled)`): **1px** outline in primary text color, **1px** offset (Figma). On dark surfaces, outline uses on-dark primary text color. No focus ring when **disabled** (non-focusable `<span>`).
+- **Disabled** — **`opacity: 0.4`** on primary text color (same approach as **Checkbox** `.disabled`), `cursor: not-allowed`, no underline. Rendered as a **span** with `role="link"` and **`aria-disabled="true"`** (not removed from the DOM).
+- **Visited** — Slightly muted secondary text color; adjust in product if you need stricter “no visited” styling for marketing surfaces.
+
+## Icons
+
+Pass any **design-system icon** (or other node) with **`icon`**, and set **`iconPosition`** to **`start`** or **`end`**. Only one icon is supported. Spacing between label and icon is **`spacing.2`** (2px) for all **`size`** values.
+
+**Icon dimensions (viewport)** — **14×14** below the medium breakpoint (&lt;768px), **16×16** at medium (768–1159px), **20×20** at large (≥1160px), matching **Layout → Breakpoints** (`breakpoint.json`). The link wrapper sizes the SVG; you do not need to match **`icon`** `size` to `Link` `size`.
+
+## Next.js App Router
+
+Pass **`next/link`** as **`as`** so client navigation and prefetch behave as in your app:
+
+```tsx
+import NextLink from 'next/link';
+import { Link } from '@minneapolisstartribune/design-system/web';
+
+<Link as={NextLink} href="/news/politics" size="medium">
+  Read more
+</Link>
+```
+
+Extra **`next/link`** props (**`prefetch`**, **`replace`**, etc.) can be passed on **`Link`**; they are forwarded to the root component.
+
+In Storybook, use the **Configurable** story control **`as`** (dropdown) → **nextLink** to preview the same pattern with a mock `next/link` component.
+
+## Out of scope
+
+- **Button-styled** links (filled/outline CTAs) — use **Button** or **UtilityButton** instead.
+- **Multiple icons** per link.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />

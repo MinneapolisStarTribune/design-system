@@ -1,0 +1,189 @@
+/* Utility text link: UtilityBody medium sizes, optional icon, token-based states */
+/* Disabled opacity matches Checkbox; focus is a thin outline per Link Figma (not Checkbox double ring). */
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  /* Grid/flex parents blockify inline-flex and stretch items to column width — outline would span full cell */
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--spacing-0, 0);
+  text-decoration: none;
+  color: var(--color-text-on-light-primary);
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  gap: var(--spacing-2);
+
+  /*
+   * Theme files set `[class*="typography-"] { color: primary }`, which wins over
+   * inheriting from `.link` — breaks disabled / visited. Force label to follow root.
+   */
+  [class*='typography-'] {
+    color: inherit !important;
+  }
+
+  &:hover:not(.disabled) {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* Focus: tight 1px rectangle (Figma) — primary text color on light / dark; not shown when disabled */
+  &:focus-visible:not(.disabled) {
+    outline: 1px solid var(--color-text-on-light-primary);
+    outline-offset: 1px;
+  }
+
+  &:visited:not(.disabled) {
+    color: var(--color-text-on-light-secondary);
+  }
+
+  /* Disabled: 40% opacity on primary foreground — matches Checkbox `.root.disabled` */
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: none;
+    color: var(--color-text-on-light-primary);
+  }
+
+  /*
+   * Icon box: spacing tokens + layout breakpoints from theme CSS (`yarn tokens` → `--spacing-*`, `--breakpoint-*`).
+   * SVGs from `Icon` use inline width/height; box + !important fill the slot.
+   */
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: inherit;
+    width: var(--spacing-14);
+    height: var(--spacing-14);
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+      width: 100% !important;
+      height: 100% !important;
+      color: inherit !important;
+    }
+
+    svg path {
+      fill: currentColor;
+    }
+  }
+
+  @media (min-width: var(--breakpoint-medium-min)) {
+    .icon {
+      width: var(--spacing-16);
+      height: var(--spacing-16);
+    }
+  }
+
+  @media (min-width: var(--breakpoint-large-min)) {
+    .icon {
+      width: var(--spacing-20);
+      height: var(--spacing-20);
+    }
+  }
+
+  /*
+   * Inline variant: inherits parent typography; default + hover + visited underlined (Figma matrix).
+   * Underline offset/thickness use em so they track font size (Figma: 16% / 8% of font size for editorial link spec).
+   */
+  &.inline {
+    margin: 0;
+    font: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    vertical-align: baseline;
+    text-decoration: underline;
+    text-decoration-skip-ink: auto;
+    text-underline-offset: 0.16em;
+    text-decoration-thickness: 0.08em;
+    text-decoration-color: currentColor;
+
+    [class*='typography-'] {
+      color: inherit !important;
+    }
+
+    &:hover:not(.disabled) {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.08em;
+      text-decoration-color: currentColor;
+    }
+
+    &:focus-visible:not(.disabled) {
+      outline: 1px solid currentColor;
+      outline-offset: 1px;
+    }
+
+    &:visited:not(.disabled) {
+      text-decoration: underline;
+      text-underline-offset: 0.16em;
+      text-decoration-thickness: 0.08em;
+      text-decoration-color: currentColor;
+    }
+
+    &.disabled {
+      text-decoration: none;
+    }
+
+    .inlineLabel {
+      color: inherit !important;
+    }
+  }
+
+  /*
+   * Underline color follows color.link.underline per state (not currentColor):
+   * default → underline/default, hover → underline/hover, visited → underline/visited.
+   * :visited:not(:hover) so hover tokens win when a visited link is hovered.
+   */
+  &.inline.brandStartribune,
+  &.inline.brandVarsity {
+    color: var(--color-link-text-default);
+    text-decoration-color: var(--color-link-underline-default);
+
+    &:hover:not(.disabled) {
+      color: var(--color-link-text-hover);
+      text-decoration-color: var(--color-link-underline-hover);
+    }
+
+    &:visited:not(.disabled):not(:hover) {
+      color: var(--color-link-text-visited);
+      text-decoration-color: var(--color-link-underline-visited);
+    }
+  }
+}
+
+:global(.sb-dark) .link {
+  color: var(--color-text-on-dark-primary);
+
+  &:focus-visible:not(.disabled) {
+    outline-color: var(--color-text-on-dark-primary);
+  }
+
+  &:visited:not(.disabled) {
+    color: var(--color-text-on-dark-secondary);
+  }
+
+  &.disabled {
+    color: var(--color-text-on-dark-primary);
+    opacity: 0.4;
+  }
+}
+
+:global(.sb-dark) .link.inline {
+  color: inherit;
+
+  &:focus-visible:not(.disabled) {
+    outline-color: currentColor;
+  }
+}
+

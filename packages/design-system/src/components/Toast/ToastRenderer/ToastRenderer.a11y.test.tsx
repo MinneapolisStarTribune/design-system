@@ -3,7 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { ToastVariant } from '@/components/Toast/Toast';
 import { renderAndCheckA11y } from '@/test-utils/a11y';
-import { ToastRenderer, useToast } from './ToastRenderer';
+import { useToast } from '@/providers/SnackProvider/SnackProvider';
 
 function ToastTrigger({
   dataTestId = 'timed-toast',
@@ -12,15 +12,15 @@ function ToastTrigger({
   dataTestId?: string;
   variant?: ToastVariant;
 }) {
-  const { showToast } = useToast();
+  const { show } = useToast();
   useEffect(() => {
-    showToast({
+    show({
       title: variant === 'error' ? 'Something went wrong' : 'Update saved',
       description: variant === 'error' ? 'Please try again.' : 'Your changes have been saved.',
       variant,
       dataTestId,
     });
-  }, [showToast, dataTestId, variant]);
+  }, [show, dataTestId, variant]);
   return null;
 }
 
@@ -29,11 +29,7 @@ describe('ToastRenderer Accessibility', () => {
     it('has no violations when a toast is shown', async () => {
       vi.useFakeTimers();
 
-      const { checkA11y } = await renderAndCheckA11y(
-        <ToastRenderer>
-          <ToastTrigger />
-        </ToastRenderer>
-      );
+      const { checkA11y } = await renderAndCheckA11y(<ToastTrigger />);
 
       await act(async () => {
         vi.advanceTimersByTime(0);
@@ -47,9 +43,7 @@ describe('ToastRenderer Accessibility', () => {
       vi.useFakeTimers();
 
       const { checkA11y } = await renderAndCheckA11y(
-        <ToastRenderer>
-          <ToastTrigger dataTestId="toast-a11y-error" variant="error" />
-        </ToastRenderer>
+        <ToastTrigger dataTestId="toast-a11y-error" variant="error" />
       );
 
       await act(async () => {
@@ -66,9 +60,7 @@ describe('ToastRenderer Accessibility', () => {
       vi.useFakeTimers();
 
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <ToastRenderer>
-          <ToastTrigger dataTestId="toast-a11y-close" />
-        </ToastRenderer>
+        <ToastTrigger dataTestId="toast-a11y-close" />
       );
 
       await act(async () => {
@@ -87,9 +79,7 @@ describe('ToastRenderer Accessibility', () => {
       vi.useFakeTimers();
 
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <ToastRenderer>
-          <ToastTrigger dataTestId="toast-a11y-click" />
-        </ToastRenderer>
+        <ToastTrigger dataTestId="toast-a11y-click" />
       );
 
       await act(async () => {
