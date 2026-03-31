@@ -44,6 +44,10 @@
   color: var(--color-text-on-light-primary);
 }
 
+.title{
+  padding-top: var(--spacing-8);
+}
+
 /* Close button */
 .closeButton {
   align-self: flex-start !important;
@@ -59,7 +63,7 @@
   max-width: 192px;
   margin-top: var(--spacing-8);
 
-  color: var(--color-text-on-light-secondary);
+  color: var(--color-text-on-light-secondary) !important;
 }
 
 /* Divider */

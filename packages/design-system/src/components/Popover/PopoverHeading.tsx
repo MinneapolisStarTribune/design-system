@@ -10,10 +10,11 @@ export const PopoverHeading: React.FC<{
 }> = ({ children }) => {
   const { close } = usePopoverContext();
   const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
+  const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
     <div className={classNames(styles.header, typographyClassName)}>
-      {children}
+      <div className={classNames({ [styles.title]: hasTitle })}>{children}</div>
       <Button
         variant="ghost"
         size="small"
