@@ -84,6 +84,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
 
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
   const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
+  const ariaPressed = variant === 'toggle' ? active : undefined;
   const toggleStateClass =
     variant === 'toggle' ? (active ? styles.toggleActive : styles.toggleInactive) : undefined;
 
@@ -104,6 +105,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     <button
       type="button"
       aria-label={buttonAriaLabel}
+      aria-pressed={ariaPressed}
       disabled={isDisabled}
       className={combinedClassNames || undefined}
       onClick={onClick}

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { ComponentType, FC } from 'react';
+import { useState, type ComponentType, type FC } from 'react';
 import {
   UtilityButton,
   UTILITY_BUTTON_VARIANTS,
@@ -29,6 +29,33 @@ const CONFIGURABLE_ICON_COMPONENTS: Record<ConfigurableIconChoice, ConfigurableI
   home: HomeIcon,
   flag: FlagIcon,
   volume: VolumeIcon,
+};
+
+const ToggleInteractiveDemo = () => {
+  const [isActive, setIsActive] = useState(false);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+        alignItems: 'flex-start',
+      }}
+    >
+      <UtilityButton
+        label={isActive ? 'Saved' : 'Save'}
+        icon={<BookmarkIcon />}
+        variant="toggle"
+        size="small"
+        active={isActive}
+        onClick={() => setIsActive((prev) => !prev)}
+      />
+      <span style={{ fontSize: '12px', color: '#6b7280' }}>
+        Click the button to toggle its pressed state (`aria-pressed`).
+      </span>
+    </div>
+  );
 };
 
 /** Story-only args for configurable demo */
@@ -222,6 +249,12 @@ export const AllVariants: Story = {
           />
           <UtilityButton label="Saved" icon={<BookmarkIcon />} variant="toggle" active isDisabled />
         </div>
+      </div>
+      <div>
+        <h3 style={{ marginBottom: '1rem', fontSize: '14px', fontWeight: 600 }}>
+          Toggle (interactive)
+        </h3>
+        <ToggleInteractiveDemo />
       </div>
     </div>
   ),
