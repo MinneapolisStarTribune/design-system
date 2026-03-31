@@ -43,7 +43,7 @@ jobs:
         if: always()
 
       - name: Unit Test Report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         if: always()
         with:
           name: "Unit Test Report"
@@ -72,7 +72,7 @@ jobs:
         if: always()
 
       - name: A11y Test Report
-        uses: dorny/test-reporter@v2
+        uses: dorny/test-reporter@v3
         if: always()
         with:
           name: "Accessibility Test Report"
