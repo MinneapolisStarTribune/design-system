@@ -28,7 +28,7 @@ jobs:
         run: yarn workspace @minneapolisstartribune/design-system test:coverage -- --exclude "**/*.a11y.test.tsx"
 
       - name: Upload unit test coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MinneapolisStarTribune/design-system
@@ -57,7 +57,7 @@ jobs:
         run: yarn workspace @minneapolisstartribune/design-system test:a11y --coverage
 
       - name: Upload a11y test coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: MinneapolisStarTribune/design-system
