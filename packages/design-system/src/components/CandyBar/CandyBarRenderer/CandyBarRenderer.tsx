@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   FloatingFocusManager,
@@ -12,6 +14,7 @@ import { CandyBar } from '@/components/CandyBar/CandyBar';
 export type CandyBarRendererItem = {
   id: string;
   children: React.ReactNode;
+  onClose?: () => void;
 };
 
 export type CandyBarRendererProps = {

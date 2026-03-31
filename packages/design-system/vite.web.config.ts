@@ -4,8 +4,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import dts from 'vite-plugin-dts';
+import preserveDirectives from 'rollup-preserve-directives';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const assetFileNames = (assetInfo: { names?: string[] }) =>
+  assetInfo.names?.some((n) => n.endsWith('.css'))
+    ? 'components.css'
+    : 'assets/[name]-[hash][extname]';
 
 export default defineConfig({
   resolve: {
@@ -18,6 +24,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    preserveDirectives(),
     svgr({
       svgrOptions: {
         icon: true,
@@ -31,6 +38,7 @@ export default defineConfig({
         path.resolve(__dirname, 'src/components/Icon/Icon.tsx'),
         path.resolve(__dirname, 'src/components/Icon/Icon.types.ts'),
         path.resolve(__dirname, 'src/icons/index.ts'),
+        path.resolve(__dirname, 'src/providers'),
         path.resolve(__dirname, 'src/types'),
       ],
       exclude: [
@@ -84,28 +92,25 @@ export default defineConfig({
     outDir: 'dist/web',
     lib: {
       entry: 'src/index.web.ts',
-      // Emit both ESM and CJS bundles so consumers can use either `import` or `require`.
-      formats: ['es', 'cjs'],
       name: 'DesignSystem',
-      fileName: (format) => (format === 'cjs' ? 'design-system.cjs.js' : 'design-system.es.js'),
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        '@floating-ui/react',
-      ],
-      output: {
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@floating-ui/react'],
+      output: (['es', 'cjs'] as const).map((format) => ({
+        format,
+        exports: 'named',
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: `[name].[format].js`,
+        chunkFileNames: `[name].[format].js`,
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
           'react/jsx-runtime': 'React',
           '@floating-ui/react': 'FloatingUIReact',
         },
-        assetFileNames: (assetInfo) =>
-          assetInfo.names?.some((n) => n.endsWith('.css')) ? 'components.css' : 'assets/[name]-[hash][extname]',
-      },
+        assetFileNames,
+      })),
     },
     target: 'esnext',
     sourcemap: true,
