@@ -80,20 +80,35 @@ const FormGroupNativeStory: React.FC<FormGroupNativeStoryProps> = ({
 const meta = {
   title: 'Forms/FormGroup',
   component: FormGroupNativeStory,
+  parameters: {
+    controls: { expanded: true },
+  },
   argTypes: {
-    showLabel: { control: 'boolean', description: 'Show label' },
-    labelText: { control: 'text', if: { arg: 'showLabel', eq: true } },
-    optional: { control: 'boolean', if: { arg: 'showLabel', eq: true } },
-    showDescription: { control: 'boolean', description: 'Show description' },
-    descriptionText: { control: 'text', if: { arg: 'showDescription', eq: true } },
-    showCaption: { control: 'boolean', description: 'Show caption' },
-    captionText: { control: 'text', if: { arg: 'showCaption', eq: true } },
+    showLabel: { control: 'boolean' },
+    labelText: {
+      control: 'text',
+      if: { arg: 'showLabel', eq: true },
+    },
+    optional: {
+      control: 'boolean',
+      if: { arg: 'showLabel', eq: true },
+    },
+    showDescription: { control: 'boolean' },
+    descriptionText: {
+      control: 'text',
+      if: { arg: 'showDescription', eq: true },
+    },
+    showCaption: { control: 'boolean' },
+    captionText: {
+      control: 'text',
+      if: { arg: 'showCaption', eq: true },
+    },
     captionVariant: {
       control: 'select',
       options: [...FORM_GROUP_CAPTION_VARIANTS],
       if: { arg: 'showCaption', eq: true },
     },
-    placeholderText: { control: 'text', description: 'TextInput placeholder' },
+    placeholderText: { control: 'text' },
   },
 } satisfies Meta<typeof FormGroupNativeStory>;
 
@@ -288,7 +303,6 @@ const styles = StyleSheet.create({
   stack: {
     width: '100%',
     maxWidth: 400,
-    gap: 0,
   },
   input: {
     borderWidth: StyleSheet.hairlineWidth,
