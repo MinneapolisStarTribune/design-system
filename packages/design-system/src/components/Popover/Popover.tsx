@@ -131,7 +131,12 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
-  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
+  const close = useCallback(() => {
+    if (!isControlled) {
+      setOpenState(false);
+    }
+    onOpenChangeProp?.(false);
+  }, [isControlled, onOpenChangeProp]);
 
   const childElement = isValidElement(trigger)
     ? (trigger as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
