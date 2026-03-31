@@ -1,0 +1,53 @@
+.inline-video {
+  $md: 768px;
+  $lg: 1080px;
+
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+
+  &.variant-immersive {
+    max-width: var(--semantic-article-toolkit-max-width-immersive-large-mobile);
+
+    @media (min-width: $md) {
+      max-width: var(--semantic-article-toolkit-max-width-immersive-large-tablet);
+    }
+
+    @media (min-width: $lg) {
+      max-width: var(--semantic-article-toolkit-max-width-immersive-large-desktop);
+    }
+  }
+
+  &.variant-standard {
+    max-width: var(--semantic-article-toolkit-max-width-standard-large-mobile);
+
+    @media (min-width: $md) {
+      max-width: var(--semantic-article-toolkit-max-width-standard-large-tablet);
+    }
+
+    @media (min-width: $lg) {
+      max-width: var(--semantic-article-toolkit-max-width-standard-large-desktop);
+    }
+  }
+}
+
+.player-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--semantic-inline-video-standard-radius, 0);
+}
+
+.player-wrapper-horizontal {
+  aspect-ratio: var(--semantic-inline-video-horizontal-aspect-ratio);
+}
+
+.player-wrapper-vertical {
+  aspect-ratio: var(--semantic-inline-video-vertical-aspect-ratio);
+}
+
+.caption {
+  color: var(--color-text-on-light-secondary);
+}
