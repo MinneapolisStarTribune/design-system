@@ -5,13 +5,13 @@ import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 
-export interface FormGroupDescriptionProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupDescriptionNativeProps extends Omit<BaseProps, 'style'> {
   children: React.ReactNode;
   id?: string;
   style?: StyleProp<ViewStyle>;
 }
 
-export const FormGroupDescription: React.FC<FormGroupDescriptionProps> = ({
+export const FormGroupDescription: React.FC<FormGroupDescriptionNativeProps> = ({
   children,
   id: idProp,
   dataTestId,

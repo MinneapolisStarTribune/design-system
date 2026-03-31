@@ -7,14 +7,14 @@ import { useNativeStyles } from '@/hooks/useNativeStyles';
 export const FORM_GROUP_CAPTION_VARIANTS = ['info', 'error', 'success'] as const;
 export type FormGroupCaptionVariant = (typeof FORM_GROUP_CAPTION_VARIANTS)[number];
 
-export interface FormGroupCaptionProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupCaptionNativeProps extends Omit<BaseProps, 'style'> {
   children: React.ReactNode;
   variant: FormGroupCaptionVariant;
   id?: string;
   style?: StyleProp<ViewStyle>;
 }
 
-export const FormGroupCaption: React.FC<FormGroupCaptionProps> = ({
+export const FormGroupCaption: React.FC<FormGroupCaptionNativeProps> = ({
   children,
   id: idProp,
   variant,

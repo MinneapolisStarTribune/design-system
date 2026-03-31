@@ -5,16 +5,15 @@ import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/nativ
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 
-export interface FormGroupLabelProps extends Omit<BaseProps, 'style'> {
+/** Native label props (no `htmlFor` / `element` — associate fields with `nativeID` on the control). */
+export interface FormGroupLabelNativeProps extends Omit<BaseProps, 'style'> {
   children: React.ReactNode;
-  element?: string;
   id?: string;
-  htmlFor?: string;
   optional?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
-export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
+export const FormGroupLabel: React.FC<FormGroupLabelNativeProps> = ({
   children,
   dataTestId,
   id: idProp,
