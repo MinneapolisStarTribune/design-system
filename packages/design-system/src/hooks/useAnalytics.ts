@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useContext } from 'react';
 import { AnalyticsContext } from '../providers/AnalyticsProvider';
 import type { TrackingEvent } from '../types/analytics';

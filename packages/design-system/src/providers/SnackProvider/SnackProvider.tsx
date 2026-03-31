@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   createContext,
   useCallback,
@@ -44,6 +46,7 @@ type SnackToastShowOptions = {
 type SnackCandyBarShowOptions = {
   id?: string;
   children: React.ReactNode;
+  onClose?: () => void;
 };
 
 type SlotsState = {
@@ -151,7 +154,11 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
 
       // Single-slot: show() replaces existing active content.
       const candyIncoming = incoming as SnackCandyBarShowOptions;
-      const item: CandyBarRendererItem = { id, children: candyIncoming.children };
+      const item: CandyBarRendererItem = {
+        id,
+        children: candyIncoming.children,
+        onClose: candyIncoming.onClose,
+      };
 
       setSlots((prev) => ({
         ...prev,
@@ -182,13 +189,17 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
       <ToastRenderer items={slots.toast} onDismiss={(id) => hide('toast', id)} />
       <CandyBarRenderer
         activeItem={slots.candybar[0] ?? null}
-        onDismiss={(id) => hide('candybar', id)}
+        onDismiss={(id) => {
+          const item = slots.candybar.find((c) => c.id === id);
+          hide('candybar', id);
+          item?.onClose?.();
+        }}
       />
     </SnackContext.Provider>
   );
 };
 
-type SnackBoundActions<Slot extends SnackSlot> = {
+export type SnackBoundActions<Slot extends SnackSlot> = {
   show: (item: SnackSlotShowOptions<Slot>) => string;
   hide: (id: string) => void;
 };

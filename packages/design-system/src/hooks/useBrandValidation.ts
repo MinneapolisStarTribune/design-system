@@ -1,3 +1,5 @@
+'use client';
+
 import { validateComponentForBrand } from '@/providers/brand/brand-validations';
 import { BRAND_VALIDATION_ERROR_PREFIX } from '@/providers/BrandValidationErrorBoundary.constants';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
