@@ -1,6 +1,9 @@
-import { Text, type StyleProp, TextStyle } from 'react-native';
+import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from '../../FormGroupContext';
+import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
+import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
 
 export interface FormGroupLabelProps extends Omit<BaseProps, 'style'> {
   children: React.ReactNode;
@@ -8,22 +11,34 @@ export interface FormGroupLabelProps extends Omit<BaseProps, 'style'> {
   id?: string;
   htmlFor?: string;
   optional?: boolean;
-  style?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
   children,
   dataTestId,
-  id,
+  id: idProp,
   optional = false,
   style,
 }) => {
   const context = useFormGroupContext();
-  const resolvedId = id ?? context?.labelId;
+  const resolvedId = idProp ?? context?.labelId;
+  const optionalTextStyle = useNativeStyles((theme) => ({
+    color: theme.colorTextOnLightTertiary,
+  }));
+
   return (
-    <Text style={style} testID={dataTestId} id={resolvedId}>
-      {children}
-      {optional ? ' (Optional)' : ''}
-    </Text>
+    <View
+      style={[{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'baseline', gap: 4 }, style]}
+    >
+      <UtilityLabel id={resolvedId} size="medium" weight="semibold" dataTestId={dataTestId}>
+        {children}
+      </UtilityLabel>
+      {optional && (
+        <UtilityBody size="xx-small" weight="regular">
+          <Text style={optionalTextStyle}>(Optional)</Text>
+        </UtilityBody>
+      )}
+    </View>
   );
 };
