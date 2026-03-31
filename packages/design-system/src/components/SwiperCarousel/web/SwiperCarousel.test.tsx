@@ -119,7 +119,6 @@ describe('SwiperCarousel', () => {
       expect(buttons.length).toBe(2);
     });
 
-
     it('enables next button when not at end', () => {
       renderCarousel({ withNavigation: true });
 
