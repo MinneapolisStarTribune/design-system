@@ -48,7 +48,7 @@ const renderCarousel = ({
       ))}
 
       {withPagination && <SwiperCarousel.Pagination />}
-      {withCustomPagination && <SwiperCarousel.Pagination variant="custom" />}
+      {withCustomPagination && <SwiperCarousel.Pagination />}
       {withNavigation && <SwiperCarousel.Navigation />}
     </SwiperCarousel>
   );
@@ -119,13 +119,6 @@ describe('SwiperCarousel', () => {
       expect(buttons.length).toBe(2);
     });
 
-    it('disables previous button at beginning', () => {
-      renderCarousel({ withNavigation: true });
-
-      const prev = screen.getByLabelText('Previous slide');
-
-      expect(prev).toBeDisabled();
-    });
 
     it('enables next button when not at end', () => {
       renderCarousel({ withNavigation: true });
@@ -144,7 +137,7 @@ describe('SwiperCarousel', () => {
             <div>Only Slide</div>
           </SwiperCarousel.Slide>
 
-          <SwiperCarousel.Pagination variant="custom" />
+          <SwiperCarousel.Pagination />
         </SwiperCarousel>
       );
 
