@@ -33,6 +33,11 @@ jobs:
           ref: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}
           fetch-depth: 0
 
+      - name: Validate tag format
+        uses: ./.github/actions/validate-tag-format
+        with:
+          tag: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}
+
       - name: Get previous release tag
         id: get-previous-tag
         if: github.event_name == 'workflow_dispatch'
