@@ -7,10 +7,12 @@ vi.mock('./SwiperCarousel.context', async () => {
     swiper: {
       slideNext: vi.fn(),
       slidePrev: vi.fn(),
+      slideTo: vi.fn(),
     },
     activeIndex: 0,
     isBeginning: true,
     isEnd: false,
+    currentPage: 0,
     totalSlides: 3,
   };
 
@@ -66,7 +68,6 @@ describe('SwiperCarousel', () => {
     it('renders default pagination when enabled (no crash)', () => {
       const { container } = renderCarousel({ withPagination: true });
 
-      // Default pagination is handled by Swiper → not testable reliably
       expect(container).toBeInTheDocument();
     });
 
@@ -77,7 +78,7 @@ describe('SwiperCarousel', () => {
 
       const dots = container.querySelectorAll('[class*="dot"]');
 
-      expect(dots.length).toBe(slides.length);
+      expect(dots.length).toBe(3);
     });
 
     it('does not render custom pagination when not provided', () => {

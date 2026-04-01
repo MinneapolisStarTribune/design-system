@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useLayoutEffect, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import styles from './DangerousCodeBlock.module.scss';

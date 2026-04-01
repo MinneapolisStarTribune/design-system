@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
