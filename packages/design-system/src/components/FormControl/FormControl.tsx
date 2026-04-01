@@ -3,6 +3,7 @@ import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
 import { Checkbox } from './Checkbox/web/Checkbox';
 import { CheckboxGroup } from './CheckboxGroup/web/CheckboxGroup';
+import { Select } from './Select/web/Select';
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
@@ -18,6 +19,8 @@ export const FormControl: React.FC<FormControlProps> & {
   Checkbox: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CheckboxGroup: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Select: React.ComponentType<any>;
   // Add any new form control subcomponents here
 } = () => {
   if (typeof console !== 'undefined' && console.error) {
@@ -33,4 +36,5 @@ export const FormControl: React.FC<FormControlProps> & {
 FormControl.TextInput = TextInput;
 FormControl.Checkbox = Checkbox;
 FormControl.CheckboxGroup = CheckboxGroup;
+FormControl.Select = Select;
 // Add any new form control subcomponents here

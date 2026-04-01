@@ -317,6 +317,37 @@
         "value": "{color.neutral.600}"
       }
     },
+    "link": {
+      "description": "Inline link — text and underline colors for default, hover, and visited states (dark backgrounds).",
+      "text": {
+        "default": {
+          "description": "Default link text on dark backgrounds.",
+          "value": "{color.base.white}"
+        },
+        "hover": {
+          "description": "Hovered link text color on dark backgrounds.",
+          "value": "{color.emerald-green.600}"
+        },
+        "visited": {
+          "description": "Visited link text color on dark backgrounds.",
+          "value": "{color.emerald-green.400}"
+        }
+      },
+      "underline": {
+        "default": {
+          "description": "Default underline color on dark backgrounds.",
+          "value": "{color.emerald-green.600}"
+        },
+        "hover": {
+          "description": "Hovered underline color on dark backgrounds.",
+          "value": "{color.emerald-green.600}"
+        },
+        "visited": {
+          "description": "Visited underline color on dark backgrounds.",
+          "value": "{color.emerald-green.400}"
+        }
+      }
+    },
     "overlay": {
       "black": {
         "description": "Primary dark overlay used behind modals, drawers, or high-emphasis layers — creates strong contrast and draws attention to the active surface.",
@@ -340,6 +371,11 @@
         "description": "Soft light overlay for gentle contrast or lower emphasis — often used for hover states, secondary overlays, or subtle layering on dark media.",
         "value": "rgb(255 255 255 / 30%)"
       }
+    },
+    "select": {
+      "background": { "value": "{color.neutral.900}" },
+      "hover": { "value": "{color.neutral.800}" },
+      "scrollbar": { "value": "{color.neutral.800}" }
     },
     "semantic": {
       "description": "Semantic tokens communicate meaning and feedback across the interface. They represent universal states — such as information, success, warning, and error — and are used across multiple components including alerts, banners, toasts, and badges. Each semantic pair (background and foreground) is designed for clear contrast and accessibility, ensuring legibility across different tonal environments.",
