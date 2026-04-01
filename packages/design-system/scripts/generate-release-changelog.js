@@ -4,111 +4,50 @@ const JIRA_BASE_URL = 'https://minneapolisstartribune.atlassian.net/browse';
 const PRODUCT_NAME = 'Shared UI Library';
 const JIRA_REGEX = new RegExp(`(${JIRA_PROJECTS.join('|')})-[0-9]+`);
 
-/** Same family as .github/actions/validate-tag-format — only these participate in changelog ranges */
-const SEMVER_TAG_RE = /^v(\d+)\.(\d+)\.(\d+)$/;
-
 /**
- * @param {string} name
- * @returns {{ major: number; minor: number; patch: number } | null}
- */
-function parseSemverTagName(name) {
-  const m = name.match(SEMVER_TAG_RE);
-  if (!m) return null;
-  return {
-    major: Number(m[1]),
-    minor: Number(m[2]),
-    patch: Number(m[3]),
-  };
-}
-
-/** @returns {number} negative if a < b, 0 if equal, positive if a > b */
-function compareSemver(a, b) {
-  if (a.major !== b.major) return a.major - b.major;
-  if (a.minor !== b.minor) return a.minor - b.minor;
-  return a.patch - b.patch;
-}
-
-/**
- * List all refs/tags (paginated). GitHub does not guarantee tag order matches semver.
- *
- * @param {Object} params
- * @param {import('@octokit/rest').Octokit} params.github
- * @param {string} params.owner
- * @param {string} params.repo
- */
-async function listAllTags({ github, owner, repo }) {
-  const all = [];
-  let page = 1;
-  const perPage = 100;
-  while (true) {
-    const { data } = await github.rest.repos.listTags({
-      owner,
-      repo,
-      per_page: perPage,
-      page,
-    });
-    if (data.length === 0) break;
-    all.push(...data);
-    if (data.length < perPage) break;
-    page += 1;
-  }
-  return all;
-}
-
-/**
- * Get the previous semver release tag strictly before currentTag (semver order).
- * Ignores non-semver tags (e.g. v.1.20) so listTags ordering cannot break changelog.
+ * Get the previous release tag using GitHub API
  *
  * @param {Object} params
  * @param {Object} params.github - Octokit instance
  * @param {string} params.owner - Repository owner
  * @param {string} params.repo - Repository name
- * @param {string} params.currentTag - Current release tag (e.g. v1.3.3)
+ * @param {string} params.currentTag - Current release tag
  * @returns {Promise<string>} - Previous tag name
  */
 async function getPreviousTag({ github, owner, repo, currentTag }) {
-  const currentParsed = parseSemverTagName(currentTag);
-  if (!currentParsed) {
+  // Fetch two latest tags from GitHub API (most recent first)
+  const { data: tags } = await github.rest.repos.listTags({
+    owner,
+    repo,
+    per_page: 2,
+  });
+
+  if (tags.length === 0) {
+    throw new Error('No tags found in repository. Cannot generate changelog.');
+  }
+
+  if (tags.length === 1) {
     throw new Error(
-      `Current tag "${currentTag}" is not a semver tag (expected vX.Y.Z, e.g. v1.3.3). Cannot generate changelog.`
+      `No previous tag found. "${currentTag}" is the first release in this repository. ` +
+      `For the first release, create a changelog manually or skip changelog generation.`
     );
   }
 
-  const tags = await listAllTags({ github, owner, repo });
-  const semverEntries = [];
-  for (const t of tags) {
-    const parsed = parseSemverTagName(t.name);
-    if (parsed) semverEntries.push({ name: t.name, semver: parsed });
-  }
+  console.log(`Fetched ${tags.length} tags from repository`);
+  console.log(`- ${tags[0].name} (latest commit: ${tags[0].commit.sha})`);
+  console.log(`- ${tags[1].name} (previous commit: ${tags[1].commit.sha})`);
 
-  if (semverEntries.length === 0) {
-    throw new Error('No semver tags found in repository. Cannot generate changelog.');
-  }
-
-  const hasCurrent = semverEntries.some(e => e.name === currentTag);
-  if (!hasCurrent) {
-    throw new Error(`Tag "${currentTag}" not found among semver tags in the repository.`);
-  }
-
-  let best = null;
-  for (const e of semverEntries) {
-    if (e.name === currentTag) continue;
-    const cmp = compareSemver(e.semver, currentParsed);
-    if (cmp >= 0) continue;
-    if (!best || compareSemver(e.semver, best.semver) > 0) {
-      best = e;
-    }
-  }
-
-  if (!best) {
+  // Verify the current tag is the most recent tag
+  if (tags[0].name !== currentTag) {
     throw new Error(
-      `No previous semver tag found before "${currentTag}". ` +
-        `For the first release, create a changelog manually or skip changelog generation.`
+      `Current tag "${currentTag}" is not the most recent tag. Most recent tag is "${tags[0].name}". ` +
+      `Changelog generation should only run for the latest release.`
     );
   }
 
-  console.log(`Current tag: ${currentTag}; previous semver tag for range: ${best.name}`);
-  return best.name;
+  const previousTag = tags[1].name;
+  console.log(`Previous tag: ${previousTag}`);
+  return previousTag;
 }
 
 /**
