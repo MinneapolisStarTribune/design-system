@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-
-import { Toast, TOAST_VARIANTS } from './Toast';
-import type { ToastProps, ToastVariant } from './Toast';
+import { Toast, TOAST_VARIANTS, ToastProps, ToastVariant } from '@/components/Toast/web/Toast';
 import { useToast } from '@/providers/SnackProvider/SnackProvider';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import styles from './Toast.stories.module.scss';
