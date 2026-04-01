@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useContext } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 
@@ -6,6 +8,7 @@ export interface SwiperContextType {
   activeIndex: number;
   isBeginning: boolean;
   isEnd: boolean;
+  currentPage: number;
   totalSlides: number;
 }
 

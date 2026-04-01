@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useMemo, useState, useRef } from 'react';
 import classNames from 'classnames';
 import type { PhotoLayoutType } from '../../types';
