@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { FloatingPortal } from '@floating-ui/react';
 import { Toast } from '@/components/Toast/Toast';

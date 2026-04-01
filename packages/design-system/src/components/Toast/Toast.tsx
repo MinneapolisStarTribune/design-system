@@ -1,3 +1,5 @@
+'use client';
+
 import classNames from 'classnames';
 import { CloseIcon, ErrorIcon, InformationIcon, SuccessIcon, WarningIcon } from '@/icons';
 import styles from './Toast.module.scss';
