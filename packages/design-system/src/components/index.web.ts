@@ -110,11 +110,11 @@ export {
   type UtilityButtonSize,
   type UtilityButtonVariant,
 } from '@/components/Button/web/UtilityButton';
-export { CandyBar, type CandyBarProps } from '@/components/CandyBar/CandyBar';
+export { CandyBar, type CandyBarProps } from '@/components/CandyBar/web/CandyBar';
 export {
   CandyBarRenderer,
   type CandyBarRendererProps,
-} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
+} from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export {

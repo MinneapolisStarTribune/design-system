@@ -7,7 +7,7 @@ import {
   useInteractions,
   useTransitionStyles,
 } from '@floating-ui/react';
-import { CandyBar } from '@/components/CandyBar/CandyBar';
+import { CandyBar } from '@/components/CandyBar/web/CandyBar';
 
 export type CandyBarRendererItem = {
   id: string;
