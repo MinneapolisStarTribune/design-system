@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
 
 type PopoverContextValue = {
