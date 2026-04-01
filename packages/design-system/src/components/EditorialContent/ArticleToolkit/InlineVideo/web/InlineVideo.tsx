@@ -17,18 +17,20 @@ export const InlineVideo: React.FC<InlineVideoProps> = ({
   dataTestId = 'inline-video',
   ...accessibilityProps
 }) => {
-  const captionText = [caption, videoCredit].filter(Boolean).join(' ');
+  const captionText = [caption, videoCredit && `(${videoCredit})`].filter(Boolean).join(' ');
 
   return (
     <figure
       data-testid={dataTestId}
-      className={classNames(styles['inline-video'], styles[`variant-${variant}`], className)}
+      className={classNames(
+        styles['inline-video'],
+        styles[`variant-${variant}`],
+        styles[`orientation-${orientation}`],
+        className
+      )}
       {...accessibilityProps}
     >
-      <div
-        className={classNames(styles['player-wrapper'], styles[`player-wrapper-${orientation}`])}
-        data-testid={`${dataTestId}-player`}
-      >
+      <div className={classNames(styles['player-wrapper'])} data-testid={`${dataTestId}-player`}>
         {children}
       </div>
 

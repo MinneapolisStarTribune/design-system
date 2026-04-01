@@ -21,33 +21,73 @@
   }
 
   &.variant-standard {
-    max-width: var(--semantic-article-toolkit-max-width-standard-large-mobile);
+    max-width: var(--semantic-article-toolkit-max-width-standard-full-mobile);
 
     @media (min-width: $md) {
-      max-width: var(--semantic-article-toolkit-max-width-standard-large-tablet);
+      max-width: var(--semantic-article-toolkit-max-width-standard-full-tablet);
     }
 
     @media (min-width: $lg) {
-      max-width: var(--semantic-article-toolkit-max-width-standard-large-desktop);
+      max-width: var(--semantic-article-toolkit-max-width-standard-full-desktop);
     }
   }
-}
 
-.player-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: var(--semantic-inline-video-standard-radius, 0);
-}
+  &.orientation-horizontal {
+    .player-wrapper {
+      aspect-ratio: var(--semantic-inline-video-horizontal-aspect-ratio);
+      border-radius: var(--semantic-inline-video-horizontal-border-radius-mobile);
 
-.player-wrapper-horizontal {
-  aspect-ratio: var(--semantic-inline-video-horizontal-aspect-ratio);
-}
+      @media (min-width: $md) {
+        border-radius: var(--semantic-inline-video-horizontal-border-radius-tablet);
+      }
 
-.player-wrapper-vertical {
-  aspect-ratio: var(--semantic-inline-video-vertical-aspect-ratio);
-}
+      @media (min-width: $lg) {
+        border-radius: var(--semantic-inline-video-horizontal-border-radius-desktop);
+      }
+    }
+  }
 
-.caption {
-  color: var(--color-text-on-light-secondary);
+  &.orientation-vertical {
+    margin: 0 auto;
+
+    &.variant-standard {
+      max-width: var(--semantic-inline-video-standard-vertical-max-width);
+    }
+
+    &.variant-immersive {
+      max-width: var(--semantic-inline-video-immersive-vertical-max-width);
+    }
+
+    .player-wrapper {
+      aspect-ratio: var(--semantic-inline-video-vertical-aspect-ratio);
+      border-radius: var(--semantic-inline-video-vertical-border-radius-mobile);
+
+      @media (min-width: $md) {
+        border-radius: var(--semantic-inline-video-vertical-border-radius-tablet);
+      }
+
+      @media (min-width: $lg) {
+        border-radius: var(--semantic-inline-video-vertical-border-radius-desktop);
+      }
+    }
+  }
+
+  .player-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .caption {
+    color: var(--color-text-on-light-secondary);
+  }
 }
