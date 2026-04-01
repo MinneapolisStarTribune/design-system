@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useId } from 'react';
 
 interface FormGroupContextValue {

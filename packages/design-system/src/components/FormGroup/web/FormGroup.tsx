@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
