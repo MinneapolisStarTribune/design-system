@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (e.g. 1.2.3). Required when run manually; ignored when triggered by a release.'
+        description: 'Version to publish (e.g. v1.2.3). Required when run manually; ignored when triggered by a release.'
         required: true
         type: string
 
@@ -31,6 +31,11 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
+      - name: Validate Tag Format
+        uses: ./.github/actions/validate-tag-format
+        with:
+          tag: ${{ github.event.release.tag_name || github.event.inputs.version }}
+
       - name: Set up Node with authentication
         uses: actions/setup-node@v4
         with:
@@ -47,15 +52,8 @@ jobs:
       - name: Extract version from tag or input
         id: version
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            if [ -z "${{ github.event.inputs.version }}" ]; then
-              echo "::error::When running manually, you must provide the 'version' input (e.g. 1.2.3)."
-              exit 1
-            fi
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION=${GITHUB_REF#refs/tags/v}
-          fi
+          TAG="${{ github.event.release.tag_name || github.event.inputs.version }}"
+          VERSION="${TAG#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Publishing version: $VERSION"
 

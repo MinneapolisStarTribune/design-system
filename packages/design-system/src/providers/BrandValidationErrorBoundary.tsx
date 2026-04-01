@@ -1,3 +1,5 @@
+'use client';
+
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { BRAND_VALIDATION_ERROR_PREFIX } from './BrandValidationErrorBoundary.constants';
 

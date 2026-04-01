@@ -1,0 +1,18 @@
+name: Validate Tag Format
+description: Validates that a release tag matches the vX.Y.Z format (e.g. v1.0.0)
+inputs:
+  tag:
+    description: The tag name to validate
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Validate tag format
+      shell: bash
+      run: |
+        TAG="${{ inputs.tag }}"
+        if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Invalid tag format: '$TAG'. Tags must match vX.Y.Z (e.g. v1.0.0)."
+          exit 1
+        fi
+        echo "Tag format valid: $TAG"

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import classNames from 'classnames';
 import { Button, type ButtonProps } from '@/components/Button/web/Button';

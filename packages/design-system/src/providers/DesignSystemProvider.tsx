@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useMemo } from 'react';
 import { Brand, ColorScheme } from './theme-helpers';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
