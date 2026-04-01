@@ -64,7 +64,7 @@ describe('Popover', () => {
     await user.click(screen.getByLabelText('Close popover'));
 
     await waitFor(() => {
-      expect(screen.queryByText('Content')).not.toBeInTheDocument();
+      expect(screen.queryByText('Content')).toBeNull();
     });
   });
 
