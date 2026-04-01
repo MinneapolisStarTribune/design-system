@@ -122,4 +122,4 @@ export {
   TOAST_VARIANTS,
   type ToastProps,
   type ToastVariant,
-} from '@/components/Toast/Toast';
+} from '@/components/Toast/web/Toast';

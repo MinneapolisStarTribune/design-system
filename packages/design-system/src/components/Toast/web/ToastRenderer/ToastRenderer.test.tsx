@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ToastRenderer } from '@/components/Toast/ToastRenderer/ToastRenderer';
+import { ToastRenderer } from '@/components/Toast/web/ToastRenderer/ToastRenderer';
 
 describe('ToastRenderer', () => {
   it('renders toast container and provided toasts', () => {

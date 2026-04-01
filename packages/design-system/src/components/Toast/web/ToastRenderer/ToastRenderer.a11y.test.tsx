@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { ToastVariant } from '@/components/Toast/Toast';
+import type { ToastVariant } from '@/components/Toast/web/Toast';
 import { renderAndCheckA11y } from '@/test-utils/a11y';
 import { useToast } from '@/providers/SnackProvider/SnackProvider';
 
