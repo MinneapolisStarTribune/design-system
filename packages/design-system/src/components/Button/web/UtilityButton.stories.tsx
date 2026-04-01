@@ -151,6 +151,22 @@ export const Configurable: Story = {
     isDisabled: false,
     onClick: () => {},
   } as ConfigurableArgs,
+  parameters: {
+    docs: {
+      source: {
+        code: `<UtilityButton
+  label="Share"
+  variant="default"
+  size="large"
+  iconPosition="start"
+  isDisabled={false}
+  onClick={() => {}}
+  icon={<Share02Icon />}
+  aria-label="Share"
+/>`,
+      },
+    },
+  },
   render: (args) => {
     const { showIcon, ariaLabel, iconChoice } = args as ConfigurableArgs;
     const IconComponent = CONFIGURABLE_ICON_COMPONENTS[iconChoice] ?? Share02Icon;
