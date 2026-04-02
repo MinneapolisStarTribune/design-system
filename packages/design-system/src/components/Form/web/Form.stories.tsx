@@ -20,10 +20,42 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const verticalFormSource = `
+<Form onSubmit={(e) => e.preventDefault()}>
+  <FormGroup>
+    <FormGroup.Label>Email</FormGroup.Label>
+    <FormControl.TextInput placeholderText="Enter your email" />
+  </FormGroup>
+  <FormGroup>
+    <FormGroup.Label>Password</FormGroup.Label>
+    <FormControl.TextInput type="password" placeholderText="Enter your password" />
+  </FormGroup>
+  <Form.Button>Submit</Form.Button>
+</Form>
+`.trim();
+
+const horizontalFormSource = `
+<Form orientation="horizontal" onSubmit={(e) => e.preventDefault()}>
+  <FormGroup>
+    <FormGroup.Label>Email</FormGroup.Label>
+    <FormControl.TextInput placeholderText="Enter your email" />
+  </FormGroup>
+  <Form.Button>Submit</Form.Button>
+</Form>
+`.trim();
+
 export const Vertical: Story = {
   args: {
     orientation: 'vertical',
   } as React.ComponentProps<typeof Form>,
+  parameters: {
+    docs: {
+      source: {
+        code: verticalFormSource,
+        type: 'code',
+      },
+    },
+  },
   render: (args) => (
     <Form {...args} onSubmit={(e) => e.preventDefault()}>
       <FormGroup>
@@ -48,6 +80,10 @@ export const Horizontal: Story = {
         story:
           '**Best for:** search bars, newsletter CTAs, inline filters — anywhere a single action applies to one or a small number of fields.\n\n' +
           '**Avoid for:** multiple unrelated fields, radio groups, or checkbox groups. Use vertical layout instead.',
+      },
+      source: {
+        code: horizontalFormSource,
+        type: 'code',
       },
     },
   },
@@ -105,6 +141,44 @@ function SimpleValidationExample({ orientation }: { orientation?: FormOrientatio
   );
 }
 
+const withValidationSimpleSource = `
+function SimpleValidationExample() {
+  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
+    initialValues: { email: '' },
+    validateOnSubmit: true,
+    validateOnBlur: true,
+    validate: (vals) => {
+      const email = (vals.email as string)?.trim() ?? '';
+      if (!email) return { email: 'Email is required' };
+      if (!email.includes('@')) return { email: 'Please enter a valid email address (include @)' };
+      return {};
+    },
+    onSubmit: (vals) => {
+      alert(\`Submitted: \${vals.email}\`);
+    },
+  });
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      <FormGroup>
+        <FormGroup.Label>Email</FormGroup.Label>
+        <FormControl.TextInput
+          name="email"
+          placeholderText="you@example.com"
+          value={values.email as string}
+          onChange={(e) => handleChange('email', e.target.value)}
+          onBlur={() => handleBlur('email')}
+        />
+        {errors.email && (
+          <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>
+        )}
+      </FormGroup>
+      <Form.Button>Submit</Form.Button>
+    </Form>
+  );
+}
+`.trim();
+
 export const WithValidationSimple: Story = {
   args: {
     orientation: 'vertical',
@@ -120,6 +194,10 @@ export const WithValidationSimple: Story = {
           '- **validate** — Optional. Function that receives current values and returns an object of field names to error messages (omit or undefined = no error).\n' +
           '- **validateOnSubmit** — Run validate on form submit. Default: `true`.\n' +
           '- **validateOnBlur** — Run validate when a field blurs and set that field’s error. Default: `false`.',
+      },
+      source: {
+        code: withValidationSimpleSource,
+        type: 'code',
       },
     },
   },

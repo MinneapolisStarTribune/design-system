@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Source } from '@storybook/addon-docs/blocks';
 import * as FormStories from './Form.stories';
 
 <Meta of={FormStories} />
@@ -13,13 +13,40 @@ import * as FormStories from './Form.stories';
 
 The form system is layered — you can use as much or as little as you need:
 
-```
-| Layer                       | What it does                                                                                     | Required? |
-| --------------------------- | ------------------------------------------------------------------------------------------------ | --------- |
-| `FormGroup` + `FormControl` | Layout, spacing, and accessibility wiring between label, description, input, and caption         | Always    |
-| `Form`                      | Semantic `<form>` element, `onSubmit` handler, and layout for vertical or horizontal orientation | Optional  |
-| `useFormLogic`              | Controlled field state, validation, and a ready-made `handleSubmit`                              | Optional  |
-```
+<table className="form-doc-table">
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>What it does</th>
+      <th>Required?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>FormGroup</code> + <code>FormControl</code>
+      </td>
+      <td>Layout, spacing, and accessibility wiring between label, description, input, and caption.</td>
+      <td>Always</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Form</code>
+      </td>
+      <td>
+        Semantic <code>form</code> element, <code>onSubmit</code> handler, and layout for vertical or horizontal orientation.
+      </td>
+      <td>Optional</td>
+    </tr>
+    <tr>
+      <td>
+        <code>useFormLogic</code>
+      </td>
+      <td>Controlled field state, validation, and a ready-made <code>handleSubmit</code>.</td>
+      <td>Optional</td>
+    </tr>
+  </tbody>
+</table>
 
 `FormGroup` and `FormControl` work standalone — drop them in any container and accessibility (`aria-labelledby`, `aria-describedby`) still works correctly. `Form` is what you add when you want a real submittable form.
 
@@ -29,43 +56,19 @@ The form system is layered — you can use as much or as little as you need:
 
 Fields stack with 16px gap. The submit button sits at the bottom-right. Use this for most forms: sign-in, sign-up, settings, checkout.
 
-```tsx
-<Form onSubmit={handleSubmit}>
-  <FormGroup>
-    <FormGroup.Label>Email</FormGroup.Label>
-    <FormControl.TextInput name="email" />
-  </FormGroup>
-  <FormGroup>
-    <FormGroup.Label>Password</FormGroup.Label>
-    <FormControl.TextInput name="password" type="password" />
-  </FormGroup>
-  <Form.Button>Sign in</Form.Button>
-</Form>
-```
+<Canvas of={FormStories.Vertical} sourceState="shown" />
 
 ### Horizontal
 
-All inputs and the submit button sit on one row, with labels and descriptions stacked above each input. The bottom edge of every input is aligned with the bottom edge of the button — this holds even when individual groups have descriptions above or error captions below.
-
-```tsx
-<Form onSubmit={handleSubmit} orientation="horizontal">
-  <FormGroup>
-    <FormGroup.Label>Email</FormGroup.Label>
-    <FormControl.TextInput name="email" />
-  </FormGroup>
-  <Form.Button>Subscribe</Form.Button>
-</Form>
-```
-
-**Best for:** search bars, newsletter CTAs, inline filters — anywhere a single action applies to one or a small number of fields.
-
-**Avoid for:** multiple unrelated fields, radio groups, or checkbox groups. Use vertical layout instead.
+All inputs and the submit button sit on one row, with labels and descriptions stacked above each input. The bottom edge of every input is aligned with the bottom edge of the button — this holds even when individual groups have descriptions above or error captions below. See the story description below the example for **best for** / **avoid** guidance.
 
 > **How the alignment works:** horizontal layout uses a 3-track CSS subgrid. Each `FormGroup` participates in shared `above` (label + description), `input`, and `caption` row tracks. This means a description in one group or an error caption in another can never push the inputs out of alignment — the input track is shared and fixed.
 
+<Canvas of={FormStories.Horizontal} sourceState="shown" />
+
 ## Submitting
 
-Always use `Form.Button` inside `Form` for the submit action. It renders a `type="submit"` button and receives the correct layout treatment for whichever orientation you're using.
+Always use `Form.Button` inside `Form` for the submit action. It renders a `type="submit"` button and receives the correct layout treatment for whichever orientation you're using. It accepts the **same props as `Button`** (`color`, `variant`, `size`, and the rest)—use **Button** in Storybook to browse variants and visuals.
 
 Pressing Enter/Return while focused in any input will also submit the form natively, as long as `Form.Button` is present.
 
@@ -73,8 +76,12 @@ Pressing Enter/Return while focused in any input will also submit the form nativ
 
 `useFormLogic` is an optional hook that gives you controlled field state, validation, and a `handleSubmit` function ready to pass to `<Form>`. Use it when you don't want to wire up form state yourself.
 
-```tsx
-const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
+The snippet below is the **body of a component** (not a full file): call the hook, then `return` the `<Form>` and fields.
+
+<Source
+  dark
+  language="tsx"
+  code={`const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
   initialValues: { email: '' },
   validate: (values) => {
     const errors: Record<string, string> = {};
@@ -83,20 +90,22 @@ const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic(
   },
 });
 
-<Form onSubmit={handleSubmit}>
-  <FormGroup>
-    <FormGroup.Label>Email</FormGroup.Label>
-    <FormControl.TextInput
-      name="email"
-      value={values.email}
-      onChange={(e) => handleChange('email', e.target.value)}
-      onBlur={() => handleBlur('email')}
-    />
-    {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
-  </FormGroup>
-  <Form.Button>Submit</Form.Button>
-</Form>;
-```
+return (
+  <Form onSubmit={handleSubmit}>
+    <FormGroup>
+      <FormGroup.Label>Email</FormGroup.Label>
+      <FormControl.TextInput
+        name="email"
+        value={values.email}
+        onChange={(e) => handleChange('email', e.target.value)}
+        onBlur={() => handleBlur('email')}
+      />
+      {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
+    </FormGroup>
+    <Form.Button>Submit</Form.Button>
+  </Form>
+);`}
+/>
 
 Skip the hook if you're already using React Hook Form, Formik, or your own `useState` — just pass your own `handleSubmit` to `<Form onSubmit={...}>` directly.
 
@@ -107,30 +116,95 @@ Skip the hook if you're already using React Hook Form, Formik, or your own `useS
 - **Field updates:** Use `handleChange(field, value)` instead of `handleChangeEvent`. Wire your text input’s `onChangeText` (or equivalent) to `(value) => handleChange('fieldName', value)`.
 - **Submit:** Use `handleSubmit()` with no arguments, or `handleSubmitPress`. Pass the latter to your submit button: `onPress={handleSubmitPress}`. Both run the same validation and `onSubmit` flow.
 
-```tsx
-const { values, errors, handleChange, handleBlur, handleSubmitPress } = useFormLogic({ ... });
+<Source
+  dark
+  language="tsx"
+  code={`const { values, errors, handleChange, handleBlur, handleSubmitPress } = useFormLogic({
+  initialValues: { email: '' },
+  validate: (values) => {
+    const fieldErrors: Record<string, string> = {};
+    if (!values.email) fieldErrors.email = 'Email is required';
+    return fieldErrors;
+  },
+});
 
-<TextInput
-  value={values.email}
-  onChangeText={(value) => handleChange('email', value)}
-  onBlur={() => handleBlur('email')}
+return (
+  <>
+    <TextInput
+      value={values.email}
+      onChangeText={(value) => handleChange('email', value)}
+      onBlur={() => handleBlur('email')}
+    />
+    <Button onPress={handleSubmitPress} title="Submit" />
+  </>
+);`}
 />
-<Button onPress={handleSubmitPress} title="Submit" />
-```
 
 ## Exports
 
-```
-| Export                    | Description                                                                                                             |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `Form`                    | Layout wrapper; renders a semantic `<form>` and handles orientation.                                                    |
-| `Form.Button`             | Submit button for use inside `Form`. Renders a design-system `Button` with `type="submit"`.                             |
-| `FormProps`               | Props for `Form` (e.g. `orientation`, `onSubmit`, `children`).                                                          |
-| `useFormLogic`            | Hook for controlled values, errors, and `handleSubmit`; optional.                                                       |
-| `FormValidationErrors<T>` | Type: object of field names to error strings (from `validate`).                                                         |
-| `UseFormLogicOptions<T>`  | Type: Options passed to `useFormLogic` (`initialValues`, `onSubmit`, `validate`, `validateOnSubmit`, `validateOnBlur`). |
-| `UseFormLogicReturn<T>`   | Type: Return type of `useFormLogic` (`values`, `errors`, `handleChange`, `handleBlur`, `handleSubmit`, `handleSubmitPress`, etc.). |
-```
+<table className="form-doc-table">
+  <thead>
+    <tr>
+      <th>Export</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>Form</code>
+      </td>
+      <td>Layout wrapper; renders a semantic <code>form</code> element and handles orientation.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Form.Button</code>
+      </td>
+      <td>
+        Submit button for use inside <code>Form</code>. Same props as <strong>Button</strong>; <code>{'type="submit"'}</code> is set for you. See{' '}
+        <strong>Button</strong> in Storybook for variants.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>FormProps</code>
+      </td>
+      <td>
+        Props for <code>Form</code> (e.g. <code>orientation</code>, <code>onSubmit</code>, <code>children</code>).
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>useFormLogic</code>
+      </td>
+      <td>Hook for controlled values, errors, and <code>handleSubmit</code>; optional.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>FormValidationErrors&lt;T&gt;</code>
+      </td>
+      <td>Type: object of field names to error strings (from <code>validate</code>).</td>
+    </tr>
+    <tr>
+      <td>
+        <code>UseFormLogicOptions&lt;T&gt;</code>
+      </td>
+      <td>
+        Options passed to <code>useFormLogic</code> (<code>initialValues</code>, <code>onSubmit</code>, <code>validate</code>,{' '}
+        <code>validateOnSubmit</code>, <code>validateOnBlur</code>).
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>UseFormLogicReturn&lt;T&gt;</code>
+      </td>
+      <td>
+        Return type of <code>useFormLogic</code> (<code>values</code>, <code>errors</code>, <code>handleChange</code>, <code>handleBlur</code>,{' '}
+        <code>handleSubmit</code>, <code>handleSubmitPress</code>, etc.).
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 Use the types when you need to annotate wrappers, options, or return values (e.g. a custom hook that returns the same shape as `useFormLogic`).
 
@@ -138,6 +212,29 @@ Use the types when you need to annotate wrappers, options, or return values (e.g
 
 ---
 
-<Primary />
-<Controls />
-<Stories />
+
+## Validation
+
+### With validation (simple)
+
+Uses `useFormLogic` for state and validation. Enter an email without the `@` symbol, then blur the field or click Submit to see the error.
+
+**`useFormLogic` options:**
+
+- **initialValues** — Initial field values (keyed by field name).
+- **onSubmit** — Called when the form is submitted and validation passes (if `validate` is provided).
+- **validate** — Optional. Function that receives current values and returns an object of field names to error messages (omit or undefined = no error).
+- **validateOnSubmit** — Run `validate` on form submit. Default: `true`.
+- **validateOnBlur** — Run `validate` when a field blurs and set that field’s error. Default: `false`.
+
+<Canvas of={FormStories.WithValidationSimple} sourceState="hidden" />
+
+### With validation (multi-field)
+
+Multi-field form with initial value, required field with error, and format validation.
+
+- **Name** — Optional; pre-filled with "Jane Doe".
+- **Email** — Required; shows an error if empty or if the value doesn’t include `@`.
+- **Message** — Required; shows "Message is required" if left empty.
+
+<Canvas of={FormStories.WithValidationMultiField} sourceState="hidden" />
