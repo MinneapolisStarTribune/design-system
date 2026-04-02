@@ -67,7 +67,6 @@ const defaultArgs: InlineImageProps = {
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'standard',
-  size: 'medium',
   expandable: false,
 };
 
