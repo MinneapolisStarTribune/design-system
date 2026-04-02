@@ -3,7 +3,6 @@
   --overlay-button-bg: rgba(34, 34, 34, 0.3);
   --overlay-button-bg-hover: rgba(34, 34, 34, 0.5);
   $md: 768px;
-  $lg: 1160px;
 
   width: 100%;
   margin: 0;
@@ -12,111 +11,65 @@
   gap: var(--spacing-8);
 
   &.variant-standard {
-    &.size-full,
-    &.size-large,
-    &.size-medium {
-      max-width: var(--semantic-article-toolkit-max-width-standard-full-mobile);
-
-      @media (min-width: $md) {
-        max-width: var(--semantic-article-toolkit-max-width-standard-full-tablet);
-      }
-
-      @media (min-width: $lg) {
-        max-width: var(--semantic-article-toolkit-max-width-standard-full-desktop);
-      }
-    }
-
-    &.size-inline {
-      max-width: var(--semantic-article-toolkit-max-width-standard-inline-mobile);
-
-      @media (min-width: $md) {
-        max-width: var(--semantic-article-toolkit-max-width-standard-inline-tablet);
-      }
-
-      @media (min-width: $lg) {
-        max-width: var(--semantic-article-toolkit-max-width-standard-inline-desktop);
-      }
-    }
+    max-width: var(--semantic-inline-image-max-width-standard);
   }
 
   &.variant-immersive {
-    &.size-full {
-      width: 100%;
-      max-width: none;
-    }
+    max-width: var(--semantic-inline-image-max-width-immersive);
+  }
 
-    &.size-large {
-      max-width: var(--semantic-article-toolkit-max-width-immersive-large-mobile);
+  .image-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+  }
 
-      @media (min-width: $md) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-large-tablet);
-      }
-
-      @media (min-width: $lg) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-large-desktop);
-      }
-    }
-
-    &.size-medium {
-      max-width: var(--semantic-article-toolkit-max-width-immersive-medium-mobile);
-
-      @media (min-width: $md) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-medium-tablet);
-      }
-
-      @media (min-width: $lg) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-medium-desktop);
-      }
-    }
-
-    &.size-inline {
-      max-width: var(--semantic-article-toolkit-max-width-immersive-inline-mobile);
-
-      @media (min-width: $md) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-inline-tablet);
-      }
-
-      @media (min-width: $lg) {
-        max-width: var(--semantic-article-toolkit-max-width-immersive-inline-desktop);
-      }
+  @media (min-width: $md) {
+    .image-wrapper {
+      gap: var(--spacing-12);
     }
   }
-}
 
-.image-wrapper {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  border-radius: var(--semantic-inline-image-border-radius);
-  aspect-ratio: var(--semantic-inline-image-aspect-ratio);
-}
+  .item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-}
+  .image-container {
+    position: relative;
+    border-radius: var(--semantic-inline-image-border-radius);
+    aspect-ratio: var(--semantic-inline-image-aspect-ratio);
+  }
 
-.caption-text {
-  color: var(--color-text-on-light-secondary);
-}
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 
-.purchase-link-separator {
-  margin: 0 var(--spacing-4);
-}
+  .caption-text {
+    color: var(--color-text-on-light-secondary);
+  }
 
-.purchase-link {
-  color: var(--color-text-on-light-secondary);
-  text-decoration: underline;
-  text-decoration-style: solid;
-  text-decoration-color: var(--color-border-brand-01);
-  text-decoration-thickness: auto;
-  text-underline-offset: 17%;
-  text-underline-position: from-font;
+  .purchase-link-separator {
+    margin: 0 var(--spacing-4);
+  }
 
-  &:hover {
-    color: var(--color-border-brand-01);
+  .purchase-link {
+    color: var(--color-text-on-light-secondary);
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: var(--color-border-brand-01);
+    text-decoration-thickness: auto;
+    text-underline-offset: 17%;
+    text-underline-position: from-font;
+
+    &:hover {
+      color: var(--color-border-brand-01);
+    }
   }
 }

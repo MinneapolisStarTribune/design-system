@@ -2,7 +2,7 @@ import type { ArticleToolkitMediaProps, ImageData, InlineImageSizeType } from '.
 
 export interface InlineImageProps extends Omit<ArticleToolkitMediaProps, 'altText'> {
   expandable?: boolean;
-  image: ImageData;
+  imageList: ImageData[];
   size?: InlineImageSizeType;
   imgixParams?: string;
   objectFit?: 'cover' | 'contain';
