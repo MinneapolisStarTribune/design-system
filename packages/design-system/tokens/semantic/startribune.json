@@ -9,7 +9,7 @@
       },
       "max-width": {
         "immersive": { "type": "dimension", "value": 1080 },
-        "standard": {}
+        "standard": { "type": "dimension", "value": 712 }
       }
     },
     "photo-layout": {
