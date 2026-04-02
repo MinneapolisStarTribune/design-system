@@ -63,31 +63,41 @@ Choose a variant that matches the situation. The `variant` prop uses `info`, `su
 
 - Prefer **Variant** for semantic meaning (success after save, error on failure, etc.).
 - Keep **Description** to a single sentence when used.
-- For global, stacked toasts in a fixed region (e.g. bottom-right), wrap your app with `DesignSystemProvider` and call `useToast()` from `@minneapolisstartribune/design-system/web`.
+- For global, stacked toasts in a fixed region (e.g. bottom-right), wrap your app with `DesignSystemProvider` and call `useToast()` from `@minneapolisstartribune-design-system/web`.
 - In Storybook, provider setup already comes from preview; see **With renderer** for a live hook-driven example.
 
-### Toast-only example 
+You can call `show(...)` directly, or alias it to a more descriptive name:
+
+```tsx
+const { show } = useToast();
+// or:
+const { show: showToast } = useToast();
+```
+
+### Toast-only example
 
 If your app only needs to show toasts, you can rely on `useToast()` and ignore `useCandyBar`. `SnackProvider` still mounts both renderers, but the candy bar slot does nothing unless you call `useCandyBar().show`.
 
 ```tsx
+"use client";
+
 import { useEffect, useRef } from 'react';
 import { useToast } from '@minneapolisstartribune/design-system/web';
 
-export function DemoToast() {
-  const { show } = useToast();
+export function HomepageToast() {
+  const { show: showToast } = useToast();
   const hasShown = useRef(false);
 
   useEffect(() => {
     if (hasShown.current) return;
     hasShown.current = true;
 
-    show({
+    showToast({
       title: 'Done',
-      description: 'Demo toast loaded successfully.',
+      description: 'Homepage loaded successfully.',
       variant: 'success',
     });
-  }, [show]);
+  }, [showToast]);
 
   return null;
 }

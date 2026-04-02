@@ -12,10 +12,30 @@ Use it when you need to show feedback from anywhere in the tree: short **toasts*
 
 ## Slots
 
-| Slot | Behavior |
-| --- | --- |
-| **`Snack.toast`** | Queue: many toasts at once. Default **5s** auto-dismiss (you can override `duration`). |
-| **`Snack.candybar`** | Single slot: each **`show()`** replaces the current bar. **No** auto-dismiss. |
+<table>
+  <thead>
+    <tr>
+      <th>Slot</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Snack.toast</code></td>
+      <td>
+        Queue: many toasts at once. Default <strong>5s</strong> auto-dismiss
+        (you can override <code>duration</code>).
+      </td>
+    </tr>
+    <tr>
+      <td><code>Snack.candybar</code></td>
+      <td>
+        Single slot: each <code>show()</code> replaces the current bar.
+        <strong>No</strong> auto-dismiss.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 Slot names are exported on **`Snack`** so you avoid magic strings.
 
