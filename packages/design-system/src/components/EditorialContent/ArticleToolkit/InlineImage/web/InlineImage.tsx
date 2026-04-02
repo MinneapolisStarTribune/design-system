@@ -10,7 +10,6 @@ import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,
   imageList,
-  size = 'medium',
   caption,
   className,
   credit,
@@ -49,7 +48,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         data-testid={dataTestId}
         className={classNames(
           styles['inline-image'],
-          styles[`size-${size}`],
           styles[`variant-${variant}`],
           className
         )}
