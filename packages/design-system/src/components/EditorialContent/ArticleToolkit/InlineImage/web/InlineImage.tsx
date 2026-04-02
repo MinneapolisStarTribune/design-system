@@ -46,11 +46,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
     <>
       <figure
         data-testid={dataTestId}
-        className={classNames(
-          styles['inline-image'],
-          styles[`variant-${variant}`],
-          className
-        )}
+        className={classNames(styles['inline-image'], styles[`variant-${variant}`], className)}
         {...accessibilityProps}
       >
         <InlineImageContent
