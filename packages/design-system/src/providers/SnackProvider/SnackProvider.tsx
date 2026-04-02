@@ -213,11 +213,19 @@ export function useSnack<Slot extends SnackSlot>(slot: Slot): SnackBoundActions<
   return {
     show: (item) => context.show(slot, item) as string,
     hide: (id) => context.hide(slot, id),
-  } as SnackBoundActions<Slot>;
+  };
 }
 
-export function useToast() {
-  return useSnack('toast');
+type ToastActions = SnackBoundActions<'toast'> & {
+  showToast: (item: SnackToastShowOptions) => string;
+};
+
+export function useToast(): ToastActions {
+  const base = useSnack('toast');
+  return {
+    ...base,
+    showToast: (item) => base.show(item),
+  };
 }
 
 export function useCandyBar() {
