@@ -13,6 +13,16 @@ const assetFileNames = (assetInfo: { names?: string[] }) =>
     ? 'components.css'
     : 'assets/[name]-[hash][extname]';
 
+/** Bare imports only — bundling these with preserveModules produced invalid `../node_modules/...` paths in published `dist`. */
+const WEB_ROLLUP_EXTERNAL = [
+  'react',
+  'react-dom',
+  'react/jsx-runtime',
+  '@floating-ui/react',
+  'classnames',
+  /^swiper(\/.*)?$/,
+] as const;
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -95,7 +105,7 @@ export default defineConfig({
       name: 'DesignSystem',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', '@floating-ui/react'],
+      external: [...WEB_ROLLUP_EXTERNAL],
       output: (['es', 'cjs'] as const).map((format) => ({
         format,
         exports: 'named',
