@@ -49,6 +49,7 @@ export default defineConfig({
         path.resolve(__dirname, 'src/components/Icon/Icon.types.ts'),
         path.resolve(__dirname, 'src/icons/index.ts'),
         path.resolve(__dirname, 'src/providers'),
+        path.resolve(__dirname, 'src/styles/fonts/index.ts'),
         path.resolve(__dirname, 'src/types'),
       ],
       exclude: [
