@@ -41,6 +41,7 @@ export type SnackToastShowOptions = {
   showIcon?: boolean;
   duration?: number;
   dataTestId?: string;
+  onClose?: () => void;
 };
 
 export type SnackCandyBarShowOptions = {
@@ -121,6 +122,7 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
           showIcon: toastIncoming.showIcon,
           exiting: false,
           dataTestId: toastIncoming.dataTestId,
+          onClose: toastIncoming.onClose,
         };
 
         setSlots((prev) => ({
@@ -186,7 +188,14 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
   return (
     <SnackContext.Provider value={ctxValue}>
       {children}
-      <ToastRenderer items={slots.toast} onDismiss={(id) => hide('toast', id)} />
+      <ToastRenderer
+        items={slots.toast}
+        onDismiss={(id) => {
+          const item = slots.toast.find((t) => t.id === id);
+          hide('toast', id);
+          item?.onClose?.();
+        }}
+      />
       <CandyBarRenderer
         activeItem={slots.candybar[0] ?? null}
         onDismiss={(id) => {
