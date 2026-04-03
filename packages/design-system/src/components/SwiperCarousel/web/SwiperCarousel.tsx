@@ -38,6 +38,10 @@ const Root: React.FC<SwiperCarouselProps> = ({
 
   const paginationRef = useRef<HTMLDivElement | null>(null);
 
+  // Swiper requires pagination element during render phase, but React lint disallows ref.current usage.
+  // Using state via ref callback ensures element is available without violating lint rules.
+  const [paginationEl, setPaginationEl] = useState<HTMLDivElement | null>(null);
+
   const allChildren = React.Children.toArray(children) as CarouselChild[];
 
   let firstSlideIndex = -1;
@@ -114,6 +118,7 @@ const Root: React.FC<SwiperCarouselProps> = ({
           pagination={
             hasPagination
               ? {
+                  el: paginationEl,
                   clickable: true,
                 }
               : false
@@ -133,7 +138,17 @@ const Root: React.FC<SwiperCarouselProps> = ({
           {slides}
         </Swiper>
 
-        {hasPagination && <div ref={paginationRef} className={styles.pagination} />}
+        {hasPagination && (
+          <div
+            ref={(node) => {
+              paginationRef.current = node;
+              if (node && paginationEl !== node) {
+                setPaginationEl(node);
+              }
+            }}
+            className={styles.pagination}
+          />
+        )}
 
         {afterSwiper}
       </div>
