@@ -54,6 +54,11 @@
       "caption-padding-mobile": {
         "value": "0px 16px"
       }
+    },
+    "pull-quote": {
+      "accent-color": {
+        "value": "{color.emerald-green.800}"
+      }
     }
   }
 }
