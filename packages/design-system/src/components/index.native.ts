@@ -1,6 +1,17 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
 
 export {
+  BUTTON_COLORS,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
+  type ButtonColor,
+  type ButtonSize,
+  type ButtonVariant,
+  ICON_ONLY_BUTTON_SIZES,
+  type IconOnlyButtonSize,
+} from './Button/Button.types';
+export { Button, type ButtonNativeProps } from './Button/native/Button.native';
+export {
   ArticleBodyHeading,
   type ArticleBodyHeadingProps,
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';

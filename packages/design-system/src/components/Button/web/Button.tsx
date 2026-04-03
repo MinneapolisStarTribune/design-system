@@ -5,44 +5,28 @@ import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
-import { BaseProps } from '@/types/globalTypes';
-import { type IconSize } from '@/components/Icon/Icon.types';
 import { createDesignSystemError } from '@/utils/errorPrefix';
-import { enhanceButtonIcon, getButtonAriaLabel } from '../Helpers';
+import { enhanceButtonIcon, getButtonAriaLabel, getButtonIconSize } from '../Helpers';
+import type { ButtonProps } from '../Button.types';
+import {
+  type ButtonColor,
+  type ButtonSize,
+  BUTTON_VARIANTS,
+  BUTTON_SIZES,
+  ICON_ONLY_BUTTON_SIZES,
+  type ButtonVariant,
+  BUTTON_COLORS,
+} from '../Button.types';
 
-export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
-export type ButtonColor = (typeof BUTTON_COLORS)[number];
-export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
-export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
-export const BUTTON_SIZES = ['small', 'medium', 'large'] as const;
-export type ButtonSize = (typeof BUTTON_SIZES)[number];
-export const ICON_ONLY_BUTTON_SIZES = ['x-small', 'small', 'medium', 'large'] as const;
-export type IconOnlyButtonSize = (typeof ICON_ONLY_BUTTON_SIZES)[number];
-
-/** Extra data to merge into the tracking event. Use for per-button context (e.g. cta_type, module_position). */
-export type ButtonAnalytics = Record<string, unknown>;
-
-export interface ButtonProps extends BaseProps {
-  type?: 'button' | 'submit' | 'reset';
-  color?: ButtonColor;
-  capitalize?: boolean;
-  variant?: ButtonVariant;
-  /**
-   * Button size. Note: 'x-small' is only valid for icon-only buttons (buttons with icon but no text children).
-   */
-  size?: ButtonSize | 'x-small';
-  /**
-   * Optional icon. For icon-only buttons, pass the icon (e.g. icon={<AvatarIcon />}).
-   * For buttons with text, use iconPosition to place it before or after the label.
-   */
-  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
-  iconPosition?: 'start' | 'end';
-  children?: React.ReactNode;
-  isDisabled?: boolean;
-  /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
-  analytics?: ButtonAnalytics;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}
+export type {
+  ButtonProps,
+  ButtonColor,
+  ButtonVariant,
+  ButtonSize,
+  IconOnlyButtonSize,
+  ButtonAnalytics,
+} from '../Button.types';
+export { BUTTON_COLORS, BUTTON_VARIANTS, BUTTON_SIZES, ICON_ONLY_BUTTON_SIZES };
 
 /**
  * Build CSS variable name for button tokens
@@ -70,32 +54,6 @@ function getCSSVariable(element: HTMLElement | null, variableName: string): stri
   }
   const computed = window.getComputedStyle(element);
   return computed.getPropertyValue(variableName).trim() || null;
-}
-
-/**
- * Get icon size token for a button based on button size and whether it's icon-only.
- */
-function getButtonIconSize(
-  size: ButtonSize | 'x-small',
-  isIconOnly: boolean
-): IconSize | undefined {
-  const iconSizeMap: Record<ButtonSize, 'x-small' | 'small' | 'medium'> = {
-    small: 'x-small',
-    medium: 'small',
-    large: 'medium',
-  };
-
-  const iconOnlySizeMap: Record<IconOnlyButtonSize, 'small' | 'medium' | 'large' | 'x-large'> = {
-    'x-small': 'small',
-    small: 'medium',
-    medium: 'large',
-    large: 'x-large',
-  };
-
-  if (isIconOnly) {
-    return iconOnlySizeMap[size as IconOnlyButtonSize];
-  }
-  return iconSizeMap[size as ButtonSize];
 }
 
 export const Button: React.FC<ButtonProps> = ({
