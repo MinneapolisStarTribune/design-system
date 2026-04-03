@@ -3,7 +3,11 @@
 export * from '@/components/index.web';
 export * from '@/icons';
 export { AnalyticsProvider } from '@/providers/AnalyticsProvider';
-export { type Brand, DesignSystemProvider } from '@/providers/DesignSystemProvider';
+export {
+  type Brand,
+  DesignSystemProvider,
+  DS_ROOT_BRAND_ATTRIBUTE,
+} from '@/providers/DesignSystemProvider';
 export {
   type CandyBarActions,
   Snack,
