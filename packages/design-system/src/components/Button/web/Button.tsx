@@ -42,6 +42,12 @@ export interface ButtonProps extends BaseProps {
   /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
   analytics?: ButtonAnalytics;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /**
+   * `dark`: dark-surface button styles on a dark region while `:root` is still light theme.
+   * Brand palettes follow `DesignSystemProvider` via `html[data-ds-brand]` (web).
+   * @default 'light'
+   */
+  surface?: 'light' | 'dark';
 }
 
 /**
@@ -111,6 +117,7 @@ export const Button: React.FC<ButtonProps> = ({
   isDisabled,
   onClick,
   analytics: analyticsOverride,
+  surface = 'light',
   ...props
 }) => {
   const { track } = useAnalytics();
@@ -150,7 +157,6 @@ export const Button: React.FC<ButtonProps> = ({
   const tokenPrefix = getButtonTokenPrefix(color, variant);
 
   // Check for gradient borders on brand-accent buttons (only for filled and outlined)
-  // This checks if the hover-border token contains "gradient" (for Varsity brand)
   useEffect(() => {
     let nextHasGradientBorder = false;
 
@@ -208,6 +214,7 @@ export const Button: React.FC<ButtonProps> = ({
     isIconOnly && styles['icon-only'],
     icon && !isIconOnly && styles.hasIcon, // Add class when button has icon + text
     isDisabled && styles.disabled,
+    surface === 'dark' && styles.surfaceDark,
     className
   );
 

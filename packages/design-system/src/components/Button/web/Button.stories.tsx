@@ -60,6 +60,12 @@ const meta: Meta<ConfigurableArgs> = {
       control: 'boolean',
       description: 'Whether to capitalize the button text',
     },
+    surface: {
+      control: 'select',
+      options: ['light', 'dark'],
+      description:
+        'Use `dark` on dark backgrounds when the page still uses light theme CSS on :root. Brand follows DesignSystemProvider (`html[data-ds-brand]`).',
+    },
   },
 };
 
@@ -77,6 +83,7 @@ export const Configurable: Story = {
     iconPosition: 'end',
     isDisabled: false,
     capitalize: false,
+    surface: 'light',
   } as ConfigurableArgs,
   render: (args) => {
     const { showIcon, ...buttonProps } = args as ConfigurableArgs;
@@ -109,6 +116,32 @@ export const ButtonWithAnalytics: Story = {
       </AnalyticsProvider>
     ),
   ],
+};
+
+/** Light toolbar theme + dark strip — same pattern as apps with light :root and a dark module. */
+export const OnDarkBackground: Story = {
+  parameters: { theme: 'light', controls: { disable: true } },
+  render: () => (
+    <div
+      style={{
+        background: '#0D0D0D',
+        padding: '2rem',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '1rem',
+      }}
+    >
+      <Button surface="dark" color="neutral" variant="filled">
+        Neutral filled
+      </Button>
+      <Button surface="dark" color="neutral" variant="outlined">
+        Neutral outlined
+      </Button>
+      <Button surface="dark" color="brand" variant="filled">
+        Brand filled
+      </Button>
+    </div>
+  ),
 };
 
 /**
