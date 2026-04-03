@@ -1,5 +1,31 @@
 import React from 'react';
-import { ICON_PIXEL_SIZES, type IconSize } from '@/components/Icon/Icon.types';
+import type { ComponentType } from 'react';
+import {
+  ICON_PIXEL_SIZES,
+  type IconSize,
+  type IconWrapperProps,
+} from '@/components/Icon/Icon.types';
+import { utilityButtonIconFilledVariant } from './utilityButtonIconFilledVariant';
+
+/**
+ * Toggle + active: use the filled wrapped icon when mapped in `utilityButtonIconFilledVariant`; otherwise keep the passed icon.
+ */
+export function resolveUtilityToggleActiveIcon(
+  icon: React.ReactElement<React.SVGProps<SVGSVGElement>> | undefined,
+  variant: 'default' | 'toggle' | 'link',
+  active: boolean | undefined
+): React.ReactElement<React.SVGProps<SVGSVGElement>> | undefined {
+  if (!icon || variant !== 'toggle' || !active || !icon.type) return icon;
+
+  const outline = icon.type as ComponentType<IconWrapperProps>;
+  const Filled = utilityButtonIconFilledVariant.get(outline);
+  if (!Filled) return icon;
+
+  return React.createElement(Filled, {
+    ...(icon.props as React.ComponentProps<typeof Filled>),
+    key: icon.key ?? undefined,
+  }) as React.ReactElement<React.SVGProps<SVGSVGElement>>;
+}
 
 /**
  * Get aria-label for accessibility.
