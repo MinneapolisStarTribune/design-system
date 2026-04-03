@@ -1,0 +1,107 @@
+.pull-quote {
+  $md: 768px;
+  * {
+    margin: 0;
+  }
+
+  display: flex;
+  grid-column: 1 / -1;
+
+  .quote-icon-wrapper {
+    display: flex;
+    align-self: flex-start;
+    width: 30px;
+    height: 30px;
+    margin-top: -4.5px;
+
+    @media (min-width: $md) {
+      width: 36px;
+      height: 36px;
+    }
+
+    .quote-icon {
+      color: var(--semantic-pull-quote-accent-color) !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  .pull-quote-wrapper {
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+  }
+
+  .caption {
+    margin-top: var(--spacing-5);
+    padding-top: var(--spacing-2);
+    border-top: 1px solid var(--strib-semantic-article-toolkit-pull-quote-accent);
+    width: max-content;
+    max-width: 100%;
+
+    .attribution {
+      font: var(--strib-typography-utility-label-bold-02);
+      color: var(--strib-color-text-primary);
+    }
+
+    .jobTitle {
+      font: var(--strib-typography-utility-label-reg-caps-03);
+      color: var(--strib-color-text-tertiary);
+      margin-top: var(--spacing-1);
+    }
+  }
+
+  // Variants
+  &.variant-immersive {
+    // Immersive specific styles
+    gap: var(--spacing-4);
+
+    @media (min-width: $md) {
+      gap: var(--spacing-8);
+    }
+  }
+
+  &.variant-standard {
+    gap: var(--spacing-4);
+
+    @media (min-width: $md) {
+      gap: var(--spacing-8);
+    }
+  }
+
+  // Alignment
+  &.align-left {
+    justify-content: flex-start;
+
+    .caption {
+      align-self: flex-start;
+    }
+  }
+
+  &.align-center {
+    justify-content: center;
+    text-align: center;
+
+    .pull-quote-wrapper {
+      align-items: center;
+    }
+
+    .caption {
+      align-self: center;
+    }
+  }
+
+  &.align-right {
+    justify-content: flex-end;
+    text-align: right;
+    flex-direction: row-reverse;
+
+    .pull-quote-wrapper {
+      align-items: flex-end;
+    }
+
+    .caption {
+      align-self: flex-end;
+    }
+  }
+}
