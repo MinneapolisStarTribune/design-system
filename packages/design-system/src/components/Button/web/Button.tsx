@@ -184,11 +184,11 @@ export const Button: React.FC<ButtonProps> = ({
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
   const leftIcon =
-    isIconOnly || iconPosition === 'start'
+    hasAnyIcon && (isIconOnly || iconPosition === 'start')
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
   const rightIcon =
-    !isIconOnly && iconPosition === 'end'
+    hasAnyIcon && !isIconOnly && iconPosition === 'end'
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
 
