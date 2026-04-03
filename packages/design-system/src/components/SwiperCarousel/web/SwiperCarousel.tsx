@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { A11y } from 'swiper/modules';
+import { A11y, Pagination as SwiperPagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
+import 'swiper/css/pagination';
+
 import classNames from 'classnames';
 
 import { Button } from '@/index.web';
@@ -17,8 +19,6 @@ import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import type { SwiperCarouselProps, NavigationProps, CarouselChild } from './SwiperCarousel.types';
 
 import styles from './SwiperCarousel.module.scss';
-
-/* ---------------- ROOT ---------------- */
 
 const Root: React.FC<SwiperCarouselProps> = ({
   children,
@@ -35,6 +35,8 @@ const Root: React.FC<SwiperCarouselProps> = ({
   const [isEnd, setIsEnd] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalSlides, setTotalSlides] = useState(0);
+
+  const paginationRef = useRef<HTMLDivElement | null>(null);
 
   const allChildren = React.Children.toArray(children) as CarouselChild[];
 
@@ -54,6 +56,10 @@ const Root: React.FC<SwiperCarouselProps> = ({
     .slice(firstSlideIndex)
     .filter((child) => child?.type?.displayName !== 'SwiperSlideWrapper');
 
+  const hasPagination = allChildren.some(
+    (child) => child?.type?.displayName === 'SwiperPagination'
+  );
+
   const contextValue = useMemo(
     () => ({
       swiper: swiperInstance,
@@ -72,12 +78,18 @@ const Root: React.FC<SwiperCarouselProps> = ({
         {beforeSwiper}
 
         <Swiper
-          modules={[A11y]}
+          modules={[A11y, SwiperPagination]}
           slidesPerView={slidesPerView}
           spaceBetween={spaceBetween}
           breakpoints={breakpoints}
           loop={loop}
           centeredSlides={centeredSlides}
+          onBeforeInit={(swiper) => {
+            if (paginationRef.current) {
+              // @ts-expect-error Swiper types do not support assigning pagination.el at runtime
+              swiper.params.pagination.el = paginationRef.current;
+            }
+          }}
           onSwiper={(swiper) => {
             setSwiperInstance(swiper);
 
@@ -88,25 +100,40 @@ const Root: React.FC<SwiperCarouselProps> = ({
 
             const isScrollable = total > 1;
 
-            setIsBeginning(!isScrollable || swiper.snapIndex === 0);
-            setIsEnd(!isScrollable || swiper.snapIndex === total - 1);
+            setIsBeginning(!isScrollable || swiper.isBeginning);
+            setIsEnd(!isScrollable || swiper.isEnd);
           }}
           onSlideChange={(swiper) => {
-            const page = swiper.snapIndex;
-
-            setCurrentPage(page);
-
-            const total = swiper.snapGrid.length;
-
-            setIsBeginning(page === 0);
-            setIsEnd(page === total - 1);
+            setCurrentPage(swiper.snapIndex);
+            setIsBeginning(swiper.isBeginning);
+            setIsEnd(swiper.isEnd);
 
             const index = loop ? swiper.realIndex : swiper.activeIndex;
             setActiveIndex(index);
           }}
+          pagination={
+            hasPagination
+              ? {
+                  clickable: true,
+                }
+              : false
+          }
+          onReachEnd={() => {
+            setIsEnd(true);
+          }}
+          onFromEdge={(swiper) => {
+            setIsEnd(swiper.isEnd);
+            setIsBeginning(swiper.isBeginning);
+          }}
+          onResize={(swiper) => {
+            setIsEnd(swiper.isEnd);
+            setIsBeginning(swiper.isBeginning);
+          }}
         >
           {slides}
         </Swiper>
+
+        {hasPagination && <div ref={paginationRef} className={styles.pagination} />}
 
         {afterSwiper}
       </div>
@@ -114,42 +141,14 @@ const Root: React.FC<SwiperCarouselProps> = ({
   );
 };
 
-/* ---------------- SLIDE ---------------- */
-
 const Slide: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <SwiperSlide className={styles.slide}>{children}</SwiperSlide>
 );
 
 Slide.displayName = 'SwiperSlideWrapper';
 
-/* ---------------- PAGINATION ---------------- */
-
-const Pagination: React.FC = () => {
-  const { swiper, currentPage, totalSlides } = useSwiperContext();
-
-  if (!swiper || totalSlides <= 1) return null;
-
-  return (
-    <div className={styles.pagination}>
-      {Array.from({ length: totalSlides }).map((_, i) => (
-        <button
-          key={i}
-          type="button"
-          className={classNames(styles.dot, {
-            [styles.active]: i === currentPage,
-          })}
-          aria-label={`Go to slide ${i + 1} of ${totalSlides}`}
-          aria-current={i === currentPage ? 'true' : undefined}
-          onClick={() => swiper.slideTo(i)}
-        />
-      ))}
-    </div>
-  );
-};
-
+const Pagination: React.FC = () => null;
 Pagination.displayName = 'SwiperPagination';
-
-/* ---------------- NAVIGATION ---------------- */
 
 const NavigationComponent: React.FC<NavigationProps> = ({
   className,
@@ -158,7 +157,7 @@ const NavigationComponent: React.FC<NavigationProps> = ({
   prevButtonProps,
   nextButtonProps,
 }) => {
-  const { swiper, currentPage, totalSlides } = useSwiperContext();
+  const { swiper, isBeginning, isEnd, totalSlides } = useSwiperContext();
 
   const responsiveSize = useResponsiveSize(size);
   const [autoSize, setAutoSize] = React.useState<'small' | 'large'>('large');
@@ -185,7 +184,7 @@ const NavigationComponent: React.FC<NavigationProps> = ({
         size={finalSize}
         icon={<ChevronLeftIcon />}
         onClick={() => swiper.slidePrev()}
-        isDisabled={currentPage === 0}
+        isDisabled={isBeginning}
         className={styles.navButton}
         aria-label="Previous slide"
         {...buttonProps}
@@ -197,7 +196,7 @@ const NavigationComponent: React.FC<NavigationProps> = ({
         size={finalSize}
         icon={<ChevronRightIcon />}
         onClick={() => swiper.slideNext()}
-        isDisabled={currentPage === totalSlides - 1}
+        isDisabled={isEnd}
         className={styles.navButton}
         aria-label="Next slide"
         {...buttonProps}
@@ -208,8 +207,6 @@ const NavigationComponent: React.FC<NavigationProps> = ({
 };
 
 NavigationComponent.displayName = 'SwiperNavigation';
-
-/* ---------------- EXPORT ---------------- */
 
 export const SwiperCarousel = Object.assign(Root, {
   Slide,

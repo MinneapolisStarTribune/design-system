@@ -51,6 +51,7 @@ const DemoCard = ({ index }: { index: number }) => (
       justifyContent: 'center',
       background: '#fff',
       fontWeight: 600,
+      margin: '20px 0',
     }}
   >
     Card {index}
@@ -78,7 +79,7 @@ export const Configurable: Story = {
 
       <SwiperCarousel.Pagination />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
         <FormGroup>
           <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
         </FormGroup>

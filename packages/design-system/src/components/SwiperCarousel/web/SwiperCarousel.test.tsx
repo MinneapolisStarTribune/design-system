@@ -32,12 +32,10 @@ const slides = ['Slide A', 'Slide B', 'Slide C'];
 
 const renderCarousel = ({
   withPagination = false,
-  withCustomPagination = false,
   withNavigation = false,
   loop = false,
 }: {
   withPagination?: boolean;
-  withCustomPagination?: boolean;
   withNavigation?: boolean;
   loop?: boolean;
 } = {}) =>
@@ -50,7 +48,6 @@ const renderCarousel = ({
       ))}
 
       {withPagination && <SwiperCarousel.Pagination />}
-      {withCustomPagination && <SwiperCarousel.Pagination />}
       {withNavigation && <SwiperCarousel.Navigation />}
     </SwiperCarousel>
   );
@@ -65,28 +62,20 @@ describe('SwiperCarousel', () => {
       });
     });
 
-    it('renders default pagination when enabled (no crash)', () => {
+    it('renders pagination container when enabled', () => {
       const { container } = renderCarousel({ withPagination: true });
 
-      expect(container).toBeInTheDocument();
+      const pagination = container.querySelector('[class*="pagination"]');
+
+      expect(pagination).toBeInTheDocument();
     });
 
-    it('renders custom pagination dots when enabled', () => {
-      const { container } = renderCarousel({
-        withCustomPagination: true,
-      });
-
-      const dots = container.querySelectorAll('[class*="dot"]');
-
-      expect(dots.length).toBe(3);
-    });
-
-    it('does not render custom pagination when not provided', () => {
+    it('does not render pagination when not provided', () => {
       const { container } = renderCarousel();
 
-      const dots = container.querySelectorAll('[class*="dot"]');
+      const pagination = container.querySelector('[class*="pagination"]');
 
-      expect(dots.length).toBe(0);
+      expect(pagination).not.toBeInTheDocument();
     });
 
     it('renders navigation buttons when included', () => {
@@ -100,7 +89,7 @@ describe('SwiperCarousel', () => {
     });
   });
 
-  describe('navigation behavior (render only)', () => {
+  describe('navigation behavior', () => {
     it('renders navigation in non-loop mode', () => {
       renderCarousel({ withNavigation: true });
 
@@ -120,6 +109,14 @@ describe('SwiperCarousel', () => {
       expect(buttons.length).toBe(2);
     });
 
+    it('disables previous button at beginning', () => {
+      renderCarousel({ withNavigation: true });
+
+      const prev = screen.getByLabelText('Previous slide');
+
+      expect(prev).toBeDisabled();
+    });
+
     it('enables next button when not at end', () => {
       renderCarousel({ withNavigation: true });
 
@@ -130,7 +127,7 @@ describe('SwiperCarousel', () => {
   });
 
   describe('pagination behavior', () => {
-    it('does not render custom pagination if only one slide', () => {
+    it('does not render pagination when only one slide', () => {
       const { container } = renderWithProvider(
         <SwiperCarousel>
           <SwiperCarousel.Slide>
@@ -141,9 +138,9 @@ describe('SwiperCarousel', () => {
         </SwiperCarousel>
       );
 
-      const dots = container.querySelectorAll('[class*="dot"]');
+      const pagination = container.querySelector('[class*="pagination"]');
 
-      expect(dots.length).toBe(3);
+      expect(pagination).toBeInTheDocument();
     });
   });
 });
