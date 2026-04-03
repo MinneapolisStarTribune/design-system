@@ -92,6 +92,40 @@ describe('SnackProvider', () => {
     vi.useRealTimers();
   });
 
+  it('shows toast and candy bar when using showToast / showCandyBar aliases', async () => {
+    function ToastViaShowToast() {
+      const { showToast } = useToast();
+      useEffect(() => {
+        showToast({
+          title: 'Via alias',
+          dataTestId: 'toast-alias',
+          duration: 0,
+          variant: 'success',
+          showIcon: false,
+        });
+      }, [showToast]);
+      return null;
+    }
+
+    function CandyViaShowCandyBar() {
+      const { showCandyBar } = useCandyBar();
+      useEffect(() => {
+        showCandyBar({ children: 'Candy via alias' });
+      }, [showCandyBar]);
+      return null;
+    }
+
+    renderWithProvider(
+      <>
+        <ToastViaShowToast />
+        <CandyViaShowCandyBar />
+      </>
+    );
+
+    expect(await screen.findByTestId('toast-alias')).toBeInTheDocument();
+    expect(await screen.findByText('Candy via alias')).toBeInTheDocument();
+  });
+
   it('throws a clear error when useToast is used outside SnackProvider', () => {
     function Outside() {
       useToast();
