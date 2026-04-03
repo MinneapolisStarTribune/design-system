@@ -33,7 +33,7 @@ const EXIT_DURATION_MS = 120; // must match Toast.module.scss animation duration
 
 // --- Slot items ---
 
-type SnackToastShowOptions = {
+export type SnackToastShowOptions = {
   id?: string;
   title: string;
   description?: string;
@@ -43,7 +43,7 @@ type SnackToastShowOptions = {
   dataTestId?: string;
 };
 
-type SnackCandyBarShowOptions = {
+export type SnackCandyBarShowOptions = {
   id?: string;
   children: React.ReactNode;
   onClose?: () => void;
@@ -216,8 +216,9 @@ export function useSnack<Slot extends SnackSlot>(slot: Slot): SnackBoundActions<
   };
 }
 
-type ToastActions = SnackBoundActions<'toast'> & {
+export type ToastActions = SnackBoundActions<'toast'> & {
   showToast: (item: SnackToastShowOptions) => string;
+  hideToast: (id: string) => void;
 };
 
 export function useToast(): ToastActions {
@@ -225,9 +226,20 @@ export function useToast(): ToastActions {
   return {
     ...base,
     showToast: (item) => base.show(item),
+    hideToast: (id) => base.hide(id),
   };
 }
 
-export function useCandyBar() {
-  return useSnack('candybar');
+export type CandyBarActions = SnackBoundActions<'candybar'> & {
+  showCandyBar: (item: SnackCandyBarShowOptions) => string;
+  hideCandyBar: (id: string) => void;
+};
+
+export function useCandyBar(): CandyBarActions {
+  const base = useSnack('candybar');
+  return {
+    ...base,
+    showCandyBar: (item) => base.show(item),
+    hideCandyBar: (id) => base.hide(id),
+  };
 }
