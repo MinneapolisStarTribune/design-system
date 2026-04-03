@@ -32,10 +32,16 @@ export interface ButtonProps extends BaseProps {
    */
   size?: ButtonSize | 'x-small';
   /**
-   * Optional icon. For icon-only buttons, pass the icon (e.g. icon={<AvatarIcon />}).
-   * For buttons with text, use iconPosition to place it before or after the label.
+   * Optional icon — pass an SVG icon element (e.g. from `@/icons`): `icon={<SaveIcon />}`.
+   *
+   * - **Text + icon:** put the label in `children` and use `iconPosition` for before/after the label.
+   * - **Icon-only:** pass `icon` and omit `children`; set **`aria-label`** so the control has an accessible name.
    */
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  /**
+   * Icon placement relative to the text label. Only applies when both `icon` and text `children` are set.
+   * @default 'end'
+   */
   iconPosition?: 'start' | 'end';
   children?: React.ReactNode;
   isDisabled?: boolean;
