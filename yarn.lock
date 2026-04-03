@@ -3202,7 +3202,7 @@ __metadata:
     autoprefixer: "npm:^10.4.21"
     axe-core: "npm:^4.11.0"
     babel-jest: "npm:^30.2.0"
-    chromatic: "npm:^13.3.3"
+    chromatic: "npm:^16.1.0"
     classnames: "npm:^2.5.1"
     cross-env: "npm:^10.0.0"
     eslint: "npm:^8.57.1"
@@ -7410,9 +7410,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chromatic@npm:^13.3.3":
-  version: 13.3.3
-  resolution: "chromatic@npm:13.3.3"
+"chromatic@npm:^16.1.0":
+  version: 16.1.0
+  resolution: "chromatic@npm:16.1.0"
   peerDependencies:
     "@chromatic-com/cypress": ^0.*.* || ^1.0.0
     "@chromatic-com/playwright": ^0.*.* || ^1.0.0
@@ -7425,7 +7425,7 @@ __metadata:
     chroma: dist/bin.js
     chromatic: dist/bin.js
     chromatic-cli: dist/bin.js
-  checksum: 10c0/6fc54df030113d91ef00a2050f5cb13ca182b355dae2c29cdd326fac6cf21d8ddc2cd93dc3f5db04379b7769d4df8e3ea5f18c3642e9e3a48545565f992a838c
+  checksum: 10c0/8fcb8ad10373e8714af3174b48e4fbc2e30e43c93d802dd65cb2580791d445be00facf26b93dd0bbf962dd487baa5330f7e82edbc16ceae6e82f5ea34d107d79
   languageName: node
   linkType: hard
 
