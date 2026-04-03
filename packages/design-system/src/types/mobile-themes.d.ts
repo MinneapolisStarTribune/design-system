@@ -340,6 +340,7 @@ interface StartribuneLightTheme {
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
   semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutBorderRadiusMobile: number;
@@ -707,6 +708,7 @@ interface StartribuneDarkTheme {
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
   semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticPhotoLayoutAspectRatio: string;
   semanticPhotoLayoutBorderRadius: number;
   semanticPhotoLayoutBorderRadiusMobile: number;

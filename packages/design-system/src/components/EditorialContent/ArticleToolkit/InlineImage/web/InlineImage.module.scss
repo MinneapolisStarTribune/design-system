@@ -2,7 +2,6 @@
   /* Button backgrounds */
   --overlay-button-bg: rgba(34, 34, 34, 0.3);
   --overlay-button-bg-hover: rgba(34, 34, 34, 0.5);
-  $md: 768px;
 
   width: 100%;
   margin: 0;
@@ -19,26 +18,9 @@
   }
 
   .image-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-8);
-  }
-
-  @media (min-width: $md) {
-    .image-wrapper {
-      gap: var(--spacing-12);
-    }
-  }
-
-  .item {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-  }
-
-  .image-container {
     position: relative;
+    overflow: hidden;
+    width: 100%;
     border-radius: var(--semantic-inline-image-border-radius);
     aspect-ratio: var(--semantic-inline-image-aspect-ratio);
   }

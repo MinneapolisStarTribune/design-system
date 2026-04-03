@@ -15,9 +15,9 @@ const meta: Meta<InlineImageProps> = {
     },
   },
   argTypes: {
-    imageList: {
+    image: {
       control: 'object',
-      description: 'List of images for the inline image',
+      description: 'Image data for the inline image',
     },
     caption: {
       control: 'text',
@@ -55,15 +55,13 @@ export default meta;
 
 type Story = StoryObj<InlineImageProps>;
 
-const imageList = [
-  {
-    src: 'https://picsum.photos/id/1018/1200/800',
-    altText: 'Alternative text for the image',
-  },
-];
+const image = {
+  src: 'https://picsum.photos/id/1018/1200/800',
+  altText: 'Alternative text for the image',
+};
 
 const defaultArgs: InlineImageProps = {
-  imageList,
+  image,
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'standard',
