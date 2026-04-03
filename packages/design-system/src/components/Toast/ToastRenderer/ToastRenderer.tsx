@@ -15,6 +15,7 @@ export type ToastRendererItem = {
   /** When true, the toast shows its exit animation. */
   exiting?: boolean;
   dataTestId?: string;
+  onClose?: () => void;
 };
 
 export type ToastRendererProps = {

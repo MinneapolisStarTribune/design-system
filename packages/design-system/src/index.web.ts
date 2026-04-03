@@ -5,8 +5,12 @@ export * from '@/icons';
 export { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 export { type Brand, DesignSystemProvider } from '@/providers/DesignSystemProvider';
 export {
+  type CandyBarActions,
   Snack,
+  type SnackCandyBarShowOptions,
   SnackProvider,
+  type SnackToastShowOptions,
+  type ToastActions,
   useCandyBar,
   useSnack,
   useToast,

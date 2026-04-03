@@ -12,12 +12,76 @@ Use it when you need to show feedback from anywhere in the tree: short **toasts*
 
 ## Slots
 
-| Slot | Behavior |
-| --- | --- |
-| **`Snack.toast`** | Queue: many toasts at once. Default **5s** auto-dismiss (you can override `duration`). |
-| **`Snack.candybar`** | Single slot: each **`show()`** replaces the current bar. **No** auto-dismiss. |
+<table>
+  <thead>
+    <tr>
+      <th>Slot</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Snack.toast</code></td>
+      <td>
+        Queue: many toasts at once. Default <strong>5s</strong> auto-dismiss
+        (you can override <code>duration</code>).
+      </td>
+    </tr>
+    <tr>
+      <td><code>Snack.candybar</code></td>
+      <td>
+        Single slot: each <code>show()</code> replaces the current bar.
+        <strong>No</strong> auto-dismiss.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 Slot names are exported on **`Snack`** so you avoid magic strings.
+
+## Hook API (`useToast` / `useCandyBar`)
+
+Each convenience hook returns **`ToastActions`** or **`CandyBarActions`**, which extend **`SnackBoundActions`** for that slot. The canonical methods are **`show`** and **`hide`**.
+
+The hooks also add **slot-specific aliases** on the same object so you can destructure names that read clearly in app code without renaming:
+
+<table>
+  <thead>
+    <tr>
+      <th>Hook</th>
+      <th>Canonical</th>
+      <th>Aliases (same functions)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong><code>useToast</code></strong>
+      </td>
+      <td>
+        <code>show</code>, <code>hide</code>
+      </td>
+      <td>
+        <code>showToast</code>, <code>hideToast</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong><code>useCandyBar</code></strong>
+      </td>
+      <td>
+        <code>show</code>, <code>hide</code>
+      </td>
+      <td>
+        <code>showCandyBar</code>, <code>hideCandyBar</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+There is **no** standalone `showToast` / `showCandyBar` export — only properties on the object returned by the hook. Prefer either `show` / `hide` or the aliases; do not assume a method name that is not on the type.
+
+Types **`ToastActions`** and **`CandyBarActions`** describe the full return shape (re-exported from **`@minneapolisstartribune/design-system/web`**).
 
 ## Usage
 
@@ -29,17 +93,17 @@ Import from **`@minneapolisstartribune/design-system/web`** (same entry as other
 import { useToast, useCandyBar } from '@minneapolisstartribune/design-system/web';
 
 function Example() {
-  const { show: showToast } = useToast();
-  const { show: showCandyBar } = useCandyBar();
+  const toast = useToast();
+  const candy = useCandyBar();
 
   return (
     <>
-      <button type="button" onClick={() => showToast({ title: 'Saved', variant: 'success' })}>
+      <button type="button" onClick={() => toast.show({ title: 'Saved', variant: 'success' })}>
         Toast
       </button>
       <button
         type="button"
-        onClick={() => showCandyBar({ children: <span>Site notice</span> })}
+        onClick={() => candy.showCandyBar({ children: <span>Site notice</span> })}
       >
         Candy bar
       </button>
