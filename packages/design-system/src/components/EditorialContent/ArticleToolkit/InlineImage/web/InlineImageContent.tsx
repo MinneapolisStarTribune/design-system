@@ -5,17 +5,17 @@ import { type ImageData } from '../../types';
 import styles from './InlineImage.module.scss';
 
 interface InlineImageContentProps {
-  images: ImageData[];
+  image: ImageData;
   imgixParams?: string;
   expandable?: boolean;
-  onExpand: (index: number, el: HTMLButtonElement) => void;
+  onExpand: (e: HTMLButtonElement) => void;
   dataTestId: string;
   style?: React.CSSProperties;
   objectFit?: 'cover' | 'contain';
 }
 
 export const InlineImageContent: React.FC<InlineImageContentProps> = ({
-  images,
+  image,
   imgixParams,
   expandable,
   onExpand,
@@ -25,25 +25,18 @@ export const InlineImageContent: React.FC<InlineImageContentProps> = ({
 }) => {
   return (
     <div className={styles['image-wrapper']}>
-      {images.map((img, index) => (
-        <div
-          key={`${img.src}-${index}`}
-          className={styles['image-container']}
-          data-test-id={`${dataTestId}-image-container`}
-        >
-          <Image
-            src={img.src}
-            alt={img.altText}
-            imgixParams={imgixParams}
-            className={styles.image}
-            loading="lazy"
-            decoding="async"
-            dataTestId={`${dataTestId}-image`}
-            style={{ ...style, objectFit }}
-          />
-          {expandable && <ExpandButton onClick={(e) => onExpand(index, e.currentTarget)} />}
-        </div>
-      ))}
+      <Image
+        src={image.src}
+        alt={image.altText}
+        imgixParams={imgixParams}
+        className={styles.image}
+        loading="lazy"
+        decoding="async"
+        dataTestId={`${dataTestId}-image`}
+        style={{ ...style, objectFit }}
+      />
+
+      {expandable && <ExpandButton onClick={(e) => onExpand(e.currentTarget)} />}
     </div>
   );
 };
