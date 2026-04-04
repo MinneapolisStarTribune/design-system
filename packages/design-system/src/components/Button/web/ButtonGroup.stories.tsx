@@ -62,7 +62,7 @@ export const AllVariants: Story = {
       </div>
 
       <div>
-        <h3 style={sectionTitleStyle}>Text buttons (narrow container)</h3>
+        <h3 style={sectionTitleStyle}>Text buttons</h3>
         <div style={{ maxWidth: 280 }}>
           <ButtonGroup>
             <Button variant="filled" color="brand" size="small" onClick={() => undefined}>
