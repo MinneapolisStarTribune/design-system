@@ -138,4 +138,34 @@ describe('UtilityButton', () => {
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
+
+  it('applies toggle inactive class when active is false', () => {
+    const { getByTestId } = renderWithProvider(
+      <UtilityButton
+        label="Save"
+        variant="toggle"
+        active={false}
+        onClick={vi.fn()}
+        data-testid="utility-button"
+      />
+    );
+
+    const classNames = getByTestId('utility-button').className.split(/\s+/);
+    expect(classNames.some((c) => c.includes('toggleInactive'))).toBe(true);
+  });
+
+  it('applies toggle active class when active is true', () => {
+    const { getByTestId } = renderWithProvider(
+      <UtilityButton
+        label="Saved"
+        variant="toggle"
+        active
+        onClick={vi.fn()}
+        data-testid="utility-button"
+      />
+    );
+
+    const classNames = getByTestId('utility-button').className.split(/\s+/);
+    expect(classNames.some((c) => c.includes('toggleActive'))).toBe(true);
+  });
 });
