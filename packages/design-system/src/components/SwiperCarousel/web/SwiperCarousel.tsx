@@ -72,8 +72,9 @@ const Root: React.FC<SwiperCarouselProps> = ({
       isEnd,
       currentPage,
       totalSlides,
+      slidesPerView,
     }),
-    [swiperInstance, activeIndex, isBeginning, isEnd, currentPage, totalSlides]
+    [swiperInstance, activeIndex, isBeginning, isEnd, currentPage, totalSlides, slidesPerView]
   );
 
   return (
@@ -156,9 +157,18 @@ const Root: React.FC<SwiperCarouselProps> = ({
   );
 };
 
-const Slide: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <SwiperSlide className={styles.slide}>{children}</SwiperSlide>
-);
+const Slide: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { slidesPerView } = useSwiperContext();
+
+  return (
+    <SwiperSlide
+      className={styles.slide}
+      style={slidesPerView === 'auto' ? { width: 'auto' } : undefined} //To avoid swiper override issue
+    >
+      {children}
+    </SwiperSlide>
+  );
+};
 
 Slide.displayName = 'SwiperSlideWrapper';
 

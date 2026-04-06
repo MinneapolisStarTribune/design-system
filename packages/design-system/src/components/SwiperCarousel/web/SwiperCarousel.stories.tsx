@@ -51,7 +51,6 @@ const DemoCard = ({ index }: { index: number }) => (
       justifyContent: 'center',
       background: '#fff',
       fontWeight: 600,
-      margin: '20px 0',
     }}
   >
     Card {index}
