@@ -1,44 +1,15 @@
 {
   "semantic": {
-    "article-toolkit": {
-      "max-width": {
-        "immersive": {
-          "inline": {
-            "desktop": { "type": "dimension", "value": 528 },
-            "mobile": { "type": "dimension", "value": 350 },
-            "tablet": { "type": "dimension", "value": 528 }
-          },
-          "large": {
-            "desktop": { "type": "dimension", "value": 1080 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 720 }
-          },
-          "medium": {
-            "desktop": { "type": "dimension", "value": 712 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 728 }
-          }
-        },
-        "standard": {
-          "full": {
-            "desktop": { "type": "dimension", "value": 712 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 728 }
-          },
-          "inline": {
-            "desktop": { "type": "dimension", "value": 528 },
-            "mobile": { "type": "dimension", "value": 358 },
-            "tablet": { "type": "dimension", "value": 528 }
-          }
-        }
-      }
-    },
     "inline-image": {
       "aspect-ratio": {
         "value": "3/2"
       },
       "border-radius": {
         "value": "0px"
+      },
+      "max-width": {
+        "immersive": { "type": "dimension", "value": 1080 },
+        "standard": { "type": "dimension", "value": 712 }
       }
     },
     "photo-layout": {
