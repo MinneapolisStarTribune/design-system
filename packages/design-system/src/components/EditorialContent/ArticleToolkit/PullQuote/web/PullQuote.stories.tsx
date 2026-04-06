@@ -30,11 +30,6 @@ const meta: Meta<PullQuoteProps> = {
       control: 'boolean',
       description: 'Indicates if the quote is long, which may affect styling.',
     },
-    align: {
-      control: 'select',
-      options: ['left', 'center', 'right'],
-      description: 'The alignment of the pull quote.',
-    },
   },
 };
 
@@ -44,10 +39,9 @@ type Story = StoryObj<PullQuoteProps>;
 
 export const Configurable: Story = {
   args: {
-    quote: 'The quick brown fox jumps over the lazy dog.',
-    attribution: 'John Doe',
-    jobTitle: 'Author',
-    isLongQuote: false,
+    quote: 'I still believe jurors can do the right thing and justice can be served.',
+    attribution: 'Gov. Tim Walz',
+    jobTitle: 'Governor, Minnesota',
     align: 'left',
   },
 };

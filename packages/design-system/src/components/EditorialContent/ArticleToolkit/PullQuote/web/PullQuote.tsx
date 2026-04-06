@@ -2,8 +2,7 @@ import React from 'react';
 import type { PullQuoteProps } from '../PullQuote.types';
 import styles from './PullQuote.module.scss';
 import classNames from 'classnames';
-import { QuoteIcon } from '@/index.web';
-import { ArticleQuote } from '@/components/Typography/ArticleBody/ArticleQuote/web/ArticleQuote';
+import { QuoteIcon, ArticleQuote, UtilityLabel } from '@/index.web';
 
 export type { PullQuoteProps } from '../PullQuote.types';
 
@@ -15,24 +14,18 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   align = 'left',
   className,
   dataTestId = 'pull-quote',
-  variant,
   ...accessibilityProps
 }) => {
   if (!quote) return null;
 
   return (
     <div
-      className={classNames(
-        styles['pull-quote'],
-        styles[`align-${align}`],
-        styles[`variant-${variant}`],
-        className
-      )}
+      className={classNames(styles['pull-quote'], styles[`align-${align}`], className)}
       data-testid={dataTestId}
       {...accessibilityProps}
     >
       <span className={styles['quote-icon-wrapper']} aria-hidden="true">
-        <QuoteIcon aria-hidden="true" className={styles['quote-icon']} />
+        <QuoteIcon aria-hidden="true" className={styles['quote-icon']} height={36} width={36} />
       </span>
       <div className={styles['pull-quote-wrapper']}>
         <ArticleQuote size={isLongQuote ? 'large' : 'small'}>{quote}</ArticleQuote>
@@ -40,14 +33,23 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
         {(attribution || jobTitle) && (
           <div className={styles.caption}>
             {attribution && (
-              <div className={styles.attribution} data-testid={`${dataTestId}-attribution`}>
+              <UtilityLabel
+                size="medium"
+                weight="semibold"
+                data-testid={`${dataTestId}-attribution`}
+              >
                 {attribution}
-              </div>
+              </UtilityLabel>
             )}
             {jobTitle && (
-              <div className={styles.jobTitle} data-testid={`${dataTestId}-job-title`}>
+              <UtilityLabel
+                size="small"
+                capitalize={true}
+                data-testid={`${dataTestId}-job-title`}
+                className={styles['job-title']}
+              >
                 {jobTitle}
-              </div>
+              </UtilityLabel>
             )}
           </div>
         )}
