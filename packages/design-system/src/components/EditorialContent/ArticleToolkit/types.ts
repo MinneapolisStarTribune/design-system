@@ -99,3 +99,9 @@ export type InlineImageSizeType = (typeof INLINE_IMAGE_SIZES)[number];
  */
 export const CODE_BLOCK_SIZES = ['full', 'large', 'medium', 'inline'] as const;
 export type CodeBlockSizeType = (typeof CODE_BLOCK_SIZES)[number];
+
+/**
+ * Pull quote alignment variants for the PullQuote component.
+ */
+export const PULL_QUOTE_ALIGNMENTS = ['left', 'center', 'right'] as const;
+export type PullQuoteAlign = (typeof PULL_QUOTE_ALIGNMENTS)[number];
