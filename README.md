@@ -249,6 +249,7 @@ yarn add @minneapolisstartribune/design-system@latest
 
 ## Documentation
 
+- **[Architecture](integration-guides/architecture.md)** - How tokens, builds, exports, and tests fit together (web & native)
 - **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
 - **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
 - **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
