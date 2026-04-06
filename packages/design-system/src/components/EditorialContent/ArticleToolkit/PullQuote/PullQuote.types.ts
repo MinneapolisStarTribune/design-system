@@ -1,6 +1,4 @@
-import { ArticleToolkitBaseProps } from '../types';
-
-export type PullQuoteAlign = 'left' | 'center' | 'right';
+import type { ArticleToolkitBaseProps, PullQuoteAlign } from '../types';
 
 export interface PullQuoteProps extends ArticleToolkitBaseProps {
   quote: string;
