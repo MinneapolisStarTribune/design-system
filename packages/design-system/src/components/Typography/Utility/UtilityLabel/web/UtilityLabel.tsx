@@ -8,6 +8,7 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   children,
   className,
   dataTestId,
+  as: Component = 'span',
   ...rest
 }) => {
   const weightSegment = weight === 'regular' ? '' : `${weight}-`;
@@ -15,9 +16,9 @@ export const UtilityLabel: React.FC<UtilityLabelProps> = ({
   const combinedClassNames = classNames(typographyClassName, className);
 
   return (
-    <span className={combinedClassNames} data-testid={dataTestId} {...rest}>
+    <Component className={combinedClassNames} data-testid={dataTestId} {...rest}>
       {children}
-    </span>
+    </Component>
   );
 };
 

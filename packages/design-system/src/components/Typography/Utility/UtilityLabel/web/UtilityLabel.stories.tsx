@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from './UtilityLabel';
-import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../UtilityLabel.types';
+import {
+  UTILITY_LABEL_AS_ELEMENTS,
+  UTILITY_LABEL_SIZES,
+  UTILITY_LABEL_WEIGHTS,
+} from '../UtilityLabel.types';
 
 const meta = {
   title: 'Typography/Utility/UtilityLabel',
@@ -22,6 +26,11 @@ const meta = {
     capitalize: {
       control: 'boolean',
       description: 'Whether to apply uppercase transformation',
+    },
+    as: {
+      control: 'select',
+      options: UTILITY_LABEL_AS_ELEMENTS,
+      description: 'The HTML element to render as',
     },
   },
 } satisfies Meta<typeof UtilityLabel>;
