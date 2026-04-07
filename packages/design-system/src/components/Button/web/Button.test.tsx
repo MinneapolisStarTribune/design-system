@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
 import { Button } from './Button';
+import buttonStyles from './Button.module.scss';
 import { renderWithProvider } from '../../../test-utils/render';
 import { CameraFilledIcon, ShareIcon } from '@/icons';
 
@@ -49,6 +50,48 @@ describe('Button', () => {
 
     expect(component).toBeInTheDocument();
     expect(component).toHaveClass('custom-class');
+  });
+
+  it('surface="dark" applies dark-surface neutral token scope on the button', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    expect(getByTestId('button')).toHaveClass(buttonStyles.surfaceDark);
+  });
+
+  it('surface="dark" with brand applies dark surface class; Strib palette when html brand is startribune', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" color="brand" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    const el = getByTestId('button');
+    expect(el).toHaveClass(buttonStyles.surfaceDark);
+    expect(el).toHaveClass(buttonStyles.brand);
+    expect(document.documentElement.getAttribute('data-ds-brand')).toBe('startribune');
+  });
+
+  it('default surface does not apply dark-surface classes', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    expect(getByTestId('button')).not.toHaveClass(buttonStyles.surfaceDark);
+  });
+
+  it('surface="dark" with provider brand varsity sets html data-ds-brand for CSS palette', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" color="brand" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>,
+      { brand: 'varsity' }
+    );
+    const el = getByTestId('button');
+    expect(el).toHaveClass(buttonStyles.surfaceDark);
+    expect(document.documentElement.getAttribute('data-ds-brand')).toBe('varsity');
   });
 
   it('renders with an icon', () => {

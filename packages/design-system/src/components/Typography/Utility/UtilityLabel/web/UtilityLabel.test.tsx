@@ -94,4 +94,14 @@ describe('UtilityLabel', () => {
 
     expect(getByTestId('label').querySelector('span')).toHaveTextContent('Nested Content');
   });
+
+  it('renders as specified HTML element', () => {
+    const { getByTestId } = renderWithProvider(
+      <UtilityLabel size="medium" as="label" data-testid="label">
+        Label Element
+      </UtilityLabel>
+    );
+
+    expect(getByTestId('label').tagName).toBe('LABEL');
+  });
 });
