@@ -77,20 +77,29 @@ export const Configurable: Story = {
   args: storyArgs(),
 };
 
-export const Standard: Story = {
-  args: storyArgs({ variant: 'standard' }),
-};
+export const AllVariants: Story = {
+  render: (args) => (
+    <div style={{ display: 'grid', gap: '32px' }}>
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Standard</h3>
+        <InlineImage {...args} variant="standard" />
+      </div>
 
-export const Immersive: Story = {
-  args: storyArgs({ variant: 'immersive' }),
-};
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Immersive</h3>
+        <InlineImage {...args} variant="immersive" />
+      </div>
 
-export const WithExpandable: Story = {
-  args: storyArgs({ expandable: true }),
-};
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Expandable</h3>
+        <InlineImage {...args} expandable />
+      </div>
 
-export const WithPurchaseLink: Story = {
-  args: storyArgs({
-    purchaseLink: 'https://www.startribune.com/photos',
-  }),
+      <div>
+        <h3 style={{ marginBottom: 8 }}>With Purchase Link</h3>
+        <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+      </div>
+    </div>
+  ),
+  args: storyArgs(),
 };
