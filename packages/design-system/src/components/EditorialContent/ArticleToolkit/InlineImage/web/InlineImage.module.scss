@@ -10,11 +10,11 @@
   gap: var(--spacing-8);
 
   &.variant-standard {
-    max-width: var(--semantic-inline-image-max-width-standard);
+    max-width: var(--semantic-article-toolkit-max-width-standard-full-desktop);
   }
 
   &.variant-immersive {
-    max-width: var(--semantic-inline-image-max-width-immersive);
+    max-width: var(--semantic-article-toolkit-max-width-immersive-large-desktop);
   }
 
   .image-wrapper {
