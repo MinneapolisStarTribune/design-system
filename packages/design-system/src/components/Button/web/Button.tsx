@@ -32,16 +32,28 @@ export interface ButtonProps extends BaseProps {
    */
   size?: ButtonSize | 'x-small';
   /**
-   * Optional icon. For icon-only buttons, pass the icon (e.g. icon={<AvatarIcon />}).
-   * For buttons with text, use iconPosition to place it before or after the label.
+   * Optional icon — pass an SVG icon element (e.g. from `@/icons`): `icon={<SaveIcon />}`.
+   *
+   * - **Text + icon:** put the label in `children` and use `iconPosition` for before/after the label.
+   * - **Icon-only:** pass `icon` and omit `children`; set **`aria-label`** so the control has an accessible name.
    */
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  /**
+   * Icon placement relative to the text label. Only applies when both `icon` and text `children` are set.
+   * @default 'end'
+   */
   iconPosition?: 'start' | 'end';
   children?: React.ReactNode;
   isDisabled?: boolean;
   /** Per-button tracking data merged into the event. Use to distinguish buttons (e.g. cta_type, module_name). */
   analytics?: ButtonAnalytics;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /**
+   * `dark`: dark-surface button styles on a dark region while `:root` is still light theme.
+   * Brand palettes follow `DesignSystemProvider` via `html[data-ds-brand]` (web).
+   * @default 'light'
+   */
+  surface?: 'light' | 'dark';
 }
 
 /**
@@ -111,6 +123,7 @@ export const Button: React.FC<ButtonProps> = ({
   isDisabled,
   onClick,
   analytics: analyticsOverride,
+  surface = 'light',
   ...props
 }) => {
   const { track } = useAnalytics();
@@ -150,7 +163,6 @@ export const Button: React.FC<ButtonProps> = ({
   const tokenPrefix = getButtonTokenPrefix(color, variant);
 
   // Check for gradient borders on brand-accent buttons (only for filled and outlined)
-  // This checks if the hover-border token contains "gradient" (for Varsity brand)
   useEffect(() => {
     let nextHasGradientBorder = false;
 
@@ -172,11 +184,11 @@ export const Button: React.FC<ButtonProps> = ({
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
   const leftIcon =
-    isIconOnly || iconPosition === 'start'
+    hasAnyIcon && (isIconOnly || iconPosition === 'start')
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
   const rightIcon =
-    !isIconOnly && iconPosition === 'end'
+    hasAnyIcon && !isIconOnly && iconPosition === 'end'
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
 
@@ -208,6 +220,7 @@ export const Button: React.FC<ButtonProps> = ({
     isIconOnly && styles['icon-only'],
     icon && !isIconOnly && styles.hasIcon, // Add class when button has icon + text
     isDisabled && styles.disabled,
+    surface === 'dark' && styles.surfaceDark,
     className
   );
 

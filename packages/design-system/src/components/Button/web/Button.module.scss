@@ -267,4 +267,100 @@
     opacity: 0.4 !important;
     cursor: not-allowed !important;
   }
+
+  /*
+   * Dark surface: light :root theme but button on a dark bar/card.
+   * Neutral tokens are shared. Brand / brand-accent follow `html[data-ds-brand]` (web DesignSystemProvider).
+   */
+  &.surfaceDark {
+    --color-button-neutral-filled-background: var(--color-base-white);
+    --color-button-neutral-filled-hover-background: var(--color-neutral-200);
+    --color-button-neutral-filled-hover-text: var(--color-neutral-950);
+    --color-button-neutral-filled-text: var(--color-neutral-950);
+    --color-button-neutral-ghost-background: transparent;
+    --color-button-neutral-ghost-hover-background: var(--color-neutral-800);
+    --color-button-neutral-ghost-hover-text: var(--color-base-white);
+    --color-button-neutral-ghost-text: var(--color-base-white);
+    --color-button-neutral-outlined-background: transparent;
+    --color-button-neutral-outlined-border: var(--color-base-white);
+    --color-button-neutral-outlined-hover-background: var(--color-neutral-800);
+    --color-button-neutral-outlined-hover-border: var(--color-base-white);
+    --color-button-neutral-outlined-hover-text: var(--color-base-white);
+    --color-button-neutral-outlined-text: var(--color-base-white);
+  }
+
+  &.surfaceDark.brand,
+  &.surfaceDark.brand-accent {
+    --color-button-brand-filled-background: var(--color-spring-green-400);
+    --color-button-brand-filled-hover-background: var(--color-spring-green-300);
+    --color-button-brand-filled-hover-text: var(--color-base-black);
+    --color-button-brand-filled-text: var(--color-base-black);
+    --color-button-brand-ghost-background: transparent;
+    --color-button-brand-ghost-hover-background: rgb(118 216 110 / 16%);
+    --color-button-brand-ghost-hover-text: var(--color-spring-green-400);
+    --color-button-brand-ghost-text: var(--color-spring-green-400);
+    --color-button-brand-outlined-background: transparent;
+    --color-button-brand-outlined-border: var(--color-spring-green-400);
+    --color-button-brand-outlined-hover-background: rgb(118 216 110 / 16%);
+    --color-button-brand-outlined-hover-border: var(--color-spring-green-400);
+    --color-button-brand-outlined-hover-text: var(--color-spring-green-400);
+    --color-button-brand-outlined-text: var(--color-spring-green-400);
+    --color-button-brand-accent-filled-background: var(--color-lime-400);
+    --color-button-brand-accent-filled-hover-background: var(--color-lime-200);
+    --color-button-brand-accent-filled-hover-text: var(--color-forest-green-900);
+    --color-button-brand-accent-filled-text: var(--color-forest-green-900);
+    --color-button-brand-accent-ghost-background: transparent;
+    --color-button-brand-accent-ghost-hover-background: rgb(200 250 49 / 16%);
+    --color-button-brand-accent-ghost-hover-text: var(--color-lime-400);
+    --color-button-brand-accent-ghost-text: var(--color-lime-400);
+    --color-button-brand-accent-outlined-background: transparent;
+    --color-button-brand-accent-outlined-border: var(--color-lime-400);
+    --color-button-brand-accent-outlined-hover-background: rgb(200 250 49 / 16%);
+    --color-button-brand-accent-outlined-hover-border: var(--color-lime-400);
+    --color-button-brand-accent-outlined-hover-text: var(--color-lime-400);
+    --color-button-brand-accent-outlined-text: var(--color-lime-300);
+  }
+}
+
+:global(html[data-ds-brand='varsity']) {
+  .button.surfaceDark.brand,
+  .button.surfaceDark.brand-accent {
+    --color-button-brand-filled-background: var(--color-cobalt-blue-500);
+    --color-button-brand-filled-hover-background: var(--color-cobalt-blue-300);
+    --color-button-brand-filled-hover-text: var(--color-base-black);
+    --color-button-brand-filled-text: var(--color-base-black);
+    --color-button-brand-ghost-background: transparent;
+    --color-button-brand-ghost-hover-background: rgb(72 160 255 / 16%);
+    --color-button-brand-ghost-hover-text: var(--color-cobalt-blue-500);
+    --color-button-brand-ghost-text: var(--color-cobalt-blue-500);
+    --color-button-brand-outlined-background: transparent;
+    --color-button-brand-outlined-border: var(--color-cobalt-blue-500);
+    --color-button-brand-outlined-hover-background: rgb(72 160 255 / 16%);
+    --color-button-brand-outlined-hover-border: var(--color-cobalt-blue-500);
+    --color-button-brand-outlined-hover-text: var(--color-cobalt-blue-500);
+    --color-button-brand-outlined-text: var(--color-cobalt-blue-500);
+    --color-button-brand-accent-filled-background: var(--color-brand-03);
+    --color-button-brand-accent-filled-hover-background: var(--color-brand-03);
+    --color-button-brand-accent-filled-hover-border: linear-gradient(
+      to right,
+      var(--color-lime-300),
+      var(--color-spring-green-400)
+    );
+    --color-button-brand-accent-filled-hover-text: var(--color-base-white);
+    --color-button-brand-accent-filled-text: var(--color-base-black);
+    --color-button-brand-accent-ghost-background: transparent;
+    --color-button-brand-accent-ghost-hover-background: rgb(200 250 49 / 16%);
+    --color-button-brand-accent-ghost-hover-text: var(--color-lime-400);
+    --color-button-brand-accent-ghost-text: var(--color-lime-400);
+    --color-button-brand-accent-outlined-background: transparent;
+    --color-button-brand-accent-outlined-border: var(--color-brand-03);
+    --color-button-brand-accent-outlined-hover-background: rgb(200 250 49 / 16%);
+    --color-button-brand-accent-outlined-hover-border: linear-gradient(
+      to right,
+      var(--color-lime-300),
+      var(--color-spring-green-400)
+    );
+    --color-button-brand-accent-outlined-hover-text: var(--color-lime-400);
+    --color-button-brand-accent-outlined-text: var(--color-lime-400);
+  }
 }
