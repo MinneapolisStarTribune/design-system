@@ -7,7 +7,9 @@ import {
   BUTTON_COLORS,
   BUTTON_SIZES,
   ICON_ONLY_BUTTON_SIZES,
+  type ButtonColor,
   type ButtonSize,
+  type ButtonVariant,
   type IconOnlyButtonSize,
 } from './Button';
 import { AnalyticsProvider } from '@/providers/AnalyticsProvider';
@@ -22,6 +24,13 @@ type ConfigurableArgs = ButtonProps & { showIcon?: boolean };
 const meta: Meta<ConfigurableArgs> = {
   title: 'Actions/Button',
   component: Button,
+  parameters: {
+    docs: {
+      canvas: {
+        sourceState: 'hidden',
+      },
+    },
+  },
   argTypes: {
     children: {
       control: 'text',
@@ -44,11 +53,13 @@ const meta: Meta<ConfigurableArgs> = {
     },
     showIcon: {
       control: 'boolean',
-      description: `Whether to show an icon (AvatarIcon in stories). In app code, pass icon={YourIcon}.`,
+      description:
+        'Stories only: toggles AvatarIcon. In apps, pass icon={<YourIcon />} (see Button `icon` prop docs).',
     },
     iconPosition: {
       control: 'select',
       options: ['start', 'end'],
+      if: { arg: 'showIcon', truthy: true },
       description:
         'When the button has both icon and text, position of the icon relative to the label.',
     },
@@ -60,11 +71,55 @@ const meta: Meta<ConfigurableArgs> = {
       control: 'boolean',
       description: 'Whether to capitalize the button text',
     },
+    surface: {
+      control: 'select',
+      options: ['light', 'dark'],
+      description:
+        'Use `dark` on dark backgrounds when the page still uses light theme CSS on :root. Brand follows DesignSystemProvider (`html[data-ds-brand]`).',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+/** Storybook serializes wrapped icons as `Icon(Svg…)`; docs snippets use the public export name. */
+const docsSourceArrowRightIconEnd = `icon={<ArrowRightIcon />}
+  iconPosition="end"`;
+
+const onDarkBackgroundDocsSource = `
+<Button surface="dark" color="neutral" variant="filled">
+  Neutral filled
+</Button>
+
+<Button surface="dark" color="neutral" variant="outlined">
+  Neutral outlined
+</Button>
+
+<Button surface="dark" color="brand" variant="filled">
+  Brand filled
+</Button>
+
+<Button
+  surface="dark"
+  color="neutral"
+  variant="filled"
+  ${docsSourceArrowRightIconEnd}
+>
+  With icon
+</Button>
+`.trim();
+
+const buttonWithAnalyticsDocsSource = `
+<Button
+  variant="filled"
+  color="brand"
+  analytics={{ cta_type: 'subscribe', module_position: 'hero' }}
+  ${docsSourceArrowRightIconEnd}
+>
+  Subscribe
+</Button>
+`.trim();
 
 export const Configurable: Story = {
   args: {
@@ -74,13 +129,19 @@ export const Configurable: Story = {
     size: 'large',
     color: 'brand',
     showIcon: false,
-    iconPosition: 'end',
     isDisabled: false,
     capitalize: false,
+    surface: 'light',
   } as ConfigurableArgs,
   render: (args) => {
-    const { showIcon, ...buttonProps } = args as ConfigurableArgs;
-    return <Button {...buttonProps} icon={showIcon ? <AvatarIcon /> : undefined} />;
+    const { showIcon, iconPosition, ...buttonProps } = args as ConfigurableArgs;
+    return (
+      <Button
+        {...buttonProps}
+        icon={showIcon ? <AvatarIcon /> : undefined}
+        {...(showIcon ? { iconPosition: iconPosition ?? 'end' } : {})}
+      />
+    );
   },
 };
 
@@ -96,6 +157,14 @@ export const ButtonWithAnalytics: Story = {
     color: 'brand',
     analytics: { cta_type: 'subscribe', module_position: 'hero' },
   },
+  parameters: {
+    docs: {
+      source: {
+        code: buttonWithAnalyticsDocsSource,
+        type: 'code',
+      },
+    },
+  },
   render: (args) => <Button {...args} icon={<ArrowRightIcon />} iconPosition="end" />,
   decorators: [
     (Story) => (
@@ -110,6 +179,90 @@ export const ButtonWithAnalytics: Story = {
     ),
   ],
 };
+
+/** Light toolbar theme + dark strip — same pattern as apps with light :root and a dark module. */
+export const OnDarkBackground: Story = {
+  parameters: {
+    theme: 'light',
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: onDarkBackgroundDocsSource,
+        type: 'code',
+      },
+    },
+  },
+  render: () => (
+    <div
+      style={{
+        background: '#0D0D0D',
+        padding: '2rem',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '1rem',
+      }}
+    >
+      <Button surface="dark" color="neutral" variant="filled">
+        Neutral filled
+      </Button>
+      <Button surface="dark" color="neutral" variant="outlined">
+        Neutral outlined
+      </Button>
+      <Button surface="dark" color="brand" variant="filled">
+        Brand filled
+      </Button>
+      <Button
+        surface="dark"
+        color="brand-accent"
+        variant="filled"
+        icon={<AvatarIcon />}
+        iconPosition="end"
+      >
+        With icon
+      </Button>
+    </div>
+  ),
+};
+
+/** Same variant × color × size walks as `renderButtonSection`; used only to build docs source (no layout noise). */
+function eachVariantMatrix<T extends ButtonSize | IconOnlyButtonSize>(
+  sizes: readonly T[],
+  format: (args: { variant: ButtonVariant; color: ButtonColor; size: T }) => string
+): string {
+  const chunks: string[] = [];
+  for (const variant of BUTTON_VARIANTS) {
+    for (const color of BUTTON_COLORS) {
+      for (const size of sizes) {
+        chunks.push(format({ variant, color, size }));
+      }
+    }
+  }
+  return chunks.join('\n\n');
+}
+
+const allVariantsDocsSource = (() => {
+  const demoLabel = (color: ButtonColor, variant: ButtonVariant, size: string) =>
+    `${color} ${variant} ${size}`;
+
+  return [
+    '// All Text Buttons\n\n',
+    eachVariantMatrix(BUTTON_SIZES, ({ variant, color, size }) => {
+      const label = demoLabel(color, variant, size);
+      return `<Button variant="${variant}" color="${color}" size="${size}">\n  ${label}\n</Button>`;
+    }),
+    '\n\n// All Text Buttons with Icons\n\n',
+    eachVariantMatrix(BUTTON_SIZES, ({ variant, color, size }) => {
+      const label = demoLabel(color, variant, size);
+      return `<Button variant="${variant}" color="${color}" size="${size}" icon={<AvatarIcon />} iconPosition="start">\n  ${label}\n</Button>`;
+    }),
+    '\n\n// All Icon Only Buttons\n\n',
+    eachVariantMatrix(ICON_ONLY_BUTTON_SIZES, ({ variant, color, size }) => {
+      return `<Button variant="${variant}" color="${color}" size="${size}" icon={<AvatarIcon />} aria-label="Icon button" />`;
+    }),
+  ]
+    .join('')
+    .trim();
+})();
 
 /**
  * Helper function to render a section of buttons (text-only, with icons, or icon-only)
@@ -190,6 +343,12 @@ export const AllVariants: Story = {
     chromatic: { modes: allModes },
     controls: { disable: true },
     layout: 'fullscreen',
+    docs: {
+      source: {
+        code: allVariantsDocsSource,
+        type: 'code',
+      },
+    },
   },
   render: () => (
     <div style={{ padding: '2rem' }}>

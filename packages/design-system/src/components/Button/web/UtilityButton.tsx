@@ -7,7 +7,11 @@ import { UtilityLabel } from '@/components/Typography/Utility';
 import { BaseProps } from '@/types/globalTypes';
 import type { Size } from '@/types/globalTypes';
 import { type IconSize } from '@/components/Icon/Icon.types';
-import { enhanceButtonIcon, getUtilityButtonAriaLabel } from '../Helpers';
+import {
+  enhanceButtonIcon,
+  getUtilityButtonAriaLabel,
+  resolveUtilityToggleActiveIcon,
+} from '../Helpers';
 
 export const UTILITY_BUTTON_VARIANTS = ['default', 'toggle', 'link'] as const;
 export type UtilityButtonVariant = (typeof UTILITY_BUTTON_VARIANTS)[number];
@@ -30,8 +34,7 @@ function getUtilityButtonIconSize(size: UtilityButtonSize, isIconOnly: boolean):
   return isIconOnly ? 'small' : 'x-small';
 }
 
-export interface UtilityButtonProps extends BaseProps {
-  variant?: UtilityButtonVariant;
+interface UtilityButtonBaseProps extends BaseProps {
   size?: UtilityButtonSize;
   /** Optional icon element (e.g. icon={<Share02Icon />}) */
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
@@ -42,9 +45,23 @@ export interface UtilityButtonProps extends BaseProps {
   label?: string;
 }
 
+type UtilityButtonToggleProps = UtilityButtonBaseProps & {
+  variant: 'toggle';
+  /** Controls active/inactive visual state for toggle variant. */
+  active: boolean;
+};
+
+type UtilityButtonNonToggleProps = UtilityButtonBaseProps & {
+  variant?: Exclude<UtilityButtonVariant, 'toggle'>;
+  active?: never;
+};
+
+export type UtilityButtonProps = UtilityButtonToggleProps | UtilityButtonNonToggleProps;
+
 export const UtilityButton: React.FC<UtilityButtonProps> = ({
   variant = 'default',
   size = 'large',
+  active,
   icon,
   iconPosition = 'start',
   isDisabled,
@@ -56,22 +73,27 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
   const hasIcon = !!icon;
   const isIconOnly = hasIcon && !label;
 
+  const displayIcon = resolveUtilityToggleActiveIcon(icon, variant, active) ?? icon;
   const iconSize = hasIcon ? getUtilityButtonIconSize(size, isIconOnly) : undefined;
   const leftIcon =
     hasIcon && (isIconOnly || iconPosition === 'start')
-      ? enhanceButtonIcon(icon, iconSize, styles.icon)
+      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
       : null;
   const rightIcon =
     hasIcon && !isIconOnly && iconPosition === 'end'
-      ? enhanceButtonIcon(icon, iconSize, styles.icon)
+      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
       : null;
 
   const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
   const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
+  const ariaPressed = variant === 'toggle' ? active : undefined;
+  const toggleStateClass =
+    variant === 'toggle' ? (active ? styles.toggleActive : styles.toggleInactive) : undefined;
 
   const combinedClassNames = classNames(
     styles.utilityButton,
     styles[variant],
+    toggleStateClass,
     styles[size],
     isIconOnly && styles['icon-only'],
     isDisabled && styles.disabled,
@@ -85,6 +107,7 @@ export const UtilityButton: React.FC<UtilityButtonProps> = ({
     <button
       type="button"
       aria-label={buttonAriaLabel}
+      aria-pressed={ariaPressed}
       disabled={isDisabled}
       className={combinedClassNames || undefined}
       onClick={onClick}
