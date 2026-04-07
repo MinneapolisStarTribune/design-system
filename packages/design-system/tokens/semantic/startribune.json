@@ -12,6 +12,38 @@
         "standard": { "type": "dimension", "value": 712 }
       }
     },
+    "inline-video": {
+      "horizontal-aspect-ratio": {
+        "value": "16/9"
+      },
+      "horizontal-border-radius-desktop": {
+        "value": "{radius.none}"
+      },
+      "horizontal-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "horizontal-border-radius-tablet": {
+        "value": "{radius.none}"
+      },
+      "immersive-vertical-max-width": {
+        "value": "390px"
+      },
+      "standard-vertical-max-width": {
+        "value": "358px"
+      },
+      "vertical-aspect-ratio": {
+        "value": "9/16"
+      },
+      "vertical-border-radius-desktop": {
+        "value": "{radius.none}"
+      },
+      "vertical-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "vertical-border-radius-tablet": {
+        "value": "{radius.none}"
+      }
+    },
     "photo-layout": {
       "aspect-ratio": {
         "value": "3 / 2"
