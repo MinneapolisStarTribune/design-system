@@ -11,11 +11,15 @@ describe('PullQuote Accessibility', () => {
     await expectNoA11yViolations(<PullQuote {...defaultProps} />);
   });
 
-  it('has no accessibility violations when quote is long', async () => {
-    await expectNoA11yViolations(<PullQuote {...defaultProps} isLongQuote />);
-  });
-
   it('has no accessibility violations when quote is not provided', async () => {
     await expectNoA11yViolations(<PullQuote {...defaultProps} quote="" />);
+  });
+
+  it('has no accessibility violations when attribution is not provided', async () => {
+    await expectNoA11yViolations(<PullQuote {...defaultProps} attribution={undefined} />);
+  });
+
+  it('has no accessibility violations when variant is standard', async () => {
+    await expectNoA11yViolations(<PullQuote {...defaultProps} variant="standard" />);
   });
 });
