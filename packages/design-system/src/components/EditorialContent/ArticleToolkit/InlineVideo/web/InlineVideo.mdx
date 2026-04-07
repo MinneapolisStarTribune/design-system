@@ -1,0 +1,58 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as InlineVideoStories from './InlineVideo.stories';
+
+<Meta of={InlineVideoStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# InlineVideo
+
+The **InlineVideo** component renders video content within editorial layouts, supporting captions and video credits.
+It provides a responsive container for embedding video players while maintaining consistent layout across article templates.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2449-81728)
+
+## Variants
+
+### Standard
+
+Used within standard article layouts with constrained width.
+
+### Immersive
+
+Used within immersive layouts where video can span wider content areas.
+
+## Orientation
+
+- **Horizontal** (`horizontal`) — Default landscape layout.
+- **Vertical** (`vertical`) — Centered portrait layout with constrained width.
+
+## Usage guidelines
+
+### When to use
+
+- Embed video within editorial content
+- Provide context using captions and credits
+
+### When to avoid
+
+- Avoid using as a standalone video player
+- Avoid for multi-video grid layouts
+
+## Props
+
+- **variant** – `'standard' | 'immersive'`
+- **orientation** – `'horizontal' | 'vertical'`
+- **caption** – Optional video description
+- **videoCredit** – Optional attribution
+- **posterUrl** – Optional thumbnail (used by consumer)
+- **children** – Video player element
+- **dataTestId** – Optional test id
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
+<Primary />
+<Controls />
+<Stories />
