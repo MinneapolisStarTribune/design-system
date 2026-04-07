@@ -227,6 +227,12 @@ interface StartribuneLightTheme {
   colorPurple800: string;
   colorPurple900: string;
   colorPurple950: string;
+  colorRadioBorderSelectedBrand: string;
+  colorRadioBorderSelectedNeutral: string;
+  colorRadioBorderUnchecked: string;
+  colorRadioDotSelectedBrand: string;
+  colorRadioDotSelectedNeutral: string;
+  colorRadioDotUnchecked: string;
   colorRed100: string;
   colorRed200: string;
   colorRed300: string;
@@ -398,6 +404,8 @@ interface StartribuneLightTheme {
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
+  spacingRadioDefault: number;
+  spacingRadioSmall: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -618,6 +626,12 @@ interface StartribuneDarkTheme {
   colorPurple800: string;
   colorPurple900: string;
   colorPurple950: string;
+  colorRadioBorderSelectedBrand: string;
+  colorRadioBorderSelectedNeutral: string;
+  colorRadioBorderUnchecked: string;
+  colorRadioDotSelectedBrand: string;
+  colorRadioDotSelectedNeutral: string;
+  colorRadioDotUnchecked: string;
   colorRed100: string;
   colorRed200: string;
   colorRed300: string;
@@ -789,6 +803,8 @@ interface StartribuneDarkTheme {
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
+  spacingRadioDefault: number;
+  spacingRadioSmall: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1015,6 +1031,12 @@ interface VarsityLightTheme {
   colorPurple800: string;
   colorPurple900: string;
   colorPurple950: string;
+  colorRadioBorderSelectedBrand: string;
+  colorRadioBorderSelectedNeutral: string;
+  colorRadioBorderUnchecked: string;
+  colorRadioDotSelectedBrand: string;
+  colorRadioDotSelectedNeutral: string;
+  colorRadioDotUnchecked: string;
   colorRed100: string;
   colorRed200: string;
   colorRed300: string;
@@ -1184,6 +1206,8 @@ interface VarsityLightTheme {
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
+  spacingRadioDefault: number;
+  spacingRadioSmall: number;
   textSize1xl: string;
   textSize2xxl: string;
 }
@@ -1410,6 +1434,12 @@ interface VarsityDarkTheme {
   colorPurple800: string;
   colorPurple900: string;
   colorPurple950: string;
+  colorRadioBorderSelectedBrand: string;
+  colorRadioBorderSelectedNeutral: string;
+  colorRadioBorderUnchecked: string;
+  colorRadioDotSelectedBrand: string;
+  colorRadioDotSelectedNeutral: string;
+  colorRadioDotUnchecked: string;
   colorRed100: string;
   colorRed200: string;
   colorRed300: string;
@@ -1579,6 +1609,8 @@ interface VarsityDarkTheme {
   spacingInputLg: number;
   spacingInputMd: number;
   spacingInputSm: number;
+  spacingRadioDefault: number;
+  spacingRadioSmall: number;
   textSize1xl: string;
   textSize2xxl: string;
 }

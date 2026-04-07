@@ -1,0 +1,98 @@
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  &:has(.input:focus-visible) {
+    box-shadow:
+      0 0 0 2px var(--color-background-light-default),
+      0 0 0 4px var(--color-border-state-focus);
+  }
+}
+
+.inputWrapper {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: inherit;
+  outline: none;
+}
+
+.visualDot {
+  width: var(--spacing-radio-default);
+  height: var(--spacing-radio-default);
+  border-radius: 999px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-radio-border-unchecked);
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visualDot::after {
+  content: '';
+  width: var(--spacing-radio-small);
+  height: var(--spacing-radio-small);
+  border-radius: 999px;
+  background-color: var(--color-radio-dot-unchecked);
+}
+
+.root.checked.neutral .visualDot {
+  border-color: var(--color-radio-border-selected-neutral);
+}
+
+.root.checked.brand .visualDot {
+  border-color: var(--color-radio-border-selected-brand);
+}
+
+.root.checked.neutral .visualDot::after {
+  background-color: var(--color-radio-dot-selected-neutral);
+}
+
+.root.checked.brand .visualDot::after {
+  background-color: var(--color-radio-dot-selected-brand);
+}
+
+.root.error:not(.checked) .visualDot {
+  border-color: var(--color-border-state-attention-on-light);
+}
+
+.root.error.checked .visualDot {
+  border-color: var(--color-border-state-attention-on-light);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 0;
+}
+
+.title {
+  color: var(--color-text-on-light-primary);
+  cursor: inherit;
+}
+
+.description {
+  color: var(--color-text-on-light-tertiary);
+  cursor: inherit;
+}
