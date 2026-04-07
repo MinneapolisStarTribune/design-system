@@ -33,6 +33,7 @@ export const FormGroupLabel: React.FC<FormGroupLabelProps> = ({
         size="medium"
         weight="semibold"
         data-testid={dataTestId}
+        as={'label'}
       >
         {children}
       </UtilityLabel>

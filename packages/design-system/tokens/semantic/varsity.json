@@ -57,6 +57,32 @@
         "value": "{radius.12}"
       }
     },
+    "inline-video": {
+      "horizontal-aspect-ratio": {
+        "value": "16/9"
+      },
+      "horizontal-border-radius-desktop": {
+        "value": "{radius.12}"
+      },
+      "horizontal-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "horizontal-border-radius-tablet": {
+        "value": "{radius.none}"
+      },
+      "vertical-aspect-ratio": {
+        "value": "9/16"
+      },
+      "vertical-border-radius-desktop": {
+        "value": "{radius.12}"
+      },
+      "vertical-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "vertical-border-radius-tablet": {
+        "value": "{radius.12}"
+      }
+    },
     "photo-layout": {
       "aspect-ratio": {
         "value": "3 / 2"
