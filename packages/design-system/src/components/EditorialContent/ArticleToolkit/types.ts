@@ -101,6 +101,12 @@ export const CODE_BLOCK_SIZES = ['full', 'large', 'medium', 'inline'] as const;
 export type CodeBlockSizeType = (typeof CODE_BLOCK_SIZES)[number];
 
 /**
+ * Inline video orientation variants for the InlineVideo component.
+ */
+export const INLINE_VIDEO_ORIENTATIONS = ['horizontal', 'vertical'] as const;
+export type InlineVideoOrientationType = (typeof INLINE_VIDEO_ORIENTATIONS)[number];
+
+/**
  * Pull quote alignment variants for the PullQuote component.
  */
 export const PULL_QUOTE_ALIGNMENTS = ['left', 'center', 'right'] as const;
