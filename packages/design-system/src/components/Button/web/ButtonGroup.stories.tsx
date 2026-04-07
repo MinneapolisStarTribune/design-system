@@ -1,14 +1,60 @@
-import type { CSSProperties } from 'react';
+import type { ComponentType, CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Button } from './Button';
+import {
+  Button,
+  BUTTON_COLORS,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
+  type ButtonSize,
+} from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { AvatarIcon } from '@/icons';
 import { allModes } from '@storybook-config/modes';
 
-const meta: Meta<typeof ButtonGroup> = {
+type ConfigurableArgs = {
+  count: number;
+  maxWidth: number;
+  variant: (typeof BUTTON_VARIANTS)[number];
+  color: (typeof BUTTON_COLORS)[number];
+  size: ButtonSize;
+  showIcon: boolean;
+  iconOnly: boolean;
+};
+
+const meta: Meta<ConfigurableArgs> = {
   title: 'Actions/ButtonGroup',
-  component: ButtonGroup,
+  component: ButtonGroup as unknown as ComponentType<ConfigurableArgs>,
+  argTypes: {
+    count: {
+      control: { type: 'number', min: 1, max: 24, step: 1 },
+      description: 'How many buttons to render in the group.',
+    },
+    maxWidth: {
+      control: { type: 'number', min: 180, max: 900, step: 20 },
+      description: 'Container width used to preview wrapping behavior.',
+    },
+    variant: {
+      control: 'select',
+      options: [...BUTTON_VARIANTS] as string[],
+    },
+    color: {
+      control: 'select',
+      options: [...BUTTON_COLORS] as string[],
+    },
+    size: {
+      control: 'select',
+      options: [...BUTTON_SIZES] as string[],
+    },
+    showIcon: {
+      control: 'boolean',
+      description: 'When true, each button includes AvatarIcon.',
+    },
+    iconOnly: {
+      control: 'boolean',
+      description: 'When true, buttons render icon-only and use aria-label.',
+    },
+  },
 };
 
 export default meta;
@@ -18,6 +64,44 @@ const sectionTitleStyle: CSSProperties = {
   marginBottom: '1rem',
   fontSize: '14px',
   fontWeight: 600,
+};
+
+export const Configurable: Story = {
+  args: {
+    count: 8,
+    maxWidth: 360,
+    variant: 'outlined',
+    color: 'neutral',
+    size: 'small',
+    showIcon: false,
+    iconOnly: false,
+  } as ConfigurableArgs,
+  render: (args) => {
+    const { count, maxWidth, variant, color, size, showIcon, iconOnly } = args as ConfigurableArgs;
+
+    return (
+      <div style={{ maxWidth }}>
+        <ButtonGroup>
+          {Array.from({ length: count }, (_, index) => {
+            const label = `Button ${index + 1}`;
+            return (
+              <Button
+                key={index}
+                variant={variant}
+                color={color}
+                size={size}
+                icon={showIcon ? <AvatarIcon /> : undefined}
+                aria-label={iconOnly ? label : undefined}
+                onClick={() => undefined}
+              >
+                {iconOnly ? undefined : label}
+              </Button>
+            );
+          })}
+        </ButtonGroup>
+      </div>
+    );
+  },
 };
 
 /**
