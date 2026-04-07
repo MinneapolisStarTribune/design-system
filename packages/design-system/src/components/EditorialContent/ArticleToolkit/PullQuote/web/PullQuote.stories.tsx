@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PullQuoteProps } from '../PullQuote.types';
 import { PullQuote } from './PullQuote';
+import { ARTICLE_BODY_VARIANTS, PULL_QUOTE_SIZES } from '../../types';
+import { ArticleBodyText } from '@/index.web';
 
 const meta: Meta<PullQuoteProps> = {
   title: 'Editorial Content/Article Toolkit/Pull Quote',
   component: PullQuote,
   parameters: {
-    layout: 'padded',
+    layout: 'centered',
     docs: {
       source: {
         type: 'dynamic',
@@ -26,9 +28,15 @@ const meta: Meta<PullQuoteProps> = {
       control: 'text',
       description: 'The job title of the person being quoted.',
     },
-    isLongQuote: {
-      control: 'boolean',
-      description: 'Indicates if the quote is long, which may affect styling.',
+    variant: {
+      control: 'radio',
+      options: Object.values(ARTICLE_BODY_VARIANTS),
+      description: 'Article body variant: standard or immersive.',
+    },
+    size: {
+      control: 'select',
+      options: PULL_QUOTE_SIZES,
+      description: 'The size of the quote text.',
     },
   },
 };
@@ -37,11 +45,62 @@ export default meta;
 
 type Story = StoryObj<PullQuoteProps>;
 
+const defaultArgs: PullQuoteProps = {
+  quote: 'I still believe jurors can do the right thing and justice can be served.',
+  attribution: 'Gov. Tim Walz',
+  jobTitle: 'Governor, Minnesota',
+  variant: 'immersive',
+  size: 'large',
+};
+
+const storyArgs = (overrides: Partial<PullQuoteProps> = {}): PullQuoteProps => ({
+  ...defaultArgs,
+  ...overrides,
+});
+
 export const Configurable: Story = {
-  args: {
-    quote: 'I still believe jurors can do the right thing and justice can be served.',
-    attribution: 'Gov. Tim Walz',
-    jobTitle: 'Governor, Minnesota',
-    align: 'left',
-  },
+  args: storyArgs(),
+};
+
+export const Immersive: Story = {
+  args: storyArgs({ variant: 'immersive' }),
+};
+
+export const InArticleContext: Story = {
+  render: (args) => (
+    <div
+      style={{
+        maxWidth: '528px',
+        margin: '0 auto',
+      }}
+    >
+      <ArticleBodyText>
+        It legalizes the possession and use of marijuana for Minnesotans 21 and older. It creates a
+        new state agency, called the Office of Cannabis Management (OCM), tasked with licensing
+        cannabis and hemp businesses and overseeing a legal recreational market, as well as the
+        existing medical cannabis and hemp-derived markets. The law mandates the expungement of all
+        misdemeanor marijuana offenses and creates a Cannabis Expungement Board to review felony
+        offenses for possible expungement on a case-by-case basis. It also imposes new rules and
+        requirements for hemp-based THC drinks and edibles, which exploded in popularity after they
+        were legalized last year.
+      </ArticleBodyText>
+
+      <PullQuote {...args} />
+
+      <ArticleBodyText>
+        Many elements of the law — including those pertaining to adult possession, use and home
+        cultivation of marijuana — took effect July 1, according to the bill. However, the bill did
+        not lift the existing criminal penalties for these same provisions until Aug. 1.
+      </ArticleBodyText>
+
+      <ArticleBodyText>
+        According to a state website about the law, legal retail sales might not begin until early
+        2025. However, the Red Lake Nation and White Earth Nation began allowing recreational
+        dispensaries to sell cannabis to non-tribal members in August. Virtually all of the
+        bill&apos;s changes to the state&apos;s medical cannabis program take effect on March 1,
+        2025.
+      </ArticleBodyText>
+    </div>
+  ),
+  args: storyArgs(),
 };

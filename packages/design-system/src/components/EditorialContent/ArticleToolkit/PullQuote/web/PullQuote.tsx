@@ -10,25 +10,43 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   quote,
   attribution,
   jobTitle,
-  isLongQuote = false,
-  align = 'left',
   className,
+  variant = 'immersive',
+  size = 'large',
   dataTestId = 'pull-quote',
   ...accessibilityProps
 }) => {
   if (!quote) return null;
 
+  if (variant === 'standard') {
+    return (
+      <div data-testid={dataTestId}>
+        Pull Quotes are not supported in the standard variant. Please use the immersive variant
+        instead.
+      </div>
+    );
+  }
+
   return (
     <div
-      className={classNames(styles['pull-quote'], styles[`align-${align}`], className)}
+      className={classNames(
+        styles['pull-quote'],
+        {
+          [styles['immersive']]: variant === 'immersive',
+        },
+        className
+      )}
       data-testid={dataTestId}
       {...accessibilityProps}
     >
-      <span className={styles['quote-icon-wrapper']} aria-hidden="true">
-        <QuoteIcon aria-hidden="true" className={styles['quote-icon']} height={36} width={36} />
+      <span className={styles['quote-icon-wrapper']}>
+        <QuoteIcon
+          aria-hidden="true"
+          className={classNames(styles['quote-icon'], styles[`size-${size}`])}
+        />
       </span>
       <div className={styles['pull-quote-wrapper']}>
-        <ArticleQuote size={isLongQuote ? 'large' : 'small'}>{quote}</ArticleQuote>
+        <ArticleQuote size={size}>{quote}</ArticleQuote>
 
         {(attribution || jobTitle) && (
           <div className={styles.caption}>
