@@ -1,13 +1,7 @@
 import type { ComponentType, CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import {
-  Button,
-  BUTTON_COLORS,
-  BUTTON_SIZES,
-  BUTTON_VARIANTS,
-  type ButtonSize,
-} from './Button';
+import { Button, BUTTON_COLORS, BUTTON_SIZES, BUTTON_VARIANTS, type ButtonSize } from './Button';
 import { ButtonGroup } from './ButtonGroup';
 import { AvatarIcon } from '@/icons';
 import { allModes } from '@storybook-config/modes';
