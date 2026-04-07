@@ -1,9 +1,17 @@
-import { defineConfig } from 'vitest/config';
+import path from 'path';
+import type { UserConfig as ViteUserConfig } from 'vite';
+import type { InlineConfig as VitestInlineConfig } from 'vitest/node';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
-import path from 'path';
 
-export default defineConfig({
+/**
+ * Use `defineConfig` from `vite` (not `vitest/config`) so plugins resolve against the same
+ * `vite` install. Vitest nests its own `vite`; `vitest/config` overloads then clash with
+ * `@vitejs/plugin-react` / `vite-plugin-svgr` types from the hoisted `vite`.
+ */
+type VitestConfig = ViteUserConfig & {test?: VitestInlineConfig};
+
+const config: VitestConfig = {
   plugins: [
     react(),
     svgr({
@@ -55,4 +63,6 @@ export default defineConfig({
       junit: process.env.VITEST_JUNIT_OUTPUT || './reports/junit.xml',
     },
   },
-});
+} satisfies VitestConfig;
+
+export default config;
