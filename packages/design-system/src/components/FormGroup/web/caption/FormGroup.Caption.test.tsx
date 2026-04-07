@@ -113,4 +113,33 @@ describe('FormGroupCaption', () => {
 
     expect(container.querySelector('svg')).toBeInTheDocument();
   });
+
+  it('merges className and forwards style and ARIA attributes', () => {
+    const { getByText } = renderWithProvider(
+      <FormGroupCaption
+        variant="error"
+        className="custom-caption"
+        style={{ minHeight: '1.5rem' }}
+        aria-hidden={false}
+      >
+        Error
+      </FormGroupCaption>
+    );
+
+    const caption = getByText('Error').closest('div') as HTMLElement;
+    expect(caption).toHaveClass('custom-caption');
+    expect(caption).toHaveAttribute('aria-hidden', 'false');
+    expect(caption.style.minHeight).toBe('1.5rem');
+  });
+
+  it('allows overriding role', () => {
+    const { getByText } = renderWithProvider(
+      <FormGroupCaption variant="error" role="status">
+        Error
+      </FormGroupCaption>
+    );
+
+    const caption = getByText('Error').closest('div');
+    expect(caption).toHaveAttribute('role', 'status');
+  });
 });
