@@ -22,11 +22,11 @@ const meta: Meta<ConfigurableArgs> = {
   argTypes: {
     count: {
       control: { type: 'number', min: 1, max: 24, step: 1 },
-      description: 'How many buttons to render in the group.',
+      description: 'Storybook-only control (not a ButtonGroup prop): how many buttons to render.',
     },
     maxWidth: {
       control: { type: 'number', min: 180, max: 900, step: 20 },
-      description: 'Container width used to preview wrapping behavior.',
+      description: 'Storybook-only control (not a ButtonGroup prop): container width for wrapping preview.',
     },
     variant: {
       control: 'select',
@@ -61,6 +61,30 @@ const sectionTitleStyle: CSSProperties = {
 };
 
 export const Configurable: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `<ButtonGroup>
+  <Button
+    variant="outlined"
+    color="neutral"
+    size="small"
+    icon={<AvatarIcon />}
+    aria-label="Button 1"
+    onClick={() => undefined}
+  />
+  <Button
+    variant="outlined"
+    color="neutral"
+    size="small"
+    onClick={() => undefined}
+  >
+    Button 2
+  </Button>
+</ButtonGroup>`,
+      },
+    },
+  },
   args: {
     count: 8,
     maxWidth: 360,
