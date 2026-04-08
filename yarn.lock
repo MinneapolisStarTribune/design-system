@@ -3246,7 +3246,6 @@ __metadata:
     react: 19.0.0
     react-dom: 19.0.0
     react-native: 0.73.0
-    react-native-svg: ">=14"
   peerDependenciesMeta:
     "@floating-ui/react":
       optional: true
@@ -3255,8 +3254,6 @@ __metadata:
     react-dom:
       optional: true
     react-native:
-      optional: true
-    react-native-svg:
       optional: true
   languageName: unknown
   linkType: soft
