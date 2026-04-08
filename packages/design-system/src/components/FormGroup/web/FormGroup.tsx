@@ -8,7 +8,11 @@ import {
   FormGroupDescription,
   type FormGroupDescriptionProps,
 } from './description/FormGroup.Description';
-import { FormGroupCaption, type FormGroupCaptionProps } from './caption/FormGroup.Caption';
+import {
+  FormGroupCaption,
+  type FormGroupCaptionProps,
+  type FormGroupCaptionVariant,
+} from './caption/FormGroup.Caption';
 import { FormGroupProvider } from '../FormGroupContext';
 import styles from './FormGroup.module.scss';
 
@@ -67,6 +71,7 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
   let hasLabel = false,
     hasDescription = false,
     hasCaption = false;
+  let captionVariant: FormGroupCaptionVariant | undefined;
   const slots = {
     label: null as React.ReactNode,
     description: null as React.ReactNode,
@@ -88,6 +93,15 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
     } else if (child.type === FormGroup.Caption) {
       hasCaption = true;
       slots.caption = child;
+      const { variant: captionVariantValue } = (child as React.ReactElement<FormGroupCaptionProps>)
+        .props;
+      if (
+        captionVariantValue === 'info' ||
+        captionVariantValue === 'error' ||
+        captionVariantValue === 'success'
+      ) {
+        captionVariant = captionVariantValue;
+      }
     } else if (slots.control == null) {
       slots.control = child;
     }
@@ -101,7 +115,12 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
     );
 
   return (
-    <FormGroupProvider hasLabel={hasLabel} hasDescription={hasDescription} hasCaption={hasCaption}>
+    <FormGroupProvider
+      hasLabel={hasLabel}
+      hasDescription={hasDescription}
+      hasCaption={hasCaption}
+      captionVariant={captionVariant}
+    >
       <div className={classNames(styles['form-group'], 'form-group', className)}>
         {slot(
           'form-group__above',

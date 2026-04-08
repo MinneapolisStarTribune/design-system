@@ -10,6 +10,7 @@ export interface SwiperContextType {
   isEnd: boolean;
   currentPage: number;
   totalSlides: number;
+  slidesPerView: string | number;
 }
 
 export const SwiperContext = createContext<SwiperContextType | null>(null);
