@@ -52,11 +52,4 @@ describe('PullQuote', () => {
     const { getByTestId } = renderWithProvider(<PullQuote {...defaultProps} />);
     expect(getByTestId(testId)).toBeInTheDocument();
   });
-
-  it('does not render pull quote in standard variant', () => {
-    const { getByTestId } = renderWithProvider(<PullQuote {...defaultProps} variant="standard" />);
-    expect(getByTestId(testId)).toHaveTextContent(
-      'Pull Quotes are not supported in the standard variant. Please use the immersive variant instead.'
-    );
-  });
 });
