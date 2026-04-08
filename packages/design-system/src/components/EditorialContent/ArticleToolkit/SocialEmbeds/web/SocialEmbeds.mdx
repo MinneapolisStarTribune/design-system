@@ -1,0 +1,200 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as SocialEmbedsStories from './SocialEmbeds.stories';
+
+<Meta of={SocialEmbedsStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Social Embeds
+
+Social Embeds provide a layout wrapper for third party social content such as Instagram Facebook Twitter and Threads.  
+The component ensures consistent spacing alignment and responsive width behavior within article layouts.
+
+### Note:  
+package `react-social-media-embed` needs to be in the consumer application (Startribune or Varsity). Its only a wrapper component
+
+## Key concept
+
+This component follows a slot pattern
+
+The Design System handles layout and responsiveness  
+The consumer provides the embed content  
+
+## When to use
+
+Embedding social media posts inside article content  
+Maintaining consistent widths across platforms  
+Ensuring responsive behavior across breakpoints  
+Keeping embed logic separate from layout  
+
+## Anatomy
+
+Container  
+Outer wrapper that controls width spacing and alignment  
+
+Embed slot  
+Children passed by the consumer which renders the embed content  
+
+## Variants
+
+<table>
+  <thead>
+    <tr>
+      <th>Variant</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>standard</td>
+      <td>Default article width</td>
+    </tr>
+    <tr>
+      <td>inline</td>
+      <td>Narrow layout within content</td>
+    </tr>
+    <tr>
+      <td>full</td>
+      <td>Wide immersive layout</td>
+    </tr>
+  </tbody>
+</table>
+
+## Platform
+
+The optional platform prop adds a semantic identifier
+
+<table>
+  <thead>
+    <tr>
+      <th>Platform</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>instagram</td>
+      <td>Uses default variant padding</td>
+    </tr>
+    <tr>
+      <td>facebook</td>
+      <td>No padding applied</td>
+    </tr>
+    <tr>
+      <td>twitter</td>
+      <td>Applies compact padding</td>
+    </tr>
+    <tr>
+      <td>threads</td>
+      <td>Applies reduced padding</td>
+    </tr>
+  </tbody>
+</table>
+
+## Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>children</td>
+      <td>ReactNode</td>
+      <td>Required embed content</td>
+    </tr>
+    <tr>
+      <td>platform</td>
+      <td>instagram facebook twitter threads</td>
+      <td>Optional platform identifier</td>
+    </tr>
+    <tr>
+      <td>variant</td>
+      <td>standard inline full</td>
+      <td>Layout variant</td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td>string or string array</td>
+      <td>Custom class name</td>
+    </tr>
+    <tr>
+      <td>dataTestId</td>
+      <td>string</td>
+      <td>Test identifier mapped to data-testid</td>
+    </tr>
+  </tbody>
+</table>
+
+## Accessibility
+
+This component supports all standard HTML div accessibility attributes
+
+<table>
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>aria-label</td>
+      <td>Provides accessible label</td>
+    </tr>
+    <tr>
+      <td>aria-describedby</td>
+      <td>Associates with another element</td>
+    </tr>
+    <tr>
+      <td>aria-hidden</td>
+      <td>Controls visibility for assistive technologies</td>
+    </tr>
+    <tr>
+      <td>role</td>
+      <td>Defines semantic role</td>
+    </tr>
+    <tr>
+      <td>tabIndex</td>
+      <td>Controls keyboard focus</td>
+    </tr>
+  </tbody>
+</table>
+
+All accessibility props are passed directly to the root element  
+
+## Usage
+
+```tsx
+<SocialEmbeds
+  platform="instagram"
+  aria-label="Instagram post"
+>
+  <InstagramEmbed url="..." />
+</SocialEmbeds>
+```
+
+## Behavior
+
+Width is controlled using semantic tokens  
+Layout adapts across desktop tablet and mobile  
+Content remains centered and responsive  
+No platform specific embed logic is handled internally  
+
+## Out of scope
+
+Rendering third party embeds  
+Managing platform SDKs  
+Handling data fetching or scripts  
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />
