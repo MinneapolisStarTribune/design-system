@@ -1146,6 +1146,8 @@ interface VarsityLightTheme {
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
   semanticInlineVideoHorizontalBorderRadiusTablet: number;
+  semanticInlineVideoImmersiveVerticalMaxWidth: string;
+  semanticInlineVideoStandardVerticalMaxWidth: string;
   semanticInlineVideoVerticalAspectRatio: string;
   semanticInlineVideoVerticalBorderRadiusDesktop: number;
   semanticInlineVideoVerticalBorderRadiusMobile: number;
@@ -1541,6 +1543,8 @@ interface VarsityDarkTheme {
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
   semanticInlineVideoHorizontalBorderRadiusTablet: number;
+  semanticInlineVideoImmersiveVerticalMaxWidth: string;
+  semanticInlineVideoStandardVerticalMaxWidth: string;
   semanticInlineVideoVerticalAspectRatio: string;
   semanticInlineVideoVerticalBorderRadiusDesktop: number;
   semanticInlineVideoVerticalBorderRadiusMobile: number;
