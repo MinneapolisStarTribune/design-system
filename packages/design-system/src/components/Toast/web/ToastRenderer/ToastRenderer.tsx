@@ -3,7 +3,7 @@
 import React from 'react';
 import { FloatingPortal } from '@floating-ui/react';
 import { Toast } from '@/components/Toast/web/Toast';
-import type { ToastVariant } from '@/components/Toast/web/Toast';
+import type { ToastVariant } from '@/components/Toast/Toast.types';
 import containerStyles from '@/components/Toast/web/Toast.module.scss';
 
 export type ToastRendererItem = {

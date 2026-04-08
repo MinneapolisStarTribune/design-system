@@ -1,0 +1,59 @@
+/*
+ * `&` blocks must stay **siblings** under `.variant` so Sass emits `.variantGroup`,
+ * `.variantHeader`, … — matching `styles.variantGroup`, `styles.variantHeader`, etc.
+ *
+ * Nesting `&Group { &Header { } }` would compile to **one** class (`.variantGroupHeader`),
+ */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-32, 2rem);
+  max-width: 420px;
+  text-align: left;
+}
+
+.variant {
+  &Group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-12, 0.75rem);
+  }
+
+  &Header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4, 0.25rem);
+  }
+
+  &Heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--spacing-4, 0.25rem);
+  }
+
+  &Code {
+    color: var(--color-text-on-light-secondary, #525252);
+  }
+
+  &Purpose {
+    margin: 0;
+    max-width: 100%;
+  }
+
+
+  &Toasts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-12, 0.75rem);
+    align-items: center;
+    width: 100%;
+  }
+}
+
+
+.showToastAgain {
+  width: fit-content;
+  max-width: 100%;
+}

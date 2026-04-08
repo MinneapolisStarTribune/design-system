@@ -117,9 +117,5 @@ export {
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
-export {
-  Toast,
-  TOAST_VARIANTS,
-  type ToastProps,
-  type ToastVariant,
-} from '@/components/Toast/web/Toast';
+export { TOAST_VARIANTS, type ToastProps, type ToastVariant } from '@/components/Toast/Toast.types';
+export { Toast } from '@/components/Toast/web/Toast';

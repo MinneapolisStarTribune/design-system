@@ -17,7 +17,7 @@ import {
   CandyBarRenderer,
   type CandyBarRendererItem,
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
-import type { ToastVariant } from '@/components/Toast/web/Toast';
+import type { ToastVariant } from '@/components/Toast/Toast.types';
 
 // --- Constants ---
 
