@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from 'react';
+import type { TypographyVariantProps } from '@/types';
 
 /** Semantic heading level; maps to h1–h6 and typography class suffix. */
 export const ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS = [
@@ -8,10 +9,10 @@ export const ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS = [
 export type ArticleBodyHeadingImportance = (typeof ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS)[number];
 
 export interface ArticleBodyHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children'> {
+  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
+    TypographyVariantProps {
   importance: ArticleBodyHeadingImportance;
   children: React.ReactNode;
   className?: string;
   id?: string;
-  'aria-label'?: string;
 }

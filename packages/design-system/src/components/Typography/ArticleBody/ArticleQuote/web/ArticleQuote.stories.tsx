@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleQuote } from './ArticleQuote';
 import { ARTICLE_QUOTE_SIZES } from '../ArticleQuote.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/ArticleBody/ArticleQuote',
@@ -13,6 +14,11 @@ const meta = {
       control: 'select',
       options: ARTICLE_QUOTE_SIZES,
       description: 'Size variant - small or large',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description: 'Semantic text color token.',
     },
     children: {
       control: 'text',

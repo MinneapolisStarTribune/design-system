@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyText } from './ArticleBodyText';
 import { ARTICLE_BODY_TEXT_WEIGHTS } from '../ArticleBodyText.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/ArticleBody/ArticleBodyText',
@@ -13,6 +14,11 @@ const meta = {
       control: 'select',
       options: ARTICLE_BODY_TEXT_WEIGHTS,
       description: 'The font weight of the article body text',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description: 'Semantic text color token.',
     },
     children: {
       control: 'text',

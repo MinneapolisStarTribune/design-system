@@ -1,4 +1,4 @@
-import type { AccessibilityProps, BaseProps, FontWeight } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, FontWeight, TypographyVariantProps } from '@/types';
 
 export const ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS = [
   'regular',
@@ -12,7 +12,10 @@ export const ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS = [
 
 export type ArticleBodySponsoredTextWeight = (typeof ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS)[number];
 
-export interface ArticleBodySponsoredTextProps extends BaseProps, AccessibilityProps {
+export interface ArticleBodySponsoredTextProps
+  extends BaseProps,
+    AccessibilityProps,
+    TypographyVariantProps {
   weight?: ArticleBodySponsoredTextWeight;
   children: React.ReactNode;
 }

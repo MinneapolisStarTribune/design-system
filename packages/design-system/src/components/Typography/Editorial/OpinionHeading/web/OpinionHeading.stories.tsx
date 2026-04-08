@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { OpinionHeading } from './OpinionHeading';
 import { OPINION_HEADING_IMPORTANCE_LEVELS } from '../OpinionHeading.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Editorial/OpinionHeading',
@@ -19,6 +20,11 @@ const meta = {
       options: OPINION_HEADING_IMPORTANCE_LEVELS,
       description:
         'Semantic heading level (1-6). Controls both the HTML element (h1-h6) and the typography class.',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description: 'Semantic text color token.',
     },
     children: {
       control: 'text',

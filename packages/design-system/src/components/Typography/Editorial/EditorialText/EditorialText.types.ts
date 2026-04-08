@@ -1,4 +1,10 @@
-import type { AccessibilityProps, BaseProps, FontWeight, Size } from '@/types/globalTypes';
+import type {
+  AccessibilityProps,
+  BaseProps,
+  FontWeight,
+  Size,
+  TypographyVariantProps,
+} from '@/types/globalTypes';
 
 export const EDITORIAL_TEXT_WEIGHTS = ['regular', 'bold'] as const satisfies readonly Extract<
   FontWeight,
@@ -17,7 +23,7 @@ export const EDITORIAL_TEXT_SIZES = [
 export type EditorialTextWeight = (typeof EDITORIAL_TEXT_WEIGHTS)[number];
 export type EditorialTextSize = (typeof EDITORIAL_TEXT_SIZES)[number];
 
-export interface EditorialTextProps extends BaseProps, AccessibilityProps {
+export interface EditorialTextProps extends BaseProps, AccessibilityProps, TypographyVariantProps {
   size: EditorialTextSize;
   weight?: EditorialTextWeight;
   children: React.ReactNode;

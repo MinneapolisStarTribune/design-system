@@ -5,6 +5,7 @@ import {
   UTILITY_LABEL_SIZES,
   UTILITY_LABEL_WEIGHTS,
 } from '../UtilityLabel.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Utility/UtilityLabel',
@@ -31,6 +32,11 @@ const meta = {
       control: 'select',
       options: UTILITY_LABEL_AS_ELEMENTS,
       description: 'The HTML element to render as',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description: 'Semantic text color token.',
     },
   },
 } satisfies Meta<typeof UtilityLabel>;
