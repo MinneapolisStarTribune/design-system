@@ -75,50 +75,35 @@ export const Configurable: Story = {
   render: renderWithPlayer,
 };
 
-export const AllVariants: Story = {
-  render: (args) => {
-    const cases: {
-      title: string;
-      props: Partial<InlineVideoProps>;
-    }[] = [
-      {
-        title: 'Standard',
-        props: { variant: 'standard' },
-      },
-      {
-        title: 'Immersive',
-        props: { variant: 'immersive' },
-      },
-      {
-        title: 'Horizontal',
-        props: {
-          orientation: 'horizontal',
-          posterUrl: SAMPLE_HORIZONTAL_POSTER,
-        },
-      },
-      {
-        title: 'Vertical',
-        props: {
-          orientation: 'vertical',
-          posterUrl: SAMPLE_VERTICAL_POSTER,
-        },
-      },
-    ];
-
-    return (
-      <div style={{ display: 'grid', gap: '32px' }}>
-        {cases.map(({ title, props }) => {
-          const mergedArgs = { ...args, ...props };
-
-          return (
-            <div key={title}>
-              <h3 className="typography-article-body-h3">{title}</h3>
-              {renderWithPlayer(mergedArgs)}
-            </div>
-          );
-        })}
-      </div>
-    );
+export const Standard: Story = {
+  args: {
+    ...defaultArgs,
+    variant: 'standard',
   },
-  args: defaultArgs,
+  render: renderWithPlayer,
+};
+
+export const Immersive: Story = {
+  args: {
+    ...defaultArgs,
+    variant: 'immersive',
+  },
+  render: renderWithPlayer,
+};
+
+export const Horizontal: Story = {
+  args: {
+    ...defaultArgs,
+    orientation: 'horizontal',
+  },
+  render: renderWithPlayer,
+};
+
+export const Vertical: Story = {
+  args: {
+    ...defaultArgs,
+    orientation: 'vertical',
+    posterUrl: SAMPLE_VERTICAL_POSTER,
+  },
+  render: renderWithPlayer,
 };
