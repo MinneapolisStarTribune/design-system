@@ -12,28 +12,17 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   jobTitle,
   className,
   variant = 'immersive',
-  size = 'large',
+  size = 'small',
   dataTestId = 'pull-quote',
   ...accessibilityProps
 }) => {
   if (!quote) return null;
 
-  if (variant === 'standard') {
-    return (
-      <div data-testid={dataTestId}>
-        Pull Quotes are not supported in the standard variant. Please use the immersive variant
-        instead.
-      </div>
-    );
-  }
-
   return (
     <div
       className={classNames(
         styles['pull-quote'],
-        {
-          [styles['immersive']]: variant === 'immersive',
-        },
+        styles[`variant-${variant}`],
         className
       )}
       data-testid={dataTestId}
