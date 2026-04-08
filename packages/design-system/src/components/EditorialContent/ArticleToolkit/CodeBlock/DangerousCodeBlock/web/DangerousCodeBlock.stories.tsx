@@ -71,11 +71,7 @@ export const AllVariants: Story = {
           <div key={title}>
             <h3 className="typography-article-body-h3">{title}</h3>
 
-            <DangerousCodeBlock
-              {...args}
-              {...props}
-              markup={dangerousCodeBlockMarkup}
-            />
+            <DangerousCodeBlock {...args} {...props} markup={dangerousCodeBlockMarkup} />
           </div>
         ))}
       </div>
