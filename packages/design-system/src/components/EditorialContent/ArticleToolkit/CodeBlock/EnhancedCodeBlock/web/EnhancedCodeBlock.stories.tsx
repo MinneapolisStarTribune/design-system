@@ -130,9 +130,7 @@ export const AllVariants: Story = {
               {title}
             </h3>
 
-            <EnhancedCodeBlock
-              {...createArgs(variant, size, false)}
-            />
+            <EnhancedCodeBlock {...createArgs(variant, size, false)} />
           </div>
         ))}
       </div>
