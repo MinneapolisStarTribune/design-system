@@ -19,6 +19,22 @@
             "tablet": { "type": "dimension", "value": 728 }
           }
         },
+        "social-embed": {
+          "standard": {
+            "desktop": {
+              "type": "dimension",
+              "value": 538
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 358
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 535
+            }
+          }
+        },
         "standard": {
           "full": {
             "desktop": { "type": "dimension", "value": 712 },
