@@ -60,32 +60,32 @@ export const Radio: React.FC<RadioProps> = ({
 
   return (
     <label className={rootClasses} htmlFor={id} data-testid={dataTestId}>
-      <span className={styles.inputWrapper}>
-        <input
-          type="radio"
-          id={id}
-          checked={checked}
-          disabled={disabled}
-          onChange={handleChange}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={description ? `${id}-description` : undefined}
-          className={styles.input}
-        />
-        <span className={styles.visualDot} aria-hidden="true" />
-      </span>
-      <span className={styles.content}>
+      <span className={styles.titleRow}>
+        <span className={styles.inputWrapper}>
+          <input
+            type="radio"
+            id={id}
+            checked={checked}
+            disabled={disabled}
+            onChange={handleChange}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={description ? `${id}-description` : undefined}
+            className={styles.input}
+          />
+          <span className={styles.visualDot} aria-hidden="true" />
+        </span>
         <span className={classNames(styles.title, 'typography-utility-text-regular-medium')}>
           {title}
         </span>
-        {description && (
-          <span
-            id={`${id}-description`}
-            className={classNames(styles.description, 'typography-utility-text-regular-x-small')}
-          >
-            {description}
-          </span>
-        )}
       </span>
+      {description ? (
+        <span
+          id={`${id}-description`}
+          className={classNames(styles.description, 'typography-utility-text-regular-x-small')}
+        >
+          {description}
+        </span>
+      ) : null}
     </label>
   );
 };
