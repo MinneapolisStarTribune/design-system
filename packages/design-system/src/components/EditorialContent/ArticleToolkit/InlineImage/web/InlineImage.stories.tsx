@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage';
-import { ARTICLE_BODY_VARIANTS, INLINE_IMAGE_SIZES } from '../../types';
+import { ARTICLE_BODY_VARIANTS } from '../../types';
 
 const meta: Meta<InlineImageProps> = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
   component: InlineImage,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       source: {
         type: 'dynamic',
@@ -30,11 +30,6 @@ const meta: Meta<InlineImageProps> = {
     purchaseLink: {
       control: 'text',
       description: 'Purchase link for the inline image',
-    },
-    size: {
-      control: 'select',
-      options: INLINE_IMAGE_SIZES,
-      description: 'Size of the inline image',
     },
     variant: {
       control: 'radio',
@@ -70,7 +65,6 @@ const defaultArgs: InlineImageProps = {
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'standard',
-  size: 'medium',
   expandable: false,
 };
 
@@ -79,39 +73,33 @@ const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps 
   ...overrides,
 });
 
-const renderVariants = (args: InlineImageProps) => {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {INLINE_IMAGE_SIZES.map((size) => (
-        <div key={`${size}-${args.variant}`}>
-          <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
-            {args.variant} ({size})
-          </h3>
-          <InlineImage {...args} size={size} />
-        </div>
-      ))}
-    </div>
-  );
-};
-
 export const Configurable: Story = {
   args: storyArgs(),
 };
 
-export const Standard: Story = {
-  args: storyArgs({ variant: 'standard' }),
-  render: renderVariants,
-};
+export const AllVariants: Story = {
+  render: (args) => (
+    <div style={{ display: 'grid', gap: '32px' }}>
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Standard</h3>
+        <InlineImage {...args} variant="standard" />
+      </div>
 
-export const Immersive: Story = {
-  args: storyArgs({ variant: 'immersive' }),
-  render: renderVariants,
-};
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Immersive</h3>
+        <InlineImage {...args} variant="immersive" />
+      </div>
 
-export const WithExpandable: Story = {
-  args: storyArgs({ expandable: true }),
-};
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Expandable</h3>
+        <InlineImage {...args} expandable />
+      </div>
 
-export const WithPurchaseLink: Story = {
-  args: storyArgs({ purchaseLink: 'https://www.startribune.com/photos' }),
+      <div>
+        <h3 style={{ marginBottom: 8 }}>With Purchase Link</h3>
+        <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+      </div>
+    </div>
+  ),
+  args: storyArgs(),
 };
