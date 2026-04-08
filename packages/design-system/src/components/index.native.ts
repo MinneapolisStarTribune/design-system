@@ -1,5 +1,21 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
 
+export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
+export {
+  FORM_GROUP_CAPTION_VARIANTS,
+  FormGroupCaption,
+  type FormGroupCaptionNativeProps,
+  type FormGroupCaptionVariant,
+} from './FormGroup/native/caption/FormGroup.Caption.native';
+export {
+  FormGroupDescription,
+  type FormGroupDescriptionNativeProps,
+} from './FormGroup/native/description/FormGroup.Description.native';
+export { FormGroupNative, type FormGroupNativeProps } from './FormGroup/native/FormGroup.native';
+export {
+  FormGroupLabel,
+  type FormGroupLabelNativeProps,
+} from './FormGroup/native/label/FormGroup.Label.native';
 export {
   ArticleBodyHeading,
   type ArticleBodyHeadingProps,
