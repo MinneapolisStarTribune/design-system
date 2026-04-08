@@ -346,6 +346,9 @@ interface StartribuneLightTheme {
   semanticArticleToolkitMaxWidthImmersiveMediumDesktop: number;
   semanticArticleToolkitMaxWidthImmersiveMediumMobile: number;
   semanticArticleToolkitMaxWidthImmersiveMediumTablet: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardDesktop: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardMobile: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardTablet: number;
   semanticArticleToolkitMaxWidthStandardFullDesktop: number;
   semanticArticleToolkitMaxWidthStandardFullMobile: number;
   semanticArticleToolkitMaxWidthStandardFullTablet: number;
@@ -354,6 +357,8 @@ interface StartribuneLightTheme {
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticInlineVideoHorizontalAspectRatio: string;
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
@@ -737,6 +742,9 @@ interface StartribuneDarkTheme {
   semanticArticleToolkitMaxWidthImmersiveMediumDesktop: number;
   semanticArticleToolkitMaxWidthImmersiveMediumMobile: number;
   semanticArticleToolkitMaxWidthImmersiveMediumTablet: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardDesktop: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardMobile: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardTablet: number;
   semanticArticleToolkitMaxWidthStandardFullDesktop: number;
   semanticArticleToolkitMaxWidthStandardFullMobile: number;
   semanticArticleToolkitMaxWidthStandardFullTablet: number;
@@ -745,6 +753,8 @@ interface StartribuneDarkTheme {
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticInlineVideoHorizontalAspectRatio: string;
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
@@ -1134,6 +1144,9 @@ interface VarsityLightTheme {
   semanticArticleToolkitMaxWidthImmersiveMediumDesktop: number;
   semanticArticleToolkitMaxWidthImmersiveMediumMobile: number;
   semanticArticleToolkitMaxWidthImmersiveMediumTablet: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardDesktop: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardMobile: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardTablet: number;
   semanticArticleToolkitMaxWidthStandardFullDesktop: number;
   semanticArticleToolkitMaxWidthStandardFullMobile: number;
   semanticArticleToolkitMaxWidthStandardFullTablet: number;
@@ -1529,6 +1542,9 @@ interface VarsityDarkTheme {
   semanticArticleToolkitMaxWidthImmersiveMediumDesktop: number;
   semanticArticleToolkitMaxWidthImmersiveMediumMobile: number;
   semanticArticleToolkitMaxWidthImmersiveMediumTablet: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardDesktop: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardMobile: number;
+  semanticArticleToolkitMaxWidthSocialEmbedStandardTablet: number;
   semanticArticleToolkitMaxWidthStandardFullDesktop: number;
   semanticArticleToolkitMaxWidthStandardFullMobile: number;
   semanticArticleToolkitMaxWidthStandardFullTablet: number;

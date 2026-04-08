@@ -4,31 +4,92 @@
       "max-width": {
         "immersive": {
           "inline": {
-            "desktop": { "type": "dimension", "value": 528 },
-            "mobile": { "type": "dimension", "value": 350 },
-            "tablet": { "type": "dimension", "value": 528 }
+            "desktop": {
+              "type": "dimension",
+              "value": 528
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 350
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 528
+            }
           },
           "large": {
-            "desktop": { "type": "dimension", "value": 1080 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 720 }
+            "desktop": {
+              "type": "dimension",
+              "value": 1080
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 390
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 720
+            }
           },
           "medium": {
-            "desktop": { "type": "dimension", "value": 712 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 728 }
+            "desktop": {
+              "type": "dimension",
+              "value": 712
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 390
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 728
+            }
+          }
+        },
+        "social-embed": {
+          "standard": {
+            "desktop": {
+              "type": "dimension",
+              "value": 538
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 358
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 535
+            }
           }
         },
         "standard": {
           "full": {
-            "desktop": { "type": "dimension", "value": 712 },
-            "mobile": { "type": "dimension", "value": 390 },
-            "tablet": { "type": "dimension", "value": 728 }
+            "desktop": {
+              "type": "dimension",
+              "value": 712
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 390
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 728
+            }
           },
           "inline": {
-            "desktop": { "type": "dimension", "value": 528 },
-            "mobile": { "type": "dimension", "value": 358 },
-            "tablet": { "type": "dimension", "value": 528 }
+            "desktop": {
+              "type": "dimension",
+              "value": 528
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 358
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 528
+            }
           }
         }
       }
