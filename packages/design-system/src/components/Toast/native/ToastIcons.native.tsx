@@ -6,13 +6,13 @@ const VARIANT_ICON_SIZE = 20;
 /** Close control glyph; matches web `close.svg` (16×16). */
 const CLOSE_ICON_SIZE = 16;
 
-type IconProps = {
+export type ToastIconProps = {
   color: string;
   /** @default VARIANT_ICON_SIZE for variant icons; CLOSE_ICON_SIZE for close */
   size?: number;
 };
 
-export const ToastInformationIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
+export const ToastInformationIcon: FC<ToastIconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
   <Svg width={size} height={size} viewBox="0 0 16 16">
     <Path
       fill={color}
@@ -25,7 +25,7 @@ export const ToastInformationIcon: FC<IconProps> = ({ color, size = VARIANT_ICON
   </Svg>
 );
 
-export const ToastSuccessIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
+export const ToastSuccessIcon: FC<ToastIconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24">
     <Path
       clipRule="evenodd"
@@ -36,7 +36,7 @@ export const ToastSuccessIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZ
   </Svg>
 );
 
-export const ToastWarningIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
+export const ToastWarningIcon: FC<ToastIconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24">
     <Path
       fill={color}
@@ -45,7 +45,7 @@ export const ToastWarningIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZ
   </Svg>
 );
 
-export const ToastErrorIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
+export const ToastErrorIcon: FC<ToastIconProps> = ({ color, size = VARIANT_ICON_SIZE }) => (
   <Svg width={size} height={size} viewBox="0 0 16 16">
     <Path
       fill={color}
@@ -58,7 +58,7 @@ export const ToastErrorIcon: FC<IconProps> = ({ color, size = VARIANT_ICON_SIZE 
   </Svg>
 );
 
-export const ToastCloseIcon: FC<IconProps> = ({ color, size = CLOSE_ICON_SIZE }) => (
+export const ToastCloseIcon: FC<ToastIconProps> = ({ color, size = CLOSE_ICON_SIZE }) => (
   <Svg width={size} height={size} viewBox="0 0 16 16">
     <Path
       fill={color}

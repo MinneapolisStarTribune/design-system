@@ -57,6 +57,11 @@
             "web": true
           },
           {
+            "component": "Inline Video",
+            "native": false,
+            "web": true
+          },
+          {
             "component": "Photo Layout",
             "native": false,
             "web": true
@@ -99,7 +104,7 @@
           },
           {
             "component": "Toast",
-            "native": false,
+            "native": true,
             "web": true
           }
         ]
