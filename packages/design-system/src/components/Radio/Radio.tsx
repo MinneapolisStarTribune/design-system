@@ -4,7 +4,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { useId } from 'react';
 import { BaseProps } from '@/types/globalTypes';
-import { UtilityLabel } from '@/components/Typography/Utility';
 import styles from './radio.module.scss';
 
 export const RADIO_COLORS = ['neutral', 'brand'] as const;
@@ -75,9 +74,9 @@ export const Radio: React.FC<RadioProps> = ({
         <span className={styles.visualDot} aria-hidden="true" />
       </span>
       <span className={styles.content}>
-        <UtilityLabel size="large" weight="regular" className={styles.title}>
+        <span className={classNames(styles.title, 'typography-utility-text-regular-medium')}>
           {title}
-        </UtilityLabel>
+        </span>
         {description && (
           <span
             id={`${id}-description`}

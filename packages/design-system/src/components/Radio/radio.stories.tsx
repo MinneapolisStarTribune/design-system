@@ -99,16 +99,19 @@ export const Disabled: Story = {
 };
 
 export const Error: Story = {
-  render: () => (
-    <Radio
-      title="Required choice"
-      description="You must select one option."
-      checked={false}
-      error
-      onChange={() => {}}
-      dataTestId="radio-error"
-    />
-  ),
+  render: function ErrorRender() {
+    const [checked, setChecked] = useState(false);
+    return (
+      <Radio
+        title="Required choice"
+        description="You must select one option."
+        checked={checked}
+        error
+        onChange={setChecked}
+        dataTestId="radio-error"
+      />
+    );
+  },
 };
 
 export const ColorVariants: Story = {

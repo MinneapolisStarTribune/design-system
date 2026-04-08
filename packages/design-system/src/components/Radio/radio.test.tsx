@@ -59,6 +59,16 @@ describe('Radio', () => {
     expect(input).toHaveAttribute('aria-invalid', 'true');
   });
 
+  it('calls onChange when error and label is clicked', async () => {
+    const onChange = vi.fn();
+    const { getByTestId } = renderWithProvider(
+      <Radio title="Required" checked={false} error onChange={onChange} dataTestId="radio" />
+    );
+
+    await userEvent.click(getByTestId('radio'));
+    expect(onChange).toHaveBeenCalledWith(true);
+  });
+
   it('disables input when disabled prop is true', () => {
     const { getByTestId } = renderWithProvider(
       <Radio

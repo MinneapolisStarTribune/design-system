@@ -46,6 +46,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* Let clicks hit the native input underneath (same pattern as Checkbox visual layer) */
+  pointer-events: none;
 }
 
 .visualDot::after {
