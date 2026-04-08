@@ -26,7 +26,8 @@ const meta: Meta<ConfigurableArgs> = {
     },
     maxWidth: {
       control: { type: 'number', min: 180, max: 900, step: 20 },
-      description: 'Storybook-only control (not a ButtonGroup prop): container width for wrapping preview.',
+      description:
+        'Storybook-only control (not a ButtonGroup prop): container width for wrapping preview.',
     },
     variant: {
       control: 'select',
