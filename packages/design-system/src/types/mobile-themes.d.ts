@@ -354,6 +354,8 @@ interface StartribuneLightTheme {
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticInlineVideoHorizontalAspectRatio: string;
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
@@ -745,6 +747,8 @@ interface StartribuneDarkTheme {
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
+  semanticInlineImageMaxWidthImmersive: number;
+  semanticInlineImageMaxWidthStandard: number;
   semanticInlineVideoHorizontalAspectRatio: string;
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
