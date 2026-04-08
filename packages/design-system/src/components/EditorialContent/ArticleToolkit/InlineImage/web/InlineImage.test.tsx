@@ -10,7 +10,7 @@ describe('InlineImage', () => {
 
   it('should render the image', () => {
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" />
+      <InlineImage dataTestId={dataTestId} image={image} />
     );
     const el = getByTestId(dataTestId);
     const imgElement = el.querySelector('img');
@@ -22,7 +22,7 @@ describe('InlineImage', () => {
   it('should apply imgix parameters to the image source URL', () => {
     const imgixParams = 'w=800&h=500&fit=crop&auto=format,compress&q=75';
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" imgixParams={imgixParams} />
+      <InlineImage dataTestId={dataTestId} image={image} imgixParams={imgixParams} />
     );
 
     const el = getByTestId(dataTestId);
@@ -33,7 +33,7 @@ describe('InlineImage', () => {
   it('should render the caption', () => {
     const caption = 'Image caption';
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" caption={caption} />
+      <InlineImage dataTestId={dataTestId} image={image} caption={caption} />
     );
     const el = getByTestId(dataTestId);
     const captionElement = el.querySelector('figcaption');
@@ -44,7 +44,7 @@ describe('InlineImage', () => {
   it('should render the credit', () => {
     const credit = 'Image credit';
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" credit={credit} />
+      <InlineImage dataTestId={dataTestId} image={image} credit={credit} />
     );
     const el = getByTestId(dataTestId);
     const creditElement = el.querySelector('figcaption');
@@ -56,13 +56,7 @@ describe('InlineImage', () => {
     const caption = 'Image caption';
     const credit = 'Image credit';
     const { getByTestId } = renderWithProvider(
-      <InlineImage
-        dataTestId={dataTestId}
-        image={image}
-        size="medium"
-        caption={caption}
-        credit={credit}
-      />
+      <InlineImage dataTestId={dataTestId} image={image} caption={caption} credit={credit} />
     );
     const el = getByTestId(dataTestId);
     const captionElement = el.querySelector('figcaption');
@@ -72,7 +66,7 @@ describe('InlineImage', () => {
 
   it('should not render the caption or credit when caption and credit are empty', () => {
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" caption="" credit="" />
+      <InlineImage dataTestId={dataTestId} image={image} caption="" credit="" />
     );
     const el = getByTestId(dataTestId);
     const captionElement = el.querySelector('figcaption');
@@ -81,7 +75,7 @@ describe('InlineImage', () => {
 
   it('should not render the caption when caption is empty', () => {
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" caption="" />
+      <InlineImage dataTestId={dataTestId} image={image} caption="" />
     );
     const el = getByTestId(dataTestId);
     const captionElement = el.querySelector('figcaption');
@@ -90,7 +84,7 @@ describe('InlineImage', () => {
 
   it('should not render the credit when credit is empty', () => {
     const { getByTestId } = renderWithProvider(
-      <InlineImage dataTestId={dataTestId} image={image} size="medium" credit="" />
+      <InlineImage dataTestId={dataTestId} image={image} credit="" />
     );
     const el = getByTestId(dataTestId);
     const captionElement = el.querySelector('figcaption');
