@@ -1,15 +1,25 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Pressable, StyleSheet, Text, View, type TextStyle } from 'react-native';
 import type { ToastNativeProps, ToastVariant } from '@/components/Toast/Toast.types';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
+import { createDesignSystemError } from '@/utils/errorPrefix';
 
-/** Unicode stand-ins for web SVG icons (no react-native-svg in this package). */
-const VARIANT_ICON_CHAR: Record<ToastVariant, string> = {
-  info: '\u2139',
-  success: '\u2713',
-  warning: '\u26a0',
-  error: '\u2715',
-};
+import {
+  ToastCloseIcon,
+  ToastErrorIcon,
+  ToastInformationIcon,
+  ToastSuccessIcon,
+  ToastWarningIcon,
+} from './ToastIcons.native';
+
+/** Same variant → icon mapping as web `Toast.tsx` (`InformationIcon`, `SuccessIcon`, etc.). */
+const VARIANT_ICON = {
+  info: ToastInformationIcon,
+  success: ToastSuccessIcon,
+  warning: ToastWarningIcon,
+  error: ToastErrorIcon,
+} as const;
 
 type VariantPalette = {
   background: string;
@@ -20,9 +30,23 @@ type VariantPalette = {
   close: string;
 };
 
-function getVariantPalette(theme: NativeTheme, variant: ToastVariant): VariantPalette {
+function getVariantPalette(
+  theme: NativeTheme,
+  variant: ToastVariant,
+  isDark: boolean
+): VariantPalette {
   switch (variant) {
     case 'info':
+      if (isDark) {
+        return {
+          background: theme.colorSemanticInfoBackground,
+          border: withAlphaSuffix(theme.colorSemanticInfoForeground, '40'),
+          title: theme.colorSemanticInfoForeground,
+          description: theme.colorSemanticInfoForeground,
+          icon: theme.colorSemanticInfoForeground,
+          close: theme.colorSemanticInfoForeground,
+        };
+      }
       return {
         background: theme.colorBackgroundLightGray01,
         border: theme.colorBorderOnLightSubtle01,
@@ -78,12 +102,21 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
   onClose,
   dataTestId = 'toast-native',
 }) => {
+  const designSystemContext = useContext(DesignSystemContext);
+  if (!designSystemContext) {
+    throw new Error(
+      createDesignSystemError('ToastNative', 'must be used within a DesignSystemProvider.')
+    );
+  }
+  const isDark = designSystemContext.colorScheme === 'dark';
+
   const styles = useNativeStyles(createToastNativeStyles);
   const paletteFactory = useCallback(
-    (theme: NativeTheme) => getVariantPalette(theme, variant),
-    [variant]
+    (theme: NativeTheme) => getVariantPalette(theme, variant, isDark),
+    [variant, isDark]
   );
   const palette = useNativeStyles(paletteFactory);
+  const VariantIcon = VARIANT_ICON[variant];
 
   const isError = variant === 'error';
 
@@ -102,13 +135,9 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
     >
       <View style={styles.content}>
         {showIcon ? (
-          <Text
-            style={[styles.icon, { color: palette.icon }]}
-            accessibilityElementsHidden
-            importantForAccessibility="no"
-          >
-            {VARIANT_ICON_CHAR[variant]}
-          </Text>
+          <View style={styles.iconWrap} accessibilityElementsHidden importantForAccessibility="no">
+            <VariantIcon color={palette.icon} />
+          </View>
         ) : null}
         <View style={styles.textColumn}>
           <Text style={[styles.title, { color: palette.title }]}>{title}</Text>
@@ -127,7 +156,7 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
             pressed && { backgroundColor: withAlphaSuffix(palette.close, '1f') },
           ]}
         >
-          <Text style={[styles.closeGlyph, { color: palette.close }]}>×</Text>
+          <ToastCloseIcon color={palette.close} />
         </Pressable>
       ) : null}
     </View>
@@ -159,13 +188,12 @@ function createToastNativeStyles(theme: NativeTheme) {
       gap: 8,
       minWidth: 0,
     },
-    icon: {
+    iconWrap: {
       marginTop: 1,
       width: 20,
-      textAlign: 'center',
-      ...t.typographyUtilityLabelSemiboldLarge,
-      fontSize: 16,
-      lineHeight: 20,
+      height: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     textColumn: {
       flex: 1,
@@ -186,10 +214,6 @@ function createToastNativeStyles(theme: NativeTheme) {
       alignItems: 'center',
       justifyContent: 'center',
       borderRadius: 6,
-    },
-    closeGlyph: {
-      fontSize: 18,
-      lineHeight: 20,
     },
   });
 }

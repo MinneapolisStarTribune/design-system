@@ -35,7 +35,7 @@ const meta = {
   title: 'Feedback & Status/Toast',
   component: ToastNative,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   argTypes: {
     title: {
@@ -90,6 +90,10 @@ function ToastWithClose(props: ToastNativeProps) {
 }
 
 export const Configurable: Story = {
+  parameters: {
+    // Preview owns `brand` / `mode`; hide `brand` only so `mode` still merges into context for the decorator.
+    controls: { exclude: ['brand'] },
+  },
   args: {
     title: 'Changes saved',
     description: 'Your changes were saved.',
@@ -99,8 +103,16 @@ export const Configurable: Story = {
     onClose: () => {},
     dataTestId: 'toast-native-demo',
   },
-  render: function ConfigurableToast(args) {
-    return <ToastWithClose {...args} />;
+  render: (args) => {
+    const {
+      brand: _brand,
+      mode: _mode,
+      ...toastArgs
+    } = args as ToastNativeProps & {
+      brand?: string;
+      mode?: string;
+    };
+    return <ToastNative key={String(toastArgs.variant ?? 'info')} {...toastArgs} />;
   },
 };
 

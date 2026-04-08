@@ -17,7 +17,7 @@ module.exports = {
   },
   setupFilesAfterEnv: ['./jest.setup.ts'],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@testing-library/react-native)/)',
+    'node_modules/(?!(react-native|@react-native|react-native-svg|@testing-library/react-native)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
