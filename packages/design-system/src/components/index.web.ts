@@ -1,6 +1,5 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export * from './EditorialContent/ArticleToolkit';
 export {
   Form,
   FormButton,
