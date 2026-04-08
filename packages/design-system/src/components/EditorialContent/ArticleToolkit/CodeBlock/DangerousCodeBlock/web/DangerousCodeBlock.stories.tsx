@@ -52,10 +52,38 @@ export const Configurable: Story = {
   },
 };
 
-export const Standard: Story = {
-  args: { markup: dangerousCodeBlockMarkup, variant: 'standard', cleanQuotes: true },
-};
+export const AllVariants: Story = {
+  render: (args) => {
+    const cases = [
+      {
+        title: 'Standard',
+        props: { variant: 'standard' as const },
+      },
+      {
+        title: 'Immersive',
+        props: { variant: 'immersive' as const },
+      },
+    ];
 
-export const Immersive: Story = {
-  args: { markup: dangerousCodeBlockMarkup, variant: 'immersive', cleanQuotes: true },
+    return (
+      <div style={{ display: 'grid', gap: '48px', padding: '48px 0' }}>
+        {cases.map(({ title, props }) => (
+          <div key={title}>
+            <h3 className="typography-article-body-h3">{title}</h3>
+
+            <DangerousCodeBlock
+              {...args}
+              {...props}
+              markup={dangerousCodeBlockMarkup}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  },
+  args: {
+    markup: dangerousCodeBlockMarkup,
+    variant: 'standard',
+    cleanQuotes: true,
+  },
 };
