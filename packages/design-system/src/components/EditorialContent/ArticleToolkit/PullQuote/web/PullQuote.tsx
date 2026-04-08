@@ -20,19 +20,12 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
 
   return (
     <div
-      className={classNames(
-        styles['pull-quote'],
-        styles[`variant-${variant}`],
-        className
-      )}
+      className={classNames(styles['pull-quote'], styles[`variant-${variant}`], className)}
       data-testid={dataTestId}
       {...accessibilityProps}
     >
-      <span className={styles['quote-icon-wrapper']}>
-        <QuoteIcon
-          aria-hidden="true"
-          className={classNames(styles['quote-icon'], styles[`size-${size}`])}
-        />
+      <span className={classNames(styles['quote-icon-wrapper'], styles[`size-${size}`])}>
+        <QuoteIcon aria-hidden="true" className={classNames(styles['quote-icon'])} />
       </span>
       <div className={styles['pull-quote-wrapper']}>
         <ArticleQuote size={size}>{quote}</ArticleQuote>
