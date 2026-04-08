@@ -70,6 +70,14 @@ export const AllVariants: Story = {
       isContext?: boolean;
     }[] = [
       {
+        title: 'Standard - Large',
+        props: { variant: 'standard', size: 'large' },
+      },
+      {
+        title: 'Standard - Small',
+        props: { variant: 'standard', size: 'small' },
+      },
+      {
         title: 'Immersive - Large',
         props: { variant: 'immersive', size: 'large' },
       },
@@ -78,58 +86,89 @@ export const AllVariants: Story = {
         props: { variant: 'immersive', size: 'small' },
       },
       {
-        title: 'In Article Context',
+        title: 'Standard - Large - In Article Context',
+        props: { variant: 'standard', size: 'large' },
+        isContext: true,
+      },
+      {
+        title: 'Standard - Small - In Article Context',
+        props: { variant: 'standard', size: 'small' },
+        isContext: true,
+      },
+      {
+        title: 'Immersive - Large - In Article Context',
+        props: { variant: 'immersive', size: 'large' },
+        isContext: true,
+      },
+      {
+        title: 'Immersive - Small - In Article Context',
+        props: { variant: 'immersive', size: 'small' },
         isContext: true,
       },
     ];
 
     return (
-      <div style={{ display: 'grid', gap: '48px' }}>
-        {cases.map(({ title, props, isContext }) => (
-          <div key={title}>
-            <h3 className="typography-article-body-h3">{title}</h3>
+      <div style={{ display: 'grid', gap: '24px' }}>
+        {cases.map(({ title, props, isContext }) => {
+          const finalProps = {
+            ...args,
+            ...props,
+          };
 
-            {isContext ? (
+          return (
+            <div key={title}>
+              <h3 className="typography-article-body-h3">{title}</h3>
+
+              {isContext ? (
+                <div
+                  style={{
+                    maxWidth: '528px',
+                    margin: '0 auto',
+                  }}
+                >
+                  <ArticleBodyText>
+                    It legalizes the possession and use of marijuana for Minnesotans 21 and older.
+                    It creates a new state agency, called the Office of Cannabis Management (OCM),
+                    tasked with licensing cannabis and hemp businesses and overseeing a legal
+                    recreational market, as well as the existing medical cannabis and hemp-derived
+                    markets. The law mandates the expungement of all misdemeanor marijuana offenses
+                    and creates a Cannabis Expungement Board to review felony offenses for possible
+                    expungement on a case-by-case basis. It also imposes new rules and requirements
+                    for hemp-based THC drinks and edibles, which exploded in popularity after they
+                    were legalized last year.
+                  </ArticleBodyText>
+
+                  <PullQuote {...finalProps} />
+
+                  <ArticleBodyText>
+                    Many elements of the law — including those pertaining to adult possession, use
+                    and home cultivation of marijuana — took effect July 1, according to the bill.
+                    However, the bill did not lift the existing criminal penalties for these same
+                    provisions until Aug. 1.
+                  </ArticleBodyText>
+
+                  <ArticleBodyText>
+                    According to a state website about the law, legal retail sales might not begin
+                    until early 2025. However, the Red Lake Nation and White Earth Nation began
+                    allowing recreational dispensaries to sell cannabis to non-tribal members in
+                    August. Virtually all of the bill&apos;s changes to the state&apos;s medical
+                    cannabis program take effect on March 1, 2025.
+                  </ArticleBodyText>
+                </div>
+              ) : (
+                <PullQuote {...finalProps} />
+              )}
+
               <div
                 style={{
-                  maxWidth: '528px',
-                  margin: '0 auto',
+                  marginTop: '24px',
+                  borderBottom: '1px solid #e5e5e5',
+                  width: '100%',
                 }}
-              >
-                <ArticleBodyText>
-                  It legalizes the possession and use of marijuana for Minnesotans 21 and older. It
-                  creates a new state agency, called the Office of Cannabis Management (OCM), tasked
-                  with licensing cannabis and hemp businesses and overseeing a legal recreational
-                  market, as well as the existing medical cannabis and hemp-derived markets. The law
-                  mandates the expungement of all misdemeanor marijuana offenses and creates a
-                  Cannabis Expungement Board to review felony offenses for possible expungement on a
-                  case-by-case basis. It also imposes new rules and requirements for hemp-based THC
-                  drinks and edibles, which exploded in popularity after they were legalized last
-                  year.
-                </ArticleBodyText>
-
-                <PullQuote {...args} />
-
-                <ArticleBodyText>
-                  Many elements of the law — including those pertaining to adult possession, use and
-                  home cultivation of marijuana — took effect July 1, according to the bill.
-                  However, the bill did not lift the existing criminal penalties for these same
-                  provisions until Aug. 1.
-                </ArticleBodyText>
-
-                <ArticleBodyText>
-                  According to a state website about the law, legal retail sales might not begin
-                  until early 2025. However, the Red Lake Nation and White Earth Nation began
-                  allowing recreational dispensaries to sell cannabis to non-tribal members in
-                  August. Virtually all of the bill&apos;s changes to the state&apos;s medical
-                  cannabis program take effect on March 1, 2025.
-                </ArticleBodyText>
-              </div>
-            ) : (
-              <PullQuote {...args} {...props} />
-            )}
-          </div>
-        ))}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   },
