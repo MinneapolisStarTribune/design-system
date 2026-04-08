@@ -16,20 +16,74 @@
 }
 
 .content {
+  /*
+   * Native fields in the bar follow the same light/dark pairing as TextInput: switch these
+   * variables only (see :global block) instead of duplicating input rules per theme.
+   */
+  --candy-bar-field-text: var(--color-text-on-light-primary);
+  --candy-bar-field-disabled: var(--color-text-state-disabled-on-light);
+  --candy-bar-field-placeholder: var(--color-text-state-disabled-on-light);
+
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  /* UtilityLabel inside <button> inherits button token color */
-  [class*='typography-'] {
+
+  /*
+   * Bar copy on dark chrome uses --candy-bar-text. Do not target native fields with typography-*
+   * alone: TextInput adds those classes on <input>, and .content [class*='typography-'] (0,2,0)
+   * beats a single .input class (0,1,0), so value/placeholder would wrongly use white bar text.
+   */
+  [class*='typography-']:not(input, textarea, select) {
     color: var(--candy-bar-text);
   }
+
+  /*
+   * Higher specificity than legacy .content [class*='typography-'] on inputs that still include
+   * typography-* (some consumer bundles).
+   */
+  :is(input, textarea, select)[class*='typography-'] {
+    color: var(--candy-bar-field-text);
+  }
+
+  :is(input, textarea, select)[class*='typography-']:disabled {
+    color: var(--candy-bar-field-disabled);
+  }
+
+  :is(input, textarea, select)[class*='typography-']::placeholder {
+    color: var(--candy-bar-field-placeholder);
+  }
+
+  input,
+  textarea,
+  select {
+    color: var(--candy-bar-field-text);
+  }
+
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    color: var(--candy-bar-field-disabled);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--candy-bar-field-placeholder);
+  }
+
   button {
     [class*='typography-'] {
       color: inherit;
     }
   }
+}
+
+:global([data-theme='dark']) .content,
+:global(.sb-dark) .content {
+  --candy-bar-field-text: var(--color-text-on-dark-primary);
+  --candy-bar-field-disabled: var(--color-text-state-disabled-on-dark);
+  --candy-bar-field-placeholder: var(--color-text-state-disabled-on-dark);
 }
 
 .closeButton {
