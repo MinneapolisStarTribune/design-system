@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo } from 'react';
 import { Brand, ColorScheme } from './theme-helpers';
 import { BrandValidationErrorBoundary } from './BrandValidationErrorBoundary';
 import { DesignSystemContext } from './DesignSystemContext';
@@ -8,6 +8,9 @@ import { loadBrandFonts } from '../styles/fonts';
 import { SnackProvider } from './SnackProvider/SnackProvider';
 
 export type { Brand };
+
+/** Set on `<html>` by the web provider so components (e.g. Button `surface="dark"`) can scope CSS by product. */
+export const DS_ROOT_BRAND_ATTRIBUTE = 'data-ds-brand';
 
 export interface DesignSystemProviderProps {
   brand: Brand;
@@ -41,6 +44,10 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     () => ({ brand, colorScheme: forceColorScheme }),
     [brand, forceColorScheme]
   );
+
+  useLayoutEffect(() => {
+    document.documentElement.setAttribute(DS_ROOT_BRAND_ATTRIBUTE, brand);
+  }, [brand]);
 
   return (
     <DesignSystemContext.Provider value={contextValue}>
