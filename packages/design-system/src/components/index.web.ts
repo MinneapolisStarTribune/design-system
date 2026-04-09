@@ -107,6 +107,7 @@ export {
   type ButtonProps,
   type ButtonSharedProps,
 } from '@/components/Button/web/Button';
+export { ButtonGroup, type ButtonGroupProps } from '@/components/Button/web/ButtonGroup';
 export {
   UTILITY_BUTTON_SIZES,
   UTILITY_BUTTON_VARIANTS,
@@ -120,6 +121,7 @@ export {
   CandyBarRenderer,
   type CandyBarRendererProps,
 } from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
+export * from '@/components/EditorialContent/ArticleToolkit/index';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export {
