@@ -105,17 +105,35 @@ const dataSource = (variant: ArticleBodyVariant, size: CodeBlockSizeType, cleanQ
 
 // Stories
 export const Configurable: Story = {
-  args: { variant: 'standard' },
+  args: { variant: 'standard', size: 'full' },
   render: renderVariantWithSizes,
   parameters: dataSource('standard', 'full', false),
 };
-export const Standard: Story = {
-  args: { variant: 'standard' },
-  render: renderVariantWithSizes,
-  parameters: dataSource('standard', 'full', false),
-};
-export const Immersive: Story = {
-  args: { variant: 'immersive' },
-  render: renderVariantWithSizes,
-  parameters: dataSource('immersive', 'full', false),
+
+export const AllVariants: Story = {
+  render: () => {
+    const variants: ArticleBodyVariant[] = ['standard', 'immersive'];
+
+    const cases = variants.flatMap((variant) =>
+      CODE_BLOCK_SIZES.map((size) => ({
+        title: `${variant} - ${size}`,
+        variant,
+        size,
+      }))
+    );
+
+    return (
+      <div style={{ display: 'grid', gap: '48px', padding: '48px 0' }}>
+        {cases.map(({ title, variant, size }) => (
+          <div key={title}>
+            <h3 className="typography-article-body-h3" style={{ textTransform: 'capitalize' }}>
+              {title}
+            </h3>
+
+            <EnhancedCodeBlock {...createArgs(variant, size, false)} />
+          </div>
+        ))}
+      </div>
+    );
+  },
 };

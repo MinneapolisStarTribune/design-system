@@ -70,6 +70,12 @@
       "horizontal-border-radius-tablet": {
         "value": "{radius.none}"
       },
+      "immersive-vertical-max-width": {
+        "value": "390px"
+      },
+      "standard-vertical-max-width": {
+        "value": "358px"
+      },
       "vertical-aspect-ratio": {
         "value": "9/16"
       },
