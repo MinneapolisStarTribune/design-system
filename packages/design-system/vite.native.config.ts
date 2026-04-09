@@ -89,7 +89,7 @@ export default defineConfig({
       fileName: () => 'design-system.es.js',
     },
     rollupOptions: {
-      external: ['react', 'react-native', 'react-native-svg'],
+      external: ['react', /^react-native(?:\/|$)/],
       output: {
         globals: {
           react: 'React',

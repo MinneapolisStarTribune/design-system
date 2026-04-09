@@ -14,6 +14,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@mobile/themes/(.*)$': '<rootDir>/dist/mobile/themes/$1',
     '^@mobile/typography/(.*)$': '<rootDir>/dist/mobile/typography/$1',
+    '^react-native-svg$': '<rootDir>/src/test-utils/mocks/react-native-svg.tsx',
   },
   setupFilesAfterEnv: ['./jest.setup.ts'],
   transformIgnorePatterns: [
