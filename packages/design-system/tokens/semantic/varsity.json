@@ -102,6 +102,28 @@
       "caption-padding-mobile": {
         "value": "0px"
       }
+    },
+    "pull-quote": {
+      "icon": {
+        "accent-color": {
+          "value": "{color.cobalt-blue.700}"
+        },
+        "large": {
+          "height": { "type": "dimension", "value": 38 },
+          "width": { "type": "dimension", "value": 38 }
+        },
+        "margin-top": {
+          "value": "-3.5px"
+        },
+        "small": {
+          "height": { "type": "dimension", "value": 32 },
+          "width": { "type": "dimension", "value": 32 }
+        }
+      },
+      "max-width": {
+        "type": "dimension",
+        "value": 535
+      }
     }
   }
 }
