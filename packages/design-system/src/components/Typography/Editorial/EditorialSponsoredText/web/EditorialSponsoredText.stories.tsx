@@ -26,7 +26,8 @@ const meta = {
     color: {
       control: 'select',
       options: Object.keys(TEXT_COLOR_TOKENS),
-      description: 'Semantic text color token.',
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',

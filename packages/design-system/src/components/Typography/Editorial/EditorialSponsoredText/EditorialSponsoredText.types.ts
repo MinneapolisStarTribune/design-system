@@ -3,7 +3,7 @@ import type {
   BaseProps,
   FontWeight,
   Size,
-  TypographyVariantProps,
+  ColorVariantProps,
 } from '@/types/globalTypes';
 
 export type EditorialSponsoredTextWeight = Extract<FontWeight, 'regular' | 'bold'>;
@@ -27,7 +27,7 @@ export type EditorialSponsoredTextSize = (typeof EDITORIAL_SPONSORED_TEXT_SIZES)
 export interface EditorialSponsoredTextProps
   extends BaseProps,
     AccessibilityProps,
-    TypographyVariantProps {
+    ColorVariantProps {
   size: EditorialSponsoredTextSize;
   weight?: EditorialSponsoredTextWeight;
   children: React.ReactNode;

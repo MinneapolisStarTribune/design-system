@@ -95,7 +95,7 @@ export type VariantProps<Color extends string, Variant extends string> = {
 /**
  * Typography variant props
  */
-export type TypographyVariantProps = VariantProps<TextColor, string>;
+export type ColorVariantProps = VariantProps<TextColor, string>;
 
 /**
  * Resolve semantic text color to inline style

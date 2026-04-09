@@ -3,7 +3,7 @@ import type {
   BaseProps,
   FontWeight,
   Size,
-  TypographyVariantProps,
+  ColorVariantProps,
 } from '@/types/globalTypes';
 
 export const EDITORIAL_TEXT_WEIGHTS = ['regular', 'bold'] as const satisfies readonly Extract<
@@ -23,7 +23,7 @@ export const EDITORIAL_TEXT_SIZES = [
 export type EditorialTextWeight = (typeof EDITORIAL_TEXT_WEIGHTS)[number];
 export type EditorialTextSize = (typeof EDITORIAL_TEXT_SIZES)[number];
 
-export interface EditorialTextProps extends BaseProps, AccessibilityProps, TypographyVariantProps {
+export interface EditorialTextProps extends BaseProps, AccessibilityProps, ColorVariantProps {
   size: EditorialTextSize;
   weight?: EditorialTextWeight;
   children: React.ReactNode;

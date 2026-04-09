@@ -1,4 +1,4 @@
-import { TypographyVariantProps } from '@/types';
+import { ColorVariantProps } from '@/types';
 import type { HTMLAttributes } from 'react';
 
 /** Semantic heading level; maps to h1-h6 and typography class suffix. */
@@ -15,7 +15,7 @@ export type OpinionHeadingImportance = (typeof OPINION_HEADING_IMPORTANCE_LEVELS
 
 export interface OpinionHeadingProps
   extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    TypographyVariantProps {
+    ColorVariantProps {
   importance: OpinionHeadingImportance;
   children: React.ReactNode;
   className?: string;
