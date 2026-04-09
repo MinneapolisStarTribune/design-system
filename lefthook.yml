@@ -1,8 +1,19 @@
-# Pre-push: run format:check so CI doesn't fail on unformatted files
+# Pre-push: format check, then regenerate component matrix (commits if needed and aborts push once)
 pre-push:
+  parallel: false
   commands:
     format-check:
       run: yarn format:check
+    # Lefthook runs from repo root. Commits matrix if generator changed it, then fails push once so you push again.
+    component-matrix:
+      run: |
+        yarn workspace @minneapolisstartribune/design-system generate:component-matrix
+        m=packages/design-system/src/stories/GettingStarted/component-matrix.json
+        if git diff --quiet HEAD -- "$m"; then exit 0; fi
+        git add -- "$m" && git commit -m "chore: Update component matrix"
+        echo "" >&2
+        echo "There were updates to the component matrix. Changes were committed; run git push again." >&2
+        exit 1 # Non-zero stops this push; push again so the new commit is included.
 
 # Pre-commit: fix staged files (prettier, eslint), then typecheck and vitest
 pre-commit:
