@@ -9,6 +9,7 @@
   display: flex;
   gap: var(--spacing-8);
   max-width: var(--semantic-pull-quote-max-width);
+  margin: 0;
 
   @media (min-width: $md) {
     gap: var(--spacing-8);
