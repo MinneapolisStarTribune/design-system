@@ -102,6 +102,7 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export { ButtonGroup, type ButtonGroupProps } from '@/components/Button/web/ButtonGroup';
 export {
   UTILITY_BUTTON_SIZES,
   UTILITY_BUTTON_VARIANTS,
