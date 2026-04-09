@@ -1,6 +1,7 @@
 .pull-quote {
   $lg: 1160px;
   $md: 768px;
+  $sm: 420px;
 
   * {
     margin: 0;
@@ -9,47 +10,30 @@
   display: flex;
   gap: var(--spacing-8);
   max-width: var(--semantic-pull-quote-max-width);
-  margin: 0;
 
-  @media (min-width: $md) {
-    gap: var(--spacing-8);
+  @media (max-width: $sm) {
+    gap: var(--spacing-4);
   }
 
   .quote-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-shrink: 0;
+    padding: 0;
 
     &.size-small {
-      width: var(--semantic-pull-quote-icon-small-mobile-width);
-      height: var(--semantic-pull-quote-icon-small-mobile-height);
-
-      @media (min-width: 768px) {
-        width: var(--semantic-pull-quote-icon-small-tablet-width);
-        height: var(--semantic-pull-quote-icon-small-tablet-height);
-      }
-
-      @media (min-width: 1160px) {
-        width: var(--semantic-pull-quote-icon-small-desktop-width);
-        height: var(--semantic-pull-quote-icon-small-desktop-height);
-      }
+      width: var(--semantic-pull-quote-icon-small-width);
+      height: var(--semantic-pull-quote-icon-small-height);
     }
 
     &.size-large {
-      width: var(--semantic-pull-quote-icon-large-mobile-width);
-      height: var(--semantic-pull-quote-icon-large-mobile-height);
-
-      @media (min-width: 768px) {
-        width: var(--semantic-pull-quote-icon-large-tablet-width);
-        height: var(--semantic-pull-quote-icon-large-tablet-height);
-      }
-
-      @media (min-width: 1160px) {
-        width: var(--semantic-pull-quote-icon-large-desktop-width);
-        height: var(--semantic-pull-quote-icon-large-desktop-height);
-      }
+      width: var(--semantic-pull-quote-icon-large-width);
+      height: var(--semantic-pull-quote-icon-large-height);
     }
 
     .quote-icon {
-      color: var(--semantic-pull-quote-accent-color) !important;
+      color: var(--semantic-pull-quote-icon-accent-color) !important;
       margin-top: -3.5px;
       margin-left: 0;
       width: 100% !important;

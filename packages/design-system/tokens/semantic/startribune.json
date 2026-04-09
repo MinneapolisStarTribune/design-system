@@ -149,37 +149,17 @@
       }
     },
     "pull-quote": {
-      "accent-color": {
-        "value": "{color.emerald-green.800}"
-      },
       "icon": {
+        "accent-color": {
+          "value": "{color.emerald-green.800}"
+        },
         "large": {
-          "desktop": {
-            "height": { "type": "dimension", "value": 31 },
-            "width": { "type": "dimension", "value": 41 }
-          },
-          "mobile": {
-            "height": { "type": "dimension", "value": 31 },
-            "width": { "type": "dimension", "value": 41 }
-          },
-          "tablet": {
-            "height": { "type": "dimension", "value": 28 },
-            "width": { "type": "dimension", "value": 38 }
-          }
+          "height": { "type": "dimension", "value": 38 },
+          "width": { "type": "dimension", "value": 38 }
         },
         "small": {
-          "desktop": {
-            "height": { "type": "dimension", "value": 24 },
-            "width": { "type": "dimension", "value": 36 }
-          },
-          "mobile": {
-            "height": { "type": "dimension", "value": 24 },
-            "width": { "type": "dimension", "value": 36 }
-          },
-          "tablet": {
-            "height": { "type": "dimension", "value": 22 },
-            "width": { "type": "dimension", "value": 30 }
-          }
+          "height": { "type": "dimension", "value": 32 },
+          "width": { "type": "dimension", "value": 32 }
         }
       },
       "max-width": {
