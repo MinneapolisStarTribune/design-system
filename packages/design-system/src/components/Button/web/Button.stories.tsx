@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import type { ButtonProps } from './Button';
@@ -178,6 +179,67 @@ export const ButtonWithAnalytics: Story = {
       </AnalyticsProvider>
     ),
   ],
+};
+
+/**
+ * Minimal stand-in for `next/link` in Storybook (same `href` + children contract as App Router `Link`).
+ * In your app: `import NextLink from 'next/link'` and pass `as={NextLink}`.
+ */
+function StoryMockNextLink({
+  href,
+  className,
+  children,
+  prefetch,
+  replace,
+  scroll,
+}: {
+  href?: string;
+  className?: string;
+  children: ReactNode;
+  prefetch?: boolean;
+  replace?: boolean;
+  scroll?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      className={className}
+      data-testid="story-mock-next-link"
+      data-prefetch={prefetch === undefined ? undefined : String(prefetch)}
+      data-replace={replace === undefined ? undefined : String(replace)}
+      data-scroll={scroll === undefined ? undefined : String(scroll)}
+    >
+      {children}
+    </a>
+  );
+}
+
+/**
+ * Button **appearance** with **client navigation**: `as` is a mock `next/link`. Replace with real `NextLink` in the app.
+ */
+export const PolymorphicAsNextLink: Story = {
+  name: 'As Next.js Link',
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Storybook uses `StoryMockNextLink`. In production pass `as={NextLink}` from `next/link` and props like `href`, `prefetch`, `replace`.',
+      },
+    },
+  },
+  render: () => (
+    <Button
+      as={StoryMockNextLink}
+      href="/subscribe"
+      prefetch={false}
+      variant="filled"
+      color="brand"
+      size="medium"
+    >
+      Subscribe
+    </Button>
+  ),
 };
 
 /** Light toolbar theme + dark strip — same pattern as apps with light :root and a dark module. */
