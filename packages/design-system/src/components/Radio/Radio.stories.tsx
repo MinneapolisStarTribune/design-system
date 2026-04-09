@@ -5,7 +5,6 @@ import { Radio } from './Radio';
 const meta = {
   title: 'Components/Actions & Inputs/Radio',
   component: Radio,
-  tags: ['autodocs'],
   argTypes: {
     title: {
       control: 'text',

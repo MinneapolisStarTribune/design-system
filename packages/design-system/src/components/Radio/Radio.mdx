@@ -1,0 +1,72 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as RadioStories from './Radio.stories';
+
+<Meta of={RadioStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# Radio
+
+Radio buttons are used when users must choose a single option in forms, filters, or settings. Use neutral styling by default and reserve brand styling—and the large size—for marketing moments. Labels are required; optional **description** text (the `description` prop) can add brief context. Only one radio can be selected within a group—coordinate `checked` and `onChange` across options in application state.
+
+## Design
+
+[Figma — Radio (Core Components)](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=212-1675&m=dev)
+
+## Canonical usage
+
+`Radio` is a controlled component. Manage which option is selected in parent state and pass the same `onChange` handler pattern to each option in the group.
+
+```tsx
+import { useState } from 'react';
+import { Radio } from '@minneapolisstartribune/design-system/web';
+
+function PlanField() {
+  const [plan, setPlan] = useState<'monthly' | 'annual'>('monthly');
+
+  return (
+    <>
+      <Radio
+        title="Monthly"
+        description="Billed every month."
+        checked={plan === 'monthly'}
+        onChange={() => setPlan('monthly')}
+      />
+      <Radio
+        title="Annual"
+        description="Save with yearly billing."
+        checked={plan === 'annual'}
+        onChange={() => setPlan('annual')}
+      />
+    </>
+  );
+}
+```
+
+## Props and variants
+
+- **`title`** (required): Primary label; rendered as the accessible name for the control.
+- **`description`**: Optional supporting text below the title (brief context or constraints).
+- **`checked`** / **`onChange`**: Controlled selection; `onChange` receives `true` when this option becomes selected.
+- **`color`**: `neutral` (default) or `brand`—align with product guidance; brand for marketing moments.
+- **`disabled`**: Non-interactive state with muted visuals.
+- **`error`**: Error styling and `aria-invalid` when validation fails.
+
+## Accessibility
+
+- The native `<input type="radio">` remains in the tree (visually hidden) for keyboard and assistive technology.
+- The visible control is associated with the label via `htmlFor` / `id`.
+- When `description` is present, it is wired with `aria-describedby`.
+
+## Exports
+
+- `Radio`
+- `RadioProps`
+- `RadioColor`
+- `RADIO_COLORS`
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />
