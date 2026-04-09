@@ -1,19 +1,29 @@
 .root {
   display: inline-flex;
   flex-direction: column;
-  align-items: stretch;
-  /* 4px between title line and description (second row only when description exists) */
-  row-gap: var(--spacing-4);
+  /* Cross-axis start: don't stretch children to a wrongly-wide label (see align-self below) */
+  align-items: flex-start;
+  /*
+   * Shrink-wrap width. `width: fit-content` alone loses when this label is a flex/grid item:
+   * default align-self/justify-self: stretch expands us to the parent track width, so the
+   * absolute input + focus ring match the viewport. Opt out of that stretch on both axes.
+   */
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
+  justify-self: start;
   cursor: pointer;
   position: relative;
   box-sizing: border-box;
   font-family: inherit;
+  /* No border-radius on root — focus ring is rectangular per Figma */
 
   &.disabled {
     cursor: not-allowed;
     opacity: 0.4;
   }
 
+  /* Focus ring wraps the full control (radio + title + description), not just the 16×16 input */
   &:has(.input:focus-visible) {
     box-shadow:
       0 0 0 2px var(--color-background-light-default),
@@ -21,37 +31,40 @@
   }
 }
 
-/* Radio + title only: vertical center of 16×16 outline with title (per Figma) */
-.titleRow {
-  display: inline-flex;
-  align-items: center;
+/* Visual layout under the stretched input; grid replaces titleRow + inputWrapper nesting */
+.content {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, max-content);
   column-gap: var(--spacing-8);
-  min-width: 0;
-}
-
-.inputWrapper {
-  position: relative;
-  flex-shrink: 0;
-  width: var(--spacing-radio-default);
-  height: var(--spacing-radio-default);
-  display: flex;
+  row-gap: var(--spacing-4);
   align-items: center;
-  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  pointer-events: none;
 }
 
 .input {
   position: absolute;
-  opacity: 0;
   inset: 0;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
+  opacity: 0;
   cursor: inherit;
   outline: none;
+  z-index: 1;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &:disabled {
+    pointer-events: none;
+  }
 }
 
 .visualDot {
+  grid-column: 1;
+  grid-row: 1;
   width: var(--spacing-radio-default);
   height: var(--spacing-radio-default);
   border-radius: 999px;
@@ -98,6 +111,8 @@
 }
 
 .title {
+  grid-column: 2;
+  grid-row: 1;
   color: var(--color-text-on-light-primary);
   cursor: inherit;
   margin: 0;
@@ -105,9 +120,9 @@
 }
 
 .description {
+  grid-column: 2;
+  grid-row: 2;
   color: var(--color-text-on-light-tertiary);
   cursor: inherit;
   margin: 0;
-  /* Line up with title text (past radio + 8px gap) */
-  padding-left: calc(var(--spacing-radio-default) + var(--spacing-8));
 }
