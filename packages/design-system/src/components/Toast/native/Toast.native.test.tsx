@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { ToastNative } from './Toast.native';
