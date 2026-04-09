@@ -294,7 +294,7 @@ export const ComponentRoadmap = () => {
       planned: stats.nativePlanned,
       pct: nativePct,
       cardStyle: {
-        '--roadmap-accent': 'var(--color-icon-brand-03)',
+        '--roadmap-accent': 'var(--color-sky-blue-500)',
         '--roadmap-metric-color': 'inherit',
       },
     },
@@ -542,7 +542,7 @@ export const ComponentRoadmap = () => {
                           ) : showCombinedBothBuilt ? (
                             <UtilityLabel
                               size="small"
-                              className={classNames(styles.badge, styles.badgeDone)}
+                              className={classNames(styles.badge, styles.badgeDoneBoth)}
                             >
                               Both Platforms Built ✓
                             </UtilityLabel>
@@ -553,7 +553,7 @@ export const ComponentRoadmap = () => {
                                   size="small"
                                   className={classNames(
                                     styles.badge,
-                                    c.webDone ? styles.badgeDone : styles.badgeTodo
+                                    c.webDone ? styles.badgeDoneWeb : styles.badgeTodo
                                   )}
                                 >
                                   {c.webDone ? 'Web ✓' : 'Web'}
@@ -564,7 +564,7 @@ export const ComponentRoadmap = () => {
                                   size="small"
                                   className={classNames(
                                     styles.badge,
-                                    c.nativeDone ? styles.badgeDone : styles.badgeTodo
+                                    c.nativeDone ? styles.badgeDoneNative : styles.badgeTodo
                                   )}
                                 >
                                   {c.nativeDone ? 'Native ✓' : 'Native'}

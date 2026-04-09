@@ -62,7 +62,6 @@
   background: var(--color-background-light-gray-01, rgba(0, 0, 0, 0.04));
   border-radius: var(--radius-8);
   padding: var(--spacing-12) var(--spacing-16);
-  border-top: 3px solid var(--roadmap-accent, var(--color-icon-brand-02));
 }
 
 .metricLabel {
@@ -103,7 +102,7 @@
 .miniBarFill {
   height: 100%;
   border-radius: inherit;
-  background: var(--roadmap-accent, var(--color-icon-brand-02));
+  background: var(--roadmap-accent);
   transition: width 0.5s ease;
 }
 
@@ -243,7 +242,17 @@
   border-radius: var(--radius-4);
 }
 
-.badgeDone {
+.badgeDoneWeb {
+  background: var(--color-forest-green-100);
+  border: none;
+}
+
+.badgeDoneNative {
+  background: var(--color-sky-blue-100);
+  border: none;
+}
+
+.badgeDoneBoth {
   background: var(--color-button-brand-accent-filled-background);
   border: none;
 }
