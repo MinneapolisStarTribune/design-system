@@ -4,31 +4,23 @@ import React from 'react';
 import classNames from 'classnames';
 import { useId } from 'react';
 import { BaseProps } from '@/types/globalTypes';
-import styles from './radio.module.scss';
+import styles from './Radio.module.scss';
 
 export const RADIO_COLORS = ['neutral', 'brand'] as const;
 export type RadioColor = (typeof RADIO_COLORS)[number];
 
 export interface RadioProps extends BaseProps {
-  /** Required title text for the radio */
   title: string;
-  /** Optional description text below the title */
   description?: string;
-  /** Controlled checked state */
   checked: boolean;
-  /** Color variant. Neutral is default. */
   color?: RadioColor;
-  /** Disabled state */
   disabled?: boolean;
-  /** Error state - shows error styling and communicates to assistive technologies */
   error?: boolean;
-  /** Callback when checked state changes */
   onChange: (checked: boolean) => void;
 }
 
 /**
  * Radio component for selecting a single option in a set.
- * This component is controlled and does not own form state.
  */
 export const Radio: React.FC<RadioProps> = ({
   title,

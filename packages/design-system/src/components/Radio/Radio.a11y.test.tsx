@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
-import { Radio } from './radio';
+import { Radio } from './Radio';
 
 describe('Radio Accessibility', () => {
   describe('standalone', () => {

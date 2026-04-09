@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useState } from 'react';
-import { Radio } from './radio';
+import { Radio } from './Radio';
 
 const meta = {
   title: 'Components/Actions & Inputs/Radio',
