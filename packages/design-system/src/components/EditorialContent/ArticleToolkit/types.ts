@@ -105,3 +105,9 @@ export type CodeBlockSizeType = (typeof CODE_BLOCK_SIZES)[number];
  */
 export const INLINE_VIDEO_ORIENTATIONS = ['horizontal', 'vertical'] as const;
 export type InlineVideoOrientationType = (typeof INLINE_VIDEO_ORIENTATIONS)[number];
+
+/**
+ * Pull quote size variants for the PullQuote component.
+ */
+export const PULL_QUOTE_SIZES = ['small', 'large'] as const;
+export type PullQuoteSizeType = (typeof PULL_QUOTE_SIZES)[number];

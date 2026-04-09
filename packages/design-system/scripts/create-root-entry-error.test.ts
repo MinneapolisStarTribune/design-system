@@ -1,4 +1,4 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import { describe, it, expect } from 'vitest';
 
 describe('package root entrypoint', () => {
