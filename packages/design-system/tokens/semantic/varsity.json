@@ -98,36 +98,111 @@
       }
     },
     "pull-quote": {
-      "accent-color": {
-        "value": "{color.cobalt-blue.700}"
-      },
       "icon": {
+        "accent-color": {
+          "value": "{color.cobalt-blue.700}"
+        },
         "large": {
           "desktop": {
-            "height": { "type": "dimension", "value": 31 },
-            "width": { "type": "dimension", "value": 41 }
+            "icon": {
+              "height": { "type": "dimension", "value": 37 },
+              "width": { "type": "dimension", "value": 37 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 31 },
+              "padding-left": {
+                "value": "{spacing.2}"
+              },
+              "padding-right": {
+                "value": "{spacing.2}"
+              },
+              "width": { "type": "dimension", "value": 41 }
+            }
           },
           "mobile": {
-            "height": { "type": "dimension", "value": 31 },
-            "width": { "type": "dimension", "value": 41 }
+            "icon": {
+              "height": { "type": "dimension", "value": 38 },
+              "width": { "type": "dimension", "value": 38 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 28 },
+              "padding-left": {
+                "value": "{spacing.0}"
+              },
+              "padding-right": {
+                "value": "{spacing.0}"
+              },
+              "width": { "type": "dimension", "value": 38 }
+            }
           },
           "tablet": {
-            "height": { "type": "dimension", "value": 28 },
-            "width": { "type": "dimension", "value": 38 }
+            "icon": {
+              "height": { "type": "dimension", "value": 37 },
+              "width": { "type": "dimension", "value": 37 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 31 },
+              "padding-left": {
+                "value": "{spacing.2}"
+              },
+              "padding-right": {
+                "value": "{spacing.2}"
+              },
+              "width": { "type": "dimension", "value": 41 }
+            }
           }
+        },
+        "margin-top": {
+          "value": "-3.5px"
         },
         "small": {
           "desktop": {
-            "height": { "type": "dimension", "value": 24 },
-            "width": { "type": "dimension", "value": 36 }
+            "icon": {
+              "height": { "type": "dimension", "value": 36 },
+              "width": { "type": "dimension", "value": 36 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 24 },
+              "padding-left": {
+                "value": "{spacing.0}"
+              },
+              "padding-right": {
+                "value": "{spacing.0}"
+              },
+              "width": { "type": "dimension", "value": 36 }
+            }
           },
           "mobile": {
-            "height": { "type": "dimension", "value": 24 },
-            "width": { "type": "dimension", "value": 36 }
+            "icon": {
+              "height": { "type": "dimension", "value": 30 },
+              "width": { "type": "dimension", "value": 30 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 22 },
+              "padding-left": {
+                "value": "{spacing.0}"
+              },
+              "padding-right": {
+                "value": "{spacing.0}"
+              },
+              "width": { "type": "dimension", "value": 30 }
+            }
           },
           "tablet": {
-            "height": { "type": "dimension", "value": 22 },
-            "width": { "type": "dimension", "value": 30 }
+            "icon": {
+              "height": { "type": "dimension", "value": 36 },
+              "width": { "type": "dimension", "value": 36 }
+            },
+            "wrapper": {
+              "height": { "type": "dimension", "value": 24 },
+              "padding-left": {
+                "value": "{spacing.0}"
+              },
+              "padding-right": {
+                "value": "{spacing.0}"
+              },
+              "width": { "type": "dimension", "value": 36 }
+            }
           }
         }
       },

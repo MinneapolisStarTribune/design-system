@@ -1,6 +1,7 @@
 .pull-quote {
   $lg: 1160px;
   $md: 768px;
+  $sm: 420px;
 
   * {
     margin: 0;
@@ -9,51 +10,94 @@
   display: flex;
   gap: var(--spacing-8);
   max-width: var(--semantic-pull-quote-max-width);
-  margin: 0;
 
-  @media (min-width: $md) {
-    gap: var(--spacing-8);
+  @media (max-width: $sm) {
+    gap: var(--spacing-4);
   }
 
   .quote-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-shrink: 0;
+    padding: 0;
 
     &.size-small {
-      width: var(--semantic-pull-quote-icon-small-mobile-width);
-      height: var(--semantic-pull-quote-icon-small-mobile-height);
+      width: var(--semantic-pull-quote-icon-small-mobile-wrapper-width);
+      height: var(--semantic-pull-quote-icon-small-mobile-wrapper-height);
+      padding-left: var(--semantic-pull-quote-icon-small-mobile-wrapper-padding-left);
+      padding-right: var(--semantic-pull-quote-icon-small-mobile-wrapper-padding-right);
 
-      @media (min-width: 768px) {
-        width: var(--semantic-pull-quote-icon-small-tablet-width);
-        height: var(--semantic-pull-quote-icon-small-tablet-height);
+      .quote-icon {
+        height: var(--semantic-pull-quote-icon-small-mobile-icon-height) !important;
+        width: var(--semantic-pull-quote-icon-small-mobile-icon-width) !important;
       }
 
-      @media (min-width: 1160px) {
-        width: var(--semantic-pull-quote-icon-small-desktop-width);
-        height: var(--semantic-pull-quote-icon-small-desktop-height);
+      @media (min-width: $md) {
+        width: var(--semantic-pull-quote-icon-small-tablet-wrapper-width);
+        height: var(--semantic-pull-quote-icon-small-tablet-wrapper-height);
+        padding-left: var(--semantic-pull-quote-icon-small-tablet-wrapper-padding-left);
+        padding-right: var(--semantic-pull-quote-icon-small-tablet-wrapper-padding-right);
+
+        .quote-icon {
+          height: var(--semantic-pull-quote-icon-small-tablet-icon-height) !important;
+          width: var(--semantic-pull-quote-icon-small-tablet-icon-width) !important;
+        }
+      }
+
+      @media (min-width: $lg) {
+        width: var(--semantic-pull-quote-icon-small-desktop-wrapper-width);
+        height: var(--semantic-pull-quote-icon-small-desktop-wrapper-height);
+        padding-left: var(--semantic-pull-quote-icon-small-desktop-wrapper-padding-left);
+        padding-right: var(--semantic-pull-quote-icon-small-desktop-wrapper-padding-right);
+
+        .quote-icon {
+          height: var(--semantic-pull-quote-icon-small-desktop-icon-height) !important;
+          width: var(--semantic-pull-quote-icon-small-desktop-icon-width) !important;
+        }
       }
     }
 
     &.size-large {
-      width: var(--semantic-pull-quote-icon-large-mobile-width);
-      height: var(--semantic-pull-quote-icon-large-mobile-height);
+      width: var(--semantic-pull-quote-icon-large-mobile-wrapper-width);
+      height: var(--semantic-pull-quote-icon-large-mobile-wrapper-height);
+      padding-left: var(--semantic-pull-quote-icon-large-mobile-wrapper-padding-left);
+      padding-right: var(--semantic-pull-quote-icon-large-mobile-wrapper-padding-right);
 
-      @media (min-width: 768px) {
-        width: var(--semantic-pull-quote-icon-large-tablet-width);
-        height: var(--semantic-pull-quote-icon-large-tablet-height);
+      .quote-icon {
+        height: var(--semantic-pull-quote-icon-large-mobile-icon-height) !important;
+        width: var(--semantic-pull-quote-icon-large-mobile-icon-width) !important;
       }
 
-      @media (min-width: 1160px) {
-        width: var(--semantic-pull-quote-icon-large-desktop-width);
-        height: var(--semantic-pull-quote-icon-large-desktop-height);
+      @media (min-width: $md) {
+        width: var(--semantic-pull-quote-icon-large-tablet-wrapper-width);
+        height: var(--semantic-pull-quote-icon-large-tablet-wrapper-height);
+        padding-left: var(--semantic-pull-quote-icon-large-tablet-wrapper-padding-left);
+        padding-right: var(--semantic-pull-quote-icon-large-tablet-wrapper-padding-right);
+
+        .quote-icon {
+          height: var(--semantic-pull-quote-icon-large-tablet-icon-height) !important;
+          width: var(--semantic-pull-quote-icon-large-tablet-icon-width) !important;
+        }
+      }
+
+      @media (min-width: $lg) {
+        width: var(--semantic-pull-quote-icon-large-desktop-wrapper-width);
+        height: var(--semantic-pull-quote-icon-large-desktop-wrapper-height);
+        padding-left: var(--semantic-pull-quote-icon-large-desktop-wrapper-padding-left);
+        padding-right: var(--semantic-pull-quote-icon-large-desktop-wrapper-padding-right);
+
+        .quote-icon {
+          height: var(--semantic-pull-quote-icon-large-desktop-icon-height) !important;
+          width: var(--semantic-pull-quote-icon-large-desktop-icon-width) !important;
+        }
       }
     }
 
     .quote-icon {
-      color: var(--semantic-pull-quote-accent-color) !important;
-      margin-top: -3.5px;
+      color: var(--semantic-pull-quote-icon-accent-color) !important;
+      margin-top: var(--semantic-pull-quote-icon-margin-top);
       margin-left: 0;
-      width: 100% !important;
-      height: 100% !important;
     }
   }
 
@@ -68,7 +112,13 @@
       &.size-small {
         @media (min-width: $lg) {
           margin-left: calc(
-            -1 * (var(--spaceing-8) + var(--semantic-pull-quote-icon-small-desktop-width))
+            -1 *
+              (
+                var(--spaceing-8) +
+                  var(--semantic-pull-quote-icon-small-desktop-wrapper-padding-left) +
+                  var(--semantic-pull-quote-icon-small-desktop-wrapper-padding-right) +
+                  var(--semantic-pull-quote-icon-small-desktop-wrapper-width)
+              )
           );
         }
       }
@@ -76,7 +126,13 @@
       &.size-large {
         @media (min-width: $lg) {
           margin-left: calc(
-            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-large-desktop-width))
+            -1 *
+              (
+                var(--spacing-8) +
+                  var(--semantic-pull-quote-icon-large-desktop-wrapper-padding-left) +
+                  var(--semantic-pull-quote-icon-large-desktop-wrapper-padding-right) +
+                  var(--semantic-pull-quote-icon-large-desktop-wrapper-width)
+              )
           );
         }
       }
