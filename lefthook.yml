@@ -9,6 +9,7 @@ pre-push:
       run: |
         yarn workspace @minneapolisstartribune/design-system generate:component-matrix
         m=packages/design-system/src/stories/GettingStarted/component-matrix.json
+        node ./node_modules/.bin/prettier --write "$m"
         if git diff --quiet HEAD -- "$m"; then exit 0; fi
         git add -- "$m" && git commit -m "chore: Update component matrix"
         echo "" >&2
