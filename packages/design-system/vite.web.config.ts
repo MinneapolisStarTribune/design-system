@@ -45,6 +45,7 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
         path.resolve(__dirname, 'src/components/index.web.ts'),
+        path.resolve(__dirname, 'src/components/EditorialContent/ArticleToolkit'),
         path.resolve(__dirname, 'src/components/Icon/Icon.tsx'),
         path.resolve(__dirname, 'src/components/Icon/Icon.types.ts'),
         path.resolve(__dirname, 'src/icons/index.ts'),
