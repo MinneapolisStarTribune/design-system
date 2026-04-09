@@ -34,7 +34,7 @@
 
     .quote-icon {
       color: var(--semantic-pull-quote-icon-accent-color) !important;
-      margin-top: -3.5px;
+      margin-top: var(--semantic-pull-quote-icon-margin-top);
       margin-left: 0;
       width: 100% !important;
       height: 100% !important;

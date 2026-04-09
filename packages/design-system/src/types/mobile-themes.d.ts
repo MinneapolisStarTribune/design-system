@@ -374,6 +374,7 @@ interface StartribuneLightTheme {
   semanticPullQuoteIconAccentColor: string;
   semanticPullQuoteIconLargeHeight: number;
   semanticPullQuoteIconLargeWidth: number;
+  semanticPullQuoteIconMarginTop: string;
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
@@ -774,6 +775,7 @@ interface StartribuneDarkTheme {
   semanticPullQuoteIconAccentColor: string;
   semanticPullQuoteIconLargeHeight: number;
   semanticPullQuoteIconLargeWidth: number;
+  semanticPullQuoteIconMarginTop: string;
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
@@ -1167,6 +1169,8 @@ interface VarsityLightTheme {
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
   semanticInlineVideoHorizontalBorderRadiusTablet: number;
+  semanticInlineVideoImmersiveVerticalMaxWidth: string;
+  semanticInlineVideoStandardVerticalMaxWidth: string;
   semanticInlineVideoVerticalAspectRatio: string;
   semanticInlineVideoVerticalBorderRadiusDesktop: number;
   semanticInlineVideoVerticalBorderRadiusMobile: number;
@@ -1178,6 +1182,7 @@ interface VarsityLightTheme {
   semanticPullQuoteIconAccentColor: string;
   semanticPullQuoteIconLargeHeight: number;
   semanticPullQuoteIconLargeWidth: number;
+  semanticPullQuoteIconMarginTop: string;
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
@@ -1571,6 +1576,8 @@ interface VarsityDarkTheme {
   semanticInlineVideoHorizontalBorderRadiusDesktop: number;
   semanticInlineVideoHorizontalBorderRadiusMobile: number;
   semanticInlineVideoHorizontalBorderRadiusTablet: number;
+  semanticInlineVideoImmersiveVerticalMaxWidth: string;
+  semanticInlineVideoStandardVerticalMaxWidth: string;
   semanticInlineVideoVerticalAspectRatio: string;
   semanticInlineVideoVerticalBorderRadiusDesktop: number;
   semanticInlineVideoVerticalBorderRadiusMobile: number;
@@ -1582,6 +1589,7 @@ interface VarsityDarkTheme {
   semanticPullQuoteIconAccentColor: string;
   semanticPullQuoteIconLargeHeight: number;
   semanticPullQuoteIconLargeWidth: number;
+  semanticPullQuoteIconMarginTop: string;
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;

@@ -157,6 +157,9 @@
           "height": { "type": "dimension", "value": 38 },
           "width": { "type": "dimension", "value": 38 }
         },
+        "margin-top": {
+          "value": "-3.5px"
+        },
         "small": {
           "height": { "type": "dimension", "value": 32 },
           "width": { "type": "dimension", "value": 32 }

@@ -70,6 +70,12 @@
       "horizontal-border-radius-tablet": {
         "value": "{radius.none}"
       },
+      "immersive-vertical-max-width": {
+        "value": "390px"
+      },
+      "standard-vertical-max-width": {
+        "value": "358px"
+      },
       "vertical-aspect-ratio": {
         "value": "9/16"
       },
@@ -105,6 +111,9 @@
         "large": {
           "height": { "type": "dimension", "value": 38 },
           "width": { "type": "dimension", "value": 38 }
+        },
+        "margin-top": {
+          "value": "-3.5px"
         },
         "small": {
           "height": { "type": "dimension", "value": 32 },
