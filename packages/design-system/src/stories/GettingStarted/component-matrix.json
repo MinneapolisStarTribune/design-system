@@ -10,12 +10,12 @@
             "web": true
           },
           {
-            "component": "Utility Button",
+            "component": "Link",
             "native": false,
             "web": true
           },
           {
-            "component": "Link",
+            "component": "Utility Button",
             "native": false,
             "web": true
           }
@@ -31,6 +31,32 @@
         "name": "",
         "rows": [
           {
+            "component": "SwiperCarousel",
+            "native": false,
+            "web": true
+          }
+        ]
+      }
+    ],
+    "subCategory": "",
+    "topLevel": "Components"
+  },
+  {
+    "groups": [
+      {
+        "name": "",
+        "rows": [
+          {
+            "component": "Image Gallery",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Inline Image",
+            "native": false,
+            "web": true
+          },
+          {
             "component": "Photo Layout",
             "native": false,
             "web": true
@@ -42,6 +68,11 @@
         "rows": [
           {
             "component": "Dangerous Code Block",
+            "native": false,
+            "web": true
+          },
+          {
+            "component": "Enhanced Code Block",
             "native": false,
             "web": true
           }
@@ -114,6 +145,11 @@
             "web": true
           },
           {
+            "component": "Select",
+            "native": false,
+            "web": true
+          },
+          {
             "component": "TextInput",
             "native": false,
             "web": true
@@ -167,11 +203,6 @@
         "name": "",
         "rows": [
           {
-            "component": "Link",
-            "native": false,
-            "web": true
-          },
-          {
             "component": "InlineLink",
             "native": false,
             "web": true
@@ -179,7 +210,7 @@
         ]
       }
     ],
-    "subCategory": "Link",
+    "subCategory": "",
     "topLevel": "Typography"
   },
   {

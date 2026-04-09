@@ -62,6 +62,14 @@ Optional field:
 </FormGroup>
 ```
 
+## React Native
+
+Use `FormGroupNative` with the same subcomponents (`FormGroupNative.Label`, …). It scans children, wraps them in `FormGroupProvider`, and passes `captionVariant` from `Caption` into context so `hasError` / `hasSuccess` match the caption.
+
+You can also compose `FormGroupProvider` with the native `FormGroupLabel`, `FormGroupDescription`, and `FormGroupCaption` manually. Wire the field with `nativeID={useFormGroupContext()?.inputId}` on `TextInput` (or your control). Native labels do not use `htmlFor`; association is via those `nativeID` values.
+
+Error captions use `accessibilityRole="alert"` and `accessibilityLiveRegion="assertive"` on the caption container.
+
 ## Exports
 
 - `FormGroup`: root field wrapper
@@ -69,6 +77,8 @@ Optional field:
 - `FormGroup.Description`: helper/description row
 - `FormGroup.Caption`: validation/status row
 - `FormGroupProps`: type map for root and subcomponent props
+
+**Native (see `index.native.ts`):** `FormGroupNative`, `FormGroupProvider`, `useFormGroupContext`, and native subcomponents with `FormGroup*NativeProps` types.
 
 {/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
 
