@@ -102,6 +102,7 @@ export {
   type UtilityLabelProps,
 } from './Typography/Utility/UtilityLabel/web/UtilityLabel';
 export { Button, type ButtonProps } from '@/components/Button/web/Button';
+export { ButtonGroup, type ButtonGroupProps } from '@/components/Button/web/ButtonGroup';
 export {
   UTILITY_BUTTON_SIZES,
   UTILITY_BUTTON_VARIANTS,
@@ -115,6 +116,7 @@ export {
   CandyBarRenderer,
   type CandyBarRendererProps,
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
+export * from '@/components/EditorialContent/ArticleToolkit/index';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export { TOAST_VARIANTS, type ToastProps, type ToastVariant } from '@/components/Toast/Toast.types';
