@@ -1,357 +1,357 @@
 [
   {
     "component": "Button",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Links",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "ButtonGroup",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "UtilityButton",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "FormGroup.Label",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "FormGroup.Caption",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "FormGroup.Description",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "Form",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Checkbox",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "CheckboxGroup",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Radio",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "RadioGroup",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "TextInput",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "PasswordInput",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Select",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "MultiSelect",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Switch",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Popover",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "ToolTip",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Skeleton",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Toast",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "CandyBar",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Tag",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Badge",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Banner",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Avatar",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Divider",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "SectionTitle",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Modal",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "SwiperCarousel",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Breadcrumb",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Pagination",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Tabs",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "EyebrowLabel",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "EyebrowBadge",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "AuthorByline",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "EditorialCard",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "PhotoLayout",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "ImageGallery",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "InlineVideo",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "PullQuote",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "SocialEmbeds",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "CodeBlock",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "DangerousCodeBlock",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "EnhancedCodeBlock",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "Caption",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "Lightbox",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "AuthorBioCard",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "RelatedCoverage",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "KeyPoints",
-    "web": false,
-    "native": false
+    "native": false,
+    "web": false
   },
   {
     "component": "ArticleBodyHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "ArticleBodySponsoredHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "ArticleBodySponsoredText",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "ArticleBodyText",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "ArticleQuote",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "EditorialSponsoredText",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "EditorialText",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "EnterpriseHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "NewsHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "NonNewsHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "OpinionHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "SponsoredHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "PageHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "SectionHeading",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "UtilityBody",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "UtilityLabel",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "DesignSystemProvider",
-    "web": true,
-    "native": true
+    "native": true,
+    "web": true
   },
   {
     "component": "AnalyticsProvider",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "SnackProvider",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Icon",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   },
   {
     "component": "Image",
-    "web": true,
-    "native": false
+    "native": false,
+    "web": true
   }
 ]
