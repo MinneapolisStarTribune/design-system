@@ -109,9 +109,7 @@ export const Error: Story = {
       setChecked(args.checked);
     }, [args.checked]);
 
-    return (
-      <Radio {...args} checked={checked} onChange={setChecked} dataTestId="radio-error" />
-    );
+    return <Radio {...args} checked={checked} onChange={setChecked} dataTestId="radio-error" />;
   },
 };
 
