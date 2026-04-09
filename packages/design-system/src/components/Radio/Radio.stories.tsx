@@ -46,6 +46,7 @@ export const Configurable: Story = {
     color: 'brand',
     disabled: false,
     error: false,
+    onChange: () => {},
   },
   render: function ConfigurableRender(args) {
     const [checked, setChecked] = useState(args.checked);
@@ -61,55 +62,55 @@ export const Configurable: Story = {
 };
 
 export const Unchecked: Story = {
-  render: () => (
-    <Radio
-      title="Receive product updates"
-      description="We send one message each week."
-      checked={false}
-      onChange={() => {}}
-      dataTestId="radio-unchecked"
-    />
-  ),
+  args: {
+    title: 'Receive product updates',
+    description: 'We send one message each week.',
+    checked: false,
+    onChange: () => {},
+    dataTestId: 'radio-unchecked',
+  },
 };
 
 export const Checked: Story = {
-  render: () => (
-    <Radio
-      title="Receive product updates"
-      description="We send one message each week."
-      checked={true}
-      color="brand"
-      onChange={() => {}}
-      dataTestId="radio-checked"
-    />
-  ),
+  args: {
+    title: 'Receive product updates',
+    description: 'We send one message each week.',
+    checked: true,
+    color: 'brand',
+    onChange: () => {},
+    dataTestId: 'radio-checked',
+  },
 };
 
 export const Disabled: Story = {
-  render: () => (
-    <Radio
-      title="Disabled option"
-      description="This choice is not available."
-      checked={false}
-      disabled
-      onChange={() => {}}
-      dataTestId="radio-disabled"
-    />
-  ),
+  args: {
+    title: 'Disabled option',
+    description: 'This choice is not available.',
+    checked: false,
+    disabled: true,
+    onChange: () => {},
+    dataTestId: 'radio-disabled',
+  },
 };
 
 export const Error: Story = {
-  render: function ErrorRender() {
-    const [checked, setChecked] = useState(false);
+  args: {
+    title: 'Required choice',
+    description: 'You must select one option.',
+    checked: false,
+    error: true,
+    onChange: () => {},
+    dataTestId: 'radio-error',
+  },
+  render: function ErrorRender(args) {
+    const [checked, setChecked] = useState(args.checked);
+
+    useEffect(() => {
+      setChecked(args.checked);
+    }, [args.checked]);
+
     return (
-      <Radio
-        title="Required choice"
-        description="You must select one option."
-        checked={checked}
-        error
-        onChange={setChecked}
-        dataTestId="radio-error"
-      />
+      <Radio {...args} checked={checked} onChange={setChecked} dataTestId="radio-error" />
     );
   },
 };
@@ -117,6 +118,11 @@ export const Error: Story = {
 export const ColorVariants: Story = {
   parameters: {
     controls: { disable: true },
+  },
+  args: {
+    title: 'Neutral (default)',
+    checked: false,
+    onChange: () => {},
   },
   render: function ColorVariantsRender() {
     const [neutralChecked, setNeutralChecked] = useState(false);
