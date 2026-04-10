@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SectionHeading } from './SectionHeading';
 import { SECTION_HEADING_IMPORTANCE_LEVELS } from '../SectionHeading.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Utility/SectionHeading',
@@ -10,6 +11,16 @@ const meta = {
       control: 'select',
       options: SECTION_HEADING_IMPORTANCE_LEVELS,
       description: 'Heading level (1-6), maps to h1-h6',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
+    },
+    children: {
+      control: 'text',
+      description: 'Section Heading',
     },
   },
 } satisfies Meta<typeof SectionHeading>;
