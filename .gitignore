@@ -155,5 +155,8 @@ storybook-static
 # Turborepo cache
 .turbo/
 
+# Playwright (per-run metadata under test-results/)
+.last-run.json
+
 # Expo (prebuild cache at root; use apps/mobile-storybook for native dev)
 .expo/

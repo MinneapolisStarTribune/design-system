@@ -54,6 +54,7 @@
     "@floating-ui/react": "0.27.19",
     "@floating-ui/react-native": "0.10.9",
     "@octokit/rest": "^22.0.1",
+    "@playwright/test": "1.59.1",
     "@react-native/babel-preset": "^0.84.1",
     "@react-native/jest-preset": "0.85.0-nightly-20260219-44901aaf9",
     "@storybook/addon-a11y": "^10.1.11",
@@ -95,7 +96,7 @@
     "jest": "^30.2.0",
     "jsdom": "^27.2.0",
     "lodash": "^4.17.23",
-    "playwright": "^1.54.1",
+    "playwright": "1.59.1",
     "postcss": "^8.5.6",
     "postcss-import": "^16.1.1",
     "prettier": "^3.6.2",
@@ -162,6 +163,7 @@
     "test:scripts": "vitest run scripts/*.test.js",
     "test:watch": "vitest",
     "test:web": "vitest run",
+    "test:e2e": "playwright test",
     "tokens": "node scripts/builders/build-tokens.js",
     "typecheck": "tsc --noEmit"
   }
