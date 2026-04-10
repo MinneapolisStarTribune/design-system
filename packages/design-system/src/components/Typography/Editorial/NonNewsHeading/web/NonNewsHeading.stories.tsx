@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NonNewsHeading } from './NonNewsHeading';
 import { NON_NEWS_HEADING_IMPORTANCE_LEVELS } from '../NonNewsHeading.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Editorial/NonNewsHeading',
@@ -19,6 +20,12 @@ const meta = {
       options: NON_NEWS_HEADING_IMPORTANCE_LEVELS,
       description:
         'Semantic heading level (1-6). Controls both the HTML element (h1-h6) and the typography class.',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',
