@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodyHeading } from './ArticleBodyHeading';
 import { ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS } from '../ArticleBodyHeading.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/ArticleBody/ArticleBodyHeading',
@@ -21,6 +22,12 @@ const meta = {
       description:
         'Semantic heading level (1–6). Controls both the HTML element (h1–h6) and the typography class.',
     },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
+    },
     children: {
       control: 'text',
       description: 'Heading text.',
@@ -35,6 +42,7 @@ export const Configurable: Story = {
   args: {
     importance: 1,
     children: 'Article Body Heading',
+    color: 'on-light-primary',
   },
 };
 

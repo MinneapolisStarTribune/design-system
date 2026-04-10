@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityBody } from './UtilityBody';
 import { UTILITY_BODY_SIZES, UTILITY_BODY_WEIGHTS } from '../UtilityBody.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Utility/UtilityBody',
@@ -13,6 +14,16 @@ const meta = {
     weight: {
       control: 'select',
       options: UTILITY_BODY_WEIGHTS,
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
+    },
+    children: {
+      control: 'text',
+      description: 'Utility text',
     },
   },
 } satisfies Meta<typeof UtilityBody>;
