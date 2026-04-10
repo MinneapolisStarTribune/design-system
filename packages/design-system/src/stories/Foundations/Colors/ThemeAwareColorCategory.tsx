@@ -313,7 +313,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
         const value = (brandColors as any)[tokenName] as string | undefined;
         if (value) {
           colorList.push({
-            name: formatColorName(suffix),
+            name: `Brand ${suffix}`,
             tokenName,
             value,
             description: undefined,
@@ -361,9 +361,22 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     <div>
       <div style={{ marginBottom: '2rem' }}>
         <h1>{displayName} Colors</h1>
-        {categoryMetadata.description && (
-          <p style={{ marginTop: '0.5rem' }}>{categoryMetadata.description}</p>
-        )}
+        {categoryMetadata.description &&
+          categoryMetadata.description
+            .split(/\n\n+/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .map((para, i) => (
+              <p
+                key={i}
+                style={{
+                  marginTop: i === 0 ? '0.5rem' : '0.75rem',
+                  marginBottom: 0,
+                }}
+              >
+                {para}
+              </p>
+            ))}
         {categoryMetadata.overview && categoryMetadata.overview.length > 0 && (
           <>
             <h2 style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Overview</h2>
@@ -377,13 +390,8 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
       </div>
       <p style={{ marginBottom: '0.5rem' }}>
         Use the toolbar controls above to switch themes and brands. Also see{' '}
-        <a
-          href="#using-these-tokens-in-code"
-          style={{ color: 'inherit', fontWeight: 600, textDecoration: 'underline' }}
-        >
-          using these tokens in code
-        </a>{' '}
-        below for CSS and examples of implementation.
+        <a href="#using-these-tokens-in-code">using these tokens in code</a> below for CSS and
+        examples of implementation.
       </p>
       <p style={{ marginBottom: '1rem' }}>
         Showing {category} colors for <strong>{brand}</strong> in <strong>{colorScheme}</strong>{' '}

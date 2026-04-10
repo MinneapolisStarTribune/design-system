@@ -9,4 +9,27 @@ import { ColorTokensUsage } from './ColorTokensUsage';
   <ButtonColorCategory />
 </ThemeLoader>
 
+<h2 style={{ marginTop: '2rem', marginBottom: '0.75rem' }}>Using button colors in React and CSS</h2>
+
+**`Button`** uses `color="neutral" | "brand" | "brand-accent"` — not text-style keys like `brand-01`. Styles resolve to `var(--color-button-…)` by variant. **Using these tokens in code** below has the category table and general token rules.
+
+```tsx
+import { Button } from '@minneapolisstartribune/design-system/web';
+
+<Button color="brand" variant="filled" size="medium">
+  Subscribe
+</Button>
+```
+
+**Defaults:** `color="neutral"`, `variant="filled"`. **Type:** `ButtonColor` (`Button.types.ts`). **Component docs:** [Button](?path=/docs/actions-button--docs).
+
+```css
+.custom-surface {
+  background-color: var(--color-button-neutral-filled-background);
+  color: var(--color-button-neutral-filled-text);
+}
+```
+
+Prefer **`Button`** over hand-rolled CSS when you can so hover and disabled states stay aligned with the system.
+
 <ColorTokensUsage />

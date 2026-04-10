@@ -9,4 +9,23 @@ import { ColorTokensUsage } from './ColorTokensUsage';
   <ThemeAwareColorCategory category="icon" />
 </ThemeLoader>
 
+<h2 style={{ marginTop: '2rem', marginBottom: '0.75rem' }}>Using icon colors in React and CSS</h2>
+
+Barrel-exported icons take a `color` prop: keys match the swatches above and map to `var(--color-icon-…)` on the SVG (paths use `currentColor`). **Using these tokens in code** below has the full naming table, how this relates to text colors, and how it differs from **Button**.
+
+```tsx
+import { CameraIcon } from '@minneapolisstartribune/design-system/web';
+
+<CameraIcon size="small" color="on-dark-secondary" />
+```
+
+**Defaults:** `size="medium"`, `color="on-light-primary"` (`Icon.tsx`). **Type:** `IconColor` (`Icon.types.ts`).
+
+```css
+/* Raw CSS — same token segment as the `color` prop */
+.my-icon {
+  color: var(--color-icon-on-light-primary);
+}
+```
+
 <ColorTokensUsage />
