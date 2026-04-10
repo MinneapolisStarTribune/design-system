@@ -24,28 +24,15 @@ This package is published to GitHub Packages. To install it, you'll need to conf
 7. **Copy the token immediately** — you will only see it once!
 8. Save the token in your `.env.local` file in the repository where you're installing this design system:
    ```
-   NPM_AUTH_TOKEN_FOR_SUS=your_token_here
+   NPM_TOKEN=your_token_here
    ```
-   This token will be used in Step 2 below.
+   This value is read by your app’s Yarn/npm configuration (see Step 2).
 
 ### Step 2: Configure npm/yarn Authentication
 
-**For yarn:**
+Application repositories already include the Yarn/npm files needed for GitHub Packages (for example `.yarnrc.yml` and scope settings for `@minneapolisstartribune`). **You should not need to add those files by hand**—only ensure **`NPM_TOKEN`** is set in `.env.local` as in Step 1, matching what your repo’s config expects.
 
-Create or edit `.yarnrc.yml` in your project root:
-
-```
-injectEnvironmentFiles:
-  - .env.local?
-
-npmScopes:
-  minneapolisstartribune:
-    npmRegistryServer: "https://npm.pkg.github.com"
-    npmAlwaysAuth: true
-    npmAuthToken: "${NPM_AUTH_TOKEN_FOR_SUS}"
-```
-
-**Security Note:** Never commit your token to version control! Use environment variables:
+**Security note:** Never commit your token to version control. Use environment variables (e.g. `.env.local`, which should be gitignored):
 
 ### Step 3: Install the Package
 
