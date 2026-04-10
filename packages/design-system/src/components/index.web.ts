@@ -19,12 +19,16 @@ export {
   type UseFormLogicOptions,
   type UseFormLogicReturn,
 } from './Form';
+export { Checkbox, type CheckboxProps } from './FormControl/Checkbox/web/Checkbox';
 export {
   type CheckboxCategory,
+  CheckboxGroup,
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export { Select } from './FormControl/Select/web/Select';
+export type { SelectProps } from './FormControl/Select/web/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
