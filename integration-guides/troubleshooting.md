@@ -79,10 +79,11 @@ Common issues and solutions for using the design system.
 
 **Solutions:**
 
-1. Verify your `.npmrc` or `.yarnrc` is configured correctly (see [README Installation](../README.md#installation))
-2. Check that your GitHub token has `read:packages` scope
-3. Ensure the token hasn't expired
-4. For CI/CD, verify the token is set as a secret/environment variable
+1. Confirm **`NPM_TOKEN`** is set in **`.env.local`** (see [README Installation](../README.md#installation)). App repos usually ship Yarn/npm config for GitHub Packages already; you typically only need the token, not a new `.yarnrc.yml`.
+2. If installs still fail, check that the committed config (e.g. `.yarnrc.yml`) references the same env var name your `.env.local` uses.
+3. Check that your GitHub token has **`read:packages`** scope.
+4. Ensure the token hasn't expired.
+5. For CI/CD, set the token as a secret/environment variable your pipeline injects (often the same **`NPM_TOKEN`** name your repo documents).
 
 ## Still Having Issues?
 

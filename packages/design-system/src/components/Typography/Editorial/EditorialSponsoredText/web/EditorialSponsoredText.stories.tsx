@@ -4,6 +4,7 @@ import {
   EDITORIAL_SPONSORED_TEXT_SIZES,
   EDITORIAL_SPONSORED_TEXT_WEIGHTS,
 } from '../EditorialSponsoredText.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Editorial/EditorialSponsoredText',
@@ -21,6 +22,12 @@ const meta = {
       control: 'select',
       options: EDITORIAL_SPONSORED_TEXT_WEIGHTS,
       description: 'The font weight of the editorial sponsored text',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',
