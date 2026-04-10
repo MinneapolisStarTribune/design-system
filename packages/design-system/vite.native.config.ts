@@ -26,6 +26,11 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.native.ts'),
         path.resolve(__dirname, 'src/components/index.native.ts'),
+        path.resolve(__dirname, 'src/providers/DesignSystemProvider.native.tsx'),
+        path.resolve(__dirname, 'src/providers/theme-helpers.ts'),
+        path.resolve(__dirname, 'src/providers/DesignSystemContext.ts'),
+        path.resolve(__dirname, 'src/providers/BrandValidationErrorBoundary.tsx'),
+        path.resolve(__dirname, 'src/hooks/useNativeStyles.ts'),
         path.resolve(__dirname, 'src/types'),
       ],
       exclude: [
@@ -51,24 +56,18 @@ export default defineConfig({
         },
       },
       beforeWriteFile: (filePath, content) => {
-        // Only copy the main entry file and rename it to index.native.d.ts
-        // Other files will be copied as-is to maintain import paths
-        if (
-          filePath.endsWith('index.native.d.ts') ||
-          (filePath.includes('index.native') && filePath.endsWith('.d.ts'))
-        ) {
-          // Ensure it's named index.native.d.ts in dist/mobile
-          if (filePath.includes('index.native.d.ts')) {
-            return {
-              filePath: path.resolve(__dirname, 'dist', 'mobile', 'index.native.d.ts'),
-              content,
-            };
-          }
-        }
-        // For the main index file, rename it
-        if (filePath.endsWith('index.d.ts') && filePath.includes('index.native')) {
+        const normalized = filePath.split(path.sep).join('/');
+        // Do not map both `src/index.native` and `components/index.native` to the same output
+        // file — that dropped DesignSystemProvider / hooks from the published .d.ts (see #native types).
+        if (normalized.endsWith('/src/index.native.d.ts')) {
           return {
-            filePath: path.resolve(__dirname, 'dist', 'mobile', 'index.native.d.ts'),
+            filePath: path.resolve(__dirname, 'dist/mobile/index.native.d.ts'),
+            content,
+          };
+        }
+        if (normalized.endsWith('/src/components/index.native.d.ts')) {
+          return {
+            filePath: path.resolve(__dirname, 'dist/mobile/components/index.native.d.ts'),
             content,
           };
         }
