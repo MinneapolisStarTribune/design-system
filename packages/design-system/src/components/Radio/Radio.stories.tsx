@@ -101,12 +101,6 @@ export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
     layout: 'fullscreen',
-    docs: {
-      description: {
-        story:
-          'Neutral and brand color, unchecked and checked, with optional description, error, focus, and disabled states. The Varsity brand example scopes Varsity light radio tokens (cobalt blue) so it contrasts with Star Tribune green when the Storybook Brand toolbar is Star Tribune; switch the toolbar to Varsity to theme the full canvas.',
-      },
-    },
   },
   render: function AllVariantsRender() {
     const [withDescription, setWithDescription] = useState(false);

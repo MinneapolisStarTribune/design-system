@@ -1,13 +1,7 @@
 .root {
   display: inline-flex;
   flex-direction: column;
-  /* Cross-axis start: don't stretch children to a wrongly-wide label (see align-self below) */
   align-items: flex-start;
-  /*
-   * Shrink-wrap width. `width: fit-content` alone loses when this label is a flex/grid item:
-   * default align-self/justify-self: stretch expands us to the parent track width, so the
-   * absolute input + focus ring match the viewport. Opt out of that stretch on both axes.
-   */
   width: fit-content;
   max-width: 100%;
   align-self: flex-start;
@@ -16,7 +10,6 @@
   position: relative;
   box-sizing: border-box;
   font-family: inherit;
-  /* No border-radius on root — focus ring is rectangular per Figma */
 
   &.disabled {
     cursor: not-allowed;
