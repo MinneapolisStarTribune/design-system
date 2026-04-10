@@ -72,7 +72,7 @@
   {
     "component": "Select",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "MultiSelect",
@@ -195,19 +195,24 @@
     "web": true
   },
   {
+    "component": "InlineImage",
+    "native": true,
+    "web": true
+  },
+  {
     "component": "InlineVideo",
-    "native": false,
-    "web": false
+    "native": true,
+    "web": true
   },
   {
     "component": "PullQuote",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "SocialEmbeds",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "CodeBlock",

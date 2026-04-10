@@ -38,6 +38,7 @@
   { "category": "Editorial Content", "name": "EditorialCard", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "PhotoLayout", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "ImageGallery", "platform": ["web", "native"] },
+  { "category": "Article Toolkit", "name": "InlineImage", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "InlineVideo", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "PullQuote", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "SocialEmbeds", "platform": ["web", "native"] },
