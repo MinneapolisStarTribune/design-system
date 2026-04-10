@@ -56,3 +56,11 @@ export type UtilityLabelWeight = Extract<FontWeight, 'regular' | 'semibold' | 'b
 export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
 
 export type Position = (typeof POSITIONS)[number];
+
+export type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+export type CtaLinkProps = {
+  label: string;
+  link?: string;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+};

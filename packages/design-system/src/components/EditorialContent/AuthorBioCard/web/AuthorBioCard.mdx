@@ -1,0 +1,200 @@
+import { Meta, Canvas, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ComponentStories from './AuthorBioCard.stories';
+
+<Meta of={ComponentStories} />
+
+# AuthorBioCard
+
+**AuthorBioCard** displays author information such as name, role, description, avatar, and an optional CTA link.
+
+It is part of the **Editorial / ArticleToolkit** and is used within article pages to present author metadata in a structured and accessible way.
+
+
+## Playground
+
+<Canvas of={ComponentStories.Configurable} sourceState="hidden" />
+
+
+## Controls
+
+<Controls />
+
+
+## Usage Guidelines
+
+- Use for **author attribution** in articles
+- Supports optional:
+  - Avatar image
+  - Role/position
+  - CTA (profile link / more articles)
+- Keeps layout consistent across editorial surfaces
+
+
+## Content Structure
+
+- **Label** → Section heading (e.g., "Author")
+- **Image** → Optional avatar
+- **Name** → Author name
+- **Position** → Role or designation
+- **Description** → Author bio
+- **CTA** → Navigation link (profile / articles)
+
+
+## Variants
+
+### Avatar Shape
+
+- `thumbnailIconRounded = false` → rounded corners (default)
+- `thumbnailIconRounded = true` → circular avatar (staff style)
+
+
+## Borders
+
+- `hasTopBorder` → adds top divider
+- `hasBottomBorder` → adds bottom divider
+
+Used for:
+- separating multiple authors
+- grouping editorial sections
+
+
+## Accessibility
+
+- Supports:
+  - `aria-label`
+  - `aria-describedby`
+  - `aria-hidden`
+- CTA uses semantic **Link** component
+- Image requires meaningful `alt` text
+
+
+## Layout Behavior
+
+- Fixed max-width with responsive adjustments
+- Flex layout:
+  - Image + content alignment
+- Content adapts based on available data
+
+
+## Full Props Reference
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>label</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Heading label above the card</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Author name</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>required</td>
+      <td>Author bio/description</td>
+    </tr>
+    <tr>
+      <td>position</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Author role (e.g., Staff Writer)</td>
+    </tr>
+    <tr>
+      <td>thumbnailIcon</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Image source URL</td>
+    </tr>
+    <tr>
+      <td>thumbnailIconAlt</td>
+      <td>string</td>
+      <td>"Author thumbnail"</td>
+      <td>Alt text for image</td>
+    </tr>
+    <tr>
+      <td>thumbnailIconRounded</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Renders circular avatar when true</td>
+    </tr>
+    <tr>
+      <td>ctaLink</td>
+      <td>{`{ label, link?, onClick? }`}</td>
+      <td>-</td>
+      <td>CTA configuration (navigation or action)</td>
+    </tr>
+    <tr>
+      <td>headingLevel</td>
+      <td>'h1' - 'h6'</td>
+      <td>'h4'</td>
+      <td>Semantic heading level</td>
+    </tr>
+    <tr>
+      <td>hasTopBorder</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Adds top border</td>
+    </tr>
+    <tr>
+      <td>hasBottomBorder</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Adds bottom border</td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Additional class names (restricted usage)</td>
+    </tr>
+    <tr>
+      <td>style</td>
+      <td>CSSProperties</td>
+      <td>-</td>
+      <td>Inline styles</td>
+    </tr>
+    <tr>
+      <td>dataTestId</td>
+      <td>string</td>
+      <td>'author-bio-card'</td>
+      <td>Test identifier</td>
+    </tr>
+  </tbody>
+</table>
+
+
+## CTA Behavior
+
+- Uses **Design System Link**
+- Supports:
+  - `href` → navigation
+  - `onClick` → action
+- Requires `label` (accessible text)
+
+## How to use
+`import { AuthorBioCard , AuthorBioCardProps } from '@minneapolisstartribune/design-system/web'`
+
+## Best Practices
+
+- Always provide **description**
+- Provide **alt text** for images
+- Avoid empty CTA labels
+- Use borders only when needed for separation
+
+
+## All Variants
+
+<Stories title="All Variants" sourceState="collapsed" />
