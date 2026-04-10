@@ -1,6 +1,6 @@
 [
   { "category": "Actions", "name": "Button", "platform": ["web", "native"] },
-  { "category": "Actions", "name": "Links", "platform": ["web", "native"] },
+  { "category": "Actions", "name": "Link", "platform": ["web", "native"] },
   { "category": "Actions", "name": "ButtonGroup", "platform": ["web", "native"] },
   { "category": "Actions", "name": "UtilityButton", "platform": ["web", "native"] },
   { "category": "Forms", "name": "FormGroup.Label", "platform": ["web", "native"] },
@@ -42,7 +42,6 @@
   { "category": "Article Toolkit", "name": "InlineVideo", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "PullQuote", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "SocialEmbeds", "platform": ["web", "native"] },
-  { "category": "Article Toolkit", "name": "CodeBlock", "platform": ["web"] },
   { "category": "Article Toolkit", "name": "DangerousCodeBlock", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "EnhancedCodeBlock", "platform": ["web", "native"] },
   { "category": "Article Toolkit", "name": "Caption", "platform": ["web", "native"] },

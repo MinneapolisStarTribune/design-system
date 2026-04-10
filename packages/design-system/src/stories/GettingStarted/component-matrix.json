@@ -5,9 +5,9 @@
     "web": true
   },
   {
-    "component": "Links",
+    "component": "Link",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "ButtonGroup",
@@ -213,11 +213,6 @@
     "component": "SocialEmbeds",
     "native": false,
     "web": true
-  },
-  {
-    "component": "CodeBlock",
-    "native": false,
-    "web": false
   },
   {
     "component": "DangerousCodeBlock",
