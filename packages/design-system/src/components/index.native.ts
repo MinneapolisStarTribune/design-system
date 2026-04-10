@@ -46,6 +46,8 @@ export {
   ToastSuccessIcon,
   ToastWarningIcon,
 } from './Toast/native/ToastIcons.native';
+export type { ToastRendererItem, ToastRendererProps } from './Toast/native/ToastRenderer.native';
+export { ToastRenderer } from './Toast/native/ToastRenderer.native';
 export { TOAST_VARIANTS, type ToastNativeProps, type ToastVariant } from './Toast/Toast.types';
 export {
   ArticleBodyHeading,
