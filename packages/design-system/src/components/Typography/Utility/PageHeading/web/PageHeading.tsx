@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import type { PageHeadingProps } from '../PageHeading.types';
+import { resolveTextColorStyle } from '@/types';
 
 const getHeadingConfig = (importance: PageHeadingProps['importance']) => {
   const configs: Record<
@@ -20,6 +21,8 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
   children,
   dataTestId,
   className,
+  color,
+  style,
 }) => {
   const { element: HeadingTag, className: typographyClassName } = getHeadingConfig(importance);
   const combinedClassNames = classNames(typographyClassName, className);
@@ -29,6 +32,7 @@ export const PageHeading: React.FC<PageHeadingProps> = ({
     {
       className: combinedClassNames,
       'data-testid': dataTestId,
+      style: resolveTextColorStyle(color, style),
     },
     children
   );
