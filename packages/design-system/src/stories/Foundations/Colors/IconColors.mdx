@@ -11,7 +11,7 @@ import { ColorTokensUsage } from './ColorTokensUsage';
 
 <h2 style={{ marginTop: '2rem', marginBottom: '0.75rem' }}>Using icon colors in React and CSS</h2>
 
-Barrel-exported icons take a `color` prop: keys match the swatches above and map to `var(--color-icon-…)` on the SVG (paths use `currentColor`). **Using these tokens in code** below has the full naming table, how this relates to text colors, and how it differs from **Button**.
+Barrel icons: `color` → `var(--color-icon-…)` on the SVG (`currentColor` on paths), same token **keys** as text—not arbitrary hex. [**Classes vs. token keys**](#classes-vs-token-keys) below covers `color` prop vs CSS vars for text/icon; **Using these tokens in code** has the full table, typography note, Button contrast, SCSS, and theme.
 
 ```tsx
 import { CameraIcon } from '@minneapolisstartribune/design-system/web';
@@ -19,13 +19,6 @@ import { CameraIcon } from '@minneapolisstartribune/design-system/web';
 <CameraIcon size="small" color="on-dark-secondary" />
 ```
 
-**Defaults:** `size="medium"`, `color="on-light-primary"` (`Icon.tsx`). **Type:** `IconColor` (`Icon.types.ts`).
-
-```css
-/* Raw CSS — same token segment as the `color` prop */
-.my-icon {
-  color: var(--color-icon-on-light-primary);
-}
-```
+**Defaults:** `size="medium"`, `color="on-light-primary"` (`Icon.tsx`). **Type:** `IconColor` (`Icon.types.ts`). **Icons gallery & controls:** [Icons > Docs](?path=/docs/foundations-icons--docs).
 
 <ColorTokensUsage />

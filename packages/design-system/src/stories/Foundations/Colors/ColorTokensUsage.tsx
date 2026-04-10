@@ -58,7 +58,7 @@ export function ColorTokensUsage() {
         <code style={{ fontSize: '0.9em' }}>--color-text-brand-01</code>) matches the value you pass
         to a component’s <code style={{ fontSize: '0.9em' }}>color</code> prop.
       </p>
-      <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+      <p style={{ marginBottom: '0.75rem', fontSize: '0.875rem' }}>
         For components that render text (headings, body copy, labels, etc.), you can use any text
         color token based on context—brand, on-light/on-dark, or state (TypeScript:{' '}
         <code style={{ fontSize: '0.9em' }}>TextColor</code>; see{' '}
@@ -67,11 +67,16 @@ export function ColorTokensUsage() {
         </a>{' '}
         for all options).
       </p>
-      <p style={{ marginBottom: '0.65rem', fontSize: '0.875rem' }}>
-        <strong>Button</strong> is an exception: it only accepts a limited set of values (
-        <code style={{ fontSize: '0.9em' }}>brand</code>,{' '}
-        <code style={{ fontSize: '0.9em' }}>neutral</code>,{' '}
-        <code style={{ fontSize: '0.9em' }}>brand-accent</code>).
+      <p style={{ marginBottom: '0.75rem', fontSize: '0.875rem' }}>
+        The next table is <strong>on purpose</strong> just three rows: typography and icons expose a{' '}
+        <code style={{ fontSize: '0.85em' }}>color</code> prop that maps to{' '}
+        <code style={{ fontSize: '0.85em' }}>--color-text-*</code> and{' '}
+        <code style={{ fontSize: '0.85em' }}>--color-icon-*</code>, and <strong>Button</strong> uses
+        a separate <code style={{ fontSize: '0.85em' }}>color</code> API for{' '}
+        <code style={{ fontSize: '0.85em' }}>--color-button-*</code>. Other families (background,
+        border, semantic, …) are mostly used as raw{' '}
+        <code style={{ fontSize: '0.9em' }}>var(--color-…)</code> in styles—each has its own
+        Foundations page, but they do not follow this same three-way prop split.
       </p>
       <table style={tableStyle}>
         <thead>
@@ -123,7 +128,7 @@ export function ColorTokensUsage() {
         </tbody>
       </table>
       <p style={{ marginBottom: '0.75rem', fontSize: '0.875rem' }}>
-        <span style={{ opacity: 0.88 }}>Text colors, end-to-end: </span>
+        <span style={{ opacity: 0.88 }}>Example (text only): </span>
         <code style={{ fontSize: '0.85em' }}>brand-01</code>
         {' → '}
         <code style={{ fontSize: '0.85em' }}>color=&quot;brand-01&quot;</code>
@@ -136,7 +141,9 @@ export function ColorTokensUsage() {
         props map to the same variables under the hood.
       </p>
 
-      <h4 style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>Classes vs. token keys</h4>
+      <h4 id="classes-vs-token-keys" style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>
+        Classes vs. token keys
+      </h4>
       <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
         <code style={{ fontSize: '0.9em' }}>brand-01</code> is a <strong>token key</strong>, not a
         global utility class. There is no <code style={{ fontSize: '0.9em' }}>.brand-01</code>{' '}

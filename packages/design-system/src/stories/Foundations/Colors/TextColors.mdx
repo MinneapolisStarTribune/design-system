@@ -9,4 +9,18 @@ import { ColorTokensUsage } from './ColorTokensUsage';
   <ThemeAwareColorCategory category="text" />
 </ThemeLoader>
 
+<h2 style={{ marginTop: '2rem', marginBottom: '0.75rem' }}>Using text colors in React and CSS</h2>
+
+Use the `color` prop with **token keys** from the swatches (`var(--color-text-…)`), same idea as in [**Classes vs. token keys**](#classes-vs-token-keys) below—not a `.brand-01` utility class. **Using these tokens in code** also has the naming table, typography defaults, **Button**’s `brand` / `neutral` vs `brand-01`, SCSS, fallbacks, and theme.
+
+```tsx
+import { UtilityBody } from '@minneapolisstartribune/design-system/web';
+
+<UtilityBody color="on-light-secondary">
+  Supporting line of copy.
+</UtilityBody>
+```
+
+**Type:** `TextColor` (`TEXT_COLOR_TOKENS` in `globalTypes.ts`).
+
 <ColorTokensUsage />
