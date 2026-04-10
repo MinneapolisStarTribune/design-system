@@ -35,6 +35,10 @@ export {
   ICON_ONLY_BUTTON_SIZES,
 } from './Button.types';
 
+/**
+ * Web `Button` (polymorphic via `as`). Prop docs live in `Button.types.ts`;
+ * token/CSS helpers (`getButtonTokenPrefix`, etc.) live in `Button.utils.ts`.
+ */
 export function Button(props: ButtonProps) {
   const {
     as,
@@ -67,9 +71,11 @@ export function Button(props: ButtonProps) {
   const buttonRef = useRef<HTMLElement | null>(null);
   const [hasGradientBorder, setHasGradientBorder] = useState(false);
 
+  // Determine if this is an icon-only button (has icon but no text children)
   const hasAnyIcon = !!icon;
   const isIconOnly = hasAnyIcon && !children;
 
+  // Validate that x-small can only be used for icon-only buttons
   if (size === 'x-small' && !isIconOnly) {
     throw new Error(
       createDesignSystemError(
@@ -88,6 +94,7 @@ export function Button(props: ButtonProps) {
 
     const label = typeof children === 'string' ? children : undefined;
 
+    // Analytics: merge label, variant, color, and optional per-button `analytics` override
     track({
       event: 'button_click',
       component: 'Button',
@@ -101,14 +108,17 @@ export function Button(props: ButtonProps) {
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLElement> = (e) => {
+    // Non-`<button>` roots: block Enter/Space from activating when disabled (no native `disabled`)
     if (isDisabled && !rootIsHtmlButton && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
     }
     (userOnKeyDown as KeyboardEventHandler<HTMLElement> | undefined)?.(e);
   };
 
+  // Build token prefix for CSS variables (see `getButtonTokenPrefix` in Button.utils.ts for naming)
   const tokenPrefix = getButtonTokenPrefix(color, variant);
 
+  // Varsity / brand-accent: detect gradient hover border so we can apply mask-based border styles
   useEffect(() => {
     let nextHasGradientBorder = false;
 
@@ -119,6 +129,7 @@ export function Button(props: ButtonProps) {
     ) {
       const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
       const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
+      // e.g. linear-gradient(...) from tokens — enables `.brand-accent-filled` / `.brand-accent-outlined`
       nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
     }
 
@@ -126,6 +137,7 @@ export function Button(props: ButtonProps) {
     setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant, tokenPrefix]);
 
+  // Map button size + icon-only mode to design-system icon size tokens
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
   const leftIcon =
@@ -137,8 +149,10 @@ export function Button(props: ButtonProps) {
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
 
+  // Accessible name: explicit `aria-label` or string `children`
   const buttonAriaLabel = getButtonAriaLabel(ariaLabelProp, children);
 
+  // Apply special classes when brand-accent uses gradient borders (see SCSS)
   const brandAccentFilledClass =
     color === 'brand-accent' && variant === 'filled' && hasGradientBorder
       ? styles['brand-accent-filled']
@@ -151,6 +165,7 @@ export function Button(props: ButtonProps) {
   const sizeClass =
     size === 'x-small' && isIconOnly ? styles['x-small'] : styles[size as ButtonSize];
 
+  // Combine CSS module classes (color, variant, size, icon layout, disabled, dark surface)
   const combinedClassNames = classNames(
     styles.button,
     styles[color],
@@ -159,7 +174,7 @@ export function Button(props: ButtonProps) {
     brandAccentFilledClass,
     brandAccentOutlinedClass,
     isIconOnly && styles['icon-only'],
-    icon && !isIconOnly && styles.hasIcon,
+    icon && !isIconOnly && styles.hasIcon, // icon + text: gap/layout
     isDisabled && styles.disabled,
     surface === 'dark' && styles.surfaceDark,
     className
