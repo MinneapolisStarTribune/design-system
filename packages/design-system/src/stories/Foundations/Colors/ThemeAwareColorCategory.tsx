@@ -381,8 +381,8 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
           href="#using-these-tokens-in-code"
           style={{ color: 'inherit', fontWeight: 600, textDecoration: 'underline' }}
         >
-          Using these tokens in code
-        </a>
+          using these tokens in code
+        </a>{' '}
         below for CSS and examples of implementation.
       </p>
       <p style={{ marginBottom: '1rem' }}>
