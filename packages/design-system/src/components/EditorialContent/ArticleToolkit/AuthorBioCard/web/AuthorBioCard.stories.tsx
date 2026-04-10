@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AuthorBioCard } from './AuthorBioCard';
 
 const meta: Meta<typeof AuthorBioCard> = {
-  title: 'Editorial Content/AuthorBioCard',
+  title: 'Editorial Content/Article Toolkit/AuthorBioCard',
   component: AuthorBioCard,
   parameters: {
     layout: 'padded',
