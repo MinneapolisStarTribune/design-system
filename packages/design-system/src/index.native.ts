@@ -5,4 +5,8 @@ export * from './components/index.native';
 export { type Brand, DesignSystemProvider } from './providers/DesignSystemProvider.native';
 
 // Export hooks
-export { useNativeStyles, useNativeStylesWithDefaults } from './hooks/useNativeStyles';
+export {
+  type NativeTheme,
+  useNativeStyles,
+  useNativeStylesWithDefaults,
+} from './hooks/useNativeStyles';
