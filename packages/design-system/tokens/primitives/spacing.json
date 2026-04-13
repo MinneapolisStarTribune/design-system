@@ -29,6 +29,8 @@
     "checkbox-small": { "value": "{spacing.16}" },
     "input-lg": { "value": "{spacing.52}" },
     "input-md": { "value": "{spacing.40}" },
-    "input-sm": { "value": "{spacing.32}" }
+    "input-sm": { "value": "{spacing.32}" },
+    "radio-default": { "value": "{spacing.16}" },
+    "radio-small": { "value": "{spacing.12}" }
   }
 }
