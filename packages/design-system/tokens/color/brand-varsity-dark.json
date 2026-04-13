@@ -435,7 +435,7 @@
       "scrollbar": { "value": "{color.neutral.800}" }
     },
     "semantic": {
-      "description": "Semantic tokens communicate meaning and feedback across the interface. They represent universal states — such as information, success, warning, and error — and are used across multiple components including alerts, banners, toasts, and badges. Each semantic pair (background and foreground) is designed for clear contrast and accessibility, ensuring legibility across different tonal environments.",
+      "description": "Semantic tokens communicate meaning and system feedback across the interface. They represent states such as info, success, warning, and error, and are used in components like alerts, banners, toasts, and badges.\n\nEach semantic color includes a background and foreground pair, designed to maintain contrast and readability across light and dark themes.",
       "error-background": {
         "description": "Background color for critical or error messages — used to indicate failure, blocking issues, or urgent errors requiring attention.",
         "value": "{color.red.900}"
