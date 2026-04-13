@@ -17,81 +17,85 @@ export function getNativeButtonSurface(
   variant: ButtonVariant,
   pressed: boolean
 ): ButtonSurfaceColors {
-  const p = pressed;
-
   if (color === 'neutral') {
     if (variant === 'filled') {
       return {
-        backgroundColor: p
+        backgroundColor: pressed
           ? theme.colorButtonNeutralFilledHoverBackground
           : theme.colorButtonNeutralFilledBackground,
-        color: p ? theme.colorButtonNeutralFilledHoverText : theme.colorButtonNeutralFilledText,
+        color: pressed
+          ? theme.colorButtonNeutralFilledHoverText
+          : theme.colorButtonNeutralFilledText,
       };
     }
     if (variant === 'outlined') {
       return {
-        backgroundColor: p
+        backgroundColor: pressed
           ? theme.colorButtonNeutralOutlinedHoverBackground
           : theme.colorButtonNeutralOutlinedBackground,
-        color: p ? theme.colorButtonNeutralOutlinedHoverText : theme.colorButtonNeutralOutlinedText,
-        borderColor: p
+        color: pressed
+          ? theme.colorButtonNeutralOutlinedHoverText
+          : theme.colorButtonNeutralOutlinedText,
+        borderColor: pressed
           ? theme.colorButtonNeutralOutlinedHoverBorder
           : theme.colorButtonNeutralOutlinedBorder,
         borderWidth: 1,
       };
     }
     return {
-      backgroundColor: p
+      backgroundColor: pressed
         ? theme.colorButtonNeutralGhostHoverBackground
         : theme.colorButtonNeutralGhostBackground,
-      color: p ? theme.colorButtonNeutralGhostHoverText : theme.colorButtonNeutralGhostText,
+      color: pressed ? theme.colorButtonNeutralGhostHoverText : theme.colorButtonNeutralGhostText,
     };
   }
 
   if (color === 'brand') {
     if (variant === 'filled') {
       return {
-        backgroundColor: p
+        backgroundColor: pressed
           ? theme.colorButtonBrandFilledHoverBackground
           : theme.colorButtonBrandFilledBackground,
-        color: p ? theme.colorButtonBrandFilledHoverText : theme.colorButtonBrandFilledText,
+        color: pressed ? theme.colorButtonBrandFilledHoverText : theme.colorButtonBrandFilledText,
       };
     }
     if (variant === 'outlined') {
       return {
-        backgroundColor: p
+        backgroundColor: pressed
           ? theme.colorButtonBrandOutlinedHoverBackground
           : theme.colorButtonBrandOutlinedBackground,
-        color: p ? theme.colorButtonBrandOutlinedHoverText : theme.colorButtonBrandOutlinedText,
+        color: pressed
+          ? theme.colorButtonBrandOutlinedHoverText
+          : theme.colorButtonBrandOutlinedText,
         borderColor: theme.colorButtonBrandOutlinedBorder,
         borderWidth: 1,
       };
     }
     return {
-      backgroundColor: p
+      backgroundColor: pressed
         ? theme.colorButtonBrandGhostHoverBackground
         : theme.colorButtonBrandGhostBackground,
-      color: p ? theme.colorButtonBrandGhostHoverText : theme.colorButtonBrandGhostText,
+      color: pressed ? theme.colorButtonBrandGhostHoverText : theme.colorButtonBrandGhostText,
     };
   }
 
   /* brand-accent */
   if (variant === 'filled') {
     return {
-      backgroundColor: p
+      backgroundColor: pressed
         ? theme.colorButtonBrandAccentFilledHoverBackground
         : theme.colorButtonBrandAccentFilledBackground,
-      color: p
+      color: pressed
         ? theme.colorButtonBrandAccentFilledHoverText
         : theme.colorButtonBrandAccentFilledText,
     };
   }
   if (variant === 'outlined') {
     return {
-      backgroundColor: p
+      backgroundColor: pressed
         ? theme.colorButtonBrandAccentOutlinedHoverBackground
         : theme.colorButtonBrandAccentOutlinedBackground,
-      color: p
+      color: pressed
         ? theme.colorButtonBrandAccentOutlinedHoverText
         : theme.colorButtonBrandAccentOutlinedText,
       borderColor: theme.colorButtonBrandAccentOutlinedBorder,
@@ -99,9 +103,11 @@ export function getNativeButtonSurface(
     };
   }
   return {
-    backgroundColor: p
+    backgroundColor: pressed
       ? theme.colorButtonBrandAccentGhostHoverBackground
       : theme.colorButtonBrandAccentGhostBackground,
-    color: p ? theme.colorButtonBrandAccentGhostHoverText : theme.colorButtonBrandAccentGhostText,
+    color: pressed
+      ? theme.colorButtonBrandAccentGhostHoverText
+      : theme.colorButtonBrandAccentGhostText,
   };
 }
