@@ -59,11 +59,11 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
-export {
-  ArticleBodyHeading,
-  type ArticleBodyHeadingImportance,
-  type ArticleBodyHeadingProps,
-} from './Typography/ArticleBody/ArticleBodyHeading/web/ArticleBodyHeading';
+export type {
+  ArticleBodyHeadingImportance,
+  ArticleBodyHeadingProps,
+} from './Typography/ArticleBody/ArticleBodyHeading/ArticleBodyHeading.types';
+export { ArticleBodyHeading } from './Typography/ArticleBody/ArticleBodyHeading/web/ArticleBodyHeading';
 export {
   ArticleBodySponsoredHeading,
   type ArticleBodySponsoredHeadingImportance,
