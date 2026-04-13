@@ -52,11 +52,32 @@ export function ColorTokensUsage() {
       <h4 style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>
         Naming CSS variables and <code style={{ fontSize: '0.9em' }}>color</code> props
       </h4>
+      <p
+        style={{
+          marginBottom: '0.75rem',
+          padding: '0.65rem 0.85rem',
+          fontSize: '0.875rem',
+          borderRadius: '4px',
+          borderLeft: '3px solid rgba(0, 0, 0, 0.22)',
+          backgroundColor: 'rgba(0, 0, 0, 0.04)',
+        }}
+      >
+        Only <strong>typography</strong> (<code style={{ fontSize: '0.85em' }}>TextColor</code>) and{' '}
+        <strong>icons</strong> (<code style={{ fontSize: '0.85em' }}>IconColor</code>) use shared
+        semantic token keys on the <code style={{ fontSize: '0.85em' }}>color</code> prop (e.g.{' '}
+        <code style={{ fontSize: '0.85em' }}>brand-01</code>). Other components use{' '}
+        <code style={{ fontSize: '0.85em' }}>var(--color-…)</code> in CSS or a different prop API (
+        <strong>Button</strong> uses <code style={{ fontSize: '0.85em' }}>neutral</code> /{' '}
+        <code style={{ fontSize: '0.85em' }}>brand</code> /{' '}
+        <code style={{ fontSize: '0.85em' }}>brand-accent</code> for{' '}
+        <code style={{ fontSize: '0.85em' }}>--color-button-*</code>
+        ).
+      </p>
       <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-        The <strong>token portion</strong> of the CSS variable (e.g.{' '}
-        <code style={{ fontSize: '0.9em' }}>brand-01</code> in{' '}
+        For <strong>typography and icons</strong>, the <strong>token portion</strong> of the CSS
+        variable (e.g. <code style={{ fontSize: '0.9em' }}>brand-01</code> in{' '}
         <code style={{ fontSize: '0.9em' }}>--color-text-brand-01</code>) matches the value you pass
-        to a component’s <code style={{ fontSize: '0.9em' }}>color</code> prop.
+        to <code style={{ fontSize: '0.9em' }}>color</code>.
       </p>
       <p style={{ marginBottom: '0.75rem', fontSize: '0.875rem' }}>
         For components that render text (headings, body copy, labels, etc.), you can use any text
