@@ -52,7 +52,7 @@
   {
     "component": "Radio",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "RadioGroup",
