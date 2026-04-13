@@ -41,6 +41,9 @@ function isViewingDeploymentUrl(deploymentUrl: string): boolean {
 }
 
 function redirectStorybookToVersionDeployment(url: string): void {
+  // Storybook runs inside an iframe, so window.top gets the parent window to ensure
+  // the entire page redirects, not just the iframe. Falls back to window if top is
+  // inaccessible.
   const w = window.top || window;
   try {
     const target = new URL(url);
