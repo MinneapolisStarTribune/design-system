@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import {
   TOAST_VARIANTS,
   type ToastNativeProps,
@@ -73,16 +75,48 @@ type Story = StoryObj<typeof meta>;
 function ToastWithClose(props: ToastNativeProps) {
   const [open, setOpen] = useState(true);
   const { onClose: _onClose, ...toastProps } = props;
+  const ctx = useContext(DesignSystemContext);
+  const isDark = ctx?.colorScheme === 'dark';
+
+  const themedStyles = useNativeStyles(
+    useCallback(
+      (theme) =>
+        StyleSheet.create({
+          showAgain: {
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: isDark
+              ? theme.colorBorderOnDarkSubtle01
+              : theme.colorBorderOnLightSubtle01,
+          },
+          showAgainPressed: {
+            opacity: 0.85,
+          },
+          showAgainText: {
+            fontSize: 14,
+            fontWeight: '600',
+            color: isDark ? theme.colorTextOnDarkPrimary : theme.colorTextOnLightPrimary,
+          },
+        }),
+      [isDark]
+    )
+  );
+
   return (
-    <View style={styles.configurableWrap}>
+    <View style={layoutStyles.configurableWrap}>
       {open ? (
         <ToastNative {...toastProps} onClose={() => setOpen(false)} />
       ) : (
         <Pressable
           onPress={() => setOpen(true)}
-          style={({ pressed }) => [styles.showAgain, pressed && styles.showAgainPressed]}
+          style={({ pressed }) => [
+            themedStyles.showAgain,
+            pressed && themedStyles.showAgainPressed,
+          ]}
         >
-          <Text style={styles.showAgainText}>Show toast again</Text>
+          <Text style={themedStyles.showAgainText}>Show toast again</Text>
         </Pressable>
       )}
     </View>
@@ -129,13 +163,13 @@ export const AllVariants: Story = {
   },
   args: { title: 'All variants', onClose: () => {} },
   render: () => (
-    <ScrollView contentContainerStyle={styles.scrollContent}>
+    <ScrollView contentContainerStyle={layoutStyles.scrollContent}>
       {TOAST_VARIANTS.map((variant) => {
         const { label, purpose } = TOAST_VARIANT_GUIDE[variant];
         return (
-          <View key={variant} style={styles.variantGroup}>
-            <View style={styles.variantHeader}>
-              <View style={styles.variantHeading}>
+          <View key={variant} style={layoutStyles.variantGroup}>
+            <View style={layoutStyles.variantHeader}>
+              <View style={layoutStyles.variantHeading}>
                 <UtilityLabel size="medium" weight="semibold">
                   {label}
                 </UtilityLabel>
@@ -148,7 +182,7 @@ export const AllVariants: Story = {
                 {purpose}
               </UtilityBody>
             </View>
-            <View style={styles.variantToasts}>
+            <View style={layoutStyles.variantToasts}>
               <ToastWithClose
                 title={`${label} message`}
                 description="With icon"
@@ -171,24 +205,9 @@ export const AllVariants: Story = {
   ),
 };
 
-const styles = StyleSheet.create({
+const layoutStyles = StyleSheet.create({
   configurableWrap: {
     alignItems: 'flex-start',
-  },
-  showAgain: {
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#9ca3af',
-  },
-  showAgainPressed: {
-    opacity: 0.85,
-  },
-  showAgainText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
   },
   scrollContent: {
     gap: 24,
