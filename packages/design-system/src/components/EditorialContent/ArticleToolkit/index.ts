@@ -4,6 +4,8 @@
  */
 
 export { ImageGallery, type ImageGalleryProps } from './ImageGallery/web/ImageGallery';
+export { InlineImage } from './InlineImage/web/InlineImage';
+export type { InlineImageProps } from './InlineImage/InlineImage.types';
 export { InlineVideo, type InlineVideoProps } from './InlineVideo/web/InlineVideo';
 export { PhotoLayout } from './PhotoLayout/web/PhotoLayout';
 export { type PhotoLayoutProps } from './PhotoLayout/PhotoLayout.types';
