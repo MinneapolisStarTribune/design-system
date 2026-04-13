@@ -50,7 +50,7 @@ module.exports = {
   overrides: [
     {
       // Node scripts (CommonJS) - allow require
-      files: ['scripts/**/*.js'],
+      files: ['scripts/**/*.js', 'packages/**/scripts/**/*.js'],
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
