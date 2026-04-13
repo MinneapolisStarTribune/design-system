@@ -1,5 +1,11 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
 
+export {
+  Checkbox,
+  CHECKBOX_VARIANTS,
+  type CheckboxProps,
+  type CheckboxVariant,
+} from './FormControl/Checkbox/native/Checkbox.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
