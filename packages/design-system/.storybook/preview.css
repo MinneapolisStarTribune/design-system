@@ -31,3 +31,38 @@
 .sb-dark .sb-main-centered {
   background-color: var(--color-background-dark-default, #0d0d0d);
 }
+
+/* -------------------------------------------------------------------------- */
+/* Docs / MDX links: match design-system link tokens (see Link inline + JSON   */
+/* color.link — default / hover / visited; theme CSS sets vars per brand).     */
+/* -------------------------------------------------------------------------- */
+
+.sbdocs a[href] {
+  color: var(--color-link-text-default);
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-underline-default);
+  text-underline-offset: 0.12em;
+}
+
+.sbdocs a[href]:hover {
+  color: var(--color-link-text-hover);
+  text-decoration-color: var(--color-link-underline-hover);
+}
+
+.sbdocs a[href]:visited:not(:hover) {
+  color: var(--color-link-text-visited);
+  text-decoration-color: var(--color-link-underline-visited);
+}
+
+.sbdocs a[href]:focus-visible {
+  outline: 2px solid var(--color-link-text-default, currentColor);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Embedded Canvas blocks inside Docs — let component styles (e.g. Link) win */
+.sbdocs .doc-story a[href],
+.sbdocs .sb-story a[href] {
+  all: revert-layer;
+}
