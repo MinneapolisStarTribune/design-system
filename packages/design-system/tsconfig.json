@@ -32,6 +32,14 @@
     "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
   },
   "exclude": ["node_modules", "dist", ".storybook"],
-  "include": ["src"]
+  "include": [
+    "src",
+    "types/vite-plugins.d.ts",
+    "vite.config.ts",
+    "vite.web.config.ts",
+    "vite.native.config.ts",
+    "vite.icons.config.ts",
+    "vitest.config.ts"
+  ]
   // Note: Stories are included here for IDE type-checking, but excluded from build by Vite
 }

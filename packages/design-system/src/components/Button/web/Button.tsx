@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { ElementType, KeyboardEventHandler, MouseEventHandler } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { createDesignSystemError } from '@/utils/errorPrefix';
+<<<<<<< sus-216-native-button
 import { enhanceButtonIcon, getButtonAriaLabel, getButtonIconSize } from '../Helpers';
 import type { ButtonProps } from '../Button.types';
 import {
@@ -71,8 +73,70 @@ export const Button: React.FC<ButtonProps> = ({
   analytics: analyticsOverride,
   ...props
 }) => {
+=======
+import { enhanceButtonIcon, getButtonAriaLabel } from '../Helpers';
+import type { ButtonProps, ButtonSize } from './Button.types';
+import {
+  getButtonIconSize,
+  getButtonTokenPrefix,
+  getCSSVariable,
+  isHtmlButtonTag,
+} from './Button.utils';
+
+export type {
+  ButtonAnalytics,
+  ButtonColor,
+  ButtonOwnProps,
+  ButtonProps,
+  ButtonRouterLinkProps,
+  ButtonSharedProps,
+  ButtonSize,
+  ButtonVariant,
+  IconOnlyButtonSize,
+} from './Button.types';
+
+export {
+  BUTTON_COLORS,
+  BUTTON_SIZES,
+  BUTTON_VARIANTS,
+  ICON_ONLY_BUTTON_SIZES,
+} from './Button.types';
+
+/**
+ * Web `Button` (polymorphic via `as`). Prop docs live in `Button.types.ts`;
+ * token/CSS helpers (`getButtonTokenPrefix`, etc.) live in `Button.utils.ts`.
+ */
+export function Button(props: ButtonProps) {
+  const {
+    as,
+    type = 'button',
+    color = 'neutral',
+    capitalize = false,
+    variant = 'filled',
+    size = 'medium',
+    icon,
+    iconPosition = 'end',
+    children,
+    className,
+    isDisabled,
+    onClick: userOnClick,
+    onKeyDown: userOnKeyDown,
+    analytics: analyticsOverride,
+    surface = 'light',
+    style,
+    dataTestId,
+    'aria-label': ariaLabelProp,
+    /** Strip so non-`<button>` roots never receive invalid native `disabled`. */
+    disabled: _omitDisabled,
+    ...domRest
+  } = props;
+
+  const Comp = (as ?? 'button') as ElementType;
+  const rootIsHtmlButton = isHtmlButtonTag(Comp);
+
+>>>>>>> release/1.5.0
   const { track } = useAnalytics();
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLElement | null>(null);
   const [hasGradientBorder, setHasGradientBorder] = useState(false);
 
   // Determine if this is an icon-only button (has icon but no text children)
@@ -89,9 +153,16 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleClick: MouseEventHandler<HTMLElement> = (e) => {
+    if (isDisabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
     const label = typeof children === 'string' ? children : undefined;
 
+    // Analytics: merge label, variant, color, and optional per-button `analytics` override
     track({
       event: 'button_click',
       component: 'Button',
@@ -101,14 +172,21 @@ export const Button: React.FC<ButtonProps> = ({
       color,
       ...analyticsOverride,
     });
-    onClick?.(e);
+    userOnClick?.(e);
   };
 
-  // Build token prefix for CSS variables
+  const handleKeyDown: KeyboardEventHandler<HTMLElement> = (e) => {
+    // Non-`<button>` roots: block Enter/Space from activating when disabled (no native `disabled`)
+    if (isDisabled && !rootIsHtmlButton && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+    }
+    (userOnKeyDown as KeyboardEventHandler<HTMLElement> | undefined)?.(e);
+  };
+
+  // Build token prefix for CSS variables (see `getButtonTokenPrefix` in Button.utils.ts for naming)
   const tokenPrefix = getButtonTokenPrefix(color, variant);
 
-  // Check for gradient borders on brand-accent buttons (only for filled and outlined)
-  // This checks if the hover-border token contains "gradient" (for Varsity brand)
+  // Varsity / brand-accent: detect gradient hover border so we can apply mask-based border styles
   useEffect(() => {
     let nextHasGradientBorder = false;
 
@@ -119,7 +197,7 @@ export const Button: React.FC<ButtonProps> = ({
     ) {
       const hoverBorderVar = `--color-${tokenPrefix}-hover-border`;
       const hoverBorderValue = getCSSVariable(buttonRef.current, hoverBorderVar);
-      // Check if the value contains "gradient" (e.g., "linear-gradient(...)")
+      // e.g. linear-gradient(...) from tokens — enables `.brand-accent-filled` / `.brand-accent-outlined`
       nextHasGradientBorder = !!(hoverBorderValue && hoverBorderValue.includes('gradient'));
     }
 
@@ -127,22 +205,22 @@ export const Button: React.FC<ButtonProps> = ({
     setHasGradientBorder(nextHasGradientBorder);
   }, [color, variant, tokenPrefix]);
 
+  // Map button size + icon-only mode to design-system icon size tokens
   const iconSizeName = hasAnyIcon ? getButtonIconSize(size, isIconOnly) : undefined;
 
   const leftIcon =
-    isIconOnly || iconPosition === 'start'
+    hasAnyIcon && (isIconOnly || iconPosition === 'start')
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
   const rightIcon =
-    !isIconOnly && iconPosition === 'end'
+    hasAnyIcon && !isIconOnly && iconPosition === 'end'
       ? enhanceButtonIcon(icon, iconSizeName, styles.icon)
       : null;
 
-  // Get aria-label for accessibility
-  const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  const buttonAriaLabel = getButtonAriaLabel(ariaLabel, children);
+  // Accessible name: explicit `aria-label` or string `children`
+  const buttonAriaLabel = getButtonAriaLabel(ariaLabelProp, children);
 
-  // Apply special classes for gradient borders
+  // Apply special classes when brand-accent uses gradient borders (see SCSS)
   const brandAccentFilledClass =
     color === 'brand-accent' && variant === 'filled' && hasGradientBorder
       ? styles['brand-accent-filled']
@@ -152,10 +230,10 @@ export const Button: React.FC<ButtonProps> = ({
       ? styles['brand-accent-outlined']
       : undefined;
 
-  // Combine class names - use styles object for CSS modules
   const sizeClass =
     size === 'x-small' && isIconOnly ? styles['x-small'] : styles[size as ButtonSize];
 
+  // Combine CSS module classes (color, variant, size, icon layout, disabled, dark surface)
   const combinedClassNames = classNames(
     styles.button,
     styles[color],
@@ -164,21 +242,14 @@ export const Button: React.FC<ButtonProps> = ({
     brandAccentFilledClass,
     brandAccentOutlinedClass,
     isIconOnly && styles['icon-only'],
-    icon && !isIconOnly && styles.hasIcon, // Add class when button has icon + text
+    icon && !isIconOnly && styles.hasIcon, // icon + text: gap/layout
     isDisabled && styles.disabled,
+    surface === 'dark' && styles.surfaceDark,
     className
   );
 
-  return (
-    <button
-      ref={buttonRef}
-      type={type}
-      aria-label={buttonAriaLabel}
-      disabled={isDisabled}
-      className={combinedClassNames || undefined}
-      onClick={handleClick}
-      {...props}
-    >
+  const inner = (
+    <>
       {leftIcon}
       {!isIconOnly && (
         <UtilityLabel size={size as ButtonSize} weight="semibold" capitalize={capitalize}>
@@ -186,6 +257,32 @@ export const Button: React.FC<ButtonProps> = ({
         </UtilityLabel>
       )}
       {rightIcon}
-    </button>
+    </>
   );
-};
+
+  const testIdProps = dataTestId != null ? { 'data-testid': dataTestId } : {};
+
+  /** Build without `ref` first — mutating a props object that includes `ref` triggers `react-hooks/refs`. */
+  const elementProps = {
+    ...domRest,
+    className: combinedClassNames || undefined,
+    style,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    'aria-label': buttonAriaLabel,
+    ...testIdProps,
+    ...(rootIsHtmlButton
+      ? { type, disabled: isDisabled }
+      : isDisabled
+        ? { 'aria-disabled': true as const, tabIndex: -1 }
+        : {}),
+  };
+
+  return (
+    <Comp ref={buttonRef} {...elementProps}>
+      {inner}
+    </Comp>
+  );
+}
+
+Button.displayName = 'Button';

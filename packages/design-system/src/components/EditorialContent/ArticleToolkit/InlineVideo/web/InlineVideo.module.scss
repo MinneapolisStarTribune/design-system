@@ -1,0 +1,93 @@
+.inline-video {
+  $md: 768px;
+  $lg: 1080px;
+
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+
+  &.variant-immersive {
+    max-width: var(--semantic-article-toolkit-max-width-immersive-large-mobile);
+
+    @media (min-width: $md) {
+      max-width: var(--semantic-article-toolkit-max-width-immersive-large-tablet);
+    }
+
+    @media (min-width: $lg) {
+      max-width: var(--semantic-article-toolkit-max-width-immersive-large-desktop);
+    }
+  }
+
+  &.variant-standard {
+    max-width: var(--semantic-article-toolkit-max-width-standard-full-mobile);
+
+    @media (min-width: $md) {
+      max-width: var(--semantic-article-toolkit-max-width-standard-full-tablet);
+    }
+
+    @media (min-width: $lg) {
+      max-width: var(--semantic-article-toolkit-max-width-standard-full-desktop);
+    }
+  }
+
+  &.orientation-horizontal {
+    .player-wrapper {
+      aspect-ratio: var(--semantic-inline-video-horizontal-aspect-ratio);
+      border-radius: var(--semantic-inline-video-horizontal-border-radius-mobile);
+
+      @media (min-width: $md) {
+        border-radius: var(--semantic-inline-video-horizontal-border-radius-tablet);
+      }
+
+      @media (min-width: $lg) {
+        border-radius: var(--semantic-inline-video-horizontal-border-radius-desktop);
+      }
+    }
+  }
+
+  &.orientation-vertical {
+    margin: 0 auto;
+
+    &.variant-standard {
+      max-width: var(--semantic-inline-video-standard-vertical-max-width);
+    }
+
+    &.variant-immersive {
+      max-width: var(--semantic-inline-video-immersive-vertical-max-width);
+    }
+
+    .player-wrapper {
+      aspect-ratio: var(--semantic-inline-video-vertical-aspect-ratio);
+      border-radius: var(--semantic-inline-video-vertical-border-radius-mobile);
+
+      @media (min-width: $md) {
+        border-radius: var(--semantic-inline-video-vertical-border-radius-tablet);
+      }
+
+      @media (min-width: $lg) {
+        border-radius: var(--semantic-inline-video-vertical-border-radius-desktop);
+      }
+    }
+  }
+
+  .player-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    > * {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .caption {
+    color: var(--color-text-on-light-secondary);
+  }
+}

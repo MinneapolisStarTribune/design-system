@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import type { SectionHeadingProps } from '../SectionHeading.types';
+import { resolveTextColorStyle } from '@/types';
 
 const getHeadingConfig = (importance: SectionHeadingProps['importance']) => {
   const configs: Record<
@@ -22,6 +23,8 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   children,
   className,
   dataTestId,
+  color,
+  style,
   ...props
 }) => {
   const { element: HeadingElement, className: typographyClassName } = getHeadingConfig(importance);
@@ -30,6 +33,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
     <HeadingElement
       className={classNames(typographyClassName, className)}
       data-testid={dataTestId}
+      style={resolveTextColorStyle(color, style)}
       {...props}
     >
       {children}

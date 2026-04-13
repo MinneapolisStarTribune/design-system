@@ -1,5 +1,7 @@
+import React from 'react';
 import { vi } from 'vitest';
 import { Button } from './Button';
+import buttonStyles from './Button.module.scss';
 import { renderWithProvider } from '../../../test-utils/render';
 import { CameraFilledIcon, ShareIcon } from '@/icons';
 
@@ -49,6 +51,48 @@ describe('Button', () => {
 
     expect(component).toBeInTheDocument();
     expect(component).toHaveClass('custom-class');
+  });
+
+  it('surface="dark" applies dark-surface neutral token scope on the button', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    expect(getByTestId('button')).toHaveClass(buttonStyles.surfaceDark);
+  });
+
+  it('surface="dark" with brand applies dark surface class; Strib palette when html brand is startribune', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" color="brand" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    const el = getByTestId('button');
+    expect(el).toHaveClass(buttonStyles.surfaceDark);
+    expect(el).toHaveClass(buttonStyles.brand);
+    expect(document.documentElement.getAttribute('data-ds-brand')).toBe('startribune');
+  });
+
+  it('default surface does not apply dark-surface classes', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button onClick={vi.fn()} data-testid="button">
+        X
+      </Button>
+    );
+    expect(getByTestId('button')).not.toHaveClass(buttonStyles.surfaceDark);
+  });
+
+  it('surface="dark" with provider brand varsity sets html data-ds-brand for CSS palette', () => {
+    const { getByTestId } = renderWithProvider(
+      <Button surface="dark" color="brand" onClick={vi.fn()} data-testid="button">
+        X
+      </Button>,
+      { brand: 'varsity' }
+    );
+    const el = getByTestId('button');
+    expect(el).toHaveClass(buttonStyles.surfaceDark);
+    expect(document.documentElement.getAttribute('data-ds-brand')).toBe('varsity');
   });
 
   it('renders with an icon', () => {
@@ -154,6 +198,73 @@ describe('Button', () => {
           label: 'Share',
         })
       );
+    });
+  });
+
+  describe('polymorphic as', () => {
+    it('renders as <a> when as="a" and forwards href', () => {
+      const { getByRole } = renderWithProvider(
+        <Button as="a" href="/subscribe" variant="filled" color="brand">
+          Subscribe
+        </Button>
+      );
+      const link = getByRole('link', { name: 'Subscribe' });
+      expect(link).toHaveAttribute('href', '/subscribe');
+      expect(link.tagName).toBe('A');
+    });
+
+    it('does not set type on anchor root', () => {
+      const { getByRole } = renderWithProvider(
+        <Button as="a" href="/x" variant="outlined">
+          Go
+        </Button>
+      );
+      expect(getByRole('link')).not.toHaveAttribute('type');
+    });
+
+    it('uses aria-disabled (not disabled attr) when isDisabled on anchor', () => {
+      const { getByRole } = renderWithProvider(
+        <Button as="a" href="/x" isDisabled>
+          Go
+        </Button>
+      );
+      const link = getByRole('link');
+      expect(link).not.toHaveAttribute('disabled');
+      expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('does not invoke onClick when disabled anchor is clicked', () => {
+      const handleClick = vi.fn();
+      const { getByRole } = renderWithProvider(
+        <Button as="a" href="/x" isDisabled onClick={handleClick}>
+          Go
+        </Button>
+      );
+      getByRole('link').click();
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+
+    it('accepts a custom component as (e.g. router Link) and forwards props', () => {
+      const RouterLink = React.forwardRef<
+        HTMLAnchorElement,
+        { href: string; children?: React.ReactNode; prefetch?: boolean }
+      >(({ href, children, prefetch, ...rest }, ref) => (
+        <a ref={ref} href={href} data-test-prefetch={String(prefetch)} {...rest}>
+          {children}
+        </a>
+      ));
+      RouterLink.displayName = 'RouterLink';
+
+      const { getByRole } = renderWithProvider(
+        <Button as={RouterLink} href="/page" prefetch={false} variant="outlined" color="neutral">
+          Next
+        </Button>
+      );
+
+      const el = getByRole('link', { name: 'Next' });
+      expect(el).toHaveAttribute('href', '/page');
+      expect(el).toHaveAttribute('data-test-prefetch', 'false');
     });
   });
 });

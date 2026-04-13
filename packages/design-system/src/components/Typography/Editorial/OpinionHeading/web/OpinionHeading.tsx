@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import type { OpinionHeadingProps } from '../OpinionHeading.types';
+import { resolveTextColorStyle } from '@/types';
 
 const getHeadingConfig = (importance: OpinionHeadingProps['importance']) => {
   const configs: Record<
@@ -22,6 +23,8 @@ export const OpinionHeading: React.FC<OpinionHeadingProps> = ({
   importance,
   children,
   className,
+  color,
+  style,
   ...props
 }) => {
   useBrandValidation('OpinionHeading');
@@ -29,7 +32,11 @@ export const OpinionHeading: React.FC<OpinionHeadingProps> = ({
   const combinedClassName = classNames(typographyClass, className);
 
   return (
-    <HeadingElement className={combinedClassName || undefined} {...props}>
+    <HeadingElement
+      className={combinedClassName || undefined}
+      style={resolveTextColorStyle(color, style)}
+      {...props}
+    >
       {children}
     </HeadingElement>
   );
