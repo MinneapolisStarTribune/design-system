@@ -27,13 +27,13 @@ function PlanField() {
   return (
     <>
       <Radio
-        title="Monthly"
+        label="Monthly"
         description="Billed every month."
         checked={plan === 'monthly'}
         onChange={() => setPlan('monthly')}
       />
       <Radio
-        title="Annual"
+        label="Annual"
         description="Save with yearly billing."
         checked={plan === 'annual'}
         onChange={() => setPlan('annual')}
@@ -45,8 +45,8 @@ function PlanField() {
 
 ## Props and variants
 
-- **`title`** (required): Primary label; rendered as the accessible name for the control.
-- **`description`**: Optional supporting text below the title (brief context or constraints).
+- **`label`** (required): Primary label; rendered as the accessible name for the control.
+- **`description`**: Optional supporting text below the label (brief context or constraints).
 - **`checked`** / **`onChange`**: Controlled selection; `onChange` receives `true` when this option becomes selected.
 - **`color`**: `neutral` (default) or `brand`—align with product guidance; brand for marketing moments.
 - **`disabled`**: Non-interactive state with muted visuals.

@@ -38,13 +38,13 @@ const meta = {
   title: 'Forms/FormControl/Radio',
   component: Radio,
   argTypes: {
-    title: {
+    label: {
       control: 'text',
-      description: 'Required title text',
+      description: 'Required label text',
     },
     description: {
       control: 'text',
-      description: 'Optional description text below the title',
+      description: 'Optional description text below the label',
     },
     checked: {
       control: 'boolean',
@@ -71,7 +71,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    title: 'Subscribe to newsletter',
+    label: 'Subscribe to newsletter',
     description: "You'll receive weekly updates and announcements.",
     checked: false,
     color: 'brand',
@@ -94,7 +94,7 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   args: {
-    title: 'All variants',
+    label: 'All variants',
     checked: false,
     onChange: () => {},
   },
@@ -123,7 +123,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Neutral / Unchecked</SectionLabel>
           <Radio
-            title="Receive product updates"
+            label="Receive product updates"
             description="We send one message each week."
             checked={false}
             color="neutral"
@@ -135,7 +135,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Neutral / Checked</SectionLabel>
           <Radio
-            title="Receive product updates"
+            label="Receive product updates"
             description="We send one message each week."
             checked
             color="neutral"
@@ -147,7 +147,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Brand / checked</SectionLabel>
           <Radio
-            title="Receive product updates"
+            label="Receive product updates"
             description="We send one message each week."
             checked
             color="brand"
@@ -160,7 +160,7 @@ export const AllVariants: Story = {
           <SectionLabel>Brand / checked (Varsity)</SectionLabel>
           <div style={varsityBrandRadioSurfaceStyle}>
             <Radio
-              title="Receive product updates"
+              label="Receive product updates"
               description="We send one message each week."
               checked
               color="brand"
@@ -174,7 +174,7 @@ export const AllVariants: Story = {
           <SectionLabel>Neutral + Brand (group)</SectionLabel>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <Radio
-              title="Neutral (default)"
+              label="Neutral (default)"
               description="Used for most forms."
               checked={neutralInGroup}
               color="neutral"
@@ -185,7 +185,7 @@ export const AllVariants: Story = {
               dataTestId="all-group-neutral"
             />
             <Radio
-              title="Brand"
+              label="Brand"
               description="Use when brand emphasis is required."
               checked={brandInGroup}
               color="brand"
@@ -201,7 +201,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>With description (interactive)</SectionLabel>
           <Radio
-            title="Subscribe to newsletter"
+            label="Subscribe to newsletter"
             description="Daily updates; unsubscribe anytime."
             checked={withDescription}
             onChange={setWithDescription}
@@ -213,7 +213,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Error</SectionLabel>
           <Radio
-            title="Required choice"
+            label="Required choice"
             description="You must select one option."
             checked={false}
             error
@@ -225,7 +225,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Focused / Unchecked</SectionLabel>
           <FocusedRadio
-            title="Receive product updates"
+            label="Receive product updates"
             description="We send one message each week."
             checked={false}
             color="neutral"
@@ -237,7 +237,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Disabled / Unchecked</SectionLabel>
           <Radio
-            title="Disabled option"
+            label="Disabled option"
             description="This choice is not available."
             checked={false}
             disabled
@@ -249,7 +249,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Disabled / Checked</SectionLabel>
           <Radio
-            title="Disabled option"
+            label="Disabled option"
             description="Previously selected; cannot change."
             checked
             disabled

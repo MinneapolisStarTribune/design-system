@@ -5,10 +5,10 @@ import { Radio } from './Radio';
 
 describe('Radio Accessibility', () => {
   describe('standalone', () => {
-    it('has no violations with title association', async () => {
+    it('has no violations with label association', async () => {
       await expectNoA11yViolations(
         <Radio
-          title="Accept terms"
+          label="Accept terms"
           checked={false}
           onChange={() => {}}
           dataTestId="radio-standalone"
@@ -19,7 +19,7 @@ describe('Radio Accessibility', () => {
     it('has no violations with description', async () => {
       await expectNoA11yViolations(
         <Radio
-          title="Subscribe to newsletter"
+          label="Subscribe to newsletter"
           description="Daily email updates"
           checked={false}
           onChange={() => {}}
@@ -31,7 +31,7 @@ describe('Radio Accessibility', () => {
     it('has no violations when disabled', async () => {
       await expectNoA11yViolations(
         <Radio
-          title="Disabled option"
+          label="Disabled option"
           checked={false}
           disabled
           onChange={() => {}}
@@ -43,7 +43,7 @@ describe('Radio Accessibility', () => {
     it('has no violations in error state', async () => {
       await expectNoA11yViolations(
         <Radio
-          title="Required option"
+          label="Required option"
           description="You must select this"
           checked={false}
           error
@@ -56,7 +56,7 @@ describe('Radio Accessibility', () => {
     it('has no violations when checked', async () => {
       await expectNoA11yViolations(
         <Radio
-          title="Checked option"
+          label="Checked option"
           checked={true}
           onChange={() => {}}
           dataTestId="radio-checked"
@@ -68,7 +68,7 @@ describe('Radio Accessibility', () => {
   describe('interactive', () => {
     it('has no violations when focused', async () => {
       const { renderResult, checkA11y } = await renderAndCheckA11y(
-        <Radio title="Focus me" checked={false} onChange={() => {}} dataTestId="radio-focus" />
+        <Radio label="Focus me" checked={false} onChange={() => {}} dataTestId="radio-focus" />
       );
 
       const radio = renderResult.getByTestId('radio-focus');
@@ -83,7 +83,7 @@ describe('Radio Accessibility', () => {
         const [checked, setChecked] = useState(false);
         return (
           <Radio
-            title="Toggle me"
+            label="Toggle me"
             checked={checked}
             onChange={setChecked}
             dataTestId="radio-toggle"

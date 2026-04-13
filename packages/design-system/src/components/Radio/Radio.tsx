@@ -10,7 +10,7 @@ export const RADIO_COLORS = ['neutral', 'brand'] as const;
 export type RadioColor = (typeof RADIO_COLORS)[number];
 
 export interface RadioProps extends BaseProps {
-  title: string;
+  label: string;
   description?: string;
   checked: boolean;
   color?: RadioColor;
@@ -23,7 +23,7 @@ export interface RadioProps extends BaseProps {
  * Radio component for selecting a single option in a set.
  */
 export const Radio: React.FC<RadioProps> = ({
-  title,
+  label,
   description,
   checked,
   color = 'neutral',
@@ -65,7 +65,7 @@ export const Radio: React.FC<RadioProps> = ({
       <span className={styles.content}>
         <span className={styles.visualDot} aria-hidden="true" />
         <span className={classNames(styles.title, 'typography-utility-text-regular-medium')}>
-          {title}
+          {label}
         </span>
         {description ? (
           <span

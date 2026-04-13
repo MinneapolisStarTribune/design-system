@@ -16,7 +16,7 @@
     opacity: 0.4;
   }
 
-  /* Focus ring wraps the full control (radio + title + description), not just the 16×16 input */
+  /* Focus ring wraps the full control (radio + label + description), not just the 16×16 input */
   &:has(.input:focus-visible) {
     box-shadow:
       0 0 0 2px var(--color-background-light-default),

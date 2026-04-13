@@ -6,7 +6,7 @@ import { Radio } from './Radio';
 describe('Radio', () => {
   it('renders a semantic radio input', () => {
     const { getByTestId } = renderWithProvider(
-      <Radio title="Option" checked={false} onChange={() => {}} dataTestId="radio" />
+      <Radio label="Option" checked={false} onChange={() => {}} dataTestId="radio" />
     );
 
     const input = getByTestId('radio').querySelector('input');
@@ -16,7 +16,7 @@ describe('Radio', () => {
 
   it('associates label with input via htmlFor', () => {
     const { getByTestId } = renderWithProvider(
-      <Radio title="Option" checked={false} onChange={() => {}} dataTestId="radio" />
+      <Radio label="Option" checked={false} onChange={() => {}} dataTestId="radio" />
     );
 
     const label = getByTestId('radio');
@@ -24,9 +24,9 @@ describe('Radio', () => {
     expect(label).toHaveAttribute('for', input?.id);
   });
 
-  it('displays title text', () => {
+  it('displays label text', () => {
     const { getByText } = renderWithProvider(
-      <Radio title="Subscribe to newsletter" checked={false} onChange={() => {}} />
+      <Radio label="Subscribe to newsletter" checked={false} onChange={() => {}} />
     );
 
     expect(getByText('Subscribe to newsletter')).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Radio', () => {
 
   it('displays optional description when provided', () => {
     const { getByText } = renderWithProvider(
-      <Radio title="Subscribe" description="Weekly updates" checked={false} onChange={() => {}} />
+      <Radio label="Subscribe" description="Weekly updates" checked={false} onChange={() => {}} />
     );
 
     expect(getByText('Weekly updates')).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe('Radio', () => {
   it('calls onChange with checked value when clicked', async () => {
     const onChange = vi.fn();
     const { getByTestId } = renderWithProvider(
-      <Radio title="Option" checked={false} onChange={onChange} dataTestId="radio" />
+      <Radio label="Option" checked={false} onChange={onChange} dataTestId="radio" />
     );
 
     await userEvent.click(getByTestId('radio'));
@@ -52,7 +52,7 @@ describe('Radio', () => {
 
   it('sets aria-invalid when error', () => {
     const { getByTestId } = renderWithProvider(
-      <Radio title="Required" checked={false} error onChange={() => {}} dataTestId="radio" />
+      <Radio label="Required" checked={false} error onChange={() => {}} dataTestId="radio" />
     );
 
     const input = getByTestId('radio').querySelector('input');
@@ -62,7 +62,7 @@ describe('Radio', () => {
   it('calls onChange when error and label is clicked', async () => {
     const onChange = vi.fn();
     const { getByTestId } = renderWithProvider(
-      <Radio title="Required" checked={false} error onChange={onChange} dataTestId="radio" />
+      <Radio label="Required" checked={false} error onChange={onChange} dataTestId="radio" />
     );
 
     await userEvent.click(getByTestId('radio'));
@@ -72,7 +72,7 @@ describe('Radio', () => {
   it('disables input when disabled prop is true', () => {
     const { getByTestId } = renderWithProvider(
       <Radio
-        title="Disabled option"
+        label="Disabled option"
         checked={false}
         disabled
         onChange={() => {}}
@@ -87,7 +87,7 @@ describe('Radio', () => {
   it('does not call onChange when disabled and clicked', async () => {
     const onChange = vi.fn();
     const { getByTestId } = renderWithProvider(
-      <Radio title="Disabled" checked={false} disabled onChange={onChange} dataTestId="radio" />
+      <Radio label="Disabled" checked={false} disabled onChange={onChange} dataTestId="radio" />
     );
 
     await userEvent.click(getByTestId('radio'));
