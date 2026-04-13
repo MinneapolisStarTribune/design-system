@@ -1,9 +1,14 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 import { ThemeLoader } from './ColorCategoryWithTheme';
 import { ThemeAwareColorCategory } from './ThemeAwareColorCategory';
+import { ColorTokensUsage } from './ColorTokensUsage';
 
 <Meta title="Foundations/Colors/Brand Colors" />
 
 <ThemeLoader>
   <ThemeAwareColorCategory category="brand" />
 </ThemeLoader>
+
+Expressive brand colors: `var(--color-brand-01)` through `var(--color-brand-04)` (per brand and light/dark). Use the toolbar to preview each combination.
+
+<ColorTokensUsage />
