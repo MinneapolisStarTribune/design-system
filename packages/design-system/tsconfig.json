@@ -31,10 +31,13 @@
     // Types
     "types": ["vitest/globals", "@testing-library/jest-dom", "node"]
   },
-  "exclude": ["node_modules", "dist", ".storybook"],
+  "exclude": ["node_modules", "dist"],
   "include": [
     "src",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
     "types/vite-plugins.d.ts",
+    "types/storybook-css.d.ts",
     "vite.config.ts",
     "vite.web.config.ts",
     "vite.native.config.ts",
