@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "react-native-svg": "15.11.2",
     "swiper": "^12.1.2"
   },
   "devDependencies": {

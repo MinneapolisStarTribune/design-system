@@ -49,7 +49,13 @@ const preview: Preview = {
         context.globals.brand ||
         'startribune'
       ) as Brand;
-      const mode = (context.args.mode || context.globals.mode || 'light') as Mode;
+      const globals = context.globals as Record<string, unknown> | undefined;
+      const mode = (
+        context.args.mode ??
+        globals?.mode ??
+        globals?.theme ??
+        'light'
+      ) as Mode;
       const canvasBackgroundColor = mode === 'dark' ? '#000000' : '#FFFFFF';
 
       return (
