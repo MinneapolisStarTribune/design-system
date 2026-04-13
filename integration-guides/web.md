@@ -139,6 +139,10 @@ All themes expose the same token names, so you can use them in CSS modules or in
 }
 ```
 
+## Typography text colors
+
+Typography components (headings, body copy, labels, quotes, etc.) accept a `color` prop typed as **`TextColor`**: short keys such as `brand-01`, `on-light-primary`, and `state-attention-on-dark` that resolve to `var(--color-text-*)`. This is **not** the same as **`Button`’s** `color` prop, which uses module variants `neutral`, `brand`, and `brand-accent` for button styles.
+
 ## Icons
 
 Import only the icons you need (tree-shakeable). Icons are SVG components and accept standard SVG/React props such as `width`, `height`, `className`, `fill`, and `aria-*`.
@@ -167,7 +171,15 @@ Icons use `fill="currentColor"` by default (when built with SVGR), so they inher
 
 Theme CSS exposes icon tokens such as `--color-icon-on-light-primary`, `--color-icon-on-dark-primary`, `--color-icon-brand-01`, `--color-icon-state-attention-on-light`, `--color-icon-state-disabled-on-light`, etc. Use the token that matches your context (light/dark background, brand, state).
 
-**3. `className` or `style`** — Apply a class or inline style that sets `fill` (or `color` if the SVG uses `currentColor` for fill).
+**3. `color` prop (`IconColor`)** — Barrel icons accept the same short keys as typography (`brand-01`, `on-dark-secondary`, …), mapped to `var(--color-icon-*)`. Example:
+
+```tsx
+<SearchIcon color="brand-01" width={24} height={24} aria-hidden />
+```
+
+Do not confuse this with **`Button`’s** `color` prop (`neutral` | `brand` | `brand-accent`).
+
+**4. `className` or `style`** — Apply a class or inline style that sets `fill` (or `color` if the SVG uses `currentColor` for fill).
 
 ```tsx
 <SearchIcon className="my-icon-class" />
