@@ -35,7 +35,7 @@ function FocusedRadio(props: React.ComponentProps<typeof Radio>) {
 }
 
 const meta = {
-  title: 'Components/Actions & Inputs/Radio',
+  title: 'Forms/FormControl/Radio',
   component: Radio,
   argTypes: {
     title: {

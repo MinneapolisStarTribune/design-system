@@ -112,7 +112,8 @@
   min-width: 0;
 }
 
-.description {
+/* Beat global `[class*="typography-"] { color: primary }` on the description span */
+.root .description {
   grid-column: 2;
   grid-row: 2;
   color: var(--color-text-on-light-tertiary);
