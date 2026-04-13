@@ -15,16 +15,16 @@ Every typography component has its own Storybook Docs tab with live examples and
 ```markdown
 | Classification | Where it applies                                                         | Product note                      |
 | -------------- | ------------------------------------------------------------------------ | --------------------------------- |
-| Editorial      | Surfaces that present editorial voice: home, section fronts, promos, ect | Always in scope for news products |
-| Utility        | Product chrome: forms, navigation labels, page and section titles, ect   | Always in scope                   |
-| Article        | Long-form story pages                                                    | Only on article experiences       |
+| Utility            | Product chrome: forms, navigation labels, page headings, section titles, ect      | Always in scope                                |
+| Editorial        | Surfaces that present editorial voice: headlines, story cards, article heroes, ect | All published story content |
+| Article Body | Exclusively used for long-form story content                                                           | Only within the article body                     |
 ```
 
-Article styles intentionally share a feel with editorial — both live in a news-reading context — but use different tokens and components so that long-form reading stays stable even when editorial marketing surfaces change.
+Article Body styles intentionally share a feel with editorial — both live in a news-reading context — but use different tokens and components so that long-form reading stays stable even when editorial marketing surfaces change.
 
 ## Why so many components?
 
-The system has over 17 distinct text styles across 3 classifications (editorial, article, and utility), spanning 11+ fonts.
+The system has over 17 distinct text styles across 3 classifications (editorial, article body, and utility), spanning 11+ fonts.
 Each style has its own supported weight set — for example, ArticleBodyText (Publico Text) supports regular, italic, bold, bold-italic, and dropcap, while ArticleBodySponsoredText (Barlow) supports regular, italic, semibold, and semibold-italic.
 
 Additionally, certain components — like ArticleBodySponsoredText — are unsupported on specific brands entirely and will throw at runtime if misused. A single `<Text>` component would push all of these rules into runtime branching. The explicit-component architecture keeps correct usage enforceable in TypeScript at the call site: if a prop isn't on the component, it isn't valid for that style.
@@ -33,15 +33,14 @@ Additionally, certain components — like ArticleBodySponsoredText — are unsup
 
 These steps mirror how typography works elsewhere in Storybook (see also **[InlineLink](/?path=/docs/typography-inlinelink--docs)** for hyperlinks inside running text).
 
-1. Identify the Figma text style (or annotation) and whether it is **editorial**, **utility**, or **article** body.
+1. Identify the Figma text style (or annotation) and whether it is **Editorial**, **Utility**, or **ArticleBody**.
 2. Pick the matching component from the tables below and apply the **`size` / `weight` / `importance`**.
 3. Do not “guess” props across families—each component exports only what design supports for that style.
 
-**Figma size tokens → DS `size` props:** Figma shorthand `xxs` / `xs` / `sm` / `md` / `lg` / `xl` maps to `xx-small` / `x-small` / `small` / `medium` / `large` / `x-large` for editorial and utility body text.
 
 ## What you will see in Figma and How to map it to a component
 
-When you click on text in Figma, you'll see an annotation like `editorial/text/regular/xxs` or `editorial/article/body/` or `utility/text/regular/`. These follow a consistent naming convention:
+When you click on text in Figma, you'll see an annotation like `editorial/text/regular/xxs` or `article-body/text/regular` or `utility/text/regular/`. These follow a consistent naming convention:
 
 `type / classifier / size / weight`
 
@@ -70,16 +69,16 @@ When you click on text in Figma, you'll see an annotation like `editorial/text/r
 | `/* editorial/text/sponsored/lg/bold */` | `<EdictorialSponsoredText size="large" weight="bold" />` |
 ```
 
-### Article Typography (Only Used on Article Pages!)
+### Article Body Typography (Only Used on Article Pages!)
 
 ```markdown
 | Typical Figma / token path                           | DS component with props                             |
 | ---------------------------------------------------- | --------------------------------------------------- |
-| `/* editorial/article/heading/H1 */`                 | `<ArticleBodyHeading importance={1} />`             |
-| `/* editorial/article/heading/sponsored/H2 */`       | `<ArticleBodySponsoredHeading importance={2} />`    |
-| `/* editorial/article/body/drop-cap */`              | `<ArticleBodyText weight="drop-cap" />`             |
-| `/* editorial/article/body/sponsored/bold italic */` | `<ArticleBodySponsoredText weight="bold-italic" />` |
-| `/* editorial/article/quote/sm */`                   | `<ArtilceQuote size="small">`                       |
+| `/* ArticleBody/Heading/H1 */`                         | `<ArticleBodyHeading importance={1} />`             |
+| `/* ArticleBody/Sponsored/Heading/H2 */`     | `<ArticleBodySponsoredHeading importance={2} />`    |
+| `/* ArticleBody/Text/drop-cap */`                     | `<ArticleBodyText weight="drop-cap" />`             |
+| `/* ArticleBody/Sponsored/Text/bold italic */` | `<ArticleBodySponsoredText weight="bold-italic" />` |
+| `/* ArticleBody/Quote/small */`                         | `<ArticleQuote size="small">`                       |
 ```
 
 ## Brand availability
