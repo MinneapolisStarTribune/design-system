@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { resolveTextColorStyle } from '@/types/globalTypes';
 import type { ArticleBodySponsoredTextProps } from '../ArticleBodySponsoredText.types';
 
 export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> = (props) => {
@@ -7,6 +8,8 @@ export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> =
     children,
     className,
     dataTestId = 'article-body-text-sponsored',
+    color,
+    style,
     ...restProps
   } = props;
 
@@ -14,7 +17,12 @@ export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> =
   const combinedClassName = classNames(typographyClassName, className);
 
   return (
-    <p className={combinedClassName} data-testid={dataTestId} {...restProps}>
+    <p
+      className={combinedClassName}
+      style={resolveTextColorStyle(color, style)}
+      data-testid={dataTestId}
+      {...restProps}
+    >
       {children}
     </p>
   );

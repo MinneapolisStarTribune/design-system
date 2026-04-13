@@ -1,3 +1,4 @@
+import { ColorVariantProps } from '@/types';
 import type { HTMLAttributes } from 'react';
 
 /** Semantic heading level; maps to h1-h6 and typography class suffix. */
@@ -13,7 +14,8 @@ export const NON_NEWS_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4, 5, 6] as const sa
 export type NonNewsHeadingImportance = (typeof NON_NEWS_HEADING_IMPORTANCE_LEVELS)[number];
 
 export interface NonNewsHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children'> {
+  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
+    ColorVariantProps {
   importance: NonNewsHeadingImportance;
   children: React.ReactNode;
   className?: string;
