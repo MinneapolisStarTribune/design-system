@@ -3228,6 +3228,7 @@ __metadata:
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
     react-native: "npm:^0.73.0"
+    react-native-svg: "npm:15.11.2"
     react-test-renderer: "npm:19.0.0"
     rollup-preserve-directives: "npm:^1.1.3"
     sass: "npm:^1.97.2"
