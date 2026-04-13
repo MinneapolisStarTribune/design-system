@@ -7,73 +7,6 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { createDesignSystemError } from '@/utils/errorPrefix';
-<<<<<<< sus-216-native-button
-import { enhanceButtonIcon, getButtonAriaLabel, getButtonIconSize } from '../Helpers';
-import type { ButtonProps } from '../Button.types';
-import {
-  type ButtonColor,
-  type ButtonSize,
-  BUTTON_VARIANTS,
-  BUTTON_SIZES,
-  ICON_ONLY_BUTTON_SIZES,
-  type ButtonVariant,
-  BUTTON_COLORS,
-} from '../Button.types';
-
-export type {
-  ButtonProps,
-  ButtonColor,
-  ButtonVariant,
-  ButtonSize,
-  IconOnlyButtonSize,
-  ButtonAnalytics,
-} from '../Button.types';
-export { BUTTON_COLORS, BUTTON_VARIANTS, BUTTON_SIZES, ICON_ONLY_BUTTON_SIZES };
-
-/**
- * Build CSS variable name for button tokens
- * Examples:
- * - neutral + filled -> 'button-filled'
- * - brand + outlined -> 'button-brand-outlined'
- * - brand-accent + ghost -> 'button-brand-accent-ghost'
- */
-function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
-  if (color === 'neutral') {
-    return `button-${variant}`;
-  } else if (color === 'brand') {
-    return `button-brand-${variant}`;
-  } else {
-    return `button-brand-accent-${variant}`;
-  }
-}
-
-/**
- * Get CSS variable value from computed styles
- */
-function getCSSVariable(element: HTMLElement | null, variableName: string): string | null {
-  if (!element || typeof window === 'undefined') {
-    return null;
-  }
-  const computed = window.getComputedStyle(element);
-  return computed.getPropertyValue(variableName).trim() || null;
-}
-
-export const Button: React.FC<ButtonProps> = ({
-  type = 'button',
-  color = 'neutral',
-  capitalize = false,
-  variant = 'filled',
-  size = 'medium',
-  icon,
-  iconPosition = 'end',
-  children,
-  className,
-  isDisabled,
-  onClick,
-  analytics: analyticsOverride,
-  ...props
-}) => {
-=======
 import { enhanceButtonIcon, getButtonAriaLabel } from '../Helpers';
 import type { ButtonProps, ButtonSize } from './Button.types';
 import {
@@ -134,7 +67,6 @@ export function Button(props: ButtonProps) {
   const Comp = (as ?? 'button') as ElementType;
   const rootIsHtmlButton = isHtmlButtonTag(Comp);
 
->>>>>>> release/1.5.0
   const { track } = useAnalytics();
   const buttonRef = useRef<HTMLElement | null>(null);
   const [hasGradientBorder, setHasGradientBorder] = useState(false);
