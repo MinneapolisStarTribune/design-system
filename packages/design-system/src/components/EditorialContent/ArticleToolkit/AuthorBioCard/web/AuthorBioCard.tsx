@@ -7,11 +7,10 @@ import styles from './AuthorBioCard.module.scss';
 import { AuthorBioCardProps } from '../AuthorBioCard.types';
 
 export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
-  label,
+  label = 'ABOUT THE AUTHOR',
   name,
   description,
   thumbnailIcon,
-  thumbnailIconRounded = false,
   thumbnailIconAlt,
   headingLevel = 'h4',
   ctaLink,
@@ -29,10 +28,11 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
 }) => {
   const HeadingTag = headingLevel;
 
-  const showCTA = Boolean(ctaLink?.label && (ctaLink?.link || ctaLink?.onClick));
+  const ctaLabel = ctaLink?.label?.trim() ? ctaLink.label : 'See More';
+  const showCTA = Boolean(ctaLink?.link || ctaLink?.onClick);
   const labelTypography = 'typography-utility-label-semibold-small-caps';
   const nameTypography = 'typography-utility-label-semibold-large';
-  const positionTypography = 'typography-utility-label-semibold-small-caps';
+  const positionTypography = 'typography-utility-label-small-caps';
   const descriptionTypography = 'typography-utility-text-regular-small';
 
   return (
@@ -55,12 +55,7 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
 
       <div className={styles.container}>
         {thumbnailIcon && (
-          <div
-            className={classNames(
-              styles.imageWrapper,
-              thumbnailIconRounded ? styles.imageCircle : styles.imageRounded
-            )}
-          >
+          <div className={classNames(styles.imageWrapper, styles.imageCircle)}>
             <Image
               src={thumbnailIcon}
               alt={thumbnailIconAlt ?? 'Author thumbnail'}
@@ -88,7 +83,7 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
               dataTestId="author-bio-cta"
               aria-label={ctaLink!.label}
             >
-              {ctaLink!.label}
+              {ctaLabel}
             </Link>
           )}
         </div>
