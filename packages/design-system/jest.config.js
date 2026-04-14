@@ -11,13 +11,15 @@ module.exports = {
   ],
   moduleDirectories: ['node_modules', rootNodeModules],
   moduleNameMapper: {
+    '\\.svg\\?react$': '<rootDir>/src/test-utils/mocks/svgReactStub.tsx',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@mobile/themes/(.*)$': '<rootDir>/dist/mobile/themes/$1',
     '^@mobile/typography/(.*)$': '<rootDir>/dist/mobile/typography/$1',
+    '^react-native-svg$': '<rootDir>/src/test-utils/mocks/react-native-svg.tsx',
   },
   setupFilesAfterEnv: ['./jest.setup.ts'],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@testing-library/react-native)/)',
+    'node_modules/(?!(react-native|@react-native|react-native-svg|@testing-library/react-native)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };

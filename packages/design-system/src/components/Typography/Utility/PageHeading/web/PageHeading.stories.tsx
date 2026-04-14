@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageHeading } from './PageHeading';
 import { PAGE_HEADING_IMPORTANCE_LEVELS } from '../PageHeading.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Utility/PageHeading',
@@ -13,6 +14,12 @@ const meta = {
       control: 'select',
       options: PAGE_HEADING_IMPORTANCE_LEVELS,
       description: 'Heading level (1-4), maps to h1-h4',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',

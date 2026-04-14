@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
+import { resolveTextColorStyle } from '@/types/globalTypes';
 import type {
   ArticleBodySponsoredHeadingProps,
   ArticleBodySponsoredHeadingImportance,
@@ -24,13 +25,22 @@ export const ArticleBodySponsoredHeading: React.FC<ArticleBodySponsoredHeadingPr
   importance,
   children,
   className,
+  color,
+  style,
   ...props
 }) => {
   useBrandValidation('ArticleBodySponsoredHeading');
+
   const { element: HeadingElement, className: typographyClass } = getHeadingConfig(importance);
+
   const combinedClassName = classNames(typographyClass, className);
+
   return (
-    <HeadingElement className={combinedClassName || undefined} {...props}>
+    <HeadingElement
+      className={combinedClassName || undefined}
+      style={resolveTextColorStyle(color, style)}
+      {...props}
+    >
       {children}
     </HeadingElement>
   );

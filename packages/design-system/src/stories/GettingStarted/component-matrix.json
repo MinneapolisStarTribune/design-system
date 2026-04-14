@@ -1,329 +1,357 @@
 [
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Button",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Link",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Utility Button",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Actions"
+    "component": "Button",
+    "native": true,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "SwiperCarousel",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Components"
+    "component": "Link",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Image Gallery",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Inline Image",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Photo Layout",
-            "native": false,
-            "web": true
-          }
-        ]
-      },
-      {
-        "name": "Code Block",
-        "rows": [
-          {
-            "component": "Dangerous Code Block",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Enhanced Code Block",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "Article Toolkit",
-    "topLevel": "Editorial Content"
+    "component": "ButtonGroup",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "CandyBar",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Popover",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Toast",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Feedback & Status"
+    "component": "UtilityButton",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Form (Optional Layout & Logic Wrapper)",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "FormGroup",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Forms"
+    "component": "FormGroup.Label",
+    "native": true,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Checkbox",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "CheckboxGroup",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Select",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "TextInput",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "FormControl",
-    "topLevel": "Forms"
+    "component": "FormGroup.Caption",
+    "native": true,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Caption",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "FormGroup",
-    "topLevel": "Forms"
+    "component": "FormGroup.Description",
+    "native": true,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "Icons",
-            "native": false,
-            "web": true
-          },
-          {
-            "component": "Image",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Foundations"
+    "component": "Form",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "InlineLink",
-            "native": false,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "",
-    "topLevel": "Typography"
+    "component": "Checkbox",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "ArticleBodyHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "ArticleBodySponsoredHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "ArticleBodySponsoredText",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "ArticleBodyText",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "ArticleQuote",
-            "native": true,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "ArticleBody",
-    "topLevel": "Typography"
+    "component": "CheckboxGroup",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "EditorialSponsoredText",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "EditorialText",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "EnterpriseHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "NewsHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "NonNewsHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "OpinionHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "SponsoredHeading",
-            "native": true,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "Editorial",
-    "topLevel": "Typography"
+    "component": "Radio",
+    "native": false,
+    "web": true
   },
   {
-    "groups": [
-      {
-        "name": "",
-        "rows": [
-          {
-            "component": "PageHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "SectionHeading",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "UtilityBody",
-            "native": true,
-            "web": true
-          },
-          {
-            "component": "UtilityLabel",
-            "native": true,
-            "web": true
-          }
-        ]
-      }
-    ],
-    "subCategory": "Utility",
-    "topLevel": "Typography"
+    "component": "RadioGroup",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "TextInput",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "PasswordInput",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Select",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "MultiSelect",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Switch",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Popover",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "ToolTip",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Skeleton",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Toast",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "CandyBar",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Tag",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Badge",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Banner",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Avatar",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Divider",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "SectionTitle",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Modal",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "SwiperCarousel",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Breadcrumb",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Pagination",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Tabs",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "EyebrowLabel",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "EyebrowBadge",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "AuthorByline",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "EditorialCard",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "PhotoLayout",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "ImageGallery",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "InlineImage",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "InlineVideo",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "PullQuote",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "SocialEmbeds",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "DangerousCodeBlock",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "EnhancedCodeBlock",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "Caption",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "Lightbox",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "AuthorBioCard",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "RelatedCoverage",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "KeyPoints",
+    "native": false,
+    "web": false
+  },
+  {
+    "component": "ArticleBodyHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "ArticleBodySponsoredHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "ArticleBodySponsoredText",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "ArticleBodyText",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "ArticleQuote",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "EditorialSponsoredText",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "EditorialText",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "EnterpriseHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "NewsHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "NonNewsHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "OpinionHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "SponsoredHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "PageHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "SectionHeading",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "UtilityBody",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "UtilityLabel",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "DesignSystemProvider",
+    "native": true,
+    "web": true
+  },
+  {
+    "component": "AnalyticsProvider",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "SnackProvider",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Icon",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Image",
+    "native": false,
+    "web": true
   }
 ]
