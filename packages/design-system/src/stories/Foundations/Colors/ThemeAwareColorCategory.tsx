@@ -163,6 +163,55 @@ function formatColorName(key: string): string {
     .join(' ');
 }
 
+/** Shared “inline code” look for swatch metadata (Storybook only). */
+const swatchCodeBaseStyle = {
+  fontFamily: 'monospace',
+  padding: '0.15rem 0.4rem',
+  borderRadius: '4px',
+  backgroundColor: 'rgba(0, 0, 0, 0.06)',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
+};
+
+/** Resolved value / gradients — may be long; allow breaking. */
+const swatchCodeStyle = {
+  ...swatchCodeBaseStyle,
+  display: 'inline-block' as const,
+  maxWidth: '100%',
+  wordBreak: 'break-all' as const,
+};
+
+/**
+ * CSS variable
+ */
+const swatchTokenCodeStyle = {
+  ...swatchCodeBaseStyle,
+  display: 'block' as const,
+  width: '100%',
+  boxSizing: 'border-box' as const,
+  maxWidth: '100%',
+  fontSize: '0.75rem',
+  whiteSpace: 'normal' as const,
+  overflowWrap: 'break-word' as const,
+  wordBreak: 'normal' as const,
+};
+
+const swatchMetaColumnStyle = {
+  display: 'flex',
+  flexDirection: 'column' as const,
+  gap: '0.5rem',
+  marginTop: '0.25rem',
+};
+
+/** Muted label above each code line (Token vs value — not always hex). */
+const swatchRowLabelStyle = {
+  fontSize: '0.65rem',
+  fontWeight: 600,
+  textTransform: 'uppercase' as const,
+  letterSpacing: '0.04em',
+  opacity: 0.65,
+  marginBottom: '0.15rem',
+};
+
 /**
  * Get category description and overview from token JSON files
  */
@@ -264,7 +313,7 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
         const value = (brandColors as any)[tokenName] as string | undefined;
         if (value) {
           colorList.push({
-            name: formatColorName(suffix),
+            name: `Brand ${suffix}`,
             tokenName,
             value,
             description: undefined,
@@ -312,9 +361,22 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
     <div>
       <div style={{ marginBottom: '2rem' }}>
         <h1>{displayName} Colors</h1>
-        {categoryMetadata.description && (
-          <p style={{ marginTop: '0.5rem' }}>{categoryMetadata.description}</p>
-        )}
+        {categoryMetadata.description &&
+          categoryMetadata.description
+            .split(/\n\n+/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .map((para, i) => (
+              <p
+                key={i}
+                style={{
+                  marginTop: i === 0 ? '0.5rem' : '0.75rem',
+                  marginBottom: 0,
+                }}
+              >
+                {para}
+              </p>
+            ))}
         {categoryMetadata.overview && categoryMetadata.overview.length > 0 && (
           <>
             <h2 style={{ marginTop: '1.5rem', marginBottom: '0.5rem' }}>Overview</h2>
@@ -326,9 +388,14 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
           </>
         )}
       </div>
+      <p style={{ marginBottom: '0.5rem' }}>
+        Use the toolbar controls above to switch themes and brands. Also see{' '}
+        <a href="#using-these-tokens-in-code">using these tokens in code</a> below for CSS and
+        examples of implementation.
+      </p>
       <p style={{ marginBottom: '1rem' }}>
         Showing {category} colors for <strong>{brand}</strong> in <strong>{colorScheme}</strong>{' '}
-        theme. Use the toolbar controls above to switch themes and brands.
+        theme.
       </p>
       {colorsWithDescriptions.length === 0 ? (
         <p>
@@ -366,16 +433,21 @@ export const ThemeAwareColorCategory: React.FC<ThemeAwareColorCategoryProps> = (
                       {color.description}
                     </div>
                   )}
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontFamily: 'monospace',
-                      wordBreak: 'break-all',
-                    }}
-                  >
-                    {color.value}
+                  <div style={swatchMetaColumnStyle}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={swatchRowLabelStyle}>Token</div>
+                      <code
+                        style={swatchTokenCodeStyle}
+                        title="Use in CSS: color, background, border-color, etc."
+                      >
+                        {`var(--color-${color.tokenName})`}
+                      </code>
+                    </div>
+                    <div>
+                      <div style={swatchRowLabelStyle}>Value</div>
+                      <code style={{ ...swatchCodeStyle, fontSize: '0.75rem' }}>{color.value}</code>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>{color.tokenName}</div>
                 </div>
               </div>
             );

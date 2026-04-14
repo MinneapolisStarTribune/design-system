@@ -1,1 +1,88 @@
-/* SocialEmbeds - Article Toolkit component (SUS-163) */
+.socialEmbeds {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border-radius: var(--spacing-8);
+  border: 1px solid #AFAFAF;
+}
+
+/* inner slot */
+.embedContainer {
+  width: 100%;
+}
+
+/* =========================
+   VARIANTS (layout)
+========================= */
+
+.variant-standard {
+  max-width: var(--semantic-article-toolkit-max-width-social-embed-standard-desktop);
+  padding: var(--spacing-20);
+  margin: 0 auto;
+}
+
+.variant-inline {
+  max-width: var(--semantic-article-toolkit-max-width-standard-inline-desktop);
+  padding: var(--spacing-20);
+  margin: 0 auto;
+}
+
+.variant-full {
+  max-width: var(--semantic-article-toolkit-max-width-immersive-large-desktop);
+  padding: var(--spacing-20);
+  margin: 0 auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1159px) {
+  .variant-standard {
+    max-width: var(--semantic-article-toolkit-max-width-social-embed-standard-tablet);
+  }
+
+  .variant-inline {
+    max-width: var(--semantic-article-toolkit-max-width-standard-inline-tablet);
+  }
+
+  .variant-full {
+    max-width: var(--semantic-article-toolkit-max-width-immersive-large-tablet);
+  }
+}
+
+@media (max-width: 767px) {
+  .variant-standard {
+    max-width: var(--semantic-article-toolkit-max-width-social-embed-standard-mobile);
+    padding: var(--spacing-16);
+  }
+
+  .variant-inline {
+    max-width: var(--semantic-article-toolkit-max-width-standard-inline-mobile);
+    padding: var(--spacing-16);
+  }
+
+  .variant-full {
+    max-width: var(--semantic-article-toolkit-max-width-immersive-large-mobile);
+    padding: var(--spacing-16);
+  }
+}
+
+/* =========================
+   PLATFORM (overrides)
+========================= */
+
+.platform-twitter {
+  padding: var(--spacing-16);
+}
+
+.platform-facebook {
+  padding: 0;
+}
+
+.platform-threads {
+  padding: var(--spacing-12);
+}
+
+/* instagram uses variant defaults */

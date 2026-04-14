@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ArticleBodySponsoredText } from './ArticleBodySponsoredText';
 import { ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS } from '../ArticleBodySponsoredText.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/ArticleBody/ArticleBodySponsoredText',
@@ -13,6 +14,12 @@ const meta = {
       control: 'select',
       options: ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS,
       description: 'The font weight of the article body sponsored text',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',
@@ -29,6 +36,7 @@ export const Configurable: Story = {
   args: {
     weight: 'regular',
     children: 'Article body sponsored text',
+    color: 'on-light-primary',
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EditorialText } from './EditorialText';
 import { EDITORIAL_TEXT_SIZES, EDITORIAL_TEXT_WEIGHTS } from '../EditorialText.types';
+import { TEXT_COLOR_TOKENS } from '@/types';
 
 const meta = {
   title: 'Typography/Editorial/EditorialText',
@@ -18,6 +19,12 @@ const meta = {
       control: 'select',
       options: EDITORIAL_TEXT_WEIGHTS,
       description: 'The font weight of the editorial text',
+    },
+    color: {
+      control: 'select',
+      options: Object.keys(TEXT_COLOR_TOKENS),
+      description:
+        'Semantic color token. Use on-light-* for light backgrounds and on-dark-* for dark backgrounds. Brand and state tokens are also available.',
     },
     children: {
       control: 'text',

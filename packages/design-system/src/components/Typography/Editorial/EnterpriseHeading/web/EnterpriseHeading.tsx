@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import type { EnterpriseHeadingProps } from '../EnterpriseHeading.types';
+import { resolveTextColorStyle } from '@/types';
 
 const getHeadingConfig = (importance: EnterpriseHeadingProps['importance']) => {
   const configs: Record<
@@ -22,6 +23,8 @@ export const EnterpriseHeading: React.FC<EnterpriseHeadingProps> = ({
   importance,
   children,
   className,
+  color,
+  style,
   ...props
 }) => {
   useBrandValidation('EnterpriseHeading');
@@ -29,7 +32,11 @@ export const EnterpriseHeading: React.FC<EnterpriseHeadingProps> = ({
   const combinedClassName = classNames(typographyClass, className);
 
   return (
-    <HeadingElement className={combinedClassName || undefined} {...props}>
+    <HeadingElement
+      className={combinedClassName || undefined}
+      style={resolveTextColorStyle(color, style)}
+      {...props}
+    >
       {children}
     </HeadingElement>
   );
