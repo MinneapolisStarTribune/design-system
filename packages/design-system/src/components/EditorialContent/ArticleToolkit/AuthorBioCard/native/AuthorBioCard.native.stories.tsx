@@ -1,7 +1,7 @@
 // AuthorBioCard.native.stories.tsx
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import { AuthorBioCardNative } from './AuthorBioCard.native';
 
@@ -33,10 +33,6 @@ const meta: Meta<typeof AuthorBioCardNative> = {
       control: 'text',
       description: 'Accessibility label for the image.',
     },
-    thumbnailIconRounded: {
-      control: 'boolean',
-      description: 'Renders circular avatar when true.',
-    },
     ctaLink: {
       control: 'object',
       description: 'CTA config: { label, link?, onPress? }. Either link or onPress required.',
@@ -59,17 +55,14 @@ type Story = StoryObj<typeof AuthorBioCardNative>;
 // configurable
 export const Configurable: Story = {
   args: {
-    label: 'Author',
     name: 'John Doe',
     description: 'John covers local news, investigative journalism, and community stories.',
     position: 'Staff Writer',
     thumbnailIcon: 'https://i.pravatar.cc/150?img=12',
     thumbnailIconAlt: 'John Doe profile image',
-    thumbnailIconRounded: true,
     hasTopBorder: true,
     hasBottomBorder: false,
     ctaLink: {
-      label: 'View profile',
       link: 'https://example.com',
     },
   },
@@ -78,24 +71,13 @@ export const Configurable: Story = {
 // all variants
 export const AllVariants: Story = {
   render: () => (
-    <View style={{ padding: 16, gap: 24 }}>
+    <ScrollView contentContainerStyle={{ padding: 16, gap: 24 }}>
       <AuthorBioCardNative
-        label="Default"
         name="Jane Smith"
         description="Reporter focused on long-form storytelling."
         position="Reporter"
         thumbnailIcon="https://i.pravatar.cc/150?img=5"
-        ctaLink={{ label: 'View profile', link: 'https://example.com' }}
-      />
-
-      <AuthorBioCardNative
-        label="Staff (Rounded Image)"
-        name="Michael Brown"
-        description="Senior editor overseeing newsroom strategy."
-        position="Senior Editor"
-        thumbnailIcon="https://i.pravatar.cc/150?img=8"
-        thumbnailIconRounded
-        ctaLink={{ label: 'View profile', link: 'https://example.com' }}
+        ctaLink={{ link: 'https://example.com' }}
       />
 
       <AuthorBioCardNative
@@ -124,6 +106,6 @@ export const AllVariants: Story = {
         thumbnailIcon="https://i.pravatar.cc/150?img=10"
         ctaLink={{ label: 'Explore', link: 'https://example.com' }}
       />
-    </View>
+    </ScrollView>
   ),
 };

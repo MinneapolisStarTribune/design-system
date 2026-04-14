@@ -75,16 +75,12 @@ describe('AuthorBioCardNative (native)', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('does not render CTA when label is missing', () => {
-    render(
-      <AuthorBioCardNative
-        description="Test"
-        ctaLink={{ label: '', link: 'https://example.com' }}
-      />,
-      { wrapper }
-    );
+  it('renders CTA with default label "See More" when label is empty', () => {
+    render(<AuthorBioCardNative description="Test" ctaLink={{ label: '', link: '/profile' }} />, {
+      wrapper,
+    });
 
-    expect(screen.queryByTestId('author-bio-cta')).toBeNull();
+    expect(screen.getByRole('link', { name: 'See More' })).toBeOnTheScreen();
   });
 
   it('renders with borders enabled', () => {

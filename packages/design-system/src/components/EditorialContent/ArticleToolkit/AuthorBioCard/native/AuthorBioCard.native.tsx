@@ -22,13 +22,13 @@ function createStyles(theme: NativeTheme) {
 
     borderTop: {
       borderTopWidth: 1,
-      borderTopColor: theme.colorBorderOnLightStrong01,
+      borderTopColor: theme.colorBorderOnLightSubtle01,
       paddingTop: theme.spacing8,
     },
 
     borderBottom: {
       borderBottomWidth: 1,
-      borderBottomColor: theme.colorBorderOnLightStrong01,
+      borderBottomColor: theme.colorBorderOnLightSubtle01,
       paddingBottom: theme.spacing8,
     },
 
@@ -47,10 +47,6 @@ function createStyles(theme: NativeTheme) {
       width: 60,
       height: 60,
       overflow: 'hidden',
-    },
-
-    imageRounded: {
-      borderRadius: theme.radius8,
     },
 
     imageCircle: {
@@ -94,11 +90,10 @@ function createStyles(theme: NativeTheme) {
 }
 
 export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
-  label,
+  label = 'ABOUT THE AUTHOR',
   name,
   description,
   thumbnailIcon,
-  thumbnailIconRounded = false,
   thumbnailIconAlt,
   ctaLink,
   position,
@@ -117,8 +112,9 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
   }
 
   const styles = useNativeStyles(createStyles);
+  const ctaLabel = ctaLink?.label?.trim() ? ctaLink.label : 'See More';
 
-  const showCTA = Boolean(ctaLink?.label && (ctaLink?.link || ctaLink?.onPress));
+  const showCTA = Boolean(ctaLink?.link || ctaLink?.onPress);
 
   const handlePress = () => {
     if (ctaLink?.onPress) return ctaLink.onPress();
@@ -143,12 +139,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
 
       <View style={styles.container}>
         {thumbnailIcon && (
-          <View
-            style={[
-              styles.imageWrapper,
-              thumbnailIconRounded ? styles.imageCircle : styles.imageRounded,
-            ]}
-          >
+          <View style={[styles.imageWrapper, styles.imageCircle]}>
             <Image
               source={{ uri: thumbnailIcon }}
               accessibilityLabel={thumbnailIconAlt ?? 'Author thumbnail'}
@@ -183,7 +174,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
               style={styles.cta}
             >
               <UtilityBody size="small" style={styles.ctaText}>
-                {ctaLink!.label}
+                {ctaLabel}
               </UtilityBody>
               <UtilityBody size="small" style={styles.ctaText}>
                 {'>'}
