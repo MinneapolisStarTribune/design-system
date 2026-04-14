@@ -10,6 +10,8 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
+export { FormControl } from './FormControl/FormControl.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
@@ -21,7 +23,11 @@ export {
   FormGroupDescription,
   type FormGroupDescriptionNativeProps,
 } from './FormGroup/native/description/FormGroup.Description.native';
-export { FormGroupNative, type FormGroupNativeProps } from './FormGroup/native/FormGroup.native';
+export {
+  FormGroup,
+  FormGroupNative,
+  type FormGroupNativeProps,
+} from './FormGroup/native/FormGroup.native';
 export {
   FormGroupLabel,
   type FormGroupLabelNativeProps,
