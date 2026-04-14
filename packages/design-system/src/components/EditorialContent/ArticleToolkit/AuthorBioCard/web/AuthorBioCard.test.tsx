@@ -68,10 +68,13 @@ describe('AuthorBioCard', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
-  it('does not render CTA when label is missing', () => {
+  it('renders CTA with default label "See More" when label is empty', () => {
     render(<AuthorBioCard description="Test" ctaLink={{ label: '', link: '/profile' }} />);
 
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    const link = screen.getByRole('link', { name: 'See More' });
+
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', '/profile');
   });
 
   it('applies custom dataTestId', () => {

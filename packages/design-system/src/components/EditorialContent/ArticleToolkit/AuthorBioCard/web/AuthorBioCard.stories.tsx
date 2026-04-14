@@ -16,18 +16,15 @@ type Story = StoryObj<typeof AuthorBioCard>;
 // identifier: configurable
 export const Configurable: Story = {
   args: {
-    label: 'Author',
     name: 'John Doe',
     description: 'John covers local news, investigative journalism, and community stories.',
     position: 'Staff Writer',
     thumbnailIcon: 'https://i.pravatar.cc/150?img=12',
     thumbnailIconAlt: 'John Doe profile image',
-    thumbnailIconRounded: true,
     headingLevel: 'h4',
     hasTopBorder: true,
-    hasBottomBorder: false,
+    hasBottomBorder: true,
     ctaLink: {
-      label: 'View profile',
       link: '#',
     },
   },
@@ -36,7 +33,6 @@ export const Configurable: Story = {
       source: {
         code: `
 <AuthorBioCard
-  label="Author"
   name="John Doe"
   description="John covers local news, investigative journalism, and community stories."
   position="Staff Writer"
@@ -45,7 +41,7 @@ export const Configurable: Story = {
   thumbnailIconRounded
   headingLevel="h4"
   hasTopBorder
-  ctaLink={{ label: "View profile", link: "#" }}
+  ctaLink={{ link: "#" }}
 />
         `,
       },
@@ -67,7 +63,7 @@ export const AllVariants: Story = {
     description="Reporter focused on long-form storytelling."
     position="Reporter"
     thumbnailIcon="https://i.pravatar.cc/150?img=5"
-    ctaLink={{ label: "View profile", link: "#" }}
+    ctaLink={{ link: "#" }}
   />
 
   <AuthorBioCard
@@ -77,7 +73,7 @@ export const AllVariants: Story = {
     position="Senior Editor"
     thumbnailIcon="https://i.pravatar.cc/150?img=8"
     thumbnailIconRounded
-    ctaLink={{ label: "View profile", link: "#" }}
+    ctaLink={{ link: "#" }}
   />
 
   <AuthorBioCard
@@ -96,6 +92,16 @@ export const AllVariants: Story = {
     thumbnailIcon="https://i.pravatar.cc/150?img=9"
   />
 </>
+<AuthorBioCard
+        label="With Borders"
+        name="Emily Davis"
+        description="Covers health and science."
+        position="Health Reporter"
+        thumbnailIcon="https://i.pravatar.cc/150?img=9"
+        hasTopBorder
+        hasBottomBorder
+        ctaLink={{ label: 'Explore', link: '#' }}
+      />
         `,
       },
     },
@@ -108,7 +114,7 @@ export const AllVariants: Story = {
         description="Reporter focused on long-form storytelling."
         position="Reporter"
         thumbnailIcon="https://i.pravatar.cc/150?img=5"
-        ctaLink={{ label: 'View profile', link: '#' }}
+        ctaLink={{ link: '#' }}
       />
 
       <AuthorBioCard
@@ -117,8 +123,7 @@ export const AllVariants: Story = {
         description="Senior editor overseeing newsroom strategy."
         position="Senior Editor"
         thumbnailIcon="https://i.pravatar.cc/150?img=8"
-        thumbnailIconRounded
-        ctaLink={{ label: 'View profile', link: '#' }}
+        ctaLink={{ link: '#' }}
       />
 
       <AuthorBioCard
@@ -135,6 +140,17 @@ export const AllVariants: Story = {
         description="Covers health and science."
         position="Health Reporter"
         thumbnailIcon="https://i.pravatar.cc/150?img=9"
+      />
+
+      <AuthorBioCard
+        label="With Borders"
+        name="Michael Brown"
+        description="Covers health and science."
+        position="Health Reporter"
+        thumbnailIcon="https://i.pravatar.cc/150?img=8"
+        hasTopBorder
+        hasBottomBorder
+        ctaLink={{ label: 'Explore', link: '#' }}
       />
     </div>
   ),

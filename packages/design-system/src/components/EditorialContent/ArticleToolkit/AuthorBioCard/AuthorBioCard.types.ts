@@ -7,7 +7,6 @@ export interface AuthorBioCardProps extends BaseProps, AccessibilityProps {
   name?: string;
   description: string;
   thumbnailIcon?: string;
-  thumbnailIconRounded?: boolean;
   thumbnailIconAlt?: string;
   ctaLink?: CtaLinkProps;
   position?: string;
