@@ -32,11 +32,21 @@ const meta: Meta<PullQuoteProps> = {
       control: 'radio',
       options: Object.values(ARTICLE_BODY_VARIANTS),
       description: 'Article body variant: standard or immersive.',
+      table: {
+        type: {
+          summary: "'standard' | 'immersive'",
+        },
+      },
     },
     size: {
       control: 'select',
       options: PULL_QUOTE_SIZES,
       description: 'The size of the quote text.',
+      table: {
+        type: {
+          summary: "'small' | 'large'",
+        },
+      },
     },
   },
 };
