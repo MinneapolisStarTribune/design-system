@@ -12,12 +12,12 @@ import React, {
 import {
   ToastRenderer,
   type ToastRendererItem,
-} from '@/components/Toast/ToastRenderer/ToastRenderer';
+} from '@/components/Toast/web/ToastRenderer/ToastRenderer';
 import {
   CandyBarRenderer,
   type CandyBarRendererItem,
-} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
-import type { ToastVariant } from '@/components/Toast/Toast';
+} from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
+import type { ToastVariant } from '@/components/Toast/Toast.types';
 
 // --- Constants ---
 

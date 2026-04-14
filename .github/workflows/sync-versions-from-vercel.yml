@@ -16,10 +16,19 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Same token as publish.yml — GITHUB_TOKEN cannot push to protected main.
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
       - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
@@ -34,8 +43,8 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "ci-branch-protection-bypass[bot]"
+          git config user.email "ci-branch-protection-bypass[bot]@users.noreply.github.com"
           git add packages/design-system/.storybook/versions.json
           if git diff --staged --quiet; then
             echo "No change to versions.json"

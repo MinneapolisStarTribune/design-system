@@ -2,22 +2,10 @@
 
 import classNames from 'classnames';
 import { CloseIcon, ErrorIcon, InformationIcon, SuccessIcon, WarningIcon } from '@/icons';
+import { TOAST_VARIANTS, type ToastProps, type ToastVariant } from '@/components/Toast/Toast.types';
 import styles from './Toast.module.scss';
 
-export const TOAST_VARIANTS = ['info', 'success', 'warning', 'error'] as const;
-export type ToastVariant = (typeof TOAST_VARIANTS)[number];
-
-export type ToastProps = {
-  title: string;
-  description?: string;
-  variant?: ToastVariant;
-  showIcon?: boolean;
-  /** When false, the dismiss control is hidden (e.g. static variant grids in Storybook). Default true. */
-  showCloseButton?: boolean;
-  exiting?: boolean;
-  onClose: () => void;
-  dataTestId?: string;
-};
+export { TOAST_VARIANTS, type ToastProps, type ToastVariant };
 
 const VARIANT_ICON = {
   info: InformationIcon,
