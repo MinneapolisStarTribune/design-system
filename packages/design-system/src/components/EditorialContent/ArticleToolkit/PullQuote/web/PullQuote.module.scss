@@ -18,7 +18,7 @@
   .quote-icon-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-shrink: 0;
     padding: 0;
 
@@ -52,7 +52,7 @@
       &.size-small {
         @media (min-width: $lg) {
           margin-left: calc(
-            -1 * (var(--spaceing-8) + var(--semantic-pull-quote-icon-small-desktop-width))
+            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-small-width))
           );
         }
       }
@@ -60,7 +60,7 @@
       &.size-large {
         @media (min-width: $lg) {
           margin-left: calc(
-            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-large-desktop-width))
+            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-large-width))
           );
         }
       }
