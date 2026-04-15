@@ -41,7 +41,7 @@
   },
   {
     "component": "Checkbox",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
