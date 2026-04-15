@@ -8,7 +8,7 @@ import * as PullQuoteStories from './PullQuote.stories';
 # Pull Quote
 
 The **Pull Quote** component highlights a key excerpt from an article to draw reader attention and emphasize important statements or quotes.
-It is designed specifically for editorial content and is supported **only in the immersive article variant**, where it enhances storytelling by breaking the flow of text with visually distinct emphasis.
+It is designed specifically for editorial content and is supported in both the **standard** and **immersive** article variants, where it helps emphasize key statements within the flow of a story.
 
 [Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2394-12749)
 
@@ -26,7 +26,7 @@ It is designed specifically for editorial content and is supported **only in the
 
 ### Standard
 
-Pull quotes are **not supported** in the standard article layout.
+Used within the standard article template to call out important statements without the immersive layout offset treatment.
 
 ### Immersive
 
@@ -59,7 +59,6 @@ import { PullQuote } from '@minneapolisstartribune/design-system/web';
 
 ### When to avoid
 
-- Avoid using in the **standard article variant**.
 - Avoid overusing — too many pull quotes reduce their impact.
 
 ---
@@ -67,8 +66,8 @@ import { PullQuote } from '@minneapolisstartribune/design-system/web';
 ## Behavior
 
 - The component **does not render** if no `quote` is provided.
-- In the **standard variant**, a fallback message is displayed indicating that pull quotes are not supported.
 - The icon size and layout are responsive and adapt across breakpoints using design tokens.
+- In the **immersive variant**, the quote icon may shift horizontally at larger breakpoints to align with the article column structure.
 
 ---
 
@@ -87,7 +86,7 @@ import { PullQuote } from '@minneapolisstartribune/design-system/web';
 ## Layout behavior
 
 - The component aligns with the editorial grid and adjusts spacing responsively.
-- In immersive layouts, the quote icon may offset slightly to align with the article column structure.
+- Standard and immersive variants share the same core content structure, with variant-specific spacing and icon positioning.
 - Maximum width is controlled via design tokens to maintain readability.
 
 ---
