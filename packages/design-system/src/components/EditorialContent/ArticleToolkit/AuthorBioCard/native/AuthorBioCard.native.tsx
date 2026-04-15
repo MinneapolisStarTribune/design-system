@@ -114,7 +114,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
   const styles = useNativeStyles(createStyles);
   const ctaLabel = ctaLink?.label?.trim() ? ctaLink.label : 'See More';
 
-  const showCTA = Boolean(ctaLink?.link || ctaLink?.onPress);
+  const showCTA = Boolean(ctaLink && (ctaLink.link || ctaLink.onClick));
 
   const handlePress = () => {
     if (ctaLink?.onPress) return ctaLink.onPress();
