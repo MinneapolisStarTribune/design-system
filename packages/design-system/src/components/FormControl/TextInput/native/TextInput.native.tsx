@@ -15,9 +15,11 @@ import { useFormGroupContext, useNativeStyles } from '@/index.native';
 import { NativeTheme } from '@/hooks/useNativeStyles';
 import {
   createStyles,
-  getIconContainerStyleKey,
   getInputTypographyStyleKey,
+  getPlaceholderTextColor,
+  getRoundedStyleKey,
 } from './TextInput.styles';
+import { SuccessIcon } from '@/icons';
 
 export interface TextInputProps
   extends Omit<BaseTextInputProps, 'style' | 'dataTestId'>,
@@ -25,8 +27,7 @@ export interface TextInputProps
 
 const createTextInputThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
-  placeholderTextColor: theme.colorTextOnLightSecondary,
-  disabledPlaceholderTextColor: theme.colorTextStateDisabledOnLight,
+  placeholderTextColor: getPlaceholderTextColor(theme),
 });
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -42,15 +43,14 @@ export const TextInput: React.FC<TextInputProps> = ({
   onChangeText,
   onBlur,
   onFocus,
-  testID,
+  testID = 'text-input',
   analytics,
   accessibilityLabel,
   accessibilityHint,
   ...props
 }) => {
   const { track } = useAnalytics();
-  const { styles, placeholderTextColor, disabledPlaceholderTextColor } =
-    useNativeStyles(createTextInputThemeState);
+  const { styles, placeholderTextColor } = useNativeStyles(createTextInputThemeState);
   const formGroupContext = useFormGroupContext();
   const inputRef = useRef<RNTextInput>(null);
 
@@ -61,7 +61,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   const hasSuccess = isSuccess ?? formGroupContext?.hasSuccess ?? false;
   const isFilled = value != null && String(value).trim().length > 0;
   const inputTypographyStyle = styles[getInputTypographyStyleKey(size, isFilled)];
-  const iconContainerSizeStyle = styles[getIconContainerStyleKey(size)];
+  const roundedSizeStyle = styles[getRoundedStyleKey(size)];
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     track({
@@ -93,6 +93,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         styles.wrapper,
         styles[size],
         rounded && styles.rounded,
+        rounded && roundedSizeStyle,
         isDisabled && styles.disabled,
         hasError && styles.error,
         hasSuccess && styles.success,
@@ -102,7 +103,7 @@ export const TextInput: React.FC<TextInputProps> = ({
       testID={testID ? `${testID}-wrapper` : undefined}
     >
       {leftIcon && (
-        <View pointerEvents="none" style={[styles.iconStart, iconContainerSizeStyle]}>
+        <View pointerEvents="none" style={[styles.iconStart]} testID={`${testID}-icon-start`}>
           {leftIcon}
         </View>
       )}
@@ -111,7 +112,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         ref={inputRef}
         style={[styles.input, inputTypographyStyle, isDisabled && styles.inputDisabled]}
         placeholder={placeholderText}
-        placeholderTextColor={isDisabled ? disabledPlaceholderTextColor : placeholderTextColor}
+        placeholderTextColor={placeholderTextColor}
         editable={!isDisabled}
         value={value}
         onChangeText={onChangeText}
@@ -125,17 +126,14 @@ export const TextInput: React.FC<TextInputProps> = ({
       />
 
       {rightIcon && (
-        <View pointerEvents="none" style={[styles.iconEnd, iconContainerSizeStyle]}>
+        <View pointerEvents="none" style={[styles.iconEnd]} testID={`${testID}-icon-end`}>
           {rightIcon}
         </View>
       )}
 
       {showSuccessIcon && (
-        <View pointerEvents="none" style={[styles.iconEnd, iconContainerSizeStyle]}>
-          <View style={styles.successIndicator}>
-            <View style={styles.successIndicatorStem} />
-            <View style={styles.successIndicatorKick} />
-          </View>
+        <View pointerEvents="none" style={[styles.iconEnd]} testID={`${testID}-icon-success`}>
+          <SuccessIcon fill={styles.iconSuccess.color as string} />
         </View>
       )}
     </Pressable>

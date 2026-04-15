@@ -1,19 +1,49 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { FormGroupNative as FormGroup } from '@/components/FormGroup/native/FormGroup.native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { FormGroupNative as FormGroup, UtilityBody } from '@/components/index.native';
 import { TextInput, type TextInputProps } from './TextInput.native';
 
-function StoryIcon() {
-  return <View style={styles.storyIcon} />;
+import {
+  CalendarIcon,
+  LocationIcon,
+  LockIcon,
+  MailIcon,
+  PhoneIcon,
+  SearchIcon,
+  UserIcon,
+} from '@/icons';
+
+const DEFAULT_ICON_COLOR = '#585C5F'; // theme.colorTextOnLightTertiary
+const ICON_MAP = {
+  None: undefined,
+  Search: <SearchIcon fill={DEFAULT_ICON_COLOR} />,
+  Mail: <MailIcon fill={DEFAULT_ICON_COLOR} />,
+  User: <UserIcon fill={DEFAULT_ICON_COLOR} />,
+  Lock: <LockIcon fill={DEFAULT_ICON_COLOR} />,
+  Calendar: <CalendarIcon fill={DEFAULT_ICON_COLOR} />,
+  Phone: <PhoneIcon fill={DEFAULT_ICON_COLOR} />,
+  Location: <LocationIcon fill={DEFAULT_ICON_COLOR} />,
+} as const;
+
+type IconOptionKey = keyof typeof ICON_MAP;
+
+function resolveIcon(icon: TextInputProps['icon'] | IconOptionKey | undefined) {
+  if (!icon) return undefined;
+  if (typeof icon === 'string') return ICON_MAP[icon as IconOptionKey];
+  return icon;
 }
+
+type ConfigurableTextInputArgs = Omit<TextInputProps, 'icon'> & {
+  icon?: TextInputProps['icon'] | IconOptionKey;
+};
 
 function SectionLabel({ children }: { children: string }) {
-  return <Text style={styles.sectionLabel}>{children}</Text>;
+  return <UtilityBody weight="bold">{children}</UtilityBody>;
 }
 
-function ConfigurableInput(args: TextInputProps) {
-  const { value: initialValue, onChangeText, ...rest } = args;
+function ConfigurableInput(args: ConfigurableTextInputArgs) {
+  const { value: initialValue, onChangeText, icon, ...rest } = args;
   const [value, setValue] = useState(initialValue ?? '');
 
   return (
@@ -22,6 +52,7 @@ function ConfigurableInput(args: TextInputProps) {
       <View style={styles.configurableWrap}>
         <TextInput
           {...rest}
+          icon={resolveIcon(icon)}
           value={value}
           onChangeText={(nextValue) => {
             setValue(nextValue);
@@ -44,8 +75,6 @@ interface VariantRow {
     variant: 'info' | 'error' | 'success';
   };
 }
-
-const cellStyle = { minWidth: 0 } as const;
 
 const ALL_VARIANTS: VariantRow[] = [
   {
@@ -130,7 +159,7 @@ const ALL_VARIANTS: VariantRow[] = [
     label: 'Label',
     props: {
       placeholderText: 'Search User Here',
-      icon: <StoryIcon />,
+      icon: ICON_MAP.User,
       iconPosition: 'start',
       accessibilityLabel: 'Left icon',
     },
@@ -140,7 +169,7 @@ const ALL_VARIANTS: VariantRow[] = [
     label: 'Label',
     props: {
       placeholderText: 'Search User Here',
-      icon: <StoryIcon />,
+      icon: ICON_MAP.User,
       iconPosition: 'end',
       accessibilityLabel: 'Right icon',
     },
@@ -241,10 +270,11 @@ function VariantField({ title, props, label, optional, description, caption }: V
   return (
     <View style={styles.variantCell}>
       <SectionLabel>{title}</SectionLabel>
+
       <FormGroup>
         {label ? <FormGroup.Label optional={optional}>{label}</FormGroup.Label> : null}
         {description ? <FormGroup.Description>{description}</FormGroup.Description> : null}
-        <TextInput {...props} />
+        <TextInput {...props} icon={resolveIcon(props.icon)} />
         {caption ? (
           <FormGroup.Caption variant={caption.variant}>{caption.text}</FormGroup.Caption>
         ) : null}
@@ -260,79 +290,66 @@ const meta = {
     docs: {
       description: {
         component:
-          'Text Inputs allow users to enter, edit, and/or view text such as names, email addresses, or search queries. They support multiple sizes, optional labels and descriptions, validation states, and can effortlessly be customized for a wide range of native use cases via the prop API.',
+          'Text Input component for native apps with icons, validation, and accessibility support.',
       },
     },
   },
   argTypes: {
-    placeholderText: {
-      control: 'text',
-      description: 'Placeholder text when empty',
-    },
+    placeholderText: { control: 'text' },
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
-      description: 'Input size',
     },
     icon: {
-      control: 'boolean',
-      mapping: {
-        true: <StoryIcon />,
-        false: undefined,
-      },
-      options: [false, true],
-      description: 'Optional icon',
+      control: 'select',
+      options: Object.keys(ICON_MAP),
     },
     iconPosition: {
       control: 'radio',
       options: ['start', 'end'],
-      description: 'Icon position (when icon is set)',
     },
-    rounded: {
-      control: 'boolean',
-      description: 'Rounded corners',
-    },
-    isDisabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    isError: {
-      control: 'boolean',
-      description: 'Error state (red border)',
-    },
-    isSuccess: {
-      control: 'boolean',
-      description: 'Success state (green border)',
-    },
-    value: {
-      control: 'text',
-      description: 'Controlled value (shows filled state when non-empty)',
-    },
+    rounded: { control: 'boolean' },
+    isDisabled: { control: 'boolean' },
+    isError: { control: 'boolean' },
+    isSuccess: { control: 'boolean' },
+    value: { control: 'text' },
   },
 } satisfies Meta<typeof TextInput>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
     placeholderText: 'Placeholder text',
     size: 'medium',
-    icon: undefined,
+    icon: 'None',
     iconPosition: 'end',
     rounded: false,
     isDisabled: false,
     isError: false,
     isSuccess: false,
     value: '',
-    accessibilityLabel: 'Configurable input',
   },
   render: (args) => <ConfigurableInput key={String(args.value ?? '')} {...args} />,
 };
 
 export const AllVariants: Story = {
   parameters: {
-    controls: { disable: true },
+    controls: {
+      exclude: [
+        'placeholderText',
+        'size',
+        'icon',
+        'iconPosition',
+        'rounded',
+        'isDisabled',
+        'isError',
+        'isSuccess',
+        'value',
+      ],
+    },
     layout: 'fullscreen',
     docs: {
       description: {
@@ -341,42 +358,20 @@ export const AllVariants: Story = {
       },
     },
   },
-  render: () => (
-    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-      {ALL_VARIANTS.map((variant) => (
-        <View key={variant.title} style={cellStyle}>
-          <VariantField {...variant} />
-        </View>
-      ))}
-    </ScrollView>
-  ),
+  render: (_args) => {
+    return (
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        {ALL_VARIANTS.map((v) => (
+          <VariantField key={v.title} {...v} />
+        ))}
+      </ScrollView>
+    );
+  },
 };
 
 const styles = StyleSheet.create({
-  configurableWrap: {
-    width: '100%',
-    maxWidth: 400,
-  },
-  scrollView: {
-    flex: 1,
-    width: '100%',
-  },
-  scrollContent: {
-    paddingBottom: 24,
-    gap: 16,
-  },
-  variantCell: {
-    gap: 8,
-    maxWidth: 400,
-  },
-  sectionLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  storyIcon: {
-    width: 16,
-    height: 16,
-    borderRadius: 4,
-    backgroundColor: 'rgba(128, 128, 128, 0.9)',
-  },
+  scrollView: { flex: 1 },
+  scrollContent: { padding: 16, gap: 16 },
+  variantCell: { gap: 8, maxWidth: 420 },
+  configurableWrap: { width: '100%', maxWidth: 400 },
 });

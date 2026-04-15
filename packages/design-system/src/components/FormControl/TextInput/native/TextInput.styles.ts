@@ -1,4 +1,4 @@
-import { StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
+import { ColorValue, StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
 import type { TextInputSize } from '../TextInput.types';
 
@@ -30,6 +30,12 @@ export type TextInputTypographyStyleKey =
 
 export type TextInputIconContainerStyleKey = `icon${SizeStyleKey}`;
 
+export type TextInputRoundedStyleKey = `rounded${SizeStyleKey}`;
+
+type IconStyle = {
+  color?: ColorValue;
+};
+
 type TextInputStyles = {
   wrapper: ViewStyle;
   input: TextStyle;
@@ -37,6 +43,9 @@ type TextInputStyles = {
   small: ViewStyle;
   medium: ViewStyle;
   large: ViewStyle;
+  roundedSmall: ViewStyle;
+  roundedMedium: ViewStyle;
+  roundedLarge: ViewStyle;
   inputPlaceholderSmall: TextStyle;
   inputPlaceholderMedium: TextStyle;
   inputPlaceholderLarge: TextStyle;
@@ -51,12 +60,7 @@ type TextInputStyles = {
   filled: ViewStyle;
   iconStart: ViewStyle;
   iconEnd: ViewStyle;
-  iconSmall: ViewStyle;
-  iconMedium: ViewStyle;
-  iconLarge: ViewStyle;
-  successIndicator: ViewStyle;
-  successIndicatorStem: ViewStyle;
-  successIndicatorKick: ViewStyle;
+  iconSuccess: IconStyle;
 };
 
 const SIZE_SUFFIX: Record<TextInputSize, SizeStyleKey> = {
@@ -77,10 +81,12 @@ export const getInputTypographyStyleKey = (
 ): TextInputTypographyStyleKey =>
   `${isFilled ? 'inputValue' : 'inputPlaceholder'}${SIZE_SUFFIX[size]}`;
 
-export const getIconContainerStyleKey = (size: TextInputSize): TextInputIconContainerStyleKey =>
-  `icon${SIZE_SUFFIX[size]}`;
+export const getRoundedStyleKey = (size: TextInputSize): TextInputRoundedStyleKey =>
+  `rounded${SIZE_SUFFIX[size]}`;
 
 export const getIconPixelSize = (size: TextInputSize) => ICON_SIZE[size];
+
+export const getPlaceholderTextColor = (theme: NativeTheme) => theme.colorTextStateDisabledOnLight;
 
 export const createStyles = (theme: NativeTheme) => {
   const typographyTheme = theme as NativeTheme & Record<InputTypographyToken, TextStyle>;
@@ -90,7 +96,7 @@ export const createStyles = (theme: NativeTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
       borderWidth: 1,
-      borderColor: theme.colorBorderOnLightSubtle01,
+      borderColor: theme.colorBorderOnLightSubtle02,
       backgroundColor: theme.colorBackgroundLightDefault,
       borderRadius: theme.radius4,
     },
@@ -106,27 +112,39 @@ export const createStyles = (theme: NativeTheme) => {
     },
     small: {
       minHeight: theme.spacingInputSm,
-      paddingHorizontal: theme.spacing8,
+      paddingVertical: theme.spacing8,
+      paddingHorizontal: theme.spacing12,
     },
     medium: {
       minHeight: theme.spacingInputMd,
-      paddingHorizontal: theme.spacing12,
+      paddingVertical: theme.spacing12,
+      paddingHorizontal: theme.spacing16,
     },
     large: {
       minHeight: theme.spacingInputLg,
+      paddingVertical: theme.spacing12,
       paddingHorizontal: theme.spacing16,
+    },
+    roundedSmall: {
+      paddingVertical: theme.spacing8,
+      paddingHorizontal: theme.spacing12,
+    },
+    roundedMedium: {
+      paddingVertical: theme.spacing12,
+      paddingHorizontal: theme.spacing20,
+    },
+    roundedLarge: {
+      paddingVertical: theme.spacing12,
+      paddingHorizontal: theme.spacing24,
     },
     inputPlaceholderSmall: {
       ...typographyTheme[INPUT_PLACEHOLDER_TOKENS.small],
-      color: theme.colorTextOnLightSecondary,
     },
     inputPlaceholderMedium: {
       ...typographyTheme[INPUT_PLACEHOLDER_TOKENS.medium],
-      color: theme.colorTextOnLightSecondary,
     },
     inputPlaceholderLarge: {
       ...typographyTheme[INPUT_PLACEHOLDER_TOKENS.large],
-      color: theme.colorTextOnLightSecondary,
     },
     inputValueSmall: {
       ...typographyTheme[INPUT_VALUE_TOKENS.small],
@@ -165,48 +183,15 @@ export const createStyles = (theme: NativeTheme) => {
       backgroundColor: theme.colorBackgroundLightGray01,
     },
     iconStart: {
-      marginRight: theme.spacing8,
       justifyContent: 'center',
       alignItems: 'center',
     },
     iconEnd: {
-      marginLeft: theme.spacing8,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    iconSmall: {
-      width: theme.spacing20,
-      height: theme.spacing20,
-    },
-    iconMedium: {
-      width: theme.spacing24,
-      height: theme.spacing24,
-    },
-    iconLarge: {
-      width: theme.spacing24,
-      height: theme.spacing24,
-    },
-    successIndicator: {
-      width: theme.spacing20,
-      height: theme.spacing20,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    successIndicatorStem: {
-      position: 'absolute',
-      width: 2,
-      height: 8,
-      backgroundColor: theme.colorBorderStateSuccessOnLight,
-      borderRadius: theme.radiusFull,
-      transform: [{ rotate: '45deg' }, { translateX: -2 }, { translateY: 2 }],
-    },
-    successIndicatorKick: {
-      position: 'absolute',
-      width: 2,
-      height: 14,
-      backgroundColor: theme.colorBorderStateSuccessOnLight,
-      borderRadius: theme.radiusFull,
-      transform: [{ rotate: '-45deg' }, { translateX: 2 }, { translateY: 0 }],
+    iconSuccess: {
+      color: theme.colorBorderBrand01,
     },
   });
 };
