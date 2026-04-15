@@ -5,6 +5,10 @@ export {
   type ArticleBodyHeadingProps,
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
 export {
+  ArticleBodySponsoredHeading,
+  type ArticleBodySponsoredHeadingProps,
+} from './Typography/ArticleBody/ArticleBodySponsoredHeading/native/ArticleBodySponsoredHeading.native';
+export {
   ArticleBodySponsoredText,
   type ArticleBodySponsoredTextProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredText/native/ArticleBodySponsoredText.native';
