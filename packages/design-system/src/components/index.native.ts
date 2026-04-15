@@ -21,6 +21,7 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
