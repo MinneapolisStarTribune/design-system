@@ -29,7 +29,7 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
   const HeadingTag = headingLevel;
 
   const ctaLabel = ctaLink?.label?.trim() ? ctaLink.label : 'See More';
-  const showCTA = Boolean(ctaLink?.link || ctaLink?.onClick);
+  const showCTA = Boolean(ctaLink && (ctaLink.link || ctaLink.onClick));
   const labelTypography = 'typography-utility-label-semibold-small-caps';
   const nameTypography = 'typography-utility-label-semibold-large';
   const positionTypography = 'typography-utility-label-small-caps';
