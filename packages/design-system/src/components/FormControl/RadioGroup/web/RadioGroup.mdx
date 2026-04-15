@@ -1,0 +1,94 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as RadioGroupStories from './RadioGroup.stories';
+
+<Meta of={RadioGroupStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# RadioGroup
+
+`FormControl.RadioGroup` renders a controlled set of radios where only one option can be selected.
+
+Use `FormGroup` for field semantics (label, optional indicator, description, and caption). This keeps behavior and accessibility consistent with other form controls.
+
+## Canonical usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Select an option</FormGroup.Label>
+  <FormControl.RadioGroup
+    name="option"
+    value={value}
+    onChange={setValue}
+    options={[
+      { value: 'a', title: 'Option A' },
+      { value: 'b', title: 'Option B' },
+      { value: 'c', title: 'Option C' },
+    ]}
+  />
+</FormGroup>
+```
+
+## Label variants (optional + description)
+
+Optional treatment is part of the group label, not the radio control itself:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Select an option</FormGroup.Label>
+  <FormControl.RadioGroup name="option" value={value} onChange={setValue} options={options} />
+</FormGroup>
+```
+
+Group-level supporting text belongs directly under the label:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Select an option</FormGroup.Label>
+  <FormGroup.Description>Select only one</FormGroup.Description>
+  <FormControl.RadioGroup name="option" value={value} onChange={setValue} options={options} />
+</FormGroup>
+```
+
+## Error state
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Subscription Plan</FormGroup.Label>
+  <FormGroup.Description>Select one</FormGroup.Description>
+  <FormControl.RadioGroup
+    name="plan"
+    value={plan}
+    onChange={setPlan}
+    options={[
+      { value: 'basic', title: 'Basic' },
+      { value: 'pro', title: 'Pro' },
+      { value: 'enterprise', title: 'Enterprise' },
+    ]}
+    error
+  />
+  <FormGroup.Caption variant="error">Please select a plan</FormGroup.Caption>
+</FormGroup>
+```
+
+## Accessibility behavior
+
+When rendered inside `FormGroup`, `RadioGroup` automatically receives:
+
+- `aria-labelledby` from `FormGroup.Label`
+- `aria-describedby` from `FormGroup.Description` and/or `FormGroup.Caption`
+- `aria-invalid` when `error` is true (or when `FormGroup.Caption` uses `variant="error"`)
+
+`RadioGroup` uses native radio behavior by applying the same `name` to all radios in the group.
+
+## Exports
+
+- `RadioGroup`
+- `RadioGroupProps`
+- `RadioOption`
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />
