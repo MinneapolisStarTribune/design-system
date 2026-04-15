@@ -15,7 +15,7 @@ StyleDictionary.registerPreprocessor({
 
       // If this node has breakpoint children that are tokens, collapse to mobile
       const hasBreakpoints = BREAKPOINTS.some(
-        (bp) => bp in obj && obj[bp] && typeof obj[bp] === 'object' && 'value' in obj[bp]
+        (bp) => bp in obj && obj[bp] && typeof obj[bp] === 'object' && 'value' in obj[bp],
       );
       if (hasBreakpoints) {
         // Prefer mobile breakpoint; tokens without a mobile key pass through untouched
@@ -116,22 +116,6 @@ function getTypographyConfig(brand) {
           const familyName = val.split(',')[0].trim();
           const lookupKey = `${familyName}|${fontWeight}|${fontStyle}`;
           result[camelKey] = fontVariantMap[lookupKey] || familyName;
-        } else if (camelKey === 'letterSpacing') {
-          if (typeof val === 'string') {
-            if (val.trim() === '0' || val === 'normal') {
-              result[camelKey] = 0;
-            } else if (val.endsWith('em')) {
-              const emValue = parseFloat(val.replace('em', ''));
-              result[camelKey] = !isNaN(emValue) && fontSize ? emValue * fontSize : emValue;
-            } else if (val.endsWith('px')) {
-              result[camelKey] = parseFloat(val.replace('px', ''));
-            } else {
-              const parsed = Number(val);
-              result[camelKey] = isNaN(parsed) ? 0 : parsed;
-            }
-          } else {
-            result[camelKey] = typeof val === 'number' ? val : 0;
-          }
         } else {
           result[camelKey] = val;
         }
