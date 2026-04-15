@@ -5,6 +5,7 @@ coverage
 test-coverage
 reports
 .storybook-static
+storybook-static
 # ESLint ignores dot-directories by default; include .storybook so config and wrappers are linted
 !.storybook
 !.storybook/**

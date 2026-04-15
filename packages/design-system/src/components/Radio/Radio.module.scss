@@ -1,0 +1,122 @@
+.root {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  align-self: flex-start;
+  justify-self: start;
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  /* Focus ring wraps the full control (radio + label + description), not just the 16×16 input */
+  &:has(.input:focus-visible) {
+    box-shadow:
+      0 0 0 2px var(--color-background-light-default),
+      0 0 0 4px var(--color-border-state-focus);
+  }
+}
+
+/* Visual layout under the stretched input; grid replaces titleRow + inputWrapper nesting */
+.content {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, max-content);
+  column-gap: var(--spacing-8);
+  row-gap: var(--spacing-4);
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: inherit;
+  outline: none;
+  z-index: 1;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &:disabled {
+    pointer-events: none;
+  }
+}
+
+.visualDot {
+  grid-column: 1;
+  grid-row: 1;
+  width: var(--spacing-radio-default);
+  height: var(--spacing-radio-default);
+  border-radius: 999px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-radio-border-unchecked);
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Let clicks hit the native input underneath (same pattern as Checkbox visual layer) */
+  pointer-events: none;
+}
+
+.visualDot::after {
+  content: '';
+  width: var(--spacing-radio-small);
+  height: var(--spacing-radio-small);
+  border-radius: 999px;
+  background-color: var(--color-radio-dot-unchecked);
+}
+
+.root.checked.neutral .visualDot {
+  border-color: var(--color-radio-border-selected-neutral);
+}
+
+.root.checked.brand .visualDot {
+  border-color: var(--color-radio-border-selected-brand);
+}
+
+.root.checked.neutral .visualDot::after {
+  background-color: var(--color-radio-dot-selected-neutral);
+}
+
+.root.checked.brand .visualDot::after {
+  background-color: var(--color-radio-dot-selected-brand);
+}
+
+.root.error:not(.checked) .visualDot {
+  border-color: var(--color-border-state-attention-on-light);
+}
+
+.root.error.checked .visualDot {
+  border-color: var(--color-border-state-attention-on-light);
+}
+
+.title {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--color-text-on-light-primary);
+  cursor: inherit;
+  margin: 0;
+  min-width: 0;
+}
+
+/* Beat global `[class*="typography-"] { color: primary }` on the description span */
+.root .description {
+  grid-column: 2;
+  grid-row: 2;
+  color: var(--color-text-on-light-tertiary);
+  cursor: inherit;
+  margin: 0;
+}
