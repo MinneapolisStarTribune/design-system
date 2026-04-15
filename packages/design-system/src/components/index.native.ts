@@ -11,12 +11,6 @@ export {
   type IconOnlyButtonSize,
 } from './Button/Button.types';
 export { Button, type ButtonNativeProps } from './Button/native/Button.native';
-export {  
-  Checkbox,
-  CHECKBOX_VARIANTS,
-  type CheckboxProps,
-  type CheckboxVariant,
-} from './FormControl/Checkbox/native/Checkbox.native';
 export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
 export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
 export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
@@ -27,6 +21,12 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export {
+  Checkbox,
+  CHECKBOX_VARIANTS,
+  type CheckboxProps,
+  type CheckboxVariant,
+} from './FormControl/Checkbox/native/Checkbox.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
