@@ -59,8 +59,8 @@ const defaultArgs: PullQuoteProps = {
   quote: 'I still believe jurors can do the right thing and justice can be served.',
   attribution: 'Gov. Tim Walz',
   jobTitle: 'Governor, Minnesota',
-  variant: 'immersive',
-  size: 'large',
+  variant: 'standard',
+  size: 'small',
 };
 
 const storyArgs = (overrides: Partial<PullQuoteProps> = {}): PullQuoteProps => ({
