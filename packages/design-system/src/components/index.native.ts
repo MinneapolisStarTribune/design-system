@@ -54,6 +54,12 @@ export {
 } from './Toast/native/ToastIcons.native';
 export { TOAST_VARIANTS, type ToastNativeProps, type ToastVariant } from './Toast/Toast.types';
 export {
+  createNativeIconWrapper,
+  type NativeIconColor,
+  type NativeIconSize,
+  type NativeIconWrapperProps,
+} from './Icon/Icon.native';
+export {
   ArticleBodyHeading,
   type ArticleBodyHeadingImportance,
   type ArticleBodyHeadingProps,

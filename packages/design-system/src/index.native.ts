@@ -6,3 +6,6 @@ export { type Brand, DesignSystemProvider } from './providers/DesignSystemProvid
 
 // Export hooks
 export { useNativeStyles, useNativeStylesWithDefaults } from './hooks/useNativeStyles';
+
+// Export native icons
+export * from './icons/index.native';
