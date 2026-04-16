@@ -26,6 +26,7 @@ export interface TextInputProps
 const createTextInputThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
   placeholderTextColor: getPlaceholderTextColor(theme),
+  successIconFill: theme.colorBorderBrand01,
 });
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -48,7 +49,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   ...props
 }) => {
   const { track } = useAnalytics();
-  const { styles, placeholderTextColor } = useNativeStyles(createTextInputThemeState);
+  const { styles, placeholderTextColor, successIconFill } = useNativeStyles(createTextInputThemeState);
   const formGroupContext = useFormGroupContext();
   const inputRef = useRef<RNTextInput>(null);
 
@@ -101,7 +102,7 @@ export const TextInput: React.FC<TextInputProps> = ({
       testID={testID ? `${testID}-wrapper` : undefined}
     >
       {leftIcon && (
-        <View pointerEvents="none" style={[styles.iconStart]} testID={`${testID}-icon-start`}>
+        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-start`}>
           {leftIcon}
         </View>
       )}
@@ -124,14 +125,14 @@ export const TextInput: React.FC<TextInputProps> = ({
       />
 
       {rightIcon && (
-        <View pointerEvents="none" style={[styles.iconEnd]} testID={`${testID}-icon-end`}>
+        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-end`}>
           {rightIcon}
         </View>
       )}
 
       {showSuccessIcon && (
-        <View pointerEvents="none" style={[styles.iconEnd]} testID={`${testID}-icon-success`}>
-          <SuccessIcon fill={styles.iconSuccess.color as string} />
+        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-success`}>
+          <SuccessIcon fill={successIconFill} />
         </View>
       )}
     </Pressable>

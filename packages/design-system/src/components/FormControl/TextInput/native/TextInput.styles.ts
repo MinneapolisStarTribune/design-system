@@ -1,4 +1,4 @@
-import { ColorValue, StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
+import { StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
 import type { TextInputSize } from '../TextInput.types';
 
@@ -32,10 +32,6 @@ export type TextInputIconContainerStyleKey = `icon${SizeStyleKey}`;
 
 export type TextInputRoundedStyleKey = `rounded${SizeStyleKey}`;
 
-type IconStyle = {
-  color?: ColorValue;
-};
-
 type TextInputStyles = {
   wrapper: ViewStyle;
   input: TextStyle;
@@ -58,9 +54,7 @@ type TextInputStyles = {
   disabled: ViewStyle;
   rounded: ViewStyle;
   filled: ViewStyle;
-  iconStart: ViewStyle;
-  iconEnd: ViewStyle;
-  iconSuccess: IconStyle;
+  iconContainer: ViewStyle;
 };
 
 const SIZE_SUFFIX: Record<TextInputSize, SizeStyleKey> = {
@@ -182,16 +176,9 @@ export const createStyles = (theme: NativeTheme) => {
     filled: {
       backgroundColor: theme.colorBackgroundLightGray01,
     },
-    iconStart: {
+    iconContainer: {
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    iconEnd: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    iconSuccess: {
-      color: theme.colorBorderBrand01,
     },
   });
 };
