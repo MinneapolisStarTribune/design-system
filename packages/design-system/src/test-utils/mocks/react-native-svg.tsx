@@ -20,5 +20,6 @@ const createSvgMockComponent = (displayName: string) => {
 const Svg = createSvgMockComponent('Svg');
 
 export const Path = createSvgMockComponent('Path');
+export const SvgXml = createSvgMockComponent('SvgXml');
 
 export default Svg;
