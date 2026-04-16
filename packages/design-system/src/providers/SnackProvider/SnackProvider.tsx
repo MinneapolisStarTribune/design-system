@@ -12,12 +12,12 @@ import React, {
 import {
   ToastRenderer,
   type ToastRendererItem,
-} from '@/components/Toast/ToastRenderer/ToastRenderer';
+} from '@/components/Toast/web/ToastRenderer/ToastRenderer';
 import {
   CandyBarRenderer,
   type CandyBarRendererItem,
-} from '@/components/CandyBar/CandyBarRenderer/CandyBarRenderer';
-import type { ToastVariant } from '@/components/Toast/Toast';
+} from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
+import type { ToastVariant } from '@/components/Toast/Toast.types';
 
 // --- Constants ---
 
@@ -33,7 +33,7 @@ const EXIT_DURATION_MS = 120; // must match Toast.module.scss animation duration
 
 // --- Slot items ---
 
-type SnackToastShowOptions = {
+export type SnackToastShowOptions = {
   id?: string;
   title: string;
   description?: string;
@@ -41,9 +41,10 @@ type SnackToastShowOptions = {
   showIcon?: boolean;
   duration?: number;
   dataTestId?: string;
+  onClose?: () => void;
 };
 
-type SnackCandyBarShowOptions = {
+export type SnackCandyBarShowOptions = {
   id?: string;
   children: React.ReactNode;
   onClose?: () => void;
@@ -121,6 +122,7 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
           showIcon: toastIncoming.showIcon,
           exiting: false,
           dataTestId: toastIncoming.dataTestId,
+          onClose: toastIncoming.onClose,
         };
 
         setSlots((prev) => ({
@@ -186,7 +188,14 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
   return (
     <SnackContext.Provider value={ctxValue}>
       {children}
-      <ToastRenderer items={slots.toast} onDismiss={(id) => hide('toast', id)} />
+      <ToastRenderer
+        items={slots.toast}
+        onDismiss={(id) => {
+          const item = slots.toast.find((t) => t.id === id);
+          hide('toast', id);
+          item?.onClose?.();
+        }}
+      />
       <CandyBarRenderer
         activeItem={slots.candybar[0] ?? null}
         onDismiss={(id) => {
@@ -213,13 +222,33 @@ export function useSnack<Slot extends SnackSlot>(slot: Slot): SnackBoundActions<
   return {
     show: (item) => context.show(slot, item) as string,
     hide: (id) => context.hide(slot, id),
-  } as SnackBoundActions<Slot>;
+  };
 }
 
-export function useToast() {
-  return useSnack('toast');
+export type ToastActions = SnackBoundActions<'toast'> & {
+  showToast: (item: SnackToastShowOptions) => string;
+  hideToast: (id: string) => void;
+};
+
+export function useToast(): ToastActions {
+  const base = useSnack('toast');
+  return {
+    ...base,
+    showToast: (item) => base.show(item),
+    hideToast: (id) => base.hide(id),
+  };
 }
 
-export function useCandyBar() {
-  return useSnack('candybar');
+export type CandyBarActions = SnackBoundActions<'candybar'> & {
+  showCandyBar: (item: SnackCandyBarShowOptions) => string;
+  hideCandyBar: (id: string) => void;
+};
+
+export function useCandyBar(): CandyBarActions {
+  const base = useSnack('candybar');
+  return {
+    ...base,
+    showCandyBar: (item) => base.show(item),
+    hideCandyBar: (id) => base.hide(id),
+  };
 }

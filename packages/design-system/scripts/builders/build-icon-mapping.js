@@ -53,3 +53,51 @@ ${typeExports}
 fs.writeFileSync(path.join(iconsDir, 'index.ts'), iconsBarrelContent, 'utf8');
 console.log(`Generated icons barrel with ${iconNames.length} icons at src/icons/index.ts`);
 
+// ── Native icons barrel ──
+// Embeds SVG XML strings and wraps with createNativeIconWrapper for React Native.
+const nativeImportWrapper =
+  "import { createNativeIconWrapper } from '@/components/Icon/Icon.native';";
+
+const nativeSvgConstants = iconNames
+  .map((name) => {
+    const componentName = toPascalIcon(name);
+    const svgPath = path.join(iconsDir, `${name}.svg`);
+    const svgContent = fs
+      .readFileSync(svgPath, 'utf8')
+      .replace(/\n/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+    // Escape backticks and dollar signs for template literal safety
+    const escaped = svgContent.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+    return `const ${componentName}Svg = \`${escaped}\`;`;
+  })
+  .join('\n');
+
+const nativeWrappedExports = iconNames
+  .map((name) => {
+    const componentName = toPascalIcon(name);
+    return `export const ${componentName} = createNativeIconWrapper(${componentName}Svg, '${componentName}');`;
+  })
+  .join('\n');
+
+const nativeTypeExports =
+  "export type { NativeIconWrapperProps, NativeIconSize, NativeIconColor } from '@/components/Icon/Icon.native';";
+
+const nativeBarrelContent = `// This file is auto-generated.
+// Do not edit manually - run 'npm run icons' to regenerate
+// Import only the icons you need for optimal bundle size (tree-shakeable).
+
+${nativeImportWrapper}
+
+${nativeSvgConstants}
+
+${nativeWrappedExports}
+
+${nativeTypeExports}
+`;
+
+fs.writeFileSync(path.join(iconsDir, 'index.native.ts'), nativeBarrelContent, 'utf8');
+console.log(
+  `Generated native icons barrel with ${iconNames.length} icons at src/icons/index.native.ts`
+);
+

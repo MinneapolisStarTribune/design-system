@@ -1,4 +1,4 @@
-import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, ColorVariantProps } from '@/types/globalTypes';
 
 export const UTILITY_BODY_SIZES = [
   'xx-small',
@@ -13,7 +13,7 @@ export const UTILITY_BODY_WEIGHTS = ['regular', 'italic', 'medium', 'semibold', 
 export type UtilityBodySize = (typeof UTILITY_BODY_SIZES)[number];
 export type UtilityBodyWeight = (typeof UTILITY_BODY_WEIGHTS)[number];
 
-export interface UtilityBodyProps extends BaseProps, AccessibilityProps {
+export interface UtilityBodyProps extends BaseProps, AccessibilityProps, ColorVariantProps {
   size?: UtilityBodySize;
   weight?: UtilityBodyWeight;
   children: React.ReactNode;

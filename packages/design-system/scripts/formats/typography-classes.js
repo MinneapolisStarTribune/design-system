@@ -180,6 +180,25 @@ function typographyClassesFormat({ dictionary, options = {} }) {
     }
   });
 
+  // Tokens often define desktop + mobile only. Tablet (768–1159px) would otherwise have no
+  // rules; match design intent by applying desktop typography whenever no tablet token exists.
+  const desktopForTablet = classesByBreakpoint.get('desktop') || [];
+  const tabletList = classesByBreakpoint.get('tablet');
+  const tabletClassNames = new Set((tabletList || []).map((d) => d.className));
+  desktopForTablet.forEach((data) => {
+    if (!tabletClassNames.has(data.className)) {
+      if (!classesByBreakpoint.has('tablet')) {
+        classesByBreakpoint.set('tablet', []);
+      }
+      classesByBreakpoint.get('tablet').push({
+        className: data.className,
+        breakpoint: 'tablet',
+        properties: { ...data.properties },
+      });
+      tabletClassNames.add(data.className);
+    }
+  });
+
   const defaultTypographyColor = 'var(--color-text-on-light-primary)';
 
   // First, generate non-responsive classes

@@ -19,6 +19,23 @@ const projectRoot = path.join(__dirname, '..');
 
 describe('Bundle Exclusions', () => {
   const nativeBundlePath = path.join(projectRoot, 'dist/mobile/design-system.es.js');
+  const webButtonModulePath = path.join(
+    projectRoot,
+    'dist/web/components/Button/web/Button.es.js'
+  );
+
+  describe('Web bundle', () => {
+    it('does not ship the React Native Button implementation when the web bundle exists', () => {
+      if (!fs.existsSync(webButtonModulePath)) {
+        console.warn('Web bundle not found. Run "yarn build:web" first.');
+        return;
+      }
+
+      const webButton = fs.readFileSync(webButtonModulePath, 'utf-8');
+      expect(webButton).not.toMatch(/\bPressable\b/);
+      expect(webButton).not.toMatch(/Button\.native/);
+    });
+  });
 
   describe('Native bundle', () => {
     it.skip('excludes CSS/SCSS and DOM-specific code', () => {

@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
 import * as ButtonStories from './Button.stories';
 
 <Meta of={ButtonStories} />
@@ -11,6 +11,16 @@ import * as ButtonStories from './Button.stories';
 Buttons trigger user actions and are available in multiple sizes, types, and emphasis levels, with optional icons. Button types define purpose and brand context, while emphasis controls visual weight and presentation.
 
 [Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=7-3)
+
+## Anatomy
+
+The button is made of a **container**, **label**, and optional **icon**.
+
+1. **Container** — The clickable or tappable frame that defines the button’s shape, size, and hit area. It uses fixed corner radius and size tokens, with padding scaled to each size.
+2. **Label** — A short, single-line text description. The text should not wrap or truncate.
+3. **Icon (optional)** — Can sit on the left or right of the label. It uses fixed icon sizes and spacing and inherits the label color.
+
+Use **Configurable** in the stories below to explore props (including **`surface`**) — open the **Controls** tab in the Storybook addons panel. **On dark background** demonstrates **`surface="dark"`** on a dark module. **All variants** shows the full matrix.
 
 ## Usage guidelines
 
@@ -36,12 +46,54 @@ Buttons trigger user actions and are available in multiple sizes, types, and emp
 
 Icon Buttons offer a compact way to surface common actions. Use them for recognizable, quick actions (like close, add or share) or anywhere a lighter, space-efficient control is needed.
 
+### Surface
+
+Use **`surface`** when the button sits on a **dark region** (for example a candy bar, dark card, or black bar) while the page still loads **light** theme CSS on `:root`. In that case, default button tokens can lack contrast; **`surface="dark"`** applies the same on-dark button palette you would get in global dark mode, scoped to this control only.
+
+- **`light`** (default) — Standard tokens from the active light theme on `:root`.
+- **`dark`** — Dark-surface button colors. **Neutral** tokens are shared. **Brand** and **brand-accent** follow the product brand set on **`DesignSystemProvider`**, reflected on `<html>` as **`data-ds-brand`** (for example `varsity` vs Star Tribune). No extra prop is required beyond `surface`.
+
+## Next.js App Router
+
+Use the default **`<button>`** when the control **performs an action** (submit, open, toggle) in place. Use **`as="a"`** with **`href`** for a **plain anchor** (external URL or when you do not need client-side routing). Use **`next/link`** as **`as`** when you want **button styling** with **App Router** navigation (client transitions, **`prefetch`**, **`replace`**, **`scroll`**, etc.).
+
+```tsx
+import NextLink from 'next/link';
+import { Button } from '@minneapolisstartribune/design-system/web';
+
+<Button as={NextLink} href="/subscribe" prefetch={false} variant="filled" color="brand" size="medium">
+  Subscribe
+</Button>
+```
+
+**How it works:** The design system does **not** import `next` — you pass whatever component should render at the root (here **`NextLink`**). Standard **`Button`** props and **`next/link`** props you pass are **forwarded** to that root. When the root is **not** a native **`<button>`**, **`disabled`** is expressed with **`aria-disabled`** and pointer/keyboard interaction is blocked (anchors do not use the invalid **`disabled`** attribute).
+
+The **As Next.js Link** story below uses a small **Storybook mock** with the same **`href` / `children`** contract as **`next/link`**; swap in real **`NextLink`** in your app.
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 {/* Do not remove the line below — it renders a divider between the doucmentation and stories. */}
 
 ---
 
-<Primary />
-<Controls />
-<Stories />
+## Configurable
+
+Each canvas below includes **Show code** / **Hide code** so you can copy usage snippets.
+
+<Canvas of={ButtonStories.Configurable} sourceState="hidden" />
+
+### As Next.js Link
+
+<Canvas of={ButtonStories.PolymorphicAsNextLink} sourceState="hidden" />
+
+### Button with analytics
+
+<Canvas of={ButtonStories.ButtonWithAnalytics} sourceState="hidden" />
+
+### On dark background
+
+<Canvas of={ButtonStories.OnDarkBackground} sourceState="hidden" />
+
+### All variants
+
+<Canvas of={ButtonStories.AllVariants} sourceState="hidden" layout="fullscreen" />

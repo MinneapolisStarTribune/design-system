@@ -1,0 +1,92 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Typography/Overview" />
+
+# Typography
+
+The design system ships explicit typography components — each text style is its own component with its own props — rather than a single generic text primitive.
+Together they cover editorial, utility, and article contexts, backed by 16 font families across brands and modes.
+
+Use this page to choose the right component, map Figma text styles to code, and copy correct imports and props.
+Every typography component has its own Storybook Docs tab with live examples and a full props table.
+
+## Editorial, utility, and article
+
+```markdown
+| Classification | Where it applies                                                         | Product note                      |
+| -------------- | ------------------------------------------------------------------------ | --------------------------------- |
+| Utility            | Product chrome: forms, navigation labels, page headings, section titles, ect      | Always in scope                                |
+| Editorial        | Surfaces that present editorial voice: headlines, story cards, article heroes, ect | All published story content |
+| Article Body | Exclusively used for long-form story content                                                           | Only within the article body                     |
+```
+
+Article Body styles intentionally share a feel with editorial — both live in a news-reading context — but use different tokens and components so that long-form reading stays stable even when editorial marketing surfaces change.
+
+## Why so many components?
+
+The system has over 17 distinct text styles across 3 classifications (editorial, article body, and utility), spanning 11+ fonts.
+Each style has its own supported weight set — for example, ArticleBodyText (Publico Text) supports regular, italic, bold, bold-italic, and dropcap, while ArticleBodySponsoredText (Barlow) supports regular, italic, semibold, and semibold-italic.
+
+Additionally, certain components — like ArticleBodySponsoredText — are unsupported on specific brands entirely and will throw at runtime if misused. A single `<Text>` component would push all of these rules into runtime branching. The explicit-component architecture keeps correct usage enforceable in TypeScript at the call site: if a prop isn't on the component, it isn't valid for that style.
+
+## How brands choose typography
+
+These steps mirror how typography works elsewhere in Storybook (see also **[InlineLink](/?path=/docs/typography-inlinelink--docs)** for hyperlinks inside running text).
+
+1. Identify the Figma text style (or annotation) and whether it is **Editorial**, **Utility**, or **ArticleBody**.
+2. Pick the matching component from the tables below and apply the **`size` / `weight` / `importance`**.
+3. Do not “guess” props across families—each component exports only what design supports for that style.
+
+
+## What you will see in Figma and How to map it to a component
+
+When you click on text in Figma, you'll see an annotation like `editorial/text/regular/xxs` or `article-body/text/regular` or `utility/text/regular/`. These follow a consistent naming convention:
+
+`type / classifier / size / weight`
+
+### Utility Typography
+
+```markdown
+| Typical Figma / token path         | DS component with props                             |
+| ---------------------------------- | --------------------------------------------------- |
+| `/* utility/page/H1 */`            | `<PageHeading importance={1} />`                    |
+| `/* utility/section/H1 */`         | `<SectionHeading importance={1} />`                 |
+| `/* utility/label/xx-small/reg */` | `<UtilityLabel size="xx-small" weight="regular" />` |
+| `/* utility/text/small/bold/ */`   | `<UtilityText size="small" weight="bold">`          |
+```
+
+### Editorial Typography
+
+```markdown
+| Typical Figma / token path               | DS component with props                                  |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `/* editorial/news/H1 */`                | `<NewsHeading importance={1} />`                         |
+| `/* editorial/enterprise/H2 */`          | `<EnterpriseHeading importance={2} />`                   |
+| `/* editorial/opinion/H3 */`             | `<OpinionHeading importance={3} />`                      |
+| `/* editorial/non-news/H4 */`            | `<NonNewsHeading importance={4} />`                      |
+| `/* editorial/sponsored/H5 */`           | `<SponsoredHeading importance={5} />`                    |
+| `/* editorial/text/bold/lg/regular */`   | `<EdictorialText size="large" weight="regular" />`       |
+| `/* editorial/text/sponsored/lg/bold */` | `<EdictorialSponsoredText size="large" weight="bold" />` |
+```
+
+### Article Body Typography (Only Used on Article Pages!)
+
+```markdown
+| Typical Figma / token path                           | DS component with props                             |
+| ---------------------------------------------------- | --------------------------------------------------- |
+| `/* ArticleBody/Heading/H1 */`                         | `<ArticleBodyHeading importance={1} />`             |
+| `/* ArticleBody/Sponsored/Heading/H2 */`     | `<ArticleBodySponsoredHeading importance={2} />`    |
+| `/* ArticleBody/Text/drop-cap */`                     | `<ArticleBodyText weight="drop-cap" />`             |
+| `/* ArticleBody/Sponsored/Text/bold italic */` | `<ArticleBodySponsoredText weight="bold-italic" />` |
+| `/* ArticleBody/Quote/small */`                         | `<ArticleQuote size="small">`                       |
+```
+
+## Brand availability
+
+Some components are **intentionally excluded** on Varsity today (see `validateComponentForBrand` in source). If you are on **Varsity**, avoid:
+
+- `ArticleBodySponsoredHeading`
+- `NonNewsHeading`
+- `EnterpriseHeading`
+
+Star Tribune–only components remain available in the package for **Star Tribune** experiences.

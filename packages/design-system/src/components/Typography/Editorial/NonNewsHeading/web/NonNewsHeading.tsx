@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import type { NonNewsHeadingProps } from '../NonNewsHeading.types';
+import { resolveTextColorStyle } from '@/types';
 
 const getHeadingConfig = (importance: NonNewsHeadingProps['importance']) => {
   const configs: Record<
@@ -22,6 +23,8 @@ export const NonNewsHeading: React.FC<NonNewsHeadingProps> = ({
   importance,
   children,
   className,
+  color,
+  style,
   ...props
 }) => {
   useBrandValidation('NonNewsHeading');
@@ -29,7 +32,11 @@ export const NonNewsHeading: React.FC<NonNewsHeadingProps> = ({
   const combinedClassName = classNames(typographyClass, className);
 
   return (
-    <HeadingElement className={combinedClassName || undefined} {...props}>
+    <HeadingElement
+      className={combinedClassName || undefined}
+      style={resolveTextColorStyle(color, style)}
+      {...props}
+    >
       {children}
     </HeadingElement>
   );

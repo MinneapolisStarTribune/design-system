@@ -1,0 +1,80 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as CandyBarStories from './CandyBar.stories';
+
+<Meta of={CandyBarStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Candy bar
+
+The candy bar is a full-width, persistent strip anchored to the bottom of the viewport. It is meant for site-level notices (for example newsletter signup or policy messages), not for transient feedback. It stays on screen until the user dismisses it or your app clears it; it does not auto-dismiss. On web, `DesignSystemProvider` mounts `SnackProvider`; trigger a candy bar with `useCandyBar()` from `@minneapolisstartribune/design-system/web`.
+
+## Anatomy
+
+1. **Content** — The main region for copy and actions. In **Configurable**, choose **Content preset** (newsletter layout vs. simple text) and edit **Simple message** when preset is simple.
+2. **Close** — Dismiss control in the top-right; it calls **`onClose`** (wired to **`onDismiss`** when using **`CandyBarRenderer`**).
+
+## Usage
+
+- Use `useCandyBar()` for app-level show/hide behavior through `SnackProvider` (same pattern as `useToast()` for toasts).
+- The hook returns **`show`** and **`hide`**, plus aliases **`showCandyBar`** and **`hideCandyBar`** on the same object. Prefer `show` / `hide` or the aliases — do not assume a method name that is not on **`CandyBarActions`** (see **Feedback & Status → SnackProvider**).
+
+```tsx
+import { useCandyBar } from '@minneapolisstartribune/design-system/web';
+
+function DemoCandyBar() {
+  const { showCandyBar } = useCandyBar();
+
+  return (
+    <button
+      type="button"
+      onClick={() =>
+        showCandyBar({
+          children: <span>Newsletter or policy message</span>,
+        })
+      }
+    >
+      Show candy bar
+    </button>
+  );
+}
+```
+
+- Prefer **`CandyBarRenderer`** for portal placement, focus management, enter/exit motion, and Escape to dismiss (see **With renderer**). `DesignSystemProvider` already mounts it via `SnackProvider`; you only call the hook.
+- Use **Configurable** to tweak **`className`**, **`style`**, and inner content while the bar is embedded in the story layout (inline **`CandyBar`**, not the portal shell).
+
+<table className="candybar-doc-table">
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>CandyBar</code>
+      </td>
+      <td>Chrome around <code>children</code>, close button, and optional <code>className</code> / <code>style</code>.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>CandyBarRenderer</code>
+      </td>
+      <td>Portal + dialog semantics + Floating UI; renders one <code>CandyBar</code> when <code>activeItem</code> is set.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Forms and submit actions
+
+`CandyBar` does not include a form or submit button—you pass them as `children`. Compose **`Form`**, **`FormGroup`** / **`FormControl`**, and **`Form.Button`** the same way you would on a page. `Form.Button` accepts the same props as **`Button`** (for example `color` and `variant` for contrast on the dark bar). In Storybook, the **Configurable** story’s **Content preset** includes an example with email + submit; **With renderer** uses the same inner content in the portal shell. See **Forms → Form** for full form guidance.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+{/* Primary + Controls use Configurable; meta layout is fullscreen. */}
+<Primary />
+<Controls />
+<Stories />

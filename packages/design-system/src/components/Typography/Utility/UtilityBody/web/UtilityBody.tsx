@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import type { UtilityBodyProps } from '../UtilityBody.types';
+import { resolveTextColorStyle } from '@/types';
 
 export const UtilityBody: React.FC<UtilityBodyProps> = ({
   size = 'medium',
@@ -7,6 +8,7 @@ export const UtilityBody: React.FC<UtilityBodyProps> = ({
   className,
   children,
   dataTestId,
+  color,
   style,
   ...props
 }) => {
@@ -16,7 +18,7 @@ export const UtilityBody: React.FC<UtilityBodyProps> = ({
     <p
       className={classNames(typographyClassName, className)}
       data-testid={dataTestId}
-      style={style}
+      style={resolveTextColorStyle(color, style)}
       {...props}
     >
       {children}

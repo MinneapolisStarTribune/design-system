@@ -1,0 +1,100 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as PullQuoteStories from './PullQuote.stories';
+
+<Meta of={PullQuoteStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Pull Quote
+
+The **Pull Quote** component highlights a key excerpt from an article to draw reader attention and emphasize important statements or quotes.
+It is designed specifically for editorial content and is supported in both the **standard** and **immersive** article variants, where it helps emphasize key statements within the flow of a story.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=2394-12749)
+
+---
+
+## Anatomy
+
+1. **Quote** — The excerpt pulled directly from the article body.
+2. **Quote-mark** — Visual indicator reinforcing that the content is quoted.
+3. **Attribution** — Includes the quoted individual’s name and typically their title or role, as provided by the newsroom.
+
+---
+
+## Variants
+
+### Standard
+
+Used within the standard article template to call out important statements without the immersive layout offset treatment.
+
+### Immersive
+
+Used within the immersive article template to emphasize key statements and improve visual storytelling.
+
+---
+
+## Sizes
+
+- **Small** (`small`) — Compact quote style suitable for shorter excerpts.
+- **Large** (`large`) — More prominent quote style for longer or more impactful statements.
+
+---
+
+## Usage guidelines
+
+To use the component in consuming applications:
+
+```tsx
+import { PullQuote } from '@minneapolisstartribune/design-system/web';
+```
+
+### When to use
+
+- Highlight impactful or important quotes within an article.
+- Break long-form content with visual emphasis.
+- Provide attribution to quoted individuals when relevant.
+
+---
+
+### When to avoid
+
+- Avoid overusing — too many pull quotes reduce their impact.
+
+---
+
+## Behavior
+
+- The component **does not render** if no `quote` is provided.
+- The icon size and layout are responsive and adapt across breakpoints using design tokens.
+- In the **immersive variant**, the quote icon may shift horizontally at larger breakpoints to align with the article column structure.
+
+---
+
+## Props
+
+- **quote** – The main quote text to display.
+- **attribution** – Optional name of the person being quoted.
+- **jobTitle** – Optional job title or descriptor for the attribution.
+- **size** – Controls quote styling: `'small' | 'large'`.
+- **variant** – Article variant: `'standard' | 'immersive'`.
+- **className** – Optional custom class for styling overrides.
+- **dataTestId** – Optional data-testid for testing purposes.
+
+---
+
+## Layout behavior
+
+- The component aligns with the editorial grid and adjusts spacing responsively.
+- Standard and immersive variants share the same core content structure, with variant-specific spacing and icon positioning.
+- Maximum width is controlled via design tokens to maintain readability.
+
+---
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
+<Primary />
+<Controls />
+<Stories />

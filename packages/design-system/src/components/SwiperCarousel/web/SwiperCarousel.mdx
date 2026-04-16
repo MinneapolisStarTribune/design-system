@@ -7,50 +7,183 @@ import * as ComponentStories from './SwiperCarousel.stories';
 
 **SwiperCarousel** is a flexible, reusable carousel component built on top of Swiper.
 
-It provides core carousel behavior (scrolling, pagination, navigation) while allowing **full control over layout composition**.
+It provides core carousel behavior (scrolling, pagination, navigation) while allowing full control over layout composition.
+
+## Playground
+
+<Canvas of={ComponentStories.Configurable} sourceState="hidden" />
+
+## Controls
+
+<Controls />
 
 ## Usage guidelines
 
 - Use for horizontal scrollable content
 - Compose layouts using:
-  - `SwiperCarousel.Slide`
-  - `SwiperCarousel.Pagination`
-  - `SwiperCarousel.Navigation`
+  - SwiperCarousel.Slide
+  - SwiperCarousel.Pagination
+  - SwiperCarousel.Navigation
 - Order of children controls layout
+
+## Slides Behavior
+
+### slidesPerView
+
+- 'auto' (default): content-based width, multiple visible slides, scroll-based navigation
+- 1: single slide view, ideal for image gallery
+- 2,3,...: fixed slides per view, pagination per group
+
+## Pagination behavior
+
+- Disabled by default  
+- Enable using SwiperCarousel.Pagination  
+- Uses Swiper native pagination  
+- Styled via design system tokens  
+- Automatically hides when not scrollable  
+
+## Navigation behavior
+
+- Optional  
+- Enable using SwiperCarousel.Navigation  
+- Automatically disables at boundaries  
+- Works with slidesPerView="auto"  
+- Uses real scroll position  
+- Supports custom button props  
 
 ## Layout flexibility
 
 ### Image gallery
+- slidesPerView={1}
 - Caption left
 - Navigation right
 - Pagination inside
 
 ### Cards layout
+- slidesPerView="auto"
 - Centered pagination + navigation
 
 ### Top controls
 - Title left
 - Navigation right
 
-## Pagination behavior
+## Full Props Reference
 
-- No pagination → omit component  
-- Default → `<SwiperCarousel.Pagination />`  
+### SwiperCarousel Props
 
-## Navigation behavior
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>slidesPerView</td>
+      <td>number | 'auto'</td>
+      <td>'auto'</td>
+      <td>Number of visible slides or automatic sizing</td>
+    </tr>
+    <tr>
+      <td>spaceBetween</td>
+      <td>number</td>
+      <td>16</td>
+      <td>Space between slides</td>
+    </tr>
+    <tr>
+      <td>breakpoints</td>
+      <td>SwiperOptions['breakpoints']</td>
+      <td>-</td>
+      <td>Responsive configuration</td>
+    </tr>
+    <tr>
+      <td>loop</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Enables infinite loop</td>
+    </tr>
+    <tr>
+      <td>centeredSlides</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Centers active slide</td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td>string</td>
+      <td>-</td>
+      <td>Custom container class</td>
+    </tr>
+  </tbody>
+</table>
 
-- Optional
-- Auto disables at boundaries
-- Can be placed anywhere
+### Navigation Props
 
-## Playground
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>size</td>
+      <td>'medium' | 'large'</td>
+      <td>Button size</td>
+    </tr>
+    <tr>
+      <td>buttonProps</td>
+      <td>Partial&lt;ButtonProps&gt;</td>
+      <td>Props applied to both buttons</td>
+    </tr>
+    <tr>
+      <td>prevButtonProps</td>
+      <td>Partial&lt;ButtonProps&gt;</td>
+      <td>Previous button props</td>
+    </tr>
+    <tr>
+      <td>nextButtonProps</td>
+      <td>Partial&lt;ButtonProps&gt;</td>
+      <td>Next button props</td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td>string</td>
+      <td>Custom class</td>
+    </tr>
+  </tbody>
+</table>
 
-<Canvas of={ComponentStories.Configurable} />
+### Composition Components
 
-## Props
-
-<Controls />
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SwiperCarousel.Slide</td>
+      <td>Defines a slide</td>
+    </tr>
+    <tr>
+      <td>SwiperCarousel.Pagination</td>
+      <td>Enables pagination</td>
+    </tr>
+    <tr>
+      <td>SwiperCarousel.Navigation</td>
+      <td>Enables navigation</td>
+    </tr>
+  </tbody>
+</table>
 
 ## All Examples
 
-<Stories />
+<Stories title="All Variants" sourceState="collapsed" />

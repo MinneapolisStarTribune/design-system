@@ -19,6 +19,22 @@
             "tablet": { "type": "dimension", "value": 728 }
           }
         },
+        "social-embed": {
+          "standard": {
+            "desktop": {
+              "type": "dimension",
+              "value": 538
+            },
+            "mobile": {
+              "type": "dimension",
+              "value": 358
+            },
+            "tablet": {
+              "type": "dimension",
+              "value": 535
+            }
+          }
+        },
         "standard": {
           "full": {
             "desktop": { "type": "dimension", "value": 712 },
@@ -41,6 +57,38 @@
         "value": "{radius.12}"
       }
     },
+    "inline-video": {
+      "horizontal-aspect-ratio": {
+        "value": "16/9"
+      },
+      "horizontal-border-radius-desktop": {
+        "value": "{radius.12}"
+      },
+      "horizontal-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "horizontal-border-radius-tablet": {
+        "value": "{radius.none}"
+      },
+      "immersive-vertical-max-width": {
+        "value": "390px"
+      },
+      "standard-vertical-max-width": {
+        "value": "358px"
+      },
+      "vertical-aspect-ratio": {
+        "value": "9/16"
+      },
+      "vertical-border-radius-desktop": {
+        "value": "{radius.12}"
+      },
+      "vertical-border-radius-mobile": {
+        "value": "{radius.none}"
+      },
+      "vertical-border-radius-tablet": {
+        "value": "{radius.12}"
+      }
+    },
     "photo-layout": {
       "aspect-ratio": {
         "value": "3 / 2"
@@ -53,6 +101,28 @@
       },
       "caption-padding-mobile": {
         "value": "0px"
+      }
+    },
+    "pull-quote": {
+      "icon": {
+        "accent-color": {
+          "value": "{color.cobalt-blue.700}"
+        },
+        "large": {
+          "height": { "type": "dimension", "value": 38 },
+          "width": { "type": "dimension", "value": 38 }
+        },
+        "margin-top": {
+          "value": "-3.5px"
+        },
+        "small": {
+          "height": { "type": "dimension", "value": 32 },
+          "width": { "type": "dimension", "value": 32 }
+        }
+      },
+      "max-width": {
+        "type": "dimension",
+        "value": 535
       }
     }
   }

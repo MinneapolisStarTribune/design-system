@@ -365,13 +365,14 @@ import { useBrandValidation } from '../../../hooks/useBrandValidation';
 Every time you work in this repo, do not forget to update documentation! You MUST update:
 
 - `README.md` — audience: consuming app developers
+- `integration-guides/architecture.md` — audience: consumers; high-level web & native pipeline and npm exports
 - `integration-guides/web.md` — audience: web consumers
 - `integration-guides/native.md` — audience: React Native consumers
 - `docs/code-standards.md` - audience: Internal Developers of this repo
 
 ## Using This Document with AI Assistants
 
-Reference `@docs/code-standards.md` in Cursor prompts or `.cursorrules`. AI tools should also reference `integration-guides/native.md` and `integration-guides/web.md` for platform-specific patterns.
+Reference `@docs/code-standards.md` in Cursor prompts or `.cursorrules`. AI tools should also reference `integration-guides/architecture.md`, `integration-guides/native.md`, and `integration-guides/web.md` for platform-specific patterns.
 
 ---
 
