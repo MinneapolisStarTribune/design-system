@@ -14,7 +14,11 @@ export {
 } from './providers/SnackProvider/SnackProvider.native';
 
 // Export hooks
-export { useNativeStyles, useNativeStylesWithDefaults } from './hooks/useNativeStyles';
+export {
+  type NativeTheme,
+  useNativeStyles,
+  useNativeStylesWithDefaults,
+} from './hooks/useNativeStyles';
 
 // Export native icons
 export * from './icons/index.native';

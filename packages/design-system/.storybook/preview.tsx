@@ -165,6 +165,11 @@ const preview: Preview = {
     },
   },
   parameters: {
+    options: {
+      storySort: {
+        order: ['Getting Started', 'Foundations', 'Typography', '*'],
+      },
+    },
     controls: {
       expanded: true,
       matchers: {

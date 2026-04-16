@@ -68,7 +68,6 @@ export {
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
 export {
   ArticleBodySponsoredHeading,
-  type ArticleBodySponsoredHeadingImportance,
   type ArticleBodySponsoredHeadingProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredHeading/native/ArticleBodySponsoredHeading.native';
 export {
