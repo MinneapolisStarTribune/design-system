@@ -49,7 +49,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   ...props
 }) => {
   const { track } = useAnalytics();
-  const { styles, placeholderTextColor, successIconFill } = useNativeStyles(createTextInputThemeState);
+  const { styles, placeholderTextColor, successIconFill } =
+    useNativeStyles(createTextInputThemeState);
   const formGroupContext = useFormGroupContext();
   const inputRef = useRef<RNTextInput>(null);
 
