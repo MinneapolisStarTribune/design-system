@@ -1,3 +1,3 @@
-<svg id="strib-quote-double" viewBox="0 0 16 16" fill="currentcolor" class="strib-icon strib-quote-double" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-  <path d="M12 7.031h3v5.813H9V7.031l2-3.875h3zm-5 0v5.813H1V7.031l2-3.875h3L4 7.031z"/>
+<svg width="16" height="16" viewBox="0 0 16 16" fill="currentcolor" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M11.8563 7.07314H14.7432V12.6665H8.96937V7.07314L10.894 3.34424H13.7809L11.8563 7.07314ZM7.04525 7.07314V12.6665H1.27145V7.07314L3.19606 3.34424H6.08296L4.15835 7.07314H7.04525Z" fill="currentcolor"/>
 </svg>
