@@ -150,7 +150,7 @@
     "fonts:fetch": "node scripts/fetch-fonts.js",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\" \"tokens/**/*.json\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,json,css,md}\" \"tokens/**/*.json\"",
-    "icons": "node scripts/builders/build-icon-mapping.js && prettier --write src/icons/index.ts",
+    "icons": "node scripts/builders/build-icon-mapping.js && prettier --write src/icons/index.ts src/icons/index.native.ts",
     "lint": "eslint . --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0 --ignore-path ../../.eslintignore",
     "lint:fix": "eslint . --ext .ts,.tsx --fix --ignore-path ../../.eslintignore",
     "pretest": "yarn tokens",

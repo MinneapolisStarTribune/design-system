@@ -119,3 +119,6 @@ export const FormGroupNative: React.FC<FormGroupNativeRootProps> & {
 FormGroupNative.Label = FormGroupLabel;
 FormGroupNative.Description = FormGroupDescription;
 FormGroupNative.Caption = FormGroupCaption;
+
+/** Web-aligned name; same reference as {@link FormGroupNative} (includes `.Label`, `.Description`, `.Caption`). */
+export const FormGroup = FormGroupNative;
