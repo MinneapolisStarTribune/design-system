@@ -116,6 +116,18 @@ function getTypographyConfig(brand) {
           const familyName = val.split(',')[0].trim();
           const lookupKey = `${familyName}|${fontWeight}|${fontStyle}`;
           result[camelKey] = fontVariantMap[lookupKey] || familyName;
+        } else if (camelKey === 'letterSpacing') {
+          // Convert CSS letterSpacing (e.g. "0.01em", "-0.02em", "0") to a
+          // plain number for React Native. em-based values are resolved
+          // relative to the fontSize already collected above.
+          const str = String(val).trim();
+          if (str.endsWith('em')) {
+            const emVal = parseFloat(str);
+            result[camelKey] = !isNaN(emVal) && fontSize ? Math.round(fontSize * emVal * 100) / 100 : 0;
+          } else {
+            const num = parseFloat(str);
+            result[camelKey] = isNaN(num) ? 0 : num;
+          }
         } else {
           result[camelKey] = val;
         }

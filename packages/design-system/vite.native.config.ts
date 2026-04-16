@@ -26,6 +26,8 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.native.ts'),
         path.resolve(__dirname, 'src/components/index.native.ts'),
+        path.resolve(__dirname, 'src/components/Icon/Icon.native.tsx'),
+        path.resolve(__dirname, 'src/icons/index.native.ts'),
         path.resolve(__dirname, 'src/providers/DesignSystemProvider.native.tsx'),
         path.resolve(__dirname, 'src/providers/theme-helpers.ts'),
         path.resolve(__dirname, 'src/providers/DesignSystemContext.ts'),
