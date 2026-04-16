@@ -43,7 +43,8 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
 
   const ariaLabelledBy = ariaLabelledByProp ?? formGroupContext?.labelId;
   const describedByFromContext =
-    [formGroupContext?.descriptionId, formGroupContext?.captionId].filter(Boolean).join(' ') || undefined;
+    [formGroupContext?.descriptionId, formGroupContext?.captionId].filter(Boolean).join(' ') ||
+    undefined;
   const ariaDescribedBy = ariaDescribedByProp ?? describedByFromContext;
 
   return (

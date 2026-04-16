@@ -71,6 +71,36 @@ Group-level supporting text belongs directly under the label:
 </FormGroup>
 ```
 
+## Props
+
+```tsx
+interface RadioOption {
+  value: string;
+  title: string;
+  description?: string;
+}
+
+interface RadioGroupProps extends BaseProps {
+  name: string;
+  value: string | null | undefined;
+  options: RadioOption[];
+  color?: 'neutral' | 'brand';
+  disabled?: boolean;
+  error?: boolean;
+  onChange: (value: string) => void;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+}
+```
+
+### Prop notes
+
+- `name` is required and should be unique per radio set on the page.
+- `value` is controlled by parent state (`string`, `null`, or `undefined`).
+- `options` renders each radio option; use `title` for the visible label.
+- `description` on an option is available, but default product usage keeps descriptive copy at the group level via `FormGroup.Description`.
+- `onChange` fires with the selected option `value`.
+
 ## Accessibility behavior
 
 When rendered inside `FormGroup`, `RadioGroup` automatically receives:

@@ -19,6 +19,12 @@ const options: RadioOption[] = [
   { value: 'c', title: 'Option C' },
 ];
 
+const configurableOptions: RadioOption[] = [
+  { value: 'cat', title: 'Cat' },
+  { value: 'frog', title: 'Frog' },
+  { value: 'dog', title: 'Dog' },
+];
+
 const planOptions: RadioOption[] = [
   { value: 'basic', title: 'Basic' },
   { value: 'pro', title: 'Pro' },
@@ -39,7 +45,8 @@ const meta = {
     },
     options: {
       control: 'object',
-      description: 'Options rendered in the group',
+      description:
+        'Options rendered in the group. Edit each item `title` to use any label (for example: Cat, Frog, Dog).',
     },
     color: {
       control: 'select',
@@ -63,8 +70,8 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     name: 'option',
-    value: 'a',
-    options,
+    value: 'cat',
+    options: configurableOptions,
     color: 'neutral',
     disabled: false,
     error: false,
@@ -90,51 +97,6 @@ export const Configurable: Story = {
   },
 };
 
-export const Optional: Story = {
-  parameters: {
-    controls: { disable: true },
-  },
-  render: function OptionalRender() {
-    const [value, setValue] = useState<string | null>('a');
-
-    return (
-      <FormGroup>
-        <FormGroup.Label optional>Select an option</FormGroup.Label>
-        <FormControl.RadioGroup
-          name="optional-example"
-          value={value}
-          onChange={setValue}
-          options={options}
-          dataTestId="radio-group-optional"
-        />
-      </FormGroup>
-    );
-  },
-};
-
-export const WithDescription: Story = {
-  parameters: {
-    controls: { disable: true },
-  },
-  render: function WithDescriptionRender() {
-    const [value, setValue] = useState<string | null>('a');
-
-    return (
-      <FormGroup>
-        <FormGroup.Label>Select an option</FormGroup.Label>
-        <FormGroup.Description>Select only one</FormGroup.Description>
-        <FormControl.RadioGroup
-          name="with-description-example"
-          value={value}
-          onChange={setValue}
-          options={options}
-          dataTestId="radio-group-with-description"
-        />
-      </FormGroup>
-    );
-  },
-};
-
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
@@ -142,6 +104,8 @@ export const AllVariants: Story = {
   },
   render: function AllVariantsRender() {
     const [neutralValue, setNeutralValue] = useState<string | null>('a');
+    const [optionalValue, setOptionalValue] = useState<string | null>('a');
+    const [withDescriptionValue, setWithDescriptionValue] = useState<string | null>('a');
     const [brandValue, setBrandValue] = useState<string | null>('pro');
 
     return (
@@ -166,6 +130,35 @@ export const AllVariants: Story = {
               options={options}
               color="neutral"
               dataTestId="all-neutral"
+            />
+          </FormGroup>
+        </div>
+
+        <div>
+          <SectionLabel>Optional</SectionLabel>
+          <FormGroup>
+            <FormGroup.Label optional>Select an option</FormGroup.Label>
+            <FormControl.RadioGroup
+              name="all-optional"
+              value={optionalValue}
+              onChange={setOptionalValue}
+              options={options}
+              dataTestId="all-optional"
+            />
+          </FormGroup>
+        </div>
+
+        <div>
+          <SectionLabel>With Description</SectionLabel>
+          <FormGroup>
+            <FormGroup.Label>Select an option</FormGroup.Label>
+            <FormGroup.Description>Select only one</FormGroup.Description>
+            <FormControl.RadioGroup
+              name="all-with-description"
+              value={withDescriptionValue}
+              onChange={setWithDescriptionValue}
+              options={options}
+              dataTestId="all-with-description"
             />
           </FormGroup>
         </div>
