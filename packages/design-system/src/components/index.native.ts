@@ -43,6 +43,12 @@ export {
   FormGroupLabel,
   type FormGroupLabelNativeProps,
 } from './FormGroup/native/label/FormGroup.Label.native';
+export {
+  createNativeIconWrapper,
+  type NativeIconColor,
+  type NativeIconSize,
+  type NativeIconWrapperProps,
+} from './Icon/Icon.native';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
@@ -53,12 +59,6 @@ export {
   ToastWarningIcon,
 } from './Toast/native/ToastIcons.native';
 export { TOAST_VARIANTS, type ToastNativeProps, type ToastVariant } from './Toast/Toast.types';
-export {
-  createNativeIconWrapper,
-  type NativeIconColor,
-  type NativeIconSize,
-  type NativeIconWrapperProps,
-} from './Icon/Icon.native';
 export {
   ArticleBodyHeading,
   type ArticleBodyHeadingImportance,
