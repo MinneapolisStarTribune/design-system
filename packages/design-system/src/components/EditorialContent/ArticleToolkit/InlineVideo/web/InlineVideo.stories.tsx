@@ -33,12 +33,22 @@ const meta: Meta<InlineVideoProps> = {
       options: INLINE_VIDEO_ORIENTATIONS,
       description:
         'Crop orientation. Horizontal (16:9) is standard widescreen; Vertical (9:16) is portrait/social.',
+      table: {
+        type: {
+          summary: "'horizontal' | 'vertical'",
+        },
+      },
     },
     variant: {
       control: 'radio',
       options: Object.values(ARTICLE_BODY_VARIANTS),
       description:
         'Layout variant. "immersive" bleeds edge-to-edge on mobile/tablet with sharp edges; contained with brand radius on desktop.',
+      table: {
+        type: {
+          summary: "'standard' | 'immersive'",
+        },
+      },
     },
     children: {
       control: false,
