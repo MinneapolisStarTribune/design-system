@@ -16,8 +16,8 @@ import { getFieldSurfaceColors, getFieldSurfaceTokens } from '@/utils/fieldSurfa
 import { createStyles, getInputTypographyStyleKey, getRoundedStyleKey } from './TextInput.styles';
 
 export interface TextInputProps
-  extends Omit<BaseTextInputProps, 'style' | 'dataTestId'>,
-    Omit<RNTextInputProps, 'style'> {}
+  extends Omit<BaseTextInputProps, 'style'>,
+    Omit<RNTextInputProps, 'style' | 'testID'> {}
 
 const createTextInputThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
@@ -37,7 +37,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   onChangeText,
   onBlur,
   onFocus,
-  testID = 'text-input',
+  dataTestId = 'text-input',
   analytics,
   accessibilityLabel,
   accessibilityHint,
@@ -105,10 +105,14 @@ export const TextInput: React.FC<TextInputProps> = ({
         rounded && roundedSizeStyle,
         isFocused && styles.focused,
       ]}
-      testID={testID ? `${testID}-wrapper` : undefined}
+      testID={dataTestId ? `${dataTestId}-wrapper` : undefined}
     >
       {leftIcon && (
-        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-start`}>
+        <View
+          pointerEvents="none"
+          style={[styles.iconContainer]}
+          testID={`${dataTestId}-icon-start`}
+        >
           {leftIcon}
         </View>
       )}
@@ -131,18 +135,22 @@ export const TextInput: React.FC<TextInputProps> = ({
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={hasError ? 'Input has error' : accessibilityHint}
         accessibilityState={{ disabled: isDisabled }}
-        testID={testID}
+        testID={dataTestId}
         {...props}
       />
 
       {rightIcon && (
-        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-end`}>
+        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${dataTestId}-icon-end`}>
           {rightIcon}
         </View>
       )}
 
       {showSuccessIcon && (
-        <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-success`}>
+        <View
+          pointerEvents="none"
+          style={[styles.iconContainer]}
+          testID={`${dataTestId}-icon-success`}
+        >
           <SuccessIcon color="brand-01" />
         </View>
       )}
