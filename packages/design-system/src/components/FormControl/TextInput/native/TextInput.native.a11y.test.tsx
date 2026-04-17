@@ -8,7 +8,11 @@ describe('TextInput Accessibility (native)', () => {
 
   it('renders a standalone labeled input', () => {
     render(
-      <TextInput placeholderText="Enter text" accessibilityLabel="Username" testID="text-input" />,
+      <TextInput
+        placeholderText="Enter text"
+        accessibilityLabel="Username"
+        dataTestId="text-input"
+      />,
       { wrapper }
     );
 
@@ -24,7 +28,7 @@ describe('TextInput Accessibility (native)', () => {
         placeholderText="Disabled"
         isDisabled
         accessibilityLabel="Disabled input"
-        testID="text-input"
+        dataTestId="text-input"
       />,
       { wrapper }
     );
@@ -40,7 +44,7 @@ describe('TextInput Accessibility (native)', () => {
         placeholderText="Enter text"
         accessibilityLabel="Hinted input"
         accessibilityHint="Enter your text here"
-        testID="text-input"
+        dataTestId="text-input"
       />,
       { wrapper }
     );
@@ -56,7 +60,7 @@ describe('TextInput Accessibility (native)', () => {
         <FormGroup.Label>Password</FormGroup.Label>
         <TextInput
           placeholderText="Enter password"
-          testID="text-input"
+          dataTestId="text-input"
           accessibilityLabel="Password"
           accessibilityHint="Custom hint"
         />
@@ -79,7 +83,7 @@ describe('TextInput Accessibility (native)', () => {
         <TextInput
           placeholderText="you@example.com"
           accessibilityLabel="Email"
-          testID="text-input"
+          dataTestId="text-input"
         />
         <FormGroup.Caption variant="info">Enter a valid email address</FormGroup.Caption>
       </FormGroup>,

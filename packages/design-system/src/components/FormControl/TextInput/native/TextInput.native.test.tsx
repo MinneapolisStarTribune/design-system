@@ -22,7 +22,11 @@ describe('TextInput (native)', () => {
 
   it('renders placeholder and wrapper test id', () => {
     render(
-      <TextInput placeholderText="Enter text" testID="native-input" accessibilityLabel="Input" />,
+      <TextInput
+        placeholderText="Enter text"
+        dataTestId="native-input"
+        accessibilityLabel="Input"
+      />,
       { wrapper }
     );
 
@@ -45,7 +49,7 @@ describe('TextInput (native)', () => {
         onChangeText={onChangeText}
         onFocus={onFocus}
         onBlur={onBlur}
-        testID="native-input"
+        dataTestId="native-input"
         accessibilityLabel="Input"
       />,
       { wrapper }
@@ -67,7 +71,7 @@ describe('TextInput (native)', () => {
       <TextInput
         value="hello"
         analytics={{ form_field: 'email' }}
-        testID="native-input"
+        dataTestId="native-input"
         accessibilityLabel="Input"
       />,
       { wrapper }
@@ -92,7 +96,7 @@ describe('TextInput (native)', () => {
       <TextInput
         placeholderText="Disabled"
         isDisabled
-        testID="native-input"
+        dataTestId="native-input"
         accessibilityLabel="Disabled input"
       />,
       { wrapper }
@@ -137,7 +141,7 @@ describe('TextInput (native)', () => {
     render(
       <FormGroup>
         <FormGroup.Label>Email</FormGroup.Label>
-        <TextInput testID="native-input" placeholderText="you@example.com" />
+        <TextInput dataTestId="native-input" placeholderText="you@example.com" />
         <FormGroup.Caption variant="error">Invalid email</FormGroup.Caption>
       </FormGroup>,
       { wrapper }
