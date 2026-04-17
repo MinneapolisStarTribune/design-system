@@ -201,6 +201,9 @@ function typographyClassesFormat({ dictionary, options = {} }) {
 
   const defaultTypographyColor = 'var(--color-text-on-light-primary)';
 
+  /** Article body drop cap tokens must apply to `::first-letter` only, not the whole paragraph. */
+  const isArticleBodyDropcapClass = (className) => className === 'typography-article-body-dropcap';
+
   // First, generate non-responsive classes
   nonResponsiveClasses.forEach((data) => {
     const className = `.${data.className}`;
@@ -210,7 +213,11 @@ function typographyClassesFormat({ dictionary, options = {} }) {
       })
       .join('\n');
 
-    classes.push(`${className} {\n${props}\n}`);
+    if (isArticleBodyDropcapClass(data.className)) {
+      classes.push(`${className}::first-letter {\n${props}\n}`);
+    } else {
+      classes.push(`${className} {\n${props}\n}`);
+    }
   });
 
   // Then, generate responsive classes: use the design-token class name (no -desktop/-tablet/-mobile suffix)
