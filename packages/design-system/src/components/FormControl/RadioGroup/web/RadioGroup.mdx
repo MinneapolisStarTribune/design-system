@@ -54,7 +54,16 @@ Group-level supporting text belongs directly under the label:
 </FormGroup>
 ```
 
+## States
+
+`RadioGroup` is controlled, `value` drives which radio is checked. These are the two valid resting states; error handling is consumer-owned and covered below.
+
+- **Default** — Initial render with a nullish `value` (null, empty, or undefined). No radio is checked; this is a valid resting state.
+- **Selected** — The user selects an option and the consumer updates `value` via `onChange`. The matching radio is checked.
+
 ## Error state
+
+`RadioGroup` does not manage validation itself. The consumer owns when an unselected group becomes an error (typically on submit or blur) by setting the `error` prop. The group then receives `aria-invalid="true"` plus error styling on each radio, and the consumer should render a matching `FormGroup.Caption` with `variant="error"` for the message.
 
 ```tsx
 <FormGroup>
