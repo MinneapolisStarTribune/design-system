@@ -1,14 +1,12 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { FormGroupProvider, useFormGroupContext } from '../FormGroupContext';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FormControl } from '@/components/FormControl/FormControl.native';
 import {
-  FormGroupCaption,
   FORM_GROUP_CAPTION_VARIANTS,
   type FormGroupCaptionVariant,
 } from './caption/FormGroup.Caption.native';
-import { FormGroupDescription } from './description/FormGroup.Description.native';
-import { FormGroupLabel } from './label/FormGroup.Label.native';
+import { FormGroup as FormGroupNative } from './FormGroup.native';
 
 interface FormGroupNativeStoryArgs {
   showLabel: boolean;
@@ -26,18 +24,6 @@ interface FormGroupNativeStoryProps extends FormGroupNativeStoryArgs {
   testIdPrefix?: string;
 }
 
-const FormGroupStoryTextInput: React.FC<{ placeholder: string }> = ({ placeholder }) => {
-  const context = useFormGroupContext();
-  return (
-    <TextInput
-      nativeID={context?.inputId}
-      placeholder={placeholder}
-      style={styles.input}
-      editable
-    />
-  );
-};
-
 const FormGroupNativeStory: React.FC<FormGroupNativeStoryProps> = ({
   testIdPrefix = 'story-form-group',
   showLabel,
@@ -50,31 +36,24 @@ const FormGroupNativeStory: React.FC<FormGroupNativeStoryProps> = ({
   captionVariant,
   placeholderText,
 }) => (
-  <FormGroupProvider
-    hasLabel={showLabel}
-    hasDescription={showDescription}
-    hasCaption={showCaption}
-    captionVariant={showCaption ? captionVariant : undefined}
-  >
-    <View style={styles.stack}>
-      {showLabel ? (
-        <FormGroupLabel optional={optional} dataTestId={`${testIdPrefix}-label`}>
-          {labelText}
-        </FormGroupLabel>
-      ) : null}
-      {showDescription ? (
-        <FormGroupDescription dataTestId={`${testIdPrefix}-description`}>
-          {descriptionText}
-        </FormGroupDescription>
-      ) : null}
-      <FormGroupStoryTextInput placeholder={placeholderText} />
-      {showCaption ? (
-        <FormGroupCaption variant={captionVariant} dataTestId={`${testIdPrefix}-caption`}>
-          {captionText}
-        </FormGroupCaption>
-      ) : null}
-    </View>
-  </FormGroupProvider>
+  <FormGroupNative style={styles.stack} dataTestId={`${testIdPrefix}-root`}>
+    {showLabel ? (
+      <FormGroupNative.Label optional={optional} dataTestId={`${testIdPrefix}-label`}>
+        {labelText}
+      </FormGroupNative.Label>
+    ) : null}
+    {showDescription ? (
+      <FormGroupNative.Description dataTestId={`${testIdPrefix}-description`}>
+        {descriptionText}
+      </FormGroupNative.Description>
+    ) : null}
+    <FormControl.TextInput placeholderText={placeholderText} dataTestId={`${testIdPrefix}-input`} />
+    {showCaption ? (
+      <FormGroupNative.Caption variant={captionVariant} dataTestId={`${testIdPrefix}-caption`}>
+        {captionText}
+      </FormGroupNative.Caption>
+    ) : null}
+  </FormGroupNative>
 );
 
 const meta = {
@@ -303,13 +282,5 @@ const styles = StyleSheet.create({
   stack: {
     width: '100%',
     maxWidth: 400,
-  },
-  input: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#888',
-    borderRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
   },
 });
