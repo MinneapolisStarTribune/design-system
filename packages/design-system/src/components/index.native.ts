@@ -27,6 +27,8 @@ export {
   type CheckboxProps,
   type CheckboxVariant,
 } from './FormControl/Checkbox/native/Checkbox.native';
+export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
+export { FormControl } from './FormControl/FormControl.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
@@ -38,11 +40,21 @@ export {
   FormGroupDescription,
   type FormGroupDescriptionNativeProps,
 } from './FormGroup/native/description/FormGroup.Description.native';
-export { FormGroupNative, type FormGroupNativeProps } from './FormGroup/native/FormGroup.native';
+export {
+  FormGroup,
+  FormGroupNative,
+  type FormGroupNativeProps,
+} from './FormGroup/native/FormGroup.native';
 export {
   FormGroupLabel,
   type FormGroupLabelNativeProps,
 } from './FormGroup/native/label/FormGroup.Label.native';
+export {
+  createNativeIconWrapper,
+  type NativeIconColor,
+  type NativeIconSize,
+  type NativeIconWrapperProps,
+} from './Icon/Icon.native';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
@@ -60,7 +72,6 @@ export {
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
 export {
   ArticleBodySponsoredHeading,
-  type ArticleBodySponsoredHeadingImportance,
   type ArticleBodySponsoredHeadingProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredHeading/native/ArticleBodySponsoredHeading.native';
 export {
