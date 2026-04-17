@@ -1,22 +1,18 @@
 [
   {
+    "version": "release/1.5.0",
+    "url": "https://design-system-awyr4oh4m-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "release/1.4.0",
+    "url": "https://design-system-b9lviamuy-startribune-team-one.vercel.app"
+  },
+  {
     "version": "release/1.3.0",
-    "url": "https://design-system-cl6mo1dxy-startribune-team-one.vercel.app"
+    "url": "https://design-system-o0oqkvdae-startribune-team-one.vercel.app"
   },
   {
     "version": "release/1.2.0",
     "url": "https://design-system-73gljktty-startribune-team-one.vercel.app"
-  },
-  {
-    "version": "release/1.1.0",
-    "url": "https://design-system-ozt8it1fp-startribune-team-one.vercel.app"
-  },
-  {
-    "version": "release/0.2.0",
-    "url": "https://design-system-7jwk6xpud-startribune-team-one.vercel.app"
-  },
-  {
-    "version": "release/0.1.0",
-    "url": "https://design-system-8tmvkwcx4-startribune-team-one.vercel.app"
   }
 ]
