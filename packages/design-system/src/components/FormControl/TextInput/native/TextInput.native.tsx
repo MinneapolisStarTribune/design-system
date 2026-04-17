@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   Pressable,
@@ -9,15 +9,11 @@ import {
 } from 'react-native';
 import { BaseTextInputProps } from '../TextInput.types';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { useFormGroupContext, useNativeStyles } from '@/index.native';
+import { SuccessIcon, useFormGroupContext, useNativeStyles } from '@/index.native';
 import { NativeTheme } from '@/hooks/useNativeStyles';
-import {
-  createStyles,
-  getInputTypographyStyleKey,
-  getPlaceholderTextColor,
-  getRoundedStyleKey,
-} from './TextInput.styles';
-import { SuccessIcon } from '@/icons';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
+import { getFieldSurfaceColors, getFieldSurfaceTokens } from '@/utils/fieldSurface';
+import { createStyles, getInputTypographyStyleKey, getRoundedStyleKey } from './TextInput.styles';
 
 export interface TextInputProps
   extends Omit<BaseTextInputProps, 'style' | 'dataTestId'>,
@@ -25,8 +21,7 @@ export interface TextInputProps
 
 const createTextInputThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
-  placeholderTextColor: getPlaceholderTextColor(theme),
-  successIconFill: theme.colorBorderBrand01,
+  fieldSurfaceTokens: getFieldSurfaceTokens(theme),
 });
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -49,8 +44,9 @@ export const TextInput: React.FC<TextInputProps> = ({
   ...props
 }) => {
   const { track } = useAnalytics();
-  const { styles, placeholderTextColor, successIconFill } =
-    useNativeStyles(createTextInputThemeState);
+  const { styles, fieldSurfaceTokens } = useNativeStyles(createTextInputThemeState);
+  const dsContext = useContext(DesignSystemContext);
+  const isDark = dsContext?.colorScheme === 'dark';
   const formGroupContext = useFormGroupContext();
   const inputRef = useRef<RNTextInput>(null);
 
@@ -62,6 +58,18 @@ export const TextInput: React.FC<TextInputProps> = ({
   const isFilled = value != null && String(value).trim().length > 0;
   const inputTypographyStyle = styles[getInputTypographyStyleKey(size, isFilled)];
   const roundedSizeStyle = styles[getRoundedStyleKey(size)];
+  const { borderColor, backgroundColor, textColor, placeholderTextColor } = useMemo(
+    () =>
+      getFieldSurfaceColors(fieldSurfaceTokens, {
+        isDark,
+        isDisabled,
+        hasError,
+        hasSuccess,
+        focused: isFocused,
+        isFilled,
+      }),
+    [fieldSurfaceTokens, hasError, hasSuccess, isDark, isDisabled, isFilled, isFocused]
+  );
 
   const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     track({
@@ -92,13 +100,10 @@ export const TextInput: React.FC<TextInputProps> = ({
       style={[
         styles.wrapper,
         styles[size],
+        { borderColor, backgroundColor },
         rounded && styles.rounded,
         rounded && roundedSizeStyle,
-        isDisabled && styles.disabled,
-        hasError && styles.error,
-        hasSuccess && styles.success,
         isFocused && styles.focused,
-        isFilled && styles.filled,
       ]}
       testID={testID ? `${testID}-wrapper` : undefined}
     >
@@ -110,7 +115,12 @@ export const TextInput: React.FC<TextInputProps> = ({
 
       <RNTextInput
         ref={inputRef}
-        style={[styles.input, inputTypographyStyle, isDisabled && styles.inputDisabled]}
+        style={[
+          styles.input,
+          inputTypographyStyle,
+          isDisabled && styles.inputDisabled,
+          { color: textColor },
+        ]}
         placeholder={placeholderText}
         placeholderTextColor={placeholderTextColor}
         editable={!isDisabled}
@@ -133,7 +143,7 @@ export const TextInput: React.FC<TextInputProps> = ({
 
       {showSuccessIcon && (
         <View pointerEvents="none" style={[styles.iconContainer]} testID={`${testID}-icon-success`}>
-          <SuccessIcon fill={successIconFill} />
+          <SuccessIcon color="brand-01" />
         </View>
       )}
     </Pressable>

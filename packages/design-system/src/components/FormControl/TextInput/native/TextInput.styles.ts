@@ -80,8 +80,6 @@ export const getRoundedStyleKey = (size: TextInputSize): TextInputRoundedStyleKe
 
 export const getIconPixelSize = (size: TextInputSize) => ICON_SIZE[size];
 
-export const getPlaceholderTextColor = (theme: NativeTheme) => theme.colorTextStateDisabledOnLight;
-
 export const createStyles = (theme: NativeTheme) => {
   const typographyTheme = theme as NativeTheme & Record<InputTypographyToken, TextStyle>;
 
@@ -97,13 +95,10 @@ export const createStyles = (theme: NativeTheme) => {
     input: {
       flex: 1,
       minWidth: 0,
-      color: theme.colorTextOnLightPrimary,
       paddingVertical: 0,
       backgroundColor: 'transparent',
     },
-    inputDisabled: {
-      color: theme.colorTextStateDisabledOnLight,
-    },
+    inputDisabled: {},
     small: {
       minHeight: theme.spacingInputSm,
       paddingVertical: theme.spacing8,
@@ -142,15 +137,12 @@ export const createStyles = (theme: NativeTheme) => {
     },
     inputValueSmall: {
       ...typographyTheme[INPUT_VALUE_TOKENS.small],
-      color: theme.colorTextOnLightPrimary,
     },
     inputValueMedium: {
       ...typographyTheme[INPUT_VALUE_TOKENS.medium],
-      color: theme.colorTextOnLightPrimary,
     },
     inputValueLarge: {
       ...typographyTheme[INPUT_VALUE_TOKENS.large],
-      color: theme.colorTextOnLightPrimary,
     },
     focused: {
       borderColor: theme.colorBorderStateFocus,
