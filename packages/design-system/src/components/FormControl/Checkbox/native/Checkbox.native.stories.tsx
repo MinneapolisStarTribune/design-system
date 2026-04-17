@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Checkbox, CHECKBOX_VARIANTS } from './Checkbox.native';
 
 const meta = {
-  title: 'Components/Actions & Inputs/Checkbox',
+  title: 'Forms/FormControl/Checkbox',
   component: Checkbox,
   parameters: {
     controls: { expanded: true },
