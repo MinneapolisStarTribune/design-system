@@ -1,10 +1,44 @@
-import React from 'react';
-import { View } from 'react-native';
-import { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+import React, { useMemo } from 'react';
+import type { ViewStyle } from 'react-native';
+import type { NativeTheme } from '@/hooks/useNativeStyles';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
+import { DangerousCodeBlock } from '../../DangerousCodeBlock/native/DangerousCodeBlock.native';
+import type { BaseEnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+import { createStyles } from './EnhancedCodeBlock.styles';
 
-// TODO: Implement native EnhancedCodeBlock component
-export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = () => {
-  return <View />;
+export type EnhancedCodeBlockProps = Omit<BaseEnhancedCodeBlockProps, 'style'> & {
+  style?: ViewStyle;
+};
+
+const createThemeState = (theme: NativeTheme) => ({
+  styles: createStyles(theme),
+});
+
+export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
+  size = 'full',
+  variant = 'standard',
+  cleanQuotes = true,
+  dataTestId = 'enhanced-code-block',
+  style,
+  ...rest
+}) => {
+  const { styles } = useNativeStyles(createThemeState);
+
+  const containerStyle = useMemo<ViewStyle | undefined>(() => {
+    if (cleanQuotes) return undefined;
+    const key = `variant-${variant}-size-${size}` as keyof typeof styles;
+    return styles[key] as ViewStyle;
+  }, [cleanQuotes, variant, size, styles]);
+
+  return (
+    <DangerousCodeBlock
+      variant={variant}
+      cleanQuotes={cleanQuotes}
+      dataTestId={dataTestId}
+      style={{ ...style, ...containerStyle }}
+      {...rest}
+    />
+  );
 };
 
 EnhancedCodeBlock.displayName = 'EnhancedCodeBlock';
