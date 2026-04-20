@@ -114,7 +114,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
   const styles = useNativeStyles(createStyles);
   const ctaLabel = ctaLink?.label?.trim() ? ctaLink.label : 'See More';
 
-  const showCTA = Boolean(ctaLink && (ctaLink.link || ctaLink.onClick));
+  const showCTA = Boolean(ctaLink && (ctaLink.link || ctaLink.onPress));
 
   const handlePress = () => {
     if (ctaLink?.onPress) return ctaLink.onPress();
@@ -165,11 +165,11 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
             {description}
           </UtilityBody>
 
-          {showCTA && (
+          {showCTA && ctaLink && (
             <Pressable
               onPress={handlePress}
               accessibilityRole="link"
-              accessibilityLabel={ctaLink!.label}
+              accessibilityLabel={ctaLink.label}
               testID="author-bio-cta"
               style={styles.cta}
             >
