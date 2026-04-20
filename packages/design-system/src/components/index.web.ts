@@ -27,6 +27,11 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export {
+  RadioGroup,
+  type RadioGroupProps,
+  type RadioOption,
+} from './FormControl/RadioGroup/web/RadioGroup';
 export { Select } from './FormControl/Select/web/Select';
 export type { SelectProps } from './FormControl/Select/web/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
