@@ -18,6 +18,8 @@ const WEB_ROLLUP_EXTERNAL = [
   'react',
   'react-dom',
   'react/jsx-runtime',
+  /** Keep in sync with jsx-runtime — consumers' bundlers may resolve dev vs prod runtime by mode. */
+  'react/jsx-dev-runtime',
   '@floating-ui/react',
   'classnames',
   /^swiper(\/.*)?$/,
@@ -119,6 +121,7 @@ export default defineConfig({
           react: 'React',
           'react-dom': 'ReactDOM',
           'react/jsx-runtime': 'React',
+          'react/jsx-dev-runtime': 'React',
           '@floating-ui/react': 'FloatingUIReact',
         },
         assetFileNames,
