@@ -73,15 +73,15 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
 
           <div className={classNames(descriptionTypography, styles.description)}>{description}</div>
 
-          {showCTA && (
+          {showCTA && ctaLink && (
             <Link
-              href={ctaLink!.link}
-              onClick={ctaLink!.onClick}
+              href={ctaLink.link}
+              onClick={ctaLink.onClick}
               size="small"
               icon={<ChevronRightIcon size="medium" />}
               iconPosition="end"
               dataTestId="author-bio-cta"
-              aria-label={ctaLink!.label}
+              aria-label={ctaLink.label}
             >
               {ctaLabel}
             </Link>
