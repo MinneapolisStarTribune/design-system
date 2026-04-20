@@ -10,6 +10,8 @@ export const RADIO_COLORS = ['neutral', 'brand'] as const;
 export type RadioColor = (typeof RADIO_COLORS)[number];
 
 export interface RadioProps extends BaseProps {
+  id?: string;
+  name?: string;
   label: string;
   description?: string;
   checked: boolean;
@@ -30,10 +32,13 @@ export const Radio: React.FC<RadioProps> = ({
   disabled = false,
   error = false,
   onChange,
+  id: idProp,
+  name,
   className,
   dataTestId,
 }) => {
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.checked);
@@ -55,6 +60,7 @@ export const Radio: React.FC<RadioProps> = ({
       <input
         type="radio"
         id={id}
+        name={name}
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
