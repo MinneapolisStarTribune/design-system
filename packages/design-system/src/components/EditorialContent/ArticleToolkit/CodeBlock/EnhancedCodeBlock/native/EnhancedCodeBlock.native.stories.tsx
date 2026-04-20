@@ -33,10 +33,10 @@ type Story = StoryObj<typeof meta>;
 
 // Sample markup for code blocks
 const enhancedCodeBlockMarkup = `
-  <div style="padding: 20px; background-color: #f1f8e9; border: 2px solid #8bc34a; border-radius: 8px; width: 100%;">
+  <div style="padding: 20px; background-color: #e3f2fd; border: 2px solid #2196F3; border-radius: 8px; width: 100%;">
     <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">Enhanced Code Block</h3>
     <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5;">This evaluates raw HTML but dynamically applies correct width bounds based on its size prop.</p>
-    <div style="height: 100px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%); color: white; font-size: 16px; font-weight: 500;">
+    <div style="height: 100px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 16px; font-weight: 500;">
       Interactive Content Area
     </div>
   </div>
