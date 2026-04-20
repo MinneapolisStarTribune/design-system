@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   blockContainer: {
-    height: 250,
     marginBottom: 16,
   },
 });

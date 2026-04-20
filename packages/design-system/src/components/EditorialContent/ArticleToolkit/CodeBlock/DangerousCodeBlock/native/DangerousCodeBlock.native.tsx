@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, type ViewStyle } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 import type { BaseDangerousCodeBlockProps } from '../DangerousCodeBlock.types';
@@ -23,10 +23,34 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   style,
 }) => {
   const { styles } = useNativeStyles(createThemeState);
+  const [height, setHeight] = useState(1);
 
   const content = useMemo(() => {
     return cleanMarkup(markup, cleanQuotes);
   }, [markup, cleanQuotes]);
+
+  const injectedJS = `
+    (function() {
+      function sendHeight() {
+        const height = document.documentElement.scrollHeight || document.body.scrollHeight;
+        window.ReactNativeWebView.postMessage(String(height));
+      }
+
+      setTimeout(sendHeight, 100);
+      setTimeout(sendHeight, 300);
+      setTimeout(sendHeight, 500);
+
+      window.addEventListener('load', sendHeight);
+    })();
+    true;
+  `;
+
+  const handleMessage = useCallback((event: WebViewMessageEvent) => {
+    const newHeight = Number(event.nativeEvent.data);
+    if (!isNaN(newHeight)) {
+      setHeight(newHeight);
+    }
+  }, []);
 
   const html = useMemo(() => {
     return `
@@ -63,6 +87,9 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
       <WebView
         originWhitelist={['*']}
         source={{ html }}
+        injectedJavaScript={injectedJS}
+        onMessage={handleMessage}
+        style={{ height }}
         javaScriptEnabled
         domStorageEnabled
         scrollEnabled={false}
