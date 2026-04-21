@@ -282,11 +282,11 @@
     "icon": {
       "brand-01": {
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
-        "value": "{color.lime.400}"
+        "value": "{color.cobalt-blue.700}"
       },
       "brand-02": {
         "description": "Brand icon color using the secondary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
-        "value": "{color.cobalt-blue.700}"
+        "value": "{color.lime.400}"
       },
       "brand-03": {
         "description": "Brand icon color using the tertiary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
@@ -299,11 +299,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary icon color for use on dark backgrounds — used for supportive or secondary actions that maintain clear visual hierarchy.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary icon color for use on dark backgrounds — used for low-emphasis icons or background details within dark environments.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary icon color for use on light backgrounds — used for key actions, navigation icons, or high-emphasis visuals.",
@@ -315,7 +315,7 @@
       },
       "on-light-tertiary": {
         "description": "Tertiary icon color for use on light backgrounds — used for low-emphasis icons, decorative elements, or background indicators.",
-        "value": "{color.neutral.600}"
+        "value": "{color.neutral.700}"
       },
       "overview": [
         "Primary, secondary, and tertiary tokens define emphasis levels, supporting clear visual hierarchy in iconography.",
@@ -472,11 +472,11 @@
     "text": {
       "brand-01": {
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography.",
-        "value": "{color.lime.400}"
+        "value": "{color.cobalt-blue.700}"
       },
       "brand-02": {
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast.",
-        "value": "{color.cobalt-blue.700}"
+        "value": "{color.lime.400}"
       },
       "brand-03": {
         "description": "Tertiary brand text color used in marketing and promotional content — applies the tertiary brand color to support balance and brand richness.",
@@ -489,11 +489,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary text color for use on dark backgrounds — used for supporting content, subheadings, or secondary information.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary text color for use on dark backgrounds — used for low-emphasis content such as labels, metadata, or helper text.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary text color for use on light backgrounds — used for high-emphasis content such as body copy, headlines, and titles.",
