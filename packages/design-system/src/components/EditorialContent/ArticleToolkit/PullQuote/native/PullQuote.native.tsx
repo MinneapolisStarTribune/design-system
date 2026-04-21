@@ -33,7 +33,10 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
 
   return (
     <View
-      style={[styles.pullQuote, variant === 'immersive' ? styles.variantImmersive : styles.variantStandard]}
+      style={[
+        styles.pullQuote,
+        variant === 'immersive' ? styles.variantImmersive : styles.variantStandard,
+      ]}
       testID={dataTestId}
       accessibilityLabel={ariaLabel}
       accessibilityElementsHidden={ariaHidden}
