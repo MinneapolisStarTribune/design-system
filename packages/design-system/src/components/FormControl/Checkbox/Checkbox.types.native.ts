@@ -4,7 +4,7 @@ import type { BaseProps } from '@/types/globalTypes';
 export const CHECKBOX_VARIANTS = ['neutral', 'brand'] as const;
 export type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
 
-export interface CheckboxProps extends Omit<BaseProps, 'style'> {
+export interface CheckboxProps extends Omit<BaseProps, 'style' | 'className'> {
   style?: StyleProp<ViewStyle>;
   /** Required label text */
   title: string;

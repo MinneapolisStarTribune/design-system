@@ -23,7 +23,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   disabled = false,
   error = false,
   onChange,
-  className: _className,
   style,
   dataTestId = 'checkbox',
 }) => {
@@ -86,11 +85,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
                 {title}
               </UtilityLabel>
               {description ? (
-                <UtilityBody
-                  size="x-small"
-                  weight="regular"
-                  style={styles.descriptionText as React.CSSProperties}
-                >
+                <UtilityBody size="x-small" weight="regular" style={styles.descriptionText}>
                   {description}
                 </UtilityBody>
               ) : null}
