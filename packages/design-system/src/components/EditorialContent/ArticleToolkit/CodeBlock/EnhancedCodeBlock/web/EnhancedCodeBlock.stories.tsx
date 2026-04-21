@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EnhancedCodeBlock } from './EnhancedCodeBlock';
-import type { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+import { EnhancedCodeBlock, type EnhancedCodeBlockProps } from './EnhancedCodeBlock';
 import {
   CODE_BLOCK_SIZES,
   ARTICLE_BODY_VARIANTS,

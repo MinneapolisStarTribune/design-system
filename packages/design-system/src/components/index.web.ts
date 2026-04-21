@@ -1,9 +1,13 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
-export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
-export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
-export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
+export {
+  DangerousCodeBlock,
+  type DangerousCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
+export {
+  EnhancedCodeBlock,
+  type EnhancedCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
 export {
   ImageGallery,
   type ImageGalleryProps,
