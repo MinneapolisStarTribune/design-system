@@ -21,13 +21,9 @@ describe('PullQuote Accessibility (native)', () => {
   });
 
   it('maps aria-label to accessibilityLabel on the root', () => {
-    render(
-      <PullQuote
-        {...defaultProps}
-        aria-label="Highlighted testimony from the trial"
-      />,
-      { wrapper }
-    );
+    render(<PullQuote {...defaultProps} aria-label="Highlighted testimony from the trial" />, {
+      wrapper,
+    });
 
     const root = screen.getByTestId('pull-quote-a11y');
     expect(root.props.accessibilityLabel).toBe('Highlighted testimony from the trial');

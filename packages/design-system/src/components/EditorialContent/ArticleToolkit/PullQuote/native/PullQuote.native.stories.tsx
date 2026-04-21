@@ -185,44 +185,44 @@ export const AllVariants: Story = {
     return (
       <ScrollView contentContainerStyle={styles.scrollContent} style={styles.scrollView}>
         <View style={styles.grid}>
-        {cases.map(({ title, brand, props, isContext }) => {
-          const finalProps = {
-            ...baseArgs,
-            ...props,
-          };
+          {cases.map(({ title, brand, props, isContext }) => {
+            const finalProps = {
+              ...baseArgs,
+              ...props,
+            };
 
-          return (
-            <View key={title} style={styles.case}>
-              <Text style={styles.title}>{title}</Text>
+            return (
+              <View key={title} style={styles.case}>
+                <Text style={styles.title}>{title}</Text>
 
-              <BrandStoryScope brand={brand}>
-                {isContext ? (
-                  <View style={styles.context}>
-                    <ArticleBodyText>
-                      It legalizes the possession and use of marijuana for Minnesotans 21 and older.
-                      It creates a new state agency, called the Office of Cannabis Management (OCM),
-                      tasked with licensing cannabis and hemp businesses and overseeing a legal
-                      recreational market.
-                    </ArticleBodyText>
+                <BrandStoryScope brand={brand}>
+                  {isContext ? (
+                    <View style={styles.context}>
+                      <ArticleBodyText>
+                        It legalizes the possession and use of marijuana for Minnesotans 21 and
+                        older. It creates a new state agency, called the Office of Cannabis
+                        Management (OCM), tasked with licensing cannabis and hemp businesses and
+                        overseeing a legal recreational market.
+                      </ArticleBodyText>
 
+                      <PullQuote {...finalProps} />
+
+                      <ArticleBodyText>
+                        Many elements of the law, including those pertaining to adult possession,
+                        use and home cultivation of marijuana, took effect July 1, according to the
+                        bill. However, the bill did not lift the existing criminal penalties for
+                        these same provisions until Aug. 1.
+                      </ArticleBodyText>
+                    </View>
+                  ) : (
                     <PullQuote {...finalProps} />
+                  )}
+                </BrandStoryScope>
 
-                    <ArticleBodyText>
-                      Many elements of the law, including those pertaining to adult possession, use
-                      and home cultivation of marijuana, took effect July 1, according to the bill.
-                      However, the bill did not lift the existing criminal penalties for these same
-                      provisions until Aug. 1.
-                    </ArticleBodyText>
-                  </View>
-                ) : (
-                  <PullQuote {...finalProps} />
-                )}
-              </BrandStoryScope>
-
-              <View style={styles.separator} />
-            </View>
-          );
-        })}
+                <View style={styles.separator} />
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     );
