@@ -16,7 +16,29 @@ import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import styles from './ImageGallery.module.scss';
-import { ImageGalleryProps } from '../ImageGallery.types';
+
+export type Variant = 'standard' | 'immersive';
+
+export interface ImageItem {
+  src: string;
+  altText: string;
+  caption?: string;
+  credit?: string;
+  width?: number;
+  height?: number;
+  imgixParams?: string;
+}
+
+export interface ImageGalleryProps {
+  images: ImageItem[];
+  variant?: Variant;
+  ImageComponent?: React.ComponentType<ImageProps>;
+  className?: string;
+  imageClassName?: string;
+  wrapperClassName?: string;
+  captionClassName?: string;
+  controlsClassName?: string;
+}
 
 /**
  * SSR-safe spacing helper
