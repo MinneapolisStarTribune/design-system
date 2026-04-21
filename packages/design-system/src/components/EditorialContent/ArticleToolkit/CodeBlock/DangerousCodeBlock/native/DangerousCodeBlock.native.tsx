@@ -33,13 +33,10 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
     (function() {
       function sendHeight() {
         const height = document.documentElement.scrollHeight || document.body.scrollHeight;
-        window.ReactNativeWebView.postMessage(String(height));
+        window.ReactNativeWebView.postMessage(String(height + 1));
       }
 
       setTimeout(sendHeight, 100);
-      setTimeout(sendHeight, 300);
-      setTimeout(sendHeight, 500);
-
       window.addEventListener('load', sendHeight);
     })();
     true;
@@ -60,11 +57,8 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
           <style>
             * {
               box-sizing: border-box;
-            }
-            body {
-              margin: 0;
               padding: 0;
-              overflow-x: hidden;
+              margin: 0;
             }
           </style>
         </head>
