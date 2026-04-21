@@ -38,7 +38,6 @@ export const Configurable: Story = {
   position="Staff Writer"
   thumbnailIcon="https://i.pravatar.cc/150?img=12"
   thumbnailIconAlt="John Doe profile image"
-  thumbnailIconRounded
   headingLevel="h4"
   hasTopBorder
   ctaLink={{ link: "#" }}
@@ -72,7 +71,6 @@ export const AllVariants: Story = {
     description="Senior editor overseeing newsroom strategy."
     position="Senior Editor"
     thumbnailIcon="https://i.pravatar.cc/150?img=8"
-    thumbnailIconRounded
     ctaLink={{ link: "#" }}
   />
 

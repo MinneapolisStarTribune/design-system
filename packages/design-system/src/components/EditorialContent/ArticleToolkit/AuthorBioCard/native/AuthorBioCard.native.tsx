@@ -12,6 +12,7 @@ import { createDesignSystemError } from '@/utils/errorPrefix';
 
 import { AuthorBioCardProps } from '../AuthorBioCard.types';
 import { StyleSheet } from 'react-native';
+import { ChevronRightIcon } from '@/index.native';
 
 function createStyles(theme: NativeTheme) {
   return StyleSheet.create({
@@ -169,7 +170,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
             <Pressable
               onPress={handlePress}
               accessibilityRole="link"
-              accessibilityLabel={ctaLink.label}
+              accessibilityLabel={ctaLabel}
               testID="author-bio-cta"
               style={styles.cta}
             >
@@ -177,7 +178,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
                 {ctaLabel}
               </UtilityBody>
               <UtilityBody size="small" style={styles.ctaText}>
-                {'>'}
+                <ChevronRightIcon size='medium' />
               </UtilityBody>
             </Pressable>
           )}

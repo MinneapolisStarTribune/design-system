@@ -236,7 +236,7 @@
   },
   {
     "component": "AuthorBioCard",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
