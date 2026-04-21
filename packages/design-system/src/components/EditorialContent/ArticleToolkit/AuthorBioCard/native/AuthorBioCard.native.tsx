@@ -90,7 +90,7 @@ function createStyles(theme: NativeTheme) {
   });
 }
 
-export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
+export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
   label = 'ABOUT THE AUTHOR',
   name,
   description,
@@ -178,7 +178,7 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
                 {ctaLabel}
               </UtilityBody>
               <UtilityBody size="small" style={styles.ctaText}>
-                <ChevronRightIcon size='medium' />
+                <ChevronRightIcon size="medium" />
               </UtilityBody>
             </Pressable>
           )}
@@ -188,4 +188,4 @@ export const AuthorBioCardNative: React.FC<AuthorBioCardProps> = ({
   );
 };
 
-AuthorBioCardNative.displayName = 'AuthorBioCardNative';
+AuthorBioCard.displayName = 'AuthorBioCard';

@@ -1,22 +1,21 @@
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 
-import { AuthorBioCardNative } from './AuthorBioCard.native';
+import { AuthorBioCard } from './AuthorBioCard.native';
 
 const wrapper = TestWrapperInDesignSystemProvider();
 
-describe('AuthorBioCardNative (native)', () => {
+describe('AuthorBioCard (native)', () => {
   it('renders description (required)', () => {
-    render(<AuthorBioCardNative description="Test description" />, { wrapper });
+    render(<AuthorBioCard description="Test description" />, { wrapper });
 
     expect(screen.getByText('Test description')).toBeOnTheScreen();
   });
 
   it('renders label, name, and position', () => {
-    render(
-      <AuthorBioCardNative label="Author" name="John Doe" position="Writer" description="Bio" />,
-      { wrapper }
-    );
+    render(<AuthorBioCard label="Author" name="John Doe" position="Writer" description="Bio" />, {
+      wrapper,
+    });
 
     expect(screen.getByText('Author')).toBeOnTheScreen();
     expect(screen.getByText('John Doe')).toBeOnTheScreen();
@@ -25,7 +24,7 @@ describe('AuthorBioCardNative (native)', () => {
 
   it('renders image with accessibility label', () => {
     render(
-      <AuthorBioCardNative
+      <AuthorBioCard
         description="Test"
         thumbnailIcon="https://example.com/image.jpg"
         thumbnailIconAlt="author image"
@@ -37,26 +36,22 @@ describe('AuthorBioCardNative (native)', () => {
   });
 
   it('uses default image accessibility label when not provided', () => {
-    render(
-      <AuthorBioCardNative description="Test" thumbnailIcon="https://example.com/image.jpg" />,
-      { wrapper }
-    );
+    render(<AuthorBioCard description="Test" thumbnailIcon="https://example.com/image.jpg" />, {
+      wrapper,
+    });
 
     expect(screen.getByLabelText('Author thumbnail')).toBeOnTheScreen();
   });
 
   it('does not render image when thumbnailIcon is missing', () => {
-    render(<AuthorBioCardNative description="Test" />, { wrapper });
+    render(<AuthorBioCard description="Test" />, { wrapper });
 
     expect(screen.queryByLabelText('Author thumbnail')).toBeNull();
   });
 
   it('renders CTA when valid', () => {
     render(
-      <AuthorBioCardNative
-        description="Test"
-        ctaLink={{ label: 'View', link: 'https://example.com' }}
-      />,
+      <AuthorBioCard description="Test" ctaLink={{ label: 'View', link: 'https://example.com' }} />,
       { wrapper }
     );
 
@@ -66,7 +61,7 @@ describe('AuthorBioCardNative (native)', () => {
   it('calls onPress when CTA is pressed', () => {
     const onPress = jest.fn();
 
-    render(<AuthorBioCardNative description="Test" ctaLink={{ label: 'Click', onPress }} />, {
+    render(<AuthorBioCard description="Test" ctaLink={{ label: 'Click', onPress }} />, {
       wrapper,
     });
 
@@ -76,7 +71,7 @@ describe('AuthorBioCardNative (native)', () => {
   });
 
   it('renders CTA with default label "See More" when label is empty', () => {
-    render(<AuthorBioCardNative description="Test" ctaLink={{ label: '', link: '/profile' }} />, {
+    render(<AuthorBioCard description="Test" ctaLink={{ label: '', link: '/profile' }} />, {
       wrapper,
     });
 
@@ -84,7 +79,7 @@ describe('AuthorBioCardNative (native)', () => {
   });
 
   it('renders with borders enabled', () => {
-    render(<AuthorBioCardNative description="Test" hasTopBorder hasBottomBorder />, { wrapper });
+    render(<AuthorBioCard description="Test" hasTopBorder hasBottomBorder />, { wrapper });
 
     expect(screen.getByTestId('author-bio-card')).toBeOnTheScreen();
   });

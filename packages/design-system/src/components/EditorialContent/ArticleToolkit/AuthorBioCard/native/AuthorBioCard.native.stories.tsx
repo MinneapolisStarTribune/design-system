@@ -3,11 +3,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ScrollView } from 'react-native';
 
-import { AuthorBioCardNative } from './AuthorBioCard.native';
+import { AuthorBioCard } from './AuthorBioCard.native';
 
-const meta: Meta<typeof AuthorBioCardNative> = {
+const meta: Meta<typeof AuthorBioCard> = {
   title: 'Editorial Content/Article Toolkit/AuthorBioCard',
-  component: AuthorBioCardNative,
+  component: AuthorBioCard,
   argTypes: {
     label: {
       control: 'text',
@@ -50,7 +50,7 @@ const meta: Meta<typeof AuthorBioCardNative> = {
 
 export default meta;
 
-type Story = StoryObj<typeof AuthorBioCardNative>;
+type Story = StoryObj<typeof AuthorBioCard>;
 
 // configurable
 export const Configurable: Story = {
@@ -72,7 +72,7 @@ export const Configurable: Story = {
 export const AllVariants: Story = {
   render: () => (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 24 }}>
-      <AuthorBioCardNative
+      <AuthorBioCard
         name="Jane Smith"
         description="Reporter focused on long-form storytelling."
         position="Reporter"
@@ -80,7 +80,7 @@ export const AllVariants: Story = {
         ctaLink={{ link: 'https://example.com' }}
       />
 
-      <AuthorBioCardNative
+      <AuthorBioCard
         label="Without Image"
         name="Alex Johnson"
         description="Freelance journalist covering tech."
@@ -88,7 +88,7 @@ export const AllVariants: Story = {
         ctaLink={{ label: 'Read articles', link: 'https://example.com' }}
       />
 
-      <AuthorBioCardNative
+      <AuthorBioCard
         label="Without CTA"
         name="Emily Davis"
         description="Covers health and science."
@@ -96,7 +96,7 @@ export const AllVariants: Story = {
         thumbnailIcon="https://i.pravatar.cc/150?img=9"
       />
 
-      <AuthorBioCardNative
+      <AuthorBioCard
         label="With Borders"
         name="Border Example"
         description="Top and bottom borders applied."
