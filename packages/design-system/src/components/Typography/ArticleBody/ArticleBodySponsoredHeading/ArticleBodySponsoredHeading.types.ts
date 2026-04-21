@@ -10,32 +10,37 @@ export const ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS = [
 export type ArticleBodySponsoredHeadingImportance =
   (typeof ARTICLE_BODY_SPONSORED_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface ArticleBodySponsoredHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface ArticleBodySponsoredHeadingBaseProps {
   importance: ArticleBodySponsoredHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
   'aria-label'?: string;
+}
+
+export interface ArticleBodySponsoredHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof ArticleBodySponsoredHeadingBaseProps
+    >,
+    ColorVariantProps,
+    ArticleBodySponsoredHeadingBaseProps {
+  className?: string;
 }
 
 /**
  * React Native entry — no `className` or `HTMLAttributes`.
  *
  * - **`color`** — Same semantic `TextColor` tokens as web via `ColorVariantProps` on
- *   {@link ArticleBodySponsoredHeadingProps}; repeated here because native does not extend that web
+ *   {@link ArticleBodySponsoredHeadingProps}; listed here because native does not extend that web
  *   `extends` chain.
  * - **`dataTestId`** — Same testing hook as on `BaseProps` in `globalTypes`; maps to `testID` on the
  *   native `Text`.
  * - **`style`** — Optional RN overrides (`StyleProp<TextStyle>`); replaces web `className` / CSS style.
  */
-export interface ArticleBodySponsoredHeadingNativeProps {
-  importance: ArticleBodySponsoredHeadingImportance;
-  children: React.ReactNode;
+export interface ArticleBodySponsoredHeadingNativeProps
+  extends ArticleBodySponsoredHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
-  'aria-label'?: string;
 }

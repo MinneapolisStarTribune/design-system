@@ -14,23 +14,27 @@ export const NEWS_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4, 5, 6] as const satisf
 
 export type NewsHeadingImportance = (typeof NEWS_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface NewsHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface NewsHeadingBaseProps {
   importance: NewsHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
   'aria-label'?: string;
 }
 
+export interface NewsHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof NewsHeadingBaseProps
+    >,
+    ColorVariantProps,
+    NewsHeadingBaseProps {
+  className?: string;
+}
+
 /** React Native — no DOM / `className` / `HTMLAttributes`. */
-export interface NewsHeadingNativeProps {
-  importance: NewsHeadingImportance;
-  children: React.ReactNode;
+export interface NewsHeadingNativeProps extends NewsHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
-  'aria-label'?: string;
 }

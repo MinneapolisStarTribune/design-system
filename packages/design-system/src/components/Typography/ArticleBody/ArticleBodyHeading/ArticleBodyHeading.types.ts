@@ -9,21 +9,26 @@ export const ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS = [
 
 export type ArticleBodyHeadingImportance = (typeof ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface ArticleBodyHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface ArticleBodyHeadingBaseProps {
   importance: ArticleBodyHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
 }
 
+export interface ArticleBodyHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof ArticleBodyHeadingBaseProps
+    >,
+    ColorVariantProps,
+    ArticleBodyHeadingBaseProps {
+  className?: string;
+}
+
 /** React Native — no DOM / `className` / `HTMLAttributes`. */
-export interface ArticleBodyHeadingNativeProps {
-  importance: ArticleBodyHeadingImportance;
-  children: React.ReactNode;
+export interface ArticleBodyHeadingNativeProps extends ArticleBodyHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
 }

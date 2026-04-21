@@ -91,6 +91,11 @@ Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 - **Native:** Either `NativeTextStylingProps<ComponentNameProps>` / `NativeViewStylingProps<…>` from
   `@/types/nativeBaseProps`, or an explicit `ComponentNameNativeProps` when web extends
   `HTMLAttributes` and native cannot.
+- **Headings with explicit native interfaces:** Prefer `ComponentNameBaseProps` for fields shared by web
+  and native (`importance`, `children`, `id`, etc.), then
+  `ComponentNameNativeProps extends ComponentNameBaseProps` with only `color`, `dataTestId`, and
+  `style`. Web `ComponentNameProps` should extend `Omit<HTMLAttributes<…>, … | keyof ComponentNameBaseProps>`
+  plus `ColorVariantProps` and `ComponentNameBaseProps` so the base stays a single source of truth.
 
 **Explicit fields on some native-only interfaces** (e.g. editorial headings) are not accidental duplication:
 

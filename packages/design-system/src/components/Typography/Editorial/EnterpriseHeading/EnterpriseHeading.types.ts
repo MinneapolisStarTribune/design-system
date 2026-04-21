@@ -14,23 +14,27 @@ export const ENTERPRISE_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4, 5, 6] as const 
 
 export type EnterpriseHeadingImportance = (typeof ENTERPRISE_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface EnterpriseHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface EnterpriseHeadingBaseProps {
   importance: EnterpriseHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
   'aria-label'?: string;
 }
 
+export interface EnterpriseHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof EnterpriseHeadingBaseProps
+    >,
+    ColorVariantProps,
+    EnterpriseHeadingBaseProps {
+  className?: string;
+}
+
 /** React Native — no DOM / `className` / `HTMLAttributes`. */
-export interface EnterpriseHeadingNativeProps {
-  importance: EnterpriseHeadingImportance;
-  children: React.ReactNode;
+export interface EnterpriseHeadingNativeProps extends EnterpriseHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
-  'aria-label'?: string;
 }

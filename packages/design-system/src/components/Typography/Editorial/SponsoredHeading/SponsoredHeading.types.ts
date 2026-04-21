@@ -14,23 +14,27 @@ export const SPONSORED_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4, 5, 6] as const s
 
 export type SponsoredHeadingImportance = (typeof SPONSORED_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface SponsoredHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface SponsoredHeadingBaseProps {
   importance: SponsoredHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
   'aria-label'?: string;
 }
 
+export interface SponsoredHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof SponsoredHeadingBaseProps
+    >,
+    ColorVariantProps,
+    SponsoredHeadingBaseProps {
+  className?: string;
+}
+
 /** React Native — no DOM / `className` / `HTMLAttributes`. */
-export interface SponsoredHeadingNativeProps {
-  importance: SponsoredHeadingImportance;
-  children: React.ReactNode;
+export interface SponsoredHeadingNativeProps extends SponsoredHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
-  'aria-label'?: string;
 }

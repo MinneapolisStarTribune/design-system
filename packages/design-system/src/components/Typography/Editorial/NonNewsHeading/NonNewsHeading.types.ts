@@ -14,23 +14,27 @@ export const NON_NEWS_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4, 5, 6] as const sa
 
 export type NonNewsHeadingImportance = (typeof NON_NEWS_HEADING_IMPORTANCE_LEVELS)[number];
 
-export interface NonNewsHeadingProps
-  extends Omit<HTMLAttributes<HTMLHeadingElement>, 'className' | 'children' | 'color'>,
-    ColorVariantProps {
+/** Shared by web and native (no DOM attrs, `className`, or RN-only styling). */
+export interface NonNewsHeadingBaseProps {
   importance: NonNewsHeadingImportance;
   children: React.ReactNode;
-  className?: string;
   id?: string;
   'aria-label'?: string;
 }
 
+export interface NonNewsHeadingProps
+  extends Omit<
+      HTMLAttributes<HTMLHeadingElement>,
+      'className' | 'children' | 'color' | keyof NonNewsHeadingBaseProps
+    >,
+    ColorVariantProps,
+    NonNewsHeadingBaseProps {
+  className?: string;
+}
+
 /** React Native — no DOM / `className` / `HTMLAttributes`. */
-export interface NonNewsHeadingNativeProps {
-  importance: NonNewsHeadingImportance;
-  children: React.ReactNode;
+export interface NonNewsHeadingNativeProps extends NonNewsHeadingBaseProps {
   color?: TextColor;
-  id?: string;
   dataTestId?: string;
   style?: StyleProp<TextStyle>;
-  'aria-label'?: string;
 }
