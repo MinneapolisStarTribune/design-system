@@ -8,6 +8,7 @@
  * 1. Global Toolbar Controls:
  *    - Brand selector: Switch between 'startribune' and 'varsity' themes
  *    - Theme selector: Switch between 'light' and 'dark' color schemes
+ *    - Versions (see `./version-toolbar.ts`, allowlist in `./version-toolbar-hosts.ts`)
  *
  * 2. Decorator Chain:
  *    - ThemeWrapper: Loads the correct CSS theme file based on brand/colorScheme
@@ -18,7 +19,7 @@
  * 3. Theme Loading Flow:
  *    - User selects brand/theme in toolbar → context.globals updates
  *    - Decorator extracts brand and colorScheme from context
- *    - ThemeWrapper loads the corresponding CSS file (e.g., startribune-light.css)
+ *    - ThemeWrapper loads the corresponding CSS file (e.g. startribune-light.css)
  *    - CSS variables become available in the DOM
  *    - DesignSystemProvider provides brand and color scheme to components
  *    - Components use CSS variables and design tokens from the loaded theme
@@ -27,7 +28,7 @@
  *    - Hides certain props from Storybook controls that are internal/accessibility-focused
  *
  * 5. Parameters:
- *    - Controls: Matchers for better control UI (e.g., color picker for color props)
+ *    - Controls: Matchers for better control UI (e.g. color picker for color props)
  *    - A11y: Accessibility testing configuration
  *    - Docs: Source code display settings
  */
@@ -38,20 +39,19 @@ import { ThemeWrapper } from './theme-wrapper';
 import { FontWrapper } from './font-wrapper';
 import './preview.css';
 
-import versionsList from './versions.json';
+import {
+  getVersionsGlobalTypeEntry,
+  getVersionsInitialGlobal,
+  registerVersionToolbarGlobalsListener,
+  showVersionsToolbar,
+  tryNavigateForVersionChoice,
+} from './version-toolbar';
 
-type VersionsEntry = { version: string; url: string };
+registerVersionToolbarGlobalsListener();
 
 type StorybookGlobalsWindow = Window & {
   __STORYBOOK_GLOBALS__?: { brand: Brand; theme: 'light' | 'dark' };
 };
-
-const versions = versionsList as VersionsEntry[];
-
-const versionToolbarItems = [
-  { value: 'current', title: 'Current' },
-  ...versions.map((v) => ({ value: v.url, title: v.version })),
-];
 
 const preview: Preview = {
   globalTypes: {
@@ -79,20 +79,12 @@ const preview: Preview = {
         ],
       },
     },
-    versions: {
-      description: 'Storybook version',
-      toolbar: {
-        title: 'Versions',
-        icon: 'branch',
-        dynamicTitle: true,
-        items: versionToolbarItems,
-      },
-    },
+    ...(showVersionsToolbar ? getVersionsGlobalTypeEntry() : {}),
   },
   initialGlobals: {
     brand: 'startribune',
     theme: 'light',
-    versions: 'current',
+    ...getVersionsInitialGlobal(),
   },
   decorators: [
     /**
@@ -109,12 +101,7 @@ const preview: Preview = {
      * are available before components try to use them.
      */
     (Story, context) => {
-      // Handle version redirect
-      const selectedVersion = context.globals.versions as string;
-      if (typeof selectedVersion === 'string' && selectedVersion.startsWith('http')) {
-        if (typeof window !== 'undefined') {
-          (window.top || window).location.href = selectedVersion;
-        }
+      if (tryNavigateForVersionChoice(context)) {
         return <div>Redirecting...</div>;
       }
 
@@ -178,6 +165,11 @@ const preview: Preview = {
     },
   },
   parameters: {
+    options: {
+      storySort: {
+        order: ['Getting Started', 'Foundations', 'Typography', '*'],
+      },
+    },
     controls: {
       expanded: true,
       matchers: {

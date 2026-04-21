@@ -11,7 +11,7 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   attribution,
   jobTitle,
   className,
-  variant = 'immersive',
+  variant = 'standard',
   size = 'small',
   dataTestId = 'pull-quote',
   ...accessibilityProps

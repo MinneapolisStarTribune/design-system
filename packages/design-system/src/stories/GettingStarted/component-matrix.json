@@ -1,7 +1,7 @@
 [
   {
     "component": "Button",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -52,16 +52,16 @@
   {
     "component": "Radio",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "RadioGroup",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "TextInput",
-    "native": false,
+    "native": true,
     "web": true
   },
   {

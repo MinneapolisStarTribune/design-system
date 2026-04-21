@@ -1,0 +1,137 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as RadioGroupStories from './RadioGroup.stories';
+
+<Meta of={RadioGroupStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# RadioGroup
+
+`FormControl.RadioGroup` renders a controlled set of radios where only one option can be selected.
+
+Use `FormGroup` for field semantics (label, optional indicator, description, and caption). This keeps behavior and accessibility consistent with other form controls.
+
+## Design
+
+[Figma — RadioGroup (Core Components)](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-505&p=f&m=dev)
+
+## Canonical usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Select an option</FormGroup.Label>
+  <FormControl.RadioGroup
+    name="option"
+    value={value}
+    onChange={setValue}
+    options={[
+      { value: 'a', title: 'Option A' },
+      { value: 'b', title: 'Option B' },
+      { value: 'c', title: 'Option C' },
+    ]}
+  />
+</FormGroup>
+```
+
+## Label variants (optional + description)
+
+Optional treatment is part of the group label, not the radio control itself:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Select an option</FormGroup.Label>
+  <FormControl.RadioGroup name="option" value={value} onChange={setValue} options={options} />
+</FormGroup>
+```
+
+Group-level supporting text belongs directly under the label:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Select an option</FormGroup.Label>
+  <FormGroup.Description>Select only one</FormGroup.Description>
+  <FormControl.RadioGroup name="option" value={value} onChange={setValue} options={options} />
+</FormGroup>
+```
+
+## States
+
+`RadioGroup` is controlled, `value` drives which radio is checked. These are the two valid resting states; error handling is consumer-owned and covered below.
+
+- **Default** — Initial render with a nullish `value` (null, empty, or undefined). No radio is checked; this is a valid resting state.
+- **Selected** — The user selects an option and the consumer updates `value` via `onChange`. The matching radio is checked.
+
+## Error state
+
+`RadioGroup` does not manage validation itself. The consumer owns when an unselected group becomes an error (typically on submit or blur) by setting the `error` prop. The group then receives `aria-invalid="true"` plus error styling on each radio, and the consumer should render a matching `FormGroup.Caption` with `variant="error"` for the message.
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Subscription Plan</FormGroup.Label>
+  <FormGroup.Description>Select one</FormGroup.Description>
+  <FormControl.RadioGroup
+    name="plan"
+    value={plan}
+    onChange={setPlan}
+    options={[
+      { value: 'basic', title: 'Basic' },
+      { value: 'pro', title: 'Pro' },
+      { value: 'enterprise', title: 'Enterprise' },
+    ]}
+    error
+  />
+  <FormGroup.Caption variant="error">Please select a plan</FormGroup.Caption>
+</FormGroup>
+```
+
+## Props
+
+```tsx
+interface RadioOption {
+  value: string;
+  title: string;
+  description?: string;
+}
+
+interface RadioGroupProps extends BaseProps {
+  name: string;
+  value: string | null | undefined;
+  options: RadioOption[];
+  color?: 'neutral' | 'brand';
+  disabled?: boolean;
+  error?: boolean;
+  onChange: (value: string) => void;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+}
+```
+
+### Prop notes
+
+- `name` is required and should be unique per radio set on the page.
+- `value` is controlled by parent state (`string`, `null`, or `undefined`).
+- `options` renders each radio option; use `title` for the visible label.
+- `description` on an option is available, but default product usage keeps descriptive copy at the group level via `FormGroup.Description`.
+- `onChange` fires with the selected option `value`.
+
+## Accessibility behavior
+
+When rendered inside `FormGroup`, `RadioGroup` automatically receives:
+
+- `aria-labelledby` from `FormGroup.Label`
+- `aria-describedby` from `FormGroup.Description` and/or `FormGroup.Caption`
+- `aria-invalid` when `error` is true (or when `FormGroup.Caption` uses `variant="error"`)
+
+`RadioGroup` uses native radio behavior by applying the same `name` to all radios in the group.
+
+## Exports
+
+- `RadioGroup`
+- `RadioGroupProps`
+- `RadioOption`
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

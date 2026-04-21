@@ -26,6 +26,8 @@ export default defineConfig({
       include: [
         path.resolve(__dirname, 'src/index.native.ts'),
         path.resolve(__dirname, 'src/components/index.native.ts'),
+        path.resolve(__dirname, 'src/components/Icon/Icon.native.tsx'),
+        path.resolve(__dirname, 'src/icons/index.native.ts'),
         path.resolve(__dirname, 'src/providers/DesignSystemProvider.native.tsx'),
         path.resolve(__dirname, 'src/providers/theme-helpers.ts'),
         path.resolve(__dirname, 'src/providers/DesignSystemContext.ts'),
@@ -88,7 +90,8 @@ export default defineConfig({
       fileName: () => 'design-system.es.js',
     },
     rollupOptions: {
-      external: ['react', 'react-native', 'react-native-svg'],
+      // react-native-svg must stay external
+      external: ['react', 'react-native-svg', /^react-native(?:\/|$)/],
       output: {
         globals: {
           react: 'React',

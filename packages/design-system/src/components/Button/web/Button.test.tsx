@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import { Button } from './Button';
 import buttonStyles from './Button.module.scss';
 import { renderWithProvider } from '../../../test-utils/render';
-import { CameraFilledIcon, ShareIcon } from '@/icons';
+import { CameraFilledIcon, Share01Icon } from '@/icons';
 
 describe('Button', () => {
   it('renders', () => {
@@ -197,7 +197,7 @@ describe('Button', () => {
     it('includes icon in tracking event when present', () => {
       const mockOnTrackingEvent = vi.fn();
       const { getByTestId } = renderWithProvider(
-        <Button onClick={vi.fn()} icon={<ShareIcon />} data-testid="button">
+        <Button onClick={vi.fn()} icon={<Share01Icon />} data-testid="button">
           Share
         </Button>,
         { mockOnTrackingEvent }

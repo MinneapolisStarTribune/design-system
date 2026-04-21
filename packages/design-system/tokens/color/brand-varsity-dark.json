@@ -84,7 +84,7 @@
       },
       "on-light-subtle-01": {
         "description": "Used on light backgrounds to separate related content or elements within the same group — provides gentle visual distinction.",
-        "value": "{color.neutral.900}"
+        "value": "{color.neutral.800}"
       },
       "on-light-subtle-02": {
         "description": "Used on light backgrounds for slightly stronger separation between related elements — maintains subtle contrast without drawing attention.",
@@ -122,7 +122,7 @@
       },
       "state-success-on-light": {
         "description": "Success border used on light backgrounds to indicate validation passed or positive feedback.",
-        "value": "{color.emerald-green.800}"
+        "value": "{color.emerald-green.400}"
       }
     },
     "brand": {
@@ -282,7 +282,7 @@
     "icon": {
       "brand-01": {
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
-        "value": "{color.lime.400}"
+        "value": "{color.cobalt-blue.600}"
       },
       "brand-02": {
         "description": "Brand icon color using the secondary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
@@ -299,11 +299,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary icon color for use on dark backgrounds — used for supportive or secondary actions that maintain clear visual hierarchy.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary icon color for use on dark backgrounds — used for low-emphasis icons or background details within dark environments.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary icon color for use on light backgrounds — used for key actions, navigation icons, or high-emphasis visuals.",
@@ -315,7 +315,7 @@
       },
       "on-light-tertiary": {
         "description": "Tertiary icon color for use on light backgrounds — used for low-emphasis icons, decorative elements, or background indicators.",
-        "value": "{color.neutral.400}"
+        "value": "{color.neutral.300}"
       },
       "overview": [
         "Primary, secondary, and tertiary tokens define emphasis levels, supporting clear visual hierarchy in iconography.",
@@ -394,6 +394,41 @@
         "value": "rgb(255 255 255 / 35%)"
       }
     },
+    "radio": {
+      "border": {
+        "selected": {
+          "brand": {
+            "description": "Border color for selected brand radio — Varsity cobalt blue on dark.",
+            "value": "{color.cobalt-blue.600}"
+          },
+          "neutral": {
+            "description": "Border color for selected neutral radio (dark mode: white).",
+            "value": "{color.base.white}"
+          }
+        },
+        "unchecked": {
+          "description": "Border color for unchecked radio on dark backgrounds.",
+          "value": "{color.neutral.600}"
+        }
+      },
+      "description": "Radio component color tokens — border and dot for unselected and selected states. Varsity uses cobalt blue for brand.",
+      "dot": {
+        "selected": {
+          "brand": {
+            "description": "Inner dot color for selected brand radio — Varsity cobalt blue on dark.",
+            "value": "{color.cobalt-blue.600}"
+          },
+          "neutral": {
+            "description": "Inner dot color for selected neutral radio (dark mode).",
+            "value": "{color.base.white}"
+          }
+        },
+        "unchecked": {
+          "description": "Dot color for unselected radio.",
+          "value": "rgb(255 255 255 / 0%)"
+        }
+      }
+    },
     "select": {
       "background": { "value": "{color.neutral.900}" },
       "hover": { "value": "{color.neutral.800}" },
@@ -403,7 +438,7 @@
       "description": "Semantic tokens communicate meaning and system feedback across the interface. They represent states such as info, success, warning, and error, and are used in components like alerts, banners, toasts, and badges.\n\nEach semantic color includes a background and foreground pair, designed to maintain contrast and readability across light and dark themes.",
       "error-background": {
         "description": "Background color for critical or error messages — used to indicate failure, blocking issues, or urgent errors requiring attention.",
-        "value": "{color.red.900}"
+        "value": "{color.red.950}"
       },
       "error-foreground": {
         "description": "Foreground color for error messages — used for text or icons on error backgrounds to maintain legibility and emphasis.",
@@ -411,7 +446,7 @@
       },
       "info-background": {
         "description": "Background color for informational messages and neutral alerts — used to indicate general updates or contextual information.",
-        "value": "{color.sky-blue.800}"
+        "value": "{color.sky-blue.900}"
       },
       "info-foreground": {
         "description": "Foreground color for informational messages — used for text or icons that appear on info backgrounds to maintain clarity and contrast.",
@@ -419,7 +454,7 @@
       },
       "success-background": {
         "description": "Background color for positive or successful outcomes — used to indicate completion, confirmation, or resolved states.",
-        "value": "{color.spring-green.900}"
+        "value": "{color.spring-green.950}"
       },
       "success-foreground": {
         "description": "Foreground color for success messages — used for text or icons displayed on success backgrounds to ensure strong contrast and visibility.",
@@ -427,7 +462,7 @@
       },
       "warning-background": {
         "description": "Background color for cautionary or warning messages — used to signal potential issues, risks, or required user awareness.",
-        "value": "{color.orange.900}"
+        "value": "{color.orange.950}"
       },
       "warning-foreground": {
         "description": "Foreground color for warning messages — used for text or icons on warning backgrounds to ensure readable contrast.",
@@ -437,7 +472,7 @@
     "text": {
       "brand-01": {
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography.",
-        "value": "{color.lime.400}"
+        "value": "{color.cobalt-blue.600}"
       },
       "brand-02": {
         "description": "Secondary brand text color used in marketing and promotional content — applies the secondary brand color for variety or contrast.",
@@ -454,11 +489,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary text color for use on dark backgrounds — used for supporting content, subheadings, or secondary information.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary text color for use on dark backgrounds — used for low-emphasis content such as labels, metadata, or helper text.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary text color for use on light backgrounds — used for high-emphasis content such as body copy, headlines, and titles.",
@@ -470,7 +505,7 @@
       },
       "on-light-tertiary": {
         "description": "Tertiary text color for use on light backgrounds — used for low-emphasis content such as labels, metadata, or helper text.",
-        "value": "{color.neutral.400}"
+        "value": "{color.neutral.300}"
       },
       "overview": [
         "Primary, secondary, and tertiary tokens establish clear emphasis levels, guiding typographic hierarchy across layouts.",
@@ -499,7 +534,7 @@
       },
       "state-success-on-light": {
         "description": "Success text color used on light backgrounds to indicate validation passed or positive feedback",
-        "value": "{color.emerald-green.800}"
+        "value": "{color.emerald-green.400}"
       }
     },
     "utility-toggle": {

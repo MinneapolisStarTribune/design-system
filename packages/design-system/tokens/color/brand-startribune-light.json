@@ -277,11 +277,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary icon color for use on dark backgrounds — used for supportive or secondary actions that maintain clear visual hierarchy.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary icon color for use on dark backgrounds — used for low-emphasis icons or background details within dark environments.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary icon color for use on light backgrounds — used for key actions, navigation icons, or high-emphasis visuals.",
@@ -372,6 +372,41 @@
         "value": "rgb(255 255 255 / 35%)"
       }
     },
+    "radio": {
+      "border": {
+        "selected": {
+          "brand": {
+            "description": "Border color for selected brand radio — Star Tribune green (light mode).",
+            "value": "{color.emerald-green.800}"
+          },
+          "neutral": {
+            "description": "Border color for selected neutral radio (light mode: black outline).",
+            "value": "{color.neutral.950}"
+          }
+        },
+        "unchecked": {
+          "description": "Border color for unchecked radio (default state).",
+          "value": "{color.neutral.400}"
+        }
+      },
+      "description": "Radio component color tokens — border and dot for unselected and selected states.",
+      "dot": {
+        "selected": {
+          "brand": {
+            "description": "Inner dot color for selected brand radio — Star Tribune green.",
+            "value": "{color.emerald-green.800}"
+          },
+          "neutral": {
+            "description": "Inner dot color for selected neutral radio (light mode).",
+            "value": "{color.neutral.950}"
+          }
+        },
+        "unchecked": {
+          "description": "Dot color for unselected radio.",
+          "value": "rgb(255 255 255 / 0%)"
+        }
+      }
+    },
     "select": {
       "background": { "value": "{color.base.white}" },
       "hover": { "value": "{color.neutral.100}" },
@@ -432,11 +467,11 @@
       },
       "on-dark-secondary": {
         "description": "Secondary text color for use on dark backgrounds — used for supporting content, subheadings, or secondary information.",
-        "value": "{color.neutral.50}"
+        "value": "{color.neutral.200}"
       },
       "on-dark-tertiary": {
         "description": "Tertiary text color for use on dark backgrounds — used for low-emphasis content such as labels, metadata, or helper text.",
-        "value": "{color.neutral.200}"
+        "value": "{color.neutral.300}"
       },
       "on-light-primary": {
         "description": "Primary text color for use on light backgrounds — used for high-emphasis content such as body copy, headlines, and titles.",
