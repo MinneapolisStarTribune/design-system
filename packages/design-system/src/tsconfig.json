@@ -5,5 +5,12 @@
   },
   "exclude": ["node_modules"],
   "extends": "../tsconfig.json",
-  "include": ["env.d.ts", "**/*.stories.ts", "**/*.stories.tsx", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "env.d.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "../e2e/**/*.ts"
+  ]
 }

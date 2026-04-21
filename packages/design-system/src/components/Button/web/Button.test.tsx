@@ -131,6 +131,20 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
+  it('defaults native button type to "button"', () => {
+    const { getByRole } = renderWithProvider(<Button onClick={vi.fn()}>Go</Button>);
+    expect(getByRole('button')).toHaveAttribute('type', 'button');
+  });
+
+  it('forwards type="submit" to the button element', () => {
+    const { getByRole } = renderWithProvider(
+      <Button type="submit" onClick={vi.fn()}>
+        Submit
+      </Button>
+    );
+    expect(getByRole('button')).toHaveAttribute('type', 'submit');
+  });
+
   describe('analytics', () => {
     it('emits tracking event on click when AnalyticsProvider is present', () => {
       const mockOnTrackingEvent = vi.fn();

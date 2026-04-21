@@ -42,7 +42,9 @@
     "vite.web.config.ts",
     "vite.native.config.ts",
     "vite.icons.config.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "e2e/**/*.ts"
   ]
   // Note: Stories are included here for IDE type-checking, but excluded from build by Vite
 }
