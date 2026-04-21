@@ -77,6 +77,7 @@ describe('SnackProvider (native)', () => {
   });
 
   it('dismisses toast and calls onClose when the close button is pressed', async () => {
+    jest.useFakeTimers();
     const onClose = jest.fn();
 
     render(<ToastTrigger dataTestId="toast-native-dismiss" duration={0} onClose={onClose} />, {
@@ -84,9 +85,13 @@ describe('SnackProvider (native)', () => {
     });
 
     fireEvent.press(await screen.findByRole('button', { name: 'Dismiss notification' }));
+    await act(async () => {
+      jest.advanceTimersByTime(121);
+    });
 
     expect(onClose).toHaveBeenCalledTimes(1);
     expect(screen.queryByTestId('toast-native-dismiss')).toBeNull();
+    jest.useRealTimers();
   });
 
   it('supports the showToast alias', async () => {

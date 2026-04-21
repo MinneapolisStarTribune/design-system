@@ -20,6 +20,7 @@ export const Snack = {
 export type SnackSlot = keyof typeof Snack;
 
 const DEFAULT_TOAST_DURATION_MS = 5000;
+const EXIT_DURATION_MS = 120;
 
 export type SnackToastShowOptions = {
   id?: string;
@@ -54,7 +55,9 @@ export type SnackProviderProps = {
 
 export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
   const [slots, setSlots] = useState<SlotsState>({ toast: [] });
-  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const timersRef = useRef<
+    Map<string, { exit?: ReturnType<typeof setTimeout>; remove?: ReturnType<typeof setTimeout> }>
+  >(new Map());
   const counterRef = useRef(0);
 
   const hide = useCallback((slot: SnackSlot, id: string) => {
@@ -62,16 +65,29 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
       return;
     }
 
-    const timer = timersRef.current.get(id);
-    if (timer) {
-      clearTimeout(timer);
+    const existing = timersRef.current.get(id);
+    if (existing?.exit) {
+      clearTimeout(existing.exit);
+    }
+    if (existing?.remove) {
+      clearTimeout(existing.remove);
       timersRef.current.delete(id);
     }
 
     setSlots((prev) => ({
       ...prev,
-      toast: prev.toast.filter((toast) => toast.id !== id),
+      toast: prev.toast.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast)),
     }));
+
+    const removeTimeout = setTimeout(() => {
+      setSlots((prev) => ({
+        ...prev,
+        toast: prev.toast.filter((toast) => toast.id !== id),
+      }));
+      timersRef.current.delete(id);
+    }, EXIT_DURATION_MS);
+
+    timersRef.current.set(id, { remove: removeTimeout });
   }, []);
 
   const show = useCallback(
@@ -104,6 +120,15 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
         return id;
       }
 
+      const whenToStartExitMs = Math.max(0, duration - EXIT_DURATION_MS);
+
+      const exitTimeout = setTimeout(() => {
+        setSlots((prev) => ({
+          ...prev,
+          toast: prev.toast.map((toast) => (toast.id === id ? { ...toast, exiting: true } : toast)),
+        }));
+      }, whenToStartExitMs);
+
       const removeTimeout = setTimeout(() => {
         setSlots((prev) => ({
           ...prev,
@@ -112,7 +137,7 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
         timersRef.current.delete(id);
       }, duration);
 
-      timersRef.current.set(id, removeTimeout);
+      timersRef.current.set(id, { exit: exitTimeout, remove: removeTimeout });
       return id;
     },
     []
@@ -121,7 +146,10 @@ export const SnackProvider: React.FC<SnackProviderProps> = ({ children }) => {
   useEffect(() => {
     const timers = timersRef.current;
     return () => {
-      timers.forEach((timer) => clearTimeout(timer));
+      timers.forEach(({ exit, remove }) => {
+        if (exit) clearTimeout(exit);
+        if (remove) clearTimeout(remove);
+      });
       timers.clear();
     };
   }, []);

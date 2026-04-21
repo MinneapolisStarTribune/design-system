@@ -11,6 +11,7 @@ export type ToastRendererItem = {
   variant?: ToastVariant;
   showIcon?: boolean;
   showCloseButton?: boolean;
+  exiting?: boolean;
   dataTestId?: string;
   onClose?: () => void;
 };
@@ -36,6 +37,7 @@ export const ToastRenderer: React.FC<ToastRendererProps> = ({ items, onDismiss }
             variant={toast.variant}
             showIcon={toast.showIcon}
             showCloseButton={toast.showCloseButton}
+            exiting={toast.exiting}
             onClose={() => onDismiss(toast.id)}
             dataTestId={toast.dataTestId}
           />
