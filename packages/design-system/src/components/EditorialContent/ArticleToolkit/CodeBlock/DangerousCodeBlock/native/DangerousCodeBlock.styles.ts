@@ -7,15 +7,13 @@ type Styles = {
   variantImmersive: ViewStyle;
 };
 
-const STANDARD_MAX_WIDTH = 390;
-
-export const createStyles = (_theme: NativeTheme) =>
+export const createStyles = (theme: NativeTheme) =>
   StyleSheet.create<Styles>({
     base: {
       position: 'relative',
     },
     variantStandard: {
-      maxWidth: STANDARD_MAX_WIDTH,
+      maxWidth: theme.semanticArticleToolkitMaxWidthStandardFullMobile,
     },
     variantImmersive: {
       width: '100%',

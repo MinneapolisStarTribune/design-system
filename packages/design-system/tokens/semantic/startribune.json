@@ -10,7 +10,7 @@
             },
             "mobile": {
               "type": "dimension",
-              "value": 350
+              "value": 358
             },
             "tablet": {
               "type": "dimension",
