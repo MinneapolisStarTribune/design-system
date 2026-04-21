@@ -21,6 +21,8 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export type { PullQuoteProps } from './EditorialContent/ArticleToolkit/PullQuote/PullQuote.types';
+export { PullQuote } from './EditorialContent/ArticleToolkit/PullQuote/native/PullQuote.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
