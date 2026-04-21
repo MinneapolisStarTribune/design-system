@@ -24,6 +24,7 @@ export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/nativ
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
