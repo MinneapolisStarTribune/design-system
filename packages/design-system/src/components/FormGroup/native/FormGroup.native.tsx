@@ -6,12 +6,12 @@ import {
   FormGroupCaption,
   type FormGroupCaptionNativeProps,
   type FormGroupCaptionVariant,
-} from './caption/FormGroup.Caption.native';
+} from './Caption/FormGroup.Caption.native';
 import {
   FormGroupDescription,
   type FormGroupDescriptionNativeProps,
-} from './description/FormGroup.Description.native';
-import { FormGroupLabel, type FormGroupLabelNativeProps } from './label/FormGroup.Label.native';
+} from './Description/FormGroup.Description.native';
+import { FormGroupLabel, type FormGroupLabelNativeProps } from './Label/FormGroup.Label.native';
 
 export interface FormGroupNativeRootProps extends NativeBaseProps {
   children: React.ReactNode;
