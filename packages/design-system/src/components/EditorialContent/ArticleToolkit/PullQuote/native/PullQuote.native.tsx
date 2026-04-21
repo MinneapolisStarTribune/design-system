@@ -22,9 +22,8 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   dataTestId = 'pull-quote',
   ...accessibilityProps
 }) => {
-  if (!quote) return null;
-
   const styles = useNativeStyles(createStyles);
+  if (!quote) return null;
 
   const iconDimensions = size === 'large' ? styles.iconLarge : styles.iconSmall;
 
@@ -47,7 +46,7 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
           <QuoteIcon
             width={iconDimensions.width as number}
             height={iconDimensions.height as number}
-            color="brand-01"
+            color="pull-quote-accent"
             testID={`${dataTestId}-icon`}
           />
         </View>
