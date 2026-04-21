@@ -4,9 +4,9 @@ export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/
 export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
 export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
 export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
 export {
   ImageGallery,
-  type ImageGalleryProps,
 } from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
