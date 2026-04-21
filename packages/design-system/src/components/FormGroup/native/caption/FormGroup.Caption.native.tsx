@@ -1,5 +1,5 @@
 import { View, Text, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
-import { BaseProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/nativeBaseProps';
 import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
@@ -7,7 +7,7 @@ import { useNativeStyles } from '@/hooks/useNativeStyles';
 export const FORM_GROUP_CAPTION_VARIANTS = ['info', 'error', 'success'] as const;
 export type FormGroupCaptionVariant = (typeof FORM_GROUP_CAPTION_VARIANTS)[number];
 
-export interface FormGroupCaptionNativeProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupCaptionNativeProps extends NativeBaseProps {
   children: React.ReactNode;
   variant: FormGroupCaptionVariant;
   id?: string;

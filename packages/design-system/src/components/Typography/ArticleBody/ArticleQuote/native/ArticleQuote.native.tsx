@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Text, type TextStyle } from 'react-native';
-import type { ArticleQuoteProps } from '../ArticleQuote.types';
+import type { ArticleQuoteNativeProps } from '../ArticleQuote.types';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 
-export const ArticleQuote: React.FC<ArticleQuoteProps> = (props) => {
+export const ArticleQuote: React.FC<ArticleQuoteNativeProps> = (props) => {
   const { size = 'large', children, dataTestId = 'article-quote', ...rest } = props;
 
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -62,4 +62,5 @@ const createStyles = (theme: NativeTheme) => ({
   } satisfies TextStyle,
 });
 
-export type { ArticleQuoteProps, ArticleQuoteSize } from '../ArticleQuote.types';
+export type { ArticleQuoteNativeProps as ArticleQuoteProps } from '../ArticleQuote.types';
+export type { ArticleQuoteSize } from '../ArticleQuote.types';

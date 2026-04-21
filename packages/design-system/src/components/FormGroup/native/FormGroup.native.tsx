@@ -1,6 +1,6 @@
 import React, { Children, isValidElement } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { BaseProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/nativeBaseProps';
 import { FormGroupProvider } from '../FormGroupContext';
 import {
   FormGroupCaption,
@@ -13,7 +13,7 @@ import {
 } from './description/FormGroup.Description.native';
 import { FormGroupLabel, type FormGroupLabelNativeProps } from './label/FormGroup.Label.native';
 
-export interface FormGroupNativeRootProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupNativeRootProps extends NativeBaseProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }

@@ -135,6 +135,11 @@ Your personal phone and work Mac can stay on different Apple IDs; AirPlay works 
 
 **Summary:** Use **QuickTime + USB** for a simple, account-agnostic mirror. Use **AirPlay to Mac** for wireless mirroring when your Mac and iPhone are on the same network.
 
+## Web vs native TypeScript props
+
+Component APIs for React Native are declared in the same **`ComponentName.types.ts`** files as web
+(`*Props` vs `*NativeProps`, or derived via `NativeTextStylingProps`). If you see **`color`**, **`dataTestId`**, and **`style`** on a native interface, they exist so RN keeps **semantic color parity**, **test IDs**, and **RN `style`** without exposing web-only props like `className`. Details: [Code standards — Web vs native props](code-standards.md#web-vs-native-props-componentnametypests).
+
 ## Tips for engineers new to React Native
 
 - **Expo** runs the app and Metro (the bundler); you don't run a separate "backend."

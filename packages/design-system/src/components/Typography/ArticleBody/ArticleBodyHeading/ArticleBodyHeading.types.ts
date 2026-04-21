@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react';
-import type { ColorVariantProps } from '@/types';
+import type { StyleProp, TextStyle } from 'react-native';
+import type { ColorVariantProps, TextColor } from '@/types';
 
 /** Semantic heading level; maps to h1–h6 and typography class suffix. */
 export const ARTICLE_BODY_HEADING_IMPORTANCE_LEVELS = [
@@ -15,4 +16,14 @@ export interface ArticleBodyHeadingProps
   children: React.ReactNode;
   className?: string;
   id?: string;
+}
+
+/** React Native — no DOM / `className` / `HTMLAttributes`. */
+export interface ArticleBodyHeadingNativeProps {
+  importance: ArticleBodyHeadingImportance;
+  children: React.ReactNode;
+  color?: TextColor;
+  id?: string;
+  dataTestId?: string;
+  style?: StyleProp<TextStyle>;
 }

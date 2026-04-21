@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
-import { BaseProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/nativeBaseProps';
 import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 
-export interface FormGroupDescriptionNativeProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupDescriptionNativeProps extends NativeBaseProps {
   children: React.ReactNode;
   id?: string;
   style?: StyleProp<ViewStyle>;

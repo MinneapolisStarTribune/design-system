@@ -1,4 +1,5 @@
 import type { AccessibilityProps, BaseProps, FontWeight, ColorVariantProps } from '@/types';
+import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
 
 export const ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS = [
   'regular',
@@ -19,3 +20,6 @@ export interface ArticleBodySponsoredTextProps
   weight?: ArticleBodySponsoredTextWeight;
   children: React.ReactNode;
 }
+
+export type ArticleBodySponsoredTextNativeProps =
+  NativeTextStylingProps<ArticleBodySponsoredTextProps>;

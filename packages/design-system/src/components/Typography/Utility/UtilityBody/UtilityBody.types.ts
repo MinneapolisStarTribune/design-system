@@ -1,4 +1,5 @@
 import type { AccessibilityProps, BaseProps, ColorVariantProps } from '@/types/globalTypes';
+import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
 
 export const UTILITY_BODY_SIZES = [
   'xx-small',
@@ -19,3 +20,5 @@ export interface UtilityBodyProps extends BaseProps, AccessibilityProps, ColorVa
   children: React.ReactNode;
   style?: React.CSSProperties;
 }
+
+export type UtilityBodyNativeProps = NativeTextStylingProps<UtilityBodyProps>;
