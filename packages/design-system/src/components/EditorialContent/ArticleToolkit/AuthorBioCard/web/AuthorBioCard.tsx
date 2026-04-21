@@ -81,7 +81,7 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
               icon={<ChevronRightIcon size="medium" />}
               iconPosition="end"
               dataTestId="author-bio-cta"
-              aria-label={ctaLink.label}
+              aria-label={ctaLabel}
             >
               {ctaLabel}
             </Link>
