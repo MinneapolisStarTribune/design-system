@@ -17,11 +17,11 @@ export type ToastRendererItem = {
 };
 
 export type ToastRendererProps = {
-  items: ToastRendererItem[];
-  onDismiss: (id: string) => void;
+  items?: ToastRendererItem[];
+  onDismiss?: (id: string) => void;
 };
 
-export const ToastRenderer: React.FC<ToastRendererProps> = ({ items, onDismiss }) => {
+export const ToastRenderer: React.FC<ToastRendererProps> = ({ items = [], onDismiss }) => {
   if (items.length === 0) {
     return null;
   }
@@ -38,7 +38,7 @@ export const ToastRenderer: React.FC<ToastRendererProps> = ({ items, onDismiss }
             showIcon={toast.showIcon}
             showCloseButton={toast.showCloseButton}
             exiting={toast.exiting}
-            onClose={() => onDismiss(toast.id)}
+            onClose={() => onDismiss?.(toast.id)}
             dataTestId={toast.dataTestId}
           />
         ))}
