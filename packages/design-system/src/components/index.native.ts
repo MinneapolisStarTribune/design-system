@@ -22,6 +22,12 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export {
+  Checkbox,
+  CHECKBOX_VARIANTS,
+  type CheckboxProps,
+  type CheckboxVariant,
+} from './FormControl/Checkbox/native/Checkbox.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
