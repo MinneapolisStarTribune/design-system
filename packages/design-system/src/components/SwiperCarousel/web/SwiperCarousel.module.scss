@@ -19,8 +19,8 @@
   align-items: center;
 }
 
-/* SWIPER BULLETS */
-:global(.swiper-pagination-bullet) {
+/* SWIPER BULLETS — scoped under .pagination for higher specificity so app styles don't override */
+.pagination :global(.sus-bullet.swiper-pagination-bullet) {
   width: var(--spacing-6);
   height: var(--spacing-6);
   min-width: var(--spacing-6);
@@ -35,7 +35,7 @@
 }
 
 /* ACTIVE */
-:global(.swiper-pagination-bullet-active) {
+.pagination :global(.sus-bullet-active.swiper-pagination-bullet-active) {
   width: var(--spacing-20);
   height: var(--spacing-6);
   border-radius: var(--radius-full);
