@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Text } from 'react-native';
+import { Text, type TextStyle } from 'react-native';
 import type { ArticleQuoteProps } from '../ArticleQuote.types';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
@@ -41,25 +41,25 @@ const createStyles = (theme: NativeTheme) => ({
   startribuneSmall: {
     fontFamily: 'Georgia',
     fontStyle: 'italic',
-    fontWeight: 400,
-  },
+    fontWeight: '400',
+  } satisfies TextStyle,
   startribuneLarge: {
     fontFamily: 'Georgia',
     fontStyle: 'italic',
-    fontWeight: 400,
-  },
+    fontWeight: '400',
+  } satisfies TextStyle,
   varsitySmall: {
     fontFamily: 'Nohemi',
     fontStyle: 'normal',
-    fontWeight: 400,
+    fontWeight: '400',
     letterSpacing: 0.66,
-  },
+  } satisfies TextStyle,
   varsityLarge: {
     fontFamily: 'Nohemi',
     fontStyle: 'normal',
-    fontWeight: 400,
+    fontWeight: '400',
     letterSpacing: 0.56,
-  },
+  } satisfies TextStyle,
 });
 
 export type { ArticleQuoteProps, ArticleQuoteSize } from '../ArticleQuote.types';
