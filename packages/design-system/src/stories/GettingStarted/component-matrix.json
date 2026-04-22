@@ -41,7 +41,7 @@
   },
   {
     "component": "Checkbox",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -57,11 +57,11 @@
   {
     "component": "RadioGroup",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "TextInput",
-    "native": false,
+    "native": true,
     "web": true
   },
   {

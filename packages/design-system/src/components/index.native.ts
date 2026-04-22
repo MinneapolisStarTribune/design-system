@@ -23,8 +23,15 @@ export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/nativ
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export type { PullQuoteProps } from './EditorialContent/ArticleToolkit/PullQuote/PullQuote.types';
 export { PullQuote } from './EditorialContent/ArticleToolkit/PullQuote/native/PullQuote.native';
+export {
+  Checkbox,
+  CHECKBOX_VARIANTS,
+  type CheckboxProps,
+  type CheckboxVariant,
+} from './FormControl/Checkbox/native/Checkbox.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
   FORM_GROUP_CAPTION_VARIANTS,
@@ -68,7 +75,6 @@ export {
 } from './Typography/ArticleBody/ArticleBodyHeading/native/ArticleBodyHeading.native';
 export {
   ArticleBodySponsoredHeading,
-  type ArticleBodySponsoredHeadingImportance,
   type ArticleBodySponsoredHeadingProps,
 } from './Typography/ArticleBody/ArticleBodySponsoredHeading/native/ArticleBodySponsoredHeading.native';
 export {
