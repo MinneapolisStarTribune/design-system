@@ -184,21 +184,16 @@ const NavigationComponent: React.FC<NavigationProps> = ({
 }) => {
   const { swiper, isBeginning, isEnd, totalSlides } = useSwiperContext();
 
-  const responsiveSize = useResponsiveSize(size);
-  const [autoSize, setAutoSize] = React.useState<'small' | 'large'>('large');
+  const finalSize = useResponsiveSize(size);
+  const handlePrevClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    swiper?.slidePrev();
+    prevButtonProps?.onClick?.(e);
+  };
 
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (typeof window === 'undefined') return;
-      setAutoSize(window.innerWidth < 1024 ? 'small' : 'large');
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const finalSize = size ? responsiveSize : autoSize;
+  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    swiper?.slideNext();
+    nextButtonProps?.onClick?.(e);
+  };
 
   if (!swiper || totalSlides <= 1) return null;
 
@@ -208,24 +203,24 @@ const NavigationComponent: React.FC<NavigationProps> = ({
         variant="ghost"
         size={finalSize}
         icon={<ChevronLeftIcon />}
-        onClick={() => swiper.slidePrev()}
         isDisabled={isBeginning}
         className={styles.navButton}
         aria-label="Previous slide"
         {...buttonProps}
         {...prevButtonProps}
+        onClick={handlePrevClick}
       />
 
       <Button
         variant="ghost"
         size={finalSize}
         icon={<ChevronRightIcon />}
-        onClick={() => swiper.slideNext()}
         isDisabled={isEnd}
         className={styles.navButton}
         aria-label="Next slide"
         {...buttonProps}
         {...nextButtonProps}
+        onClick={handleNextClick}
       />
     </div>
   );
