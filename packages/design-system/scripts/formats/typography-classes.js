@@ -204,10 +204,24 @@ function typographyClassesFormat({ dictionary, options = {} }) {
   /** Article body drop cap tokens must apply to `::first-letter` only, not the whole paragraph. */
   const isArticleBodyDropcapClass = (className) => className === 'typography-article-body-dropcap';
 
+  /**
+   * Float the drop cap so the first line of body copy lines up at the top of the cap instead of
+   * sharing a baseline with the oversized first letter (which wastes space above the paragraph).
+   * Layout lives here so token values stay RN-safe (no `float` in shared composites).
+   */
+  const articleBodyDropcapLayoutCss = {
+    float: 'left',
+    'padding-right': '0.375rem',
+    'line-height': '0.8',
+  };
+
   // First, generate non-responsive classes
   nonResponsiveClasses.forEach((data) => {
     const className = `.${data.className}`;
-    const props = Object.entries(data.properties)
+    const mergedProps = isArticleBodyDropcapClass(data.className)
+      ? { ...data.properties, ...articleBodyDropcapLayoutCss }
+      : data.properties;
+    const props = Object.entries(mergedProps)
       .map(([prop, value]) => {
         return `  ${prop}: ${value};`;
       })
