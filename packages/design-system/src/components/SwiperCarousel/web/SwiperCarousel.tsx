@@ -121,6 +121,8 @@ const Root: React.FC<SwiperCarouselProps> = ({
               ? {
                   el: paginationEl,
                   clickable: true,
+                  bulletClass: 'sus-bullet swiper-pagination-bullet',
+                  bulletActiveClass: 'sus-bullet-active swiper-pagination-bullet-active',
                 }
               : false
           }
