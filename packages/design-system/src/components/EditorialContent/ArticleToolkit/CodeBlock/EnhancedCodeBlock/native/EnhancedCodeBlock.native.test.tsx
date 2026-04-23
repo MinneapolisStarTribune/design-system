@@ -91,23 +91,20 @@ describe('EnhancedCodeBlock (native)', () => {
     expect(flattened).toEqual({});
   });
 
-  it.each(CODE_BLOCK_SIZES)(
-    'applies size mapping for size %s when cleanQuotes=false',
-    (size) => {
-      render(<EnhancedCodeBlock markup="<div>Map</div>" size={size} cleanQuotes={false} />, {
-        wrapper,
-      });
+  it.each(CODE_BLOCK_SIZES)('applies size mapping for size %s when cleanQuotes=false', (size) => {
+    render(<EnhancedCodeBlock markup="<div>Map</div>" size={size} cleanQuotes={false} />, {
+      wrapper,
+    });
 
-      const flattened = getFlattenedStyle();
+    const flattened = getFlattenedStyle();
 
-      if (size === 'inline') {
-        expect(flattened).toEqual(expect.objectContaining({ maxWidth: 358 }));
-        return;
-      }
-
-      expect(flattened).toEqual(expect.objectContaining({ maxWidth: 390 }));
+    if (size === 'inline') {
+      expect(flattened).toEqual(expect.objectContaining({ maxWidth: 358 }));
+      return;
     }
-  );
+
+    expect(flattened).toEqual(expect.objectContaining({ maxWidth: 390 }));
+  });
 
   it('applies immersive full width mapping when cleanQuotes=false', () => {
     render(
@@ -137,8 +134,6 @@ describe('EnhancedCodeBlock (native)', () => {
 
     const flattened = getFlattenedStyle();
 
-    expect(flattened).toEqual(
-      expect.objectContaining({ marginTop: 12, maxWidth: 358 })
-    );
+    expect(flattened).toEqual(expect.objectContaining({ marginTop: 12, maxWidth: 358 }));
   });
 });
