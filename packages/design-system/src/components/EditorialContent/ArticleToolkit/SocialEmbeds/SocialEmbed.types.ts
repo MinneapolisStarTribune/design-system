@@ -1,6 +1,5 @@
-import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { BaseProps } from '@/types';
+import type { BaseProps } from '@/types';
 
 export const SOCIAL_EMBED_PLATFORMS = ['instagram', 'facebook', 'twitter', 'threads'] as const;
 
@@ -28,12 +27,10 @@ export interface SocialEmbedsProps extends ArticleToolkitBaseProps, DivProps {
  * Native props for SocialEmbeds.
  * Uses RN `style` and `testID`-compatible `dataTestId`.
  */
-type SocialEmbedsNativeSharedProps = Pick<
-  SocialEmbedsProps,
-  'platform' | 'variant' | 'children' | 'dataTestId'
->;
+type SocialEmbedsNativeSharedProps = Pick<SocialEmbedsProps, 'platform' | 'variant' | 'dataTestId'>;
 
 export interface SocialEmbedsNativeProps extends SocialEmbedsNativeSharedProps {
+  children?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
 }

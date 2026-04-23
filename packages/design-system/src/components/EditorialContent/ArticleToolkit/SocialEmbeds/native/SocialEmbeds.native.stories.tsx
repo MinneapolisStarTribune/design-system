@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { StyleSheet, Text, View } from 'react-native';
-import {
-  SOCIAL_EMBED_PLATFORMS,
-  SOCIAL_EMBEDS_VARIANTS,
-  type SocialEmbedsNativeProps,
-} from '../SocialEmbed.types';
+import { SOCIAL_EMBED_PLATFORMS, SOCIAL_EMBEDS_VARIANTS } from '../SocialEmbed.types';
 import { SocialEmbeds } from './SocialEmbeds.native';
 
 const meta = {
@@ -43,8 +39,12 @@ export const Configurable: Story = {
     variant: 'standard',
     dataTestId: 'social-embeds',
     accessibilityLabel: 'Social embed container',
-    children: <Placeholder text="Embedded content placeholder" />,
-  } satisfies SocialEmbedsNativeProps,
+  },
+  render: (args) => (
+    <SocialEmbeds {...args}>
+      <Placeholder text="Embedded content placeholder" />
+    </SocialEmbeds>
+  ),
 };
 
 export const PlatformsAndVariants: Story = {
@@ -53,8 +53,7 @@ export const PlatformsAndVariants: Story = {
     variant: 'standard',
     dataTestId: 'social-embeds',
     accessibilityLabel: 'Social embed container',
-    children: <Placeholder text="Embedded content placeholder" />,
-  } satisfies SocialEmbedsNativeProps,
+  },
   parameters: {
     controls: { disable: true },
     layout: 'fullscreen',
