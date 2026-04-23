@@ -40,7 +40,7 @@ Select inputs allow users to choose a single value from a predefined list of opt
 ## Basic usage
 
 ```tsx
-import { FormControl, FormGroup } from '@minneapolisstartribune/design-system';
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
 
 <FormGroup>
   <FormGroup.Label>Country</FormGroup.Label>
@@ -58,7 +58,7 @@ import { FormControl, FormGroup } from '@minneapolisstartribune/design-system';
 
 ```tsx
 import { useState } from 'react';
-import { FormControl } from '@minneapolisstartribune/design-system';
+import { FormControl } from '@minneapolisstartribune/design-system/web';
 
 const [value, setValue] = useState<string | undefined>();
 
@@ -186,6 +186,34 @@ const [value, setValue] = useState<string | undefined>();
     </tr>
   </tbody>
 </table>
+
+## React Native usage
+
+Current native `Select` is being actively built out. Use this pattern for integration and theming setup:
+
+```tsx
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/native';
+
+const options = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+];
+
+export function NativeCountrySelect() {
+  return (
+    <FormGroup>
+      <FormGroup.Label>Country</FormGroup.Label>
+      <FormControl.Select
+        id="country-select"
+        options={options}
+        placeholderText="Select an option"
+        showPlaceholder
+        size="medium"
+      />
+    </FormGroup>
+  );
+}
+```
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
