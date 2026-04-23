@@ -101,6 +101,8 @@ describe('EnhancedCodeBlock Accessibility (native)', () => {
     );
 
     const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
-    expect(props.style).toEqual(expect.objectContaining({ maxWidth: 358 }));
+    expect(props.style).toEqual(
+      expect.arrayContaining([expect.objectContaining({ maxWidth: 358 })])
+    );
   });
 });

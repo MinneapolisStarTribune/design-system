@@ -24,7 +24,7 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
   const { styles } = useNativeStyles(createThemeState);
 
   const containerStyle = useMemo<ViewStyle | undefined>(() => {
-    if (cleanQuotes) return undefined;
+    if (cleanQuotes) return undefined; // apply size/variant styles only when cleanQuotes is false
     const key = `variant-${variant}-size-${size}` as keyof typeof styles;
     return styles[key] as ViewStyle;
   }, [cleanQuotes, variant, size, styles]);

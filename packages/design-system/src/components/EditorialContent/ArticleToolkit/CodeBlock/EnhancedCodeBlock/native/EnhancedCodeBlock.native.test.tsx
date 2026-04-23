@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { render, screen } from '@testing-library/react-native';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CODE_BLOCK_SIZES } from '../../../types';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { EnhancedCodeBlock } from './EnhancedCodeBlock.native';
@@ -35,6 +35,11 @@ describe('EnhancedCodeBlock (native)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  const getFlattenedStyle = () => {
+    const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
+    return StyleSheet.flatten(props.style);
+  };
 
   it('renders without crashing', () => {
     render(<EnhancedCodeBlock markup="<div>Test</div>" />, { wrapper });
@@ -82,23 +87,27 @@ describe('EnhancedCodeBlock (native)', () => {
       wrapper,
     });
 
-    const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
-    expect(props.style).toEqual({});
+    const flattened = getFlattenedStyle();
+    expect(flattened).toEqual({});
   });
 
-  it.each(CODE_BLOCK_SIZES)('applies size mapping for size %s when cleanQuotes=false', (size) => {
-    render(<EnhancedCodeBlock markup="<div>Map</div>" size={size} cleanQuotes={false} />, {
-      wrapper,
-    });
+  it.each(CODE_BLOCK_SIZES)(
+    'applies size mapping for size %s when cleanQuotes=false',
+    (size) => {
+      render(<EnhancedCodeBlock markup="<div>Map</div>" size={size} cleanQuotes={false} />, {
+        wrapper,
+      });
 
-    const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
-    if (size === 'inline') {
-      expect(props.style).toEqual(expect.objectContaining({ maxWidth: 358 }));
-      return;
+      const flattened = getFlattenedStyle();
+
+      if (size === 'inline') {
+        expect(flattened).toEqual(expect.objectContaining({ maxWidth: 358 }));
+        return;
+      }
+
+      expect(flattened).toEqual(expect.objectContaining({ maxWidth: 390 }));
     }
-
-    expect(props.style).toEqual(expect.objectContaining({ maxWidth: 390 }));
-  });
+  );
 
   it('applies immersive full width mapping when cleanQuotes=false', () => {
     render(
@@ -111,8 +120,8 @@ describe('EnhancedCodeBlock (native)', () => {
       { wrapper }
     );
 
-    const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
-    expect(props.style).toEqual(expect.objectContaining({ width: '100%' }));
+    const flattened = getFlattenedStyle();
+    expect(flattened).toEqual(expect.objectContaining({ width: '100%' }));
   });
 
   it('merges custom style with mapped container style when cleanQuotes=false', () => {
@@ -126,7 +135,10 @@ describe('EnhancedCodeBlock (native)', () => {
       { wrapper }
     );
 
-    const props = mockDangerousCodeBlock.mock.calls[0][0] as Record<string, unknown>;
-    expect(props.style).toEqual(expect.objectContaining({ marginTop: 12, maxWidth: 358 }));
+    const flattened = getFlattenedStyle();
+
+    expect(flattened).toEqual(
+      expect.objectContaining({ marginTop: 12, maxWidth: 358 })
+    );
   });
 });
