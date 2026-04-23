@@ -38,13 +38,35 @@ const meta = {
     },
   },
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
-    rounded: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
-    isError: { control: 'boolean' },
-    placeholderText: { control: 'text' },
-    showPlaceholder: { control: 'boolean' },
-    value: { control: 'text' },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+      description: 'Select visual size.',
+    },
+    rounded: {
+      control: 'boolean',
+      description: 'Applies pill-style rounded corners.',
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: 'Disables interaction and applies disabled styling.',
+    },
+    isError: {
+      control: 'boolean',
+      description: 'Applies error state styling.',
+    },
+    placeholderText: {
+      control: 'text',
+      description: 'Placeholder text shown when no option is selected.',
+    },
+    showPlaceholder: {
+      control: 'boolean',
+      description: 'Whether placeholder text is shown when value is empty.',
+    },
+    value: {
+      control: 'text',
+      description: 'Controlled selected option value.',
+    },
   },
 } satisfies Meta<typeof FormControl.Select>;
 
@@ -89,6 +111,24 @@ export const Configurable: Story = {
     isError: false,
     placeholderText: 'Select an option',
     showPlaceholder: true,
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormControl.Select
+    id="country-select"
+    options={options}
+    value={value}
+    onChange={setValue}
+    placeholderText="Select an option"
+    showPlaceholder
+    size="medium"
+  />
+</FormGroup>`,
+      },
+    },
   },
   render: (args) => <ConfigurableComponent {...args} />,
 };

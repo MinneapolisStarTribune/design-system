@@ -12,20 +12,36 @@ Select inputs allow users to choose a single value from a predefined list of opt
 `<Select>` allows users to choose a single option from a dropdown list. It supports keyboard navigation, multiple sizes, states, and integrates with `FormGroup` for accessibility.
 
 ## Architecture
-Layer	What it does	Required?
-FormGroup + FormControl	Layout, labels, descriptions, accessibility	Recommended
-Select	Dropdown behavior and selection	Always
 
-| Layer                   | What it does                                | Required?   |
-| ----------------------- | ------------------------------------------- | ----------- |
-| FormGroup + FormControl | Layout, labels, descriptions, accessibility | Recommended |
-| Select                  | Dropdown behavior and selection             | Always      |
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>What it does</th>
+      <th>Required?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FormGroup + FormControl</td>
+      <td>Layout, labels, descriptions, accessibility</td>
+      <td>Recommended</td>
+    </tr>
+    <tr>
+      <td>Select</td>
+      <td>Dropdown behavior and selection</td>
+      <td>Always</td>
+    </tr>
+  </tbody>
+</table>
 
 `Select` works standalone, but when wrapped in `FormGroup`, it automatically connects labels and descriptions via `aria` attributes.
 
 ## Basic usage
 
 ```tsx
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system';
+
 <FormGroup>
   <FormGroup.Label>Country</FormGroup.Label>
   <FormControl.Select
@@ -35,20 +51,18 @@ Select	Dropdown behavior and selection	Always
       { value: 'ca', label: 'Canada' },
     ]}
   />
-</FormGroup>
+</FormGroup>;
 ```
 
 ## Controlled usage
 
 ```tsx
+import { useState } from 'react';
+import { FormControl } from '@minneapolisstartribune/design-system';
+
 const [value, setValue] = useState<string | undefined>();
 
-<FormControl.Select
-  id="country"
-  value={value}
-  onChange={setValue}
-  options={OPTIONS}
-/>
+<FormControl.Select id="country" value={value} onChange={setValue} options={OPTIONS} />;
 ```
 
 ## Sizes
@@ -86,52 +100,92 @@ const [value, setValue] = useState<string | undefined>();
 <FormGroup>
   <FormGroup.Label>Country</FormGroup.Label>
   <FormControl.Select isError options={OPTIONS} />
-  <FormGroup.Caption variant="error">
-    This field is required
-  </FormGroup.Caption>
+  <FormGroup.Caption variant="error">This field is required</FormGroup.Caption>
 </FormGroup>
 ```
 
 ## Accessibility
 
-* role="combobox" with aria-expanded
-* aria-controls links combobox to listbox
-* aria-activedescendant for keyboard navigation
-* aria-labelledby via FormGroup
-* fallback aria-label when no label is provided
+- role="combobox" with aria-expanded
+- aria-controls links combobox to listbox
+- aria-activedescendant for keyboard navigation
+- aria-labelledby via FormGroup
+- fallback aria-label when no label is provided
 
 # Keyboard interaction
-| Key         | Behavior              |
-| ----------- | --------------------- |
-| ArrowDown   | Open / move down      |
-| ArrowUp     | Move up               |
-| Enter       | Select option         |
-| Escape      | Close dropdown        |
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ArrowDown</td>
+      <td>Open / move down</td>
+    </tr>
+    <tr>
+      <td>ArrowUp</td>
+      <td>Move up</td>
+    </tr>
+    <tr>
+      <td>Enter</td>
+      <td>Select option</td>
+    </tr>
+    <tr>
+      <td>Escape</td>
+      <td>Close dropdown</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Integration with FormGroup
 
 ```tsx
 <FormGroup>
   <FormGroup.Label>Country</FormGroup.Label>
-  <FormGroup.Description>
-    Choose your country
-  </FormGroup.Description>
+  <FormGroup.Description>Choose your country</FormGroup.Description>
 
   <FormControl.Select options={OPTIONS} />
 
-  <FormGroup.Caption variant="info">
-    Informational message
-  </FormGroup.Caption>
+  <FormGroup.Caption variant="info">Informational message</FormGroup.Caption>
 </FormGroup>
 ```
 
 ## Exports
 
-| Export         | Description               |
-| -------------- | ------------------------- |
-| `Select`       | Dropdown select component |
-| `SelectProps`  | Props interface           |
-| `SelectOption` | Option type               |
+<table>
+  <thead>
+    <tr>
+      <th>Export</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>Select</code>
+      </td>
+      <td>Single-select dropdown component</td>
+    </tr>
+    <tr>
+      <td>
+        <code>SelectProps</code>
+      </td>
+      <td>
+        Web props for <code>Select</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>SelectOption</code>
+      </td>
+      <td>Option item shape</td>
+    </tr>
+  </tbody>
+</table>
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
