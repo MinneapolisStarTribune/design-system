@@ -21,6 +21,11 @@ export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineV
 export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
+export { SocialEmbeds } from './EditorialContent/ArticleToolkit/SocialEmbeds/native/SocialEmbeds.native';
+export type {
+  SocialEmbedsNativeProps,
+  SocialEmbedsProps,
+} from './EditorialContent/ArticleToolkit/SocialEmbeds/SocialEmbed.types';
 export {
   Checkbox,
   CHECKBOX_VARIANTS,
