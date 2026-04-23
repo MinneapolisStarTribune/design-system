@@ -11,10 +11,14 @@ export {
   type IconOnlyButtonSize,
 } from './Button/Button.types';
 export { Button, type ButtonNativeProps } from './Button/native/Button.native';
-export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
-export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
-export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
-export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export {
+  DangerousCodeBlock,
+  type DangerousCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
+export {
+  EnhancedCodeBlock,
+  type EnhancedCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
 export { InlineImage } from './EditorialContent/ArticleToolkit/InlineImage/native/InlineImage.native';
 export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineVideo/InlineVideo.types';
