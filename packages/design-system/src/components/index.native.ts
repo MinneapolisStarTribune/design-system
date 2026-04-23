@@ -27,6 +27,13 @@ export {
   type CheckboxProps,
   type CheckboxVariant,
 } from './FormControl/Checkbox/native/Checkbox.native';
+export {
+  type CheckboxCategory,
+  CheckboxGroup,
+  type CheckboxGroupNativeProps,
+  type CheckboxGroupProps,
+  type CheckboxOption,
+} from './FormControl/CheckboxGroup/native/CheckboxGroup.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
