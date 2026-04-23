@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import type { ViewStyle } from 'react-native';
-import type { NativeTheme } from '@/hooks/useNativeStyles';
-import { useNativeStyles } from '@/hooks/useNativeStyles';
+import type { StyleProp, ViewStyle } from 'react-native';
+import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DangerousCodeBlock } from '../../DangerousCodeBlock/native/DangerousCodeBlock.native';
 import type { BaseEnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
 import { createStyles } from './EnhancedCodeBlock.styles';
 
 export type EnhancedCodeBlockProps = Omit<BaseEnhancedCodeBlockProps, 'style'> & {
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 };
 
 const createThemeState = (theme: NativeTheme) => ({
@@ -35,7 +34,7 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
       variant={variant}
       cleanQuotes={cleanQuotes}
       dataTestId={dataTestId}
-      style={{ ...style, ...containerStyle }}
+      style={[style, containerStyle]}
       {...rest}
     />
   );
