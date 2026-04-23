@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
-import { SelectProps } from './Select.types';
+import type { SelectProps } from '../Select.types';
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{ marginBottom: 4 }}>

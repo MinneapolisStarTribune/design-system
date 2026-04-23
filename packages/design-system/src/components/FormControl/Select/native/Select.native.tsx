@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, type TextStyle, View } from 'react-native'
 import type { FC } from 'react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { SelectProps } from './Select.native.types';
+import type { SelectNativeProps as SelectProps } from '../Select.types';
 
 type SelectSize = NonNullable<SelectProps['size']>;
 

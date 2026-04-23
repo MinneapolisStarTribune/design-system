@@ -31,6 +31,11 @@ export {
 } from './FormControl/Checkbox/native/Checkbox.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export { Select } from './FormControl/Select/native/Select.native';
+export type {
+  SelectOption,
+  SelectNativeProps as SelectProps,
+} from './FormControl/Select/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
