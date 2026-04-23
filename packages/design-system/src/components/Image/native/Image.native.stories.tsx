@@ -119,6 +119,52 @@ export const AllVariants: Story = {
           />
         </View>
       </View>
+
+      {/* Accessibility Cases */}
+      <View>
+        <Text style={{ marginBottom: 6 }}>Accessibility (alt fallback)</Text>
+        <View style={{ width: 250, height: 150 }}>
+          <Image
+            src="https://picsum.photos/id/1040/800/500"
+            alt="Accessible via alt"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      </View>
+
+      <View>
+        <Text style={{ marginBottom: 6 }}>Accessibility (no alt)</Text>
+        <View style={{ width: 250, height: 150 }}>
+          <Image
+            src="https://picsum.photos/id/1041/800/500"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      </View>
+
+      <View>
+        <Text style={{ marginBottom: 6 }}>Accessibility (override label)</Text>
+        <View style={{ width: 250, height: 150 }}>
+          <Image
+            src="https://picsum.photos/id/1042/800/500"
+            alt="Alt text"
+            accessibilityLabel="Custom accessibility label"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      </View>
+
+      <View>
+        <Text style={{ marginBottom: 6 }}>Accessibility (clickable role)</Text>
+        <View style={{ width: 250, height: 150 }}>
+          <Image
+            src="https://picsum.photos/id/1043/800/500"
+            alt="Clickable accessible image"
+            onPress={() => alert('Pressed')}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
+      </View>
     </View>
   ),
 };
