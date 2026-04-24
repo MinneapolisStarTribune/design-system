@@ -2,9 +2,9 @@ import React from 'react';
 import { Text } from 'react-native';
 import camelCase from 'lodash/camelCase';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { ArticleBodyTextProps } from '../ArticleBodyText.types';
+import type { ArticleBodyTextNativeProps } from '../ArticleBodyText.types';
 
-export const ArticleBodyText: React.FC<ArticleBodyTextProps> = (props) => {
+export const ArticleBodyText: React.FC<ArticleBodyTextNativeProps> = (props) => {
   const { weight = 'regular', children, dataTestId = 'article-body-text', ...rest } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
   const styleKey = camelCase(weight) as keyof typeof styles;
@@ -29,4 +29,5 @@ const createStyles = (theme: NativeTheme) => ({
   dropcap: { ...theme.typographyArticleBodyDropcap },
 });
 
-export type { ArticleBodyTextProps, ArticleBodyTextWeight } from '../ArticleBodyText.types';
+export type { ArticleBodyTextNativeProps as ArticleBodyTextProps } from '../ArticleBodyText.types';
+export type { ArticleBodyTextWeight } from '../ArticleBodyText.types';
