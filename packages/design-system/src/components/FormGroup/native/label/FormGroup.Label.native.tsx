@@ -1,12 +1,12 @@
 import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
-import { BaseProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 
 /** Native label props (no `htmlFor` / `element` — associate fields with `nativeID` on the control). */
-export interface FormGroupLabelNativeProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupLabelNativeProps extends NativeBaseProps {
   children: React.ReactNode;
   id?: string;
   optional?: boolean;

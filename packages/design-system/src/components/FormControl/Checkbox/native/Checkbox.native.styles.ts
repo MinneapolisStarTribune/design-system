@@ -1,6 +1,6 @@
 import { StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
-import type { CheckboxVariant } from '../Checkbox.types.native';
+import type { CheckboxVariant } from '../Checkbox.types';
 
 export type CheckboxVisualParams = {
   variant: CheckboxVariant;

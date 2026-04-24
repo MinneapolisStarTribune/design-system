@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from '../../FormGroupContext';
