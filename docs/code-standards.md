@@ -88,8 +88,8 @@ ComponentName/
 Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 
 - **Web:** `ComponentNameProps` (DOM/`HTMLAttributes`, `className`, CSS `style` via `BaseProps`, etc.).
-- **Native:** Either `NativeTextStylingProps<ComponentNameProps>` / `NativeViewStylingProps<…>` from
-  `@/types/nativeBaseProps`, or an explicit `ComponentNameNativeProps` when web extends
+- **Native:** Either `NativeTextStylingProps<ComponentNameProps>` / `NativeViewStylingProps<…>` /
+  `NativeImageStylingProps<…>` from `@/types/nativeBaseProps`, or an explicit `ComponentNameNativeProps` when web extends
   `HTMLAttributes` and native cannot.
 - **Headings with explicit native interfaces:** Prefer `ComponentNameBaseProps` for fields shared by web
   and native (`importance`, `children`, `id`, etc.), then

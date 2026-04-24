@@ -1,12 +1,12 @@
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import type { ImageStyle, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import type { BaseProps } from './globalTypes';
 
 /**
  * Helpers for React Native public APIs in `*.types.ts` (alongside web `*Props`).
  *
- * **`NativeTextStylingProps` / `NativeViewStylingProps`** — Take a web props object, strip `className`
- * and CSS `style`, and expose RN `style` (`TextStyle` / `ViewStyle`). Use when native and web share
- * the same logical props (e.g. typography with `BaseProps`).
+ * **`NativeTextStylingProps` / `NativeViewStylingProps` / `NativeImageStylingProps`** — Take a web props
+ * object, strip `className` and CSS `style`, and expose RN `style` (`TextStyle` / `ViewStyle` /
+ * `ImageStyle`). Use when native and web share the same logical props (e.g. typography with `BaseProps`).
  *
  * **Explicit `*NativeProps` on some headings** — Web types extend `HTMLAttributes` + `ColorVariantProps`.
  * Native types cannot extend DOM attributes, so we define a small RN-only interface. Fields that look
@@ -35,4 +35,11 @@ export type NativeTextStylingProps<P extends object> = Omit<P, 'className' | 'st
  */
 export type NativeViewStylingProps<P extends object> = Omit<P, 'className' | 'style'> & {
   style?: StyleProp<ViewStyle>;
+};
+
+/**
+ * Replaces web `style` with React Native image styles and removes `className`.
+ */
+export type NativeImageStylingProps<P extends object> = Omit<P, 'className' | 'style'> & {
+  style?: StyleProp<ImageStyle>;
 };

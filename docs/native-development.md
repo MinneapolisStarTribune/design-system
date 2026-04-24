@@ -138,7 +138,20 @@ Your personal phone and work Mac can stay on different Apple IDs; AirPlay works 
 ## Web vs native TypeScript props
 
 Component APIs for React Native are declared in the same **`ComponentName.types.ts`** files as web
-(`*Props` vs `*NativeProps`, or derived via `NativeTextStylingProps`). If you see **`color`**, **`dataTestId`**, and **`style`** on a native interface, they exist so RN keeps **semantic color parity**, **test IDs**, and **RN `style`** without exposing web-only props like `className`. Details: [Code standards — Web vs native props](code-standards.md#web-vs-native-props-componentnametypests).
+(`*Props` vs `*NativeProps`, or derived via `NativeTextStylingProps` / `NativeViewStylingProps` /
+`NativeImageStylingProps`). If you see **`color`**, **`dataTestId`**, and **`style`** on a native
+interface, they exist so RN keeps **semantic color parity**, **test IDs**, and **RN `style`** without
+exposing web-only props like `className`. Details: [Code standards — Web vs native props](code-standards.md#web-vs-native-props-componentnametypests).
+
+Example for upcoming image-style native components:
+
+```ts
+import type { NativeImageStylingProps } from '@/types/nativeBaseProps';
+
+export interface HeroImageNativeProps extends NativeImageStylingProps<HeroImageProps> {
+  accessibilityLabel?: string;
+}
+```
 
 ## Tips for engineers new to React Native
 
