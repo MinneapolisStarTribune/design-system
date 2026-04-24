@@ -27,7 +27,9 @@ describe('InlineImage Accessibility (native)', () => {
   });
 
   it('exposes purchase link semantics when purchaseLink is provided', () => {
-    render(<InlineImage image={image} caption="Caption" purchaseLink="https://example.com" />, { wrapper });
+    render(<InlineImage image={image} caption="Caption" purchaseLink="https://example.com" />, {
+      wrapper,
+    });
 
     expect(screen.getByRole('link', { name: 'Buy Reprint' })).toBeOnTheScreen();
   });

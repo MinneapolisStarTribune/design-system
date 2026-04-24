@@ -36,7 +36,9 @@ describe('InlineImage (native)', () => {
 
   it('appends imgix params to the image URI', () => {
     const imgixParams = 'w=800&h=500&fit=crop&auto=format,compress&q=75';
-    render(<InlineImage dataTestId={dataTestId} image={image} imgixParams={imgixParams} />, { wrapper });
+    render(<InlineImage dataTestId={dataTestId} image={image} imgixParams={imgixParams} />, {
+      wrapper,
+    });
 
     const imageElement = screen.getByTestId(`${dataTestId}-image`);
     expect(imageElement.props.source.uri).toBe(`${image.src}?${imgixParams}`);

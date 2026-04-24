@@ -209,7 +209,11 @@ export const InlineImage: React.FC<InlineImageProps> = ({
             </UtilityLabel>
             {purchaseLink ? (
               <>
-                <Text style={styles.captionText} accessibilityElementsHidden importantForAccessibility="no">
+                <Text
+                  style={styles.captionText}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                >
                   •
                 </Text>
                 <Pressable
@@ -228,7 +232,12 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         ) : null}
       </View>
 
-      <Modal visible={isOpen} animationType="fade" transparent onRequestClose={() => setIsOpen(false)}>
+      <Modal
+        visible={isOpen}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setIsOpen(false)}
+      >
         <View
           style={styles.dialogOverlay}
           testID={`${dataTestId}-dialog`}
