@@ -206,7 +206,7 @@
   },
   {
     "component": "PullQuote",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
