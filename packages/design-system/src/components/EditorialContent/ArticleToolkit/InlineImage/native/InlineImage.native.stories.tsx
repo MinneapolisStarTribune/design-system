@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage.native';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
@@ -9,6 +9,11 @@ const meta = {
   component: InlineImage,
   parameters: {
     layout: 'padded',
+    docs: {
+      source: {
+        type: 'dynamic',
+      },
+    },
   },
   argTypes: {
     image: {
@@ -75,36 +80,48 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   args: storyArgs(),
-  parameters: {
-    controls: { disable: true },
-    layout: 'fullscreen',
-  },
   render: (args) => (
-    <View style={styles.grid}>
-      <View style={styles.item}>
-        <InlineImage {...args} variant="standard" />
+    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+      <View style={styles.grid}>
+        <View style={styles.item}>
+          <Text style={styles.heading}>Standard</Text>
+          <InlineImage {...args} variant="standard" />
+        </View>
+        <View style={styles.item}>
+          <Text style={styles.heading}>Immersive</Text>
+          <InlineImage {...args} variant="immersive" />
+        </View>
+        <View style={styles.item}>
+          <Text style={styles.heading}>Expandable</Text>
+          <InlineImage {...args} expandable />
+        </View>
+        <View style={styles.item}>
+          <Text style={styles.heading}>With Purchase Link</Text>
+          <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+        </View>
       </View>
-      <View style={styles.item}>
-        <InlineImage {...args} variant="immersive" />
-      </View>
-      <View style={styles.item}>
-        <InlineImage {...args} expandable />
-      </View>
-      <View style={styles.item}>
-        <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
-      </View>
-    </View>
+    </ScrollView>
   ),
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    width: '100%',
+  },
+  scrollContent: {
+    width: '100%',
+    paddingBottom: 24,
+  },
   grid: {
     width: '100%',
     gap: 24,
-    paddingBottom: 24,
   },
   item: {
     width: '100%',
-    gap: 8,
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
   },
 });

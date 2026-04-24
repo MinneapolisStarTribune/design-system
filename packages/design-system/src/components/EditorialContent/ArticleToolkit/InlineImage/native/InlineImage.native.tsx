@@ -70,20 +70,16 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
       width: '100%',
       height: '100%',
     },
-    captionRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'center',
-      gap: theme.spacing4,
-    },
     captionText: {
       color: theme.colorTextOnLightSecondary,
-      flexShrink: 1,
+    },
+    purchaseLinkSeparator: {
+      marginHorizontal: theme.spacing4,
     },
     purchaseLinkText: {
-      color: theme.colorBorderBrand01,
+      color: theme.colorLinkTextDefault,
       textDecorationLine: 'underline',
-      textDecorationColor: theme.colorBorderBrand01,
+      textDecorationColor: theme.colorLinkUnderlineDefault,
     },
     expandButton: {
       position: 'absolute',
@@ -203,31 +199,30 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         </View>
 
         {captionText ? (
-          <View style={styles.captionRow} testID={`${dataTestId}-caption`}>
+          <View testID={`${dataTestId}-caption`}>
             <UtilityLabel size="small" weight="regular" style={styles.captionText}>
               {captionText}
-            </UtilityLabel>
-            {purchaseLink ? (
-              <>
-                <Text
-                  style={styles.captionText}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
-                >
-                  •
-                </Text>
-                <Pressable
-                  accessibilityRole="link"
-                  accessibilityLabel="Buy Reprint"
-                  onPress={openPurchaseLink}
-                  testID={`${dataTestId}-purchase-link`}
-                >
-                  <UtilityLabel size="small" weight="regular" style={styles.purchaseLinkText}>
+              {purchaseLink ? (
+                <>
+                  <Text
+                    style={styles.purchaseLinkSeparator}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                  >
+                    •
+                  </Text>
+                  <Text
+                    style={styles.purchaseLinkText}
+                    accessibilityRole="link"
+                    accessibilityLabel="Buy Reprint"
+                    onPress={openPurchaseLink}
+                    testID={`${dataTestId}-purchase-link`}
+                  >
                     Buy Reprint
-                  </UtilityLabel>
-                </Pressable>
-              </>
-            ) : null}
+                  </Text>
+                </>
+              ) : null}
+            </UtilityLabel>
           </View>
         ) : null}
       </View>
