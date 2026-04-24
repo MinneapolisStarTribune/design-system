@@ -3,7 +3,6 @@ import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineImage } from './InlineImage.native';
 
 jest.mock('react-native/Libraries/Modal/Modal', () => {
-  const React = require('react');
   const { View } = require('react-native');
   const MockModal = ({ visible, children }: { visible?: boolean; children?: unknown }) =>
     visible ? <View>{children}</View> : null;
