@@ -15,7 +15,7 @@ import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import type { AccessibilityProps } from '@/types/globalTypes';
-import type { NativeBaseProps } from '@/types/nativeBaseProps';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { Size } from '@/types/globalTypes';
 import {
   fieldSurfaceBorderWidth,

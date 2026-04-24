@@ -1,5 +1,5 @@
 import type { AccessibilityProps, BaseProps, FontWeight, ColorVariantProps } from '@/types';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const ARTICLE_BODY_SPONSORED_TEXT_WEIGHTS = [
   'regular',

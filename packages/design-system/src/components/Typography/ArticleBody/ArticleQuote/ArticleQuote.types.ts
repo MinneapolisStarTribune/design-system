@@ -1,5 +1,5 @@
 import type { AccessibilityProps, BaseProps, Size, ColorVariantProps } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 /** Article quote size - small or large */
 export const ARTICLE_QUOTE_SIZES = ['small', 'large'] as const satisfies readonly Extract<

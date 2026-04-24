@@ -146,7 +146,7 @@ exposing web-only props like `className`. Details: [Code standards — Web vs na
 Example for upcoming image-style native components:
 
 ```ts
-import type { NativeImageStylingProps } from '@/types/nativeBaseProps';
+import type { NativeImageStylingProps } from '@/types/native-base-props';
 
 export interface HeroImageNativeProps extends NativeImageStylingProps<HeroImageProps> {
   accessibilityLabel?: string;

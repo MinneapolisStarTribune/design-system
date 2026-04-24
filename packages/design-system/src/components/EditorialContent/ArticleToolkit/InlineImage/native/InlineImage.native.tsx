@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import type { InlineImageProps } from '../InlineImage.types';
-import type { NativeViewStylingProps } from '@/types/nativeBaseProps';
+import type { NativeViewStylingProps } from '@/types/native-base-props';
 
 export type InlineImageNativeProps = NativeViewStylingProps<InlineImageProps>;
 

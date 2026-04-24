@@ -1,5 +1,5 @@
 import type { AccessibilityProps, BaseProps, ColorVariantProps } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const UTILITY_BODY_SIZES = [
   'xx-small',

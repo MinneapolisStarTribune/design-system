@@ -89,7 +89,7 @@ Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 
 - **Web:** `ComponentNameProps` (DOM/`HTMLAttributes`, `className`, CSS `style` via `BaseProps`, etc.).
 - **Native:** Either `NativeTextStylingProps<ComponentNameProps>` / `NativeViewStylingProps<…>` /
-  `NativeImageStylingProps<…>` from `@/types/nativeBaseProps`, or an explicit `ComponentNameNativeProps` when web extends
+  `NativeImageStylingProps<…>` from `@/types/native-base-props`, or an explicit `ComponentNameNativeProps` when web extends
   `HTMLAttributes` and native cannot.
 - **Headings with explicit native interfaces:** Prefer `ComponentNameBaseProps` for fields shared by web
   and native (`importance`, `children`, `id`, etc.), then
@@ -105,7 +105,7 @@ Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 | **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`. |
 | **`style`** | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`. |
 
-See the module comment on `packages/design-system/src/types/nativeBaseProps.ts` for the full pattern.
+See the module comment on `packages/design-system/src/types/native-base-props.ts` for the full pattern.
 
 ---
 

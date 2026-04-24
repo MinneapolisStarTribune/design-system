@@ -1,5 +1,5 @@
 import type { AccessibilityProps, BaseProps, ColorVariantProps } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const UTILITY_LABEL_SIZES = ['small', 'medium', 'large'] as const;
 export const UTILITY_LABEL_WEIGHTS = ['regular', 'semibold'] as const;

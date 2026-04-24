@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import type { DangerousCodeBlockProps } from '../DangerousCodeBlock.types';
-import type { NativeViewStylingProps } from '@/types/nativeBaseProps';
+import type { NativeViewStylingProps } from '@/types/native-base-props';
 
 export type DangerousCodeBlockNativeProps = NativeViewStylingProps<DangerousCodeBlockProps>;
 

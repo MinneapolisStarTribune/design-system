@@ -1,6 +1,6 @@
 import React, { Children, isValidElement } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import type { NativeBaseProps } from '@/types/nativeBaseProps';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { FormGroupProvider } from '../FormGroupContext';
 import {
   FormGroupCaption,

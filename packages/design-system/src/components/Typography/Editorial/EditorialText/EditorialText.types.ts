@@ -5,7 +5,7 @@ import type {
   Size,
   ColorVariantProps,
 } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const EDITORIAL_TEXT_WEIGHTS = ['regular', 'bold'] as const satisfies readonly Extract<
   FontWeight,

@@ -1,5 +1,5 @@
 import type { BaseProps, ColorVariantProps } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const PAGE_HEADING_IMPORTANCE_LEVELS = [1, 2, 3, 4] as const;
 export type PageHeadingImportance = (typeof PAGE_HEADING_IMPORTANCE_LEVELS)[number];

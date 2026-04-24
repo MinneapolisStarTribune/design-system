@@ -5,7 +5,7 @@ import type {
   Size,
   ColorVariantProps,
 } from '@/types/globalTypes';
-import type { NativeTextStylingProps } from '@/types/nativeBaseProps';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export type EditorialSponsoredTextWeight = Extract<FontWeight, 'regular' | 'bold'>;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import type { InlineVideoProps } from '../InlineVideo.types';
-import type { NativeViewStylingProps } from '@/types/nativeBaseProps';
+import type { NativeViewStylingProps } from '@/types/native-base-props';
 
 export type InlineVideoNativeProps = NativeViewStylingProps<InlineVideoProps>;
 

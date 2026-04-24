@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
-import type { NativeBaseProps } from '@/types/nativeBaseProps';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
