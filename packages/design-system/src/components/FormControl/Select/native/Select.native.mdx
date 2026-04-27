@@ -1,0 +1,92 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Forms/FormControl/Select (Native)" />
+
+# Select (React Native)
+
+`FormControl.Select` on React Native renders a **single-line field** that shows the selected option label or placeholder text. It uses the same option model as web (`value` / `label` / optional `disabled`).
+
+Use it inside **`FormGroup`** so labels, descriptions, and captions stay aligned with other form controls.
+
+> **Live examples** run in **mobile Storybook** (`*.native.stories.tsx`). This page documents usage and API for app developers browsing web Storybook.
+
+## Import
+
+```tsx
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/native';
+```
+
+## Basic usage
+
+```tsx
+const options = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+];
+
+export function CountrySelect() {
+  return (
+    <FormGroup>
+      <FormGroup.Label>Country</FormGroup.Label>
+      <FormControl.Select
+        id="country-select"
+        options={options}
+        placeholderText="Select an option"
+        showPlaceholder
+        size="medium"
+      />
+    </FormGroup>
+  );
+}
+```
+
+## Controlled usage
+
+```tsx
+import { useState } from 'react';
+
+const [value, setValue] = useState<string | undefined>();
+
+<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormControl.Select
+    id="country"
+    options={OPTIONS}
+    value={value}
+    onChange={setValue}
+  />
+</FormGroup>;
+```
+
+## Sizes
+
+```tsx
+<FormControl.Select id="s" options={OPTIONS} size="small" />
+<FormControl.Select id="m" options={OPTIONS} size="medium" />
+<FormControl.Select id="l" options={OPTIONS} size="large" />
+```
+
+## Rounded
+
+```tsx
+<FormControl.Select id="r" options={OPTIONS} rounded />
+```
+
+## States
+
+```tsx
+<FormControl.Select id="1" options={OPTIONS} />
+<FormControl.Select id="2" options={OPTIONS} value="us" />
+<FormControl.Select id="3" options={OPTIONS} isDisabled />
+<FormControl.Select id="4" options={OPTIONS} isError />
+```
+
+## Accessibility
+
+- Root is a `Pressable` with `accessibilityRole="button"`.
+- `accessibilityLabel` defaults from visible value / placeholder; override with `accessibilityLabel` or pair with `FormGroup` labeling patterns your app uses.
+- Optional `accessibilityHint` is passed through.
+
+## Related
+
+- Web behavior, keyboard interaction, and combobox semantics: **Forms → FormControl → Select** (web `Select` docs).
