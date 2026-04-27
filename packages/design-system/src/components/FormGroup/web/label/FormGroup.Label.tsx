@@ -1,3 +1,5 @@
+'use client';
+
 import { BaseProps } from '@/types/globalTypes';
 import { useFormGroupContext } from '../../FormGroupContext';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';

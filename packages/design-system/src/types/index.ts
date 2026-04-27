@@ -4,4 +4,5 @@
  */
 
 export * from './globalTypes';
+export * from './native-base-props';
 export * from './component-names';

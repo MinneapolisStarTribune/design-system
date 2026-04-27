@@ -1,4 +1,5 @@
 import type { AccessibilityProps, BaseProps, ColorVariantProps } from '@/types/globalTypes';
+import type { NativeTextStylingProps } from '@/types/native-base-props';
 
 export const UTILITY_LABEL_SIZES = ['small', 'medium', 'large'] as const;
 export const UTILITY_LABEL_WEIGHTS = ['regular', 'semibold'] as const;
@@ -18,3 +19,9 @@ export interface UtilityLabelProps extends BaseProps, AccessibilityProps, ColorV
   htmlFor?: string;
   as?: UtilityLabelAsElement;
 }
+
+/** React Native — no `className`, `htmlFor`, or `as`. */
+export type UtilityLabelNativeProps = Omit<
+  NativeTextStylingProps<UtilityLabelProps>,
+  'htmlFor' | 'as'
+>;
