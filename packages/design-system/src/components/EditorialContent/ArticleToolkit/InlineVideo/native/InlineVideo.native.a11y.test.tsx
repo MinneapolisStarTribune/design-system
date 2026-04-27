@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react-native';
 import { Text } from 'react-native';
+import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineVideo } from './InlineVideo.native';
+
+const wrapper = TestWrapperInDesignSystemProvider();
 
 describe('InlineVideo Accessibility (native)', () => {
   it('renders the video player slot for assistive tech', () => {
@@ -12,6 +15,21 @@ describe('InlineVideo Accessibility (native)', () => {
 
     expect(screen.getByTestId('inline-video-a11y')).toBeOnTheScreen();
     expect(screen.getByText('Accessible video player')).toBeOnTheScreen();
+  });
+
+  it('exposes caption and credit text for assistive tech', () => {
+    render(
+      <InlineVideo
+        dataTestId="inline-video-a11y"
+        caption="General Manager interview"
+        videoCredit="Rebecca McApline/Star Tribune"
+      />,
+      { wrapper }
+    );
+
+    expect(
+      screen.getByText('General Manager interview (Rebecca McApline/Star Tribune)')
+    ).toBeOnTheScreen();
   });
 
   it('maps aria-label to accessibilityLabel on the root', () => {
