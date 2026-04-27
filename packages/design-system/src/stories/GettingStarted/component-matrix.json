@@ -191,7 +191,7 @@
   },
   {
     "component": "ImageGallery",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -351,7 +351,7 @@
   },
   {
     "component": "Image",
-    "native": false,
+    "native": true,
     "web": true
   }
 ]

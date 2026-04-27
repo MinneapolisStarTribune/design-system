@@ -3,7 +3,8 @@
  * @see architecture/article-toolkit-variants.md
  */
 
-export { ImageGallery, type ImageGalleryProps } from './ImageGallery/web/ImageGallery';
+export { ImageGallery } from './ImageGallery/web/ImageGallery';
+export type { ImageGalleryProps } from './ImageGallery/ImageGallery.types';
 export { InlineImage } from './InlineImage/web/InlineImage';
 export type { InlineImageProps } from './InlineImage/InlineImage.types';
 export { InlineVideo, type InlineVideoProps } from './InlineVideo/web/InlineVideo';

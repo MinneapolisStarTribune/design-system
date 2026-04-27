@@ -15,6 +15,8 @@ export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/
 export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
 export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
 export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/native/ImageGallery.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
 export { InlineImage } from './EditorialContent/ArticleToolkit/InlineImage/native/InlineImage.native';
 export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineVideo/InlineVideo.types';
@@ -58,6 +60,7 @@ export {
   type NativeIconSize,
   type NativeIconWrapperProps,
 } from './Icon/Icon.native';
+export { Image, type ImageProps } from './Image/native/Image.native';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
