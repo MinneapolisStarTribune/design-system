@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { Image } from '@/components/index.web';
 import { CameraIcon, CloseIcon } from '@/icons';

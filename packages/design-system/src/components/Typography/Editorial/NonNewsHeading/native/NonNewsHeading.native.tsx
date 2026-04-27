@@ -2,11 +2,12 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { NonNewsHeadingProps } from '../NonNewsHeading.types';
+import type { NonNewsHeadingImportance } from '../NonNewsHeading.types';
+import type { NonNewsHeadingNativeProps } from '../NonNewsHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<NonNewsHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<NonNewsHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -15,7 +16,7 @@ const importanceToStyleKey: Record<NonNewsHeadingProps['importance'], StyleKey> 
   6: 'h6',
 };
 
-export const NonNewsHeading: React.FC<NonNewsHeadingProps> = (props) => {
+export const NonNewsHeading: React.FC<NonNewsHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   useBrandValidation('NonNewsHeading');
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -56,4 +57,5 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type { NonNewsHeadingImportance, NonNewsHeadingProps } from '../NonNewsHeading.types';
+export type { NonNewsHeadingNativeProps as NonNewsHeadingProps } from '../NonNewsHeading.types';
+export type { NonNewsHeadingImportance } from '../NonNewsHeading.types';

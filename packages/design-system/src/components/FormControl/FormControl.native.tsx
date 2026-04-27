@@ -14,7 +14,8 @@ import {
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
-import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
+import type { AccessibilityProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { Size } from '@/types/globalTypes';
 import {
   fieldSurfaceBorderWidth,
@@ -24,7 +25,7 @@ import {
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
-export interface FormControlProps extends BaseProps {
+export interface FormControlProps extends NativeBaseProps {
   size?: FormControlSize;
   isDisabled?: boolean;
 }
@@ -75,7 +76,7 @@ const SIZE_LAYOUT: Record<
 };
 
 interface FormControlTextInputProps
-  extends Omit<FormControlProps, 'className' | 'style'>,
+  extends FormControlProps,
     Omit<RNTextInputProps, 'editable' | 'testID'>,
     AccessibilityProps {
   placeholderText?: string;
