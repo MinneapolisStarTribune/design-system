@@ -3,18 +3,18 @@ import { Pressable, Text, View } from 'react-native';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { CheckboxProps } from '../Checkbox.types.native';
+import type { CheckboxNativeProps } from '../Checkbox.types';
 import { createCheckboxStyles } from './Checkbox.native.styles';
 
-export type { CheckboxProps, CheckboxVariant } from '../Checkbox.types.native';
-export { CHECKBOX_VARIANTS } from '../Checkbox.types.native';
+export type { CheckboxNativeProps as CheckboxProps, CheckboxVariant } from '../Checkbox.types';
+export { CHECKBOX_VARIANTS } from '../Checkbox.types';
 
 /**
  * Single checkbox for React Native. Uses `accessibilityRole="checkbox"` with `accessibilityState.checked`
  * set to `"mixed"` when indeterminate. The indeterminate state is visual only — user interaction reports
  * a boolean to `onChange` (typically `true` when leaving mixed).
  */
-export const Checkbox: React.FC<CheckboxProps> = ({
+export const Checkbox: React.FC<CheckboxNativeProps> = ({
   title,
   description,
   checked,
