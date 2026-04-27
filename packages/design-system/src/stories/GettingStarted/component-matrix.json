@@ -71,7 +71,7 @@
   },
   {
     "component": "Select",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
