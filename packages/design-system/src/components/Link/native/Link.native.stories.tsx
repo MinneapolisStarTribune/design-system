@@ -1,25 +1,22 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-native';
-import { View, Text } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { ArrowRightIcon } from '@/icons';
 import {
-  INLINE_LINK_BRANDS,
   LINK_ICON_POSITIONS,
   LINK_SIZES,
-  type InlineLinkBrand,
   type LinkIconPosition,
   type LinkSize,
 } from '../Link.types';
 import { Link } from './Link.native';
+import { UtilityBody } from '@/index.native';
 
 type LinkStoryArgs = {
   children?: string;
-  variant?: 'utility' | 'inline';
   size?: LinkSize;
   disabled?: boolean;
   showIcon?: boolean;
   iconPosition?: LinkIconPosition;
-  brand?: InlineLinkBrand;
   onPress?: () => void;
   dataTestId?: string;
   'aria-label'?: string;
@@ -30,12 +27,10 @@ const meta = {
   component: Link as React.ComponentType<LinkStoryArgs>,
   argTypes: {
     children: { control: 'text' },
-    variant: { control: 'select', options: ['utility', 'inline'] },
     size: { control: 'select', options: [...LINK_SIZES] },
     disabled: { control: 'boolean' },
     showIcon: { control: 'boolean' },
     iconPosition: { control: 'select', options: [...LINK_ICON_POSITIONS] },
-    brand: { control: 'select', options: [...INLINE_LINK_BRANDS] },
     onPress: { action: 'pressed' },
   },
 } satisfies Meta<LinkStoryArgs>;
@@ -47,94 +42,95 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     children: 'Read more',
-    variant: 'utility',
     size: 'medium',
     disabled: false,
     showIcon: false,
     iconPosition: 'end',
-    brand: 'startribune',
   },
 
-  render: (args) => {
-    if (args.variant === 'inline') {
-      return (
-        <Link
-          variant="inline"
-          brand={args.brand ?? 'startribune'}
-          disabled={args.disabled}
-          onPress={args.onPress}
-          dataTestId={args.dataTestId}
-          aria-label={args['aria-label']}
-        >
-          {args.children ?? 'Read more'}
-        </Link>
-      );
-    }
-
-    return (
-      <Link
-        variant="utility"
-        size={args.size ?? 'medium'}
-        disabled={args.disabled}
-        iconPosition={args.iconPosition ?? 'end'}
-        icon={args.showIcon ? <ArrowRightIcon /> : undefined}
-        onPress={args.onPress}
-        dataTestId={args.dataTestId}
-        aria-label={args['aria-label']}
-      >
-        {args.children ?? 'Read more'}
-      </Link>
-    );
-  },
+  render: (args) => (
+    <Link
+      size={args.size ?? 'medium'}
+      disabled={args.disabled}
+      iconPosition={args.iconPosition ?? 'end'}
+      icon={args.showIcon ? <ArrowRightIcon /> : undefined}
+      onPress={args.onPress}
+      dataTestId={args.dataTestId}
+      aria-label={args['aria-label']}
+    >
+      {args.children ?? 'Read more'}
+    </Link>
+  ),
 };
 
 export const AllVariants: Story = {
   parameters: {
-    controls: { disable: true },
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'Use the Storybook **brand** and **mode** controls (preview toolbar / Controls) for light and dark themes.',
+      },
+    },
   },
 
   render: () => (
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 24 }}>
-      {LINK_SIZES.flatMap((size) =>
-        LINK_ICON_POSITIONS.flatMap((iconPosition) =>
-          [false, true].flatMap((disabled) => (
-            <View
-              key={`${size}-${iconPosition}-${disabled}`}
-              style={{ width: 220, gap: 10, marginBottom: 20 }}
-            >
-              <Text style={{ fontSize: 12, opacity: 0.5 }}>
-                {size} · icon {iconPosition} · {disabled ? 'disabled' : 'enabled'}
-              </Text>
+    <ScrollView style={{ flex: 1, width: '100%' }} contentContainerStyle={{ padding: 16, gap: 32 }}>
+      {LINK_SIZES.map((size) => (
+        <View key={size} style={{ gap: 12 }}>
+          <UtilityBody size="small" weight="bold">
+            {size}
+          </UtilityBody>
 
-              {/* Utility */}
-              <View style={{ gap: 6 }}>
-                <Text style={{ fontSize: 11, opacity: 0.4 }}>Utility</Text>
+          <View style={{ gap: 8 }}>
+            {(
+              [
+                { label: 'Default', disabled: false, icon: undefined },
+                { label: 'Disabled', disabled: true, icon: undefined },
+                {
+                  label: 'Icon start',
+                  disabled: false,
+                  icon: <ArrowRightIcon />,
+                  iconPosition: 'start' as const,
+                },
+                {
+                  label: 'Icon start · disabled',
+                  disabled: true,
+                  icon: <ArrowRightIcon />,
+                  iconPosition: 'start' as const,
+                },
+                {
+                  label: 'Icon end',
+                  disabled: false,
+                  icon: <ArrowRightIcon />,
+                  iconPosition: 'end' as const,
+                },
+                {
+                  label: 'Icon end · disabled',
+                  disabled: true,
+                  icon: <ArrowRightIcon />,
+                  iconPosition: 'end' as const,
+                },
+              ] as const
+            ).map((row) => (
+              <View key={row.label} style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                <UtilityBody size="x-small" style={{ width: 160 }}>
+                  {row.label}
+                </UtilityBody>
                 <Link
                   variant="utility"
                   size={size}
-                  disabled={disabled}
-                  iconPosition={iconPosition}
-                  icon={<ArrowRightIcon />}
+                  disabled={row.disabled}
+                  icon={row.icon}
+                  iconPosition={'iconPosition' in row ? row.iconPosition : 'end'}
                 >
                   Read more
                 </Link>
               </View>
-
-              {/* Inline */}
-              <View style={{ gap: 6 }}>
-                <Text style={{ fontSize: 11, opacity: 0.4 }}>Inline</Text>
-                <Text style={{ fontSize: 16, lineHeight: 24 }}>
-                  Read the{' '}
-                  <Link variant="inline" brand="startribune" disabled={disabled}>
-                    full article
-                  </Link>{' '}
-                  for details.
-                </Text>
-              </View>
-            </View>
-          ))
-        )
-      )}
-    </View>
+            ))}
+          </View>
+        </View>
+      ))}
+    </ScrollView>
   ),
 };

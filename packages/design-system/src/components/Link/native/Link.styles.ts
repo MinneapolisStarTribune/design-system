@@ -21,23 +21,22 @@ export const createStyles = (theme: NativeTheme) =>
     },
 
     text: {
-      color: theme.colorLinkTextDefault,
+      color: theme.colorTextOnLightPrimary,
     },
 
     textDisabled: {
       color: theme.colorTextOnLightPrimary,
-      opacity: 0.4,
     },
 
     inlineText: {
       color: theme.colorLinkTextDefault,
       textDecorationLine: 'underline',
+      textDecorationColor: theme.colorLinkUnderlineDefault,
     },
 
     inlineTextDisabled: {
       color: theme.colorTextOnLightPrimary,
       textDecorationLine: 'none',
-      opacity: 0.4,
     },
 
     icon: {
@@ -53,6 +52,9 @@ export const createStyles = (theme: NativeTheme) =>
     },
 
     pressed: {
-      opacity: 0.72,
+      outlineWidth: 1,
+      outlineStyle: 'solid',
+      outlineColor: theme.colorTextOnLightPrimary,
+      outlineOffset: 1,
     },
   });
