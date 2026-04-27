@@ -62,7 +62,11 @@ describe('InlineLink (native)', () => {
 
   it('forwards testID and accessibility label to the underlying link', () => {
     render(
-      <InlineLink brand="startribune" dataTestId="inline-link-forwarded" aria-label="Forwarded label">
+      <InlineLink
+        brand="startribune"
+        dataTestId="inline-link-forwarded"
+        aria-label="Forwarded label"
+      >
         forwarded
       </InlineLink>,
       { wrapper }

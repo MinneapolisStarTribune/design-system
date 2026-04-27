@@ -20,7 +20,12 @@ describe('Link Accessibility (native)', () => {
 
   it('marks utility link as disabled in accessibility state', () => {
     render(
-      <Link size="medium" disabled aria-label="Disabled utility link" dataTestId="link-a11y-disabled">
+      <Link
+        size="medium"
+        disabled
+        aria-label="Disabled utility link"
+        dataTestId="link-a11y-disabled"
+      >
         Read later
       </Link>,
       { wrapper }
@@ -32,7 +37,12 @@ describe('Link Accessibility (native)', () => {
 
   it('renders inline link with role, label, and token underline style', () => {
     render(
-      <Link variant="inline" brand="startribune" aria-label="Inline terms link" dataTestId="link-a11y-inline">
+      <Link
+        variant="inline"
+        brand="startribune"
+        aria-label="Inline terms link"
+        dataTestId="link-a11y-inline"
+      >
         terms
       </Link>,
       { wrapper }

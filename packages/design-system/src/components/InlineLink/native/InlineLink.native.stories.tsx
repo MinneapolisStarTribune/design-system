@@ -131,11 +131,7 @@ export const AllVariants: Story = {
   parameters: {
     layout: 'fullscreen',
     controls: {
-      exclude: [
-        'children',
-        'typographyVariant',
-        'disabled',
-      ],
+      exclude: ['children', 'typographyVariant', 'disabled'],
     },
   },
   render: (_args) => (
