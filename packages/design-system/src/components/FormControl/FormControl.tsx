@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
