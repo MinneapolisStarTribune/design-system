@@ -3021,7 +3021,6 @@ __metadata:
     "@floating-ui/react-native": "npm:0.10.9"
     "@octokit/rest": "npm:^22.0.1"
     "@react-native/babel-preset": "npm:0.79.6"
-    "@react-native/jest-preset": "npm:0.85.0-nightly-20260219-44901aaf9"
     "@storybook/addon-a11y": "npm:10.3.5"
     "@storybook/addon-docs": "npm:10.3.5"
     "@storybook/addon-themes": "npm:10.3.5"
@@ -3069,11 +3068,11 @@ __metadata:
     postcss-import: "npm:^16.1.1"
     prettier: "npm:^3.6.2"
     prettier-plugin-sort-json: "npm:^4.2.0"
-    react: "npm:19.2.3"
-    react-dom: "npm:19.2.3"
+    react: "npm:19.0.0"
+    react-dom: "npm:19.0.0"
     react-native: "npm:0.79.6"
     react-native-svg: "npm:15.11.2"
-    react-test-renderer: "npm:19.2.3"
+    react-test-renderer: "npm:19.0.0"
     rollup-preserve-directives: "npm:^1.1.3"
     sass: "npm:^1.97.2"
     storybook: "npm:10.3.5"
@@ -3122,8 +3121,8 @@ __metadata:
     expo: "npm:~53.0.0"
     expo-dev-client: "npm:~5.2.4"
     expo-status-bar: "npm:~2.2.3"
-    react: "npm:19.2.3"
-    react-dom: "npm:19.2.3"
+    react: "npm:19.0.0"
+    react-dom: "npm:19.0.0"
     react-native: "npm:0.79.6"
     react-native-gesture-handler: "npm:~2.24.0"
     react-native-reanimated: "npm:~3.17.4"
@@ -3671,32 +3670,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/jest-preset@npm:0.85.0-nightly-20260219-44901aaf9":
-  version: 0.85.0-nightly-20260219-44901aaf9
-  resolution: "@react-native/jest-preset@npm:0.85.0-nightly-20260219-44901aaf9"
-  dependencies:
-    "@jest/create-cache-key-function": "npm:^29.7.0"
-    "@react-native/js-polyfills": "npm:0.85.0-nightly-20260219-44901aaf9"
-    babel-jest: "npm:^29.7.0"
-    jest-environment-node: "npm:^29.7.0"
-    regenerator-runtime: "npm:^0.13.2"
-  peerDependencies:
-    react: ^19.2.3
-  checksum: 10c0/1c46976214c041de13bae52416ccb15588b5563714ab59d637a8647c5fe7c7ed39c8c0a77fdf8d781f57b3aab88ab62242904ec56028e7b090a4aa69b469dee4
-  languageName: node
-  linkType: hard
-
 "@react-native/js-polyfills@npm:0.79.6":
   version: 0.79.6
   resolution: "@react-native/js-polyfills@npm:0.79.6"
   checksum: 10c0/a2f78dac9ed1cf4224c863c00b6ef941097928150404f12951e6d938f6ea52869cbed128e6847ee3d4a34437ae48cc340a259e5967ece0adeba7cb4c6c7a2489
-  languageName: node
-  linkType: hard
-
-"@react-native/js-polyfills@npm:0.85.0-nightly-20260219-44901aaf9":
-  version: 0.85.0-nightly-20260219-44901aaf9
-  resolution: "@react-native/js-polyfills@npm:0.85.0-nightly-20260219-44901aaf9"
-  checksum: 10c0/c417122f57ffc54ec8305cb5f8752a9c111f5a4342bbc603013d759b64f7299acd73520af810d2452aad9151f25ce63384c390fe0e071e5c2e57eb077808ac67
   languageName: node
   linkType: hard
 
@@ -13129,14 +13106,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.3":
-  version: 19.2.3
-  resolution: "react-dom@npm:19.2.3"
+"react-dom@npm:19.0.0":
+  version: 19.0.0
+  resolution: "react-dom@npm:19.0.0"
   dependencies:
-    scheduler: "npm:^0.27.0"
+    scheduler: "npm:^0.25.0"
   peerDependencies:
-    react: ^19.2.3
-  checksum: 10c0/dc43f7ede06f46f3acc16ee83107c925530de9b91d1d0b3824583814746ff4c498ea64fd65cd83aba363205268adff52e2827c582634ae7b15069deaeabc4892
+    react: ^19.0.0
+  checksum: 10c0/a36ce7ab507b237ae2759c984cdaad4af4096d8199fb65b3815c16825e5cfeb7293da790a3fc2184b52bfba7ba3ff31c058c01947aff6fd1a3701632aabaa6a9
   languageName: node
   linkType: hard
 
@@ -13161,7 +13138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.2.3":
+"react-is@npm:^19.0.0":
   version: 19.2.5
   resolution: "react-is@npm:19.2.5"
   checksum: 10c0/58c28ab2f7f868f9836c728fa164a16dcf20246ab84a3ae6a09e617b0e4d9bbb3acdddfdc40452f0134d27b121d3359227602a050c0be554cb20069cb52a67f4
@@ -13364,22 +13341,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.2.3":
-  version: 19.2.3
-  resolution: "react-test-renderer@npm:19.2.3"
+"react-test-renderer@npm:19.0.0":
+  version: 19.0.0
+  resolution: "react-test-renderer@npm:19.0.0"
   dependencies:
-    react-is: "npm:^19.2.3"
-    scheduler: "npm:^0.27.0"
+    react-is: "npm:^19.0.0"
+    scheduler: "npm:^0.25.0"
   peerDependencies:
-    react: ^19.2.3
-  checksum: 10c0/842b82239dbddbc536083a6260c3e1b0507c02a3400bd05879fc19160468fd0f8ab79fec5dceffa6113b131835cc7621212f8415b46ea5156ab66bbfd7e24297
+    react: ^19.0.0
+  checksum: 10c0/67c34dae4d3a60b9306d2b5cb6db436376ef20c651aaf092644298e3ffb92cd3c7b0da2017e7f1395bf2de8b42429874a5a63e8cc3c21febbab31b0309e41862
   languageName: node
   linkType: hard
 
-"react@npm:19.2.3":
-  version: 19.2.3
-  resolution: "react@npm:19.2.3"
-  checksum: 10c0/094220b3ba3a76c1b668f972ace1dd15509b157aead1b40391d1c8e657e720c201d9719537375eff08f5e0514748c0319063392a6f000e31303aafc4471f1436
+"react@npm:19.0.0":
+  version: 19.0.0
+  resolution: "react@npm:19.0.0"
+  checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
   languageName: node
   linkType: hard
 
@@ -14033,17 +14010,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0":
+"scheduler@npm:0.25.0, scheduler@npm:^0.25.0":
   version: 0.25.0
   resolution: "scheduler@npm:0.25.0"
   checksum: 10c0/a4bb1da406b613ce72c1299db43759526058fdcc413999c3c3e0db8956df7633acf395cb20eb2303b6a65d658d66b6585d344460abaee8080b4aa931f10eaafe
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "scheduler@npm:0.27.0"
-  checksum: 10c0/4f03048cb05a3c8fddc45813052251eca00688f413a3cee236d984a161da28db28ba71bd11e7a3dd02f7af84ab28d39fb311431d3b3772fed557945beb00c452
   languageName: node
   linkType: hard
 
