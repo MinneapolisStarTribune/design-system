@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { OpinionHeadingProps } from '../OpinionHeading.types';
+import type { OpinionHeadingImportance } from '../OpinionHeading.types';
+import type { OpinionHeadingNativeProps } from '../OpinionHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<OpinionHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<OpinionHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -14,7 +15,7 @@ const importanceToStyleKey: Record<OpinionHeadingProps['importance'], StyleKey> 
   6: 'h6',
 };
 
-export const OpinionHeading: React.FC<OpinionHeadingProps> = (props) => {
+export const OpinionHeading: React.FC<OpinionHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
   const styleKey = importanceToStyleKey[importance];
@@ -39,4 +40,5 @@ const createStyles = (theme: NativeTheme) => ({
   h6: { ...theme.typographyEditorialOpinionH6 },
 });
 
-export type { OpinionHeadingImportance, OpinionHeadingProps } from '../OpinionHeading.types';
+export type { OpinionHeadingNativeProps as OpinionHeadingProps } from '../OpinionHeading.types';
+export type { OpinionHeadingImportance } from '../OpinionHeading.types';

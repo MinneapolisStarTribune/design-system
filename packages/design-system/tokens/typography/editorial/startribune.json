@@ -41,7 +41,7 @@
       },
       "dropcap": {
         "value": {
-          "font-family": "{font.family.publico-headline}",
+          "font-family": "{font.family.publico-headline-condensed}",
           "font-size": 82,
           "font-weight": 300,
           "line-height": 0.86
