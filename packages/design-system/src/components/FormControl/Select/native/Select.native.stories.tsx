@@ -79,6 +79,29 @@ export const Configurable: Story = {
     showPlaceholder: true,
     options: OPTIONS,
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `<FormGroup>
+  <FormGroup.Label optional={false}>Country</FormGroup.Label>
+  <FormGroup.Description>Choose a shipping region.</FormGroup.Description>
+  <FormControl.Select
+    id="select-native-configurable"
+    options={[
+      { value: 'us', label: 'United States' },
+      { value: 'ca', label: 'Canada' },
+      { value: 'mx', label: 'Mexico' },
+      { value: 'uk', label: 'United Kingdom', disabled: true },
+    ]}
+    placeholderText="Select an option"
+    showPlaceholder
+    size="medium"
+  />
+  <FormGroup.Caption variant="info">Helper text for the field.</FormGroup.Caption>
+</FormGroup>`,
+      },
+    },
+  },
   render: (args) => <ConfigurableSelect key={String(args.value ?? '')} {...args} />,
 };
 

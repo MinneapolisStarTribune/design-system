@@ -189,7 +189,11 @@ const [value, setValue] = useState<string | undefined>();
 
 ## React Native usage
 
-Current native `Select` is being actively built out. Use this pattern for integration and theming setup:
+`FormControl.Select` on React Native renders a single-line field and uses the same option model as web (`value` / `label` / optional `disabled`).
+
+Use it inside `FormGroup` so labels, descriptions, and captions remain consistent across controls.
+
+`FormControl.Select` does not render helper or caption text itself; use `FormGroup.Caption` for informational/error/success messaging.
 
 ```tsx
 import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/native';
@@ -210,10 +214,39 @@ export function NativeCountrySelect() {
         showPlaceholder
         size="medium"
       />
+      <FormGroup.Caption variant="info">Helper text for the field</FormGroup.Caption>
     </FormGroup>
   );
 }
 ```
+
+### Native controlled usage
+
+```tsx
+import { useState } from 'react';
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/native';
+
+const options = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+];
+
+const [value, setValue] = useState<string | undefined>();
+
+<FormGroup>
+  <FormGroup.Label>Country</FormGroup.Label>
+  <FormControl.Select id="country" options={options} value={value} onChange={setValue} />
+</FormGroup>;
+```
+
+### Native accessibility notes
+
+- Root control uses `Pressable` with `accessibilityRole="button"`.
+- `accessibilityState` includes `disabled` and `expanded`.
+- `accessibilityLabel` falls back to selected value or placeholder text.
+- Optional `accessibilityHint` is passed through.
+
+Interactive native examples are available in mobile Storybook (`Select.native.stories.tsx`).
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 

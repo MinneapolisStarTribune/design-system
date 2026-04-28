@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import { FormGroupNative as FormGroup } from '@/components/FormGroup/native/FormGroup.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { Select } from './Select.native';
@@ -44,6 +44,47 @@ describe('Select (native)', () => {
     expect(control.props.accessibilityState).toEqual(
       expect.objectContaining({ disabled: true, expanded: false })
     );
+  });
+
+  it('opens option list when pressed', () => {
+    render(
+      <Select
+        id="country"
+        options={OPTIONS}
+        placeholderText="Select an option"
+        dataTestId="native-select"
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId('native-select'));
+
+    expect(screen.getByTestId('native-select-options')).toBeOnTheScreen();
+    expect(screen.getByText('United States')).toBeOnTheScreen();
+    expect(screen.getByTestId('native-select-icon-up')).toBeOnTheScreen();
+  });
+
+  it('shows down icon when closed', () => {
+    render(<Select id="country" options={OPTIONS} dataTestId="native-select" />, { wrapper });
+
+    expect(screen.getByTestId('native-select-icon-down')).toBeOnTheScreen();
+    expect(screen.queryByTestId('native-select-icon-up')).not.toBeOnTheScreen();
+  });
+
+  it('calls onChange when selecting an enabled option', () => {
+    const onChange = jest.fn();
+    render(
+      <Select id="country" options={OPTIONS} dataTestId="native-select" onChange={onChange} />,
+      {
+        wrapper,
+      }
+    );
+
+    fireEvent.press(screen.getByTestId('native-select'));
+    fireEvent.press(screen.getByTestId('native-select-option-ca'));
+
+    expect(onChange).toHaveBeenCalledWith('ca');
+    expect(screen.queryByTestId('native-select-options')).not.toBeOnTheScreen();
   });
 
   it('renders with FormGroup context and keeps configured id', () => {

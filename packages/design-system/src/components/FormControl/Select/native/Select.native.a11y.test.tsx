@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { Select } from './Select.native';
 
@@ -50,5 +50,15 @@ describe('Select Accessibility (native)', () => {
     expect(
       screen.getByTestId('native-select', { includeHiddenElements: true }).props.accessibilityState
     ).toEqual(expect.objectContaining({ disabled: true, expanded: false }));
+  });
+
+  it('updates expanded accessibilityState when opened', () => {
+    render(<Select id="country" options={OPTIONS} dataTestId="native-select" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('native-select'));
+
+    expect(
+      screen.getByTestId('native-select', { includeHiddenElements: true }).props.accessibilityState
+    ).toEqual(expect.objectContaining({ expanded: true }));
   });
 });

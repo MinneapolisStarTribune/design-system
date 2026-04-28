@@ -126,6 +126,7 @@ export const Configurable: Story = {
     showPlaceholder
     size="medium"
   />
+  <FormGroup.Caption variant="info">Informational message</FormGroup.Caption>
 </FormGroup>`,
       },
     },

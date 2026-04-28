@@ -1,8 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, type TextStyle, View } from 'react-native';
 import type { FC } from 'react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
+import { ChevronDownIcon, ChevronUpIcon } from '@/icons';
 import type { SelectNativeProps as SelectProps } from '../Select.types';
 
 type SelectSize = NonNullable<SelectProps['size']>;
@@ -49,7 +50,9 @@ export const Select: FC<SelectProps> = (props) => {
     style,
     accessibilityLabel,
     accessibilityHint,
+    onChange,
   } = props;
+  const [expanded, setExpanded] = useState(false);
 
   const formGroup = useFormGroupContext();
   const hasError = isErrorProp ?? formGroup?.hasError ?? false;
@@ -62,6 +65,7 @@ export const Select: FC<SelectProps> = (props) => {
   const isFilled = Boolean(selectedOption);
   const displayLabel =
     isFilled && selectedOption ? selectedOption.label : showPlaceholder ? placeholderText : '';
+  const controlLabel = accessibilityLabel ?? (displayLabel || placeholderText);
 
   const sizeTokens = SIZE_TOKENS[size];
   const styles = useNativeStyles(
@@ -87,10 +91,14 @@ export const Select: FC<SelectProps> = (props) => {
           shellPressed: {
             opacity: 0.85,
           },
+          shellDisabled: {
+            opacity: 0.6,
+          },
           inner: {
             flexDirection: 'row',
             alignItems: 'center',
             minWidth: 0,
+            gap: theme.spacing8,
           },
           valueText: {
             flex: 1,
@@ -101,36 +109,128 @@ export const Select: FC<SelectProps> = (props) => {
             color: theme.colorTextOnLightTertiary,
             ...readTypography(theme, sizeTokens.placeholderTypography),
           },
+          chevron: {
+            flexShrink: 0,
+          },
+          dropdown: {
+            marginTop: theme.spacing8,
+            borderWidth: 1,
+            borderColor: theme.colorBorderOnLightSubtle02,
+            backgroundColor: theme.colorBackgroundLightDefault,
+            borderRadius: theme.radius4,
+            overflow: 'hidden',
+          },
+          optionRow: {
+            paddingVertical: theme.spacing12,
+            paddingHorizontal: theme.spacing16,
+          },
+          optionSelected: {
+            backgroundColor: theme.colorBackgroundLightGray01,
+          },
+          optionDisabled: {
+            opacity: 0.5,
+          },
+          optionText: {
+            color: theme.colorTextOnLightPrimary,
+            ...readTypography(theme, sizeTokens.valueTypography),
+          },
+          optionTextDisabled: {
+            color: theme.colorTextOnLightTertiary,
+          },
         }),
       [sizeTokens]
     )
   );
 
+  const toggleExpanded = () => {
+    if (isDisabled) return;
+    setExpanded((prev) => !prev);
+  };
+
+  const handleSelectOption = (nextValue: string, optionDisabled?: boolean) => {
+    if (isDisabled || optionDisabled) return;
+    onChange?.(nextValue);
+    setExpanded(false);
+  };
+
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel ?? (displayLabel || placeholderText)}
-      accessibilityHint={accessibilityHint}
-      accessibilityState={{ disabled: isDisabled, expanded: false }}
-      disabled={isDisabled}
-      testID={dataTestId}
-      nativeID={inputId}
-      style={({ pressed }) => [
-        styles.shell,
-        rounded ? styles.shellRounded : null,
-        hasError ? styles.shellError : null,
-        pressed && !isDisabled ? styles.shellPressed : null,
-        style,
-      ]}
-    >
-      <View style={styles.inner}>
-        <Text
-          style={[styles.valueText, !isFilled && showPlaceholder ? styles.placeholderText : null]}
-          numberOfLines={1}
-        >
-          {displayLabel}
-        </Text>
-      </View>
-    </Pressable>
+    <View>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={controlLabel}
+        accessibilityHint={accessibilityHint}
+        accessibilityState={{ disabled: isDisabled, expanded }}
+        disabled={isDisabled}
+        onPress={toggleExpanded}
+        testID={dataTestId}
+        nativeID={inputId}
+        style={({ pressed }) => [
+          styles.shell,
+          rounded ? styles.shellRounded : null,
+          hasError ? styles.shellError : null,
+          isDisabled ? styles.shellDisabled : null,
+          pressed && !isDisabled ? styles.shellPressed : null,
+          style,
+        ]}
+      >
+        <View style={styles.inner}>
+          <Text
+            style={[styles.valueText, !isFilled && showPlaceholder ? styles.placeholderText : null]}
+            numberOfLines={1}
+          >
+            {displayLabel}
+          </Text>
+          <View
+            style={styles.chevron}
+            testID={
+              expanded ? `${dataTestId ?? 'select'}-icon-up` : `${dataTestId ?? 'select'}-icon-down`
+            }
+          >
+            {expanded ? (
+              <ChevronUpIcon
+                size={size}
+                color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}
+              />
+            ) : (
+              <ChevronDownIcon
+                size={size}
+                color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}
+              />
+            )}
+          </View>
+        </View>
+      </Pressable>
+
+      {expanded ? (
+        <View style={styles.dropdown} testID={`${dataTestId ?? 'select'}-options`}>
+          {options.map((option) => {
+            const optionSelected = value === option.value;
+            const optionDisabled = Boolean(option.disabled) || isDisabled;
+            return (
+              <Pressable
+                key={option.value}
+                testID={`${dataTestId ?? 'select'}-option-${option.value}`}
+                accessibilityRole="button"
+                accessibilityLabel={option.label}
+                accessibilityState={{ disabled: optionDisabled, selected: optionSelected }}
+                disabled={optionDisabled}
+                onPress={() => handleSelectOption(option.value, option.disabled)}
+                style={[
+                  styles.optionRow,
+                  optionSelected ? styles.optionSelected : null,
+                  optionDisabled ? styles.optionDisabled : null,
+                ]}
+              >
+                <Text
+                  style={[styles.optionText, optionDisabled ? styles.optionTextDisabled : null]}
+                >
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      ) : null}
+    </View>
   );
 };
