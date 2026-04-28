@@ -49,6 +49,60 @@ Used within immersive layouts where video can span wider content areas.
 - **children** – Video player element
 - **dataTestId** – Optional test id
 
+## Web
+
+Import the web component from `@minneapolisstartribune/design-system/web`.
+
+```tsx
+import { InlineVideo } from '@minneapolisstartribune/design-system/web';
+
+<InlineVideo
+  variant="standard"
+  orientation="horizontal"
+  caption="General Manager Heather Ann Mady with Moua outside the building."
+  videoCredit="Rebecca McApline/Star Tribune"
+  posterUrl="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=8"
+>
+  <video
+    src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+    poster="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=8"
+    controls
+  />
+</InlineVideo>;
+```
+
+## React Native
+
+Import from `@minneapolisstartribune/design-system/native` and pass the native video player as `children`.
+The design system provides the container, caption, credit, and accessibility mapping; the consuming app owns the player implementation.
+
+```tsx
+import { InlineVideo } from '@minneapolisstartribune/design-system/native';
+import Video from 'react-native-video';
+
+const videoUrl = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+const posterUrl =
+  'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1200&q=8';
+
+export function ArticleScreen() {
+  return (
+      <InlineVideo
+        variant="immersive"
+        orientation="horizontal"
+        caption="General Manager Heather Ann Mady with Moua outside the building."
+        videoCredit="Rebecca McApline/Star Tribune"
+        posterUrl={posterUrl}
+        dataTestId="article-inline-video"
+        aria-label="Video: General Manager interview"
+      >
+        <Video source={{ uri: videoUrl }} poster={posterUrl} controls resizeMode="contain" />
+      </InlineVideo>
+  );
+}
+```
+
+`react-native-video` is shown as an example. It is not required by the design system.
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 ## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
