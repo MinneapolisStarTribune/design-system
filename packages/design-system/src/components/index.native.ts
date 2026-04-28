@@ -1,5 +1,4 @@
 // This is what we will export out to consuming apps for react native apps. This file is sorted alphabetically.
-
 export {
   BUTTON_COLORS,
   BUTTON_SIZES,
@@ -11,6 +10,8 @@ export {
   type IconOnlyButtonSize,
 } from './Button/Button.types';
 export { Button, type ButtonNativeProps } from './Button/native/Button.native';
+export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
+export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/native/AuthorBioCard.native';
 export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
 export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
 export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
