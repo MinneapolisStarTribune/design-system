@@ -14,7 +14,7 @@ export interface ImageProps
   extends Omit<NativeImageProps, 'source' | 'style'>,
     Omit<BaseProps, 'className' | 'style'> {
   src: string;
-  alt?: string; // made optional
+  alt?: string;
   imgixParams?: string;
 
   style?: StyleProp<ImageStyle>;
@@ -29,45 +29,55 @@ export const Image: React.FC<ImageProps> = ({
   dataTestId = 'image',
   accessibilityLabel,
   onPress,
+  accessible: accessibleProp,
   ...rest
 }) => {
   const finalSrc = useMemo(() => {
     if (!imgixParams) return src;
 
     const cleanedParams = imgixParams.startsWith('?') ? imgixParams.slice(1) : imgixParams;
-
     const separator = src.includes('?') ? '&' : '?';
+
     return `${src}${separator}${cleanedParams}`;
   }, [src, imgixParams]);
 
-  const role = onPress ? 'button' : 'image';
-
-  const imageElement = (
-    <NativeImage
-      source={{ uri: finalSrc }}
-      style={style}
-      testID={dataTestId}
-      accessible
-      accessibilityRole={role}
-      accessibilityLabel={accessibilityLabel || alt || undefined}
-      {...rest}
-    />
-  );
+  const resolvedLabel = accessibilityLabel || alt || undefined;
+  const hasName = Boolean(resolvedLabel);
+  const accessible = accessibleProp ?? hasName;
 
   if (onPress) {
     return (
       <Pressable
         onPress={onPress}
-        accessibilityRole={role}
-        accessibilityLabel={accessibilityLabel || alt || undefined}
         testID={`${dataTestId}-pressable`}
+        accessible={accessible}
+        accessibilityRole="button"
+        accessibilityLabel={resolvedLabel}
       >
-        {imageElement}
+        <NativeImage
+          source={{ uri: finalSrc }}
+          style={style}
+          testID={dataTestId}
+          accessible={false}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden
+          {...rest}
+        />
       </Pressable>
     );
   }
 
-  return imageElement;
+  return (
+    <NativeImage
+      source={{ uri: finalSrc }}
+      style={style}
+      testID={dataTestId}
+      accessible={accessible}
+      accessibilityRole="image"
+      accessibilityLabel={resolvedLabel}
+      {...rest}
+    />
+  );
 };
 
 Image.displayName = 'Image';

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { Image, ImageProps } from './Image.native';
 
 const meta: Meta<ImageProps> = {
@@ -41,7 +41,8 @@ const meta: Meta<ImageProps> = {
     },
     onPress: {
       action: 'pressed',
-      description: 'Callback when image is pressed (wraps with Pressable).',
+      description:
+        'Callback when image is pressed (wrapped with Pressable; only wrapper is accessible).',
     },
     blurRadius: {
       control: 'number',
@@ -69,10 +70,14 @@ export const Configurable: Story = {
 
 export const AllVariants: Story = {
   render: () => (
-    <View style={{ gap: 20 }}>
+    <ScrollView
+      style={{ gap: 20, width: '100%' }}
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+    >
       {/* Default */}
       <View>
-        <Text style={{ marginBottom: 6 }}>Default</Text>
+        <Text style={{ marginBottom: 6 }}>Default (accessible image)</Text>
         <View style={{ width: 250, height: 150 }}>
           <Image
             src="https://picsum.photos/id/1018/800/500"
@@ -89,7 +94,7 @@ export const AllVariants: Story = {
           <Image
             src="https://assets.imgix.net/examples/pione.jpg"
             alt="Imgix optimized"
-            imgixParams="w=500&h=300&fit=crop&auto=format,compress&q=75&borderRadius=16"
+            imgixParams="w=500&h=300&fit=crop&auto=format,compress&q=75"
             style={{ width: '100%', height: '100%', borderRadius: 8 }}
           />
         </View>
@@ -97,7 +102,7 @@ export const AllVariants: Story = {
 
       {/* Non-clickable */}
       <View>
-        <Text style={{ marginBottom: 6 }}>Non-clickable</Text>
+        <Text style={{ marginBottom: 6 }}>Non-clickable (role: image)</Text>
         <View style={{ width: 250, height: 150 }}>
           <Image
             src="https://picsum.photos/id/1025/800/500"
@@ -109,7 +114,9 @@ export const AllVariants: Story = {
 
       {/* Clickable */}
       <View>
-        <Text style={{ marginBottom: 6 }}>Clickable (onPress)</Text>
+        <Text style={{ marginBottom: 6 }}>
+          Clickable (Pressable is accessible, image is hidden)
+        </Text>
         <View style={{ width: 250, height: 150 }}>
           <Image
             src="https://picsum.photos/id/1019/800/500"
@@ -133,7 +140,7 @@ export const AllVariants: Story = {
       </View>
 
       <View>
-        <Text style={{ marginBottom: 6 }}>Accessibility (no alt)</Text>
+        <Text style={{ marginBottom: 6 }}>Accessibility (no alt → not accessible)</Text>
         <View style={{ width: 250, height: 150 }}>
           <Image
             src="https://picsum.photos/id/1041/800/500"
@@ -155,7 +162,7 @@ export const AllVariants: Story = {
       </View>
 
       <View>
-        <Text style={{ marginBottom: 6 }}>Accessibility (clickable role)</Text>
+        <Text style={{ marginBottom: 6 }}>Accessibility (clickable → button role on wrapper)</Text>
         <View style={{ width: 250, height: 150 }}>
           <Image
             src="https://picsum.photos/id/1043/800/500"
@@ -165,6 +172,6 @@ export const AllVariants: Story = {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   ),
 };

@@ -26,14 +26,14 @@ describe('Image', () => {
   });
 
   it('sets accessibilityRole to button when clickable', () => {
-    const { getByTestId } = render(
+    const { queryByTestId, getByTestId } = render(
       <Image src="https://example.com" alt="img" onPress={() => {}} />
     );
 
-    const image = getByTestId('image');
+    const image = queryByTestId('image');
     const pressable = getByTestId('image-pressable');
 
-    expect(image.props.accessibilityRole).toBe('button');
+    expect(image).toBeNull();
     expect(pressable.props.accessibilityRole).toBe('button');
   });
 

@@ -62,18 +62,15 @@ describe('Image Accessibility', () => {
   });
 
   it('is accessible when pressable (image + pressable)', () => {
-    const { getByTestId } = render(
+    const { queryByTestId, getByTestId } = render(
       <Image src="https://via.placeholder.com/150" alt="Pressable image" onPress={() => {}} />
     );
 
-    const image = getByTestId('image');
+    const image = queryByTestId('image');
     const pressable = getByTestId('image-pressable');
 
-    // Image
-    expect(image.props.accessible).toBe(true);
-    expect(image.props.accessibilityRole).toBe('button');
+    expect(image).toBeNull();
 
-    // Pressable (IMPORTANT)
     expect(pressable.props.accessibilityRole).toBe('button');
     expect(pressable.props.accessibilityLabel).toBe('Pressable image');
   });
