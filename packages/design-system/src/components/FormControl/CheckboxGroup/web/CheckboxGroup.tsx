@@ -2,45 +2,10 @@
 
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
-import { BaseProps } from '@/types/globalTypes';
 import { Checkbox, type CheckboxVariant } from '../../Checkbox/web/Checkbox';
+import { getCategoryState, toggleCategoryValues, toggleOptionValue } from '../CheckboxGroup.shared';
+import type { CheckboxCategory, CheckboxGroupProps, CheckboxOption } from '../CheckboxGroup.types';
 import styles from './CheckboxGroup.module.scss';
-
-export interface CheckboxOption {
-  value: string;
-  title: string;
-  description?: string;
-}
-
-export interface CheckboxCategory {
-  parentOption: CheckboxOption;
-  options: CheckboxOption[];
-}
-
-export type CheckboxGroupProps = BaseProps & {
-  value: string[];
-  color?: 'neutral' | 'brand';
-  disabled?: boolean;
-  error?: boolean;
-  onChange: (values: string[]) => void;
-  /** Per-group tracking data merged into each Checkbox event. Use to distinguish groups (e.g. form_field, module_name). */
-  analytics?: Record<string, unknown>;
-} & (
-    | { options: CheckboxOption[]; categories?: never } // flat mode
-    | { categories: CheckboxCategory[]; options?: never } // category mode
-  );
-
-function getCategoryState(
-  category: CheckboxCategory,
-  selectedValues: string[]
-): 'checked' | 'unchecked' | 'indeterminate' {
-  const categoryValues = category.options.map((o) => o.value);
-  const selectedInCategory = categoryValues.filter((v) => selectedValues.includes(v));
-  const count = selectedInCategory.length;
-  if (count === 0) return 'unchecked';
-  if (count === categoryValues.length) return 'checked';
-  return 'indeterminate';
-}
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   value,
@@ -61,28 +26,14 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
 
   const toggleValue = useCallback(
     (optionValue: string, add: boolean) => {
-      if (add) {
-        onChange([...value, optionValue]);
-      } else {
-        onChange(value.filter((v) => v !== optionValue));
-      }
+      onChange(toggleOptionValue(value, optionValue, add));
     },
     [value, onChange]
   );
 
   const toggleCategory = useCallback(
     (category: CheckboxCategory) => {
-      const categoryValues = category.options.map((o) => o.value);
-      const selectedInCategory = categoryValues.filter((v) => value.includes(v));
-      const allSelected = selectedInCategory.length === categoryValues.length;
-
-      if (allSelected) {
-        onChange(value.filter((v) => !categoryValues.includes(v)));
-      } else {
-        const newValues = new Set(value);
-        categoryValues.forEach((v) => newValues.add(v));
-        onChange([...newValues]);
-      }
+      onChange(toggleCategoryValues(value, category));
     },
     [value, onChange]
   );
@@ -166,3 +117,5 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     </div>
   );
 };
+
+export type { CheckboxOption, CheckboxCategory, CheckboxGroupProps };

@@ -46,7 +46,7 @@
   },
   {
     "component": "CheckboxGroup",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
