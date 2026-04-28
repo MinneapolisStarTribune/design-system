@@ -43,7 +43,7 @@ yarn add @minneapolisstartribune/design-system
 
 ### Step 4: Install Peer Dependencies
 
-Add the ones that match your platform.
+Add the peers for your platform. These should stay aligned with the package `peerDependencies`.
 
 **Web** (use the `/web` entry):
 
@@ -54,7 +54,7 @@ yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
 **Native** (use the `/native` entry):
 
 ```bash
-yarn add react@19.0.0 react-native@0.73.0 @floating-ui/react-native@0.10.9
+yarn add react@19.0.0 react-native@0.79.0 @floating-ui/react-native@0.10.9
 ```
 
 ## Quick Start
@@ -240,6 +240,7 @@ yarn add @minneapolisstartribune/design-system@latest
 - **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
 - **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
 - **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
+- **[Release Checklist](integration-guides/release-checklist.md)** - Required pre-release checks for web, native, and multi-brand safety
 - **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 
 ## Still Having Issues?

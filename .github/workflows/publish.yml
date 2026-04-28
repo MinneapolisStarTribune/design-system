@@ -49,6 +49,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Run release verification gates (web + native + a11y)
+        run: yarn workspace @minneapolisstartribune/design-system release:verify
+
       - name: Extract version from tag or input
         id: version
         run: |

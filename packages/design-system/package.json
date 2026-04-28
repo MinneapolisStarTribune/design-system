@@ -158,12 +158,13 @@
     "storybook": "node scripts/builders/build-if-needed.js && storybook dev -p 6006",
     "generate:component-matrix": "node scripts/generate-component-matrix.js",
     "test": "vitest run && jest --config jest.config.js",
-    "test:a11y": "vitest run a11y.test && jest --config jest.config.js --testPathPatterns native.a11y.test",
+    "test:a11y": "vitest run a11y.test && jest --config jest.config.js --testPathPatterns native.a11y.test --watchman=false",
     "test:coverage": "vitest run --coverage",
-    "test:native": "jest --config jest.config.js",
+    "test:native": "jest --config jest.config.js --watchman=false",
     "test:scripts": "vitest run scripts/*.test.js",
     "test:watch": "vitest",
     "test:web": "vitest run",
+    "release:verify": "yarn lint && yarn format:check && yarn typecheck && yarn test:web && yarn test:a11y && yarn test:native && yarn build",
     "tokens": "node scripts/builders/build-tokens.js",
     "typecheck": "tsc --noEmit"
   }
