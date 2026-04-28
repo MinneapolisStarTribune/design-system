@@ -5,12 +5,13 @@ import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/
 import { createStyles } from './Link.styles';
 import {
   LINK_SIZE_TO_UTILITY_BODY_TOKEN,
-  type LinkProps as SharedLinkProps,
   type LinkUtilityProps,
   type LinkInlineProps,
 } from '../Link.types';
 
-export type LinkProps = Omit<SharedLinkProps, 'href' | 'as' | 'onClick'> & {
+type OmitWebProps<T> = Omit<T, 'href' | 'as' | 'onClick'>;
+
+export type LinkProps = (OmitWebProps<LinkUtilityProps> | OmitWebProps<LinkInlineProps>) & {
   onPress?: (event: GestureResponderEvent) => void;
   testID?: string;
 };

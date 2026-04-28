@@ -1,13 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { Link } from './Link.native';
+import { ChevronRightIcon } from '@/index.native';
 
 const wrapper = TestWrapperInDesignSystemProvider();
 
 describe('Link (native)', () => {
   it('renders utility variant with icon support', () => {
     render(
-      <Link size="medium" icon={<>{'>'}</>} iconPosition="start">
+      <Link size="medium" icon={<ChevronRightIcon />} iconPosition="start">
         Read more
       </Link>,
       { wrapper }
