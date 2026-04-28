@@ -17,8 +17,10 @@ export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/C
 export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
 export { InlineImage } from './EditorialContent/ArticleToolkit/InlineImage/native/InlineImage.native';
-export type { InlineVideoProps } from './EditorialContent/ArticleToolkit/InlineVideo/InlineVideo.types';
-export { InlineVideo } from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
+export {
+  InlineVideo,
+  type InlineVideoProps,
+} from './EditorialContent/ArticleToolkit/InlineVideo/native/InlineVideo.native';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/native/PhotoLayout.native';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PullQuote } from './EditorialContent/ArticleToolkit/PullQuote/native/PullQuote.native';
@@ -74,6 +76,8 @@ export {
   ToastSuccessIcon,
   ToastWarningIcon,
 } from './Toast/native/ToastIcons.native';
+export type { ToastRendererItem, ToastRendererProps } from './Toast/native/ToastRenderer.native';
+export { ToastRenderer } from './Toast/native/ToastRenderer.native';
 export { TOAST_VARIANTS, type ToastNativeProps, type ToastVariant } from './Toast/Toast.types';
 export {
   ArticleBodyHeading,
