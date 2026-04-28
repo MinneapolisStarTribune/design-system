@@ -16,7 +16,7 @@ import { getFieldSurfaceColors, getFieldSurfaceTokens } from '@/utils/fieldSurfa
 import { createStyles, getInputTypographyStyleKey, getRoundedStyleKey } from './TextInput.styles';
 
 export interface TextInputProps
-  extends Omit<BaseTextInputProps, 'style'>,
+  extends Omit<BaseTextInputProps, 'className' | 'style'>,
     Omit<RNTextInputProps, 'style' | 'testID'> {}
 
 const createTextInputThemeState = (theme: NativeTheme) => ({

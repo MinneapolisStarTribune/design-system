@@ -2,11 +2,12 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { EnterpriseHeadingProps } from '../EnterpriseHeading.types';
+import type { EnterpriseHeadingImportance } from '../EnterpriseHeading.types';
+import type { EnterpriseHeadingNativeProps } from '../EnterpriseHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<EnterpriseHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<EnterpriseHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -15,7 +16,7 @@ const importanceToStyleKey: Record<EnterpriseHeadingProps['importance'], StyleKe
   6: 'h6',
 };
 
-export const EnterpriseHeading: React.FC<EnterpriseHeadingProps> = (props) => {
+export const EnterpriseHeading: React.FC<EnterpriseHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   useBrandValidation('EnterpriseHeading');
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -56,7 +57,5 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type {
-  EnterpriseHeadingImportance,
-  EnterpriseHeadingProps,
-} from '../EnterpriseHeading.types';
+export type { EnterpriseHeadingNativeProps as EnterpriseHeadingProps } from '../EnterpriseHeading.types';
+export type { EnterpriseHeadingImportance } from '../EnterpriseHeading.types';

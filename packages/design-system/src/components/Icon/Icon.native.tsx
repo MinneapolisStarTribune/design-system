@@ -26,6 +26,7 @@ export const NATIVE_ICON_COLOR_MAP = {
   'brand-01': 'colorIconBrand01',
   'brand-02': 'colorIconBrand02',
   'brand-03': 'colorIconBrand03',
+  'pull-quote-accent': 'semanticPullQuoteIconAccentColor',
   'on-dark-primary': 'colorIconOnDarkPrimary',
   'on-dark-secondary': 'colorIconOnDarkSecondary',
   'on-dark-tertiary': 'colorIconOnDarkTertiary',
