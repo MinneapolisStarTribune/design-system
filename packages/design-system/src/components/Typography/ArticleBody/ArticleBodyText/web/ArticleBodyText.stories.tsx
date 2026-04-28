@@ -50,14 +50,33 @@ export const AllVariants: Story = {
   render: () => (
     <div
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '1rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+        maxWidth: '600px',
       }}
     >
       {ARTICLE_BODY_TEXT_WEIGHTS.map((weight) => (
         <div key={weight} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <ArticleBodyText weight={weight}>Article body text - {weight}</ArticleBodyText>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: '14px',
+              fontFamily: 'sans-serif',
+              fontWeight: 600,
+              textTransform: 'capitalize',
+            }}
+          >
+            {weight}
+          </h3>
+          <ArticleBodyText weight={weight}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque
+            mauris pellentesque. Ut eu sem integer vitae justo eget. Amet consectetur adipiscing
+            elit ut. Erat nam at lectus urna duis. Nisi vitae suscipit tellus mauris a diam maecenas
+            sed. Sed sed risus pretium quam vulputate. Mi bibendum neque egestas congue quisque
+            egestas diam.
+          </ArticleBodyText>
         </div>
       ))}
     </div>

@@ -1,14 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { View } from 'react-native';
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import type { BaseDangerousCodeBlockProps } from '../DangerousCodeBlock.types';
 import { cleanMarkup } from '../DangerousCodeBlock.utils';
 import { createStyles } from './DangerousCodeBlock.styles';
+import { NativeViewStylingProps } from '@/types';
 
-export type DangerousCodeBlockProps = Omit<BaseDangerousCodeBlockProps, 'style'> & {
-  style?: StyleProp<ViewStyle>;
-};
+export type DangerousCodeBlockProps = NativeViewStylingProps<BaseDangerousCodeBlockProps>;
 
 const createThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
