@@ -17,6 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 /* SWIPER BULLETS */
@@ -50,6 +51,8 @@
   justify-content: flex-end;
   gap: var(--spacing-4);
   margin-top: var(--spacing-8);
+  position: relative;
+  z-index: 2;
 }
 
 .navButton {
