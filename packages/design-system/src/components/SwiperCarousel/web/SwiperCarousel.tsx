@@ -184,6 +184,10 @@ const NavigationComponent: React.FC<NavigationProps> = ({
 }) => {
   const { swiper, isBeginning, isEnd, totalSlides } = useSwiperContext();
 
+  const { onClick: sharedOnClick, ...sharedButtonProps } = buttonProps ?? {};
+  const { onClick: prevOnClick, ...restPrevButtonProps } = prevButtonProps ?? {};
+  const { onClick: nextOnClick, ...restNextButtonProps } = nextButtonProps ?? {};
+
   const responsiveSize = useResponsiveSize(size);
   const [autoSize, setAutoSize] = React.useState<'small' | 'large'>('large');
 
@@ -208,24 +212,32 @@ const NavigationComponent: React.FC<NavigationProps> = ({
         variant="ghost"
         size={finalSize}
         icon={<ChevronLeftIcon />}
-        onClick={() => swiper.slidePrev()}
+        onClick={(e) => {
+          swiper.slidePrev();
+          sharedOnClick?.(e);
+          prevOnClick?.(e);
+        }}
         isDisabled={isBeginning}
         className={styles.navButton}
         aria-label="Previous slide"
-        {...buttonProps}
-        {...prevButtonProps}
+        {...sharedButtonProps}
+        {...restPrevButtonProps}
       />
 
       <Button
         variant="ghost"
         size={finalSize}
         icon={<ChevronRightIcon />}
-        onClick={() => swiper.slideNext()}
+        onClick={(e) => {
+          swiper.slideNext();
+          sharedOnClick?.(e);
+          nextOnClick?.(e);
+        }}
         isDisabled={isEnd}
         className={styles.navButton}
         aria-label="Next slide"
-        {...buttonProps}
-        {...nextButtonProps}
+        {...sharedButtonProps}
+        {...restNextButtonProps}
       />
     </div>
   );
