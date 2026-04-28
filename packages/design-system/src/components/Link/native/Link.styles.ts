@@ -52,9 +52,6 @@ export const createStyles = (theme: NativeTheme) =>
     },
 
     pressed: {
-      outlineWidth: 1,
-      outlineStyle: 'solid',
-      outlineColor: theme.colorTextOnLightPrimary,
-      outlineOffset: 1,
+      opacity: 0.7,
     },
   });

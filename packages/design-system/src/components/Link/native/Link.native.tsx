@@ -10,7 +10,7 @@ import {
   type LinkInlineProps,
 } from '../Link.types';
 
-export type LinkProps = SharedLinkProps & {
+export type LinkProps = Omit<SharedLinkProps, 'href' | 'as' | 'onClick'> & {
   onPress?: (event: GestureResponderEvent) => void;
   testID?: string;
 };
@@ -42,8 +42,8 @@ export const Link: React.FC<LinkProps> = (props) => {
         onPress={disabled ? undefined : onPress}
         style={baseStyle}
         testID={testID ?? dataTestId}
-        aria-label={ariaLabel}
-        id={id}
+        accessibilityLabel={ariaLabel}
+        nativeID={id}
       >
         {children}
       </Text>
@@ -85,8 +85,8 @@ export const Link: React.FC<LinkProps> = (props) => {
       disabled={disabled}
       onPress={onPress}
       testID={testID ?? dataTestId}
-      aria-label={ariaLabel}
-      id={id}
+      accessibilityLabel={ariaLabel}
+      nativeID={id}
       style={({ pressed }) => [
         styles.row,
         disabled && styles.disabled,
