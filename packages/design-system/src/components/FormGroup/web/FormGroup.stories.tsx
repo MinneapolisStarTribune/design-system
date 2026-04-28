@@ -5,7 +5,7 @@ import { FormControl } from '@/components/FormControl/FormControl';
 import {
   FORM_GROUP_CAPTION_VARIANTS,
   type FormGroupCaptionVariant,
-} from '@/components/FormGroup/web/caption/FormGroup.Caption';
+} from '@/components/FormGroup/web/Caption/FormGroup.Caption';
 
 import {
   CalendarIcon,
