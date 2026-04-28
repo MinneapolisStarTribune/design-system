@@ -236,8 +236,8 @@
   },
   {
     "component": "AuthorBioCard",
-    "native": false,
-    "web": false
+    "native": true,
+    "web": true
   },
   {
     "component": "RelatedCoverage",
@@ -341,7 +341,7 @@
   },
   {
     "component": "SnackProvider",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
