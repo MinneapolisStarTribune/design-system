@@ -30,6 +30,11 @@ export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/nativ
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PullQuote } from './EditorialContent/ArticleToolkit/PullQuote/native/PullQuote.native';
 export type { PullQuoteProps } from './EditorialContent/ArticleToolkit/PullQuote/PullQuote.types';
+export { SocialEmbeds } from './EditorialContent/ArticleToolkit/SocialEmbeds/native/SocialEmbeds.native';
+export type {
+  SocialEmbedsNativeProps,
+  SocialEmbedsProps,
+} from './EditorialContent/ArticleToolkit/SocialEmbeds/SocialEmbed.types';
 export {
   Checkbox,
   CHECKBOX_VARIANTS,
