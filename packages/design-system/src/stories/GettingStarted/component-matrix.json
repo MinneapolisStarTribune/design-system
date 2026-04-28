@@ -46,7 +46,7 @@
   },
   {
     "component": "CheckboxGroup",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -341,7 +341,7 @@
   },
   {
     "component": "SnackProvider",
-    "native": false,
+    "native": true,
     "web": true
   },
   {

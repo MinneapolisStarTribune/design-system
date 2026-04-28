@@ -17,5 +17,7 @@ export type ToastProps = ToastBaseProps & {
   exiting?: boolean;
 };
 
-/** Native Toast — same surface API as base; no web-only `exiting` prop. */
-export type ToastNativeProps = ToastBaseProps;
+/** Native Toast — supports exit animation state from the renderer. */
+export type ToastNativeProps = ToastBaseProps & {
+  exiting?: boolean;
+};
