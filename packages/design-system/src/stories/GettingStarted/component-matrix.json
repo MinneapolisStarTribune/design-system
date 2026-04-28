@@ -211,7 +211,7 @@
   },
   {
     "component": "SocialEmbeds",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
