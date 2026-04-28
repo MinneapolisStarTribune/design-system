@@ -341,7 +341,7 @@
   },
   {
     "component": "SnackProvider",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
