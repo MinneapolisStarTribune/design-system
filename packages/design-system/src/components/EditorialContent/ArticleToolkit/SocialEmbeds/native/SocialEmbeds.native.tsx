@@ -15,8 +15,8 @@ export const SocialEmbeds: React.FC<SocialEmbedsNativeProps> = ({
   accessibilityLabel,
 }) => {
   return (
-    <View testID={dataTestId} accessibilityLabel={accessibilityLabel} style={style}>
-      <View>{children}</View>
+    <View testID={dataTestId} accessible accessibilityLabel={accessibilityLabel} style={style}>
+      {children}
     </View>
   );
 };
