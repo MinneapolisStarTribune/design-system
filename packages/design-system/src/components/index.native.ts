@@ -12,10 +12,14 @@ export {
 export { Button, type ButtonNativeProps } from './Button/native/Button.native';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/native/AuthorBioCard.native';
-export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
-export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
-export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
-export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export {
+  DangerousCodeBlock,
+  type DangerousCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/native/DangerousCodeBlock.native';
+export {
+  EnhancedCodeBlock,
+  type EnhancedCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
 export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
 export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/native/ImageGallery.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
