@@ -35,6 +35,8 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
   const positionTypography = 'typography-utility-label-small-caps';
   const descriptionTypography = 'typography-utility-text-regular-small';
 
+  const showLabel = label !== '';
+
   return (
     <div
       className={classNames(
@@ -49,18 +51,14 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
       aria-describedby={ariaDescribedBy}
       aria-hidden={ariaHidden}
     >
-      {label && (
+      {showLabel && label && (
         <HeadingTag className={classNames(styles.heading, labelTypography)}>{label}</HeadingTag>
       )}
 
       <div className={styles.container}>
         {thumbnailIcon && (
           <div className={classNames(styles.imageWrapper, styles.imageCircle)}>
-            <Image
-              src={thumbnailIcon}
-              alt={thumbnailIconAlt ?? 'Author thumbnail'}
-              className={styles.image}
-            />
+            <Image src={thumbnailIcon} alt={thumbnailIconAlt ?? ''} className={styles.image} />
           </div>
         )}
 
@@ -81,7 +79,6 @@ export const AuthorBioCard: React.FC<AuthorBioCardProps> = ({
               icon={<ChevronRightIcon size="medium" />}
               iconPosition="end"
               dataTestId="author-bio-cta"
-              aria-label={ctaLink.label}
             >
               {ctaLabel}
             </Link>
