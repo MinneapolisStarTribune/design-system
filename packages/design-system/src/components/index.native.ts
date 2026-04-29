@@ -50,6 +50,11 @@ export {
 } from './FormControl/CheckboxGroup/native/CheckboxGroup.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export { Select } from './FormControl/Select/native/Select.native';
+export type {
+  SelectOption,
+  SelectNativeProps as SelectProps,
+} from './FormControl/Select/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/native/TextInput.native';
 export { FormGroupProvider, useFormGroupContext } from './FormGroup/FormGroupContext';
 export {
@@ -57,11 +62,11 @@ export {
   FormGroupCaption,
   type FormGroupCaptionNativeProps,
   type FormGroupCaptionVariant,
-} from './FormGroup/native/caption/FormGroup.Caption.native';
+} from './FormGroup/native/Caption/FormGroup.Caption.native';
 export {
   FormGroupDescription,
   type FormGroupDescriptionNativeProps,
-} from './FormGroup/native/description/FormGroup.Description.native';
+} from './FormGroup/native/Description/FormGroup.Description.native';
 export {
   FormGroup,
   FormGroupNative,
@@ -70,13 +75,14 @@ export {
 export {
   FormGroupLabel,
   type FormGroupLabelNativeProps,
-} from './FormGroup/native/label/FormGroup.Label.native';
+} from './FormGroup/native/Label/FormGroup.Label.native';
 export {
   createNativeIconWrapper,
   type NativeIconColor,
   type NativeIconSize,
   type NativeIconWrapperProps,
 } from './Icon/Icon.native';
+export { Image, type ImageProps } from './Image/native/Image.native';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
