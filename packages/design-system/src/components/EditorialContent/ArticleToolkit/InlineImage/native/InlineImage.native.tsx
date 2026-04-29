@@ -184,7 +184,9 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         style={styles.root}
         accessibilityLabel={accessibilityProps['aria-label']}
         accessibilityElementsHidden={accessibilityProps['aria-hidden']}
-        importantForAccessibility={accessibilityProps['aria-hidden'] ? 'no-hide-descendants' : 'auto'}
+        importantForAccessibility={
+          accessibilityProps['aria-hidden'] ? 'no-hide-descendants' : 'auto'
+        }
       >
         <View style={styles.imageWrapper}>
           <Image
