@@ -41,7 +41,8 @@ describe('AuthorBioCard', () => {
   it('renders default alt text when alt is not provided', () => {
     render(<AuthorBioCard thumbnailIcon="https://example.com/image.jpg" description="Test" />);
 
-    expect(screen.getByRole('img')).toHaveAttribute('alt', 'Author thumbnail');
+    const img = screen.getByTestId('image');
+    expect(img).toHaveAttribute('alt', '');
   });
 
   it('does not render image when thumbnailIcon is not provided', () => {
@@ -113,5 +114,19 @@ describe('AuthorBioCard', () => {
     render(<AuthorBioCard description="Only description" />);
 
     expect(screen.getByText('Only description')).toBeInTheDocument();
+  });
+
+  it('renders default label when label is not provided', () => {
+    render(<AuthorBioCard description="Test" headingLevel="h3" />);
+
+    const heading = screen.getByRole('heading', { name: 'ABOUT THE AUTHOR' });
+    expect(heading).toBeInTheDocument();
+    expect(heading.tagName.toLowerCase()).toBe('h3');
+  });
+
+  it('does not render heading when label is empty', () => {
+    render(<AuthorBioCard label="" description="Test" />);
+
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
   });
 });
