@@ -78,6 +78,7 @@ export {
   type NativeIconSize,
   type NativeIconWrapperProps,
 } from './Icon/Icon.native';
+export { Image, type ImageProps } from './Image/native/Image.native';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
