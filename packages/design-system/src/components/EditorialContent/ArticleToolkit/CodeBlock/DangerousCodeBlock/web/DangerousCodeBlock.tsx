@@ -3,7 +3,10 @@
 import React, { useRef, useLayoutEffect, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import styles from './DangerousCodeBlock.module.scss';
-import type { DangerousCodeBlockProps } from '../DangerousCodeBlock.types';
+import type { BaseDangerousCodeBlockProps } from '../DangerousCodeBlock.types';
+import { cleanMarkup } from '../DangerousCodeBlock.utils';
+
+export type DangerousCodeBlockProps = BaseDangerousCodeBlockProps;
 
 /**
  * DangerousCodeBlock renders raw HTML using React's
@@ -24,21 +27,9 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   const elRef = useRef<HTMLDivElement>(null);
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const cleanMarkup = useCallback(
-    (html: string): string => {
-      if (!html || !cleanQuotes) return html ?? '';
-
-      let cleaned = html.replace(/[’‘]/g, "'");
-      cleaned = cleaned.replace(/[“”″]/g, '"');
-
-      return cleaned;
-    },
-    [cleanQuotes]
-  );
-
   const content = useMemo(() => {
-    return cleanMarkup(markup);
-  }, [markup, cleanMarkup]);
+    return cleanMarkup(markup, cleanQuotes);
+  }, [markup, cleanQuotes]);
 
   const executeScripts = useCallback(() => {
     const el = elRef.current;

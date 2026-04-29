@@ -37,9 +37,50 @@ It is ideal for article content where styled or interactive code blocks are need
 - **className** – add custom styles.
 - **dataTestId** – used for testing; defaults to `enhanced-code-block`.
 
+## React Native usage
+
+`EnhancedCodeBlock` is available from the native entry point and composes `DangerousCodeBlock` with article-layout sizing.
+
+Use it when you need trusted HTML content to respect article-width variants like `full`, `large`, `medium`, or `inline` in mobile layouts.
+
+```tsx
+import { EnhancedCodeBlock } from '@minneapolisstartribune/design-system/native';
+
+const markup = `
+	<div style="padding: 16px; background: #f4f7fb; border-radius: 8px;">
+		<h3 style="margin: 0 0 8px 0;">Enhanced mobile block</h3>
+		<p style="margin: 0;">This example applies native size and variant styling.</p>
+	</div>
+`;
+
+export function NativeEnhancedCodeBlockExample() {
+  return <EnhancedCodeBlock markup={markup} variant="standard" size="full" />;
+}
+```
+
+### Native sizing usage
+
+```tsx
+import { EnhancedCodeBlock } from '@minneapolisstartribune/design-system/native';
+
+<EnhancedCodeBlock markup={markup} size="full" />;
+<EnhancedCodeBlock markup={markup} size="large" />;
+<EnhancedCodeBlock markup={markup} size="medium" variant="immersive" />;
+<EnhancedCodeBlock markup={markup} size="inline" />;
+```
+
+### Native accessibility and behavior notes
+
+- Native rendering uses the same `WebView`-backed HTML pipeline as `DangerousCodeBlock`.
+- `variant` and `size` control the outer React Native layout used around the embedded content.
+- `cleanQuotes` is passed through to the underlying dangerous block before rendering.
+- The `style` prop can be used to add container spacing or layout overrides.
+- Interactive native examples are available in mobile Storybook (`EnhancedCodeBlock.native.stories.tsx`).
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 ## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
 ---
 
 <Primary />
