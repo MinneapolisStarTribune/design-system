@@ -1,9 +1,15 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
-export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
-export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
-export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
+export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
+export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
+export {
+  DangerousCodeBlock,
+  type DangerousCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
+export {
+  EnhancedCodeBlock,
+  type EnhancedCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
 export {
   ImageGallery,
   type ImageGalleryProps,
@@ -27,8 +33,13 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export {
+  RadioGroup,
+  type RadioGroupProps,
+  type RadioOption,
+} from './FormControl/RadioGroup/web/RadioGroup';
+export type { SelectOption, SelectProps } from './FormControl/Select/Select.types';
 export { Select } from './FormControl/Select/web/Select';
-export type { SelectProps } from './FormControl/Select/web/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,

@@ -3,12 +3,12 @@ import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { UtilityBodyProps } from '../UtilityBody.types';
+import type { UtilityBodyNativeProps } from '../UtilityBody.types';
 import { UTILITY_BODY_SIZES, UTILITY_BODY_WEIGHTS } from '../UtilityBody.types';
 
 const toTokenSuffix = (value: string) => upperFirst(camelCase(value));
 
-export const UtilityBody: React.FC<UtilityBodyProps> = (props) => {
+export const UtilityBody: React.FC<UtilityBodyNativeProps> = (props) => {
   const {
     size = 'medium',
     weight = 'regular',
@@ -48,4 +48,5 @@ const createStyles = (theme: NativeTheme) => {
   ) as Record<string, NativeTheme['typographyUtilityTextRegularMedium']>;
 };
 
-export type { UtilityBodyProps, UtilityBodySize, UtilityBodyWeight } from '../UtilityBody.types';
+export type { UtilityBodyNativeProps as UtilityBodyProps } from '../UtilityBody.types';
+export type { UtilityBodySize, UtilityBodyWeight } from '../UtilityBody.types';

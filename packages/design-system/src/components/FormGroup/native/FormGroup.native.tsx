@@ -1,19 +1,19 @@
 import React, { Children, isValidElement } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { BaseProps } from '@/types/globalTypes';
+import type { NativeBaseProps } from '@/types/native-base-props';
 import { FormGroupProvider } from '../FormGroupContext';
 import {
   FormGroupCaption,
   type FormGroupCaptionNativeProps,
   type FormGroupCaptionVariant,
-} from './caption/FormGroup.Caption.native';
+} from './Caption/FormGroup.Caption.native';
 import {
   FormGroupDescription,
   type FormGroupDescriptionNativeProps,
-} from './description/FormGroup.Description.native';
-import { FormGroupLabel, type FormGroupLabelNativeProps } from './label/FormGroup.Label.native';
+} from './Description/FormGroup.Description.native';
+import { FormGroupLabel, type FormGroupLabelNativeProps } from './Label/FormGroup.Label.native';
 
-export interface FormGroupNativeRootProps extends Omit<BaseProps, 'style'> {
+export interface FormGroupNativeRootProps extends NativeBaseProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }

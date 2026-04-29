@@ -22,10 +22,11 @@ export type NativeIconSize = keyof typeof NATIVE_ICON_PIXEL_SIZES;
  * Maps semantic icon color names to NativeTheme token keys.
  * Consumers use short names: color="on-dark-secondary", color="brand-01".
  */
-export const NATIVE_ICON_COLOR_MAP: Record<string, keyof NativeTheme> = {
+export const NATIVE_ICON_COLOR_MAP = {
   'brand-01': 'colorIconBrand01',
   'brand-02': 'colorIconBrand02',
   'brand-03': 'colorIconBrand03',
+  'pull-quote-accent': 'semanticPullQuoteIconAccentColor',
   'on-dark-primary': 'colorIconOnDarkPrimary',
   'on-dark-secondary': 'colorIconOnDarkSecondary',
   'on-dark-tertiary': 'colorIconOnDarkTertiary',
@@ -36,7 +37,7 @@ export const NATIVE_ICON_COLOR_MAP: Record<string, keyof NativeTheme> = {
   'state-attention-on-light': 'colorIconStateAttentionOnLight',
   'state-disabled-on-dark': 'colorIconStateDisabledOnDark',
   'state-disabled-on-light': 'colorIconStateDisabledOnLight',
-};
+} as const satisfies Readonly<Record<string, keyof NativeTheme>>;
 
 export type NativeIconColor = keyof typeof NATIVE_ICON_COLOR_MAP;
 

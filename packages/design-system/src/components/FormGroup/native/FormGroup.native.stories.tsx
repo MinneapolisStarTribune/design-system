@@ -5,7 +5,7 @@ import { FormControl } from '@/components/FormControl/FormControl.native';
 import {
   FORM_GROUP_CAPTION_VARIANTS,
   type FormGroupCaptionVariant,
-} from './caption/FormGroup.Caption.native';
+} from './Caption/FormGroup.Caption.native';
 import { FormGroup as FormGroupNative } from './FormGroup.native';
 
 interface FormGroupNativeStoryArgs {

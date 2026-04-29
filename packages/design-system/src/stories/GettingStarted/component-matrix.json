@@ -41,12 +41,12 @@
   },
   {
     "component": "Checkbox",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
     "component": "CheckboxGroup",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -57,11 +57,11 @@
   {
     "component": "RadioGroup",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "TextInput",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -71,7 +71,7 @@
   },
   {
     "component": "Select",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -206,12 +206,12 @@
   },
   {
     "component": "PullQuote",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
     "component": "SocialEmbeds",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -236,8 +236,8 @@
   },
   {
     "component": "AuthorBioCard",
-    "native": false,
-    "web": false
+    "native": true,
+    "web": true
   },
   {
     "component": "RelatedCoverage",
@@ -341,7 +341,7 @@
   },
   {
     "component": "SnackProvider",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -351,7 +351,7 @@
   },
   {
     "component": "Image",
-    "native": false,
+    "native": true,
     "web": true
   }
 ]
