@@ -183,7 +183,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         testID={dataTestId}
         style={styles.root}
         accessibilityLabel={accessibilityProps['aria-label']}
-        accessibilityHint={accessibilityProps['aria-describedby']}
         accessibilityElementsHidden={accessibilityProps['aria-hidden']}
       >
         <View style={styles.imageWrapper}>
