@@ -53,14 +53,25 @@ describe('Image Accessibility', () => {
     expect(element.props.accessibilityLabel).toBe('Custom label');
   });
 
-  it('is accessible when pressable', () => {
-    const { getByTestId } = render(
-      <Image src="https://via.placeholder.com/150" alt="Pressable image" onPress={() => {}} />
-    );
+  it('returns undefined accessibilityLabel when no alt or label provided', () => {
+    const { getByTestId } = render(<Image src="https://via.placeholder.com/150" />);
 
     const element = getByTestId('image');
 
-    expect(element.props.accessible).toBe(true);
-    expect(element.props.accessibilityRole).toBe('image');
+    expect(element.props.accessibilityLabel).toBeUndefined();
+  });
+
+  it('is accessible when pressable (image + pressable)', () => {
+    const { queryByTestId, getByTestId } = render(
+      <Image src="https://via.placeholder.com/150" alt="Pressable image" onPress={() => {}} />
+    );
+
+    const image = queryByTestId('image');
+    const pressable = getByTestId('image-pressable');
+
+    expect(image).toBeNull();
+
+    expect(pressable.props.accessibilityRole).toBe('button');
+    expect(pressable.props.accessibilityLabel).toBe('Pressable image');
   });
 });

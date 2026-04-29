@@ -32,8 +32,8 @@ export {
   type RadioGroupProps,
   type RadioOption,
 } from './FormControl/RadioGroup/web/RadioGroup';
+export type { SelectOption, SelectProps } from './FormControl/Select/Select.types';
 export { Select } from './FormControl/Select/web/Select';
-export type { SelectProps } from './FormControl/Select/web/Select.types';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,

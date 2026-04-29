@@ -14,7 +14,7 @@ export interface ImageProps
   extends Omit<NativeImageProps, 'source' | 'style'>,
     Omit<BaseProps, 'className' | 'style'> {
   src: string;
-  alt: string;
+  alt?: string;
   imgixParams?: string;
 
   style?: StyleProp<ImageStyle>;
@@ -29,29 +29,55 @@ export const Image: React.FC<ImageProps> = ({
   dataTestId = 'image',
   accessibilityLabel,
   onPress,
+  accessible: accessibleProp,
   ...rest
 }) => {
   const finalSrc = useMemo(() => {
-    return imgixParams ? `${src}?${imgixParams}` : src;
+    if (!imgixParams) return src;
+
+    const cleanedParams = imgixParams.startsWith('?') ? imgixParams.slice(1) : imgixParams;
+    const separator = src.includes('?') ? '&' : '?';
+
+    return `${src}${separator}${cleanedParams}`;
   }, [src, imgixParams]);
 
-  const imageElement = (
+  const resolvedLabel = accessibilityLabel || alt || undefined;
+  const hasName = Boolean(resolvedLabel);
+  const accessible = accessibleProp ?? hasName;
+
+  if (onPress) {
+    return (
+      <Pressable
+        onPress={onPress}
+        testID={`${dataTestId}-pressable`}
+        accessible={accessible}
+        accessibilityRole="button"
+        accessibilityLabel={resolvedLabel}
+      >
+        <NativeImage
+          source={{ uri: finalSrc }}
+          style={style}
+          testID={dataTestId}
+          accessible={false}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden
+          {...rest}
+        />
+      </Pressable>
+    );
+  }
+
+  return (
     <NativeImage
       source={{ uri: finalSrc }}
       style={style}
       testID={dataTestId}
-      accessible
+      accessible={accessible}
       accessibilityRole="image"
-      accessibilityLabel={accessibilityLabel || alt}
+      accessibilityLabel={resolvedLabel}
       {...rest}
     />
   );
-
-  if (onPress) {
-    return <Pressable onPress={onPress}>{imageElement}</Pressable>;
-  }
-
-  return imageElement;
 };
 
 Image.displayName = 'Image';
