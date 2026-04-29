@@ -163,7 +163,18 @@ export const InlineImage: React.FC<InlineImageProps> = ({
     if (!purchaseLink) {
       return;
     }
-    await Linking.openURL(purchaseLink);
+
+    try {
+      const canOpenPurchaseLink = await Linking.canOpenURL(purchaseLink);
+
+      if (!canOpenPurchaseLink) {
+        return;
+      }
+
+      await Linking.openURL(purchaseLink);
+    } catch (error) {
+      console.warn('Failed to open purchase link', error);
+    }
   };
 
   return (
