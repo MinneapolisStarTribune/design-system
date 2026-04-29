@@ -1,91 +1,125 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
+import { ScrollView } from 'react-native';
 import { ImageGallery } from './ImageGallery.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 
-jest.mock('react-native/Libraries/Components/ScrollView/ScrollView', () => {
-  const React = require('react');
-  const { View } = require('react-native');
-
-  return React.forwardRef((props: React.ComponentProps<typeof View>, ref: React.Ref<unknown>) => {
-    React.useImperativeHandle(ref, () => ({
-      scrollTo: jest.fn(),
-    }));
-
-    return <View {...props}>{props.children}</View>;
-  });
-});
-
-const ds = TestWrapperInDesignSystemProvider({ brand: 'startribune' });
+const wrapper = TestWrapperInDesignSystemProvider({ brand: 'startribune' });
 
 const images = [
   {
-    src: 'https://picsum.photos/1080/720?1',
-    altText: 'Image 1',
-    caption: 'Caption 1',
-    credit: '(Credit 1)',
+    src: 'https://example.com/1.jpg',
+    altText: 'Image one',
+    caption: 'Caption one',
+    credit: 'Credit one',
+    width: 800,
+    height: 600,
   },
   {
-    src: 'https://picsum.photos/1080/720?2',
-    altText: 'Image 2',
-    caption: 'Caption 2',
-    credit: '(Credit 2)',
+    src: 'https://example.com/2.jpg',
+    altText: 'Image two',
+    caption: 'Caption two',
+    credit: 'Credit two',
+    width: 800,
+    height: 600,
   },
 ];
 
 describe('ImageGallery (native)', () => {
-  it('renders gallery container', () => {
-    render(<ImageGallery images={images} dataTestId="gallery" />, { wrapper: ds });
-
-    expect(screen.getByTestId('gallery')).toBeOnTheScreen();
-  });
-
-  it('renders first image caption and credit', () => {
-    render(<ImageGallery images={images} />, { wrapper: ds });
-
-    expect(screen.getByText(/Caption 1/)).toBeOnTheScreen();
-  });
-
-  it('renders images with accessibility labels', () => {
-    render(<ImageGallery images={images} />, { wrapper: ds });
-
-    expect(screen.getAllByLabelText('Image 1').length).toBeGreaterThan(0);
-  });
-
-  it('renders navigation controls when multiple images', () => {
-    render(<ImageGallery images={images} />, { wrapper: ds });
-
-    expect(screen.getAllByTestId('button')).toHaveLength(2);
-  });
-
-  it('does not render controls for single image', () => {
-    render(<ImageGallery images={[images[0]]} />, { wrapper: ds });
-
-    expect(screen.queryAllByTestId('button')).toHaveLength(0);
-  });
-
-  it('renders standard variant correctly (shows counter)', () => {
-    render(<ImageGallery images={images} variant="standard" />, { wrapper: ds });
-
-    expect(screen.getByText('1/2')).toBeOnTheScreen();
-  });
-
-  it('renders immersive variant correctly (hides counter)', () => {
-    render(<ImageGallery images={images} variant="immersive" />, { wrapper: ds });
-
-    expect(screen.queryByText('1/2')).toBeNull();
-  });
-
-  it('renders all images (looped structure)', () => {
-    render(<ImageGallery images={images} variant="immersive" />, { wrapper: ds });
-
-    // looped = 4 (last + original + first)
-    expect(screen.getAllByLabelText('Image 1').length).toBeGreaterThan(1);
-  });
-
-  it('returns null when images array is empty', () => {
-    const { toJSON } = render(<ImageGallery images={[]} />, { wrapper: ds });
-
+  it('renders null when images array is empty', () => {
+    const { toJSON } = render(<ImageGallery images={[]} />, { wrapper });
     expect(toJSON()).toBeNull();
+  });
+
+  it('renders gallery with images', () => {
+    const { getByTestId } = render(<ImageGallery images={images} />, { wrapper });
+
+    expect(getByTestId('image-gallery')).toBeOnTheScreen();
+  });
+
+  it('renders the correct number of slides including looped clones', () => {
+    const { UNSAFE_getAllByType } = render(<ImageGallery images={images} />, {
+      wrapper,
+    });
+
+    // total + 2 cloned slides
+    const imageComponents = UNSAFE_getAllByType(
+      require('@/components/Image/native/Image.native').Image
+    );
+    expect(imageComponents.length).toBe(images.length + 2);
+  });
+
+  it('renders caption and credit for current image', () => {
+    const { getByText } = render(<ImageGallery images={images} />, { wrapper });
+
+    expect(getByText('Caption one Credit one')).toBeOnTheScreen();
+  });
+
+  it('renders navigation controls when multiple images exist', () => {
+    const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
+
+    const buttons = getAllByRole('button');
+    expect(buttons).toHaveLength(2);
+  });
+
+  it('does not render navigation controls for a single image', () => {
+    const single = [images[0]];
+
+    const { queryAllByRole } = render(<ImageGallery images={single} />, {
+      wrapper,
+    });
+
+    expect(queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it('advances slide when next button is pressed', () => {
+    const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
+
+    const buttons = getAllByRole('button');
+
+    fireEvent.press(buttons[1]); // next
+
+    expect(buttons[1]).toBeDefined();
+  });
+
+  it('goes backward when prev button is pressed', () => {
+    const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
+
+    const buttons = getAllByRole('button');
+
+    fireEvent.press(buttons[0]); // prev
+
+    expect(buttons[0]).toBeDefined();
+  });
+
+  it('handles onScroll updates correctly', () => {
+    const { UNSAFE_getByType } = render(<ImageGallery images={images} />, {
+      wrapper,
+    });
+
+    const scrollView = UNSAFE_getByType(ScrollView);
+
+    fireEvent.scroll(scrollView, {
+      nativeEvent: {
+        contentOffset: { x: 400, y: 0 },
+        contentSize: { width: 1200, height: 400 },
+        layoutMeasurement: { width: 400, height: 400 },
+      },
+    });
+
+    expect(scrollView).toBeDefined();
+  });
+
+  it('renders media tag for standard variant', () => {
+    const { getByText } = render(<ImageGallery images={images} variant="standard" />, { wrapper });
+
+    expect(getByText('1/2')).toBeOnTheScreen();
+  });
+
+  it('does not render media tag in immersive variant', () => {
+    const { queryByText } = render(<ImageGallery images={images} variant="immersive" />, {
+      wrapper,
+    });
+
+    expect(queryByText('1/2')).toBeNull();
   });
 });

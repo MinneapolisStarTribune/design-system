@@ -14,9 +14,8 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 
-import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
 import { ImageGalleryProps, Variant } from '../ImageGallery.types';
-import { Button } from '@/index.native';
+import { Button, CameraFilledIcon, ChevronLeftIcon, ChevronRightIcon } from '@/index.native';
 import {
   Image as DSImage,
   ImageProps as NativeImageProps,
