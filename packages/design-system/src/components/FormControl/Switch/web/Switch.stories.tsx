@@ -29,11 +29,21 @@ const meta = {
       control: 'select',
       options: ['neutral', 'brand'],
       description: 'Switch color style.',
+      table: {
+        type: {
+          summary: "'neutral' | 'brand'",
+        },
+      },
     },
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
       description: 'Switch size.',
+      table: {
+        type: {
+          summary: "'small' | 'medium' | 'large'",
+        },
+      },
     },
     selected: {
       control: 'boolean',
@@ -47,6 +57,11 @@ const meta = {
       control: 'select',
       options: ['start', 'end'],
       description: 'Position of the label relative to the switch.',
+      table: {
+        type: {
+          summary: "'start' | 'end'",
+        },
+      },
     },
     caption: {
       control: 'text',

@@ -124,6 +124,74 @@
         "type": "dimension",
         "value": 535
       }
+    },
+    "switch": {
+      "large": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 22
+          },
+          "width": {
+            "type": "dimension",
+            "value": 22
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 28
+          },
+          "width": {
+            "type": "dimension",
+            "value": 58
+          }
+        }
+      },
+      "medium": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 18
+          },
+          "width": {
+            "type": "dimension",
+            "value": 18
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 24
+          },
+          "width": {
+            "type": "dimension",
+            "value": 50
+          }
+        }
+      },
+      "small": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 14
+          },
+          "width": {
+            "type": "dimension",
+            "value": 14
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 20
+          },
+          "width": {
+            "type": "dimension",
+            "value": 42
+          }
+        }
+      }
     }
   }
 }

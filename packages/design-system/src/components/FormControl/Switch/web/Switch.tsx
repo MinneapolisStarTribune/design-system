@@ -2,7 +2,6 @@
 
 import React, { useId } from 'react';
 import classNames from 'classnames';
-import { UtilityLabel } from '@/components/Typography/Utility';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import styles from './Switch.module.scss';
 import type { BaseSwitchProps } from '../Switch.types';
@@ -16,12 +15,6 @@ export interface SwitchProps extends BaseSwitchProps, AccessibilityProps {
   /** Override computed aria-labelledby. */
   'aria-labelledby'?: string;
 }
-
-const LABEL_SIZE_BY_SWITCH_SIZE = {
-  small: 'small',
-  medium: 'medium',
-  large: 'large',
-} as const;
 
 const CHECK_ICON_SIZE_BY_SWITCH_SIZE = {
   small: 'x-small',
@@ -65,6 +58,18 @@ export const Switch: React.FC<SwitchProps> = ({
 
   const ariaDescribedBy = ariaDescribedByProp ?? composedDescribedBy;
 
+  const [isFocusVisible, setIsFocusVisible] = React.useState(false);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.matches(':focus-visible')) {
+      setIsFocusVisible(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setIsFocusVisible(false);
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.checked);
   };
@@ -78,6 +83,7 @@ export const Switch: React.FC<SwitchProps> = ({
         {
           [styles.selected]: selected,
           [styles.disabled]: isDisabled,
+          [styles.focused]: isFocusVisible,
         },
         className
       )}
@@ -93,11 +99,14 @@ export const Switch: React.FC<SwitchProps> = ({
           checked={selected}
           disabled={isDisabled}
           onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
           aria-describedby={ariaDescribedBy}
           className={styles.input}
         />
+
         <span className={styles.track} aria-hidden="true">
           {selected && (
             <CheckIcon
@@ -108,6 +117,7 @@ export const Switch: React.FC<SwitchProps> = ({
               aria-hidden
             />
           )}
+
           <span className={styles.thumb} />
         </span>
       </span>
@@ -120,16 +130,14 @@ export const Switch: React.FC<SwitchProps> = ({
           })}
         >
           {label && (
-            <UtilityLabel
-              as="span"
+            <span
               id={localLabelId}
-              size={LABEL_SIZE_BY_SWITCH_SIZE[size]}
-              weight="regular"
-              className={styles.label}
+              className={classNames(styles.label, `typography-utility-text-regular-${size}`)}
             >
               {label}
-            </UtilityLabel>
+            </span>
           )}
+
           {caption && (
             <span
               id={localCaptionId}
