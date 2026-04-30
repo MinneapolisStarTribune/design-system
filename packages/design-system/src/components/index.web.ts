@@ -10,10 +10,8 @@ export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
-export {
-  ImageGallery,
-  type ImageGalleryProps,
-} from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
 export {

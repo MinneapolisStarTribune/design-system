@@ -20,6 +20,8 @@ export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/native/ImageGallery.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
 export { InlineImage } from './EditorialContent/ArticleToolkit/InlineImage/native/InlineImage.native';
 export {
