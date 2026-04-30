@@ -1,3 +1,4 @@
+import { IconOnlyButtonSize } from '@/components/Button/web/Button.types';
 import { ButtonProps } from '@/index.web';
 import { ReactNode } from 'react';
 import type { SwiperOptions } from 'swiper/types';
@@ -12,7 +13,7 @@ export interface SwiperCarouselProps {
   className?: string;
 }
 
-export type NavigationSize = 'medium' | 'large';
+export type NavigationSize = IconOnlyButtonSize;
 
 export interface NavigationProps {
   className?: string;
