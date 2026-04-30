@@ -43,7 +43,8 @@ export function useNativeStyles<T>(factory: (theme: NativeTheme) => T): T {
           ? varsityLightTheme
           : varsityDarkTheme;
 
-    const typography = brand === 'startribune' ? startribuneTypography : varsityTypography;
+    const typography: TypographyTokens =
+      brand === 'startribune' ? startribuneTypography : varsityTypography;
 
     return {
       ...baseTheme,
