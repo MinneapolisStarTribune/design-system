@@ -30,7 +30,7 @@ const getSpaceBetween = (): number => {
   return 24;
 };
 
-export const ImageGallery: React.FC<ImageGalleryProps> = ({
+export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   images,
   variant = 'standard',
   ImageComponent,

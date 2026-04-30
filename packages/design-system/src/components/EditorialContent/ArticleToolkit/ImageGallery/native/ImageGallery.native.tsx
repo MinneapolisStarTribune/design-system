@@ -12,6 +12,7 @@ import {
   type TextStyle,
   type StyleProp,
   type LayoutChangeEvent,
+  type ImageStyle,
 } from 'react-native';
 
 import { ImageGalleryProps, Variant } from '../ImageGallery.types';
@@ -52,59 +53,64 @@ const getButtonSize = (width: number): 'small' | 'large' =>
 
 function createStyles(theme: NativeTheme) {
   return {
-    gallery: { width: '100%' as const } satisfies ViewStyle,
-    innerContainer: { width: '100%' as const, position: 'relative' as const } satisfies ViewStyle,
+    gallery: { width: '100%' } as ViewStyle,
+    innerContainer: { width: '100%', position: 'relative' } as ViewStyle,
     slide: {
-      overflow: 'hidden' as const,
+      overflow: 'hidden',
       borderRadius: theme.semanticPhotoLayoutBorderRadius,
-    } satisfies ViewStyle,
+    } as ViewStyle,
     imageWrapper: {
-      width: '100%' as const,
-      overflow: 'hidden' as const,
-    } satisfies ViewStyle,
+      width: '100%',
+      overflow: 'hidden',
+    } as ViewStyle,
     image: {
-      width: '100%' as const,
-      height: '100%' as const,
-    } satisfies ViewStyle,
+      width: '100%',
+      height: '100%',
+    } as ImageStyle,
     mediaTag: {
-      position: 'absolute' as const,
+      position: 'absolute',
       bottom: theme.spacing16,
       left: theme.spacing16,
-      flexDirection: 'row' as const,
-      alignItems: 'center' as const,
+      flexDirection: 'row',
+      alignItems: 'center',
       paddingVertical: theme.spacing4,
       paddingHorizontal: theme.spacing6,
       borderRadius: theme.radius6,
       backgroundColor: 'rgba(0,0,0,0.3)',
-    } satisfies ViewStyle,
+    } as ViewStyle,
     mediaTagText: {
       color: theme.colorBaseWhite,
-    } satisfies TextStyle,
+    } as TextStyle,
     bottomSection: {
       marginTop: theme.spacing8,
-      flexDirection: 'row' as const,
-      justifyContent: 'space-between' as const,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       gap: theme.spacing20,
-    } satisfies ViewStyle,
-    captionContainer: { flex: 1 } satisfies ViewStyle,
-    caption: { color: theme.colorTextOnLightSecondary } satisfies TextStyle,
+    } as ViewStyle,
+    captionContainer: { flex: 1 } as ViewStyle,
+    caption: { color: theme.colorTextOnLightSecondary } as TextStyle,
     controls: {
-      flexDirection: 'row' as const,
+      flexDirection: 'row',
       gap: theme.spacing4,
       marginLeft: theme.spacing16,
-    } satisfies ViewStyle,
+    } as ViewStyle,
     navButton: {
       borderWidth: 1,
       borderColor: theme.colorBorderOnDarkSubtle01,
-    } satisfies ViewStyle,
+    } as ViewStyle,
   };
 }
 
-export const ImageGallery: React.FC<ImageGalleryProps> = ({
+export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   images,
   variant = 'standard',
+  loop,
   ImageComponent,
   style,
+  imageStyle,
+  wrapperStyle,
+  captionStyle,
+  controlsStyle,
   dataTestId = 'image-gallery',
   'aria-label': ariaLabel,
 }) => {
@@ -117,10 +123,9 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   }
 
   const styles = useNativeStyles(createStyles);
-
   const scrollRef = useRef<ScrollView>(null);
 
-  const [dimensions, setDimensions] = useState<{ width: number; height: number }>(() => {
+  const [dimensions, setDimensions] = useState(() => {
     const { width } = Dimensions.get('window');
     return { width, height: 0 };
   });
@@ -128,11 +133,14 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   const isImmersive = variant === 'immersive';
   const total = images.length;
 
-  const loopedImages = total > 1 ? [images[total - 1], ...images, images[0]] : images;
+  const shouldLoop = loop !== undefined ? loop : isImmersive;
+  const hasLoop = shouldLoop && total > 1;
 
-  const [index, setIndex] = useState<number>(1);
+  const loopedImages = hasLoop ? [images[total - 1], ...images, images[0]] : images;
 
-  const Img = (ImageComponent ?? DSImage) as React.ComponentType<NativeImageProps>;
+  const [index, setIndex] = useState(hasLoop ? 1 : 0);
+
+  const Img: React.ComponentType<NativeImageProps> = ImageComponent ?? DSImage;
 
   const spaceBetween = getSpaceBetween(dimensions.width);
   const maxWidth = getMaxWidth(dimensions.width, variant);
@@ -142,63 +150,68 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
   const scale = dimensions.width / BASE_WIDTH;
 
   const slideWidth = isImmersive ? Math.min(358 * scale, maxWidth) : dimensions.width;
-
   const sideSpacing = isImmersive ? Math.max((dimensions.width - slideWidth) / 2, 0) : 0;
+  const interval = slideWidth + spaceBetween;
 
-  // initial positioning to center first real slide (skip cloned first)
+  useEffect(() => {
+    if (!isImmersive || !hasLoop) return;
+
+    scrollRef.current?.scrollTo({
+      x: interval,
+      animated: false,
+    });
+  }, [isImmersive, interval, hasLoop]);
+
   useEffect(() => {
     if (!isImmersive) return;
 
     scrollRef.current?.scrollTo({
-      x: slideWidth + spaceBetween,
+      x: index * interval,
       animated: false,
     });
-  }, [isImmersive, slideWidth, spaceBetween]);
+  }, [interval, isImmersive, index]);
 
-  const handleScroll = useCallback(
+  const handleMomentumEnd = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const offsetX = event.nativeEvent.contentOffset.x;
-      const nextIndex = Math.round(offsetX / (slideWidth + spaceBetween));
+      let nextIndex = Math.floor((offsetX + interval / 2) / interval);
 
-      if (nextIndex === index) return;
+      if (hasLoop) {
+        if (nextIndex === 0) {
+          scrollRef.current?.scrollTo({ x: total * interval, animated: false });
+          nextIndex = total;
+        } else if (nextIndex === total + 1) {
+          scrollRef.current?.scrollTo({ x: interval, animated: false });
+          nextIndex = 1;
+        }
+      }
 
       setIndex(nextIndex);
 
       if (Platform.OS !== 'web') {
-        const normalized = nextIndex === 0 ? total : nextIndex === total + 1 ? 1 : nextIndex;
-
+        const normalized = hasLoop ? nextIndex : nextIndex + 1;
         AccessibilityInfo.announceForAccessibility(`Image ${normalized} of ${total}`);
       }
     },
-    [index, slideWidth, spaceBetween, total]
+    [interval, total, hasLoop]
   );
 
   const scrollTo = (i: number) => {
     scrollRef.current?.scrollTo({
-      x: i * (slideWidth + spaceBetween),
+      x: i * interval,
       animated: true,
     });
   };
 
-  const handlePrev = () => scrollTo(index - 1);
-  const handleNext = () => scrollTo(index + 1);
+  const handlePrev = () => {
+    if (!hasLoop && index === 0) return;
+    scrollTo(index - 1);
+  };
 
-  // loop correction without animation to avoid flicker
-  useEffect(() => {
-    if (!isImmersive) return;
-
-    if (index === 0) {
-      scrollRef.current?.scrollTo({
-        x: total * (slideWidth + spaceBetween),
-        animated: false,
-      });
-    } else if (index === total + 1) {
-      scrollRef.current?.scrollTo({
-        x: slideWidth + spaceBetween,
-        animated: false,
-      });
-    }
-  }, [index, isImmersive, total, slideWidth, spaceBetween]);
+  const handleNext = () => {
+    if (!hasLoop && index === total - 1) return;
+    scrollTo(index + 1);
+  };
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -207,7 +220,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
 
   if (!images?.length) return null;
 
-  const realIndex = index === 0 ? total - 1 : index === total + 1 ? 0 : index - 1;
+  let realIndex = index;
+  if (hasLoop) {
+    if (index === 0) realIndex = total - 1;
+    else if (index === total + 1) realIndex = 0;
+    else realIndex = index - 1;
+  }
 
   const currentImage = images[realIndex];
 
@@ -223,12 +241,11 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           ref={scrollRef}
           horizontal
           showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          snapToInterval={slideWidth + spaceBetween}
+          onMomentumScrollEnd={handleMomentumEnd}
+          snapToInterval={interval}
           snapToAlignment="start"
           decelerationRate="fast"
-          disableIntervalMomentum
+          disableIntervalMomentum={false}
           contentContainerStyle={{
             alignItems: 'center',
             gap: spaceBetween,
@@ -241,13 +258,19 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
             const aspectRatio = width / height;
 
             return (
-              <View key={`${img.src}-${i}`} style={[styles.slide, { width: slideWidth }]}>
-                <View style={[styles.imageWrapper, { aspectRatio }]}>
+              <View
+                key={`${img.src}-${i}`}
+                style={[styles.slide, { width: slideWidth }]}
+                accessible
+                accessibilityRole="image"
+                accessibilityLabel={`${img.altText}. Image ${realIndex + 1} of ${total}`}
+              >
+                <View style={[styles.imageWrapper, { aspectRatio }, wrapperStyle]}>
                   <Img
                     src={img.src}
                     alt={img.altText}
                     imgixParams={img.imgixParams}
-                    style={styles.image}
+                    style={[styles.image, imageStyle]}
                   />
                 </View>
               </View>
@@ -268,7 +291,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
       <View style={styles.bottomSection}>
         <View style={styles.captionContainer}>
           {(currentImage?.caption || currentImage?.credit) && (
-            <Text style={styles.caption}>
+            <Text style={[styles.caption, captionStyle]}>
               {currentImage.caption}
               {currentImage.credit ? ` ${currentImage.credit}` : ''}
             </Text>
@@ -276,7 +299,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
         </View>
 
         {total > 1 && (
-          <View style={styles.controls}>
+          <View style={[styles.controls, controlsStyle]}>
             <Button
               variant="ghost"
               size={buttonSize}

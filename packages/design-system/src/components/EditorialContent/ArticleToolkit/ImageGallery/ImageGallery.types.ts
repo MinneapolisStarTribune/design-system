@@ -1,5 +1,5 @@
-import { ImageProps } from '@/index.web';
 import { AccessibilityProps, BaseProps } from '@/types';
+import { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 
 export type Variant = 'standard' | 'immersive';
 
@@ -13,13 +13,20 @@ export interface ImageItem {
   imgixParams?: string;
 }
 
-export interface ImageGalleryProps extends BaseProps, AccessibilityProps {
+export interface ImageGalleryProps<TImageProps> extends BaseProps, AccessibilityProps {
   images: ImageItem[];
   variant?: Variant;
-  ImageComponent?: React.ComponentType<ImageProps>;
-  className?: string;
+  loop?: boolean;
+
+  ImageComponent?: React.ComponentType<TImageProps>;
+
   imageClassName?: string;
   wrapperClassName?: string;
   captionClassName?: string;
   controlsClassName?: string;
+
+  imageStyle?: StyleProp<ImageStyle>;
+  wrapperStyle?: StyleProp<ViewStyle>;
+  captionStyle?: StyleProp<TextStyle>;
+  controlsStyle?: StyleProp<ViewStyle>;
 }

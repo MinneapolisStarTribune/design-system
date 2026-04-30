@@ -30,95 +30,106 @@ describe('ImageGallery (native)', () => {
     expect(toJSON()).toBeNull();
   });
 
-  it('renders gallery with images', () => {
+  it('renders gallery container', () => {
     const { getByTestId } = render(<ImageGallery images={images} />, { wrapper });
-
-    expect(getByTestId('image-gallery')).toBeOnTheScreen();
+    expect(getByTestId('image-gallery')).toBeTruthy();
   });
 
-  it('renders the correct number of slides including looped clones', () => {
-    const { UNSAFE_getAllByType } = render(<ImageGallery images={images} />, {
-      wrapper,
-    });
+  it('renders looped slides when looping is enabled', () => {
+    const { UNSAFE_getAllByType } = render(
+      <ImageGallery images={images} loop />,
+      { wrapper }
+    );
 
-    // total + 2 cloned slides
     const imageComponents = UNSAFE_getAllByType(
       require('@/components/Image/native/Image.native').Image
     );
+
     expect(imageComponents.length).toBe(images.length + 2);
   });
 
-  it('renders caption and credit for current image', () => {
+  it('renders normal slides when looping is disabled', () => {
+    const { UNSAFE_getAllByType } = render(
+      <ImageGallery images={images} loop={false} />,
+      { wrapper }
+    );
+
+    const imageComponents = UNSAFE_getAllByType(
+      require('@/components/Image/native/Image.native').Image
+    );
+
+    expect(imageComponents.length).toBe(images.length);
+  });
+
+  it('renders caption and credit', () => {
     const { getByText } = render(<ImageGallery images={images} />, { wrapper });
 
-    expect(getByText('Caption one Credit one')).toBeOnTheScreen();
+    expect(getByText('Caption one Credit one')).toBeTruthy();
   });
 
-  it('renders navigation controls when multiple images exist', () => {
+  it('renders navigation buttons for multiple images', () => {
     const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
 
-    const buttons = getAllByRole('button');
-    expect(buttons).toHaveLength(2);
+    expect(getAllByRole('button')).toHaveLength(2);
   });
 
-  it('does not render navigation controls for a single image', () => {
-    const single = [images[0]];
-
-    const { queryAllByRole } = render(<ImageGallery images={single} />, {
-      wrapper,
-    });
+  it('does not render navigation buttons for single image', () => {
+    const { queryAllByRole } = render(
+      <ImageGallery images={[images[0]]} />,
+      { wrapper }
+    );
 
     expect(queryAllByRole('button')).toHaveLength(0);
   });
 
-  it('advances slide when next button is pressed', () => {
+  it('handles next button press', () => {
     const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
 
-    const buttons = getAllByRole('button');
+    const [, next] = getAllByRole('button');
+    fireEvent.press(next);
 
-    fireEvent.press(buttons[1]); // next
-
-    expect(buttons[1]).toBeDefined();
+    expect(next).toBeTruthy();
   });
 
-  it('goes backward when prev button is pressed', () => {
+  it('handles prev button press', () => {
     const { getAllByRole } = render(<ImageGallery images={images} />, { wrapper });
 
-    const buttons = getAllByRole('button');
+    const [prev] = getAllByRole('button');
+    fireEvent.press(prev);
 
-    fireEvent.press(buttons[0]); // prev
-
-    expect(buttons[0]).toBeDefined();
+    expect(prev).toBeTruthy();
   });
 
-  it('handles onScroll updates correctly', () => {
+  it('handles momentum scroll event', () => {
     const { UNSAFE_getByType } = render(<ImageGallery images={images} />, {
       wrapper,
     });
 
     const scrollView = UNSAFE_getByType(ScrollView);
 
-    fireEvent.scroll(scrollView, {
+    fireEvent(scrollView, 'momentumScrollEnd', {
       nativeEvent: {
         contentOffset: { x: 400, y: 0 },
-        contentSize: { width: 1200, height: 400 },
-        layoutMeasurement: { width: 400, height: 400 },
       },
     });
 
-    expect(scrollView).toBeDefined();
+    expect(scrollView).toBeTruthy();
   });
 
   it('renders media tag for standard variant', () => {
-    const { getByText } = render(<ImageGallery images={images} variant="standard" />, { wrapper });
+    const { getByText } = render(
+      <ImageGallery images={images} variant="standard" />,
+      { wrapper }
+    );
 
-    expect(getByText('1/2')).toBeOnTheScreen();
+    expect(getByText('1/2')).toBeTruthy();
   });
 
-  it('does not render media tag in immersive variant', () => {
-    const { queryByText } = render(<ImageGallery images={images} variant="immersive" />, {
-      wrapper,
-    });
+  it('does not render media tag for immersive variant', () => {
+    const { queryByText } = render(
+      <ImageGallery images={images} variant="immersive" />,
+      { wrapper }
+    );
 
     expect(queryByText('1/2')).toBeNull();
   });

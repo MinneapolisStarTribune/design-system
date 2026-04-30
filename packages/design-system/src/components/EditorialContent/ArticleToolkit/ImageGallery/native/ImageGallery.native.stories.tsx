@@ -41,6 +41,10 @@ const meta: Meta<typeof ImageGallery> = {
       control: 'text',
       description: 'Accessibility label for the gallery.',
     },
+    loop: {
+      control: 'boolean',
+      description: 'Whether the gallery should loop when navigating.',
+    },
   },
 };
 
