@@ -36,10 +36,7 @@ describe('ImageGallery (native)', () => {
   });
 
   it('renders looped slides when looping is enabled', () => {
-    const { UNSAFE_getAllByType } = render(
-      <ImageGallery images={images} loop />,
-      { wrapper }
-    );
+    const { UNSAFE_getAllByType } = render(<ImageGallery images={images} loop />, { wrapper });
 
     const imageComponents = UNSAFE_getAllByType(
       require('@/components/Image/native/Image.native').Image
@@ -49,10 +46,9 @@ describe('ImageGallery (native)', () => {
   });
 
   it('renders normal slides when looping is disabled', () => {
-    const { UNSAFE_getAllByType } = render(
-      <ImageGallery images={images} loop={false} />,
-      { wrapper }
-    );
+    const { UNSAFE_getAllByType } = render(<ImageGallery images={images} loop={false} />, {
+      wrapper,
+    });
 
     const imageComponents = UNSAFE_getAllByType(
       require('@/components/Image/native/Image.native').Image
@@ -74,10 +70,7 @@ describe('ImageGallery (native)', () => {
   });
 
   it('does not render navigation buttons for single image', () => {
-    const { queryAllByRole } = render(
-      <ImageGallery images={[images[0]]} />,
-      { wrapper }
-    );
+    const { queryAllByRole } = render(<ImageGallery images={[images[0]]} />, { wrapper });
 
     expect(queryAllByRole('button')).toHaveLength(0);
   });
@@ -117,19 +110,15 @@ describe('ImageGallery (native)', () => {
   });
 
   it('renders media tag for standard variant', () => {
-    const { getByText } = render(
-      <ImageGallery images={images} variant="standard" />,
-      { wrapper }
-    );
+    const { getByText } = render(<ImageGallery images={images} variant="standard" />, { wrapper });
 
     expect(getByText('1/2')).toBeTruthy();
   });
 
   it('does not render media tag for immersive variant', () => {
-    const { queryByText } = render(
-      <ImageGallery images={images} variant="immersive" />,
-      { wrapper }
-    );
+    const { queryByText } = render(<ImageGallery images={images} variant="immersive" />, {
+      wrapper,
+    });
 
     expect(queryByText('1/2')).toBeNull();
   });
