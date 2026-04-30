@@ -51,7 +51,7 @@
   },
   {
     "component": "Radio",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
