@@ -20,13 +20,15 @@ export interface EyebrowLabelProps extends BaseProps, AccessibilityProps {
   size?: EyebrowLabelSize;
   color?: EyebrowLabelColor;
   /**
-   * Show the product brand mark to the left of the label when not `live`.
-   * Ignored when `color` is `live` (only the live dot + text are shown).
+   * Show the product brand mark to the left of the label.
+   * Hidden when `color` is `live`, or when `isSubscriberOnly` — those states only show their indicator + text (live dot or key icon).
    * @default false
    */
   logo?: boolean;
   /** Icon color when `logo` is shown. Omit to match eyebrow text (`currentColor`). */
   logoColor?: IconColor;
+  /** Subscriber-only: leading key icon instead of brand logo (`logo` has no visible brand mark). @default false */
+  isSubscriberOnly?: boolean;
   /**
    * Legacy API: true maps to "on-dark", false maps to "on-light".
    * @default false

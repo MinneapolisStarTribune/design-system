@@ -62,6 +62,11 @@
   height: 0.875rem;
 }
 
+.subscriberIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
 .liveDot {
   font-size: 0.8em;
   line-height: 1;

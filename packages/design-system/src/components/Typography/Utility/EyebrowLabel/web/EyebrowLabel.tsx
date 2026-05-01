@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { LogoStribBlackIcon, LogoVarsityIcon } from '@/icons';
+import type { IconSize } from '@/components/Icon/Icon.types';
+import { KeyIcon, LogoStribBlackIcon, LogoVarsityIcon } from '@/icons';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import type { EyebrowLabelProps, EyebrowLabelSize } from '../EyebrowLabel.types';
@@ -12,6 +13,12 @@ const TYPOGRAPHY_BY_SIZE: Record<EyebrowLabelSize, 'small' | 'medium' | 'large'>
   large: 'large',
 };
 
+const SUBSCRIBER_KEY_ICON_SIZE: Record<EyebrowLabelSize, IconSize> = {
+  small: 'x-small',
+  medium: 'small',
+  large: 'small',
+};
+
 export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   children,
   label,
@@ -19,6 +26,7 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   color = 'neutral',
   logo = false,
   logoColor,
+  isSubscriberOnly = false,
   isBackground = false,
   background,
   brand,
@@ -41,8 +49,8 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
         : styles.brandOnDark
       : styles[`${color}-${resolvedBackground}`];
   const showLiveDot = color === 'live';
-  /** Live state: dot + label only; brand mark is not shown. */
-  const showBrandLogo = logo && color !== 'live';
+  /** Live and subscriber-only: no brand logo (only indicator + label). */
+  const showBrandLogo = logo && color !== 'live' && !isSubscriberOnly;
   const typographySize = TYPOGRAPHY_BY_SIZE[size];
 
   const logoIconCommonProps = {
@@ -63,6 +71,11 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
         <LogoStribBlackIcon {...logoIconCommonProps} />
       )}
       {showBrandLogo && resolvedBrand === 'varsity' && <LogoVarsityIcon {...logoIconCommonProps} />}
+      {isSubscriberOnly && (
+        <span className={styles.subscriberIcon} aria-hidden>
+          <KeyIcon size={SUBSCRIBER_KEY_ICON_SIZE[size]} style={{ color: 'inherit' }} />
+        </span>
+      )}
       {showLiveDot && (
         <span className={styles.liveDot} aria-hidden>
           •

@@ -1,4 +1,5 @@
 import { EyebrowLabel } from './EyebrowLabel';
+import eyebrowStyles from './EyebrowLabel.module.scss';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('EyebrowLabel', () => {
@@ -42,6 +43,43 @@ describe('EyebrowLabel', () => {
 
     expect(container.querySelector('svg')).not.toBeInTheDocument();
     expect(getByText('•')).toBeInTheDocument();
+  });
+
+  it('renders subscriber key icon when isSubscriberOnly is true', () => {
+    const { container } = renderWithProvider(
+      <EyebrowLabel isSubscriberOnly>Subscriber only</EyebrowLabel>
+    );
+
+    const wrap = container.querySelector(`.${eyebrowStyles.subscriberIcon}`);
+    expect(wrap).toBeInTheDocument();
+    expect(wrap?.querySelector('svg')).toBeInTheDocument();
+  });
+
+  it('does not render brand logo when isSubscriberOnly is true', () => {
+    const { container } = renderWithProvider(
+      <EyebrowLabel logo brand="startribune" isSubscriberOnly>
+        Subscriber only
+      </EyebrowLabel>
+    );
+
+    expect(container.querySelector('.logo')).not.toBeInTheDocument();
+    expect(
+      container.querySelector(`.${eyebrowStyles.subscriberIcon}`)?.querySelector('svg')
+    ).toBeInTheDocument();
+  });
+
+  it('shows subscriber key with live dot when both apply', () => {
+    const { container, getByText } = renderWithProvider(
+      <EyebrowLabel color="live" isSubscriberOnly logo brand="startribune">
+        Live
+      </EyebrowLabel>
+    );
+
+    expect(
+      container.querySelector(`.${eyebrowStyles.subscriberIcon}`)?.querySelector('svg')
+    ).toBeInTheDocument();
+    expect(getByText('•')).toBeInTheDocument();
+    expect(container.querySelector('.logo')).not.toBeInTheDocument();
   });
 
   it('logo matches eyebrow text color when logoColor is omitted', () => {

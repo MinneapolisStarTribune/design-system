@@ -65,6 +65,22 @@ const ALL_VARIANT_ROWS: VariantRowSpec[] = [
     brand: 'varsity',
   },
   {
+    key: 'subscriber-only-neutral',
+    label: 'Subscriber only',
+    color: 'neutral',
+    logo: true,
+    brand: 'startribune',
+    isSubscriberOnly: true,
+  },
+  {
+    key: 'subscriber-only-brand',
+    label: 'Subscriber only',
+    color: 'brand',
+    logo: true,
+    brand: 'startribune',
+    isSubscriberOnly: true,
+  },
+  {
     key: 'live',
     label: 'Live',
     color: 'live',
@@ -74,6 +90,12 @@ const ALL_VARIANT_ROWS: VariantRowSpec[] = [
 ];
 
 const VARIANT_SIZES = ['small', 'medium', 'large'] as const;
+
+/** Surfaces aligned with **All variants** so docs previews match Storybook demos. */
+const DOCS_PREVIEW_SURFACE = {
+  onLight: '#ffffff',
+  onDark: '#0d0d0d',
+} as const;
 
 const meta = {
   title: 'Typography/Utility/EyebrowLabel',
@@ -95,7 +117,12 @@ const meta = {
     logo: {
       control: 'boolean',
       description:
-        'When true, shows the active brand logo on the left (not shown when color is live).',
+        'When true, shows the active brand logo on the left (hidden when color is live or isSubscriberOnly).',
+    },
+    isSubscriberOnly: {
+      control: 'boolean',
+      description:
+        'Subscriber-only: leading key icon; brand logo is not shown (same suppression rule as live).',
     },
     logoColor: {
       control: 'select',
@@ -132,8 +159,155 @@ export const Configurable: Story = {
     background: 'on-light',
     isBackground: false,
     brand: 'startribune',
+    isSubscriberOnly: false,
     as: 'span',
   },
+};
+
+/**
+ * Each doc example keeps **`args`** and spreads **`{…args}`** in **`render`** so Storybook MDX **`Canvas`**
+ * resolves correctly (Stories that only used **`render`** without **`args`** can fall back to component defaults).
+ */
+export const DocsNeutralMediumOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'medium',
+    color: 'neutral',
+    background: 'on-light',
+    label: 'Label',
+    logo: false,
+    brand: 'startribune',
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsBrandLargeOnDark: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'large',
+    color: 'brand',
+    background: 'on-dark',
+    logo: true,
+    brand: 'startribune',
+    label: 'Label',
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onDark,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsBrandLargeOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'large',
+    color: 'brand',
+    background: 'on-light',
+    logo: true,
+    brand: 'startribune',
+    label: 'Label',
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsLiveSmallOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'small',
+    color: 'live',
+    background: 'on-light',
+    label: 'Live',
+    logo: false,
+    brand: 'startribune',
+    isSubscriberOnly: false,
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsSubscriberOnlyMediumOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'medium',
+    color: 'neutral',
+    background: 'on-light',
+    label: 'Subscriber only',
+    logo: false,
+    brand: 'startribune',
+    isSubscriberOnly: true,
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
 };
 
 export const AllVariants: Story = {

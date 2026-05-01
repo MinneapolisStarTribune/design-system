@@ -17,4 +17,12 @@ describe('EyebrowLabel Accessibility', () => {
       </EyebrowLabel>
     );
   });
+
+  it('has no violations for subscriber-only', async () => {
+    await expectNoA11yViolations(
+      <EyebrowLabel isSubscriberOnly background="on-light" logo brand="startribune">
+        Subscriber only
+      </EyebrowLabel>
+    );
+  });
 });
