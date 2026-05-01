@@ -3,7 +3,11 @@ import { EyebrowLabel } from './EyebrowLabel';
 
 describe('EyebrowLabel Accessibility', () => {
   it('has no violations for neutral/light', async () => {
-    await expectNoA11yViolations(<EyebrowLabel color="neutral" background="on-light">Label</EyebrowLabel>);
+    await expectNoA11yViolations(
+      <EyebrowLabel color="neutral" background="on-light">
+        Label
+      </EyebrowLabel>
+    );
   });
 
   it('has no violations for live/dark', async () => {

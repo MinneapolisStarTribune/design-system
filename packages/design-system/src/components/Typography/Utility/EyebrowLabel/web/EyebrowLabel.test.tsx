@@ -3,7 +3,9 @@ import { renderWithProvider } from '@/test-utils/render';
 
 describe('EyebrowLabel', () => {
   it('renders with defaults', () => {
-    const { getByTestId } = renderWithProvider(<EyebrowLabel data-testid="eyebrow">Label</EyebrowLabel>);
+    const { getByTestId } = renderWithProvider(
+      <EyebrowLabel data-testid="eyebrow">Label</EyebrowLabel>
+    );
 
     expect(getByTestId('eyebrow')).toBeInTheDocument();
     expect(getByTestId('eyebrow')).toHaveTextContent('Label');
@@ -44,7 +46,13 @@ describe('EyebrowLabel', () => {
 
   it('logo matches eyebrow text color when logoColor is omitted', () => {
     const { getByTestId } = renderWithProvider(
-      <EyebrowLabel data-testid="eyebrow" logo brand="startribune" color="brand" background="on-light">
+      <EyebrowLabel
+        data-testid="eyebrow"
+        logo
+        brand="startribune"
+        color="brand"
+        background="on-light"
+      >
         Label
       </EyebrowLabel>
     );
@@ -70,7 +78,9 @@ describe('EyebrowLabel', () => {
   });
 
   it('renders label prop when provided', () => {
-    const { getByText } = renderWithProvider(<EyebrowLabel label="Breaking">Ignored Child</EyebrowLabel>);
+    const { getByText } = renderWithProvider(
+      <EyebrowLabel label="Breaking">Ignored Child</EyebrowLabel>
+    );
 
     expect(getByText('Breaking')).toBeInTheDocument();
   });

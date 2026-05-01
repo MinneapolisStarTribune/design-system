@@ -59,7 +59,9 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
       style={style}
       {...rest}
     >
-      {showBrandLogo && resolvedBrand === 'startribune' && <LogoStribBlackIcon {...logoIconCommonProps} />}
+      {showBrandLogo && resolvedBrand === 'startribune' && (
+        <LogoStribBlackIcon {...logoIconCommonProps} />
+      )}
       {showBrandLogo && resolvedBrand === 'varsity' && <LogoVarsityIcon {...logoIconCommonProps} />}
       {showLiveDot && (
         <span className={styles.liveDot} aria-hidden>

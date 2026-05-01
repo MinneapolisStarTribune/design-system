@@ -94,7 +94,8 @@ const meta = {
     },
     logo: {
       control: 'boolean',
-      description: 'When true, shows the active brand logo on the left (not shown when color is live).',
+      description:
+        'When true, shows the active brand logo on the left (not shown when color is live).',
     },
     logoColor: {
       control: 'select',
@@ -172,7 +173,10 @@ export const AllVariants: Story = {
             }}
           >
             {VARIANT_SIZES.map((size, columnIndex) => (
-              <div key={size} style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0 }}>
+              <div
+                key={size}
+                style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: 0 }}
+              >
                 <h4
                   style={{
                     margin: '0',

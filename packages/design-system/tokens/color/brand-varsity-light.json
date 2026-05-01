@@ -279,6 +279,18 @@
         }
       }
     },
+    "eyebrow": {
+      "text": {
+        "brand-on-dark": {
+          "description": "Eyebrow label brand accent on dark surfaces — lime secondary.",
+          "value": "{color.lime.400}"
+        },
+        "brand-on-light": {
+          "description": "Eyebrow label brand text on light surfaces — matches Figma --color-eyebrow-text-brand-on-light (#0064CF / cobalt-blue.700).",
+          "value": "{color.cobalt-blue.700}"
+        }
+      }
+    },
     "icon": {
       "brand-01": {
         "description": "Brand icon color using the primary brand hue — applied for expressive or active states to reinforce brand identity within the interface.",
@@ -535,18 +547,6 @@
       "state-success-on-light": {
         "description": "Success text color used on light backgrounds to indicate validation passed or positive feedback",
         "value": "{color.emerald-green.800}"
-      }
-    },
-    "eyebrow": {
-      "text": {
-        "brand-on-light": {
-          "description": "Eyebrow label brand text on light surfaces — matches Figma --color-eyebrow-text-brand-on-light (#0064CF / cobalt-blue.700).",
-          "value": "{color.cobalt-blue.700}"
-        },
-        "brand-on-dark": {
-          "description": "Eyebrow label brand accent on dark surfaces — lime secondary.",
-          "value": "{color.lime.400}"
-        }
       }
     },
     "utility-toggle": {
