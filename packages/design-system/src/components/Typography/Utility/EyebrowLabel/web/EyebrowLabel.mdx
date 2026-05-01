@@ -1,0 +1,23 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as EyebrowLabelStories from './EyebrowLabel.stories';
+
+<Meta of={EyebrowLabelStories} />
+
+# Eyebrow Label
+
+Eyebrow labels provide a compact content signal above headlines and editorial cards.  
+This initial implementation supports:
+
+- three sizes (`small`, `medium`, `large`)
+- color variants (`neutral`, `brand`, `live`) — `brand` on-light uses `--color-eyebrow-text-brand-on-light` per theme; `brand` on-dark uses `--color-lime-400` (Figma brand-on-dark eyebrow, same for both products)
+- optional leading logo via boolean `logo` (hidden when `color` is `live`); logo matches text color by default, or override with semantic `logoColor` (same tokens as icons)
+- brand-driven logo selection (`startribune` or `varsity`)
+- background contrast via `background` (`on-light` or `on-dark`) and legacy `isBackground`
+
+Use this component for short categorical labels (for example section names, promo context, or live states). Keep text concise so the label stays scannable.
+
+---
+
+<Primary />
+<Controls />
+<Stories />

@@ -515,6 +515,18 @@
         "value": "{color.emerald-green.800}"
       }
     },
+    "eyebrow": {
+      "text": {
+        "brand-on-light": {
+          "description": "Eyebrow label brand text color on light surfaces (#00854B / emerald-green 800 per Figma).",
+          "value": "{color.emerald-green.800}"
+        },
+        "brand-on-dark": {
+          "description": "Eyebrow label brand text color on dark surfaces — lighter emerald for sufficient contrast.",
+          "value": "{color.emerald-green.400}"
+        }
+      }
+    },
     "utility-toggle": {
       "active-icon-default": {
         "description": "Default icon color for active utility toggle controls on light backgrounds.",
