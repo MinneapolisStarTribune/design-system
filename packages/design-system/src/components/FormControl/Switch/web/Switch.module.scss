@@ -9,15 +9,11 @@
   --switch-thumb-width: var(--semantic-switch-medium-thumb-width);
   --switch-thumb-height: var(--semantic-switch-medium-thumb-height);
 
-  /* ON STATE PADDING */
-  --switch-padding-left-on: 6px;
-  --switch-padding-right-on: 3px;
-
   /* DERIVED TRANSLATE */
   --switch-thumb-translate: calc(
-    var(--switch-track-width) - var(--switch-thumb-width) - var(--switch-padding-left-on) - var(
-        --switch-padding-right-on
-      )
+    var(--switch-track-width) - var(--switch-thumb-width) - var(
+        --semantic-switch-padding-left-on
+      ) - var(--semantic-switch-padding-right-on)
   );
 
   display: inline-flex;
@@ -44,11 +40,12 @@
     --switch-track-border: var(--color-switch-border-on-neutral);
 
     .track {
-      padding: 3px var(--switch-padding-right-on) 3px var(--switch-padding-left-on);
+      padding: var(--semantic-switch-padding-top-on) var(--semantic-switch-padding-right-on)
+        var(--semantic-switch-padding-bottom-on) var(--semantic-switch-padding-left-on);
     }
 
     .thumb {
-      transform: translateX(var(--switch-thumb-translate));
+      transform: translateX(calc(var(--switch-thumb-translate) - 2px)); // Adjust for 1px border on track
     }
 
     /* BRAND VARIANT */
@@ -64,10 +61,6 @@
     --switch-track-height: var(--semantic-switch-small-track-height);
     --switch-thumb-width: var(--semantic-switch-small-thumb-width);
     --switch-thumb-height: var(--semantic-switch-small-thumb-height);
-
-    .check-icon {
-      left: 3px;
-    }
   }
 
   &.size-medium {
@@ -75,10 +68,6 @@
     --switch-track-height: var(--semantic-switch-medium-track-height);
     --switch-thumb-width: var(--semantic-switch-medium-thumb-width);
     --switch-thumb-height: var(--semantic-switch-medium-thumb-height);
-
-    .check-icon {
-      left: 4px;
-    }
   }
 
   &.size-large {
@@ -86,10 +75,6 @@
     --switch-track-height: var(--semantic-switch-large-track-height);
     --switch-thumb-width: var(--semantic-switch-large-thumb-width);
     --switch-thumb-height: var(--semantic-switch-large-thumb-height);
-
-    .check-icon {
-      left: 6px;
-    }
   }
 
   /* CONTROL */
@@ -122,7 +107,8 @@
     background: var(--switch-track-bg);
 
     /* OFF padding */
-    padding: 3px 29px 3px 3px;
+    padding: var(--semantic-switch-padding-top-off) var(--semantic-switch-padding-right-off)
+      var(--semantic-switch-padding-bottom-off) var(--semantic-switch-padding-left-off);
 
     transition:
       background-color 0.2s ease,
@@ -148,9 +134,7 @@
   /* ICON */
   .check-icon {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 4px;
+    left: var(--semantic-switch-padding-left-on);
     line-height: 0;
     color: var(--color-switch-check-icon) !important;
   }

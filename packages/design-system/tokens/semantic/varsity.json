@@ -170,6 +170,48 @@
           }
         }
       },
+      "padding": {
+        "bottom": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        },
+        "left": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 6
+          }
+        },
+        "right": {
+          "off": {
+            "type": "dimension",
+            "value": 29
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        },
+        "top": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        }
+      },
       "small": {
         "thumb": {
           "height": {
