@@ -16,12 +16,12 @@ function createStyles(theme: NativeTheme) {
 
   return StyleSheet.create({
     root: {
-      alignItems: 'flex-start',
+      alignSelf: 'flex-start',
     },
 
     pressable: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
 
     disabled: {
@@ -36,6 +36,7 @@ function createStyles(theme: NativeTheme) {
       backgroundColor: 'transparent',
       alignItems: 'center',
       justifyContent: 'center',
+      marginTop: theme.spacing2,
     },
 
     dot: {
@@ -55,10 +56,11 @@ function createStyles(theme: NativeTheme) {
     },
 
     description: {
-      marginTop: theme.spacing4,
       color: theme.colorTextOnLightTertiary,
+      marginTop: theme.spacing4,
     },
 
+    // Border colors
     borderUnchecked: {
       borderColor: theme.colorRadioBorderUnchecked,
     },
@@ -75,6 +77,11 @@ function createStyles(theme: NativeTheme) {
       borderColor: theme.colorBorderStateAttentionOnLight,
     },
 
+    // Dot colors
+    dotUnchecked: {
+      backgroundColor: theme.colorRadioDotUnchecked,
+    },
+
     dotNeutral: {
       backgroundColor: theme.colorRadioDotSelectedNeutral,
     },
@@ -82,13 +89,13 @@ function createStyles(theme: NativeTheme) {
     dotBrand: {
       backgroundColor: theme.colorRadioDotSelectedBrand,
     },
-
-    dotUnchecked: {
-      backgroundColor: theme.colorRadioDotUnchecked,
-    },
   });
 }
 
+/**
+ * Radio component for selecting a single option in a set.
+ * React Native implementation matching the web version.
+ */
 export const Radio: React.FC<RadioProps> = ({
   label,
   description,
@@ -103,7 +110,7 @@ export const Radio: React.FC<RadioProps> = ({
 
   if (!context) {
     throw new Error(
-      createDesignSystemError('RadioNative', 'must be used within a DesignSystemProvider.')
+      createDesignSystemError('Radio', 'must be used within a DesignSystemProvider.')
     );
   }
 
@@ -114,21 +121,22 @@ export const Radio: React.FC<RadioProps> = ({
     onChange(true);
   };
 
-  const borderStyle = [
-    styles.visualDot,
-    error
-      ? styles.borderError
-      : checked
-        ? color === 'brand'
-          ? styles.borderCheckedBrand
-          : styles.borderCheckedNeutral
-        : styles.borderUnchecked,
-  ];
+  // Determine border color based on state
+  const getBorderStyle = () => {
+    if (error) return styles.borderError;
+    if (checked) {
+      return color === 'brand' ? styles.borderCheckedBrand : styles.borderCheckedNeutral;
+    }
+    return styles.borderUnchecked;
+  };
 
-  const dotStyle = [
-    styles.dot,
-    checked ? (color === 'brand' ? styles.dotBrand : styles.dotNeutral) : styles.dotUnchecked,
-  ];
+  // Determine dot color based on state
+  const getDotStyle = () => {
+    if (checked) {
+      return color === 'brand' ? styles.dotBrand : styles.dotNeutral;
+    }
+    return styles.dotUnchecked;
+  };
 
   return (
     <Pressable
@@ -136,15 +144,19 @@ export const Radio: React.FC<RadioProps> = ({
       disabled={disabled}
       accessibilityRole="radio"
       accessibilityState={{ checked, disabled }}
+      accessibilityLabel={label}
+      accessibilityHint={description}
       testID={dataTestId}
       style={[styles.root, disabled && styles.disabled]}
-      android_ripple={null} // ✅ FIX: remove square ripple completely
+      android_ripple={{ color: 'transparent' }}
     >
       <View style={styles.pressable}>
-        <View style={borderStyle}>
-          <View style={dotStyle} />
+        {/* Visual radio button */}
+        <View style={[styles.visualDot, getBorderStyle()]}>
+          {checked && <View style={[styles.dot, getDotStyle()]} />}
         </View>
 
+        {/* Label and description */}
         <View style={styles.content}>
           <UtilityLabel size="medium" weight="regular" style={styles.title}>
             {label}
