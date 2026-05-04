@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, type LinkProps } from '@/components/index.native';
+import { Link, type LinkProps } from '@/components/Link/native/Link.native';
 
 export type InlineLinkProps = Omit<Extract<LinkProps, { variant: 'inline' }>, 'variant'>;
 
