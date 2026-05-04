@@ -122,6 +122,10 @@ export {
   type SponsoredHeadingProps,
 } from './Typography/Editorial/SponsoredHeading/web/SponsoredHeading';
 export {
+  EyebrowLabel,
+  type EyebrowLabelProps,
+} from './Typography/Utility/EyebrowLabel/web/EyebrowLabel';
+export {
   PageHeading,
   type PageHeadingProps,
 } from './Typography/Utility/PageHeading/web/PageHeading';

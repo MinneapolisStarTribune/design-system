@@ -1,0 +1,216 @@
+import { Meta, Primary, Controls, Canvas } from '@storybook/addon-docs/blocks';
+import * as EyebrowLabelStories from './EyebrowLabel.stories';
+
+<Meta of={EyebrowLabelStories} />
+
+# Eyebrow Label
+
+Eyebrow Labels provide a quick visual signal for story categories, content types, or brand-related context. They appear above headlines on article pages and editorial cards and can be interactive or static depending on their use. In editorial contexts, eyebrows use brand coloring by default to strengthen category recognition, while promotional contexts use neutral eyebrows to keep focus on the promotional content itself. Eyebrows may also indicate special states like live updates or subscriber-only access.
+
+This initial implementation supports:
+
+- three sizes (`small`, `medium`, `large`)
+- color variants (**`neutral`**, **`brand`**, **`live`**)
+- **`color="live"`** — Applies live attention text color and **prepends a `•` character** before the label as the live indicator (same line as the text; **`aria-hidden`** so screen readers rely on your label wording). No separate prop toggles this dot—the **`live`** color turns it on. The leading brand **`logo`** is hidden whenever **`live`** is used
+- optional leading logo: boolean **`logo`** — use **`logo={true}`** (or the JSX shorthand **`logo`**, which means the same thing) to show the brand mark; omit it or set **`logo={false}`** to hide it (default **false**). Hidden when **`color`** is **`live`** or **`isSubscriberOnly`** is true; logo matches text color by default, or override with semantic **`logoColor`** (same tokens as icons)
+- optional subscriber-only state via `isSubscriberOnly`: shows a leading key icon and hides the brand logo (same rule as live: no brand mark, only the indicator + text). You can combine `color="live"` with `isSubscriberOnly` for key + live dot + label if needed
+- brand-driven logo selection (`startribune` or `varsity`)
+- background contrast via `background` (`on-light` or `on-dark`) and legacy `isBackground`
+
+Use this component for short categorical labels (for example section names, promo context, or live states). Keep text concise so the label stays scannable.
+
+Render `EyebrowLabel` inside your app’s **`DesignSystemProvider`** (Storybook does this in the preview) so **`brand`** and theme context resolve when you omit explicit props.
+
+## Props reference
+
+The visible label text comes from **`label`** when set; otherwise **`children`** are used (**`label`** takes precedence).
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Prop</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td>Optional string caption. When set, replaces <code>children</code> as the eyebrow copy.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td>Alternate label text via JSX children—ignored when <code>label</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td>Typography scale: <code>small</code>, <code>medium</code> <em>(default)</em>, <code>large</code>.</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td>Visual tone: <code>neutral</code> <em>(default)</em>, <code>brand</code>, <code>live</code>. <code>live</code> prepends <code>•</code> and uses attention styling; <code>logo</code> is suppressed.</td>
+    </tr>
+    <tr>
+      <td><code>background</code></td>
+      <td><code>on-light</code> or <code>on-dark</code> contrast preset for eyebrow tones. Omit and use <code>isBackground</code> <em>(legacy)</em>, otherwise defaults to <code>on-light</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isBackground</code></td>
+      <td>Legacy boolean: <code>true</code> → <code>background=&quot;on-dark&quot;</code>, <code>false</code> → <code>on-light</code> <em>(default)</em>; only consulted when <code>background</code> is omitted.</td>
+    </tr>
+    <tr>
+      <td><code>logo</code></td>
+      <td><code>true</code> shows the <code>brand</code> mark before text; <code>false</code> <em>(default)</em>. Ignored when <code>color=&quot;live&quot;</code> or <code>isSubscriberOnly</code> is <code>true</code>.</td>
+    </tr>
+    <tr>
+      <td><code>logoColor</code></td>
+      <td>Semantic icon color token <em>(same naming as Icon components)</em>. Omit so the logo inherits eyebrow text color.</td>
+    </tr>
+    <tr>
+      <td><code>brand</code></td>
+      <td><code>startribune</code> · <code>varsity</code> mark for <code>logo</code>. Resolved from <strong>DesignSystemProvider</strong> when omitted.</td>
+    </tr>
+    <tr>
+      <td><code>isSubscriberOnly</code></td>
+      <td><code>true</code> renders the subscriber key before the label and hides <code>logo</code>; <code>false</code> <em>(default)</em>. Can pair with <code>live</code> if both indicators are intended.</td>
+    </tr>
+    <tr>
+      <td><code>as</code></td>
+      <td><code>span</code> <em>(default)</em> or <code>label</code> root. Use <code>label</code> with <code>htmlFor</code> to associate the eyebrow with a control ID.</td>
+    </tr>
+    <tr>
+      <td><code>htmlFor</code></td>
+      <td>Applies to <code>as=&quot;label&quot;</code> — sets the native <code>for</code> attribute linking to <code>id</code> on the paired input.</td>
+    </tr>
+    <tr>
+      <td><code>id</code></td>
+      <td>Passed to the root <code>span</code> or <code>label</code>.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td>Additional classes merged onto the root.</td>
+    </tr>
+    <tr>
+      <td><code>style</code></td>
+      <td>Inline styles on the root (normally prefer tokens/CSS variables).</td>
+    </tr>
+    <tr>
+      <td><code>dataTestId</code></td>
+      <td>Renders <code>data-testid</code> on the root <em>(Storybook hides this knob in addons by default)</em>.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code></td>
+      <td>Passed through for assistive labeling.</td>
+    </tr>
+    <tr>
+      <td><code>aria-describedby</code></td>
+      <td>Passed through <em>(extra description element IDs)</em>.</td>
+    </tr>
+    <tr>
+      <td><code>aria-hidden</code></td>
+      <td>Passed through—avoid <code>true</code> on meaningful eyebrow text unless redundancy is intentional.</td>
+    </tr>
+    <tr>
+      <td><em>Additional DOM props</em></td>
+      <td>Attributes such as <code>role</code>, <code>tabIndex</code>, <code>onClick</code>, <code>data-*</code>, <code>title</code>, etc. are forwarded to the root <code>span</code> or <code>label</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+Use **Configurable** and the addons **Controls** panel (below **Primary**) for live tweaking—this table summarizes how each knob behaves in prose.
+
+## Usage examples
+
+Each block shows copy-paste code, then a **Result** preview with the same props. (In Storybook 10+, use **`Canvas`’s `of` prop** to pick the story; nested `<Story />` children under `Canvas` are ignored.)
+
+### Neutral on a light surface (medium, no logo)
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel size="medium" color="neutral" background="on-light">
+  Label
+</EyebrowLabel>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsNeutralMediumOnLight} sourceState="hidden" />
+
+### Star Tribune brand on a dark surface (large, with logo)
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel
+  size="large"
+  color="brand"
+  background="on-dark"
+  logo={true}
+  brand="startribune"
+  label="Label"
+/>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsBrandLargeOnDark} sourceState="hidden" />
+
+### Star Tribune brand on a light surface (large, with logo)
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel
+  size="large"
+  color="brand"
+  background="on-light"
+  logo={true}
+  brand="startribune"
+  label="Label"
+/>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsBrandLargeOnLight} sourceState="hidden" />
+
+### Live on a light surface (small)
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel size="small" color="live" background="on-light" label="Live" />
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsLiveSmallOnLight} sourceState="hidden" />
+
+### Subscriber-only key (neutral on light)
+
+Use **`isSubscriberOnly={true}`** to show the **subscriber key** icon before the label. **`logo={true}`** does not show the brand mark in this mode—it follows the same “indicator + label” pattern as **`live`**.
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel
+  size="medium"
+  color="neutral"
+  background="on-light"
+  isSubscriberOnly={true}
+  label="Subscriber only"
+/>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsSubscriberOnlyMediumOnLight} sourceState="hidden" />
+
+---
+
+<Primary />
+<Controls />
+
+## All variants
+
+<Canvas of={EyebrowLabelStories.AllVariants} sourceState="hidden" layout="fullscreen" />
