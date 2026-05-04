@@ -23,12 +23,12 @@ type CommonProps = {
 };
 
 export type InlineLinkProps = InlineNativeProps & {
-  variant: 'inline';
+  variant?: 'inline';
   children: string;
 };
 
 export type UtilityLinkProps = UtilityNativeProps & {
-  variant: 'utility';
+  variant?: 'utility';
   children: React.ReactNode;
 };
 
