@@ -1,0 +1,167 @@
+.root {
+  /* COLORS (OFF by default) */
+  --switch-track-bg: var(--color-switch-background-off);
+  --switch-track-border: var(--color-switch-border-off);
+
+  /* DEFAULT SIZE = MEDIUM */
+  --switch-track-width: var(--semantic-switch-medium-track-width);
+  --switch-track-height: var(--semantic-switch-medium-track-height);
+  --switch-thumb-width: var(--semantic-switch-medium-thumb-width);
+  --switch-thumb-height: var(--semantic-switch-medium-thumb-height);
+
+  /* DERIVED TRANSLATE */
+  --switch-thumb-translate: calc(
+    var(--switch-track-width) - var(--switch-thumb-width) - var(
+        --semantic-switch-padding-left-on
+      ) - var(--semantic-switch-padding-right-on)
+  );
+
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  cursor: pointer;
+  width: fit-content;
+  min-width: 0;
+
+  /* STATES */
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  &.focused {
+    border: 2px solid #000;
+  }
+
+  /* ON STATE */
+  &.selected {
+    --switch-track-bg: var(--color-switch-background-on-neutral);
+    --switch-track-border: var(--color-switch-border-on-neutral);
+
+    .track {
+      padding: var(--semantic-switch-padding-top-on) var(--semantic-switch-padding-right-on)
+        var(--semantic-switch-padding-bottom-on) var(--semantic-switch-padding-left-on);
+    }
+
+    .thumb {
+      transform: translateX(calc(var(--switch-thumb-translate) - 2px)); // Adjust for 1px border on track
+    }
+
+    /* BRAND VARIANT */
+    &.brand {
+      --switch-track-bg: var(--color-switch-background-on-brand);
+      --switch-track-border: var(--color-switch-border-on-brand);
+    }
+  }
+
+  /* SIZE VARIANTS */
+  &.size-small {
+    --switch-track-width: var(--semantic-switch-small-track-width);
+    --switch-track-height: var(--semantic-switch-small-track-height);
+    --switch-thumb-width: var(--semantic-switch-small-thumb-width);
+    --switch-thumb-height: var(--semantic-switch-small-thumb-height);
+  }
+
+  &.size-medium {
+    --switch-track-width: var(--semantic-switch-medium-track-width);
+    --switch-track-height: var(--semantic-switch-medium-track-height);
+    --switch-thumb-width: var(--semantic-switch-medium-thumb-width);
+    --switch-thumb-height: var(--semantic-switch-medium-thumb-height);
+  }
+
+  &.size-large {
+    --switch-track-width: var(--semantic-switch-large-track-width);
+    --switch-track-height: var(--semantic-switch-large-track-height);
+    --switch-thumb-width: var(--semantic-switch-large-thumb-width);
+    --switch-thumb-height: var(--semantic-switch-large-thumb-height);
+  }
+
+  /* CONTROL */
+  .control {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  /* TRACK */
+  .track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+
+    width: var(--switch-track-width);
+    height: var(--switch-track-height);
+    border-radius: var(--radius-full);
+
+    border: 1px solid var(--switch-track-border);
+    background: var(--switch-track-bg);
+
+    /* OFF padding */
+    padding: var(--semantic-switch-padding-top-off) var(--semantic-switch-padding-right-off)
+      var(--semantic-switch-padding-bottom-off) var(--semantic-switch-padding-left-off);
+
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  /* THUMB */
+  .thumb {
+    flex: 0 0 auto;
+
+    width: var(--switch-thumb-width);
+    height: var(--switch-thumb-height);
+    border-radius: var(--radius-full);
+
+    background-color: var(--color-switch-thumb);
+
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  /* ICON */
+  .check-icon {
+    position: absolute;
+    left: var(--semantic-switch-padding-left-on);
+    line-height: 0;
+    color: var(--color-switch-check-icon) !important;
+  }
+
+  /* CONTENT */
+  .content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .label-start {
+    order: -1;
+  }
+
+  .label-end {
+    order: 1;
+  }
+
+  .label {
+    color: var(--color-text-on-light-primary);
+    cursor: inherit;
+  }
+
+  .caption {
+    color: var(--color-text-on-light-tertiary);
+    cursor: inherit;
+  }
+}

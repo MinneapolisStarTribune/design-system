@@ -124,6 +124,116 @@
         "type": "dimension",
         "value": 535
       }
+    },
+    "switch": {
+      "large": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 22
+          },
+          "width": {
+            "type": "dimension",
+            "value": 22
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 28
+          },
+          "width": {
+            "type": "dimension",
+            "value": 58
+          }
+        }
+      },
+      "medium": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 18
+          },
+          "width": {
+            "type": "dimension",
+            "value": 18
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 24
+          },
+          "width": {
+            "type": "dimension",
+            "value": 50
+          }
+        }
+      },
+      "padding": {
+        "bottom": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        },
+        "left": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 6
+          }
+        },
+        "right": {
+          "off": {
+            "type": "dimension",
+            "value": 29
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        },
+        "top": {
+          "off": {
+            "type": "dimension",
+            "value": 3
+          },
+          "on": {
+            "type": "dimension",
+            "value": 3
+          }
+        }
+      },
+      "small": {
+        "thumb": {
+          "height": {
+            "type": "dimension",
+            "value": 14
+          },
+          "width": {
+            "type": "dimension",
+            "value": 14
+          }
+        },
+        "track": {
+          "height": {
+            "type": "dimension",
+            "value": 20
+          },
+          "width": {
+            "type": "dimension",
+            "value": 42
+          }
+        }
+      }
     }
   }
 }

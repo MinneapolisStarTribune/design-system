@@ -1,0 +1,77 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/addon-docs/blocks';
+import * as SwitchStories from './Switch.stories';
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+`Switch` toggles a setting on or off and applies the change immediately.
+
+Use **neutral** by default for everyday settings. Use **brand** (and especially **large**) only for high-visibility moments where extra emphasis is intentional.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=217-12525)
+
+`Switch` works in two ways:
+
+- As `FormControl.Switch` inside `FormGroup` for built-in label/description/caption accessibility wiring.
+- As standalone `Switch`/`FormControl.Switch` with direct props.
+
+## Basic usage in FormGroup
+
+```tsx
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+<FormGroup>
+  <FormGroup.Label>Personalized homepage</FormGroup.Label>
+  <FormGroup.Description>Show stories based on your reading behavior.</FormGroup.Description>
+  <FormControl.Switch selected={enabled} onChange={setEnabled} />
+  <FormGroup.Caption variant="info">Changes apply instantly.</FormGroup.Caption>
+</FormGroup>;
+```
+
+## Standalone usage
+
+```tsx
+import { Switch } from '@minneapolisstartribune/design-system/web';
+
+<Switch
+  selected={enabled}
+  onChange={setEnabled}
+  label="Enable breaking news alerts"
+  caption="Sends push notifications for major stories."
+/>;
+```
+
+## Props overview
+
+- `color`: `neutral` (default) | `brand`
+- `size`: `small` | `medium` (default) | `large`
+- `selected`: controlled boolean state
+- `onChange`: callback with next selected value
+- `label`: optional visible label text
+- `caption`: optional supporting text
+- `isDisabled`: disables interaction
+
+## Accessibility guidance
+
+- Provide an accessible name via visible `label`, `FormGroup.Label`, or `aria-label`.
+- Provide extra context with `caption` or `FormGroup.Description`/`FormGroup.Caption`.
+- Prefer `FormGroup` when rendering form fields to get automatic `aria-labelledby` and `aria-describedby` wiring.
+
+---
+
+## Playground
+
+<Canvas>
+  <Story of={SwitchStories.Configurable} />
+</Canvas>
+
+---
+
+## All Variants
+
+<Canvas>
+  <Story of={SwitchStories.AllVariants} />
+</Canvas>
+
+<Controls of={SwitchStories.Configurable} />

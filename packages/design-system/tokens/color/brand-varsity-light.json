@@ -469,6 +469,49 @@
         "value": "{color.orange.700}"
       }
     },
+    "switch": {
+      "background": {
+        "off": {
+          "description": "Background for switch in OFF state.",
+          "value": "{color.neutral.200}"
+        },
+        "on": {
+          "brand": {
+            "description": "Background for switch in ON state (brand variant) — Star Tribune green.",
+            "value": "{color.cobalt-blue.700}"
+          },
+          "neutral": {
+            "description": "Background for switch in ON state (neutral variant, light mode: black fill).",
+            "value": "{color.neutral.950}"
+          }
+        }
+      },
+      "border": {
+        "off": {
+          "description": "Border color for switch in OFF state (default).",
+          "value": "{color.neutral.300}"
+        },
+        "on": {
+          "brand": {
+            "description": "Border color for switch in ON state (brand variant) — Star Tribune green (light mode).",
+            "value": "{color.cobalt-blue.700}"
+          },
+          "neutral": {
+            "description": "Border color for switch in ON state (neutral variant, light mode: black outline).",
+            "value": "{color.neutral.950}"
+          }
+        }
+      },
+      "check-icon": {
+        "description": "Check icon color for switch in ON state (both brand and neutral variants use white check).",
+        "value": "{color.base.white}"
+      },
+      "description": "Switch component color tokens — background and border for OFF and ON states across neutral and brand variants.",
+      "thumb": {
+        "description": "Thumb color for switch in ON state (both brand and neutral variants use white thumb).",
+        "value": "{color.base.white}"
+      }
+    },
     "text": {
       "brand-01": {
         "description": "Primary brand text color used in marketing and promotional content — applies the main brand color for emphasis or expressive typography.",
