@@ -126,7 +126,7 @@ const meta = {
     },
     logoColor: {
       control: 'select',
-      options: [...Object.keys(ICON_COLOR_TOKENS)] as (keyof typeof ICON_COLOR_TOKENS)[],
+      options: Object.keys(ICON_COLOR_TOKENS) as (keyof typeof ICON_COLOR_TOKENS)[],
       description: 'Semantic icon color for the logo. Leave unset to match eyebrow text.',
       if: { arg: 'logo' },
     },
