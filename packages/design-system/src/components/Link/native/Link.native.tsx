@@ -9,31 +9,48 @@ import {
   type LinkInlineProps,
 } from '../Link.types';
 
-type OmitWebProps<T> = Omit<T, 'href' | 'as' | 'onClick'>;
+import type { NativeTextStylingProps, NativeViewStylingProps } from '@/types';
 
-export type LinkProps = (OmitWebProps<LinkUtilityProps> | OmitWebProps<LinkInlineProps>) & {
+type OmitWebProps<T> = Omit<T, 'href' | 'as' | 'onClick' | 'className' | 'style' | 'children'>;
+
+type InlineNativeProps = NativeTextStylingProps<OmitWebProps<LinkInlineProps>>;
+
+type UtilityNativeProps = NativeViewStylingProps<OmitWebProps<LinkUtilityProps>>;
+
+type CommonProps = {
   onPress?: (event: GestureResponderEvent) => void;
   testID?: string;
 };
 
+export type InlineLinkProps = InlineNativeProps & {
+  variant: 'inline';
+  children: string;
+};
+
+export type UtilityLinkProps = UtilityNativeProps & {
+  variant: 'utility';
+  children: React.ReactNode;
+};
+
+export type LinkProps = (InlineLinkProps & CommonProps) | (UtilityLinkProps & CommonProps);
+
 export const Link: React.FC<LinkProps> = (props) => {
-  const { variant = 'utility' } = props;
-  const isInline = variant === 'inline';
   const { styles } = useNativeStyles((t) => ({
     styles: createStyles(t),
   }));
 
-  if (isInline) {
-    const inlineProps = props as LinkInlineProps & LinkProps;
+  // Inline Variant
+  if (props.variant === 'inline') {
     const {
       children,
       onPress,
       disabled,
+      style,
       dataTestId,
       testID,
       'aria-label': ariaLabel,
       id,
-    } = inlineProps;
+    } = props;
 
     const baseStyle = disabled ? styles.inlineTextDisabled : styles.inlineText;
 
@@ -42,7 +59,7 @@ export const Link: React.FC<LinkProps> = (props) => {
         accessibilityRole="link"
         accessibilityState={{ disabled: !!disabled }}
         onPress={disabled ? undefined : onPress}
-        style={baseStyle}
+        style={[baseStyle, style]}
         testID={testID ?? dataTestId}
         accessibilityLabel={ariaLabel}
         nativeID={id}
@@ -53,7 +70,6 @@ export const Link: React.FC<LinkProps> = (props) => {
   }
 
   // Utility Variant
-  const utilityProps = props as LinkUtilityProps & LinkProps;
   const {
     children,
     size = 'medium',
@@ -65,7 +81,7 @@ export const Link: React.FC<LinkProps> = (props) => {
     testID,
     'aria-label': ariaLabel,
     id,
-  } = utilityProps;
+  } = props;
 
   const utilityBodySize = LINK_SIZE_TO_UTILITY_BODY_TOKEN[size];
   const textStyle = disabled ? styles.textDisabled : styles.text;

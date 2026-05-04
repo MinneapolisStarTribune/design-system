@@ -28,7 +28,6 @@ export interface LinkBaseProps extends BaseProps, AccessibilityProps {
   size: LinkSize;
   icon?: ReactNode;
   iconPosition?: LinkIconPosition;
-  disabled?: boolean;
 }
 
 /** Shared anchor props for both utility and inline links. */
