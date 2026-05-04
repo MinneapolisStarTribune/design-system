@@ -14,6 +14,7 @@ export const UtilityBody: React.FC<UtilityBodyNativeProps> = (props) => {
     weight = 'regular',
     children,
     dataTestId = 'utility-body',
+    style,
     ...rest
   } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -21,7 +22,7 @@ export const UtilityBody: React.FC<UtilityBodyNativeProps> = (props) => {
 
   return (
     <Text
-      style={styles[styleKey]}
+      style={[styles[styleKey], style]}
       accessibilityRole="text"
       testID={dataTestId}
       {...(rest as React.ComponentProps<typeof Text>)}

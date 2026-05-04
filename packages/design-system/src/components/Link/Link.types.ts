@@ -22,8 +22,16 @@ type LinkAnchorOmit = Omit<
   'href' | 'children' | 'className' | 'size' | 'aria-hidden' | 'aria-label' | 'aria-describedby'
 >;
 
+/** Shared base props for utility Link across web and native implementations. */
+export interface LinkBaseProps extends BaseProps, AccessibilityProps {
+  children: string;
+  size: LinkSize;
+  icon?: ReactNode;
+  iconPosition?: LinkIconPosition;
+}
+
 /** Shared anchor props for both utility and inline links. */
-interface LinkShared extends BaseProps, AccessibilityProps, LinkAnchorOmit {
+interface LinkShared extends LinkAnchorOmit {
   /**
    * Root element or component (default: native `a`).
    * - **`a`** — standard navigation; **`href`** is applied.
@@ -33,22 +41,15 @@ interface LinkShared extends BaseProps, AccessibilityProps, LinkAnchorOmit {
   as?: ElementType;
   /** Navigation target. Omitted when `disabled` is true. */
   href?: string;
-  className?: string;
   disabled?: boolean;
 }
 
-/** Standalone Utility Body link (Actions/Link). */
-export interface LinkUtilityProps extends LinkShared {
+export interface LinkUtilityProps extends LinkBaseProps, LinkShared {
   variant?: 'utility' | undefined;
-  size: LinkSize;
-  children: string;
-  iconPosition?: LinkIconPosition;
-  /** Optional icon (e.g. design-system icon); place with `iconPosition`. */
-  icon?: ReactNode;
 }
 
 /** Inline link: inherits parent typography; use via `InlineLink` or `Link variant="inline"`. */
-export interface LinkInlineProps extends LinkShared {
+export interface LinkInlineProps extends BaseProps, AccessibilityProps, LinkShared {
   variant: 'inline';
   brand: InlineLinkBrand;
   children: ReactNode;
