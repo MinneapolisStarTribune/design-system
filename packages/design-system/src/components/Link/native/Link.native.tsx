@@ -17,7 +17,8 @@ export type LinkProps = (OmitWebProps<LinkUtilityProps> | OmitWebProps<LinkInlin
 };
 
 export const Link: React.FC<LinkProps> = (props) => {
-  const isInline = props.variant === 'inline';
+  const { variant = 'utility' } = props;
+  const isInline = variant === 'inline';
   const { styles } = useNativeStyles((t) => ({
     styles: createStyles(t),
   }));
