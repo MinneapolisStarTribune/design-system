@@ -3,6 +3,11 @@ import type { Brand } from '@/providers/theme-helpers';
 import type { IconColor } from '@/components/Icon/Icon.types';
 import type { ReactElement } from 'react';
 
+export type EyebrowLabelCustomIconProps = {
+  className?: string;
+  'aria-hidden'?: boolean;
+};
+
 export const EYEBROW_LABEL_SIZES = ['small', 'medium', 'large'] as const;
 export type EyebrowLabelSize = (typeof EYEBROW_LABEL_SIZES)[number];
 
@@ -33,7 +38,7 @@ export interface EyebrowLabelProps extends BaseProps, AccessibilityProps {
    * Hidden when `color` is `live`, or when `isSubscriberOnly` is true.
    * This icon keeps its own default color; EyebrowLabel does not apply color styles to it.
    */
-  customIcon?: ReactElement;
+  customIcon?: ReactElement<EyebrowLabelCustomIconProps>;
   /** Subscriber-only: leading key icon instead of brand logo (`logo` has no visible brand mark). @default false */
   isSubscriberOnly?: boolean;
   /**

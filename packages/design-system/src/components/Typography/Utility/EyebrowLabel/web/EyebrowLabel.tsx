@@ -3,7 +3,11 @@ import type { IconSize } from '@/components/Icon/Icon.types';
 import { KeyIcon, LogoStribBlackIcon, LogoVarsityIcon } from '@/icons';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
-import type { EyebrowLabelProps, EyebrowLabelSize } from '../EyebrowLabel.types';
+import type {
+  EyebrowLabelCustomIconProps,
+  EyebrowLabelProps,
+  EyebrowLabelSize,
+} from '../EyebrowLabel.types';
 import { cloneElement, isValidElement, useContext } from 'react';
 import styles from './EyebrowLabel.module.scss';
 
@@ -74,7 +78,7 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
       )}
       {showBrandLogo && resolvedBrand === 'varsity' && <LogoVarsityIcon {...logoIconCommonProps} />}
       {showCustomIcon &&
-        isValidElement(customIcon) &&
+        isValidElement<EyebrowLabelCustomIconProps>(customIcon) &&
         cloneElement(customIcon, {
           className: classNames(styles.logo, customIcon.props.className),
           'aria-hidden': customIcon.props['aria-hidden'] ?? true,
