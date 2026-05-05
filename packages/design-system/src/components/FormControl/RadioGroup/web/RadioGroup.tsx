@@ -3,9 +3,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
-import { Radio, type RadioColor } from '@/components/Radio/Radio';
 import { BaseProps } from '@/types/globalTypes';
 import styles from './RadioGroup.module.scss';
+import { Radio, RadioColor } from '@/index.web';
 
 export interface RadioOption {
   value: string;
