@@ -68,7 +68,7 @@
 }
 
 .liveDot {
-  font-size: 0.8em;
-  line-height: 1;
-  transform: translateY(-0.03em);
+  flex-shrink: 0;
+  display: inline-flex;
+  transform: translateY(0.02em);
 }

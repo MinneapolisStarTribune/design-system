@@ -11,7 +11,7 @@ This initial implementation supports:
 
 - three sizes (`small`, `medium`, `large`)
 - color variants (**`neutral`**, **`brand`**, **`live`**)
-- **`color="live"`** — Applies live attention text color and **prepends a `•` character** before the label as the live indicator (same line as the text; **`aria-hidden`** so screen readers rely on your label wording). No separate prop toggles this dot—the **`live`** color turns it on. The leading brand **`logo`** is hidden whenever **`live`** is used
+- **`color="live"`** — Applies live attention text color and prepends a live-dot icon before the label (same line as the text; **`aria-hidden`** so screen readers rely on your label wording). No separate prop toggles this dot—the **`live`** color turns it on. The leading brand **`logo`** is hidden whenever **`live`** is used
 - optional leading logo: boolean **`logo`** — use **`logo={true}`** (or the JSX shorthand **`logo`**, which means the same thing) to show the brand mark; omit it or set **`logo={false}`** to hide it (default **false**). Hidden when **`color`** is **`live`** or **`isSubscriberOnly`** is true; logo matches text color by default, or override with semantic **`logoColor`** (same tokens as icons)
 - optional leading custom icon via **`customIcon`** — accepts a React element and follows the same visibility rules as `logo` (hidden on `live` and when `isSubscriberOnly` is true). Unlike `logo`, no color styles are applied by EyebrowLabel, so the icon keeps its own default color
 - optional subscriber-only state via `isSubscriberOnly`: shows a leading key icon and hides the brand logo (same rule as live: no brand mark, only the indicator + text). You can combine `color="live"` with `isSubscriberOnly` for key + live dot + label if needed
@@ -48,7 +48,7 @@ The visible label text comes from **`label`** when set; otherwise **`children`**
     </tr>
     <tr>
       <td><code>color</code></td>
-      <td>Visual tone: <code>neutral</code> <em>(default)</em>, <code>brand</code>, <code>live</code>. <code>live</code> prepends <code>•</code> and uses attention styling; <code>logo</code> is suppressed.</td>
+      <td>Visual tone: <code>neutral</code> <em>(default)</em>, <code>brand</code>, <code>live</code>. <code>live</code> prepends a live-dot icon and uses attention styling; <code>logo</code> is suppressed.</td>
     </tr>
     <tr>
       <td><code>background</code></td>

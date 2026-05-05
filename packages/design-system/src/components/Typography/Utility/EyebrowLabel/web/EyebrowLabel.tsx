@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { Icon } from '@/components/Icon/Icon';
 import type { IconSize } from '@/components/Icon/Icon.types';
 import { KeyIcon, LogoStribBlackIcon, LogoVarsityIcon } from '@/icons';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
@@ -22,6 +23,18 @@ const SUBSCRIBER_KEY_ICON_SIZE: Record<EyebrowLabelSize, IconSize> = {
   medium: 'small',
   large: 'small',
 };
+
+const LIVE_DOT_ICON_SIZE: Record<EyebrowLabelSize, IconSize> = {
+  small: 'x-small',
+  medium: 'x-small',
+  large: 'small',
+};
+
+const LiveDotSvg: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <circle cx="8" cy="8" r="4" fill="currentColor" />
+  </svg>
+);
 
 export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   children,
@@ -89,9 +102,13 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
         </span>
       )}
       {showLiveDot && (
-        <span className={styles.liveDot} aria-hidden>
-          •
-        </span>
+        <Icon
+          component={LiveDotSvg}
+          size={LIVE_DOT_ICON_SIZE[size]}
+          className={styles.liveDot}
+          style={{ color: 'inherit' }}
+          aria-hidden
+        />
       )}
       <UtilityLabel size={typographySize} weight="semibold" capitalize className={styles.label}>
         {labelText}

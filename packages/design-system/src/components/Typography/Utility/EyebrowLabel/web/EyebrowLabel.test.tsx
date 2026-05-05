@@ -14,15 +14,15 @@ describe('EyebrowLabel', () => {
   });
 
   it('renders live dot for live tone', () => {
-    const { getByText } = renderWithProvider(<EyebrowLabel color="live">Live</EyebrowLabel>);
+    const { container } = renderWithProvider(<EyebrowLabel color="live">Live</EyebrowLabel>);
 
-    expect(getByText('•')).toBeInTheDocument();
+    expect(container.querySelector(`.${eyebrowStyles.liveDot}`)).toBeInTheDocument();
   });
 
   it('does not render live dot for non-live tones', () => {
-    const { queryByText } = renderWithProvider(<EyebrowLabel color="neutral">Label</EyebrowLabel>);
+    const { container } = renderWithProvider(<EyebrowLabel color="neutral">Label</EyebrowLabel>);
 
-    expect(queryByText('•')).not.toBeInTheDocument();
+    expect(container.querySelector(`.${eyebrowStyles.liveDot}`)).not.toBeInTheDocument();
   });
 
   it('renders logo when enabled and brand is startribune', () => {
@@ -42,8 +42,9 @@ describe('EyebrowLabel', () => {
       </EyebrowLabel>
     );
 
-    expect(container.querySelector('svg')).not.toBeInTheDocument();
-    expect(getByText('•')).toBeInTheDocument();
+    expect(container.querySelector(`.${eyebrowStyles.logo}`)).not.toBeInTheDocument();
+    expect(getByText('Live')).toBeInTheDocument();
+    expect(container.querySelector(`.${eyebrowStyles.liveDot}`)).toBeInTheDocument();
   });
 
   it('renders subscriber key icon when isSubscriberOnly is true', () => {
@@ -70,7 +71,7 @@ describe('EyebrowLabel', () => {
   });
 
   it('shows subscriber key with live dot when both apply', () => {
-    const { container, getByText } = renderWithProvider(
+    const { container } = renderWithProvider(
       <EyebrowLabel color="live" isSubscriberOnly logo brand="startribune">
         Live
       </EyebrowLabel>
@@ -79,7 +80,7 @@ describe('EyebrowLabel', () => {
     expect(
       container.querySelector(`.${eyebrowStyles.subscriberIcon}`)?.querySelector('svg')
     ).toBeInTheDocument();
-    expect(getByText('•')).toBeInTheDocument();
+    expect(container.querySelector(`.${eyebrowStyles.liveDot}`)).toBeInTheDocument();
     expect(container.querySelector('.logo')).not.toBeInTheDocument();
   });
 
