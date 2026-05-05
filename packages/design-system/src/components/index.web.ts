@@ -70,7 +70,8 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
-export { Radio, type RadioColor, type RadioProps } from './Radio/Radio';
+export type { RadioColor, RadioProps } from './Radio/Radio.types';
+export { Radio } from './Radio/web/Radio';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
