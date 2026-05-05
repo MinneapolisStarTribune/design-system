@@ -15,6 +15,10 @@ export interface BaseSwitchProps extends FormControlWebProps {
   label?: string;
   /** Optional position of the label relative to the switch. */
   labelPosition?: 'start' | 'end';
+  /** Optional class name for the label container. */
+  labelContainerClassName?: string;
+  /** Optional style for the label container. */
+  labelContainerStyle?: React.CSSProperties;
   /** Optional visible caption. */
   caption?: string;
   /** Visual color variant. Neutral is default. */

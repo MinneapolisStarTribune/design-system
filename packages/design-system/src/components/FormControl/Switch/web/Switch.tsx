@@ -27,6 +27,8 @@ export const Switch: React.FC<SwitchProps> = ({
   onChange,
   label,
   labelPosition = 'start',
+  labelContainerClassName,
+  labelContainerStyle,
   caption,
   color = 'neutral',
   size = 'medium',
@@ -92,6 +94,31 @@ export const Switch: React.FC<SwitchProps> = ({
       htmlFor={inputId}
       data-testid={dataTestId}
     >
+      {(label || caption) && (
+        <span
+          className={classNames(styles.content, labelContainerClassName)}
+          style={labelContainerStyle}
+        >
+          {label && (
+            <span
+              id={localLabelId}
+              className={classNames(styles.label, `typography-utility-text-regular-${size}`)}
+            >
+              {label}
+            </span>
+          )}
+
+          {caption && (
+            <span
+              id={localCaptionId}
+              className={classNames(styles.caption, 'typography-utility-text-regular-x-small')}
+            >
+              {caption}
+            </span>
+          )}
+        </span>
+      )}
+
       <span className={styles.control}>
         <input
           id={inputId}
@@ -123,28 +150,6 @@ export const Switch: React.FC<SwitchProps> = ({
           <span className={styles.thumb} />
         </span>
       </span>
-
-      {(label || caption) && (
-        <span className={styles.content}>
-          {label && (
-            <span
-              id={localLabelId}
-              className={classNames(styles.label, `typography-utility-text-regular-${size}`)}
-            >
-              {label}
-            </span>
-          )}
-
-          {caption && (
-            <span
-              id={localCaptionId}
-              className={classNames(styles.caption, 'typography-utility-text-regular-x-small')}
-            >
-              {caption}
-            </span>
-          )}
-        </span>
-      )}
     </label>
   );
 };
