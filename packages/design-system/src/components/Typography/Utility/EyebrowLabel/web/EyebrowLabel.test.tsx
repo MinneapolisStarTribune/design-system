@@ -1,6 +1,7 @@
 import { EyebrowLabel } from './EyebrowLabel';
 import eyebrowStyles from './EyebrowLabel.module.scss';
 import { renderWithProvider } from '@/test-utils/render';
+import { CameraIcon } from '@/icons';
 
 describe('EyebrowLabel', () => {
   it('renders with defaults', () => {
@@ -113,6 +114,48 @@ describe('EyebrowLabel', () => {
     expect(container.querySelector('svg')).toHaveStyle({
       color: 'var(--color-icon-brand-01)',
     });
+  });
+
+  it('renders custom icon when provided', () => {
+    const { container } = renderWithProvider(
+      <EyebrowLabel customIcon={<CameraIcon data-testid="custom-icon" />}>Label</EyebrowLabel>
+    );
+
+    expect(container.querySelector('[data-testid="custom-icon"]')).toBeInTheDocument();
+  });
+
+  it('does not render custom icon when color is live', () => {
+    const { queryByTestId } = renderWithProvider(
+      <EyebrowLabel color="live" customIcon={<CameraIcon data-testid="custom-icon" />}>
+        Live
+      </EyebrowLabel>
+    );
+
+    expect(queryByTestId('custom-icon')).not.toBeInTheDocument();
+  });
+
+  it('does not render custom icon when isSubscriberOnly is true', () => {
+    const { queryByTestId, container } = renderWithProvider(
+      <EyebrowLabel isSubscriberOnly customIcon={<CameraIcon data-testid="custom-icon" />}>
+        Subscriber only
+      </EyebrowLabel>
+    );
+
+    expect(queryByTestId('custom-icon')).not.toBeInTheDocument();
+    expect(
+      container.querySelector(`.${eyebrowStyles.subscriberIcon}`)?.querySelector('svg')
+    ).toBeInTheDocument();
+  });
+
+  it('renders custom icon instead of brand logo when both are provided', () => {
+    const { container, getByTestId } = renderWithProvider(
+      <EyebrowLabel logo brand="startribune" customIcon={<CameraIcon data-testid="custom-icon" />}>
+        Label
+      </EyebrowLabel>
+    );
+
+    expect(getByTestId('custom-icon')).toBeInTheDocument();
+    expect(container.querySelectorAll('svg')).toHaveLength(1);
   });
 
   it('renders label prop when provided', () => {

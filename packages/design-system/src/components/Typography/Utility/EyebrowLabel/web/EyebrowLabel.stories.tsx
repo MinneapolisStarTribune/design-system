@@ -9,6 +9,7 @@ import {
   EYEBROW_LABEL_SIZES,
 } from './EyebrowLabel';
 import { ICON_COLOR_TOKENS } from '@/components/Icon/Icon.types';
+import { CameraIcon } from '@/icons';
 
 type EyebrowStoryProps = ComponentProps<typeof EyebrowLabel>;
 
@@ -129,6 +130,11 @@ const meta = {
       options: Object.keys(ICON_COLOR_TOKENS) as (keyof typeof ICON_COLOR_TOKENS)[],
       description: 'Semantic icon color for the logo. Leave unset to match eyebrow text.',
       if: { arg: 'logo' },
+    },
+    customIcon: {
+      control: false,
+      description:
+        'Optional custom leading icon. Hidden when color is live or isSubscriberOnly is true; keeps its own default icon color.',
     },
     background: {
       control: 'select',
@@ -291,6 +297,35 @@ export const DocsSubscriberOnlyMediumOnLight: Story = {
     logo: false,
     brand: 'startribune',
     isSubscriberOnly: true,
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsCustomIconMediumOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'medium',
+    color: 'neutral',
+    background: 'on-light',
+    label: 'Photo Essay',
+    customIcon: <CameraIcon />,
+    logo: false,
+    brand: 'startribune',
   },
   parameters: {
     chromatic: { disable: true },

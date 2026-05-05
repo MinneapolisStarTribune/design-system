@@ -4,7 +4,7 @@ import { KeyIcon, LogoStribBlackIcon, LogoVarsityIcon } from '@/icons';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import type { EyebrowLabelProps, EyebrowLabelSize } from '../EyebrowLabel.types';
-import { useContext } from 'react';
+import { cloneElement, isValidElement, useContext } from 'react';
 import styles from './EyebrowLabel.module.scss';
 
 const TYPOGRAPHY_BY_SIZE: Record<EyebrowLabelSize, 'small' | 'medium' | 'large'> = {
@@ -26,6 +26,7 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   color = 'neutral',
   logo = false,
   logoColor,
+  customIcon,
   isSubscriberOnly = false,
   isBackground = false,
   background,
@@ -49,8 +50,9 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
         : styles.brandOnDark
       : styles[`${color}-${resolvedBackground}`];
   const showLiveDot = color === 'live';
+  const showCustomIcon = Boolean(customIcon) && color !== 'live' && !isSubscriberOnly;
   /** Live and subscriber-only: no brand logo (only indicator + label). */
-  const showBrandLogo = logo && color !== 'live' && !isSubscriberOnly;
+  const showBrandLogo = logo && color !== 'live' && !isSubscriberOnly && !showCustomIcon;
   const typographySize = TYPOGRAPHY_BY_SIZE[size];
 
   const logoIconCommonProps = {
@@ -71,6 +73,12 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
         <LogoStribBlackIcon {...logoIconCommonProps} />
       )}
       {showBrandLogo && resolvedBrand === 'varsity' && <LogoVarsityIcon {...logoIconCommonProps} />}
+      {showCustomIcon &&
+        isValidElement(customIcon) &&
+        cloneElement(customIcon, {
+          className: classNames(styles.logo, customIcon.props.className),
+          'aria-hidden': customIcon.props['aria-hidden'] ?? true,
+        })}
       {isSubscriberOnly && (
         <span className={styles.subscriberIcon} aria-hidden>
           <KeyIcon size={SUBSCRIBER_KEY_ICON_SIZE[size]} style={{ color: 'inherit' }} />
