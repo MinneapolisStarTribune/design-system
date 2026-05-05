@@ -392,6 +392,7 @@ interface StartribuneLightTheme {
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
+  semanticSwitchLabelMaxWidth: number;
   semanticSwitchLargeThumbHeight: number;
   semanticSwitchLargeThumbWidth: number;
   semanticSwitchLargeTrackHeight: number;
@@ -829,6 +830,7 @@ interface StartribuneDarkTheme {
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
+  semanticSwitchLabelMaxWidth: number;
   semanticSwitchLargeThumbHeight: number;
   semanticSwitchLargeThumbWidth: number;
   semanticSwitchLargeTrackHeight: number;
@@ -1272,6 +1274,7 @@ interface VarsityLightTheme {
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
+  semanticSwitchLabelMaxWidth: number;
   semanticSwitchLargeThumbHeight: number;
   semanticSwitchLargeThumbWidth: number;
   semanticSwitchLargeTrackHeight: number;
@@ -1715,6 +1718,7 @@ interface VarsityDarkTheme {
   semanticPullQuoteIconSmallHeight: number;
   semanticPullQuoteIconSmallWidth: number;
   semanticPullQuoteMaxWidth: number;
+  semanticSwitchLabelMaxWidth: number;
   semanticSwitchLargeThumbHeight: number;
   semanticSwitchLargeThumbWidth: number;
   semanticSwitchLargeTrackHeight: number;

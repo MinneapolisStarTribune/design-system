@@ -126,6 +126,12 @@
       }
     },
     "switch": {
+      "label": {
+        "max-width": {
+          "type": "dimension",
+          "value": 200
+        }
+      },
       "large": {
         "thumb": {
           "height": {

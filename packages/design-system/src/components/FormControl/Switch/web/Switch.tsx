@@ -84,6 +84,8 @@ export const Switch: React.FC<SwitchProps> = ({
           [styles.selected]: selected,
           [styles.disabled]: isDisabled,
           [styles.focused]: isFocusVisible,
+          [styles['label-start']]: labelPosition === 'start',
+          [styles['label-end']]: labelPosition === 'end',
         },
         className
       )}
@@ -123,12 +125,7 @@ export const Switch: React.FC<SwitchProps> = ({
       </span>
 
       {(label || caption) && (
-        <span
-          className={classNames(styles.content, {
-            [styles['label-start']]: labelPosition === 'start',
-            [styles['label-end']]: labelPosition === 'end',
-          })}
-        >
+        <span className={styles.content}>
           {label && (
             <span
               id={localLabelId}
