@@ -63,6 +63,14 @@ const meta = {
         },
       },
     },
+    labelContainerClassName: {
+      control: 'text',
+      description: 'Optional class name for the label container.',
+    },
+    labelContainerStyle: {
+      control: 'object',
+      description: 'Optional style for the label container.',
+    },
     caption: {
       control: 'text',
       description: 'Optional supporting caption.',
