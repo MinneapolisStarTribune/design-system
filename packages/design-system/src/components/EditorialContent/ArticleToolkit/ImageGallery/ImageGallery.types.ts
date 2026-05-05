@@ -13,18 +13,24 @@ export interface ImageItem {
   imgixParams?: string;
 }
 
-export interface ImageGalleryProps<TImageProps> extends BaseProps, AccessibilityProps {
+export interface ImageGalleryBaseProps<TImageProps>
+  extends BaseProps,
+    AccessibilityProps {
   images: ImageItem[];
   variant?: Variant;
   loop?: boolean;
-
   ImageComponent?: React.ComponentType<TImageProps>;
+}
 
+export interface ImageGalleryProps<TImageProps>
+  extends ImageGalleryBaseProps<TImageProps> {
   imageClassName?: string;
   wrapperClassName?: string;
   captionClassName?: string;
   controlsClassName?: string;
-
+}
+export interface ImageGalleryNativeProps<TImageProps>
+  extends ImageGalleryBaseProps<TImageProps> {
   imageStyle?: StyleProp<ImageStyle>;
   wrapperStyle?: StyleProp<ViewStyle>;
   captionStyle?: StyleProp<TextStyle>;

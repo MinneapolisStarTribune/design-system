@@ -15,7 +15,7 @@ import {
   type ImageStyle,
 } from 'react-native';
 
-import { ImageGalleryProps, Variant } from '../ImageGallery.types';
+import { ImageGalleryNativeProps as ImageGalleryProps, Variant } from '../ImageGallery.types';
 import { Button, CameraFilledIcon, ChevronLeftIcon, ChevronRightIcon } from '@/index.native';
 import {
   Image as DSImage,
