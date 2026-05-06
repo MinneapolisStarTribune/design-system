@@ -8,11 +8,7 @@ import styles from './RadioGroup.module.scss';
 import { Radio } from '@/index.web';
 import { type BaseRadioGroupProps } from '../RadioGroup.types';
 
-export interface RadioOption {
-  value: string;
-  title: string;
-  description?: string;
-}
+export { type RadioOption } from '../RadioGroup.types';
 
 export interface RadioGroupProps extends BaseRadioGroupProps, BaseProps {
   'aria-labelledby'?: string;

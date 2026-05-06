@@ -7,6 +7,8 @@ import { createDesignSystemError } from '@/utils/errorPrefix';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 import { createStyles } from './RadioGroup.styles';
 
+export { type RadioOption } from '../RadioGroup.types';
+
 export interface RadioGroupProps extends BaseRadioGroupProps {
   accessibilityLabel?: string;
   dataTestId?: string;
