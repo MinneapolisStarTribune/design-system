@@ -1,7 +1,9 @@
+import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EyebrowBadge } from './EyebrowBadge';
 import {
   EYEBROW_BADGE_AS_ELEMENTS,
+  EYEBROW_BADGE_SIZES,
   EYEBROW_BADGE_VARIANTS,
 } from '@/components/EyebrowBadge/EyebrowBadge.types';
 
@@ -15,6 +17,12 @@ const meta = {
     variant: {
       control: 'select',
       options: EYEBROW_BADGE_VARIANTS,
+    },
+    size: {
+      control: 'select',
+      options: EYEBROW_BADGE_SIZES,
+      description:
+        '`large` (default): 24px badge height, 6px radius. `small`: 20px height, 4px radius — all variants.',
     },
     as: {
       control: 'select',
@@ -34,20 +42,88 @@ export const Configurable: Story = {
     label: 'Live',
     secondaryLabel: 'Updated 12 mins ago',
     variant: 'live',
+    size: 'large',
     showDot: true,
   },
 };
 
-export const Variants: Story = {
+function VariantSizesRow(props: {
+  variantLabel: string;
+  badge: Omit<ComponentProps<typeof EyebrowBadge>, 'size'>;
+}) {
+  const { variantLabel, badge } = props;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <span className="typography-utility-label-semibold-small">{variantLabel}</span>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '24px',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '200px' }}>
+          <span className="typography-utility-text-regular-small">Large</span>
+          <EyebrowBadge {...badge} size="large" />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', minWidth: '200px' }}>
+          <span className="typography-utility-text-regular-small">Small</span>
+          <EyebrowBadge {...badge} size="small" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const AllVariants: Story = {
+  name: 'All Variants',
+  args: {
+    label: 'Live',
+    secondaryLabel: 'Updated 12 mins ago',
+    variant: 'live',
+    size: 'large',
+    showDot: true,
+  },
   parameters: {
     controls: { disable: true },
+    layout: 'padded',
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <EyebrowBadge label="Live" secondaryLabel="Updated 12 mins ago" variant="live" />
-      <EyebrowBadge label="Breaking" secondaryLabel="Developing story" variant="breaking" />
-      <EyebrowBadge label="Showcase" secondaryLabel="Series" variant="showcase" showDot={false} />
-      <EyebrowBadge label="Sponsored" variant="sponsored" />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+      <VariantSizesRow
+        variantLabel="Live"
+        badge={{
+          label: 'Live',
+          secondaryLabel: 'Updated 12 mins ago',
+          variant: 'live',
+        }}
+      />
+      <VariantSizesRow
+        variantLabel="Breaking"
+        badge={{
+          label: 'Breaking',
+          secondaryLabel: 'Developing story',
+          variant: 'breaking',
+        }}
+      />
+      <VariantSizesRow
+        variantLabel="Showcase"
+        badge={{
+          label: 'Showcase',
+          secondaryLabel: 'Optional label',
+          variant: 'showcase',
+          showDot: false,
+        }}
+      />
+      <VariantSizesRow
+        variantLabel="Sponsored"
+        badge={{
+          label: 'Sponsored',
+          variant: 'sponsored',
+        }}
+      />
     </div>
   ),
 };

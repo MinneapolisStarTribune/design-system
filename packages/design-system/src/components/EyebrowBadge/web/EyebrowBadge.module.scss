@@ -6,13 +6,32 @@
 
 .badge {
   display: inline-flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-4);
-  padding: var(--spacing-4) var(--spacing-8);
+  padding: 0 var(--spacing-8);
   border-radius: var(--eyebrow-badge-radius, var(--border-radius-corner-radius-6, 6px));
   border: var(--eyebrow-badge-border, none);
   background: var(--eyebrow-badge-background, transparent);
+}
+
+/** Large (default): 24px badge height — all variants */
+.sizeLarge .badge {
+  height: 24px;
+  min-height: 24px;
+}
+
+/** Small: 20px badge height + 4px radius — all variants */
+.sizeSmall .badge {
+  height: 20px;
+  min-height: 20px;
+  border-radius: var(--border-radius-4, 4px);
+}
+
+.sizeSmall .badgeDot {
+  width: 6px;
+  height: 6px;
 }
 
 .badgeDot {
@@ -36,22 +55,42 @@
   color: var(--eyebrow-badge-secondary-text) !important;
 }
 
-.variant-live {
-  --eyebrow-badge-background: var(--color-background-state-attention);
-  --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
-  --eyebrow-badge-secondary-text: var(--color-background-state-attention);
-}
-
+/* Live/Breaking: fixed red-600 + white so dark brand themes do not shift attention red to red-400. */
+.variant-live,
 .variant-breaking {
-  --eyebrow-badge-background: var(--color-background-state-attention);
-  --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
-  --eyebrow-badge-secondary-text: var(--color-background-state-attention);
+  --eyebrow-badge-background: var(--color-red-600);
+  --eyebrow-badge-primary-text: var(--color-base-white);
+  --eyebrow-badge-secondary-text: var(--color-red-600);
 }
 
+/* Light color scheme / light page: dark chip */
 .variant-showcase {
   --eyebrow-badge-background: var(--color-background-dark-default);
   --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
   --eyebrow-badge-secondary-text: var(--color-text-on-light-secondary);
+}
+
+/*
+ * Dark color scheme (via `DesignSystemContext` + `.showcaseWhenDark`):
+ * Use a physical white chip + dark ink — `background.light-default` / `text.on-light-primary`
+ * in `brand-*-dark.json` do not map to true light surfaces / dark text.
+ */
+.variant-showcase.showcaseWhenDark {
+  --eyebrow-badge-background: var(--color-base-white);
+  --eyebrow-badge-primary-text: var(--color-neutral-950);
+  --eyebrow-badge-secondary-text: var(--color-text-on-light-secondary);
+}
+
+.variant-showcase.showcaseWhenDark .badge {
+  background: var(--color-base-white, #ffffff) !important;
+}
+
+.variant-showcase.showcaseWhenDark .primaryLabel {
+  color: var(--color-neutral-950, var(--color-base-black, #0d0d0d)) !important;
+}
+
+.variant-showcase.showcaseWhenDark .badgeDot {
+  background: var(--color-neutral-950, var(--color-base-black, #0d0d0d)) !important;
 }
 
 .variant-sponsored {

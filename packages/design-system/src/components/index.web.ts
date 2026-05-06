@@ -7,12 +7,6 @@ export {
   type DangerousCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
 export {
-  EYEBROW_BADGE_VARIANTS,
-  EyebrowBadge,
-  type EyebrowBadgeProps,
-  type EyebrowBadgeVariant,
-} from './EyebrowBadge/web/EyebrowBadge';
-export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
@@ -22,6 +16,14 @@ export {
 } from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
+export {
+  EYEBROW_BADGE_SIZES,
+  EYEBROW_BADGE_VARIANTS,
+  EyebrowBadge,
+  type EyebrowBadgeProps,
+  type EyebrowBadgeSize,
+  type EyebrowBadgeVariant,
+} from './EyebrowBadge/web/EyebrowBadge';
 export {
   Form,
   FormButton,
