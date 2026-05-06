@@ -85,6 +85,8 @@ export {
 export { Image, type ImageProps } from './Image/native/Image.native';
 export { InlineLink, type InlineLinkProps } from './InlineLink/native/InlineLink.native';
 export { Link, type LinkProps } from './Link/native/Link.native';
+export { Radio } from './Radio/native/Radio.native';
+export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
