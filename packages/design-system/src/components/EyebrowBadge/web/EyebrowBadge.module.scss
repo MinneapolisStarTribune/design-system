@@ -1,0 +1,61 @@
+.eyebrowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-8);
+  border-radius: var(--eyebrow-badge-radius, var(--border-radius-corner-radius-6, 6px));
+  border: var(--eyebrow-badge-border, none);
+  background: var(--eyebrow-badge-background, transparent);
+}
+
+.badgeDot {
+  width: var(--spacing-8);
+  height: var(--spacing-8);
+  border-radius: 999px;
+  background: var(--eyebrow-badge-primary-text);
+  flex-shrink: 0;
+}
+
+.primaryLabel,
+.secondaryLabel {
+  white-space: nowrap;
+}
+
+.primaryLabel {
+  color: var(--eyebrow-badge-primary-text) !important;
+}
+
+.secondaryLabel {
+  color: var(--eyebrow-badge-secondary-text) !important;
+}
+
+.variant-live {
+  --eyebrow-badge-background: var(--color-background-state-attention);
+  --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
+  --eyebrow-badge-secondary-text: var(--color-background-state-attention);
+}
+
+.variant-breaking {
+  --eyebrow-badge-background: var(--color-background-state-attention);
+  --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
+  --eyebrow-badge-secondary-text: var(--color-background-state-attention);
+}
+
+.variant-showcase {
+  --eyebrow-badge-background: var(--color-background-dark-default);
+  --eyebrow-badge-primary-text: var(--color-text-on-dark-primary);
+  --eyebrow-badge-secondary-text: var(--color-text-on-light-secondary);
+}
+
+.variant-sponsored {
+  --eyebrow-badge-radius: var(--border-radius-6, 6px);
+  --eyebrow-badge-border: 1px solid var(--color-border-on-light-strong-02);
+  --eyebrow-badge-primary-text: var(--color-text-on-light-secondary);
+}

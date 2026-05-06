@@ -7,6 +7,12 @@ export {
   type DangerousCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
 export {
+  EYEBROW_BADGE_VARIANTS,
+  EyebrowBadge,
+  type EyebrowBadgeProps,
+  type EyebrowBadgeVariant,
+} from './EyebrowBadge/web/EyebrowBadge';
+export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
