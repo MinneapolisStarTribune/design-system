@@ -7,20 +7,24 @@ import { CloseIcon } from '@/icons';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
+  headerClassName?: string;
+  titleClassName?: string;
+  closeButtonClassName?: string;
+}> = ({ children, headerClassName, titleClassName, closeButtonClassName }) => {
   const { close } = usePopoverContext();
   const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
-    <div className={classNames(styles.header, typographyClassName)}>
-      <div className={classNames({ [styles.title]: hasTitle })}>{children}</div>
+    <div className={classNames(styles.header, typographyClassName, headerClassName)}>
+      <div className={classNames({ [styles.title]: hasTitle }, titleClassName)}>{children}</div>
+
       <Button
         variant="ghost"
         size="small"
         icon={<CloseIcon />}
         aria-label="Close popover"
-        className={styles.closeButton}
+        className={classNames(styles.closeButton, closeButtonClassName)}
         onClick={close}
       />
     </div>
