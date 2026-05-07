@@ -3,23 +3,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useId } from 'react';
-import { BaseProps } from '@/types/globalTypes';
 import styles from './Radio.module.scss';
-
-export const RADIO_COLORS = ['neutral', 'brand'] as const;
-export type RadioColor = (typeof RADIO_COLORS)[number];
-
-export interface RadioProps extends BaseProps {
-  id?: string;
-  name?: string;
-  label: string;
-  description?: string;
-  checked: boolean;
-  color?: RadioColor;
-  disabled?: boolean;
-  error?: boolean;
-  onChange: (checked: boolean) => void;
-}
+import { RadioProps } from '../Radio.types';
 
 /**
  * Radio component for selecting a single option in a set.
