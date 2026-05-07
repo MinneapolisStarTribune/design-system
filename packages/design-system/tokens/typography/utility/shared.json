@@ -92,7 +92,7 @@
             "font-family": "{font.family.graphik}",
             "font-size": 11,
             "font-weight": 600,
-            "letter-spacing": "0.03em",
+            "letter-spacing": "0.07em",
             "line-height": 1.2,
             "text-transform": "uppercase"
           }
@@ -111,7 +111,7 @@
             "font-family": "{font.family.graphik}",
             "font-size": 11,
             "font-weight": 400,
-            "letter-spacing": "0.03em",
+            "letter-spacing": "0.07em",
             "line-height": 1.2,
             "text-transform": "uppercase"
           }
