@@ -30,7 +30,11 @@ const meta: Meta<typeof EnhancedCodeBlock> = {
     size: {
       control: { type: 'select' },
       options: CODE_BLOCK_SIZES,
-      type: { name: 'enum', value: [...CODE_BLOCK_SIZES] },
+      table: {
+        type: {
+          summary: `${CODE_BLOCK_SIZES.map((size) => `'${size}'`).join(' | ')}`,
+        },
+      },
       description: 'Size variant of the code block',
     },
     cleanQuotes: {
