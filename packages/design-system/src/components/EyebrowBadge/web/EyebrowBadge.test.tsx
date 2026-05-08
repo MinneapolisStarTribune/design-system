@@ -3,7 +3,6 @@ import styles from './EyebrowBadge.module.scss';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('EyebrowBadge', () => {
-
   it('renders required label', () => {
     const { getByText } = renderWithProvider(<EyebrowBadge label="Live" />);
     expect(getByText('Live')).toBeInTheDocument();
@@ -53,7 +52,12 @@ describe('EyebrowBadge', () => {
 
   it('applies showcase dark-surface class when color scheme is dark', () => {
     const { container } = renderWithProvider(
-      <EyebrowBadge label="Showcase" variant="showcase" secondaryLabel="Optional label" showDot={false} />,
+      <EyebrowBadge
+        label="Showcase"
+        variant="showcase"
+        secondaryLabel="Optional label"
+        showDot={false}
+      />,
       { colorScheme: 'dark' }
     );
     expect(container.firstChild).toHaveClass(styles.showcaseWhenDark);
@@ -61,7 +65,12 @@ describe('EyebrowBadge', () => {
 
   it('does not apply showcase dark-surface class when color scheme is light', () => {
     const { container } = renderWithProvider(
-      <EyebrowBadge label="Showcase" variant="showcase" secondaryLabel="Optional label" showDot={false} />,
+      <EyebrowBadge
+        label="Showcase"
+        variant="showcase"
+        secondaryLabel="Optional label"
+        showDot={false}
+      />,
       { colorScheme: 'light' }
     );
     expect(container.firstChild).not.toHaveClass(styles.showcaseWhenDark);

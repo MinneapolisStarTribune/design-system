@@ -65,7 +65,12 @@ export const EyebrowBadge: React.FC<EyebrowBadgeProps> = ({
       </span>
 
       {secondaryLabel && variant !== 'sponsored' ? (
-        <UtilityLabel size={labelSize} weight="semibold" capitalize className={styles.secondaryLabel}>
+        <UtilityLabel
+          size={labelSize}
+          weight="semibold"
+          capitalize
+          className={styles.secondaryLabel}
+        >
           {secondaryLabel}
         </UtilityLabel>
       ) : null}
