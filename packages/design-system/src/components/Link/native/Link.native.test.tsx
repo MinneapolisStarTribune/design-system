@@ -8,7 +8,7 @@ const wrapper = TestWrapperInDesignSystemProvider();
 describe('Link (native)', () => {
   it('renders utility variant with icon support', () => {
     render(
-      <Link size="medium" icon={<ChevronRightIcon />} iconPosition="start">
+      <Link variant='utility' size="medium" icon={<ChevronRightIcon />} iconPosition="start">
         Read more
       </Link>,
       { wrapper }
