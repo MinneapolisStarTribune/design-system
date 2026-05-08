@@ -48,7 +48,6 @@ export const Configurable: Story = {
 };
 
 export const ExampleLive: Story = {
-  name: 'Example Live',
   tags: ['!dev'],
   args: {
     label: 'Live',
@@ -62,7 +61,6 @@ export const ExampleLive: Story = {
 };
 
 export const ExampleBreaking: Story = {
-  name: 'Example Breaking',
   tags: ['!dev'],
   args: {
     label: 'Breaking',
@@ -76,7 +74,6 @@ export const ExampleBreaking: Story = {
 };
 
 export const ExampleShowcaseSmall: Story = {
-  name: 'Example Showcase Small',
   tags: ['!dev'],
   args: {
     label: 'Showcase',
@@ -91,7 +88,6 @@ export const ExampleShowcaseSmall: Story = {
 };
 
 export const ExampleSponsoredAsDiv: Story = {
-  name: 'Example Sponsored As Div',
   tags: ['!dev'],
   args: {
     as: 'div',
@@ -135,7 +131,6 @@ function VariantSizesRow(props: {
 }
 
 export const AllVariants: Story = {
-  name: 'All Variants',
   args: {
     label: 'Live',
     secondaryLabel: 'Updated 12 mins ago',
