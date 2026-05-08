@@ -33,6 +33,7 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
   RadioGroup,
   type RadioGroupProps,

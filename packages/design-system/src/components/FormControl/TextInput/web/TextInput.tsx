@@ -34,6 +34,8 @@ export interface TextInputProps
   'aria-labelledby'?: string;
   /** Override invalid state for screen readers */
   'aria-invalid'?: boolean;
+  /** Input type for web text fields. */
+  type?: 'text' | 'email' | 'number';
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -52,6 +54,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   'aria-labelledby': ariaLabelledByProp,
   'aria-invalid': ariaInvalidProp,
   id: idProp,
+  type = 'text',
   value,
   onChange,
   onBlur,
@@ -116,7 +119,7 @@ export const TextInput: React.FC<TextInputProps> = ({
     <div className={wrapperClasses}>
       {leftIcon && <span className={styles.iconStart}>{leftIcon}</span>}
       <input
-        type="text"
+        type={type}
         id={inputId}
         className={classNames(styles.input, PLACEHOLDER_TYPOGRAPHY[size], styles.valueTypography)}
         placeholder={placeholderText}

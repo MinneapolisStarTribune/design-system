@@ -1,0 +1,92 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as NumberInputStories from './NumberInput.stories';
+
+<Meta of={NumberInputStories} />
+
+# NumberInput
+
+`FormControl.NumberInput` is a numeric field built on top of `TextInput`.
+
+It renders an HTML `input[type="number"]`, applies the same visual states as `TextInput`, and adds a dedicated stepper control with up/down buttons on the right side.
+
+For label, description, and caption composition, use it inside `FormGroup`. This page describes the implemented behavior and public API of `NumberInput`.
+
+## Canonical usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Build Number</FormGroup.Label>
+  <FormControl.NumberInput
+    placeholderText={1000}
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+  />
+</FormGroup>
+```
+
+## Behavior
+
+- Uses `type="number"`, `inputMode="numeric"`, and `pattern="[0-9]*"`.
+- Rejects pasted values that contain non-digit characters.
+- Includes built-in up/down step buttons that call the native input stepping behavior.
+- Preserves focus on the input after stepping.
+- Inherits `TextInput` sizing, rounded styling, disabled state, error state, and success state.
+
+## Value model
+
+`NumberInput` accepts controlled and uncontrolled numeric values through the same shape used by the component props:
+
+- `value`: number or numeric string
+- `defaultValue`: number or numeric string
+- `placeholderText`: number or numeric string
+
+The rendered input still emits standard DOM change events, so controlled usage reads from `event.target.value`.
+
+```tsx
+<FormControl.NumberInput
+  value={count}
+  onChange={(event) => setCount(event.target.value)}
+/>
+```
+
+## Stepper controls
+
+The right-side control rail is part of the component. Clicking the top button increments the current value, and clicking the bottom button decrements it.
+
+If the underlying input is disabled or read-only, the stepper buttons do not change the value.
+
+## Visual options
+
+- `size`: `small` | `medium` | `large`
+- `rounded`: rounded corner style
+- `isDisabled`: disables input and stepper interaction
+- `isError`: applies error styling and `aria-invalid`
+- `isSuccess`: applies success styling when not in error
+
+## Placeholder guidance
+
+`placeholderText` is numeric-only at the component API level and is rendered as text inside the input.
+
+```tsx
+<FormControl.NumberInput placeholderText={12345} />
+```
+
+## Accessibility
+
+When used inside `FormGroup`, the field automatically inherits:
+
+- `aria-labelledby` from `FormGroup.Label`
+- `aria-describedby` from `FormGroup.Description` and `FormGroup.Caption`
+- generated field `id` wiring from the form-group context
+
+When used outside `FormGroup`, provide an accessible name directly, such as `aria-label`.
+
+## Exports
+
+- NumberInput
+- NumberInputProps
+- FormControl.NumberInput
+
+<Primary />
+<Controls />
+<Stories />
