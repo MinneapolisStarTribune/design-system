@@ -47,6 +47,63 @@ export const Configurable: Story = {
   },
 };
 
+export const ExampleLive: Story = {
+  name: 'Example Live',
+  tags: ['!dev'],
+  args: {
+    label: 'Live',
+    secondaryLabel: 'Updated 12 mins ago',
+    variant: 'live',
+    size: 'large',
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
+export const ExampleBreaking: Story = {
+  name: 'Example Breaking',
+  tags: ['!dev'],
+  args: {
+    label: 'Breaking',
+    secondaryLabel: 'Developing story',
+    variant: 'breaking',
+    size: 'large',
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
+export const ExampleShowcaseSmall: Story = {
+  name: 'Example Showcase Small',
+  tags: ['!dev'],
+  args: {
+    label: 'Showcase',
+    secondaryLabel: 'Style',
+    variant: 'showcase',
+    size: 'small',
+    showDot: false,
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
+export const ExampleSponsoredAsDiv: Story = {
+  name: 'Example Sponsored As Div',
+  tags: ['!dev'],
+  args: {
+    as: 'div',
+    label: 'Sponsored',
+    variant: 'sponsored',
+    dataTestId: 'sponsored-eyebrow-badge',
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
 function VariantSizesRow(props: {
   variantLabel: string;
   badge: Omit<ComponentProps<typeof EyebrowBadge>, 'size'>;
