@@ -7,7 +7,7 @@ describe('Link Accessibility (native)', () => {
 
   it('renders utility link with link role and accessible label', () => {
     render(
-      <Link size="medium" aria-label="Utility news link" dataTestId="link-a11y-utility">
+      <Link variant="utility" size="medium" aria-label="Utility news link" dataTestId="link-a11y-utility">
         Read more
       </Link>,
       { wrapper }
@@ -21,6 +21,7 @@ describe('Link Accessibility (native)', () => {
   it('marks utility link as disabled in accessibility state', () => {
     render(
       <Link
+        variant="utility"
         size="medium"
         disabled
         aria-label="Disabled utility link"

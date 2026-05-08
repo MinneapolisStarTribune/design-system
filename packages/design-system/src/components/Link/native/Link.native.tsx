@@ -22,17 +22,17 @@ type CommonProps = {
   testID?: string;
 };
 
-export type InlineLinkProps = InlineNativeProps & {
-  variant?: 'inline';
+export type NativeLinkInlineProps = InlineNativeProps & CommonProps & {
+  variant: 'inline';
   children: string;
 };
 
-export type UtilityLinkProps = UtilityNativeProps & {
-  variant?: 'utility';
+export type NativeLinkUtilityProps = UtilityNativeProps & CommonProps & {
+  variant: 'utility';
   children: React.ReactNode;
 };
 
-export type LinkProps = (InlineLinkProps & CommonProps) | (UtilityLinkProps & CommonProps);
+export type LinkProps = NativeLinkInlineProps | NativeLinkUtilityProps;
 
 export const Link: React.FC<LinkProps> = (props) => {
   const { styles } = useNativeStyles((t) => ({

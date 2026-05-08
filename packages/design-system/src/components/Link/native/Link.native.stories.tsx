@@ -50,6 +50,7 @@ export const Configurable: Story = {
 
   render: (args) => (
     <Link
+      variant="utility"
       size={args.size ?? 'medium'}
       disabled={args.disabled}
       iconPosition={args.iconPosition ?? 'end'}
