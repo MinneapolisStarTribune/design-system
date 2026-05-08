@@ -7,7 +7,12 @@ describe('Link Accessibility (native)', () => {
 
   it('renders utility link with link role and accessible label', () => {
     render(
-      <Link variant="utility" size="medium" aria-label="Utility news link" dataTestId="link-a11y-utility">
+      <Link
+        variant="utility"
+        size="medium"
+        aria-label="Utility news link"
+        dataTestId="link-a11y-utility"
+      >
         Read more
       </Link>,
       { wrapper }
