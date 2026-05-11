@@ -3,11 +3,6 @@
   width: 100%;
 
   .number-input {
-    input[type='number'] {
-      appearance: textfield;
-      -moz-appearance: textfield;
-      padding-right: 44px;
-    }
 
     input[type='number']::-webkit-outer-spin-button,
     input[type='number']::-webkit-inner-spin-button {
@@ -87,33 +82,4 @@
     justify-content: center;
     line-height: 0;
   }
-
-  // .sb-dark .controls,
-  // [data-theme='dark'] .controls {
-  //   border-left-color: var(--color-border-on-dark-subtle-01);
-  // }
-
-  // .sb-dark .control-button,
-  // [data-theme='dark'] .control-button {
-  //   color: var(--color-text-on-dark-tertiary);
-
-  //   &:hover {
-  //     background-color: var(--color-background-dark-gray-02);
-  //   }
-  // }
-
-  // .sb-dark .control-button-up,
-  // [data-theme='dark'] .control-button-up {
-  //   border-bottom-color: var(--color-border-on-dark-subtle-01);
-  // }
-
-  // .sb-dark .number-input:has(input:disabled) + .controls,
-  // [data-theme='dark'] .number-input:has(input:disabled) + .controls {
-  //   border-left-color: var(--color-border-state-disabled-on-dark);
-  // }
-
-  // .sb-dark .number-input:has(input:disabled) + .controls .control-button,
-  // [data-theme='dark'] .number-input:has(input:disabled) + .controls .control-button {
-  //   color: var(--color-text-state-disabled-on-dark);
-  // }
 }

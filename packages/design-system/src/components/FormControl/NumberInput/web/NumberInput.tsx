@@ -41,7 +41,6 @@ export const NumberInput: React.FC<NumberInputProps> = ({
         size={size}
         type="number"
         inputMode="numeric"
-        pattern="[0-9]*"
         placeholderText={placeholderText != null ? String(placeholderText) : undefined}
         className={classNames(styles['number-input'], styles[`number-input-${size}`], className)}
       />
