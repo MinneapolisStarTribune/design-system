@@ -56,7 +56,7 @@
   },
   {
     "component": "RadioGroup",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
