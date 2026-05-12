@@ -138,6 +138,8 @@ interface StartribuneLightTheme {
   colorEmeraldGreen800: string;
   colorEmeraldGreen900: string;
   colorEmeraldGreen950: string;
+  colorEyebrowTextBrandOnDark: string;
+  colorEyebrowTextBrandOnLight: string;
   colorForestGreen100: string;
   colorForestGreen200: string;
   colorForestGreen300: string;
@@ -575,6 +577,8 @@ interface StartribuneDarkTheme {
   colorEmeraldGreen800: string;
   colorEmeraldGreen900: string;
   colorEmeraldGreen950: string;
+  colorEyebrowTextBrandOnDark: string;
+  colorEyebrowTextBrandOnLight: string;
   colorForestGreen100: string;
   colorForestGreen200: string;
   colorForestGreen300: string;
@@ -1018,6 +1022,8 @@ interface VarsityLightTheme {
   colorEmeraldGreen800: string;
   colorEmeraldGreen900: string;
   colorEmeraldGreen950: string;
+  colorEyebrowTextBrandOnDark: string;
+  colorEyebrowTextBrandOnLight: string;
   colorForestGreen100: string;
   colorForestGreen200: string;
   colorForestGreen300: string;
@@ -1461,6 +1467,8 @@ interface VarsityDarkTheme {
   colorEmeraldGreen800: string;
   colorEmeraldGreen900: string;
   colorEmeraldGreen950: string;
+  colorEyebrowTextBrandOnDark: string;
+  colorEyebrowTextBrandOnLight: string;
   colorForestGreen100: string;
   colorForestGreen200: string;
   colorForestGreen300: string;
