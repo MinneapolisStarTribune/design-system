@@ -4,7 +4,9 @@ import { SwiperCarousel } from './SwiperCarousel';
 import { FormGroup, SectionHeading, SwiperCarouselProps, UtilityBody } from '@/index.web';
 import type { NavigationProps } from './SwiperCarousel.types';
 
-const meta: Meta<typeof SwiperCarousel> = {
+type StoryArgs = SwiperCarouselProps & NavigationProps;
+
+const meta: Meta<StoryArgs> = {
   title: 'Components/SwiperCarousel',
   component: SwiperCarousel,
 
@@ -17,6 +19,7 @@ const meta: Meta<typeof SwiperCarousel> = {
     spaceBetween: 16,
     loop: false,
     centeredSlides: false,
+    size: 'medium',
   },
 
   argTypes: {
@@ -24,20 +27,23 @@ const meta: Meta<typeof SwiperCarousel> = {
       control: { type: 'radio' },
       options: ['auto', 1, 2, 3],
     },
-    spaceBetween: {
-      control: { type: 'number' },
-    },
+    spaceBetween: { control: { type: 'number' } },
     loop: { control: 'boolean' },
     centeredSlides: { control: 'boolean' },
+
+    size: {
+      control: { type: 'select' },
+      options: ['x-small', 'small', 'medium', 'large'],
+    },
+
     breakpoints: { control: false },
     className: { control: false },
     children: { control: false },
   },
 };
-
 export default meta;
 
-type Story = StoryObj<typeof SwiperCarousel>;
+type Story = StoryObj<StoryArgs>;
 
 const DemoCard = ({ index }: { index: number }) => (
   <div
@@ -82,7 +88,7 @@ export const Configurable: Story = {
         <FormGroup>
           <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
         </FormGroup>
-        <SwiperCarousel.Navigation />
+        <SwiperCarousel.Navigation size={args.size} />
       </div>
     </SwiperCarousel>
   ),
@@ -103,7 +109,7 @@ export const Configurable: Story = {
     <FormGroup>
           <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
         </FormGroup>
-    <SwiperCarousel.Navigation />
+        <SwiperCarousel.Navigation size={args.size}/>
   </div>
 </SwiperCarousel>
         `,
@@ -153,7 +159,15 @@ export const AllVariants: StoryObj<NavigationStoryArgs> = {
                 Captions (Formgroup.caption Used)
               </FormGroup.Caption>
             </FormGroup>
-            <SwiperCarousel.Navigation />
+            <SwiperCarousel.Navigation
+              size={size}
+              prevButtonProps={{
+                onClick: () => alert('Prev tracking'),
+              }}
+              nextButtonProps={{
+                onClick: () => alert('Next tracking'),
+              }}
+            />
           </div>
         </SwiperCarousel>
       </section>

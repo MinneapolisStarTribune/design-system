@@ -34,10 +34,12 @@ const renderCarousel = ({
   withPagination = false,
   withNavigation = false,
   loop = false,
+  size,
 }: {
   withPagination?: boolean;
   withNavigation?: boolean;
   loop?: boolean;
+  size?: 'x-small' | 'small' | 'medium' | 'large';
 } = {}) =>
   renderWithProvider(
     <SwiperCarousel loop={loop}>
@@ -48,7 +50,7 @@ const renderCarousel = ({
       ))}
 
       {withPagination && <SwiperCarousel.Pagination />}
-      {withNavigation && <SwiperCarousel.Navigation />}
+      {withNavigation && <SwiperCarousel.Navigation size={size} />}
     </SwiperCarousel>
   );
 
@@ -81,11 +83,8 @@ describe('SwiperCarousel', () => {
     it('renders navigation buttons when included', () => {
       renderCarousel({ withNavigation: true });
 
-      const prev = screen.getByLabelText('Previous slide');
-      const next = screen.getByLabelText('Next slide');
-
-      expect(prev).toBeInTheDocument();
-      expect(next).toBeInTheDocument();
+      expect(screen.getByLabelText('Previous slide')).toBeInTheDocument();
+      expect(screen.getByLabelText('Next slide')).toBeInTheDocument();
     });
   });
 
@@ -93,36 +92,48 @@ describe('SwiperCarousel', () => {
     it('renders navigation in non-loop mode', () => {
       renderCarousel({ withNavigation: true });
 
-      const buttons = screen.getAllByRole('button');
-
-      expect(buttons.length).toBe(2);
+      expect(screen.getAllByRole('button')).toHaveLength(2);
     });
 
     it('renders navigation in loop mode', () => {
-      renderCarousel({
-        withNavigation: true,
-        loop: true,
-      });
+      renderCarousel({ withNavigation: true, loop: true });
 
-      const buttons = screen.getAllByRole('button');
-
-      expect(buttons.length).toBe(2);
+      expect(screen.getAllByRole('button')).toHaveLength(2);
     });
 
     it('disables previous button at beginning', () => {
       renderCarousel({ withNavigation: true });
 
-      const prev = screen.getByLabelText('Previous slide');
-
-      expect(prev).toBeDisabled();
+      expect(screen.getByLabelText('Previous slide')).toBeDisabled();
     });
 
     it('enables next button when not at end', () => {
       renderCarousel({ withNavigation: true });
 
-      const next = screen.getByLabelText('Next slide');
+      expect(screen.getByLabelText('Next slide')).not.toBeDisabled();
+    });
+  });
 
-      expect(next).not.toBeDisabled();
+  describe('navigation size', () => {
+    it('renders with medium size explicitly', () => {
+      renderCarousel({ withNavigation: true, size: 'medium' });
+
+      const buttons = screen.getAllByRole('button');
+      expect(buttons).toHaveLength(2);
+    });
+
+    it('renders with large size explicitly', () => {
+      renderCarousel({ withNavigation: true, size: 'large' });
+
+      const buttons = screen.getAllByRole('button');
+      expect(buttons).toHaveLength(2);
+    });
+
+    it('supports icon-only sizes (x-small)', () => {
+      renderCarousel({ withNavigation: true, size: 'x-small' });
+
+      const buttons = screen.getAllByRole('button');
+      expect(buttons).toHaveLength(2);
     });
   });
 

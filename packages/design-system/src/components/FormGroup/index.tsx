@@ -1,10 +1,10 @@
 export { FormControl, type FormControlProps } from '../FormControl/FormControl';
 export { FormGroup, type FormGroupProps } from './web/FormGroup';
-export type { FormGroupDescriptionProps } from './web/description/FormGroup.Description';
-export type { FormGroupLabelProps } from './web/label/FormGroup.Label';
-export type { FormGroupCaptionProps } from './web/caption/FormGroup.Caption';
+export type { FormGroupDescriptionProps } from './web/Description/FormGroup.Description';
+export type { FormGroupLabelProps } from './web/Label/FormGroup.Label';
+export type { FormGroupCaptionProps } from './web/Caption/FormGroup.Caption';
 export { FormGroupNative, type FormGroupNativeProps } from './native/FormGroup.native';
-export type { FormGroupLabelNativeProps } from './native/label/FormGroup.Label.native';
-export type { FormGroupDescriptionNativeProps } from './native/description/FormGroup.Description.native';
-export type { FormGroupCaptionNativeProps } from './native/caption/FormGroup.Caption.native';
+export type { FormGroupLabelNativeProps } from './native/Label/FormGroup.Label.native';
+export type { FormGroupDescriptionNativeProps } from './native/Description/FormGroup.Description.native';
+export type { FormGroupCaptionNativeProps } from './native/Caption/FormGroup.Caption.native';
 export { useFormGroupContext, FormGroupProvider } from './FormGroupContext';

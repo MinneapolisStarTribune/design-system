@@ -1,0 +1,161 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ImageStories from './Image.stories';
+
+<Meta of={ImageStories} />
+
+# Image
+
+The `Image` component is a reusable wrapper around the native HTML `<img>` element.  
+It provides a consistent API for handling images across the application, including support for **Imgix optimization**, **accessibility**, and **testing hooks**.
+
+---
+
+## Canonical usage
+
+```tsx
+import { Image } from '@/components/Image';
+
+function Example() {
+  return (
+    <Image
+      src="https://picsum.photos/400/300"
+      alt="Sample image"
+      width="400"
+      height="300"
+    />
+  );
+}
+```
+
+---
+
+## With Imgix optimization
+
+```tsx
+<Image
+  src="https://assets.imgix.net/examples/pione.jpg"
+  alt="Optimized image"
+  imgixParams="w=400&h=300&fit=crop&auto=format,compress&q=75"
+/>
+```
+
+---
+
+## Clickable image
+
+```tsx
+<Image
+  src="https://picsum.photos/400/300"
+  alt="Clickable"
+  onClick={() => console.log('Clicked')}
+/>
+```
+
+---
+
+## Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td><code>src</code></td>
+      <td><code>string</code></td>
+      <td>Yes</td>
+      <td>Image source URL.</td>
+    </tr>
+
+    <tr>
+      <td><code>alt</code></td>
+      <td><code>string</code></td>
+      <td>Yes</td>
+      <td>Alternative text for accessibility and SEO.</td>
+    </tr>
+
+    <tr>
+      <td><code>imgixParams</code></td>
+      <td><code>string</code></td>
+      <td>No</td>
+      <td>Optional Imgix query parameters for resizing and optimization.</td>
+    </tr>
+
+    <tr>
+      <td><code>dataTestId</code></td>
+      <td><code>string</code></td>
+      <td>No</td>
+      <td>Test identifier mapped to <code>data-testid</code>. Default is <code>"image"</code>.</td>
+    </tr>
+
+    <tr>
+      <td><code>onClick</code></td>
+      <td><code>(event) =&gt; void</code></td>
+      <td>No</td>
+      <td>Click handler for interactive images.</td>
+    </tr>
+
+    <tr>
+      <td><code>width</code></td>
+      <td><code>string | number</code></td>
+      <td>No</td>
+      <td>Width of the image element.</td>
+    </tr>
+
+    <tr>
+      <td><code>height</code></td>
+      <td><code>string | number</code></td>
+      <td>No</td>
+      <td>Height of the image element.</td>
+    </tr>
+
+    <tr>
+      <td><code>loading</code></td>
+      <td><code>'lazy' | 'eager'</code></td>
+      <td>No</td>
+      <td>Controls lazy loading behavior of the image.</td>
+    </tr>
+
+    <tr>
+      <td><code>...rest</code></td>
+      <td><code>ImgHTMLAttributes&lt;HTMLImageElement&gt;</code></td>
+      <td>No</td>
+      <td>All standard HTML image attributes are supported.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+---
+
+## Accessibility
+
+- Always provide meaningful <code>alt</code> text.
+- The <code>alt</code> attribute is used by screen readers and improves SEO.
+- Avoid empty alt text unless the image is purely decorative.
+
+---
+
+## Best practices
+
+- Use **Imgix parameters** to serve optimized images.
+- Prefer <code>loading="lazy"</code> for non-critical images.
+- Always define width and height to prevent layout shifts.
+- Use appropriate formats via Imgix (<code>auto=format</code>).
+
+---
+
+## Exports
+
+- <code>Image</code>
+- <code>ImageProps</code>
+
+<Primary />
+<Controls />
+<Stories />

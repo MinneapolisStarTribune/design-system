@@ -51,12 +51,12 @@
   },
   {
     "component": "Radio",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
     "component": "RadioGroup",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -71,7 +71,7 @@
   },
   {
     "component": "Select",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -82,7 +82,7 @@
   {
     "component": "Switch",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "Popover",
@@ -167,7 +167,7 @@
   {
     "component": "EyebrowLabel",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "EyebrowBadge",
@@ -211,7 +211,7 @@
   },
   {
     "component": "SocialEmbeds",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -236,8 +236,8 @@
   },
   {
     "component": "AuthorBioCard",
-    "native": false,
-    "web": false
+    "native": true,
+    "web": true
   },
   {
     "component": "RelatedCoverage",
@@ -351,7 +351,7 @@
   },
   {
     "component": "Image",
-    "native": false,
+    "native": true,
     "web": true
   }
 ]

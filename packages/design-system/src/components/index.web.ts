@@ -1,9 +1,15 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export type { DangerousCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/DangerousCodeBlock.types';
-export { DangerousCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
-export type { EnhancedCodeBlockProps } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/EnhancedCodeBlock.types';
-export { EnhancedCodeBlock } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
+export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
+export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
+export {
+  DangerousCodeBlock,
+  type DangerousCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/DangerousCodeBlock/web/DangerousCodeBlock';
+export {
+  EnhancedCodeBlock,
+  type EnhancedCodeBlockProps,
+} from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
 export {
   ImageGallery,
   type ImageGalleryProps,
@@ -32,8 +38,16 @@ export {
   type RadioGroupProps,
   type RadioOption,
 } from './FormControl/RadioGroup/web/RadioGroup';
+export type { SelectOption, SelectProps } from './FormControl/Select/Select.types';
 export { Select } from './FormControl/Select/web/Select';
-export type { SelectProps } from './FormControl/Select/web/Select.types';
+export {
+  Switch,
+  SWITCH_COLORS,
+  SWITCH_SIZES,
+  type SwitchColor,
+  type SwitchProps,
+  type SwitchSize,
+} from './FormControl/Switch/web/Switch';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
@@ -64,7 +78,8 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
-export { Radio, type RadioColor, type RadioProps } from './Radio/Radio';
+export type { RadioColor, RadioProps } from './Radio/Radio.types';
+export { Radio } from './Radio/web/Radio';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
@@ -115,6 +130,10 @@ export {
   SponsoredHeading,
   type SponsoredHeadingProps,
 } from './Typography/Editorial/SponsoredHeading/web/SponsoredHeading';
+export {
+  EyebrowLabel,
+  type EyebrowLabelProps,
+} from './Typography/Utility/EyebrowLabel/web/EyebrowLabel';
 export {
   PageHeading,
   type PageHeadingProps,

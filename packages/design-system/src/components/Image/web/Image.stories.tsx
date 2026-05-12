@@ -4,7 +4,6 @@ import { Image, ImageProps } from './Image';
 const meta: Meta<ImageProps> = {
   title: 'Foundations/Image',
   component: Image,
-  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },

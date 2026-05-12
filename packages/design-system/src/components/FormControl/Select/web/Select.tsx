@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import styles from './Select.module.scss';
-import { SelectProps, SelectOption } from './Select.types';
+import type { SelectOption, SelectProps } from '../Select.types';
 import { ChevronDownIcon } from '@/icons';
 
 export const Select: React.FC<SelectProps> = ({

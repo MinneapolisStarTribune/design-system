@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EnhancedCodeBlock } from './EnhancedCodeBlock';
-import type { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+import { EnhancedCodeBlock, type EnhancedCodeBlockProps } from './EnhancedCodeBlock';
 import {
   CODE_BLOCK_SIZES,
   ARTICLE_BODY_VARIANTS,
@@ -31,7 +30,11 @@ const meta: Meta<typeof EnhancedCodeBlock> = {
     size: {
       control: { type: 'select' },
       options: CODE_BLOCK_SIZES,
-      type: { name: 'enum', value: [...CODE_BLOCK_SIZES] },
+      table: {
+        type: {
+          summary: `${CODE_BLOCK_SIZES.map((size) => `'${size}'`).join(' | ')}`,
+        },
+      },
       description: 'Size variant of the code block',
     },
     cleanQuotes: {

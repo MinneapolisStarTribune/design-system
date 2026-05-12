@@ -1,16 +1,15 @@
 'use client';
 
+import { IconOnlyButtonSize } from '@/components/Button/web/Button.types';
 import { useEffect, useState } from 'react';
 
-type Size = 'medium' | 'large';
-
-export const useResponsiveSize = (override?: Size): Size => {
-  const getInitialSize = (): Size => {
+export const useResponsiveSize = (override?: IconOnlyButtonSize): IconOnlyButtonSize => {
+  const getInitialSize = (): IconOnlyButtonSize => {
     if (typeof window === 'undefined') return 'large';
     return window.innerWidth < 1024 ? 'medium' : 'large';
   };
 
-  const [size, setSize] = useState<Size>(getInitialSize);
+  const [size, setSize] = useState<IconOnlyButtonSize>(getInitialSize);
 
   useEffect(() => {
     if (override || typeof window === 'undefined') return;

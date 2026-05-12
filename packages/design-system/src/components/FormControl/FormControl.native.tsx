@@ -17,6 +17,7 @@ import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import type { AccessibilityProps } from '@/types/globalTypes';
 import type { NativeBaseProps } from '@/types/native-base-props';
 import { Size } from '@/types/globalTypes';
+import { Select } from './Select/native/Select.native';
 import {
   fieldSurfaceBorderWidth,
   getFieldSurfaceColors,
@@ -231,6 +232,8 @@ FormControlTextInput.displayName = 'FormControl.TextInput';
 export const FormControl: React.FC<FormControlProps> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Select: React.ComponentType<any>;
 } = () => {
   if (typeof console !== 'undefined' && console.error) {
     console.error(
@@ -242,3 +245,4 @@ export const FormControl: React.FC<FormControlProps> & {
 };
 
 FormControl.TextInput = FormControlTextInput;
+FormControl.Select = Select;
