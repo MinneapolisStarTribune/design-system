@@ -52,6 +52,11 @@ export {
 } from './FormControl/CheckboxGroup/native/CheckboxGroup.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export {
+  RadioGroup,
+  type RadioGroupProps,
+  type RadioOption,
+} from './FormControl/RadioGroup/native/RadioGroup.native';
 export { Select } from './FormControl/Select/native/Select.native';
 export type {
   SelectOption,
