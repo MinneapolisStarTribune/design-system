@@ -2,7 +2,9 @@ import React from 'react';
 import classNames from 'classnames';
 import { DangerousCodeBlock } from '../../DangerousCodeBlock/web/DangerousCodeBlock';
 import styles from './EnhancedCodeBlock.module.scss';
-import type { EnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+import type { BaseEnhancedCodeBlockProps } from '../EnhancedCodeBlock.types';
+
+export type EnhancedCodeBlockProps = BaseEnhancedCodeBlockProps;
 
 /**
  * EnhancedCodeBlock wraps `DangerousCodeBlock` and applies `size` × `variant` styles

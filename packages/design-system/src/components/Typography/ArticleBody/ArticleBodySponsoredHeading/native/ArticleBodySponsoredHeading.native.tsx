@@ -2,10 +2,10 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { ArticleBodySponsoredHeadingProps } from '../ArticleBodySponsoredHeading.types';
+import type { ArticleBodySponsoredHeadingImportance } from '../ArticleBodySponsoredHeading.types';
+import type { ArticleBodySponsoredHeadingNativeProps } from '../ArticleBodySponsoredHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-type ArticleBodySponsoredHeadingImportance = ArticleBodySponsoredHeadingProps['importance'];
 
 const importanceToStyleKey: Record<ArticleBodySponsoredHeadingImportance, StyleKey> = {
   1: 'h1',
@@ -25,7 +25,9 @@ type SponsoredHeadingTypographyTokens = {
   typographyArticleBodySponsoredH6: NativeTheme['typographyArticleBodyH6'];
 };
 
-export const ArticleBodySponsoredHeading: React.FC<ArticleBodySponsoredHeadingProps> = (props) => {
+export const ArticleBodySponsoredHeading: React.FC<ArticleBodySponsoredHeadingNativeProps> = (
+  props
+) => {
   const { importance, children, ...rest } = props;
   useBrandValidation('ArticleBodySponsoredHeading');
 
@@ -57,7 +59,5 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type {
-  ArticleBodySponsoredHeadingProps,
-  ArticleBodySponsoredHeadingImportance,
-} from '../ArticleBodySponsoredHeading.types';
+export type { ArticleBodySponsoredHeadingNativeProps as ArticleBodySponsoredHeadingProps } from '../ArticleBodySponsoredHeading.types';
+export type { ArticleBodySponsoredHeadingImportance } from '../ArticleBodySponsoredHeading.types';

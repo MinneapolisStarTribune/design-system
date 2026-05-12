@@ -51,17 +51,13 @@
     .quote-icon-wrapper {
       &.size-small {
         @media (min-width: $lg) {
-          margin-left: calc(
-            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-small-width))
-          );
+          margin-left: calc(-1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-small-width)));
         }
       }
 
       &.size-large {
         @media (min-width: $lg) {
-          margin-left: calc(
-            -1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-large-width))
-          );
+          margin-left: calc(-1 * (var(--spacing-8) + var(--semantic-pull-quote-icon-large-width)));
         }
       }
     }

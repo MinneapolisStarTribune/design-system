@@ -1,6 +1,6 @@
 import type { ArticleToolkitBaseProps } from '@/components/EditorialContent/ArticleToolkit/types';
 
-export interface DangerousCodeBlockProps extends ArticleToolkitBaseProps {
+export interface BaseDangerousCodeBlockProps extends ArticleToolkitBaseProps {
   /*
    * Raw HTML markup from Arc CMS (charts, maps, embeds)
    */

@@ -2,9 +2,9 @@ import React from 'react';
 import { Text } from 'react-native';
 import camelCase from 'lodash/camelCase';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { ArticleBodySponsoredTextProps } from '../ArticleBodySponsoredText.types';
+import type { ArticleBodySponsoredTextNativeProps } from '../ArticleBodySponsoredText.types';
 
-export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextProps> = (props) => {
+export const ArticleBodySponsoredText: React.FC<ArticleBodySponsoredTextNativeProps> = (props) => {
   const {
     weight = 'regular',
     children,
@@ -46,7 +46,5 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type {
-  ArticleBodySponsoredTextProps,
-  ArticleBodySponsoredTextWeight,
-} from '../ArticleBodySponsoredText.types';
+export type { ArticleBodySponsoredTextNativeProps as ArticleBodySponsoredTextProps } from '../ArticleBodySponsoredText.types';
+export type { ArticleBodySponsoredTextWeight } from '../ArticleBodySponsoredText.types';

@@ -11,6 +11,47 @@ import * as ArticleBodyText from './ArticleBodyText.stories';
 Article body text styles are used for the main written content within an article.
 These styles are optimized for sustained reading, with consistent line height and spacing to support clarity across paragraphs, emphasis styles, and inline links.
 
+## Weights
+
+| Weight        | Description                                                                      |
+| ------------- | -------------------------------------------------------------------------------- |
+| `regular`     | Default body copy for all article types.                                         |
+| `italic`      | For emphasis within body copy.                                                   |
+| `bold`        | For strong emphasis within body copy.                                            |
+| `bold-italic` | Combined bold and italic emphasis.                                               |
+| `dropcap`     | Decorative oversized first letter. **Immersive articles only** — see note below. |
+
+> **Note:** Standard articles on the brand side should use the **`regular`** weight, not `dropcap`.
+> The drop cap style is reserved for **immersive article layouts** where the first paragraph
+> features an oversized first letter. Using `dropcap` on a standard article will have no visible
+> effect because the immersive article body wrapper is required for the `::first-letter` styles
+> to apply.
+
+## Developer Usage
+
+```tsx
+import { ArticleBodyText } from '@minneapolisstartribune/design-system/web';
+
+{
+  /* Regular body copy (standard articles) */
+}
+<ArticleBodyText weight="regular">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+  labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque.
+</ArticleBodyText>;
+
+{
+  /* Drop cap (immersive articles only) */
+}
+<ArticleBodyText weight="dropcap">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+  labore et dolore magna aliqua. Mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Ut
+  eu sem integer vitae justo eget. Amet consectetur adipiscing elit ut. Erat nam at lectus urna
+  duis. Nisi vitae suscipit tellus mauris a diam maecenas sed. Sed sed risus pretium quam vulputate.
+  Mi bibendum neque egestas congue quisque egestas diam.
+</ArticleBodyText>;
+```
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 {/* Do not remove the line below — it renders a divider between the doucmentation and. */}

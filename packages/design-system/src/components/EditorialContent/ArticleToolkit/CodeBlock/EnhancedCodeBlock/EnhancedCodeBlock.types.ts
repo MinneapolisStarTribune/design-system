@@ -1,6 +1,6 @@
 import type { CodeBlockSizeType } from '../../types';
-import type { DangerousCodeBlockProps } from '../DangerousCodeBlock/DangerousCodeBlock.types';
+import type { BaseDangerousCodeBlockProps } from '../DangerousCodeBlock/DangerousCodeBlock.types';
 
-export interface EnhancedCodeBlockProps extends DangerousCodeBlockProps {
+export type BaseEnhancedCodeBlockProps = BaseDangerousCodeBlockProps & {
   size?: CodeBlockSizeType;
-}
+};

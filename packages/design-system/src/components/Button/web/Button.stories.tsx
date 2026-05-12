@@ -78,6 +78,38 @@ const meta: Meta<ConfigurableArgs> = {
       description:
         'Use `dark` on dark backgrounds when the page still uses light theme CSS on :root. Brand follows DesignSystemProvider (`html[data-ds-brand]`).',
     },
+    /** Autodocs cannot show a real `as` value — document Next.js / anchor usage here instead of a bogus control default. */
+    as: {
+      control: false,
+      description:
+        'Root element type. Default is a native `<button>`. **Next.js App Router:** `import NextLink from "next/link"` then `as={NextLink}` with `href` (and optional `prefetch`, `replace`, `scroll`). **Plain URL:** `as="a"` with `href`, `target`, `rel`.',
+      table: {
+        category: 'Polymorphic / link',
+        type: { summary: 'ElementType' },
+        defaultValue: { summary: 'button' },
+      },
+    },
+    href: {
+      control: false,
+      description:
+        'Forwarded to the root with `as="a"` or `as={NextLink}`. Omit on the default `<button>`.',
+      table: { category: 'Polymorphic / link' },
+    },
+    prefetch: {
+      control: false,
+      description: 'When `as` is `next/link`’s `Link`, forwarded as Next’s `prefetch` prop.',
+      table: { category: 'Polymorphic / link' },
+    },
+    replace: {
+      control: false,
+      description: 'When `as` is `next/link`’s `Link`, forwarded as Next’s `replace` prop.',
+      table: { category: 'Polymorphic / link' },
+    },
+    scroll: {
+      control: false,
+      description: 'When `as` is `next/link`’s `Link`, forwarded as Next’s `scroll` prop.',
+      table: { category: 'Polymorphic / link' },
+    },
   },
 };
 
@@ -214,17 +246,36 @@ function StoryMockNextLink({
   );
 }
 
+/** Shown in docs for **Button with Next.js Link** — swap in `NextLink` from `next/link` in your app. */
+const polymorphicNextLinkDocsSource = `
+import NextLink from 'next/link';
+import { Button } from '@minneapolisstartribune/design-system/web';
+
+<Button as={NextLink} 
+    href="/subscribe" 
+    prefetch={false} 
+    variant="filled" 
+    color="brand" 
+    size="medium">
+  Subscribe
+</Button>
+`.trim();
+
 /**
  * Button **appearance** with **client navigation**: `as` is a mock `next/link`. Replace with real `NextLink` in the app.
  */
 export const PolymorphicAsNextLink: Story = {
-  name: 'As Next.js Link',
+  name: 'Button with Next.js Link',
   parameters: {
     controls: { disable: true },
     docs: {
       description: {
         story:
-          'Storybook uses `StoryMockNextLink`. In production pass `as={NextLink}` from `next/link` and props like `href`, `prefetch`, `replace`.',
+          'The canvas uses `StoryMockNextLink` so Storybook does not depend on `next`. In your app, use `NextLink` from `next/link` — the snippet below is what you should copy.',
+      },
+      source: {
+        code: polymorphicNextLinkDocsSource,
+        type: 'code',
       },
     },
   },

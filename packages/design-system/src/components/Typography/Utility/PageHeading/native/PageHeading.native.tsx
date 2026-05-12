@@ -1,18 +1,19 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { PageHeadingProps } from '../PageHeading.types';
+import type { PageHeadingImportance } from '../PageHeading.types';
+import type { PageHeadingNativeProps } from '../PageHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4';
 
-const importanceToStyleKey: Record<PageHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<PageHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
   4: 'h4',
 };
 
-export const PageHeading: React.FC<PageHeadingProps> = (props) => {
+export const PageHeading: React.FC<PageHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
   const styleKey = importanceToStyleKey[importance];
@@ -35,4 +36,5 @@ const createStyles = (theme: NativeTheme) => ({
   h4: { ...theme.typographyUtilityPageH4 },
 });
 
-export type { PageHeadingImportance, PageHeadingProps } from '../PageHeading.types';
+export type { PageHeadingNativeProps as PageHeadingProps } from '../PageHeading.types';
+export type { PageHeadingImportance } from '../PageHeading.types';

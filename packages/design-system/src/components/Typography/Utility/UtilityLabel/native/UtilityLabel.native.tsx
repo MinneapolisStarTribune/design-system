@@ -2,10 +2,10 @@ import React from 'react';
 import upperFirst from 'lodash/upperFirst';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { UtilityLabelProps } from '../UtilityLabel.types';
+import type { UtilityLabelNativeProps } from '../UtilityLabel.types';
 import { UTILITY_LABEL_SIZES, UTILITY_LABEL_WEIGHTS } from '../UtilityLabel.types';
 
-export const UtilityLabel: React.FC<UtilityLabelProps> = (props) => {
+export const UtilityLabel: React.FC<UtilityLabelNativeProps> = (props) => {
   const {
     size,
     weight = 'regular',
@@ -47,8 +47,5 @@ const createStyles = (theme: NativeTheme) => {
   ) as Record<string, NativeTheme['typographyUtilityLabelMedium']>;
 };
 
-export type {
-  UtilityLabelProps,
-  UtilityLabelSize,
-  UtilityLabelWeight,
-} from '../UtilityLabel.types';
+export type { UtilityLabelNativeProps as UtilityLabelProps } from '../UtilityLabel.types';
+export type { UtilityLabelSize, UtilityLabelWeight } from '../UtilityLabel.types';

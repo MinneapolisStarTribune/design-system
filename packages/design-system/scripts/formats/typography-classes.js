@@ -201,16 +201,37 @@ function typographyClassesFormat({ dictionary, options = {} }) {
 
   const defaultTypographyColor = 'var(--color-text-on-light-primary)';
 
+  /** Article body drop cap tokens must apply to `::first-letter` only, not the whole paragraph. */
+  const isArticleBodyDropcapClass = (className) => className === 'typography-article-body-dropcap';
+
+  /**
+   * Float the drop cap so the first line of body copy lines up at the top of the cap instead of
+   * sharing a baseline with the oversized first letter (which wastes space above the paragraph).
+   * Layout lives here so token values stay RN-safe (no `float` in shared composites).
+   */
+  const articleBodyDropcapLayoutCss = {
+    float: 'left',
+    'padding-right': '0.375rem',
+    'line-height': '0.8',
+  };
+
   // First, generate non-responsive classes
   nonResponsiveClasses.forEach((data) => {
     const className = `.${data.className}`;
-    const props = Object.entries(data.properties)
+    const mergedProps = isArticleBodyDropcapClass(data.className)
+      ? { ...data.properties, ...articleBodyDropcapLayoutCss }
+      : data.properties;
+    const props = Object.entries(mergedProps)
       .map(([prop, value]) => {
         return `  ${prop}: ${value};`;
       })
       .join('\n');
 
-    classes.push(`${className} {\n${props}\n}`);
+    if (isArticleBodyDropcapClass(data.className)) {
+      classes.push(`${className}::first-letter {\n${props}\n}`);
+    } else {
+      classes.push(`${className} {\n${props}\n}`);
+    }
   });
 
   // Then, generate responsive classes: use the design-token class name (no -desktop/-tablet/-mobile suffix)

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { SectionHeadingProps } from '../SectionHeading.types';
+import type { SectionHeadingImportance } from '../SectionHeading.types';
+import type { SectionHeadingNativeProps } from '../SectionHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<SectionHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<SectionHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -14,7 +15,7 @@ const importanceToStyleKey: Record<SectionHeadingProps['importance'], StyleKey> 
   6: 'h6',
 };
 
-export const SectionHeading: React.FC<SectionHeadingProps> = (props) => {
+export const SectionHeading: React.FC<SectionHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
   const styleKey = importanceToStyleKey[importance];
@@ -39,4 +40,5 @@ const createStyles = (theme: NativeTheme) => ({
   h6: { ...theme.typographyUtilitySectionH6 },
 });
 
-export type { SectionHeadingImportance, SectionHeadingProps } from '../SectionHeading.types';
+export type { SectionHeadingNativeProps as SectionHeadingProps } from '../SectionHeading.types';
+export type { SectionHeadingImportance } from '../SectionHeading.types';

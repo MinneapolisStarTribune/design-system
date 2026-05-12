@@ -3,13 +3,13 @@
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { BaseProps } from '@/types/globalTypes';
 import { Icon } from '@/components/Icon/Icon';
 import type { IconComponent as IconComponentType } from '@/components/Icon/Icon.types';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { CheckIcon, CheckboxInactiveIcon, MinusIcon } from '@/icons';
 import { useId } from 'react';
 import styles from './Checkbox.module.scss';
+import type { CheckboxProps } from '../Checkbox.types';
 
 const CHECKBOX_ICONS = {
   check: CheckIcon,
@@ -17,39 +17,8 @@ const CHECKBOX_ICONS = {
   'checkbox-inactive': CheckboxInactiveIcon,
 } as const;
 
-export const CHECKBOX_VARIANTS = ['neutral', 'brand'] as const;
-export type CheckboxVariant = (typeof CHECKBOX_VARIANTS)[number];
-
-export const CHECKBOX_SIZES = ['default', 'small'] as const;
-export type CheckboxSize = (typeof CHECKBOX_SIZES)[number];
-
-export interface CheckboxProps extends BaseProps {
-  /** Required label text for the checkbox */
-  label: string;
-  /** Controlled checked state */
-  checked: boolean;
-  /**
-   * Indeterminate state - a visual state indicating mixed selection.
-   * Must be set programmatically; user interaction transitions to checked or unchecked.
-   */
-  indeterminate?: boolean;
-  /** Color variant. Neutral is default; brand is for specific uses within a brand. */
-  variant?: CheckboxVariant;
-  /** Optional caption text below the label */
-  caption?: string;
-  /** Size of the checkbox */
-  size?: CheckboxSize;
-  /** Disabled state */
-  disabled?: boolean;
-  /** Error state - shows error styling and communicates to assistive technologies */
-  error?: boolean;
-  /** When true, checkbox can receive focus. When false, cannot be focused (e.g. tabIndex=-1). */
-  focus?: boolean;
-  /** Callback when checked state changes */
-  onChange: (checked: boolean) => void;
-  /** Per-checkbox tracking data merged into the event. Use to distinguish checkboxes (e.g. form_field, module_name). */
-  analytics?: Record<string, unknown>;
-}
+export type { CheckboxProps, CheckboxVariant, CheckboxSize } from '../Checkbox.types';
+export { CHECKBOX_SIZES, CHECKBOX_VARIANTS } from '../Checkbox.types';
 
 /**
  * Checkbox component for selecting or deselecting an option.

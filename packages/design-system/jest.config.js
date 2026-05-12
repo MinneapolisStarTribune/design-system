@@ -16,10 +16,11 @@ module.exports = {
     '^@mobile/themes/(.*)$': '<rootDir>/dist/mobile/themes/$1',
     '^@mobile/typography/(.*)$': '<rootDir>/dist/mobile/typography/$1',
     '^react-native-svg$': '<rootDir>/src/test-utils/mocks/react-native-svg.tsx',
+    '^react-native-webview$': '<rootDir>/src/test-utils/mocks/react-native-webview.tsx',
   },
   setupFilesAfterEnv: ['./jest.setup.ts'],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|react-native-svg|@testing-library/react-native)/)',
+    'node_modules/(?!(react-native|@react-native|react-native-svg|@testing-library/react-native|react-native-webview)/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };

@@ -66,9 +66,11 @@ import { Button } from '@minneapolisstartribune/design-system/web';
 </Button>
 ```
 
+**Appearance:** Same as any other **`Button`** (variants, sizes, radius). **`NextLink`** only swaps the root to an anchor for routing — not the typography **`Link`** component (underline / inline styles).
+
 **How it works:** The design system does **not** import `next` — you pass whatever component should render at the root (here **`NextLink`**). Standard **`Button`** props and **`next/link`** props you pass are **forwarded** to that root. When the root is **not** a native **`<button>`**, **`disabled`** is expressed with **`aria-disabled`** and pointer/keyboard interaction is blocked (anchors do not use the invalid **`disabled`** attribute).
 
-The **As Next.js Link** story below uses a small **Storybook mock** with the same **`href` / `children`** contract as **`next/link`**; swap in real **`NextLink`** in your app.
+The **Button with Next.js Link** story below uses a small **Storybook mock** with the same **`href` / `children`** contract as **`next/link`**; swap in real **`NextLink`** in your app.
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
@@ -82,9 +84,6 @@ Each canvas below includes **Show code** / **Hide code** so you can copy usage s
 
 <Canvas of={ButtonStories.Configurable} sourceState="hidden" />
 
-### As Next.js Link
-
-<Canvas of={ButtonStories.PolymorphicAsNextLink} sourceState="hidden" />
 
 ### Button with analytics
 

@@ -1,38 +1,77 @@
 // Polyfills for APIs that Storybook (and its dependencies) expect but
 // React Native's JS engines do not provide.
 
-if (typeof globalThis.SharedArrayBuffer === 'undefined') {
-  function SharedArrayBuffer(byteLength) {
-    return new ArrayBuffer(byteLength);
+function SharedArrayBufferPolyfill(byteLength) {
+  return new ArrayBuffer(byteLength);
+}
+
+function getSharedArrayBufferGrowable() {
+  return false;
+}
+
+function getSharedArrayBufferMaxByteLength() {
+  return this.byteLength;
+}
+
+function getSharedArrayBufferByteLength() {
+  return 0;
+}
+
+function getArrayBufferResizable() {
+  return false;
+}
+
+function getArrayBufferMaxByteLength() {
+  return this.byteLength;
+}
+
+function getArrayBufferDetached() {
+  return false;
+}
+
+function growSharedArrayBuffer() {
+  throw new TypeError('SharedArrayBuffer.prototype.grow is not supported');
+}
+
+function sliceSharedArrayBuffer(begin, end) {
+  return ArrayBuffer.prototype.slice.call(this, begin, end);
+}
+
+function defineMissingGetter(prototype, key, get) {
+  if (!Object.getOwnPropertyDescriptor(prototype, key)) {
+    Object.defineProperty(prototype, key, {
+      get,
+      configurable: true,
+      enumerable: false,
+    });
   }
+}
 
-  SharedArrayBuffer.prototype = Object.create(ArrayBuffer.prototype, {
-    growable: {
-      get() {
-        return false;
-      },
-      configurable: true,
-      enumerable: false,
-    },
-    maxByteLength: {
-      get() {
-        return this.byteLength;
-      },
-      configurable: true,
-      enumerable: false,
-    },
-  });
+defineMissingGetter(ArrayBuffer.prototype, 'resizable', getArrayBufferResizable);
+defineMissingGetter(ArrayBuffer.prototype, 'maxByteLength', getArrayBufferMaxByteLength);
+defineMissingGetter(ArrayBuffer.prototype, 'detached', getArrayBufferDetached);
 
-  SharedArrayBuffer.prototype.constructor = SharedArrayBuffer;
-  SharedArrayBuffer.prototype[Symbol.toStringTag] = 'SharedArrayBuffer';
+if (typeof globalThis.SharedArrayBuffer === 'undefined') {
+  SharedArrayBufferPolyfill.prototype = Object.create(ArrayBuffer.prototype);
+  SharedArrayBufferPolyfill.prototype.constructor = SharedArrayBufferPolyfill;
+  SharedArrayBufferPolyfill.prototype[Symbol.toStringTag] = 'SharedArrayBuffer';
+  globalThis.SharedArrayBuffer = SharedArrayBufferPolyfill;
+}
 
-  SharedArrayBuffer.prototype.grow = function () {
-    throw new TypeError('SharedArrayBuffer.prototype.grow is not supported');
-  };
+const sharedArrayBufferPrototype = globalThis.SharedArrayBuffer.prototype;
 
-  SharedArrayBuffer.prototype.slice = function (begin, end) {
-    return ArrayBuffer.prototype.slice.call(this, begin, end);
-  };
+defineMissingGetter(sharedArrayBufferPrototype, 'growable', getSharedArrayBufferGrowable);
+defineMissingGetter(sharedArrayBufferPrototype, 'byteLength', getSharedArrayBufferByteLength);
+defineMissingGetter(
+  sharedArrayBufferPrototype,
+  'maxByteLength',
+  getSharedArrayBufferMaxByteLength
+);
 
-  globalThis.SharedArrayBuffer = SharedArrayBuffer;
+if (typeof sharedArrayBufferPrototype.grow !== 'function') {
+  sharedArrayBufferPrototype.grow = growSharedArrayBuffer;
+}
+
+if (typeof sharedArrayBufferPrototype.slice !== 'function') {
+  sharedArrayBufferPrototype.slice = sliceSharedArrayBuffer;
 }

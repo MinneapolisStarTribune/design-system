@@ -16,11 +16,13 @@ The **DangerousCodeBlock** component renders raw HTML using React's `dangerously
 ## Usage guidelines
 
 ### When to use
+
 - Render raw HTML content safely when you control or trust the source.
 - Display dynamic or external HTML snippets in a controlled environment.
 - Execute inline scripts or scripts from trusted sources for interactive demos or previews.
 
 ### When to avoid
+
 - Never pass untrusted or user-generated content.
 - Avoid for general-purpose HTML rendering where security is a concern.
 - Do not use to inject third-party scripts dynamically from unknown sources.
@@ -33,10 +35,47 @@ The **DangerousCodeBlock** component renders raw HTML using React's `dangerously
 - **className** – add custom styles.
 - **dataTestId** – used for testing; defaults to `dangerous-code-block`.
 
+## React Native usage
+
+`DangerousCodeBlock` is available from the native entry point and renders trusted HTML inside a `WebView`.
+
+Use it for article embeds or rich code-block content when the markup source is controlled and expected to run in a mobile web context.
+
+```tsx
+import { DangerousCodeBlock } from '@minneapolisstartribune/design-system/native';
+
+const markup = `
+  <div style="padding: 16px; background: #f4f7fb; border-radius: 8px;">
+    <h3 style="margin: 0 0 8px 0;">Mobile code block</h3>
+    <p style="margin: 0;">Trusted HTML is rendered inside a WebView.</p>
+  </div>
+`;
+
+export function NativeDangerousCodeBlockExample() {
+  return <DangerousCodeBlock markup={markup} variant="standard" />;
+}
+```
+
+### Native variant usage
+
+```tsx
+import { DangerousCodeBlock } from '@minneapolisstartribune/design-system/native';
+
+<DangerousCodeBlock markup={markup} variant="standard" />;
+<DangerousCodeBlock markup={markup} variant="immersive" />;
+```
+
+### Native accessibility and behavior notes
+
+- Native rendering uses `react-native-webview` rather than `dangerouslySetInnerHTML`.
+- The component measures the embedded document height and grows the container automatically.
+- `cleanQuotes` still runs before markup is rendered in the WebView.
+- Only pass trusted markup, because embedded scripts can still execute in the WebView.
+- Additional React Native layout can be applied through the `style` prop.
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
-{/* Do not remove the line below — it renders a divider between the documentation and stories. */}
----
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
 
 <Primary />
 <Controls />

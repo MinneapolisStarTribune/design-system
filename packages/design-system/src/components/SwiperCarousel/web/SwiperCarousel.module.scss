@@ -17,6 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 }
 
 /* SWIPER BULLETS — scoped under .pagination for higher specificity so app styles don't override */
@@ -32,6 +33,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   border: none;
+  pointer-events: auto;
 }
 
 /* ACTIVE */
@@ -50,6 +52,7 @@
   justify-content: flex-end;
   gap: var(--spacing-4);
   margin-top: var(--spacing-8);
+  z-index: 1;
 }
 
 .navButton {

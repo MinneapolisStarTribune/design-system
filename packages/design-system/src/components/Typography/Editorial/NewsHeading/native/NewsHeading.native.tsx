@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { NewsHeadingProps } from '../NewsHeading.types';
+import type { NewsHeadingImportance } from '../NewsHeading.types';
+import type { NewsHeadingNativeProps } from '../NewsHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<NewsHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<NewsHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -14,7 +15,7 @@ const importanceToStyleKey: Record<NewsHeadingProps['importance'], StyleKey> = {
   6: 'h6',
 };
 
-export const NewsHeading: React.FC<NewsHeadingProps> = (props) => {
+export const NewsHeading: React.FC<NewsHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
   const styleKey = importanceToStyleKey[importance];
@@ -39,4 +40,5 @@ const createStyles = (theme: NativeTheme) => ({
   h6: { ...theme.typographyEditorialNewsH6 },
 });
 
-export type { NewsHeadingImportance, NewsHeadingProps } from '../NewsHeading.types';
+export type { NewsHeadingNativeProps as NewsHeadingProps } from '../NewsHeading.types';
+export type { NewsHeadingImportance } from '../NewsHeading.types';

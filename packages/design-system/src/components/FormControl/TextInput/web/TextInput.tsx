@@ -3,13 +3,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { FormControlProps } from '@/components/FormControl/FormControl';
-import { AccessibilityProps } from '@/types/globalTypes';
 import { SuccessIcon } from '@/icons';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import styles from './TextInput.module.scss';
-
-export type TextInputSize = NonNullable<FormControlProps['size']>;
+import type { BaseTextInputProps, TextInputSize } from '../TextInput.types';
+import { type AccessibilityProps } from '@/types';
 
 /** Placeholder typography by size (italic); value text uses regular when filled */
 const PLACEHOLDER_TYPOGRAPHY: Record<TextInputSize, string> = {
@@ -19,7 +17,7 @@ const PLACEHOLDER_TYPOGRAPHY: Record<TextInputSize, string> = {
 };
 
 export interface TextInputProps
-  extends FormControlProps,
+  extends BaseTextInputProps,
     AccessibilityProps,
     Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
@@ -32,23 +30,10 @@ export interface TextInputProps
       | 'aria-invalid'
       | 'aria-hidden'
     > {
-  size?: TextInputSize;
-  placeholderText?: string;
-  /** Optional decorative icon element (e.g. <SearchIcon />). */
-  icon?: React.ReactNode;
-  iconPosition?: 'start' | 'end';
-  rounded?: boolean;
-  isDisabled?: boolean;
-  /** When true, shows error border. Parent/FormGroup manages validation state. */
-  isError?: boolean;
-  /** When true, shows success border. Parent/FormGroup manages validation state. */
-  isSuccess?: boolean;
   /** Override label association (e.g. when used outside FormGroup) */
   'aria-labelledby'?: string;
   /** Override invalid state for screen readers */
   'aria-invalid'?: boolean;
-  /** Per-input tracking data merged into the blur event. Use to distinguish inputs (e.g. form_field, module_name). */
-  analytics?: Record<string, unknown>;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({

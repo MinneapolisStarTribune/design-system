@@ -13,7 +13,11 @@ export const ArticleBodyText: React.FC<ArticleBodyTextProps> = (props) => {
     ...rest
   } = props;
 
-  const typographyClassName = `typography-article-body-${weight}`;
+  /** Drop cap: paragraph uses regular body type; token styles target `::first-letter` only (see typography-classes format). */
+  const typographyClassName =
+    weight === 'dropcap'
+      ? classNames('typography-article-body-regular', 'typography-article-body-dropcap')
+      : `typography-article-body-${weight}`;
   const combinedClassNames = classNames(typographyClassName, className);
 
   return (

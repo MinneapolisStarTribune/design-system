@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { FormGroupProvider } from '../FormGroupContext';
-import { FormGroupCaption } from './caption/FormGroup.Caption.native';
-import { FormGroupDescription } from './description/FormGroup.Description.native';
-import { FormGroupLabel } from './label/FormGroup.Label.native';
+import { FormGroupCaption } from './Caption/FormGroup.Caption.native';
+import { FormGroupDescription } from './Description/FormGroup.Description.native';
+import { FormGroupLabel } from './Label/FormGroup.Label.native';
 
 const ds = TestWrapperInDesignSystemProvider({ brand: 'startribune' });
 

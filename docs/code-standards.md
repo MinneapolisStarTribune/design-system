@@ -83,6 +83,30 @@ ComponentName/
     ComponentName.native.a11y.test.tsx       # native a11y test (Jest + RNTL)
 ```
 
+### Web vs native props (`ComponentName.types.ts`)
+
+Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
+
+- **Web:** `ComponentNameProps` (DOM/`HTMLAttributes`, `className`, CSS `style` via `BaseProps`, etc.).
+- **Native:** Either `NativeTextStylingProps<ComponentNameProps>` / `NativeViewStylingProps<…>` /
+  `NativeImageStylingProps<…>` from `@/types/native-base-props`, or an explicit `ComponentNameNativeProps` when web extends
+  `HTMLAttributes` and native cannot.
+- **Headings with explicit native interfaces:** Prefer `ComponentNameBaseProps` for fields shared by web
+  and native (`importance`, `children`, `id`, etc.), then
+  `ComponentNameNativeProps extends ComponentNameBaseProps` with only `color`, `dataTestId`, and
+  `style`. Web `ComponentNameProps` should extend `Omit<HTMLAttributes<…>, … | keyof ComponentNameBaseProps>`
+  plus `ColorVariantProps` and `ComponentNameBaseProps` so the base stays a single source of truth.
+
+**Explicit fields on some native-only interfaces** (e.g. editorial headings) are not accidental duplication:
+
+| Field | Why it appears on native |
+| --- | --- |
+| **`color`** | Web inherits semantic color via `ColorVariantProps`; native types often define a minimal interface instead of the same `extends`, so `color?: TextColor` is listed explicitly for parity. |
+| **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`. |
+| **`style`** | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`. |
+
+See the module comment on `packages/design-system/src/types/native-base-props.ts` for the full pattern.
+
 ---
 
 ## Export Patterns

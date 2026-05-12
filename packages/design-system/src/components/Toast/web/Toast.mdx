@@ -105,6 +105,43 @@ export function ToastDemo() {
 }
 ```
 
+### Native usage
+
+On native, `SnackProvider` owns `ToastRenderer.native` state and lifecycle (including exit-state timing before removal). In most apps, mount `DesignSystemProvider` at the app root, then use `SnackProvider` + `useToast()` from `@minneapolisstartribune/design-system/native`.
+
+`ToastRenderer.native` is a presentational renderer and expects provider-managed props (`items` and `onDismiss`). If a consuming app mounts `<ToastRenderer />` directly with no props, it now safely renders nothing instead of throwing.
+
+```tsx
+import { Button } from 'react-native';
+import { SnackProvider, ToastRenderer, useToast } from '@minneapolisstartribune/design-system/native';
+
+function NativeToastTrigger() {
+  const { showToast } = useToast();
+
+  return (
+    <Button
+      title="Show toast"
+      onPress={() =>
+        showToast({
+          title: 'Saved',
+          description: 'Your changes were saved.',
+          variant: 'success',
+        })
+      }
+    />
+  );
+}
+
+export function NativeToastExample() {
+  return (
+    <SnackProvider>
+      <NativeToastTrigger />
+      <ToastRenderer />
+    </SnackProvider>
+  );
+}
+```
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 ---

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext } from 'react';
-import { Pressable, StyleSheet, Text, View, type TextStyle } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View, type TextStyle } from 'react-native';
 import type { ToastNativeProps, ToastVariant } from '@/components/Toast/Toast.types';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
@@ -99,6 +99,7 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
   variant = 'info',
   showIcon = true,
   showCloseButton = true,
+  exiting = false,
   onClose,
   dataTestId = 'toast-native',
 }) => {
@@ -117,16 +118,37 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
   );
   const palette = useNativeStyles(paletteFactory);
   const VariantIcon = VARIANT_ICON[variant];
+  const [exitProgress] = useState(() => new Animated.Value(exiting ? 1 : 0));
 
   const isError = variant === 'error';
 
+  useEffect(() => {
+    Animated.timing(exitProgress, {
+      toValue: exiting ? 1 : 0,
+      duration: 120,
+      useNativeDriver: false,
+    }).start();
+  }, [exiting, exitProgress]);
+
   return (
-    <View
+    <Animated.View
       style={[
         styles.root,
         {
           backgroundColor: palette.background,
           borderColor: palette.border,
+          opacity: exitProgress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0],
+          }),
+          transform: [
+            {
+              translateY: exitProgress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 8],
+              }),
+            },
+          ],
         },
       ]}
       testID={dataTestId}
@@ -159,7 +181,7 @@ export const ToastNative: React.FC<ToastNativeProps> = ({
           <ToastCloseIcon color={palette.close} />
         </Pressable>
       ) : null}
-    </View>
+    </Animated.View>
   );
 };
 

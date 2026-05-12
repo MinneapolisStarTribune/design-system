@@ -26,6 +26,17 @@
   -moz-appearance: none;
   
   border: none;
+
+  /* Polymorphic `as="a"` / Next.js `Link`: anchors get default underline; buttons must not */
+  text-decoration: none;
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    text-decoration: none;
+  }
   
   /* Size variants */
   &.small {

@@ -25,7 +25,12 @@ describe('ArticleBodyText', () => {
       );
 
       const element = getByTestId(`article-body-text-${weight}`);
-      expect(element).toHaveClass(`typography-article-body-${weight}`);
+      if (weight === 'dropcap') {
+        expect(element).toHaveClass('typography-article-body-regular');
+        expect(element).toHaveClass('typography-article-body-dropcap');
+      } else {
+        expect(element).toHaveClass(`typography-article-body-${weight}`);
+      }
     }
   );
 

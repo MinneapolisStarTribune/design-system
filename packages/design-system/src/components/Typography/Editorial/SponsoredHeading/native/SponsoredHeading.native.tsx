@@ -2,11 +2,12 @@ import React from 'react';
 import { Text } from 'react-native';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { SponsoredHeadingProps } from '../SponsoredHeading.types';
+import type { SponsoredHeadingImportance } from '../SponsoredHeading.types';
+import type { SponsoredHeadingNativeProps } from '../SponsoredHeading.types';
 
 type StyleKey = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const importanceToStyleKey: Record<SponsoredHeadingProps['importance'], StyleKey> = {
+const importanceToStyleKey: Record<SponsoredHeadingImportance, StyleKey> = {
   1: 'h1',
   2: 'h2',
   3: 'h3',
@@ -15,7 +16,7 @@ const importanceToStyleKey: Record<SponsoredHeadingProps['importance'], StyleKey
   6: 'h6',
 };
 
-export const SponsoredHeading: React.FC<SponsoredHeadingProps> = (props) => {
+export const SponsoredHeading: React.FC<SponsoredHeadingNativeProps> = (props) => {
   const { importance, children, ...rest } = props;
   useBrandValidation('SponsoredHeading');
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -47,4 +48,5 @@ const createStyles = (theme: NativeTheme) => {
   };
 };
 
-export type { SponsoredHeadingImportance, SponsoredHeadingProps } from '../SponsoredHeading.types';
+export type { SponsoredHeadingNativeProps as SponsoredHeadingProps } from '../SponsoredHeading.types';
+export type { SponsoredHeadingImportance } from '../SponsoredHeading.types';

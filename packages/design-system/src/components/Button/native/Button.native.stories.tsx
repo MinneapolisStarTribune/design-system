@@ -28,7 +28,7 @@ function StoryIcon(props: { width?: number; height?: number; color?: string }) {
 }
 
 const meta = {
-  title: 'Components/Button',
+  title: 'Actions/Button',
   component: Button,
   argTypes: {
     color: { control: 'select', options: BUTTON_COLORS },

@@ -3,16 +3,16 @@
 import React, { Children, isValidElement } from 'react';
 import classNames from 'classnames';
 import { BaseProps } from '@/types/globalTypes';
-import { FormGroupLabel, type FormGroupLabelProps } from './label/FormGroup.Label';
+import { FormGroupLabel, type FormGroupLabelProps } from './Label/FormGroup.Label';
 import {
   FormGroupDescription,
   type FormGroupDescriptionProps,
-} from './description/FormGroup.Description';
+} from './Description/FormGroup.Description';
 import {
   FormGroupCaption,
   type FormGroupCaptionProps,
   type FormGroupCaptionVariant,
-} from './caption/FormGroup.Caption';
+} from './Caption/FormGroup.Caption';
 import { FormGroupProvider } from '../FormGroupContext';
 import styles from './FormGroup.module.scss';
 
@@ -144,6 +144,6 @@ FormGroup.Description = FormGroupDescription;
 FormGroup.Caption = FormGroupCaption;
 
 // Export types so they come from one place (individual types for internal/deep imports)
-export type { FormGroupCaptionProps } from './caption/FormGroup.Caption';
-export type { FormGroupDescriptionProps } from './description/FormGroup.Description';
-export type { FormGroupLabelProps } from './label/FormGroup.Label';
+export type { FormGroupCaptionProps } from './Caption/FormGroup.Caption';
+export type { FormGroupDescriptionProps } from './Description/FormGroup.Description';
+export type { FormGroupLabelProps } from './Label/FormGroup.Label';

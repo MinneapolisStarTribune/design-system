@@ -3,7 +3,7 @@ import camelCase from 'lodash/camelCase';
 import upperFirst from 'lodash/upperFirst';
 import { Text } from 'react-native';
 import { useNativeStylesWithDefaults, type NativeTheme } from '@/hooks/useNativeStyles';
-import type { EditorialSponsoredTextProps } from '../EditorialSponsoredText.types';
+import type { EditorialSponsoredTextNativeProps } from '../EditorialSponsoredText.types';
 import {
   EDITORIAL_SPONSORED_TEXT_SIZES,
   EDITORIAL_SPONSORED_TEXT_WEIGHTS,
@@ -11,7 +11,7 @@ import {
 
 const toTokenSuffix = (value: string) => upperFirst(camelCase(value));
 
-export const EditorialSponsoredText: React.FC<EditorialSponsoredTextProps> = (props) => {
+export const EditorialSponsoredText: React.FC<EditorialSponsoredTextNativeProps> = (props) => {
   const {
     size,
     weight = 'regular',
@@ -53,8 +53,8 @@ const createStyles = (theme: NativeTheme) => {
   ) as Record<string, NativeTheme['typographyArticleBodyRegular']>;
 };
 
+export type { EditorialSponsoredTextNativeProps as EditorialSponsoredTextProps } from '../EditorialSponsoredText.types';
 export type {
-  EditorialSponsoredTextProps,
   EditorialSponsoredTextSize,
   EditorialSponsoredTextWeight,
 } from '../EditorialSponsoredText.types';
