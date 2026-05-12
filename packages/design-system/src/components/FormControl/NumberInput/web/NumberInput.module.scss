@@ -1,0 +1,84 @@
+.root {
+  position: relative;
+  width: 100%;
+
+  .number-input {
+
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:has(input:disabled) + .controls {
+      border-left-color: var(--color-border-state-disabled-on-light);
+    }
+
+    &:has(input:disabled) + .controls .control-button {
+      color: var(--color-text-state-disabled-on-light);
+      cursor: not-allowed;
+    }
+  }
+
+  .controls {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    width: 38px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--color-border-on-light-subtle-01);
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+    overflow: hidden;
+
+    &.size-large {
+      width: 40px;
+    }
+
+    &.size-small {
+      width: 24px;
+    }
+
+    &.size-medium {
+      width: 32px;
+    }
+  }
+
+  .control-button {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-background-light-gray-01);
+    }
+  }
+
+  .control-button-up {
+    border-bottom: 1px solid var(--color-border-on-light-subtle-01);
+    border-top-right-radius: var(--radius-4);
+  }
+
+  .control-button-down {
+    border-bottom-right-radius: var(--radius-4);
+  }
+
+  .chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+}
