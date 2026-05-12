@@ -13,6 +13,11 @@ const meta: Meta<typeof DangerousCodeBlock> = {
       control: { type: 'radio' },
       options: [ARTICLE_BODY_VARIANTS.STANDARD, ARTICLE_BODY_VARIANTS.IMMERSIVE],
       description: 'Layout variant of the code block',
+      table: {
+        type: {
+          summary: `'${ARTICLE_BODY_VARIANTS.STANDARD}' | '${ARTICLE_BODY_VARIANTS.IMMERSIVE}'`,
+        },
+      },
     },
     cleanQuotes: {
       control: 'boolean',
