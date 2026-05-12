@@ -8,27 +8,15 @@
   $lg: 1024px;
 
   position: relative;
-  margin-left: auto;
-  margin-right: auto;
 
   /* Standard variant */
   &.variant-standard {
-    max-width: var(--semantic-article-toolkit-max-width-standard-full-mobile);
-
-    @media (min-width: $md) {
-      max-width: var(--semantic-article-toolkit-max-width-standard-full-tablet);
-    }
-
-    @media (min-width: $lg) {
-      max-width: var(--semantic-article-toolkit-max-width-standard-full-desktop);
-    }
+    max-width: 100%;
   }
 
   /* Immersive variant - full-width breakout */
   &.variant-immersive {
     width: 100%;
     max-width: none;
-    margin-left: 0;
-    margin-right: 0;
   }
 }
