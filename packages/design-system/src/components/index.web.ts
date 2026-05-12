@@ -40,6 +40,14 @@ export {
 } from './FormControl/RadioGroup/web/RadioGroup';
 export type { SelectOption, SelectProps } from './FormControl/Select/Select.types';
 export { Select } from './FormControl/Select/web/Select';
+export {
+  Switch,
+  SWITCH_COLORS,
+  SWITCH_SIZES,
+  type SwitchColor,
+  type SwitchProps,
+  type SwitchSize,
+} from './FormControl/Switch/web/Switch';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
