@@ -4,7 +4,7 @@ Use this checklist before publishing `@minneapolisstartribune/design-system` to 
 
 ## 1) Baseline quality gates (required)
 
-- [ ] Automated gate in publish workflow passes (`release:verify`)
+- [ ] Automated gate in publish workflow passes (`release:verify`). This is enforced before any version bump, build, or publish step.
 - [ ] `yarn workspace @minneapolisstartribune/design-system lint`
 - [ ] `yarn workspace @minneapolisstartribune/design-system format:check`
 - [ ] `yarn workspace @minneapolisstartribune/design-system typecheck`
@@ -12,6 +12,18 @@ Use this checklist before publishing `@minneapolisstartribune/design-system` to 
 - [ ] `yarn workspace @minneapolisstartribune/design-system test:a11y --coverage`
 - [ ] `yarn workspace @minneapolisstartribune/design-system test:native`
 - [ ] `yarn workspace @minneapolisstartribune/design-system build`
+
+`release:verify` runs the following gates in order and stops at the first failure:
+
+1. `lint`
+2. `format:check`
+3. `typecheck`
+4. `test:web`
+5. `test:a11y`
+6. `test:native`
+7. `build`
+
+When a gate fails, the publish workflow logs the gate name, command, and exit code. Run the printed command locally, fix the error, and rerun the publish workflow.
 
 ## 2) Platform coverage (required)
 

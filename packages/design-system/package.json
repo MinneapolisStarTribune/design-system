@@ -165,7 +165,7 @@
     "test:scripts": "vitest run scripts/*.test.js",
     "test:watch": "vitest",
     "test:web": "vitest run",
-    "release:verify": "yarn lint && yarn format:check && yarn typecheck && yarn test:web && yarn test:a11y && yarn test:native && yarn build",
+    "release:verify": "node scripts/release-verify.js",
     "tokens": "node scripts/builders/build-tokens.js",
     "typecheck": "tsc --noEmit"
   }
