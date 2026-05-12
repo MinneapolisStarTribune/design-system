@@ -13,6 +13,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
   placeholderText,
   className,
   size = 'medium',
+  isDisabled = false,
   ...props
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ export const NumberInput: React.FC<NumberInputProps> = ({
         size={size}
         type="number"
         inputMode="numeric"
+        isDisabled={isDisabled}
         placeholderText={placeholderText != null ? String(placeholderText) : undefined}
         className={classNames(styles['number-input'], styles[`number-input-${size}`], className)}
       />
@@ -53,7 +55,10 @@ export const NumberInput: React.FC<NumberInputProps> = ({
           onClick={() => stepInput('up')}
         >
           <span className={styles.chevron}>
-            <ChevronUpIcon size="x-small" color="on-light-secondary" />
+            <ChevronUpIcon
+              size="x-small"
+              color={isDisabled ? 'state-disabled-on-light' : 'on-light-secondary'}
+            />
           </span>
         </button>
         <button
@@ -64,7 +69,10 @@ export const NumberInput: React.FC<NumberInputProps> = ({
           onClick={() => stepInput('down')}
         >
           <span className={styles.chevron}>
-            <ChevronDownIcon size="x-small" color="on-light-secondary" />
+            <ChevronDownIcon
+              size="x-small"
+              color={isDisabled ? 'state-disabled-on-light' : 'on-light-secondary'}
+            />
           </span>
         </button>
       </div>

@@ -5,13 +5,15 @@ type NumericValue = number | `${number}`;
 export interface NumberInputProps
   extends Omit<
     TextInputProps,
-    'type' | 'inputMode' | 'pattern' | 'placeholderText' | 'value' | 'defaultValue'
+    | 'type'
+    | 'inputMode'
+    | 'pattern'
+    | 'placeholderText'
+    | 'value'
+    | 'defaultValue'
+    | 'rounded'
+    | 'isSuccess'
   > {
-  /**
-   * Regex used to validate typed/pasted input.
-   * Can be a RegExp or pattern string. Defaults to digits-only.
-   */
-  validationRegex?: RegExp | string;
   /** Placeholder must be numeric for this control. */
   placeholderText?: NumericValue;
   /** Controlled numeric value represented as number or numeric string. */
