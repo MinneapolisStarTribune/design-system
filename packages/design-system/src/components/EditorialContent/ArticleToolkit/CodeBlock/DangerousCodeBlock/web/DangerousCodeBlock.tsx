@@ -21,6 +21,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   variant = 'standard',
   cleanQuotes = true,
   className,
+  style,
   dataTestId = 'dangerous-code-block',
   ...accessibilityProps
 }) => {
@@ -78,6 +79,7 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
         className
       )}
       dangerouslySetInnerHTML={{ __html: content }}
+      style={style}
       {...accessibilityProps}
     />
   );
