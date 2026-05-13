@@ -15,6 +15,14 @@ export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/web
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
 export {
+  EYEBROW_BADGE_SIZES,
+  EYEBROW_BADGE_VARIANTS,
+  EyebrowBadge,
+  type EyebrowBadgeProps,
+  type EyebrowBadgeSize,
+  type EyebrowBadgeVariant,
+} from './EyebrowBadge/web/EyebrowBadge';
+export {
   Form,
   FormButton,
   type FormProps,

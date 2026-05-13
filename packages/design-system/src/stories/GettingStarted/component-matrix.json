@@ -172,7 +172,7 @@
   {
     "component": "EyebrowBadge",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "AuthorByline",
