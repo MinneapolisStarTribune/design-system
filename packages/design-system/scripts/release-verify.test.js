@@ -31,9 +31,10 @@ describe('release-verify', () => {
 
     expect(passed).toBe(true);
     expect(runCommand).toHaveBeenCalledTimes(RELEASE_VERIFY_GATES.length);
-    expect(runCommand.mock.calls.map(([command, args]) => [command, ...args].join(' '))).toEqual(
+    expect(runCommand.mock.calls.map(([commandLine]) => commandLine)).toEqual(
       RELEASE_VERIFY_GATES.map((gate) => gate.command.join(' '))
     );
+    expect(runCommand.mock.calls.every(([, opts]) => opts.shell === true)).toBe(true);
     expect(logs.join('\n')).toContain('[release:verify] All release verification gates passed.');
   });
 

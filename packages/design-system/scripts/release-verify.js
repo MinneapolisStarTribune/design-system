@@ -2,6 +2,18 @@
 
 const { spawnSync } = require('node:child_process');
 
+/**
+ * Run a gate command through the system shell so `yarn` resolves on Windows
+ * (e.g. `yarn.cmd` via PATHEXT) and in Git Bash where a bare `spawnSync('yarn', …)`
+ * can throw ENOENT.
+ */
+function spawnShellCommand(commandLine, options) {
+  return spawnSync(commandLine, {
+    ...options,
+    shell: true,
+  });
+}
+
 const RELEASE_VERIFY_GATES = [
   {
     name: 'lint',
@@ -39,7 +51,7 @@ function formatCommand(command) {
 
 function runReleaseVerify({
   gates = RELEASE_VERIFY_GATES,
-  runCommand = spawnSync,
+  runCommand = spawnShellCommand,
   cwd = process.cwd(),
   env = process.env,
   log = console.log,
@@ -48,25 +60,26 @@ function runReleaseVerify({
   log('[release:verify] Starting enforced release verification.');
 
   for (const [index, gate] of gates.entries()) {
-    const commandText = formatCommand(gate.command);
+    const commandLine = formatCommand(gate.command);
 
     log('');
     log(`[release:verify] Gate ${index + 1}/${gates.length}: ${gate.name}`);
-    log(`[release:verify] Command: ${commandText}`);
+    log(`[release:verify] Command: ${commandLine}`);
 
-    const result = runCommand(gate.command[0], gate.command.slice(1), {
+    const result = runCommand(commandLine, {
       cwd,
       env,
       stdio: 'inherit',
+      shell: true,
     });
 
     if (result.error) {
       error('');
       error(`[release:verify] Gate failed: ${gate.name}`);
-      error(`[release:verify] Command: ${commandText}`);
+      error(`[release:verify] Command: ${commandLine}`);
       error(`[release:verify] Error: ${result.error.message}`);
       error(
-        `::error title=release:verify failed::${gate.name} failed to start. Run \`${commandText}\` locally and fix the error above.`
+        `::error title=release:verify failed::${gate.name} failed to start. Run \`${commandLine}\` locally and fix the error above.`
       );
       return false;
     }
@@ -76,10 +89,10 @@ function runReleaseVerify({
 
       error('');
       error(`[release:verify] Gate failed: ${gate.name}`);
-      error(`[release:verify] Command: ${commandText}`);
+      error(`[release:verify] Command: ${commandLine}`);
       error(`[release:verify] Exit code: ${exitCode}`);
       error(
-        `::error title=release:verify failed::${gate.name} failed. Run \`${commandText}\` locally and fix the error above.`
+        `::error title=release:verify failed::${gate.name} failed. Run \`${commandLine}\` locally and fix the error above.`
       );
       return false;
     }
@@ -100,4 +113,5 @@ if (require.main === module) {
 module.exports = {
   RELEASE_VERIFY_GATES,
   runReleaseVerify,
+  spawnShellCommand,
 };
