@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { fireEvent, render, screen, within } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
 import { Linking } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineImage } from './InlineImage.native';
@@ -67,6 +67,7 @@ describe('InlineImage (native)', () => {
 
   it('renders purchase link and opens URL on press', async () => {
     const purchaseLink = 'https://www.startribune.com/photos';
+    jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
     render(
@@ -81,7 +82,9 @@ describe('InlineImage (native)', () => {
 
     fireEvent.press(screen.getByTestId(`${dataTestId}-purchase-link`));
 
-    expect(openURLSpy).toHaveBeenCalledWith(purchaseLink);
+    await waitFor(() => {
+      expect(openURLSpy).toHaveBeenCalledWith(purchaseLink);
+    });
   });
 
   it('opens and closes the expanded dialog when expandable', () => {
