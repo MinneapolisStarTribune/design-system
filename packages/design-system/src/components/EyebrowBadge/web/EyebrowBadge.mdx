@@ -1,0 +1,216 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as EyebrowBadgeStories from './EyebrowBadge.stories';
+
+<Meta of={EyebrowBadgeStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# EyebrowBadge
+
+Eyebrow Badges highlight top-priority newsroom content and signal urgency or editorial significance. They appear above headlines-just like standard Eyebrow Labels-but are reserved for the highest-visibility stories across the site, including homepage leads, section fronts, and article pages.
+
+Badges come in Showcase, Breaking, Live, and Sponsored variants, each representing a distinct editorial state. They may include a secondary label for timestamps or series titles. Eyebrow Badges are always non-interactive and strictly used in editorial contexts.
+
+[Figma — Eyebrow Badge (Core Components)](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-525&p=f&m=dev)
+
+## Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>label</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>Yes</td>
+      <td>Primary badge text.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>secondaryLabel</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>No</td>
+      <td>
+        Optional trailing text. Not rendered when <code>variant="sponsored"</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>variant</code>
+      </td>
+      <td>
+        <code>'live' | 'breaking' | 'showcase' | 'sponsored'</code>
+      </td>
+      <td>No</td>
+      <td>
+        Visual style variant. Defaults to <code>'live'</code>. Dot behavior differs by variant.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>size</code>
+      </td>
+      <td>
+        <code>'large' | 'small'</code>
+      </td>
+      <td>No</td>
+      <td>
+        Size token. Defaults to <code>'large'</code> (24px). <code>'small'</code> uses 20px.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>showDot</code>
+      </td>
+      <td>
+        <code>boolean</code>
+      </td>
+      <td>No</td>
+      <td>
+        Dot visibility override. <code>live</code> defaults to true, <code>showcase</code> defaults to
+        false, and <code>breaking</code> always hides dot.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>as</code>
+      </td>
+      <td>
+        <code>'span' | 'div'</code>
+      </td>
+      <td>No</td>
+      <td>
+        Root element type. Defaults to <code>'span'</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>className</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>No</td>
+      <td>Optional class on the root element.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>style</code>
+      </td>
+      <td>
+        <code>React.CSSProperties</code>
+      </td>
+      <td>No</td>
+      <td>Inline style object applied to the root element.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>dataTestId</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>No</td>
+      <td>Sets the root <code>data-testid</code> attribute.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>...accessibilityProps</code>
+      </td>
+      <td>HTML/ARIA props</td>
+      <td>No</td>
+      <td>
+        Additional accessibility and DOM props (for example <code>aria-label</code>,{' '}
+        <code>onClick</code>, <code>role</code>) are forwarded to the root element.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Example: Live badge
+
+```tsx
+<EyebrowBadge
+  label="Live"
+  secondaryLabel="Updated 12 mins ago"
+  variant="live"
+  size="large"
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleLive} sourceState="hidden" />
+
+## Example: Breaking badge
+
+```tsx
+<EyebrowBadge
+  label="Breaking"
+  secondaryLabel="Developing story"
+  variant="breaking"
+  size="large"
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleBreaking} sourceState="hidden" />
+
+## Example: Showcase small
+
+```tsx
+<EyebrowBadge
+  label="Showcase"
+  secondaryLabel="Style"
+  variant="showcase"
+  size="small"
+  showDot={false}
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleShowcaseSmall} sourceState="hidden" />
+
+## Example: Sponsored as div
+
+```tsx
+<EyebrowBadge
+  as="div"
+  label="Sponsored"
+  variant="sponsored"
+  dataTestId="sponsored-eyebrow-badge"
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleSponsoredAsDiv} sourceState="hidden" />
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+## Playground
+
+<Canvas of={EyebrowBadgeStories.Configurable} sourceState="hidden" />
+
+<Controls />
+
+## All Variants
+
+<Canvas of={EyebrowBadgeStories.AllVariants} sourceState="hidden" />

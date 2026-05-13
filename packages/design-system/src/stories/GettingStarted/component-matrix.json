@@ -6,7 +6,7 @@
   },
   {
     "component": "Link",
-    "native": false,
+    "native": true,
     "web": true
   },
   {
@@ -172,7 +172,7 @@
   {
     "component": "EyebrowBadge",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "AuthorByline",
