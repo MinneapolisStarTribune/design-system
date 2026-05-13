@@ -8,7 +8,7 @@ import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
 
 `FormControl` is a namespaced entry point for concrete input controls.
 
-It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, or `FormControl.Switch`.
+It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.NumberInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, or `FormControl.Switch`.
 
 For field wiring and labeling semantics, pair controls with `FormGroup`. For submit/layout semantics, use `Form`.
 
@@ -36,6 +36,19 @@ Checkbox:
 ```tsx
 <FormGroup>
   <FormControl.Checkbox label="I agree to the terms" checked={checked} onChange={setChecked}/>
+</FormGroup>
+```
+
+Number input:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Build Number</FormGroup.Label>
+  <FormControl.NumberInput
+    placeholderText={1000}
+    value={buildNumber}
+    onChange={(e) => setBuildNumber(e.target.value)}
+  />
 </FormGroup>
 ```
 
@@ -90,6 +103,7 @@ Switch:
 
 - `FormControl`: namespace container for form controls
 - `FormControl.TextInput`: text input control
+- `FormControl.NumberInput`: number input control
 - `FormControl.Checkbox`: checkbox control
 - `FormControl.CheckboxGroup`: grouped checkbox control
 - `FormControl.RadioGroup`: grouped radio control
