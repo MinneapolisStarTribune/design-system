@@ -67,6 +67,7 @@ describe('InlineImage (native)', () => {
 
   it('renders purchase link and opens URL on press', async () => {
     const purchaseLink = 'https://www.startribune.com/photos';
+    jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
     render(
