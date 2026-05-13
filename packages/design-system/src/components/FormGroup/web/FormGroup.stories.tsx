@@ -39,7 +39,7 @@ const STORY_ICON_MAP: Record<StoryIconName, React.ReactNode> = {
 };
 
 // Available FormControl types for the dropdown
-const FORM_CONTROL_TYPES = ['TextInput'] as const;
+const FORM_CONTROL_TYPES = ['TextInput', 'NumberInput'] as const;
 type FormControlType = (typeof FORM_CONTROL_TYPES)[number];
 
 // Custom args interface for the configurable story
@@ -53,6 +53,7 @@ interface FormGroupStoryArgs {
   captionVariant: FormGroupCaptionVariant;
   formControlType: FormControlType;
   placeholderText: string;
+  numberPlaceholderText: number;
   inputSize: 'small' | 'medium' | 'large';
   showIcon: boolean;
   iconName: StoryIconName;
@@ -109,6 +110,11 @@ const meta = {
       description: 'Placeholder text for TextInput',
       if: { arg: 'formControlType', eq: 'TextInput' },
     },
+    numberPlaceholderText: {
+      control: 'number',
+      description: 'Placeholder number for NumberInput',
+      if: { arg: 'formControlType', eq: 'NumberInput' },
+    },
     inputSize: {
       control: 'select',
       options: ['small', 'medium', 'large'],
@@ -158,6 +164,7 @@ export const Configurable: Story = {
     captionVariant: 'error',
     formControlType: 'TextInput',
     placeholderText: 'Enter your email',
+    numberPlaceholderText: 1000,
     inputSize: 'medium',
     showIcon: true,
     iconName: 'mail',
@@ -178,6 +185,15 @@ export const Configurable: Story = {
               size={storyArgs.inputSize}
               icon={storyArgs.showIcon ? STORY_ICON_MAP[storyArgs.iconName] : undefined}
               iconPosition={storyArgs.iconPosition}
+              rounded={storyArgs.rounded}
+              isDisabled={storyArgs.isDisabled}
+            />
+          );
+        case 'NumberInput':
+          return (
+            <FormControl.NumberInput
+              placeholderText={storyArgs.numberPlaceholderText}
+              size={storyArgs.inputSize}
               rounded={storyArgs.rounded}
               isDisabled={storyArgs.isDisabled}
             />
