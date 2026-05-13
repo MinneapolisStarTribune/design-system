@@ -263,7 +263,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
                 style={[styles.slide, { width: slideWidth }]}
                 accessible
                 accessibilityRole="image"
-                accessibilityLabel={`${img.altText}. Image ${realIndex + 1} of ${total}`}
+                accessibilityLabel={`${img.altText}. Image ${hasLoop ? ((i - 1 + total) % total) + 1 : i + 1} of ${total}`}
               >
                 <View style={[styles.imageWrapper, { aspectRatio }, wrapperStyle]}>
                   <Img

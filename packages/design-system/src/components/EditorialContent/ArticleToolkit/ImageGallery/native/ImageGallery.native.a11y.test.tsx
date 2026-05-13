@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import { ImageGallery } from './ImageGallery.native';
-import { AccessibilityInfo, Platform } from 'react-native';
+import { AccessibilityInfo, Platform, ScrollView } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 
 jest.spyOn(AccessibilityInfo, 'announceForAccessibility').mockImplementation(jest.fn());
@@ -53,9 +53,16 @@ describe('ImageGallery Accessibility (native)', () => {
   it('announces slide changes on native platforms', () => {
     if (Platform.OS === 'web') return;
 
-    render(<ImageGallery images={images} />, { wrapper });
+    const { UNSAFE_getByType } = render(<ImageGallery images={images} />, { wrapper });
 
-    expect(AccessibilityInfo.announceForAccessibility).not.toHaveBeenCalled();
+    const scrollView = UNSAFE_getByType(ScrollView);
+    fireEvent(scrollView, 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+
+    expect(AccessibilityInfo.announceForAccessibility).toHaveBeenCalledWith(
+      expect.stringMatching(/Image \d+ of \d+/)
+    );
   });
 
   it('does not crash when accessibilityLabel is missing on images', () => {
