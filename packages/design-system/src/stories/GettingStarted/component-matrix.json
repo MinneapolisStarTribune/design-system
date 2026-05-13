@@ -82,7 +82,7 @@
   {
     "component": "Switch",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "Popover",
