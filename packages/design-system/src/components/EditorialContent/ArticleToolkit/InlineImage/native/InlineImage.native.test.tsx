@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react-native';
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react-native';
 import { Linking } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineImage } from './InlineImage.native';
