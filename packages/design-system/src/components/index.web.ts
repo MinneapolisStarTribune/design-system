@@ -10,12 +10,18 @@ export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
-export {
-  ImageGallery,
-  type ImageGalleryProps,
-} from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
+export {
+  EYEBROW_BADGE_SIZES,
+  EYEBROW_BADGE_VARIANTS,
+  EyebrowBadge,
+  type EyebrowBadgeProps,
+  type EyebrowBadgeSize,
+  type EyebrowBadgeVariant,
+} from './EyebrowBadge/web/EyebrowBadge';
 export {
   Form,
   FormButton,
@@ -33,6 +39,7 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
   RadioGroup,
   type RadioGroupProps,
@@ -40,6 +47,14 @@ export {
 } from './FormControl/RadioGroup/web/RadioGroup';
 export type { SelectOption, SelectProps } from './FormControl/Select/Select.types';
 export { Select } from './FormControl/Select/web/Select';
+export {
+  Switch,
+  SWITCH_COLORS,
+  SWITCH_SIZES,
+  type SwitchColor,
+  type SwitchProps,
+  type SwitchSize,
+} from './FormControl/Switch/web/Switch';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
@@ -70,7 +85,8 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export { Popover, type PopoverProps } from './Popover/Popover';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
-export { Radio, type RadioColor, type RadioProps } from './Radio/Radio';
+export type { RadioColor, RadioProps } from './Radio/Radio.types';
+export { Radio } from './Radio/web/Radio';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
@@ -121,6 +137,10 @@ export {
   SponsoredHeading,
   type SponsoredHeadingProps,
 } from './Typography/Editorial/SponsoredHeading/web/SponsoredHeading';
+export {
+  EyebrowLabel,
+  type EyebrowLabelProps,
+} from './Typography/Utility/EyebrowLabel/web/EyebrowLabel';
 export {
   PageHeading,
   type PageHeadingProps,

@@ -3,24 +3,14 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
-import { Radio, type RadioColor } from '@/components/Radio/Radio';
 import { BaseProps } from '@/types/globalTypes';
 import styles from './RadioGroup.module.scss';
+import { Radio } from '@/index.web';
+import { type BaseRadioGroupProps } from '../RadioGroup.types';
 
-export interface RadioOption {
-  value: string;
-  title: string;
-  description?: string;
-}
+export { type RadioOption } from '../RadioGroup.types';
 
-export interface RadioGroupProps extends BaseProps {
-  name: string;
-  value: string | null | undefined;
-  options: RadioOption[];
-  color?: RadioColor;
-  disabled?: boolean;
-  error?: boolean;
-  onChange: (value: string) => void;
+export interface RadioGroupProps extends BaseRadioGroupProps, BaseProps {
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
 }

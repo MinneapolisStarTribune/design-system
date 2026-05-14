@@ -167,4 +167,4 @@ Published via [GitHub Releases](https://docs.github.com/en/repositories/releasin
 6. Once the `Publish` action has succeeded create a new release branch off of main and push that to Github
    6a. Update our scrum team channel with the new release version name.
 
-CI automatically extracts the version, updates `package.json`, builds, publishes to GitHub Packages, and commits the version bump back to `main`. No local `yarn publish` needed.
+CI runs `release:verify` before any version bump, build, or publish step. If a gate fails, the publish workflow stops and logs the failed gate name, command, and exit code. After verification passes, CI extracts the version, updates `package.json`, builds, publishes to GitHub Packages, and commits the version bump back to `main`. No local `yarn publish` needed.
