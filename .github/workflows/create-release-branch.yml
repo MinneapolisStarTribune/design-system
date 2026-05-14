@@ -1,0 +1,97 @@
+name: Create release branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version (e.g. 1.6.0 or v1.6.0)'
+        required: true
+        type: string
+      base_branch:
+        description: 'Branch to create the release branch from'
+        required: false
+        default: main
+        type: string
+
+jobs:
+  create-release-branch:
+    name: Create release/* branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Validate and normalize inputs
+        id: normalize
+        run: |
+          RAW_VERSION="${{ github.event.inputs.release_version }}"
+          BASE_BRANCH="${{ github.event.inputs.base_branch }}"
+
+          # Accept either 1.2.3 or v1.2.3 and normalize to 1.2.3 for release branch naming.
+          NORMALIZED_VERSION="${RAW_VERSION#v}"
+
+          if [[ ! "$NORMALIZED_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid release_version: '$RAW_VERSION'. Use 1.2.3 or v1.2.3."
+            exit 1
+          fi
+
+          if [[ -z "$BASE_BRANCH" ]]; then
+            echo "base_branch cannot be empty."
+            exit 1
+          fi
+
+          RELEASE_BRANCH="release/$NORMALIZED_VERSION"
+          echo "release_branch=$RELEASE_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "base_branch=$BASE_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "Will create branch: $RELEASE_BRANCH from $BASE_BRANCH"
+
+      - name: Verify base branch exists on origin
+        run: |
+          BASE_BRANCH="${{ steps.normalize.outputs.base_branch }}"
+          git fetch origin "$BASE_BRANCH"
+          if ! git show-ref --verify --quiet "refs/remotes/origin/$BASE_BRANCH"; then
+            echo "Base branch 'origin/$BASE_BRANCH' does not exist."
+            exit 1
+          fi
+
+      - name: Check if release branch already exists
+        id: branch-exists
+        run: |
+          RELEASE_BRANCH="${{ steps.normalize.outputs.release_branch }}"
+          git fetch origin "$RELEASE_BRANCH" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/$RELEASE_BRANCH"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Branch already exists: $RELEASE_BRANCH"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create and push release branch
+        if: steps.branch-exists.outputs.exists == 'false'
+        run: |
+          RELEASE_BRANCH="${{ steps.normalize.outputs.release_branch }}"
+          BASE_BRANCH="${{ steps.normalize.outputs.base_branch }}"
+          git checkout -b "$RELEASE_BRANCH" "origin/$BASE_BRANCH"
+          git push origin "$RELEASE_BRANCH"
+
+      - name: Summary
+        run: |
+          RELEASE_BRANCH="${{ steps.normalize.outputs.release_branch }}"
+          if [ "${{ steps.branch-exists.outputs.exists }}" = "true" ]; then
+            echo "Release branch already existed: $RELEASE_BRANCH"
+          else
+            echo "Created release branch: $RELEASE_BRANCH"
+          fi

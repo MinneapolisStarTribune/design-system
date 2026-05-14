@@ -20,6 +20,8 @@ export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/native/EnhancedCodeBlock.native';
+export type { ImageGalleryNativeProps as ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/native/ImageGallery.native';
 export type { InlineImageProps } from './EditorialContent/ArticleToolkit/InlineImage/InlineImage.types';
 export { InlineImage } from './EditorialContent/ArticleToolkit/InlineImage/native/InlineImage.native';
 export {
@@ -50,6 +52,11 @@ export {
 } from './FormControl/CheckboxGroup/native/CheckboxGroup.native';
 export type { FormControlProps, FormControlSize } from './FormControl/FormControl.native';
 export { FormControl } from './FormControl/FormControl.native';
+export {
+  RadioGroup,
+  type RadioGroupProps,
+  type RadioOption,
+} from './FormControl/RadioGroup/native/RadioGroup.native';
 export { Select } from './FormControl/Select/native/Select.native';
 export type {
   SelectOption,
@@ -83,6 +90,10 @@ export {
   type NativeIconWrapperProps,
 } from './Icon/Icon.native';
 export { Image, type ImageProps } from './Image/native/Image.native';
+export { InlineLink, type InlineLinkProps } from './InlineLink/native/InlineLink.native';
+export { Link, type LinkProps } from './Link/native/Link.native';
+export { Radio } from './Radio/native/Radio.native';
+export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {

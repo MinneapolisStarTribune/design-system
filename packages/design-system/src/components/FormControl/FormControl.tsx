@@ -3,10 +3,12 @@
 import React from 'react';
 import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
+import { NumberInput } from './NumberInput/web/NumberInput';
 import { Checkbox } from './Checkbox/web/Checkbox';
 import { CheckboxGroup } from './CheckboxGroup/web/CheckboxGroup';
 import { RadioGroup } from './RadioGroup/web/RadioGroup';
 import { Select } from './Select/web/Select';
+import { Switch } from './Switch/web/Switch';
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
@@ -19,6 +21,8 @@ export const FormControl: React.FC<FormControlProps> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  NumberInput: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Checkbox: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CheckboxGroup: React.ComponentType<any>;
@@ -26,6 +30,8 @@ export const FormControl: React.FC<FormControlProps> & {
   RadioGroup: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Select: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Switch: React.ComponentType<any>;
   // Add any new form control subcomponents here
 } = () => {
   if (typeof console !== 'undefined' && console.error) {
@@ -39,8 +45,10 @@ export const FormControl: React.FC<FormControlProps> & {
 
 // Attach subcomponents
 FormControl.TextInput = TextInput;
+FormControl.NumberInput = NumberInput;
 FormControl.Checkbox = Checkbox;
 FormControl.CheckboxGroup = CheckboxGroup;
 FormControl.RadioGroup = RadioGroup;
 FormControl.Select = Select;
+FormControl.Switch = Switch;
 // Add any new form control subcomponents here
