@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   border: 1px solid var(--color-border-on-dark-strong-01);
-  border-radius: var(--radius-6);
+  border-radius: var(--radius-8);
   background: var(--color-background-light-default);
   transition:
     border-color 0.15s ease,
@@ -14,6 +14,7 @@
 
   &.sizeSmall {
     height: var(--spacing-input-sm);
+    border-radius: var(--radius-6);
   }
 
   &.sizeMedium {
@@ -61,7 +62,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-8);
-  padding: 0 var(--spacing-8) 0 var(--spacing-16);
+  padding: 0 var(--spacing-8) 0 var(--spacing-12);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -72,7 +73,24 @@
 }
 
 .selectContainer.sizeSmall .selectTrigger {
+  padding: 0 var(--spacing-8);
+}
+
+.selectContainer.sizeLarge .selectTrigger {
+  padding: 0 var(--spacing-8) 0 var(--spacing-16);
+}
+
+/* Pill inputs need extra horizontal padding so content clears the curved ends */
+.selectContainer.isRounded.sizeSmall .selectTrigger {
   padding: 0 var(--spacing-8) 0 var(--spacing-12);
+}
+
+.selectContainer.isRounded.sizeMedium .selectTrigger {
+  padding: 0 var(--spacing-8) 0 var(--spacing-16);
+}
+
+.selectContainer.isRounded.sizeLarge .selectTrigger {
+  padding: 0 var(--spacing-8) 0 var(--spacing-20);
 }
 
 .selectValue {
