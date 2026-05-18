@@ -42,7 +42,7 @@
         },
         "semibold-large": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 16,
             "font-weight": 600,
             "letter-spacing": "0",
@@ -51,7 +51,7 @@
         },
         "semibold-large-caps": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 16,
             "font-weight": 600,
             "letter-spacing": "0.03em",
@@ -61,7 +61,7 @@
         },
         "semibold-medium": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 14,
             "font-weight": 600,
             "letter-spacing": "0",
@@ -70,7 +70,7 @@
         },
         "semibold-medium-caps": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 14,
             "font-weight": 600,
             "letter-spacing": "0.03em",
@@ -80,7 +80,7 @@
         },
         "semibold-small": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 12,
             "font-weight": 600,
             "letter-spacing": "0",
@@ -89,7 +89,7 @@
         },
         "semibold-small-caps": {
           "value": {
-            "font-family": "{font.family.graphik}",
+            "font-family": "{font.family.graphik-semibold}",
             "font-size": 11,
             "font-weight": 600,
             "letter-spacing": "0.07em",
@@ -407,7 +407,7 @@
         "semibold": {
           "large": {
             "value": {
-              "font-family": "{font.family.graphik}",
+              "font-family": "{font.family.graphik-semibold}",
               "font-size": 18,
               "font-weight": 600,
               "letter-spacing": "0",

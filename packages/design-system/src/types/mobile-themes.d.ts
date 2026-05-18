@@ -334,6 +334,7 @@ interface StartribuneLightTheme {
   fontFamilyGraphik: string;
   fontFamilyGraphikCompact: string;
   fontFamilyGraphikCondensed: string;
+  fontFamilyGraphikSemibold: string;
   fontFamilyNohemi: string;
   fontFamilyPopular: string;
   fontFamilyPublicoBanner: string;
@@ -773,6 +774,7 @@ interface StartribuneDarkTheme {
   fontFamilyGraphik: string;
   fontFamilyGraphikCompact: string;
   fontFamilyGraphikCondensed: string;
+  fontFamilyGraphikSemibold: string;
   fontFamilyNohemi: string;
   fontFamilyPopular: string;
   fontFamilyPublicoBanner: string;
@@ -1218,6 +1220,7 @@ interface VarsityLightTheme {
   fontFamilyGraphik: string;
   fontFamilyGraphikCompact: string;
   fontFamilyGraphikCondensed: string;
+  fontFamilyGraphikSemibold: string;
   fontFamilyNohemi: string;
   fontFamilyPopular: string;
   fontFamilyPublicoBanner: string;
@@ -1663,6 +1666,7 @@ interface VarsityDarkTheme {
   fontFamilyGraphik: string;
   fontFamilyGraphikCompact: string;
   fontFamilyGraphikCondensed: string;
+  fontFamilyGraphikSemibold: string;
   fontFamilyNohemi: string;
   fontFamilyPopular: string;
   fontFamilyPublicoBanner: string;
