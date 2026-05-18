@@ -41,6 +41,7 @@ const config: VitestConfig = {
   test: {
     globals: true,
     environment: 'jsdom',
+    pool: 'forks',
     setupFiles: ['./vitest.setup.ts'],
     include: [
       'src/**/*.{test,spec,a11y.test}.{ts,tsx}',

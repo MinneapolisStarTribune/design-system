@@ -11,6 +11,9 @@
 - [ ] Added/updated unit tests (`*.test.tsx`)
 - [ ] Added/updated a11y tests (`*.a11y.test.tsx`)
 - [ ] Updated/added Storybook stories
+- [ ] Web vs Native impact assessed (explicitly noted in PR description)
+- [ ] Multi-brand impact assessed (Star Tribune/Varsity, light/dark where applicable)
+- [ ] Breaking-change and migration notes added when public API/behavior changed
 
 ## How to test
 

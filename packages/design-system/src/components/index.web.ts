@@ -10,12 +10,18 @@ export {
   EnhancedCodeBlock,
   type EnhancedCodeBlockProps,
 } from './EditorialContent/ArticleToolkit/CodeBlock/EnhancedCodeBlock/web/EnhancedCodeBlock';
-export {
-  ImageGallery,
-  type ImageGalleryProps,
-} from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
+export type { ImageGalleryProps } from './EditorialContent/ArticleToolkit/ImageGallery/ImageGallery.types';
+export { ImageGallery } from './EditorialContent/ArticleToolkit/ImageGallery/web/ImageGallery';
 export type { PhotoLayoutProps } from './EditorialContent/ArticleToolkit/PhotoLayout/PhotoLayout.types';
 export { PhotoLayout } from './EditorialContent/ArticleToolkit/PhotoLayout/web/PhotoLayout';
+export {
+  EYEBROW_BADGE_SIZES,
+  EYEBROW_BADGE_VARIANTS,
+  EyebrowBadge,
+  type EyebrowBadgeProps,
+  type EyebrowBadgeSize,
+  type EyebrowBadgeVariant,
+} from './EyebrowBadge/web/EyebrowBadge';
 export {
   Form,
   FormButton,
@@ -33,6 +39,7 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
   RadioGroup,
   type RadioGroupProps,
