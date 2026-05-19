@@ -1,0 +1,82 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as CaptionStories from './Caption.stories';
+
+<Meta of={CaptionStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Write your component description and guidelines in markdown below. */}
+
+# Caption
+
+Captions provide context for images and videos within articles. They clarify what the audience is seeing, add essential detail, and ensure proper attribution. This component is informational and non-interactive, and may include navigation controls when paired with galleries or lightboxes.
+
+This component serves as the foundational caption primitive for editorial media components including InlineImage, ImageGallery, PhotoLayout, and Lightbox integrations.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=3305-1555)
+
+## Anatomy
+
+1. **Caption Text** — Descriptive editorial text that provides additional image context.
+2. **Photo Credit** — Attribution for the image source or photographer. Attribution always follows the caption and is enclosed in parentheses.
+3. **Photo Purchase Link (optional)** — Optional CTA allowing users to purchase a reprint of the image.
+4. **Prefix Slot (optional)** — Reserved area for integrations such as gallery counters.
+5. **Suffix Slot (optional)** — Reserved area for integrations such as gallery controls or actions.
+
+## Variants
+
+### Inline
+
+Used within editorial article body layouts on light surfaces.
+
+### Lightbox
+
+Used within immersive or overlay-based experiences on dark surfaces.
+
+## Configurations
+
+### Purchase Link
+
+Use when readers should be able to purchase a reprint of the image.
+
+### Prefix / Suffix Slots
+
+Use for gallery integrations such as image counters, navigation controls, or additional contextual actions.
+
+## Usage guidelines
+
+### When to use
+
+- Display editorial image captions and credits consistently.
+- Standardize attribution formatting across media experiences.
+- Provide optional photo purchase functionality.
+- Support future gallery and lightbox integrations through shared APIs.
+
+### When to avoid
+
+- Avoid for generic form field helper text or non-editorial captions.
+- Avoid using as a standalone layout container for media experiences.
+
+## Accessibility
+
+- Uses semantic `<figcaption>` structure.
+- Purchase CTA remains keyboard accessible.
+- Lightbox variant maintains accessible contrast ratios on dark backgrounds.
+
+## Props
+
+- **caption** – Optional editorial caption content.
+- **credit** – Optional attribution or photographer credit.
+- **purchaseLink** – Optional CTA configuration object `{ label, link, onClick }`.
+- **variant** – Caption presentation variant: `'inline' | 'lightbox'`.
+- **prefixSlot** – Optional content rendered before caption content.
+- **suffixSlot** – Optional content rendered after caption content.
+- **className** – Optional custom class names.
+- **dataTestId** – Optional data-testid attribute for testing.
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+## {/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
+<Primary />
+<Controls />
+<Stories />

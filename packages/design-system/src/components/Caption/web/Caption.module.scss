@@ -1,0 +1,137 @@
+.caption {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+/* ---------- LAYOUT ---------- */
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-16);
+}
+
+.caption-row {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-16);
+}
+
+/* ---------- CONTENT ---------- */
+
+.caption-text {
+  word-break: break-word;
+}
+
+.credit-row {
+  line-height: 1.4;
+}
+
+.pagination {
+  flex-shrink: 0;
+}
+
+/* ---------- NAVIGATION ---------- */
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-shrink: 0;
+}
+
+.navButton {
+  border: 1px solid var(--color-border-on-dark-subtle-01);
+}
+
+/* ---------- CTA ---------- */
+
+.purchase-link-separator {
+  margin: 0 var(--spacing-4);
+}
+
+.purchase-link {
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-thickness: auto;
+  text-underline-offset: 8%;
+  text-underline-position: from-font;
+
+  &:focus-visible {
+    outline: 2px solid
+      var(--color-border-brand-01);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- INLINE ---------- */
+
+.variant-inline {
+  color: var(
+    --color-text-on-light-secondary
+  );
+
+  .purchase-link {
+    color: var(
+      --color-text-on-light-secondary
+    );
+
+    &:hover {
+      color: var(
+        --color-border-brand-01
+      );
+    }
+  }
+}
+
+/* ---------- LIGHTBOX ---------- */
+
+.variant-lightbox {
+  color: var(
+    --color-text-on-dark-primary
+  );
+
+  .credit-row {
+    color: var(
+      --color-text-on-dark-tertiary
+    );
+  }
+
+  .purchase-link {
+    color: var(
+      --color-text-on-dark-primary
+    );
+
+    &:hover {
+      color: var(
+        --color-text-brand-01
+      );
+    }
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 767px) {
+  .top-row {
+    flex-direction: column;
+  }
+
+  .bottom-row {
+    align-items: flex-start;
+  }
+
+  .navigation {
+    align-self: flex-end;
+  }
+}
