@@ -4,7 +4,7 @@ import layoutJson from '../../../../../tokens/primitives/breakpoint.json';
 export const BreakpointIndicator: React.FC = () => {
   const [breakpoint, setBreakpoint] = useState('');
   const [viewportWidth, setViewportWidth] = useState(0);
-  const [color, setColor] = useState('#1683F8');
+  const [color, setColor] = useState('var(--color-cobalt-blue-600)');
 
   const largeMin = Number(layoutJson.breakpoint.large.min.value);
   const largeMax = Number(layoutJson.breakpoint.large.max.value);
@@ -23,23 +23,23 @@ export const BreakpointIndicator: React.FC = () => {
       const smallOnly = document.getElementById('small-only');
 
       let newBreakpoint = '';
-      let newColor = '#1683F8';
+      let newColor = 'var(--color-cobalt-blue-600)';
 
       if (width >= largeMin) {
         newBreakpoint = `Large (≥ ${largeMin}px)`;
-        newColor = '#1683F8';
+        newColor = 'var(--color-cobalt-blue-600)';
         if (largeOnly) largeOnly.style.display = 'block';
         if (mediumOnly) mediumOnly.style.display = 'none';
         if (smallOnly) smallOnly.style.display = 'none';
       } else if (width >= mediumMin && width <= mediumMax) {
         newBreakpoint = `Medium (${mediumMin}px - ${mediumMax}px)`;
-        newColor = '#F96A06';
+        newColor = 'var(--color-orange-500)';
         if (largeOnly) largeOnly.style.display = 'none';
         if (mediumOnly) mediumOnly.style.display = 'block';
         if (smallOnly) smallOnly.style.display = 'none';
       } else {
         newBreakpoint = `Small (≤ ${smallMax}px)`;
-        newColor = '#F04C4C';
+        newColor = 'var(--color-red-500)';
         if (largeOnly) largeOnly.style.display = 'none';
         if (mediumOnly) mediumOnly.style.display = 'none';
         if (smallOnly) smallOnly.style.display = 'block';
@@ -79,7 +79,7 @@ export const BreakpointIndicator: React.FC = () => {
         fontWeight: '600',
         textAlign: 'center',
         marginBottom: '2rem',
-        borderRadius: '4px',
+        borderRadius: 'var(--radius-4)',
         transition: 'background-color 0.2s ease',
       }}
     >
