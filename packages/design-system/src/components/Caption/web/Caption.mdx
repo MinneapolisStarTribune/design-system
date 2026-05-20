@@ -19,8 +19,8 @@ This component serves as the foundational caption primitive for editorial media 
 1. **Caption Text** — Descriptive editorial text that provides additional image context.
 2. **Photo Credit** — Attribution for the image source or photographer. Attribution always follows the caption and is enclosed in parentheses.
 3. **Photo Purchase Link (optional)** — Optional CTA allowing users to purchase a reprint of the image.
-4. **Prefix Slot (optional)** — Reserved area for integrations such as gallery counters.
-5. **Suffix Slot (optional)** — Reserved area for integrations such as gallery controls or actions.
+4. **Gallery Controls (optional)** — Previous/next navigation when paired with a carousel or gallery.
+5. **Counter (optional)** — Current position indicator (e.g. `1/17`) for lightbox layouts.
 
 ## Variants
 
@@ -38,9 +38,9 @@ Used within immersive or overlay-based experiences on dark surfaces.
 
 Use when readers should be able to purchase a reprint of the image.
 
-### Prefix / Suffix Slots
+### Gallery navigation
 
-Use for gallery integrations such as image counters, navigation controls, or additional contextual actions.
+Pass `currentIndex`, `totalItems`, and `onPrevious` / `onNext` when the caption is paired with a gallery. Inline layouts render controls in the top row; lightbox layouts render the counter and controls in a bottom row.
 
 ## Usage guidelines
 
@@ -68,8 +68,10 @@ Use for gallery integrations such as image counters, navigation controls, or add
 - **credit** – Optional attribution or photographer credit.
 - **purchaseLink** – Optional CTA configuration object `{ label, link, onClick }`.
 - **variant** – Caption presentation variant: `'inline' | 'lightbox'`.
-- **prefixSlot** – Optional content rendered before caption content.
-- **suffixSlot** – Optional content rendered after caption content.
+- **currentIndex** / **totalItems** – Optional gallery pagination for controls and counter.
+- **onPrevious** / **onNext** – Optional gallery navigation handlers.
+- **analytics** – Optional metadata merged into the Buy Reprint tracking event.
+- **onPurchaseLinkClick** / **onNavigationClick** – Optional interaction callbacks.
 - **className** – Optional custom class names.
 - **dataTestId** – Optional data-testid attribute for testing.
 

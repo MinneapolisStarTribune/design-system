@@ -31,6 +31,10 @@ const meta: Meta<CaptionProps> = {
       control: 'object',
       description: 'Optional Buy Reprint CTA',
     },
+    analytics: {
+      control: 'object',
+      description: 'Analytics metadata for Buy Reprint tracking',
+    },
     currentIndex: {
       control: 'number',
       description: 'Current pagination index',

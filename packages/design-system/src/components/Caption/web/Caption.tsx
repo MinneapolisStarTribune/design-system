@@ -3,7 +3,8 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@/icons';
+import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@/icons';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 import type { CaptionProps } from '../Caption.types';
 import styles from './Caption.module.scss';
@@ -18,12 +19,14 @@ export const Caption: React.FC<CaptionProps> = ({
   totalItems,
   onPrevious,
   onNext,
+  analytics: analyticsOverride,
   onPurchaseLinkClick,
   onNavigationClick,
   className,
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
+  const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
 
   const hasNavigation =
@@ -46,6 +49,15 @@ export const Caption: React.FC<CaptionProps> = ({
   };
 
   const handlePurchaseClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+    track({
+      event: 'link_click',
+      component: 'Caption',
+      label: purchaseLink?.label ?? 'Buy Reprint',
+      cta_type: 'buy_reprint',
+      href: purchaseLink?.link,
+      variant,
+      ...analyticsOverride,
+    });
     purchaseLink?.onClick?.(event);
     onPurchaseLinkClick?.(event);
   };
@@ -83,11 +95,12 @@ export const Caption: React.FC<CaptionProps> = ({
     );
   };
 
-  const hasTopRowContent = caption || purchaseLink?.link || (!isLightbox && hasNavigation);
+  const hasTopRowContent =
+    caption || credit || purchaseLink?.link || (!isLightbox && hasNavigation);
 
   const hasBottomRowContent = isLightbox && (hasPagination || hasNavigation);
 
-  if (!caption && !credit && !purchaseLink && !hasNavigation) {
+  if (!caption && !credit && !purchaseLink?.link && !hasNavigation) {
     return null;
   }
 
@@ -102,19 +115,25 @@ export const Caption: React.FC<CaptionProps> = ({
       )}
       {...accessibilityProps}
     >
-      {/* TOP ROW */}
       {hasTopRowContent && (
         <div className={styles['top-row']}>
           <div className={styles['caption-row']}>
-            {caption && (
+            {(caption || (!isLightbox && credit)) && (
               <span className={styles['caption-text']} data-testid={`${dataTestId}-caption`}>
                 {caption}
+                {!isLightbox && credit && (
+                  <>
+                    {caption ? ' ' : null}({credit})
+                  </>
+                )}
               </span>
             )}
 
             {purchaseLink?.link && (
               <>
-                <span className={styles['purchase-link-separator']}>•</span>
+                {(caption || (!isLightbox && credit)) && (
+                  <span className={styles['purchase-link-separator']}>•</span>
+                )}
 
                 <a
                   href={purchaseLink.link}
@@ -132,14 +151,13 @@ export const Caption: React.FC<CaptionProps> = ({
         </div>
       )}
 
-      {/* CREDIT */}
       {isLightbox && credit && (
         <div className={styles['credit-row']} data-testid={`${dataTestId}-credit`}>
-          {credit}
+          <CameraIcon size="medium" aria-hidden className={styles['credit-icon']} />
+          <span>{credit}</span>
         </div>
       )}
 
-      {/* BOTTOM ROW */}
       {hasBottomRowContent && (
         <div className={styles['bottom-row']}>
           {hasPagination ? (

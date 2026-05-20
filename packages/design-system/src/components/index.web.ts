@@ -177,6 +177,12 @@ export {
   CandyBarRenderer,
   type CandyBarRendererProps,
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
+export {
+  CAPTION_VARIANTS,
+  type CaptionProps,
+  type CaptionVariant,
+} from '@/components/Caption/Caption.types';
+export { Caption } from '@/components/Caption/web/Caption';
 export * from '@/components/EditorialContent/ArticleToolkit/index';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';

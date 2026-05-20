@@ -41,6 +41,11 @@ export interface CaptionProps extends BaseProps, AccessibilityProps {
   onNext?: () => void;
 
   /**
+   * Analytics metadata merged into the Buy Reprint tracking event.
+   */
+  analytics?: Record<string, unknown>;
+
+  /**
    * Analytics / external events
    */
   onPurchaseLinkClick?: React.MouseEventHandler<HTMLAnchorElement>;
