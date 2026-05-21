@@ -47,9 +47,9 @@ Breakpoints define the responsive breakpoints for the design system. Resize your
   <div
     style={{
       padding: '1rem',
-      backgroundColor: '#f0f7ff',
-      border: '2px solid #1683F8',
-      borderRadius: '4px',
+      backgroundColor: 'var(--color-cobalt-blue-50)',
+      border: '2px solid var(--color-cobalt-blue-600)',
+      borderRadius: 'var(--radius-4)',
       marginBottom: '1rem',
     }}
     id="large-only"
@@ -63,9 +63,9 @@ Breakpoints define the responsive breakpoints for the design system. Resize your
   <div
     style={{
       padding: '1rem',
-      backgroundColor: '#fff7ed',
-      border: '2px solid #F96A06',
-      borderRadius: '4px',
+      backgroundColor: 'var(--color-orange-50)',
+      border: '2px solid var(--color-orange-500)',
+      borderRadius: 'var(--radius-4)',
       marginBottom: '1rem',
     }}
     id="medium-only"
@@ -79,9 +79,9 @@ Breakpoints define the responsive breakpoints for the design system. Resize your
   <div
     style={{
       padding: '1rem',
-      backgroundColor: '#fef2f2',
-      border: '2px solid #F04C4C',
-      borderRadius: '4px',
+      backgroundColor: 'var(--color-red-50)',
+      border: '2px solid var(--color-red-500)',
+      borderRadius: 'var(--radius-4)',
     }}
     id="small-only"
   >
@@ -92,18 +92,45 @@ Breakpoints define the responsive breakpoints for the design system. Resize your
   </div>
 </div>
 
-## CSS Custom Properties
+## Using breakpoints in media queries
 
-```css
-@media (min-width: var(--breakpoint-large-min)) {
+> **Heads up:** CSS custom properties (`var(--breakpoint-*)`) **cannot** be used inside `@media` query conditions. Media features are evaluated before the cascade runs, so the browser has no element context to resolve a custom property against and silently treats the rule as invalid. This is a CSS spec limitation, not a browser bug.
+>
+> The design system still exposes `--breakpoint-large-min`, `--breakpoint-medium-min`, etc. as CSS variables — they're useful in regular property values (e.g. `max-width: var(--breakpoint-large-container-max)`) but **not** inside `@media (...)`.
+
+In SCSS, declare the breakpoint values as Sass variables (resolved at compile time) and use those in your media queries. Keep them in sync with the values in the table above.
+
+```scss
+$breakpoint-small-max: 767px;
+$breakpoint-medium-min: 768px;
+$breakpoint-medium-max: 1159px;
+$breakpoint-large-min: 1160px;
+
+@media (min-width: $breakpoint-large-min) {
   /* Large breakpoint styles */
 }
 
-@media (min-width: var(--breakpoint-medium-min)) and (max-width: var(--breakpoint-medium-max)) {
+@media (min-width: $breakpoint-medium-min) and (max-width: $breakpoint-medium-max) {
   /* Medium breakpoint styles */
 }
 
-@media (max-width: var(--breakpoint-small-max)) {
+@media (max-width: $breakpoint-small-max) {
+  /* Small breakpoint styles */
+}
+```
+
+In plain CSS, use the literal pixel values directly:
+
+```css
+@media (min-width: 1160px) {
+  /* Large breakpoint styles */
+}
+
+@media (min-width: 768px) and (max-width: 1159px) {
+  /* Medium breakpoint styles */
+}
+
+@media (max-width: 767px) {
   /* Small breakpoint styles */
 }
 ```
