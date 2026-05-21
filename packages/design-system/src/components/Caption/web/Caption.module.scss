@@ -79,8 +79,7 @@
   text-underline-position: from-font;
 
   &:focus-visible {
-    outline: 2px solid
-      var(--color-border-brand-01);
+    outline: 2px solid var(--color-border-brand-01);
     outline-offset: 2px;
   }
 }
@@ -88,9 +87,7 @@
 /* ---------- INLINE ---------- */
 
 .variant-inline {
-  color: var(
-    --color-text-on-light-secondary
-  );
+  color: var(--color-text-on-light-secondary);
 
   .purchase-link {
     color: var(--color-text-on-light-secondary);
@@ -103,27 +100,26 @@
 }
 
 /* ---------- LIGHTBOX ---------- */
-
 .variant-lightbox {
-  color: var(
-    --color-text-on-dark-primary
-  );
+  color: var(--color-text-on-dark-primary);
+
+  [class*='typography-'] {
+    color: var(--color-text-on-dark-primary);
+  }
+
+  .caption-text,
+  .purchase-link,
+  .pagination {
+    color: var(--color-text-on-dark-primary);
+  }
 
   .credit-row {
-    color: var(
-      --color-text-on-dark-tertiary
-    );
+    color: var(--color-text-on-dark-tertiary);
   }
 
   .purchase-link {
-    color: var(
-      --color-text-on-dark-primary
-    );
-
     &:hover {
-      color: var(
-        --color-text-brand-01
-      );
+      color: var(--color-text-brand-01);
     }
   }
 }

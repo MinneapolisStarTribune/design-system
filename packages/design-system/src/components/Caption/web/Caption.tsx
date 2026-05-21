@@ -153,7 +153,12 @@ export const Caption: React.FC<CaptionProps> = ({
 
       {isLightbox && credit && (
         <div className={styles['credit-row']} data-testid={`${dataTestId}-credit`}>
-          <CameraIcon size="medium" aria-hidden className={styles['credit-icon']} />
+          <CameraIcon
+            size="medium"
+            color={isLightbox ? 'on-dark-primary' : undefined}
+            aria-hidden
+            className={styles['credit-icon']}
+          />
           <span>{credit}</span>
         </div>
       )}
@@ -162,7 +167,7 @@ export const Caption: React.FC<CaptionProps> = ({
         <div className={styles['bottom-row']}>
           {hasPagination ? (
             <div
-              className={styles.pagination}
+              className={classNames(styles.pagination, 'typography-utility-label-semibold-large')}
               data-testid={`${dataTestId}-pagination`}
               aria-live="polite"
               aria-atomic="true"
