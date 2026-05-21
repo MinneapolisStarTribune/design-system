@@ -62,7 +62,7 @@ export const Configurable: Story = {
 <Popover
   placement="bottom"
   trigger={<Button>Open</Button>}
-  containerClassName="[--spacing-8:8px]"
+  containerClassName="custom-container"
 >
   <Popover.Heading>Title</Popover.Heading>
 

@@ -8,9 +8,9 @@ import { CloseIcon } from '@/icons';
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
   /**
- * Heading container classes.
- * Kept as headerClassName for backwards compatibility.
- */
+   * Heading container classes.
+   * Kept as headerClassName for backwards compatibility.
+   */
   headerClassName?: string;
   titleClassName?: string;
   closeButtonClassName?: string;
