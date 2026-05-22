@@ -133,6 +133,60 @@
   }
 }
 
+/* ---------- STORYBOOK DOCS ---------- */
+/*
+ * Docs applies .sbdocs a[href] link tokens with higher specificity than CSS modules.
+ * .caption-purchase-link + :global(.sbdocs) restores Caption purchase-link tokens only.
+ */
+
+:global(.sbdocs) .variant-inline :global(a.caption-purchase-link) {
+  --caption-purchase-link-accent: var(--color-caption-purchase-link-accent-on-light-surface);
+  color: var(--color-text-on-light-secondary);
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--caption-purchase-link-accent);
+  text-underline-offset: 8%;
+
+  &:hover {
+    color: var(--caption-purchase-link-accent);
+    text-decoration-color: var(--caption-purchase-link-accent);
+  }
+
+  &:visited:not(:hover) {
+    color: var(--color-text-on-light-secondary);
+    text-decoration-color: var(--caption-purchase-link-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--caption-purchase-link-accent);
+    outline-offset: 2px;
+  }
+}
+
+:global(.sbdocs) .variant-lightbox :global(a.caption-purchase-link) {
+  --caption-purchase-link-accent: var(--color-caption-purchase-link-accent-on-dark-surface);
+  color: var(--color-text-on-dark-primary);
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--caption-purchase-link-accent);
+  text-underline-offset: 8%;
+
+  &:hover {
+    color: var(--caption-purchase-link-accent);
+    text-decoration-color: var(--caption-purchase-link-accent);
+  }
+
+  &:visited:not(:hover) {
+    color: var(--color-text-on-dark-primary);
+    text-decoration-color: var(--caption-purchase-link-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--caption-purchase-link-accent);
+    outline-offset: 2px;
+  }
+}
+
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 767px) {

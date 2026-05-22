@@ -160,7 +160,7 @@ export const Caption: React.FC<CaptionProps> = ({
 
                 <a
                   href={purchaseLink.link}
-                  className={styles['purchase-link']}
+                  className={classNames(styles['purchase-link'], 'caption-purchase-link')}
                   onClick={handlePurchaseClick}
                   data-testid={`${dataTestId}-purchase-link`}
                 >
