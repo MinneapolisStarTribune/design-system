@@ -7,11 +7,6 @@ const meta: Meta<CaptionProps> = {
   component: Caption,
   parameters: {
     layout: 'padded',
-    docs: {
-      source: {
-        type: 'dynamic',
-      },
-    },
   },
   argTypes: {
     caption: {
@@ -61,6 +56,7 @@ const storyArgs = (overrides: Partial<CaptionProps> = {}): CaptionProps => ({
   ...overrides,
 });
 
+// identifier: configurable
 export const Configurable: Story = {
   args: storyArgs({
     purchaseLink: {
@@ -70,9 +66,116 @@ export const Configurable: Story = {
     currentIndex: 1,
     totalItems: 5,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `
+<Caption
+  caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+  credit="Star Tribune staff/The Minnesota Star Tribune"
+  variant="inline"
+  purchaseLink={{
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  }}
+  currentIndex={1}
+  totalItems={5}
+/>
+        `,
+      },
+    },
+  },
 };
 
+// identifier: all variants
 export const AllVariants: Story = {
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      source: {
+        code: `
+<>
+  {/* Inline */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="inline"
+  />
+
+  {/* Inline with CTA */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="inline"
+    purchaseLink={{
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    }}
+  />
+
+  {/* Gallery Layout */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="inline"
+    purchaseLink={{
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    }}
+    currentIndex={2}
+    totalItems={17}
+    onPrevious={() => {}}
+    onNext={() => {}}
+  />
+
+  {/* Lightbox */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="lightbox"
+    purchaseLink={{
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    }}
+    currentIndex={1}
+    totalItems={17}
+    onPrevious={() => {}}
+    onNext={() => {}}
+  />
+
+  {/* Lightbox Without CTA */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="lightbox"
+    currentIndex={1}
+    totalItems={17}
+    onPrevious={() => {}}
+    onNext={() => {}}
+  />
+
+  {/* Without Credit */}
+  <Caption
+    caption="A scenic view of mountains during sunrise, highlighting nature's beauty."
+    variant="inline"
+  />
+
+  {/* Without Caption */}
+  <Caption
+    credit="Star Tribune staff/The Minnesota Star Tribune"
+    variant="inline"
+  />
+
+  {/* Caption only */}
+  <Caption
+    caption="A scenic view of mountains during sunrise."
+  />
+</>
+        `,
+      },
+    },
+  },
+
   render: (args) => (
     <div
       style={{
@@ -199,5 +302,6 @@ export const AllVariants: Story = {
       </div>
     </div>
   ),
+
   args: storyArgs(),
 };
