@@ -2,20 +2,18 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
 }
 
 /* ---------- LAYOUT ---------- */
 
 .top-row {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  gap: var(--spacing-16);
+  gap: var(--spacing-20);
 }
 
 .caption-row {
-  flex: 1;
+  flex: 0 1 auto;
   min-width: 0;
   line-height: 1.4;
 }
@@ -24,7 +22,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--spacing-16);
 }
 
 /* ---------- CONTENT ---------- */
@@ -37,8 +34,10 @@
 .credit-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-8);
+  gap: var(--spacing-4);
   line-height: 1.4;
+  margin-top: var(--spacing-12);
+  margin-bottom: var(--spacing-20);
 }
 
 .credit-icon {
@@ -55,7 +54,9 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
+  flex: 0 0 auto;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .variant-inline .navButton {
@@ -81,7 +82,11 @@
   text-underline-position: from-font;
 
   &:focus-visible {
-    outline: 2px solid var(--color-border-brand-01);
+    outline: 2px solid
+      var(
+        --caption-purchase-link-color,
+        var(--color-border-brand-01)
+      );
     outline-offset: 2px;
   }
 }
@@ -93,15 +98,23 @@
 
   .purchase-link {
     color: var(--color-text-on-light-secondary);
-    text-decoration-color: var(--color-border-brand-01);
+
+    text-decoration-color: var(
+      --caption-purchase-link-color,
+      var(--color-border-brand-01)
+    );
 
     &:hover {
-      color: var(--color-border-brand-01);
+      color: var(
+        --caption-purchase-link-color,
+        var(--color-border-brand-01)
+      );
     }
   }
 }
 
 /* ---------- LIGHTBOX ---------- */
+
 .variant-lightbox {
   color: var(--color-text-on-dark-primary);
 
@@ -111,11 +124,12 @@
 
   .caption-text,
   .purchase-link,
-  .pagination {
+  .pagination,
+  .purchase-link-separator {
     color: var(--color-text-on-dark-primary);
   }
 
-  .credit-row {
+  .credit-text {
     color: var(--color-text-on-dark-tertiary);
   }
 
@@ -129,15 +143,7 @@
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 767px) {
-  .top-row {
-    flex-direction: column;
-  }
-
   .bottom-row {
     align-items: flex-start;
   }
-
-  .navigation {
-    align-self: flex-end;
-  }
-}
+} 

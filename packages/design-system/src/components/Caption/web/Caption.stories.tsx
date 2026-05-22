@@ -46,7 +46,8 @@ export default meta;
 type Story = StoryObj<CaptionProps>;
 
 const defaultArgs: CaptionProps = {
-  caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
+  caption:
+    'Barb Dentz, an advocate with Tennessee Families for Vaccines, met with her state representative, Sam Whitson, to discuss the state’s declining childhood immunization rates in January. (Rebecca McApline, Star Tribune)',
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'inline',
 };

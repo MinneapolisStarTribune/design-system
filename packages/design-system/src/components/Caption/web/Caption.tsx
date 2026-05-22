@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@/icons';
@@ -26,6 +26,8 @@ export const Caption: React.FC<CaptionProps> = ({
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
+  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
+
   const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
 
@@ -62,6 +64,24 @@ export const Caption: React.FC<CaptionProps> = ({
     onPurchaseLinkClick?.(event);
   };
 
+  /**
+   * Single resize listener (optimized + SSR safe)
+   */
+  useEffect(() => {
+    const handleResize = (): void => {
+      if (typeof window === 'undefined') return;
+
+      const width = window.innerWidth;
+
+      setButtonSize(width < 1160 ? 'small' : 'large');
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const renderNavigation = () => {
     if (!hasNavigation) return null;
 
@@ -70,7 +90,7 @@ export const Caption: React.FC<CaptionProps> = ({
         <Button
           variant="ghost"
           surface={isLightbox ? 'dark' : 'light'}
-          size="large"
+          size={buttonSize}
           icon={<ChevronLeftIcon />}
           onClick={handlePrevious}
           isDisabled={!canGoPrevious}
@@ -81,7 +101,7 @@ export const Caption: React.FC<CaptionProps> = ({
         <Button
           variant="ghost"
           surface={isLightbox ? 'dark' : 'light'}
-          size="large"
+          size={buttonSize}
           icon={<ChevronRightIcon />}
           onClick={handleNext}
           isDisabled={!canGoNext}
@@ -110,7 +130,10 @@ export const Caption: React.FC<CaptionProps> = ({
       className={classNames(
         styles.caption,
         styles[`variant-${variant}`],
-        'typography-utility-label-small',
+        {
+          'typography-utility-text-regular-small': isLightbox,
+          'typography-utility-label-small': !isLightbox,
+        },
         className
       )}
       {...accessibilityProps}
@@ -155,11 +178,15 @@ export const Caption: React.FC<CaptionProps> = ({
         <div className={styles['credit-row']} data-testid={`${dataTestId}-credit`}>
           <CameraIcon
             size="medium"
-            color={isLightbox ? 'on-dark-primary' : undefined}
+            color={isLightbox ? 'on-dark-tertiary' : undefined}
             aria-hidden
             className={styles['credit-icon']}
           />
-          <span>{credit}</span>
+          <span
+            className={classNames('typography-utility-text-regular-small', styles['credit-text'])}
+          >
+            {credit}
+          </span>
         </div>
       )}
 
