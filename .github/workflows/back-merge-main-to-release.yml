@@ -1,0 +1,150 @@
+name: Back-merge main into active release branches
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  back-merge:
+    name: Open PRs to merge main into higher release branches
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Determine merged version
+        id: merged-version
+        run: |
+          MERGED_BRANCH="${{ github.event.pull_request.head.ref }}"
+          # Extract version from release/X.Y.Z
+          MERGED_VERSION="${MERGED_BRANCH#release/}"
+          echo "version=$MERGED_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Merged release branch: $MERGED_BRANCH (version $MERGED_VERSION)"
+
+      - name: Find higher-version release branches
+        id: find-branches
+        run: |
+          MERGED_VERSION="${{ steps.merged-version.outputs.version }}"
+
+          # Fetch all remote release branches
+          git fetch origin 'refs/heads/release/*:refs/remotes/origin/release/*'
+
+          # Get all release/* branches, extract versions, filter higher ones
+          HIGHER_BRANCHES=""
+          for branch in $(git branch -r --list 'origin/release/*' | sed 's|origin/||; s|^[[:space:]]*||'); do
+            BRANCH_VERSION="${branch#release/}"
+
+            # Skip non-semver branches
+            if [[ ! "$BRANCH_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              continue
+            fi
+
+            # Compare versions using sort -V
+            HIGHER=$(printf '%s\n%s' "$MERGED_VERSION" "$BRANCH_VERSION" | sort -V | tail -n1)
+            if [[ "$HIGHER" == "$BRANCH_VERSION" && "$BRANCH_VERSION" != "$MERGED_VERSION" ]]; then
+              HIGHER_BRANCHES="$HIGHER_BRANCHES $branch"
+            fi
+          done
+
+          HIGHER_BRANCHES=$(echo "$HIGHER_BRANCHES" | xargs)
+          echo "branches=$HIGHER_BRANCHES" >> "$GITHUB_OUTPUT"
+
+          if [ -z "$HIGHER_BRANCHES" ]; then
+            echo "No higher-version release branches found. Nothing to back-merge."
+          else
+            echo "Will back-merge main into: $HIGHER_BRANCHES"
+          fi
+
+      - name: Create back-merge PRs
+        if: steps.find-branches.outputs.branches != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          MERGED_VERSION="${{ steps.merged-version.outputs.version }}"
+          BRANCHES="${{ steps.find-branches.outputs.branches }}"
+
+          for branch in $BRANCHES; do
+            echo "---"
+            echo "Processing: $branch"
+
+            # Check if a back-merge PR already exists
+            EXISTING_PR=$(gh pr list \
+              --base "$branch" \
+              --head "main" \
+              --state open \
+              --json number \
+              --jq '.[0].number // empty')
+
+            if [ -n "$EXISTING_PR" ]; then
+              echo "PR #$EXISTING_PR already exists for main → $branch. Skipping."
+              continue
+            fi
+
+            # Check if main can merge cleanly into the target branch
+            git checkout "$branch" --quiet
+            git reset --hard "origin/$branch" --quiet
+
+            HAS_CONFLICTS=false
+            if ! git merge origin/main --no-commit --no-ff --quiet 2>/dev/null; then
+              HAS_CONFLICTS=true
+              git merge --abort
+            else
+              git merge --abort 2>/dev/null || git reset --hard "origin/$branch" --quiet
+            fi
+
+            # Build PR body
+            if [ "$HAS_CONFLICTS" = true ]; then
+              PR_BODY="## ⚠️ Merge conflicts detected"$'\n\n'\
+              "This PR has merge conflicts that need manual resolution."$'\n\n'\
+              "### What happened"$'\n'\
+              "\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression."$'\n\n'\
+              "### What to do"$'\n'\
+              "1. Check out this PR locally"$'\n'\
+              "2. Resolve the conflicts"$'\n'\
+              "3. Push the resolution"$'\n'\
+              "4. Get review and merge"$'\n\n'\
+              '```sh'$'\n'\
+              "gh pr checkout <this-pr-number>"$'\n'\
+              "git merge main"$'\n'\
+              "# resolve conflicts"$'\n'\
+              "git push"$'\n'\
+              '```'
+            else
+              PR_BODY="## ✅ Clean merge - no conflicts"$'\n\n'\
+              "\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression."$'\n\n'\
+              "This should merge cleanly. Review and merge when ready."
+            fi
+
+            # Create the PR
+            gh pr create \
+              --base "$branch" \
+              --head "main" \
+              --title "chore: back-merge main into $branch (after $MERGED_VERSION release)" \
+              --body "$PR_BODY" \
+              --label "back-merge" 2>/dev/null || \
+            gh pr create \
+              --base "$branch" \
+              --head "main" \
+              --title "chore: back-merge main into $branch (after $MERGED_VERSION release)" \
+              --body "$PR_BODY"
+
+            echo "✅ Created PR: main → $branch"
+          done

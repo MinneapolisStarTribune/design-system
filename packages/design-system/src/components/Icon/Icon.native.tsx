@@ -47,7 +47,7 @@ export type NativeIconColor = keyof typeof NATIVE_ICON_COLOR_MAP;
  */
 export interface NativeIconWrapperProps {
   size?: NativeIconSize;
-  color?: NativeIconColor;
+  color?: NativeIconColor | string; //Allow string (hex values)
   width?: number;
   height?: number;
   /** Test ID passed through to the underlying SVG element. */
@@ -74,15 +74,19 @@ export function createNativeIconWrapper(
     height,
     testID,
   }) => {
-    const themeKey = NATIVE_ICON_COLOR_MAP[color];
+    const themeKey = NATIVE_ICON_COLOR_MAP[color as NativeIconColor];
 
     const resolvedColor = useNativeStyles(
       useCallback(
         (theme: NativeTheme) => {
+          // Handle hex colors directly
+          if (color.startsWith('#') || color.toLowerCase().startsWith('rgb')) {
+            return color;
+          }
           const value = theme[themeKey];
           return typeof value === 'string' ? value : '#000000';
         },
-        [themeKey]
+        [themeKey, color] // Add color to deps
       )
     );
 
