@@ -42,10 +42,10 @@ export const Configurable: Story = {
   args: {
     trigger: <Button>Open</Button>,
     placement: 'bottom',
-    containerClassName: '',
-    contentClassName: '',
-    wrapperClassName: '',
-    arrowClassName: '',
+    containerClassName: undefined,
+    contentClassName: undefined,
+    wrapperClassName: undefined,
+    arrowClassName: undefined,
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
@@ -62,7 +62,7 @@ export const Configurable: Story = {
 <Popover
   placement="bottom"
   trigger={<Button>Open</Button>}
-  containerClassName="[--spacing-8:8px]"
+  containerClassName="custom-container"
 >
   <Popover.Heading>Title</Popover.Heading>
 

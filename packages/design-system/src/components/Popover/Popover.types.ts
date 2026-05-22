@@ -17,6 +17,13 @@ export type PopoverProps = {
    * Defaults to false.
    */
   modal?: boolean;
+
+  /**
+   * @deprecated Use contentClassName instead.
+   * Kept for backwards compatibility.
+   */
+  className?: string;
+
   wrapperClassName?: string;
   containerClassName?: string;
   contentClassName?: string;

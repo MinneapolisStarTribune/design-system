@@ -193,7 +193,11 @@ describe('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      expect(document.querySelector('.custom-wrapper')).toBeInTheDocument();
+      const content = screen.getByText('Content');
+
+      const wrapper = content.closest('.custom-wrapper');
+
+      expect(wrapper).toHaveClass('custom-wrapper');
     });
   });
 
@@ -209,7 +213,11 @@ describe('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      expect(document.querySelector('.custom-container')).toBeInTheDocument();
+      const content = screen.getByText('Content');
+
+      const container = content.closest('.custom-container');
+
+      expect(container).toHaveClass('custom-container');
     });
   });
 
@@ -225,7 +233,11 @@ describe('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      expect(document.querySelector('.custom-content')).toBeInTheDocument();
+      const content = screen.getByText('Content');
+
+      const contentEl = content.closest('.custom-content');
+
+      expect(contentEl).toHaveClass('custom-content');
     });
   });
 
@@ -241,7 +253,9 @@ describe('Popover', () => {
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
-      expect(document.querySelector('.custom-arrow')).toBeInTheDocument();
+      const arrow = document.querySelector('svg.custom-arrow');
+
+      expect(arrow).toHaveClass('custom-arrow');
     });
   });
 });
