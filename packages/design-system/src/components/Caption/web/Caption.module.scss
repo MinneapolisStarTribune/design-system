@@ -85,7 +85,7 @@
     outline: 2px solid
       var(
         --caption-purchase-link-color,
-        var(--color-border-brand-01)
+        var(--color-button-brand-filled-background)
       );
     outline-offset: 2px;
   }
@@ -101,13 +101,13 @@
 
     text-decoration-color: var(
       --caption-purchase-link-color,
-      var(--color-border-brand-01)
+      var(--color-button-brand-filled-background)
     );
 
     &:hover {
       color: var(
         --caption-purchase-link-color,
-        var(--color-border-brand-01)
+        var(--color-button-brand-filled-background)
       );
     }
   }
@@ -116,7 +116,7 @@
 /* ---------- LIGHTBOX ---------- */
 
 .variant-lightbox {
-  color: var(--color-text-on-dark-primary);
+  // color: var(--color-text-on-dark-primary);
 
   [class*='typography-'] {
     color: var(--color-text-on-dark-primary);
@@ -134,6 +134,10 @@
   }
 
   .purchase-link {
+    text-decoration-color: var(
+      --caption-purchase-link-color,
+      var(--color-button-brand-filled-background)
+    );
     &:hover {
       color: var(--color-text-brand-01);
     }
