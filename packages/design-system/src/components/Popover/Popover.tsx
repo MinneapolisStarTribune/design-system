@@ -2,10 +2,8 @@
 
 import React, {
   cloneElement,
-  HTMLAttributes,
   isValidElement,
   ReactElement,
-  ReactNode,
   useCallback,
   useContext,
   useId,
@@ -13,6 +11,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import classNames from 'classnames';
 import {
   arrow,
   autoUpdate,
@@ -39,34 +38,7 @@ import {
 import { PopoverDescription } from './PopoverDescription';
 import { PopoverDivider } from './PopoverDivider';
 import { PopoverHeading } from './PopoverHeading';
-
-export type Placement = 'top' | 'right' | 'bottom' | 'left';
-
-export type PopoverProps = {
-  trigger: ReactNode;
-  children: ReactNode;
-  /**
-   * Which side of the trigger the popover appears on.
-   * Defaults to 'bottom'.
-   */
-  placement?: Placement;
-  isDisabled?: boolean;
-  /**
-   * Whether to trap focus inside the popover (modal behavior).
-   * Use `true` for action-heavy popovers, `false` for informational ones.
-   * Defaults to false.
-   */
-  modal?: boolean;
-  className?: string;
-  /** Controlled open state. If omitted, the component manages open state internally. */
-  open?: boolean;
-  /** Called when the popover requests an open/close transition. Required when `open` is provided. */
-  onOpenChange?: (open: boolean) => void;
-  /** When set, the popover content portals into this element instead of document.body (e.g. for Storybook). */
-  portalRoot?: HTMLElement | null;
-  /** Accessible label for the popover dialog. Provide this when no PopoverHeading is rendered. */
-  'aria-label'?: string;
-} & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label'>;
+import { PopoverProps } from './Popover.types';
 
 const ARROW_HEIGHT = 8;
 const GAP = 4;
@@ -81,7 +53,10 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   placement = 'bottom',
   isDisabled,
   modal = false,
-  className,
+  wrapperClassName,
+  containerClassName,
+  contentClassName,
+  arrowClassName,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   portalRoot: portalRootProp,
@@ -190,7 +165,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
                 // eslint-disable-next-line react-hooks/refs
                 ref={refs.setFloating}
                 style={floatingStyles}
-                className={styles.wrapper}
+                className={classNames(styles.wrapper, wrapperClassName)}
                 aria-label={ariaLabel}
                 aria-labelledby={ariaLabel ? undefined : `popover-heading-${headingId}`}
                 {...getFloatingProps()}
@@ -204,9 +179,10 @@ const PopoverRoot: React.FC<PopoverProps> = ({
                   fill="#fff"
                   stroke="#E3E5E8"
                   strokeWidth={1}
+                  className={classNames(styles.arrow, arrowClassName)}
                 />
-                <div className={styles.container}>
-                  <div className={`${styles.content} ${className ?? ''}`}>{children}</div>
+                <div className={classNames(styles.container, containerClassName)}>
+                  <div className={classNames(styles.content, contentClassName)}>{children}</div>
                 </div>
               </div>
             </FloatingFocusManager>
