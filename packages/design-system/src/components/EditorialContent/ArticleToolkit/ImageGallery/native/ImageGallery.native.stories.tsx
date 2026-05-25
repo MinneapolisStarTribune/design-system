@@ -45,6 +45,10 @@ const meta: Meta<typeof ImageGallery> = {
       control: 'boolean',
       description: 'Whether the gallery should loop when navigating.',
     },
+    expandable: {
+      control: 'boolean',
+      description: 'Opens the pressed slide in a full-screen modal.',
+    },
   },
 };
 
@@ -56,26 +60,35 @@ export const Configurable: Story = {
   args: {
     images: sampleImages,
     variant: 'standard',
+    expandable: false,
     'aria-label': 'Image gallery',
   },
 };
 
 export const AllVariants: Story = {
-  render: () => (
+  args: {
+    images: sampleImages,
+    variant: 'standard',
+    expandable: false,
+    'aria-label': 'Image gallery',
+  },
+
+  render: (args) => (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
       <View>
-        <ImageGallery images={sampleImages} variant="standard" aria-label="Standard gallery" />
+        <ImageGallery {...args} variant="standard" aria-label="Standard gallery" />
       </View>
 
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
       <View>
-        <ImageGallery images={sampleImages} variant="immersive" aria-label="Immersive gallery" />
+        <ImageGallery {...args} variant="immersive" aria-label="Immersive gallery" />
       </View>
 
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
       <View>
         <ImageGallery
+          {...args}
           images={[sampleImages[0]]}
           variant="standard"
           aria-label="Single image gallery"
@@ -85,6 +98,7 @@ export const AllVariants: Story = {
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Without Caption</Text>
       <View>
         <ImageGallery
+          {...args}
           images={[
             {
               src: 'https://picsum.photos/id/1020/1080/720',
@@ -99,6 +113,7 @@ export const AllVariants: Story = {
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Many Images (Scroll Test)</Text>
       <View>
         <ImageGallery
+          {...args}
           images={[...sampleImages, ...sampleImages]}
           variant="immersive"
           aria-label="Large gallery"
