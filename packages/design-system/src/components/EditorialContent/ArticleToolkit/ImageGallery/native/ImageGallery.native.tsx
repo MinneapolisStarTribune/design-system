@@ -8,6 +8,9 @@ import {
   AccessibilityInfo,
   Platform,
   Text,
+  Modal,
+  Pressable,
+  Image,
   type ViewStyle,
   type TextStyle,
   type StyleProp,
@@ -15,8 +18,20 @@ import {
   type ImageStyle,
 } from 'react-native';
 
-import { ImageGalleryNativeProps as ImageGalleryProps, Variant } from '../ImageGallery.types';
-import { Button, CameraFilledIcon, ChevronLeftIcon, ChevronRightIcon } from '@/index.native';
+import {
+  ImageGalleryNativeProps as ImageGalleryProps,
+  type ImageItem,
+  Variant,
+} from '../ImageGallery.types';
+import {
+  Button,
+  CameraFilledIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  ExpandIcon,
+} from '@/index.native';
+import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import {
   Image as DSImage,
   ImageProps as NativeImageProps,
@@ -51,6 +66,103 @@ const getMaxWidth = (width: number, variant: Variant): number => {
 const getButtonSize = (width: number): 'small' | 'large' =>
   width < BREAKPOINTS.medium ? 'small' : 'large';
 
+const buildImageUri = (src: string, imgixParams?: string): string => {
+  if (!imgixParams) {
+    return src;
+  }
+  return `${src}${src.includes('?') ? '&' : '?'}${imgixParams}`;
+};
+
+/** Maps a carousel slide index (including loop clones) to an index in `images`. */
+const toLogicalImageIndex = (slideIndex: number, hasLoop: boolean, total: number): number => {
+  if (!hasLoop) {
+    return slideIndex;
+  }
+  if (slideIndex === 0) {
+    return total - 1;
+  }
+  if (slideIndex === total + 1) {
+    return 0;
+  }
+  return slideIndex - 1;
+};
+
+type GalleryStyles = ReturnType<typeof createStyles>;
+
+type ImageGalleryExpandModalProps = {
+  visible: boolean;
+  image: ImageItem | null;
+  styles: GalleryStyles;
+  dataTestId: string;
+  onClose: () => void;
+};
+
+const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
+  visible,
+  image,
+  styles,
+  dataTestId,
+  onClose,
+}) => {
+  if (!image) {
+    return null;
+  }
+
+  const uri = buildImageUri(image.src, image.imgixParams);
+  const aspectRatio = (image.width ?? 1080) / (image.height ?? 720);
+  const hasCaption = Boolean(image.caption?.trim());
+  const hasCredit = Boolean(image.credit?.trim());
+
+  return (
+    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+      <View
+        style={styles.dialogOverlay}
+        testID={`${dataTestId}-dialog`}
+        accessibilityViewIsModal
+        accessibilityLabel="Expanded image view"
+      >
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Close expanded image"
+          onPress={onClose}
+          style={styles.dialogClose}
+          testID={`${dataTestId}-dialog-close-button`}
+        >
+          <CloseIcon color="on-dark-primary" size="large" />
+        </Pressable>
+
+        <View style={styles.dialogImageWrapper}>
+          <Image
+            source={{ uri }}
+            style={[styles.dialogImage, { aspectRatio }]}
+            resizeMode="contain"
+            accessibilityRole="image"
+            accessibilityLabel={image.altText}
+          />
+        </View>
+
+        {hasCaption || hasCredit ? (
+          <View style={styles.dialogCaption}>
+            {hasCaption ? (
+              <UtilityLabel size="small" weight="regular" style={styles.dialogCaptionText}>
+                {image.caption}
+              </UtilityLabel>
+            ) : null}
+            {hasCredit ? (
+              <View style={styles.dialogCreditRow}>
+                <CameraFilledIcon color="on-dark-primary" size="medium" />
+                <UtilityLabel size="small" weight="regular" style={styles.dialogCreditText}>
+                  {image.credit}
+                </UtilityLabel>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
+      </View>
+    </Modal>
+  );
+};
+
 function createStyles(theme: NativeTheme) {
   return {
     gallery: { width: '100%' } as ViewStyle,
@@ -62,7 +174,61 @@ function createStyles(theme: NativeTheme) {
     imageWrapper: {
       width: '100%',
       overflow: 'hidden',
+      position: 'relative',
     } as ViewStyle,
+    expandButton: {
+      position: 'absolute',
+      right: theme.spacing16,
+      top: theme.spacing16,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(34, 34, 34, 0.5)',
+    } as ViewStyle,
+    dialogOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.92)',
+      justifyContent: 'center',
+      paddingHorizontal: theme.spacing16,
+      paddingVertical: theme.spacing24,
+      gap: theme.spacing12,
+    } as ViewStyle,
+    dialogClose: {
+      alignSelf: 'flex-end',
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(34, 34, 34, 0.5)',
+    } as ViewStyle,
+    dialogImageWrapper: {
+      width: '100%',
+      maxHeight: '75%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    } as ViewStyle,
+    dialogImage: {
+      width: '100%',
+      maxHeight: '100%',
+    } as ImageStyle,
+    dialogCaption: {
+      gap: theme.spacing8,
+    } as ViewStyle,
+    dialogCaptionText: {
+      color: theme.colorTextOnDarkPrimary,
+    } as TextStyle,
+    dialogCreditRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing4,
+    } as ViewStyle,
+    dialogCreditText: {
+      color: theme.colorTextOnDarkSecondary,
+      flexShrink: 1,
+    } as TextStyle,
     image: {
       width: '100%',
       height: '100%',
@@ -104,6 +270,7 @@ function createStyles(theme: NativeTheme) {
 export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   images,
   variant = 'standard',
+  expandable = false,
   loop,
   ImageComponent,
   style,
@@ -139,6 +306,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const loopedImages = hasLoop ? [images[total - 1], ...images, images[0]] : images;
 
   const [index, setIndex] = useState(hasLoop ? 1 : 0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const Img: React.ComponentType<NativeImageProps> = ImageComponent ?? DSImage;
 
@@ -186,14 +354,19 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         }
       }
 
+      const logicalIndex = toLogicalImageIndex(nextIndex, hasLoop, total);
+
       setIndex(nextIndex);
 
+      if (expandedIndex !== null && logicalIndex !== expandedIndex) {
+        setExpandedIndex(null);
+      }
+
       if (Platform.OS !== 'web') {
-        const normalized = hasLoop ? nextIndex : nextIndex + 1;
-        AccessibilityInfo.announceForAccessibility(`Image ${normalized} of ${total}`);
+        AccessibilityInfo.announceForAccessibility(`Image ${logicalIndex + 1} of ${total}`);
       }
     },
-    [interval, total, hasLoop]
+    [expandedIndex, interval, total, hasLoop]
   );
 
   const scrollTo = (i: number) => {
@@ -218,106 +391,128 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     setDimensions({ width, height });
   };
 
-  if (!images?.length) return null;
+  const activeImageIndex = total > 0 ? toLogicalImageIndex(index, hasLoop, total) : 0;
+  const currentImage = total > 0 ? images[activeImageIndex] : undefined;
+  const expandedImage =
+    expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
 
-  let realIndex = index;
-  if (hasLoop) {
-    if (index === 0) realIndex = total - 1;
-    else if (index === total + 1) realIndex = 0;
-    else realIndex = index - 1;
-  }
-
-  const currentImage = images[realIndex];
+  if (!total) return null;
 
   return (
-    <View
-      style={[styles.gallery, style as StyleProp<ViewStyle>]}
-      testID={dataTestId}
-      accessibilityLabel={ariaLabel}
-      onLayout={handleLayout}
-    >
-      <View style={styles.innerContainer}>
-        <ScrollView
-          ref={scrollRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          onMomentumScrollEnd={handleMomentumEnd}
-          snapToInterval={interval}
-          snapToAlignment="start"
-          decelerationRate="fast"
-          disableIntervalMomentum={false}
-          contentContainerStyle={{
-            alignItems: 'center',
-            gap: spaceBetween,
-            paddingHorizontal: sideSpacing,
-          }}
-        >
-          {loopedImages.map((img, i) => {
-            const width = img.width ?? 1080;
-            const height = img.height ?? 720;
-            const aspectRatio = width / height;
+    <>
+      <View
+        style={[styles.gallery, style as StyleProp<ViewStyle>]}
+        testID={dataTestId}
+        accessibilityLabel={ariaLabel}
+        onLayout={handleLayout}
+      >
+        <View style={styles.innerContainer}>
+          <ScrollView
+            ref={scrollRef}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            onMomentumScrollEnd={handleMomentumEnd}
+            snapToInterval={interval}
+            snapToAlignment="start"
+            decelerationRate="fast"
+            disableIntervalMomentum={false}
+            contentContainerStyle={{
+              alignItems: 'center',
+              gap: spaceBetween,
+              paddingHorizontal: sideSpacing,
+            }}
+          >
+            {loopedImages.map((img, i) => {
+              const width = img.width ?? 1080;
+              const height = img.height ?? 720;
+              const aspectRatio = width / height;
+              const logicalIndex = toLogicalImageIndex(i, hasLoop, total);
+              const slideLabel = `Image ${logicalIndex + 1} of ${total}`;
 
-            return (
-              <View
-                key={`${img.src}-${i}`}
-                style={[styles.slide, { width: slideWidth }]}
-                accessible
-                accessibilityRole="image"
-                accessibilityLabel={`${img.altText}. Image ${hasLoop ? ((i - 1 + total) % total) + 1 : i + 1} of ${total}`}
-              >
-                <View style={[styles.imageWrapper, { aspectRatio }, wrapperStyle]}>
-                  <Img
-                    src={img.src}
-                    alt={img.altText}
-                    imgixParams={img.imgixParams}
-                    style={[styles.image, imageStyle]}
-                  />
+              return (
+                <View
+                  key={`${img.src}-${i}`}
+                  style={[styles.slide, { width: slideWidth }]}
+                  accessible
+                  accessibilityRole="image"
+                  accessibilityLabel={`${img.altText}. ${slideLabel}`}
+                >
+                  <View style={[styles.imageWrapper, { aspectRatio }, wrapperStyle]}>
+                    <Img
+                      src={img.src}
+                      alt={img.altText}
+                      imgixParams={img.imgixParams}
+                      style={[styles.image, imageStyle]}
+                    />
+                    {expandable ? (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`Expand image ${logicalIndex + 1} of ${total}`}
+                        accessibilityHint="Opens expanded image view"
+                        onPress={() => setExpandedIndex(logicalIndex)}
+                        style={styles.expandButton}
+                        testID={`${dataTestId}-expand-button-${logicalIndex}`}
+                      >
+                        <ExpandIcon color="on-dark-primary" size="large" />
+                      </Pressable>
+                    ) : null}
+                  </View>
                 </View>
-              </View>
-            );
-          })}
-        </ScrollView>
+              );
+            })}
+          </ScrollView>
 
-        {!isImmersive && (
-          <View style={styles.mediaTag}>
-            <CameraFilledIcon color="on-dark-primary" size="medium" />
-            <Text style={styles.mediaTagText}>
-              {realIndex + 1}/{total}
-            </Text>
-          </View>
-        )}
-      </View>
-
-      <View style={styles.bottomSection}>
-        <View style={styles.captionContainer}>
-          {(currentImage?.caption || currentImage?.credit) && (
-            <Text style={[styles.caption, captionStyle]}>
-              {currentImage.caption}
-              {currentImage.credit ? ` ${currentImage.credit}` : ''}
-            </Text>
+          {!isImmersive && (
+            <View style={styles.mediaTag}>
+              <CameraFilledIcon color="on-dark-primary" size="medium" />
+              <Text style={styles.mediaTagText}>
+                {activeImageIndex + 1}/{total}
+              </Text>
+            </View>
           )}
         </View>
 
-        {total > 1 && (
-          <View style={[styles.controls, controlsStyle]}>
-            <Button
-              variant="ghost"
-              size={buttonSize}
-              icon={<ChevronLeftIcon />}
-              onPress={handlePrev}
-              style={styles.navButton}
-            />
-            <Button
-              variant="ghost"
-              size={buttonSize}
-              icon={<ChevronRightIcon />}
-              onPress={handleNext}
-              style={styles.navButton}
-            />
+        <View style={styles.bottomSection}>
+          <View style={styles.captionContainer}>
+            {(currentImage?.caption || currentImage?.credit) && (
+              <Text style={[styles.caption, captionStyle]}>
+                {currentImage.caption}
+                {currentImage.credit ? ` ${currentImage.credit}` : ''}
+              </Text>
+            )}
           </View>
-        )}
+
+          {total > 1 && (
+            <View style={[styles.controls, controlsStyle]}>
+              <Button
+                variant="ghost"
+                size={buttonSize}
+                icon={<ChevronLeftIcon />}
+                onPress={handlePrev}
+                style={styles.navButton}
+              />
+              <Button
+                variant="ghost"
+                size={buttonSize}
+                icon={<ChevronRightIcon />}
+                onPress={handleNext}
+                style={styles.navButton}
+              />
+            </View>
+          )}
+        </View>
       </View>
-    </View>
+
+      {expandable ? (
+        <ImageGalleryExpandModal
+          visible={expandedIndex !== null}
+          image={expandedImage}
+          styles={styles}
+          dataTestId={dataTestId}
+          onClose={() => setExpandedIndex(null)}
+        />
+      ) : null}
+    </>
   );
 };
 

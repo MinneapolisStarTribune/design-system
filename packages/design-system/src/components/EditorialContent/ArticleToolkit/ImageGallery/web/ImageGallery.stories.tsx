@@ -46,6 +46,10 @@ const meta: Meta<typeof ImageGallery> = {
       control: false,
       description: 'Custom image renderer',
     },
+    expandable: {
+      control: 'boolean',
+      description: 'Opens the active slide in a full-screen dialog',
+    },
   },
 };
 
@@ -57,23 +61,31 @@ export const Configurable: Story = {
   args: {
     variant: 'standard',
     images,
+    expandable: false,
   },
 };
 
 export const AllVariants: Story = {
-  render: () => (
+  args: {
+    variant: 'standard',
+    images,
+    expandable: false,
+  },
+
+  render: (args) => (
     <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 40 }}>
       {/* STANDARD */}
-      <ImageGallery variant="standard" images={images} />
+      <ImageGallery {...args} variant="standard" />
 
       {/* IMMERSIVE */}
-      <ImageGallery variant="immersive" images={images} />
+      <ImageGallery {...args} variant="immersive" />
 
       {/* CUSTOM IMAGE */}
-      <ImageGallery images={images} ImageComponent={CustomImage} />
+      <ImageGallery {...args} ImageComponent={CustomImage} />
 
       {/* INTRINSIC SIZING */}
       <ImageGallery
+        {...args}
         images={[
           {
             src: 'https://picsum.photos/1080/720',
@@ -92,10 +104,10 @@ export const AllVariants: Story = {
       />
 
       {/* SINGLE IMAGE */}
-      <ImageGallery images={[images[0]]} />
+      <ImageGallery {...args} images={[images[0]]} />
 
       {/* MANY IMAGES */}
-      <ImageGallery variant="immersive" images={[...images, ...images, ...images]} />
+      <ImageGallery {...args} variant="immersive" images={[...images, ...images, ...images]} />
     </div>
   ),
 };
