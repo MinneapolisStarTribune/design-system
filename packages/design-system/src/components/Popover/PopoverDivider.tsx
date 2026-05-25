@@ -4,6 +4,11 @@ import styles from './Popover.module.scss';
 
 export const PopoverDivider: React.FC<{
   fullBleed?: boolean;
-}> = ({ fullBleed = true }) => {
-  return <div className={classNames(styles.divider, fullBleed && styles.dividerFullBleed)} />;
+  dividerClassName?: string;
+}> = ({ fullBleed = true, dividerClassName }) => {
+  return (
+    <div
+      className={classNames(styles.divider, fullBleed && styles.dividerFullBleed, dividerClassName)}
+    />
+  );
 };
