@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Image } from '@/components/index.web';
-import { CameraIcon, CloseIcon } from '@/icons';
+import { Caption, Image } from '@/components/index.web';
+import { CloseIcon } from '@/icons';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
-import classNames from 'classnames';
 
 export interface ImageDialogProps {
   image: ImageData;
   caption?: string;
   credit?: string;
+  purchaseLink?: string;
   imgixParams?: string;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
@@ -37,14 +37,14 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   image,
   caption,
   credit,
+  purchaseLink,
   imgixParams,
   dialogRef,
   isOpen,
   onClose,
   dataTestId = 'image-dialog',
 }) => {
-  const hasCaption = Boolean(caption?.trim());
-  const hasCredit = Boolean(credit?.trim());
+  const hasCaptionContent = Boolean(caption?.trim() || credit?.trim() || purchaseLink?.trim());
   const dialogTitleId = `${dataTestId}-title`;
 
   // Lock scroll when dialog is open
@@ -106,32 +106,15 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
           />
         </div>
 
-        {(hasCaption || hasCredit) && (
+        {hasCaptionContent && (
           <aside className={styles['dialog-caption']} role="region" aria-label="Image information">
-            {hasCaption && (
-              <p
-                className={classNames(
-                  'typography-utility-label-small',
-                  styles['dialog-caption-text']
-                )}
-              >
-                {caption}
-              </p>
-            )}
-
-            {hasCredit && (
-              <div className={styles['dialog-credit-row']}>
-                <CameraIcon size="medium" aria-hidden className={styles['dialog-credit-icon']} />
-                <span
-                  className={classNames(
-                    'typography-utility-label-small',
-                    styles['dialog-credit-text']
-                  )}
-                >
-                  {credit}
-                </span>
-              </div>
-            )}
+            <Caption
+              caption={caption}
+              credit={credit}
+              variant="lightbox"
+              purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
+              dataTestId={`${dataTestId}-caption`}
+            />
           </aside>
         )}
       </div>

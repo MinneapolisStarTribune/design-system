@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
+import { Caption } from '@/index.web';
 import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
 import { InlineImageContent } from './InlineImageContent';
@@ -24,7 +25,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const captionText = [caption, credit && `(${credit})`].filter(Boolean).join(' ');
 
   const onExpand = (el: HTMLButtonElement) => {
     lastTriggerRef.current = el;
@@ -51,27 +51,19 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           style={style}
           objectFit={objectFit}
         />
-        {captionText && (
-          <figcaption
-            className={classNames(styles['caption-text'], 'typography-utility-label-small')}
-            data-testid={`${dataTestId}-caption`}
-          >
-            {captionText}
-            {purchaseLink && (
-              <>
-                <span className={styles['purchase-link-separator']}>•</span>
-                <a href={purchaseLink} className={styles['purchase-link']}>
-                  Buy Reprint
-                </a>
-              </>
-            )}
-          </figcaption>
-        )}
+        <Caption
+          caption={caption}
+          credit={credit}
+          variant="inline"
+          purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
+          dataTestId={`${dataTestId}-caption`}
+        />
       </figure>
       <ImageDialog
         image={image}
         caption={caption}
         credit={credit}
+        purchaseLink={purchaseLink}
         imgixParams={imgixParams}
         dialogRef={dialogRef}
         isOpen={isOpen}

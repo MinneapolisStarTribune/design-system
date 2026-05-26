@@ -10,9 +10,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import classNames from 'classnames';
+import { Caption } from '@/index.web';
 
-import { Button } from '../../../../Button/web/Button';
-import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
+import { CameraFilledIcon } from '@/icons';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import styles from './ImageGallery.module.scss';
@@ -44,10 +44,11 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
   const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
-  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
+  const activeImage = images[currentImageProgress - 1];
+  const normalizedCredit = activeImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
@@ -61,7 +62,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
       const width = window.innerWidth;
 
       setSpaceBetween(getSpaceBetween());
-      setButtonSize(width < 1024 ? 'small' : 'large');
     };
 
     handleResize();
@@ -70,14 +70,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const next = (): void => {
-    swiperRef.current?.slideNext();
-  };
-  const prev = (): void => {
-    swiperRef.current?.slidePrev();
-  };
-
-  const captionsTypography = 'typography-utility-text-regular-x-small';
   const mediaTagTypography = 'typography-utility-label-semibold-large';
 
   if (!images?.length) return null;
@@ -154,35 +146,17 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
       </div>
 
       <div className={styles.bottomSection}>
-        <div className={classNames(styles.caption, captionsTypography, captionClassName)}>
-          {images[currentImageProgress - 1]?.caption}
-          {images[currentImageProgress - 1]?.credit && (
-            <> {images[currentImageProgress - 1].credit}</>
-          )}
-        </div>
-
-        {total > 1 && (
-          <div className={classNames(styles.controls, controlsClassName)}>
-            <Button
-              variant="ghost"
-              size={buttonSize}
-              icon={<ChevronLeftIcon />}
-              onClick={prev}
-              isDisabled={!isImmersive && currentImageProgress === 1}
-              className={styles.navButton}
-              aria-label={`Previous image (${Math.max(currentImageProgress - 1, 1)} of ${total})`}
-            />
-            <Button
-              variant="ghost"
-              size={buttonSize}
-              icon={<ChevronRightIcon />}
-              onClick={next}
-              isDisabled={!isImmersive && currentImageProgress === total}
-              className={styles.navButton}
-              aria-label={`Next image (${Math.min(currentImageProgress + 1, total)} of ${total})`}
-            />
-          </div>
-        )}
+        <Caption
+          caption={activeImage?.caption}
+          credit={normalizedCredit}
+          variant="inline"
+          currentIndex={total > 1 ? currentImageProgress : undefined}
+          totalItems={total > 1 ? total : undefined}
+          onPrevious={() => swiperRef.current?.slidePrev()}
+          onNext={() => swiperRef.current?.slideNext()}
+          className={classNames(styles.caption, captionClassName)}
+          dataTestId="image-gallery-caption"
+        />
       </div>
     </div>
   );
