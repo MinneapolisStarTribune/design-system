@@ -35,6 +35,7 @@
 /* -------------------------------------------------------------------------- */
 /* Docs / MDX links: match design-system link tokens (see Link inline + JSON   */
 /* color.link — default / hover / visited; theme CSS sets vars per brand).     */
+/* Caption Buy Reprint is exempt — see Caption.module.scss (.caption-purchase-link). */
 /* -------------------------------------------------------------------------- */
 
 .sbdocs a[href] {
@@ -59,10 +60,4 @@
   outline: 2px solid var(--color-link-text-default, currentColor);
   outline-offset: 2px;
   border-radius: 2px;
-}
-
-/* Embedded Canvas blocks inside Docs — let component styles (e.g. Link) win */
-.sbdocs .doc-story a[href],
-.sbdocs .sb-story a[href] {
-  all: revert-layer;
 }

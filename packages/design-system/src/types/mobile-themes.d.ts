@@ -107,6 +107,8 @@ interface StartribuneLightTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCaptionPurchaseLinkAccentOnDarkSurface: string;
+  colorCaptionPurchaseLinkAccentOnLightSurface: string;
   colorCheckboxBackgroundSelectedBrand: string;
   colorCheckboxBackgroundSelectedNeutral: string;
   colorCheckboxBackgroundUnchecked: string;
@@ -546,6 +548,8 @@ interface StartribuneDarkTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCaptionPurchaseLinkAccentOnDarkSurface: string;
+  colorCaptionPurchaseLinkAccentOnLightSurface: string;
   colorCheckboxBackgroundSelectedBrand: string;
   colorCheckboxBackgroundSelectedNeutral: string;
   colorCheckboxBackgroundUnchecked: string;
@@ -991,6 +995,8 @@ interface VarsityLightTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCaptionPurchaseLinkAccentOnDarkSurface: string;
+  colorCaptionPurchaseLinkAccentOnLightSurface: string;
   colorCheckboxBackgroundSelectedBrand: string;
   colorCheckboxBackgroundSelectedNeutral: string;
   colorCheckboxBackgroundUnchecked: string;
@@ -1436,6 +1442,8 @@ interface VarsityDarkTheme {
   colorButtonNeutralUtilityHoverBorder: string;
   colorButtonNeutralUtilityHoverText: string;
   colorButtonNeutralUtilityText: string;
+  colorCaptionPurchaseLinkAccentOnDarkSurface: string;
+  colorCaptionPurchaseLinkAccentOnLightSurface: string;
   colorCheckboxBackgroundSelectedBrand: string;
   colorCheckboxBackgroundSelectedNeutral: string;
   colorCheckboxBackgroundUnchecked: string;
