@@ -10,9 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import classNames from 'classnames';
-import { Caption } from '@/index.web';
-
-import { CameraFilledIcon } from '@/icons';
+import { Caption } from '@/components/Caption/web/Caption';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
@@ -35,6 +33,17 @@ const getSpaceBetween = (): number => {
   return 24;
 };
 
+const normalizeCredit = (credit?: string): string | undefined => {
+  const trimmedCredit = credit?.trim();
+
+  if (!trimmedCredit) {
+    return undefined;
+  }
+
+  const match = trimmedCredit.match(/^\((.*)\)$/);
+  return match?.[1] ?? trimmedCredit;
+};
+
 export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   images,
   variant = 'standard',
@@ -45,6 +54,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   imageClassName,
   wrapperClassName,
   captionClassName,
+  controlsClassName,
   dataTestId = 'image-gallery',
 }) => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -52,19 +62,22 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
 
   const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
-
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
   const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
 
   const isDialogOpen = expandedIndex !== null;
   const isImmersive = variant === 'immersive';
   const total = images.length;
-
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
-
-  const normalizedCredit = activeImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
+  const dialogPurchaseLink =
+    dialogImage?.purchaseLink ??
+    (purchaseLink
+      ? {
+          label: 'Buy Reprint',
+          link: purchaseLink,
+        }
+      : undefined);
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
@@ -73,8 +86,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
    */
   useEffect(() => {
     const handleResize = (): void => {
-      if (typeof window === 'undefined') return;
-
       setSpaceBetween(getSpaceBetween());
     };
 
@@ -85,9 +96,67 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const goToGalleryIndex = (nextIndex: number): void => {
+    if (nextIndex < 0 || nextIndex >= total) {
+      return;
+    }
+
+    const swiper = swiperRef.current;
+
+    if (!swiper) {
+      setCurrentImageProgress(nextIndex + 1);
+      return;
+    }
+
+    if (isImmersive) {
+      swiper.slideToLoop(nextIndex);
+      return;
+    }
+
+    swiper.slideTo(nextIndex);
+  };
+
+  const next = (): void => {
+    if (!isImmersive && currentImageProgress >= total) {
+      return;
+    }
+
+    goToGalleryIndex(isImmersive ? currentImageProgress % total : currentImageProgress);
+  };
+
+  const prev = (): void => {
+    if (!isImmersive && currentImageProgress <= 1) {
+      return;
+    }
+
+    goToGalleryIndex(
+      isImmersive ? (currentImageProgress - 2 + total) % total : currentImageProgress - 2
+    );
+  };
+
+  const goToDialogIndex = (nextIndex: number): void => {
+    setExpandedIndex(nextIndex);
+    goToGalleryIndex(nextIndex);
+  };
+
+  const goToPreviousDialogImage = (): void => {
+    if (expandedIndex === null) {
+      return;
+    }
+
+    goToDialogIndex(expandedIndex - 1);
+  };
+
+  const goToNextDialogImage = (): void => {
+    if (expandedIndex === null) {
+      return;
+    }
+
+    goToDialogIndex(expandedIndex + 1);
+  };
   const onExpand = (index: number, el: HTMLButtonElement): void => {
     lastTriggerRef.current = el;
-    setExpandedIndex(index);
+    goToDialogIndex(index);
   };
 
   const onCloseDialog = (): void => {
@@ -97,18 +166,17 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const handleSlideChange = (swiper: SwiperType): void => {
     const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
+    const nextIndex = normalizedIndex;
 
-    setCurrentImageProgress(normalizedIndex + 1);
+    setCurrentImageProgress(nextIndex + 1);
 
-    /**
-     * Close lightbox if slide changes underneath
-     */
-    if (expandedIndex !== null && expandedIndex !== normalizedIndex) {
-      onCloseDialog();
+    if (expandedIndex !== null && expandedIndex !== nextIndex) {
+      setExpandedIndex(nextIndex);
     }
   };
 
-  const mediaTagTypography = 'typography-utility-label-semibold-large';
+  const captionsTypography = 'typography-utility-text-regular-x-small';
+  const hasBottomSection = Boolean(activeImage?.caption || activeImage?.credit || total > 1);
 
   if (!images?.length) return null;
 
@@ -180,38 +248,23 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
               );
             })}
           </Swiper>
-
-          {!isImmersive && (
-            <div className={styles.mediaTag}>
-              <CameraFilledIcon color="on-dark-primary" size="medium" />
-              <span className={mediaTagTypography}>
-                {currentImageProgress}/{total}
-              </span>
-            </div>
-          )}
         </div>
 
-        <div className={styles.bottomSection}>
-          <Caption
-            caption={activeImage?.caption}
-            credit={normalizedCredit}
-            variant="inline"
-            purchaseLink={
-              purchaseLink
-                ? {
-                    link: purchaseLink,
-                    label: 'Buy Reprint',
-                  }
-                : undefined
-            }
-            currentIndex={total > 1 ? currentImageProgress : undefined}
-            totalItems={total > 1 ? total : undefined}
-            onPrevious={() => swiperRef.current?.slidePrev()}
-            onNext={() => swiperRef.current?.slideNext()}
-            className={classNames(styles.caption, captionClassName)}
-            dataTestId="image-gallery-caption"
-          />
-        </div>
+        {hasBottomSection && (
+          <div className={classNames(styles.bottomSection, controlsClassName)}>
+            <Caption
+              caption={activeImage?.caption}
+              credit={normalizeCredit(activeImage?.credit)}
+              currentIndex={total > 1 ? currentImageProgress : undefined}
+              totalItems={total > 1 ? total : undefined}
+              onPrevious={total > 1 ? prev : undefined}
+              onNext={total > 1 ? next : undefined}
+              loopNavigation={isImmersive}
+              className={classNames(styles.caption, captionsTypography, captionClassName)}
+              dataTestId="image-gallery-caption"
+            />
+          </div>
+        )}
       </div>
 
       {expandable && dialogImage && (
@@ -223,11 +276,16 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             height: dialogImage.height,
           }}
           caption={dialogImage.caption}
-          credit={dialogImage.credit}
-          purchaseLink={purchaseLink}
+          credit={normalizeCredit(dialogImage.credit)}
           imgixParams={dialogImage.imgixParams}
+          purchaseLink={dialogPurchaseLink}
           dialogRef={dialogRef}
           isOpen={isDialogOpen}
+          currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
+          totalItems={total}
+          onPrevious={goToPreviousDialogImage}
+          onNext={goToNextDialogImage}
+          loopNavigation={isImmersive}
           onClose={onCloseDialog}
           dataTestId={`${dataTestId}-dialog`}
         />
