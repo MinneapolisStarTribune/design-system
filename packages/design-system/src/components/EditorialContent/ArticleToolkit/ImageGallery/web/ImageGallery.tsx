@@ -11,6 +11,7 @@ import 'swiper/css/pagination';
 
 import classNames from 'classnames';
 
+import { Caption } from '@/components/Caption/web/Caption';
 import { Button } from '../../../../Button/web/Button';
 import { ChevronLeftIcon, ChevronRightIcon, CameraFilledIcon } from '@/icons';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
@@ -30,6 +31,17 @@ const getSpaceBetween = (): number => {
   if (width < 640) return 8;
   if (width < 1024) return 16;
   return 24;
+};
+
+const normalizeCredit = (credit?: string): string | undefined => {
+  const trimmedCredit = credit?.trim();
+
+  if (!trimmedCredit) {
+    return undefined;
+  }
+
+  const match = trimmedCredit.match(/^\((.*)\)$/);
+  return match?.[1] ?? trimmedCredit;
 };
 
 export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
@@ -56,6 +68,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const isImmersive = variant === 'immersive';
   const total = images.length;
+  const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
@@ -84,6 +97,30 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   };
   const prev = (): void => {
     swiperRef.current?.slidePrev();
+  };
+
+  const goToDialogIndex = (nextIndex: number): void => {
+    if (nextIndex < 0 || nextIndex >= total) {
+      return;
+    }
+
+    setExpandedIndex(nextIndex);
+  };
+
+  const goToPreviousDialogImage = (): void => {
+    if (expandedIndex === null) {
+      return;
+    }
+
+    goToDialogIndex(expandedIndex - 1);
+  };
+
+  const goToNextDialogImage = (): void => {
+    if (expandedIndex === null) {
+      return;
+    }
+
+    goToDialogIndex(expandedIndex + 1);
   };
 
   const onExpand = (index: number, el: HTMLButtonElement): void => {
@@ -188,12 +225,12 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
         </div>
 
         <div className={styles.bottomSection}>
-          <div className={classNames(styles.caption, captionsTypography, captionClassName)}>
-            {images[currentImageProgress - 1]?.caption}
-            {images[currentImageProgress - 1]?.credit && (
-              <> {images[currentImageProgress - 1].credit}</>
-            )}
-          </div>
+          <Caption
+            caption={activeImage?.caption}
+            credit={normalizeCredit(activeImage?.credit)}
+            className={classNames(styles.caption, captionsTypography, captionClassName)}
+            dataTestId="image-gallery-caption"
+          />
 
           {total > 1 && (
             <div className={classNames(styles.controls, controlsClassName)}>
@@ -228,10 +265,14 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             height: dialogImage.height,
           }}
           caption={dialogImage.caption}
-          credit={dialogImage.credit}
+          credit={normalizeCredit(dialogImage.credit)}
           imgixParams={dialogImage.imgixParams}
           dialogRef={dialogRef}
           isOpen={isDialogOpen}
+          currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
+          totalItems={total}
+          onPrevious={goToPreviousDialogImage}
+          onNext={goToNextDialogImage}
           onClose={onCloseDialog}
           dataTestId={`${dataTestId}-dialog`}
         />

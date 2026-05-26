@@ -49,7 +49,8 @@ describe('ImageGallery', () => {
   });
 
   it('shows caption and credit', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
+    const { getByTestId, getByText } = renderWithProvider(<ImageGallery images={images} />);
+    expect(getByTestId('image-gallery-caption')).toHaveTextContent('Caption 1 (Photo credit 1)');
     expect(getByText(/Caption 1/i)).toBeInTheDocument();
     expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
   });
@@ -140,6 +141,25 @@ describe('ImageGallery', () => {
 
     fireEvent.click(getByTestId('gallery-dialog-close-button'));
     expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
+  });
+
+  it('renders dialog pagination and caption navigation when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    const dialog = getByTestId('gallery-dialog');
+    const buttons = dialog.querySelectorAll('button');
+
+    expect(getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
+
+    fireEvent.click(buttons[2]);
+
+    expect(getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
+    expect(dialog.querySelector('img')).toHaveAttribute('alt', 'Image 2');
+    expect(getByTestId('gallery-dialog-caption')).toHaveTextContent('Caption 2');
   });
 
   it('applies custom classNames', () => {

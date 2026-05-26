@@ -27,6 +27,10 @@ describe('ImageDialog Accessibility', () => {
         image={{ src: '', altText: '' }}
         caption="Caption for the image"
         credit="Credit for the image"
+        currentIndex={2}
+        totalItems={4}
+        onPrevious={vi.fn()}
+        onNext={vi.fn()}
         dialogRef={dialogRef}
         onClose={onClose}
         isOpen

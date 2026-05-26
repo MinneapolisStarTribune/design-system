@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect } from 'react';
-import { Image } from '@/components/index.web';
-import { CameraIcon, CloseIcon } from '@/icons';
+import { Caption, Image } from '@/components/index.web';
+import { CloseIcon } from '@/icons';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
-import classNames from 'classnames';
 
 export interface ImageDialogProps {
   image: ImageData;
@@ -15,6 +14,10 @@ export interface ImageDialogProps {
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
   onClose: () => void;
+  currentIndex?: number;
+  totalItems?: number;
+  onPrevious?: () => void;
+  onNext?: () => void;
   dataTestId?: string;
 }
 
@@ -41,10 +44,20 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   dialogRef,
   isOpen,
   onClose,
+  currentIndex,
+  totalItems,
+  onPrevious,
+  onNext,
   dataTestId = 'image-dialog',
 }) => {
-  const hasCaption = Boolean(caption?.trim());
-  const hasCredit = Boolean(credit?.trim());
+  const hasCaptionContent = Boolean(
+    caption?.trim() ||
+      credit?.trim() ||
+      typeof currentIndex === 'number' ||
+      typeof totalItems === 'number' ||
+      onPrevious ||
+      onNext
+  );
   const dialogTitleId = `${dataTestId}-title`;
 
   // Open/close the native dialog.
@@ -107,7 +120,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
         </span>
       </button>
 
-      <div className={styles['dialog-content']}>
+      <figure className={styles['dialog-content']}>
         <div className={styles['dialog-image-wrapper']}>
           <Image
             src={image.src}
@@ -121,35 +134,20 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
           />
         </div>
 
-        {(hasCaption || hasCredit) && (
-          <aside className={styles['dialog-caption']} role="region" aria-label="Image information">
-            {hasCaption && (
-              <p
-                className={classNames(
-                  'typography-utility-label-small',
-                  styles['dialog-caption-text']
-                )}
-              >
-                {caption}
-              </p>
-            )}
-
-            {hasCredit && (
-              <div className={styles['dialog-credit-row']}>
-                <CameraIcon size="medium" aria-hidden className={styles['dialog-credit-icon']} />
-                <span
-                  className={classNames(
-                    'typography-utility-label-small',
-                    styles['dialog-credit-text']
-                  )}
-                >
-                  {credit}
-                </span>
-              </div>
-            )}
-          </aside>
+        {hasCaptionContent && (
+          <Caption
+            caption={caption}
+            credit={credit}
+            variant="lightbox"
+            currentIndex={currentIndex}
+            totalItems={totalItems}
+            onPrevious={onPrevious}
+            onNext={onNext}
+            className={styles['dialog-caption']}
+            dataTestId={`${dataTestId}-caption`}
+          />
         )}
-      </div>
+      </figure>
     </dialog>
   );
 };
