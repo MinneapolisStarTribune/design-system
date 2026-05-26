@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Caption, Image } from '@/components/index.web';
-import { CloseIcon } from '@/icons';
+import { Image } from '@/components/index.web';
+import { CameraIcon, CloseIcon } from '@/icons';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
+import classNames from 'classnames';
 
 export interface ImageDialogProps {
   image: ImageData;
@@ -37,14 +38,14 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   image,
   caption,
   credit,
-  purchaseLink,
   imgixParams,
   dialogRef,
   isOpen,
   onClose,
   dataTestId = 'image-dialog',
 }) => {
-  const hasCaptionContent = Boolean(caption?.trim() || credit?.trim() || purchaseLink?.trim());
+  const hasCaption = Boolean(caption?.trim());
+  const hasCredit = Boolean(credit?.trim());
   const dialogTitleId = `${dataTestId}-title`;
 
   // Lock scroll when dialog is open
@@ -106,15 +107,32 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
           />
         </div>
 
-        {hasCaptionContent && (
+        {(hasCaption || hasCredit) && (
           <aside className={styles['dialog-caption']} role="region" aria-label="Image information">
-            <Caption
-              caption={caption}
-              credit={credit}
-              variant="lightbox"
-              purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
-              dataTestId={`${dataTestId}-caption`}
-            />
+            {hasCaption && (
+              <p
+                className={classNames(
+                  'typography-utility-label-small',
+                  styles['dialog-caption-text']
+                )}
+              >
+                {caption}
+              </p>
+            )}
+
+            {hasCredit && (
+              <div className={styles['dialog-credit-row']}>
+                <CameraIcon size="medium" aria-hidden className={styles['dialog-credit-icon']} />
+                <span
+                  className={classNames(
+                    'typography-utility-label-small',
+                    styles['dialog-credit-text']
+                  )}
+                >
+                  {credit}
+                </span>
+              </div>
+            )}
           </aside>
         )}
       </div>
