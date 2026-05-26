@@ -4,9 +4,9 @@ import {
   TextInput as RNTextInput,
   type TextInput as RNTextInputRef,
   View,
-  type NativeSyntheticEvent,
+  type BlurEvent,
+  type FocusEvent,
   type StyleProp,
-  type TextInputFocusEventData,
   type TextInputProps as RNTextInputProps,
   type TextStyle,
   type ViewStyle,
@@ -189,12 +189,12 @@ const FormControlTextInput = React.forwardRef<RNTextInputRef, FormControlTextInp
       [fieldSurfaceTokens, focused, hasError, hasSuccess, isDark, isDisabled, isFilled]
     );
 
-    const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    const handleFocus = (e: FocusEvent) => {
       setFocused(true);
       onFocus?.(e);
     };
 
-    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    const handleBlur = (e: BlurEvent) => {
       setFocused(false);
       onBlur?.(e);
     };

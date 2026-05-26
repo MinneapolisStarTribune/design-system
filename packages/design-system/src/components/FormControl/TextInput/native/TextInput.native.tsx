@@ -1,11 +1,11 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import {
-  NativeSyntheticEvent,
   Pressable,
   TextInput as RNTextInput,
-  type TextInputProps as RNTextInputProps,
-  TextInputFocusEventData,
   View,
+  type BlurEvent,
+  type FocusEvent,
+  type TextInputProps as RNTextInputProps,
 } from 'react-native';
 import { BaseTextInputProps } from '../TextInput.types';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -71,7 +71,7 @@ export const TextInput: React.FC<TextInputProps> = ({
     [fieldSurfaceTokens, hasError, hasSuccess, isDark, isDisabled, isFilled, isFocused]
   );
 
-  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+  const handleBlur = (e: BlurEvent) => {
     track({
       event: 'text_input_blur',
       component: 'TextInput',
@@ -82,7 +82,7 @@ export const TextInput: React.FC<TextInputProps> = ({
     onBlur?.(e);
   };
 
-  const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+  const handleFocus = (e: FocusEvent) => {
     setIsFocused(true);
     onFocus?.(e);
   };
