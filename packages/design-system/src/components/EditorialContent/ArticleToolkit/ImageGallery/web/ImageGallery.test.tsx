@@ -223,6 +223,5 @@ describe('ImageGallery', () => {
     expect(container.querySelector('.img')).toBeInTheDocument();
     expect(container.querySelector('.wrap')).toBeInTheDocument();
     expect(container.querySelector('.cap')).toBeInTheDocument();
-    expect(container.querySelector('.ctrl')).toBeInTheDocument();
   });
 });

@@ -19,6 +19,7 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   images: ImageItem[];
   /** When true, opens the active slide in a full-screen dialog (same pattern as InlineImage). */
   expandable?: boolean;
+  purchaseLink?: string;
   variant?: Variant;
   loop?: boolean;
   ImageComponent?: React.ComponentType<TImageProps>;

@@ -10,9 +10,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 import classNames from 'classnames';
-
 import { Caption } from '@/components/Caption/web/Caption';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
+
 import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
 
@@ -26,8 +26,10 @@ const getSpaceBetween = (): number => {
   if (typeof window === 'undefined') return 24;
 
   const width = window.innerWidth;
+
   if (width < 640) return 8;
   if (width < 1024) return 16;
+
   return 24;
 };
 
@@ -46,6 +48,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   images,
   variant = 'standard',
   expandable = false,
+  purchaseLink,
   ImageComponent,
   className,
   imageClassName,
@@ -60,13 +63,21 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const isDialogOpen = expandedIndex !== null;
   const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
 
+  const isDialogOpen = expandedIndex !== null;
   const isImmersive = variant === 'immersive';
   const total = images.length;
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
+  const dialogPurchaseLink =
+    dialogImage?.purchaseLink ??
+    (purchaseLink
+      ? {
+          label: 'Buy Reprint',
+          link: purchaseLink,
+        }
+      : undefined);
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
@@ -81,6 +92,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
     handleResize();
 
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -142,7 +154,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
     goToDialogIndex(expandedIndex + 1);
   };
-
   const onExpand = (index: number, el: HTMLButtonElement): void => {
     lastTriggerRef.current = el;
     goToDialogIndex(index);
@@ -178,6 +189,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
         <span aria-live="polite" aria-atomic="true" className={styles.srOnly}>
           {`Image ${currentImageProgress} of ${total}`}
         </span>
+
         <div className={styles.innerContainer}>
           <Swiper
             onSwiper={(swiper: SwiperType) => {
@@ -207,7 +219,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                     className={classNames(styles.imageWrapper, wrapperClassName)}
                     style={
                       img.width && img.height
-                        ? { aspectRatio: `${img.width} / ${img.height}` }
+                        ? {
+                            aspectRatio: `${img.width} / ${img.height}`,
+                          }
                         : undefined
                     }
                   >
@@ -221,6 +235,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                       loading="lazy"
                       decoding="async"
                     />
+
                     {expandable && (
                       <ExpandButton
                         onClick={(e) => onExpand(index, e.currentTarget)}
@@ -251,7 +266,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
           </div>
         )}
       </div>
-      {expandable && (
+
+      {expandable && dialogImage && (
         <ImageDialog
           image={{
             src: dialogImage.src,
@@ -262,7 +278,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
           caption={dialogImage.caption}
           credit={normalizeCredit(dialogImage.credit)}
           imgixParams={dialogImage.imgixParams}
-          purchaseLink={dialogImage.purchaseLink}
+          purchaseLink={dialogPurchaseLink}
           dialogRef={dialogRef}
           isOpen={isDialogOpen}
           currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
