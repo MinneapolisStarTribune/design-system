@@ -74,15 +74,17 @@ describe('ImageGallery', () => {
     expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
   });
 
-  it('renders buy reprint, pagination, and navigation from the shared caption', () => {
+  it('renders pagination and navigation from the shared caption', () => {
     const { getByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
-      'href',
-      'https://www.startribune.com/photos'
-    );
     expect(getByTestId('image-gallery-caption-pagination')).toHaveTextContent('1/2');
     expect(getAllByRole('button')).toHaveLength(2);
+  });
+
+  it('does not render buy reprint in the inline gallery caption', () => {
+    const { queryByTestId } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(queryByTestId('image-gallery-caption-purchase-link')).not.toBeInTheDocument();
   });
 
   it('renders controls when multiple images', () => {

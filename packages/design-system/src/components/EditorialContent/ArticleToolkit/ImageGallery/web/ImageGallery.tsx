@@ -165,9 +165,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   };
 
   const captionsTypography = 'typography-utility-text-regular-x-small';
-  const hasBottomSection = Boolean(
-    activeImage?.caption || activeImage?.credit || activeImage?.purchaseLink?.link || total > 1
-  );
+  const hasBottomSection = Boolean(activeImage?.caption || activeImage?.credit || total > 1);
 
   if (!images?.length) return null;
 
@@ -242,7 +240,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             <Caption
               caption={activeImage?.caption}
               credit={normalizeCredit(activeImage?.credit)}
-              purchaseLink={activeImage?.purchaseLink}
               currentIndex={total > 1 ? currentImageProgress : undefined}
               totalItems={total > 1 ? total : undefined}
               onPrevious={total > 1 ? prev : undefined}
