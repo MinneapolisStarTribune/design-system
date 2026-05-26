@@ -180,6 +180,7 @@ export {
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
 export {
   CAPTION_VARIANTS,
+  type CaptionBaseProps,
   type CaptionProps,
   type CaptionVariant,
 } from '@/components/Caption/Caption.types';
