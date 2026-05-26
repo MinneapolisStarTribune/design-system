@@ -122,6 +122,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
       <View style={styles.navigation}>
         <Button
           variant="ghost"
+          surface={isLightbox ? 'dark' : 'light'}
           size={navButtonSize}
           icon={<ChevronLeftIcon />}
           onPress={handlePrevious}
@@ -132,6 +133,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
         />
         <Button
           variant="ghost"
+          surface={isLightbox ? 'dark' : 'light'}
           size={navButtonSize}
           icon={<ChevronRightIcon />}
           onPress={handleNext}
