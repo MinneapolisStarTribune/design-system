@@ -74,7 +74,7 @@ export const Caption: React.FC<CaptionProps> = ({
 
       const width = window.innerWidth;
 
-      setButtonSize(width < 1024 ? 'small' : 'medium');
+      setButtonSize(width <= 1024 ? 'small' : 'medium');
     };
 
     handleResize();
