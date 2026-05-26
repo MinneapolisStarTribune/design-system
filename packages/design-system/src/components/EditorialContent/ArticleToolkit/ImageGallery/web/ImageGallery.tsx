@@ -51,14 +51,11 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
 
-  const [currentImageProgress, setCurrentImageProgress] =
-    useState<number>(1);
+  const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
 
-  const [expandedIndex, setExpandedIndex] =
-    useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  const [spaceBetween, setSpaceBetween] =
-    useState<number>(getSpaceBetween);
+  const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
 
   const isDialogOpen = expandedIndex !== null;
   const isImmersive = variant === 'immersive';
@@ -67,12 +64,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
 
-  const normalizedCredit = activeImage?.credit
-    ?.trim()
-    .replace(/^\((.*)\)$/, '$1');
+  const normalizedCredit = activeImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
 
-  const Img: React.ComponentType<ImageProps> =
-    ImageComponent ?? DSImage;
+  const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
   /**
    * Single resize listener (optimized + SSR safe)
@@ -88,14 +82,10 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
     window.addEventListener('resize', handleResize);
 
-    return () =>
-      window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const onExpand = (
-    index: number,
-    el: HTMLButtonElement
-  ): void => {
+  const onExpand = (index: number, el: HTMLButtonElement): void => {
     lastTriggerRef.current = el;
     setExpandedIndex(index);
   };
@@ -105,28 +95,20 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
     lastTriggerRef.current?.focus();
   };
 
-  const handleSlideChange = (
-    swiper: SwiperType
-  ): void => {
-    const normalizedIndex = isImmersive
-      ? swiper.realIndex
-      : swiper.activeIndex;
+  const handleSlideChange = (swiper: SwiperType): void => {
+    const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
 
     setCurrentImageProgress(normalizedIndex + 1);
 
     /**
      * Close lightbox if slide changes underneath
      */
-    if (
-      expandedIndex !== null &&
-      expandedIndex !== normalizedIndex
-    ) {
+    if (expandedIndex !== null && expandedIndex !== normalizedIndex) {
       onCloseDialog();
     }
   };
 
-  const mediaTagTypography =
-    'typography-utility-label-semibold-large';
+  const mediaTagTypography = 'typography-utility-label-semibold-large';
 
   if (!images?.length) return null;
 
@@ -134,17 +116,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
     <>
       <div
         data-testid={dataTestId}
-        className={classNames(
-          styles.gallery,
-          styles[variant],
-          className
-        )}
+        className={classNames(styles.gallery, styles[variant], className)}
       >
-        <span
-          aria-live="polite"
-          aria-atomic="true"
-          className={styles.srOnly}
-        >
+        <span aria-live="polite" aria-atomic="true" className={styles.srOnly}>
           {`Image ${currentImageProgress} of ${total}`}
         </span>
 
@@ -168,22 +142,13 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
               const height = img.height ?? 720;
 
               if (!img.altText?.trim()) {
-                console.warn(
-                  'ImageGallery: missing altText for image',
-                  img.src
-                );
+                console.warn('ImageGallery: missing altText for image', img.src);
               }
 
               return (
-                <SwiperSlide
-                  key={`${img.src}-${index}`}
-                  className={styles.slide}
-                >
+                <SwiperSlide key={`${img.src}-${index}`} className={styles.slide}>
                   <div
-                    className={classNames(
-                      styles.imageWrapper,
-                      wrapperClassName
-                    )}
+                    className={classNames(styles.imageWrapper, wrapperClassName)}
                     style={
                       img.width && img.height
                         ? {
@@ -196,10 +161,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                       src={img.src}
                       alt={img.altText}
                       imgixParams={img.imgixParams}
-                      className={classNames(
-                        styles.image,
-                        imageClassName
-                      )}
+                      className={classNames(styles.image, imageClassName)}
                       width={width}
                       height={height}
                       loading="lazy"
@@ -208,15 +170,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
                     {expandable && (
                       <ExpandButton
-                        onClick={(e) =>
-                          onExpand(
-                            index,
-                            e.currentTarget
-                          )
-                        }
-                        ariaLabel={`Expand image ${
-                          index + 1
-                        } of ${total}`}
+                        onClick={(e) => onExpand(index, e.currentTarget)}
+                        ariaLabel={`Expand image ${index + 1} of ${total}`}
                         dataTestId={`${dataTestId}-expand-button-${index}`}
                       />
                     )}
@@ -228,10 +183,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
           {!isImmersive && (
             <div className={styles.mediaTag}>
-              <CameraFilledIcon
-                color="on-dark-primary"
-                size="medium"
-              />
+              <CameraFilledIcon color="on-dark-primary" size="medium" />
               <span className={mediaTagTypography}>
                 {currentImageProgress}/{total}
               </span>
@@ -252,24 +204,11 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                   }
                 : undefined
             }
-            currentIndex={
-              total > 1
-                ? currentImageProgress
-                : undefined
-            }
-            totalItems={
-              total > 1 ? total : undefined
-            }
-            onPrevious={() =>
-              swiperRef.current?.slidePrev()
-            }
-            onNext={() =>
-              swiperRef.current?.slideNext()
-            }
-            className={classNames(
-              styles.caption,
-              captionClassName
-            )}
+            currentIndex={total > 1 ? currentImageProgress : undefined}
+            totalItems={total > 1 ? total : undefined}
+            onPrevious={() => swiperRef.current?.slidePrev()}
+            onNext={() => swiperRef.current?.slideNext()}
+            className={classNames(styles.caption, captionClassName)}
             dataTestId="image-gallery-caption"
           />
         </div>
