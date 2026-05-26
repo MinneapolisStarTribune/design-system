@@ -30,6 +30,10 @@ Displays a collection of images with optional captions, credits, and navigation 
 - Pass `imgixParams` to optimize images (compression, cropping, etc.).
 - Example: `w=800&h=500&fit=crop&auto=format,compress`
 
+### Expandable
+
+When `expandable` is enabled, readers can open the **active slide** in a full-screen dialog (same behavior as `InlineImage`). Changing slides closes the dialog and returns focus to the expand control.
+
 ### Custom image component
 
 You can override rendering using `ImageComponent`.
@@ -54,7 +58,8 @@ It receives:
 ### Accessibility
 
 - Provide meaningful `altText`
-- Buttons include aria-labels
+- Navigation and expand buttons include accessible names
+- Expand control uses `aria-haspopup="dialog"`
 
 ---
 

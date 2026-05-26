@@ -5,6 +5,15 @@ import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
 
+beforeEach(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
+    this.open = true;
+  });
+  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
+    this.open = false;
+  });
+});
+
 const images = [
   {
     src: 'https://picsum.photos/1080/720?1',
@@ -99,6 +108,38 @@ describe('ImageGallery', () => {
     const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
     fireEvent(window, new Event('resize'));
     expect(getByTestId('image-gallery')).toBeInTheDocument();
+  });
+
+  it('does not render expand control by default', () => {
+    const { queryByTestId } = renderWithProvider(
+      <ImageGallery images={images} dataTestId="gallery" />
+    );
+    expect(queryByTestId('gallery-expand-button-0')).not.toBeInTheDocument();
+  });
+
+  it('renders expand control on each slide when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+    expect(getByTestId('gallery-expand-button-0')).toBeInTheDocument();
+    expect(getByTestId('gallery-expand-button-1')).toBeInTheDocument();
+  });
+
+  it('opens and closes expanded dialog for the clicked slide when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    expect(HTMLDialogElement.prototype.showModal).not.toHaveBeenCalled();
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+
+    const dialog = getByTestId('gallery-dialog');
+    expect(dialog.querySelector('img')).toHaveAttribute('alt', 'Image 1');
+
+    fireEvent.click(getByTestId('gallery-dialog-close-button'));
+    expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
   });
 
   it('applies custom classNames', () => {
