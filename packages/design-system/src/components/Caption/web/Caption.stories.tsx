@@ -38,6 +38,10 @@ const meta: Meta<CaptionProps> = {
       control: 'number',
       description: 'Total number of items',
     },
+    loopNavigation: {
+      control: 'boolean',
+      description: 'Keep navigation enabled at the edges and let the parent wrap',
+    },
   },
 };
 

@@ -6,11 +6,26 @@ import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
-    this.open = true;
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
   });
-  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
-    this.open = false;
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
   });
 });
 
@@ -21,6 +36,10 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&q=75',
+    purchaseLink: {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -53,6 +72,17 @@ describe('ImageGallery', () => {
     expect(getByTestId('image-gallery-caption')).toHaveTextContent('Caption 1 (Photo credit 1)');
     expect(getByText(/Caption 1/i)).toBeInTheDocument();
     expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
+  });
+
+  it('renders buy reprint, pagination, and navigation from the shared caption', () => {
+    const { getByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+    expect(getByTestId('image-gallery-caption-pagination')).toHaveTextContent('1/2');
+    expect(getAllByRole('button')).toHaveLength(2);
   });
 
   it('renders controls when multiple images', () => {
@@ -160,6 +190,19 @@ describe('ImageGallery', () => {
     expect(getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
     expect(dialog.querySelector('img')).toHaveAttribute('alt', 'Image 2');
     expect(getByTestId('gallery-dialog-caption')).toHaveTextContent('Caption 2');
+  });
+
+  it('renders buy reprint in the expanded dialog for the active image', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    expect(getByTestId('gallery-dialog-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
   it('applies custom classNames', () => {

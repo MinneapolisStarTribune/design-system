@@ -4,8 +4,27 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react';
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn();
-  HTMLDialogElement.prototype.close = vi.fn();
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
+  });
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
 });
 
 describe('ImageDialog', () => {
@@ -62,6 +81,20 @@ describe('ImageDialog', () => {
     expect(captionElement).toBeInTheDocument();
     expect(captionElement).toHaveTextContent(caption);
     expect(captionElement).toHaveTextContent(credit);
+  });
+
+  it('should render Buy Reprint when purchaseLink is provided', () => {
+    const { getByTestId } = setup({
+      purchaseLink: {
+        label: 'Buy Reprint',
+        link: 'https://www.startribune.com/photos',
+      },
+    });
+
+    expect(getByTestId(`${testId}-caption-purchase-link`)).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
   it('should render pagination and navigation when provided', () => {

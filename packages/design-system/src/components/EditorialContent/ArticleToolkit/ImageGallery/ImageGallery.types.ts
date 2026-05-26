@@ -1,4 +1,4 @@
-import { AccessibilityProps, BaseProps } from '@/types';
+import { AccessibilityProps, BaseProps, CtaLinkProps } from '@/types';
 import { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 
 export type Variant = 'standard' | 'immersive';
@@ -9,6 +9,7 @@ export interface ImageItem {
   credit?: string;
   height?: number;
   imgixParams?: string;
+  purchaseLink?: CtaLinkProps;
   src: string;
   width?: number;
 }

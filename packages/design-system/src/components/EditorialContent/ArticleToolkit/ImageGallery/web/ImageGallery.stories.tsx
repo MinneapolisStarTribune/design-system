@@ -10,6 +10,10 @@ const images = [
     caption: 'Editorial image with caption.',
     credit: '(Photo: Star Tribune)',
     imgixParams: 'w=800&auto=format,compress',
+    purchaseLink: {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -40,7 +44,7 @@ const meta: Meta<typeof ImageGallery> = {
     },
     images: {
       control: 'object',
-      description: 'Array of image items',
+      description: 'Array of image items including caption, credit, and optional purchaseLink',
     },
     ImageComponent: {
       control: false,
@@ -62,6 +66,22 @@ export const Configurable: Story = {
     variant: 'standard',
     images,
     expandable: false,
+  },
+};
+
+export const CaptionDrivenGallery: Story = {
+  args: {
+    variant: 'standard',
+    images,
+    expandable: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Pagination, previous/next controls, and the optional Buy Reprint link are rendered by the shared Caption component. Click expand to see the same caption treatment in the lightbox dialog.',
+      },
+    },
   },
 };
 

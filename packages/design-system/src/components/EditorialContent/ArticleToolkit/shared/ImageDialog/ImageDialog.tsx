@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { Caption, Image } from '@/components/index.web';
 import { CloseIcon } from '@/icons';
+import type { CtaLinkProps } from '@/types';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
 
@@ -11,6 +12,7 @@ export interface ImageDialogProps {
   caption?: string;
   credit?: string;
   imgixParams?: string;
+  purchaseLink?: CtaLinkProps;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
   onClose: () => void;
@@ -18,6 +20,7 @@ export interface ImageDialogProps {
   totalItems?: number;
   onPrevious?: () => void;
   onNext?: () => void;
+  loopNavigation?: boolean;
   dataTestId?: string;
 }
 
@@ -41,6 +44,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   caption,
   credit,
   imgixParams,
+  purchaseLink,
   dialogRef,
   isOpen,
   onClose,
@@ -48,11 +52,13 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   totalItems,
   onPrevious,
   onNext,
+  loopNavigation = false,
   dataTestId = 'image-dialog',
 }) => {
   const hasCaptionContent = Boolean(
     caption?.trim() ||
       credit?.trim() ||
+      purchaseLink?.link ||
       typeof currentIndex === 'number' ||
       typeof totalItems === 'number' ||
       onPrevious ||
@@ -138,11 +144,13 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
           <Caption
             caption={caption}
             credit={credit}
+            purchaseLink={purchaseLink}
             variant="lightbox"
             currentIndex={currentIndex}
             totalItems={totalItems}
             onPrevious={onPrevious}
             onNext={onNext}
+            loopNavigation={loopNavigation}
             className={styles['dialog-caption']}
             dataTestId={`${dataTestId}-caption`}
           />
