@@ -1,10 +1,30 @@
 import { renderWithProvider } from '@/test-utils/render';
 import { ImageDialog, ImageDialogProps } from './ImageDialog';
 import React from 'react';
+import { fireEvent } from '@testing-library/react';
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn();
-  HTMLDialogElement.prototype.close = vi.fn();
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
+  });
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
 });
 
 describe('ImageDialog', () => {
@@ -47,8 +67,7 @@ describe('ImageDialog', () => {
     const caption = 'Image caption';
     const { getByTestId } = setup({ caption });
 
-    const el = getByTestId(testId);
-    const captionElement = el.querySelector('[role="region"]');
+    const captionElement = getByTestId(`${testId}-caption`);
     expect(captionElement).toBeInTheDocument();
     expect(captionElement).toHaveTextContent(caption);
   });
@@ -58,19 +77,52 @@ describe('ImageDialog', () => {
     const credit = 'Image credit';
     const { getByTestId } = setup({ caption, credit });
 
-    const el = getByTestId(testId);
-    const captionElement = el.querySelector('[role="region"]');
+    const captionElement = getByTestId(`${testId}-caption`);
     expect(captionElement).toBeInTheDocument();
     expect(captionElement).toHaveTextContent(caption);
     expect(captionElement).toHaveTextContent(credit);
   });
 
-  it('should not render caption or credit when not provided', () => {
-    const { getByTestId } = setup();
+  it('should render Buy Reprint when purchaseLink is provided', () => {
+    const { getByTestId } = setup({
+      purchaseLink: {
+        label: 'Buy Reprint',
+        link: 'https://www.startribune.com/photos',
+      },
+    });
 
-    const el = getByTestId(testId);
-    const captionElement = el.querySelector('[role="region"]');
-    expect(captionElement).not.toBeInTheDocument();
+    expect(getByTestId(`${testId}-caption-purchase-link`)).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
+  it('should render pagination and navigation when provided', () => {
+    const onPrevious = vi.fn();
+    const onNext = vi.fn();
+    const { getByTestId } = setup({
+      currentIndex: 2,
+      totalItems: 4,
+      onPrevious,
+      onNext,
+    });
+
+    const dialogElement = getByTestId(testId);
+    const buttons = dialogElement.querySelectorAll('button');
+
+    expect(getByTestId(`${testId}-caption-pagination`)).toHaveTextContent('2/4');
+
+    fireEvent.click(buttons[1]);
+    fireEvent.click(buttons[2]);
+
+    expect(onPrevious).toHaveBeenCalledTimes(1);
+    expect(onNext).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not render caption content when not provided', () => {
+    const { queryByTestId } = setup();
+
+    expect(queryByTestId(`${testId}-caption`)).not.toBeInTheDocument();
   });
 
   it('should call onClose when close button is clicked', () => {

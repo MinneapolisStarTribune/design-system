@@ -77,6 +77,38 @@ describe('Caption', () => {
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 
+  it('renders gallery pagination and navigation in inline variant', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        variant="inline"
+        currentIndex={2}
+        totalItems={5}
+        onPrevious={vi.fn()}
+        onNext={vi.fn()}
+      />
+    );
+
+    expect(screen.getByTestId('caption-pagination')).toHaveTextContent('2/5');
+    expect(screen.getAllByRole('button')).toHaveLength(2);
+  });
+
+  it('keeps edge navigation enabled when loopNavigation is true', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        variant="inline"
+        currentIndex={1}
+        totalItems={5}
+        onPrevious={vi.fn()}
+        onNext={vi.fn()}
+        loopNavigation
+      />
+    );
+
+    expect(screen.getAllByRole('button')[0]).not.toBeDisabled();
+  });
+
   it('emits analytics when Buy Reprint is clicked', () => {
     const mockOnTrackingEvent = vi.fn();
 

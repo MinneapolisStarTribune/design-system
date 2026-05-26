@@ -4,8 +4,27 @@ import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 
 beforeEach(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn();
-  HTMLDialogElement.prototype.close = vi.fn();
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
+  });
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
 });
 
 const images = [
@@ -15,6 +34,10 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&auto=format,compress',
+    purchaseLink: {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',

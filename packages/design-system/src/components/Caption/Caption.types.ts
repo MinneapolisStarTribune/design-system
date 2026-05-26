@@ -41,6 +41,11 @@ export interface CaptionProps extends BaseProps, AccessibilityProps {
   onNext?: () => void;
 
   /**
+   * When true, keeps navigation enabled at the edges and lets the parent wrap.
+   */
+  loopNavigation?: boolean;
+
+  /**
    * Analytics metadata merged into the Buy Reprint tracking event.
    */
   analytics?: Record<string, unknown>;

@@ -1,5 +1,6 @@
 .caption {
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
@@ -22,6 +23,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--spacing-12);
+  min-width: 0;
+}
+
+.top-row + .bottom-row,
+.credit-row + .bottom-row {
+  margin-top: var(--spacing-12);
 }
 
 /* ---------- CONTENT ---------- */
@@ -57,6 +65,7 @@
   flex: 0 0 auto;
   flex-shrink: 0;
   margin-left: auto;
+  max-width: 100%;
 }
 
 .variant-inline .navButton {
@@ -82,7 +91,11 @@
   text-underline-position: from-font;
 
   &:focus-visible {
-    outline: 2px solid var(--caption-purchase-link-accent, var(--color-caption-purchase-link-accent-on-light-surface));
+    outline: 2px solid
+      var(
+        --caption-purchase-link-accent,
+        var(--color-caption-purchase-link-accent-on-light-surface)
+      );
     outline-offset: 2px;
   }
 }
@@ -189,8 +202,13 @@
 
 /* ---------- RESPONSIVE ---------- */
 
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .bottom-row {
+    flex-wrap: wrap;
     align-items: flex-start;
   }
-} 
+
+  .navigation {
+    margin-left: auto;
+  }
+}
