@@ -7,7 +7,9 @@ import {
   BUTTON_VARIANTS,
   ICON_ONLY_BUTTON_SIZES,
 } from '../Button.types';
+import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 import { Button } from './Button.native';
+import { getNativeButtonSurface } from './buttonTheme';
 
 const wrapper = TestWrapperInDesignSystemProvider();
 
@@ -159,5 +161,27 @@ describe('Button (native)', () => {
     );
     expect(screen.getByTestId('mock-icon', { includeHiddenElements: true })).toBeOnTheScreen();
     expect(screen.getByText('Next')).toBeOnTheScreen();
+  });
+
+  it('uses white foreground for ghost neutral button on dark surface', () => {
+    const theme = {
+      ...nativeTokenFixtures.startribune.light.theme,
+      ...nativeTokenFixtures.startribune.light.typography,
+    };
+
+    expect(getNativeButtonSurface(theme, 'neutral', 'ghost', false, 'dark').color).toBe('#ffffff');
+
+    render(
+      <Button
+        surface="dark"
+        variant="ghost"
+        icon={<MockIcon />}
+        accessibilityLabel="Previous"
+        onPress={() => {}}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByLabelText('Previous')).toBeOnTheScreen();
   });
 });

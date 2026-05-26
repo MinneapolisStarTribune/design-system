@@ -113,7 +113,22 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 - **TypeScript errors in IDE** — Restart the TS server; aliases are configured
   in `tsconfig.json` and match Babel.
 - **`SharedArrayBuffer` errors** — The `shims.js` file polyfills this. Make sure `index.js` imports `./shims` before anything else.
-- > :warning: **Troubleshooting:** If you hit a sandbox sync error, run `yarn build:ios` again — it will re-run pod install automatically. Do not run `pod install` directly; it's deprecated in React Native projects. You can also run `yarn ios` from inside `apps/mobile-storybook/` as an alternative. Always run commands from either the **repo root** or `apps/mobile-storybook/` — not from `apps/mobile-storybook/ios/`.
+- **CocoaPods: `fast_float` version conflict** (`RCT-Folly/Fabric` wants `8.0.0` but `React-RCTBlob` wants `6.1.4`, or similar) — This usually means **`ios/Pods` is stale**: an old cached `RCT-Folly` podspec does not match the `react-native` version in `node_modules` (which pins `fast_float` to `6.1.4` for RN 0.79.x). **Fix:** from the repo root, after `yarn install`:
+
+  ```bash
+  cd apps/mobile-storybook/ios
+  rm -rf Pods build
+  export LANG=en_US.UTF-8   # avoids Ruby/CocoaPods encoding errors on some setups
+  pod install
+  cd ../../..
+  yarn build:ios
+  ```
+
+  You only need to delete `Podfile.lock` if `pod install` still fails after a clean `Pods` folder; normally keep the lockfile and let CocoaPods refresh local podspecs from `node_modules/react-native`.
+
+- **Xcode: missing `FollyConvert.mm` under `React-utils`** — Often the same stale Pods / partial build state. Use the **`rm -rf Pods build`** step above, then rebuild.
+
+- > :warning: **Troubleshooting:** If you hit a sandbox sync error, run `yarn build:ios` again — it will re-run pod install automatically. Prefer `yarn build:ios` / `yarn ios` from the repo root or `apps/mobile-storybook/`; use a manual `pod install` in `ios/` mainly after cleaning `Pods` as above. Always run workspace commands from the **repo root** or `apps/mobile-storybook/` when possible.
 
 ## For engineers new to React Native
 

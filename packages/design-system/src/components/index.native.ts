@@ -10,6 +10,14 @@ export {
   type IconOnlyButtonSize,
 } from './Button/Button.types';
 export { Button, type ButtonNativeProps } from './Button/native/Button.native';
+export {
+  CAPTION_VARIANTS,
+  type CaptionBaseProps,
+  type CaptionNativeProps,
+  type CaptionProps,
+  type CaptionVariant,
+} from './Caption/Caption.types';
+export { Caption } from './Caption/native/Caption.native';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/native/AuthorBioCard.native';
 export {

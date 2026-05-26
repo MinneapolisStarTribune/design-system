@@ -39,6 +39,10 @@ export interface ButtonProps extends BaseProps {
 /** React Native Button — uses Pressable; no DOM / HTML. */
 export interface ButtonNativeProps {
   color?: ButtonColor;
+  /**
+   * `dark`: button on a dark region while the app theme is still light (matches web `surface="dark"`).
+   */
+  surface?: 'light' | 'dark';
   capitalize?: boolean;
   variant?: ButtonVariant;
   size?: ButtonSize | 'x-small';

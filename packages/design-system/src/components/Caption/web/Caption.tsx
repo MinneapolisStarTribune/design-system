@@ -19,6 +19,7 @@ export const Caption: React.FC<CaptionProps> = ({
   totalItems,
   onPrevious,
   onNext,
+  loopNavigation = false,
   analytics: analyticsOverride,
   onPurchaseLinkClick,
   onNavigationClick,
@@ -26,7 +27,7 @@ export const Caption: React.FC<CaptionProps> = ({
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
-  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
+  const [buttonSize, setButtonSize] = useState<'small' | 'medium'>('medium');
 
   const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
@@ -36,9 +37,9 @@ export const Caption: React.FC<CaptionProps> = ({
 
   const hasPagination = typeof currentIndex === 'number' && typeof totalItems === 'number';
 
-  const canGoPrevious = hasPagination && currentIndex > 1;
+  const canGoPrevious = loopNavigation || (hasPagination && currentIndex > 1);
 
-  const canGoNext = hasPagination && currentIndex < totalItems;
+  const canGoNext = loopNavigation || (hasPagination && currentIndex < totalItems);
 
   const handlePrevious = () => {
     onNavigationClick?.('previous');
@@ -73,7 +74,7 @@ export const Caption: React.FC<CaptionProps> = ({
 
       const width = window.innerWidth;
 
-      setButtonSize(width < 1160 ? 'small' : 'large');
+      setButtonSize(width <= 1024 ? 'small' : 'medium');
     };
 
     handleResize();
@@ -115,10 +116,9 @@ export const Caption: React.FC<CaptionProps> = ({
     );
   };
 
-  const hasTopRowContent =
-    caption || credit || purchaseLink?.link || (!isLightbox && hasNavigation);
+  const hasTopRowContent = caption || credit || purchaseLink?.link;
 
-  const hasBottomRowContent = isLightbox && (hasPagination || hasNavigation);
+  const hasBottomRowContent = hasPagination || hasNavigation;
 
   if (!caption && !credit && !purchaseLink?.link && !hasNavigation) {
     return null;
@@ -169,8 +169,6 @@ export const Caption: React.FC<CaptionProps> = ({
               </>
             )}
           </div>
-
-          {!isLightbox && renderNavigation()}
         </div>
       )}
 

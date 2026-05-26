@@ -98,32 +98,11 @@
   border-radius: var(--semantic-photo-layout-border-radius);
 }
 
-/* TAG */
-
-.mediaTag {
-  position: absolute;
-  bottom: var(--spacing-16);
-  left: var(--spacing-16);
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-4);
-  padding: var(--spacing-4) var(--spacing-6);
-  border-radius: var(--radius-6);
-  background: #0000004d;
-  z-index: 1;
-  span {
-    color: var(--color-base-white);
-  }
-}
-
 /* BOTTOM */
 
 .standard .bottomSection {
   max-width: 712px;
   margin: 8px auto 0;
-  display: flex;
-  justify-content: space-between;
-  gap: var(--spacing-20)
 }
 
 @media (max-width: 1024px) {
@@ -141,8 +120,6 @@
 .immersive .bottomSection {
   max-width: 1080px;
   margin: var(--spacing-8) auto 0;
-  display: flex;
-  justify-content: space-between;
 }
 
 @media (max-width: 1024px) {
@@ -157,18 +134,6 @@
   }
 }
 
-/* CONTROLS */
-
-.controls {
-  display: flex;
-  gap: var(--spacing-4);
-  margin-left: var(--spacing-16);
-}
-
-.navButton {
-  border: 1px solid var(--color-border-on-dark-subtle-01);
-}
-
 /* SWIPER */
 
 .swiper {
@@ -180,7 +145,7 @@
   bottom: 8px;
 }
 
-.caption{
+.caption {
   color: var(--color-text-on-light-secondary) !important;
 }
 

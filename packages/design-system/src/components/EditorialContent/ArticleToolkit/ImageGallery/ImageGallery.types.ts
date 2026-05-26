@@ -1,4 +1,4 @@
-import { AccessibilityProps, BaseProps } from '@/types';
+import { AccessibilityProps, BaseProps, CtaLinkProps } from '@/types';
 import { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 
 export type Variant = 'standard' | 'immersive';
@@ -9,6 +9,8 @@ export interface ImageItem {
   credit?: string;
   height?: number;
   imgixParams?: string;
+  /** Optional Buy Reprint CTA shown only in the expanded lightbox view. */
+  purchaseLink?: CtaLinkProps;
   src: string;
   width?: number;
 }
@@ -17,6 +19,7 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   images: ImageItem[];
   /** When true, opens the active slide in a full-screen dialog (same pattern as InlineImage). */
   expandable?: boolean;
+  purchaseLink?: string;
   variant?: Variant;
   loop?: boolean;
   ImageComponent?: React.ComponentType<TImageProps>;

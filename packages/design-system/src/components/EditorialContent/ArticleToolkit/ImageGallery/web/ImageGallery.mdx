@@ -5,7 +5,7 @@ import * as ImageGalleryStories from './ImageGallery.stories';
 
 # Image Gallery
 
-Displays a collection of images with optional captions, credits, and navigation controls. Supports both standard (inline) and immersive (full-bleed) layouts.
+Displays a collection of images with optional captions, credits, caption-driven navigation, and an optional Buy Reprint link in the expanded lightbox view. Supports both standard (inline) and immersive (full-bleed) layouts.
 
 ## Usage guidelines
 
@@ -32,7 +32,14 @@ Displays a collection of images with optional captions, credits, and navigation 
 
 ### Expandable
 
-When `expandable` is enabled, readers can open the **active slide** in a full-screen dialog (same behavior as `InlineImage`). Changing slides closes the dialog and returns focus to the expand control.
+When `expandable` is enabled, readers can open the **active slide** in a full-screen dialog (same behavior as `InlineImage`). The same shared `Caption` treatment powers inline and lightbox modes, and the optional Buy Reprint link is rendered only in the expanded lightbox view.
+
+### Caption-driven gallery controls
+
+- `ImageGallery` delegates inline caption text, credit, counter, and next/previous controls to the shared `Caption` component.
+- Add `purchaseLink` to an image item to render the optional Buy Reprint CTA in the expanded lightbox view.
+- The `Configurable` story includes a `showBuyReprint` control to toggle the sample lightbox CTA on or off across all demo images.
+- In immersive mode, caption navigation stays enabled at the edges and wraps with the looping swiper.
 
 ### Custom image component
 
@@ -58,8 +65,9 @@ It receives:
 ### Accessibility
 
 - Provide meaningful `altText`
-- Navigation and expand buttons include accessible names
+- Caption navigation and expand buttons include accessible names
 - Expand control uses `aria-haspopup="dialog"`
+- Pagination updates are announced through a polite live region
 
 ---
 

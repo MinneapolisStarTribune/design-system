@@ -33,6 +33,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  margin: 0;
 }
 
 @media (min-width: 1160px) {
@@ -88,35 +89,15 @@
 /* Caption / Credit (inside dialog) */
 
 .dialog-caption {
-  padding: var(--spacing-16);
-  color: var(--color-icon-on-dark-primary);
+  margin: 0;
+  padding: 0 var(--spacing-16) var(--spacing-16);
 }
 
 @media (min-width: 1160px) {
   .dialog-caption {
     align-self: flex-end;
     min-width: 240px;
-    max-width: 260px;
+    max-width: 320px;
+    padding: var(--spacing-16) var(--spacing-24) var(--spacing-24) 0;
   }
-}
-
-.dialog-credit-row {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-8);
-  margin-top: var(--spacing-8);
-}
-
-.dialog-credit-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.dialog-caption-text {
-  color: var(--caption-text-color) !important;
-}
-
-.dialog-credit-icon,
-.dialog-credit-text {
-  color: var(--credit-text-color) !important;
 }
