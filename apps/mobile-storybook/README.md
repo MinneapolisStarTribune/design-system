@@ -25,46 +25,123 @@ yarn install        # installs all workspace dependencies
 
 **Before first run (and after token changes):** From the monorepo root, run `yarn tokens` so that `packages/design-system/dist/mobile/themes` and `dist/mobile/typography` exist. The app resolves `@mobile/themes` and `@mobile/typography` to those paths.
 
-## Run locally (development build — NOT Expo Go)
+## Where to run commands
 
-This app requires a **development build** (via `expo-dev-client`). **Expo Go is not supported** — it uses its own bundled runtime and will crash on Storybook dependencies.
+This app lives in a Yarn workspace monorepo. **Use the repository root** (`design-system/`) for day-to-day work unless noted below.
 
-| What you're doing                                           | Command (from repo root)                                                   |
-| ----------------------------------------------------------- | -------------------------------------------------------------------------- |
-| **Build** the native app (one-time or after native changes) | `yarn build:ios` or `yarn build:android`                                   |
-| **Start development** (Metro dev server; use daily)         | `yarn storybook:native` or `yarn storybook:ios` / `yarn storybook:android` |
+### From the repo root (recommended)
 
-### First time setup
+| Task | Command |
+| ---- | ------- |
+| Install all workspace dependencies | `yarn install` |
+| Build design-system mobile tokens | `yarn tokens` |
+| Build iOS dev client (native app) | `yarn build:ios` |
+| Build Android dev client | `yarn build:android` |
+| Start Metro (dev client) | `yarn storybook:native` |
+| Start Metro + iOS Simulator | `yarn storybook:ios` |
+| Start Metro + Android emulator | `yarn storybook:android` |
 
-1. **Build the development client** (installs a custom app on the simulator — not Expo Go):
+Root scripts delegate to this workspace via Turbo or `yarn workspace @minneapolisstartribune/mobile-storybook`.
+
+### From `apps/mobile-storybook/` (equivalent)
+
+You can `cd apps/mobile-storybook` and run the workspace scripts directly:
+
+| Task | Command |
+| ---- | ------- |
+| Build iOS dev client | `yarn ios` |
+| Build Android dev client | `yarn android` |
+| Start Metro | `yarn storybook` |
+| Start Metro + iOS | `yarn storybook:ios` |
+| Start Metro + Android | `yarn storybook:android` |
+
+These run the same Expo commands as the root shortcuts. App scripts set `NODE_PATH=./node_modules`, which helps Babel resolve `expo/config` in the monorepo.
+
+### Always run from the repo root
+
+- **`yarn install`** — installs the whole monorepo; do not run install only inside `apps/mobile-storybook/`.
+- **`yarn tokens`** — builds token output under `packages/design-system/dist/mobile/`.
+
+### Do not run commands from
+
+- `apps/mobile-storybook/ios/` — use `yarn build:ios` from root or `yarn ios` from this app folder.
+- `apps/mobile-storybook/android/` — same for Android.
+
+Running `pod install` manually under `ios/` is discouraged; `expo run:ios` (via `yarn build:ios` or `yarn ios`) handles native dependencies.
+
+### Physical device
+
+See [Run locally](#run-locally) — **Option A** (dev client install + Metro) or **Option B** (Expo Go: `yarn storybook:native`, press **`s`**, scan QR). Phone and Mac must be on the same Wi‑Fi for either option.
+
+## Run locally
+
+Storybook scripts start Metro with **`--dev-client`** (development build mode). You can also use **Expo Go** on a physical device by toggling Metro — both are documented below.
+
+| What you're doing | Command (from repo root) |
+| ----------------- | ------------------------ |
+| Start Metro | `yarn storybook:native` |
+| Start Metro + open simulator/emulator | `yarn storybook:ios` / `yarn storybook:android` |
+| Build custom native app (dev client) | `yarn build:ios` / `yarn build:android` |
+
+### Option A: Development build (recommended)
+
+Use this for **simulator/emulator**, **CI**, and when you need the full native stack (Reanimated, worklets, all Storybook addons). This is what `app.json` and `expo-dev-client` are configured for.
+
+**First time (or after `app.json` / native dependency changes):**
+
+1. Build and install the dev client:
 
    ```bash
-   yarn build:ios        # from repo root — builds & installs on iOS Simulator
+   yarn build:ios        # iOS Simulator
    # or
-   yarn build:android    # builds & installs on Android emulator/device
+   yarn build:android    # Android emulator/device
    ```
 
-   This runs `expo run:ios` / `expo run:android` in the mobile-storybook workspace. It compiles native code, installs `expo-dev-client`, and puts the app on your simulator.
-
-2. **Start the Metro dev server:**
+2. Start Metro:
 
    ```bash
    yarn storybook:native   # or yarn storybook:ios / yarn storybook:android
    ```
 
-3. **Open the "mobile-storybook" app** on the simulator. This is the app the build step installed — **not** Expo Go. The dev client connects to Metro automatically.
+3. Open the **mobile-storybook** app on the simulator (the app from step 1, not Expo Go). It connects to Metro automatically.
 
-### Daily development
+**Daily:** Steps 2–3 only. Rebuild when native config or dependencies change.
 
-After the first build, you only need step 2 and 3. Code changes update via Fast Refresh. Only rebuild (`yarn build:ios`) when you change native config (`app.json`) or add/change native dependencies.
+**Physical device (dev client):** Install the app once with `npx expo run:ios --device` or `run:android --device` from `apps/mobile-storybook/`, then start Metro with `yarn storybook:native` and stay in **development build** mode (do not press **`s`** to switch to Expo Go). Scan the QR code or open the installed app.
 
-### Why not Expo Go?
+### Option B: Expo Go (physical device, quick try)
 
-Expo Go bundles its own fixed React Native runtime. This app needs:
+Expo Go can work for **light testing on a real phone** after dependencies are aligned with **Expo SDK 54** (install the latest Expo Go from the store). It avoids a native build but uses a fixed runtime — some stories or addons may fail if they need native modules Expo Go does not ship.
 
-- `expo-dev-client` for custom native modules
-- A `SharedArrayBuffer` shim (in `shims.js`) that must run before Storybook loads
-- Native dependencies (`react-native-reanimated`, gesture handler, etc.) that Expo Go doesn't include
+1. From the repo root, start Metro:
+
+   ```bash
+   yarn storybook:native
+   ```
+
+2. In the Metro terminal, press **`s`** (`switch to Expo Go`). Metro shows **Using Expo Go** and the QR code targets the **Expo Go** app.
+
+3. On your phone, install **Expo Go** (SDK 54), connect to the **same Wi‑Fi** as your Mac, and scan the QR code.
+
+Press **`s`** again (`switch to development build`) to return to dev-client mode.
+
+| | Development build | Expo Go |
+| --- | --- | --- |
+| **Best for** | Simulator, full native deps, team default | Quick check on a physical device |
+| **Native build required?** | Yes (`yarn build:ios` / `:android`) | No |
+| **How to connect** | Open **mobile-storybook** app; or QR in dev-client mode | Press **`s`** in Metro, scan QR with **Expo Go** |
+| **Guaranteed for all stories?** | Yes (intended setup) | No — depends on Expo Go’s bundled modules |
+
+### Metro modes (`s` toggle)
+
+Our scripts pass `--dev-client`, so Metro starts in **development build** mode. While Metro is running, Expo prints a shortcut line such as:
+
+- **`Press s │ switch to Expo Go`** — when you are in development build mode
+- **`Press s │ switch to development build`** — when you are in Expo Go mode (**Using Expo Go**)
+
+The QR code and deep link target whichever mode is active.
+
+If you see **`PlatformConstants`** or missing-module errors in Expo Go, the JS bundle and Expo Go’s runtime are likely out of sync — run `yarn install` at the repo root, confirm Expo SDK 54, update Expo Go on the device, or use **Option A** (dev client) instead.
 
 ## How it works
 
@@ -104,7 +181,41 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 
 ## Troubleshooting
 
-- **"Using Expo Go" in terminal** — You need a **development build**, not Expo Go. Run `yarn build:ios` first to install the dev client on the simulator, then `yarn storybook:native`. The scripts use `--dev-client` to connect to the built app.
+- **`pod install` failed** after upgrading Expo SDK — The checked-in `ios/Podfile.lock` may still reference React Native 0.79 pods while `package.json` is on 0.81. From `apps/mobile-storybook/ios/`:
+
+  ```bash
+  export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8   # required if CocoaPods warns about UTF-8
+  rm -rf Pods Podfile.lock build
+  pod install
+  ```
+
+  Then run `yarn build:ios` from the repo root again. Commit the regenerated `Podfile.lock` so the team stays in sync.
+
+- **Android build fails after Expo SDK upgrade** — Gradle caches and generated native code can be stale. From `apps/mobile-storybook/android/`:
+
+  ```bash
+  ./gradlew clean
+  ```
+
+  Or remove build outputs and retry from the repo root:
+
+  ```bash
+  rm -rf apps/mobile-storybook/android/.gradle apps/mobile-storybook/android/app/build apps/mobile-storybook/android/build
+  yarn build:android
+  ```
+
+  Ensure [Android setup](../docs/native-development.md#android-setup) is complete (`ANDROID_HOME`, an AVD or connected device). First build downloads Gradle dependencies and can take several minutes.
+
+- **CocoaPods `Unicode Normalization not appropriate for ASCII-8BIT`** — Your shell locale is not UTF-8. Add to `~/.zshrc` and restart the terminal:
+
+  ```bash
+  export LANG=en_US.UTF-8
+  export LC_ALL=en_US.UTF-8
+  ```
+
+- **Wrong app opens after scanning QR** — Check Metro’s mode (look for **Using Expo Go** vs development build). Press **`s`** to toggle; the QR targets the active mode. For Expo Go, press **`s`** until Metro shows **Using Expo Go**, then scan with the Expo Go app. For the dev client, stay in development build mode and open **mobile-storybook** (or scan after `yarn build:ios` / device install).
+- **`PlatformConstants` / TurboModule errors in Expo Go** — Usually SDK or version mismatch. Run `yarn install` at the repo root, update Expo Go on the device to match SDK 54, or use the **development build** (`yarn build:ios` / `yarn build:android`).
+- **Expo Go worked before but not now** — Confirm Metro shows **Using Expo Go** (press **`s`** if needed), same Wi‑Fi, and Expo Go is updated. Fall back to dev client for full Storybook support.
 - **Metro can't find a module** — Run `yarn install` at the monorepo root to
   ensure symlinks are correct, then restart Metro with cache cleared:
   `yarn storybook:native -- --clear`.
@@ -131,7 +242,7 @@ Expo Go bundles its own fixed React Native runtime. This app needs:
 ## Audit notes (setup consistency)
 
 - **Native projects**: iOS is generated at `apps/mobile-storybook/ios/` by `expo run:ios`. Android is generated at `apps/mobile-storybook/android/` by `expo run:android`. Both are regenerated from `app.json` config.
-- **Root scripts**: From repo root, `yarn build:ios` and `yarn build:android` build the native app; `storybook:native`, `storybook:ios`, and `storybook:android` start the Metro dev server with `--dev-client`.
+- **Root scripts**: From repo root, `yarn build:ios` and `yarn build:android` build the dev client; `storybook:native`, `storybook:ios`, and `storybook:android` start Metro with `--dev-client` (press **`s`** in Metro to switch to Expo Go for QR on a physical device).
 - **Turbo**: `turbo.json` defines persistent tasks `storybook`, `storybook:ios`, and `storybook:android` (no cache) so Turbo runs the right script in this workspace.
 - **Workspace**: This app is `@minneapolisstartribune/mobile-storybook`; root uses `--filter=@minneapolisstartribune/mobile-storybook` so only this app runs for native Storybook.
 - **First run**: After adding or changing this workspace, run `yarn install` from the monorepo root once so the lockfile includes it; then the root storybook scripts work.
