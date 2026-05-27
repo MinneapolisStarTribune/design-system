@@ -2,8 +2,10 @@ import React, { useContext, useMemo, useRef, useState } from 'react';
 import {
   Pressable,
   TextInput as RNTextInput,
-  type TextInputProps as RNTextInputProps,
   View,
+  type NativeSyntheticEvent,
+  type TextInputFocusEventData,
+  type TextInputProps as RNTextInputProps,
 } from 'react-native';
 import { BaseTextInputProps } from '../TextInput.types';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -16,6 +18,9 @@ import { createStyles, getInputTypographyStyleKey, getRoundedStyleKey } from './
 export interface TextInputProps
   extends Omit<BaseTextInputProps, 'className' | 'style'>,
     Omit<RNTextInputProps, 'style' | 'testID'> {}
+
+type RNTextInputFocusHandler = NonNullable<RNTextInputProps['onFocus']>;
+type RNTextInputBlurHandler = NonNullable<RNTextInputProps['onBlur']>;
 
 const createTextInputThemeState = (theme: NativeTheme) => ({
   styles: createStyles(theme),
@@ -69,7 +74,7 @@ export const TextInput: React.FC<TextInputProps> = ({
     [fieldSurfaceTokens, hasError, hasSuccess, isDark, isDisabled, isFilled, isFocused]
   );
 
-  const handleBlur = (e: Parameters<NonNullable<RNTextInputProps['onBlur']>>[0]) => {
+  const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     track({
       event: 'text_input_blur',
       component: 'TextInput',
@@ -77,12 +82,12 @@ export const TextInput: React.FC<TextInputProps> = ({
       ...analytics,
     });
     setIsFocused(false);
-    onBlur?.(e);
+    onBlur?.(e as Parameters<RNTextInputBlurHandler>[0]);
   };
 
-  const handleFocus = (e: Parameters<NonNullable<RNTextInputProps['onFocus']>>[0]) => {
+  const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
     setIsFocused(true);
-    onFocus?.(e);
+    onFocus?.(e as Parameters<RNTextInputFocusHandler>[0]);
   };
 
   const leftIcon = icon && iconPosition === 'start' ? icon : null;
@@ -128,8 +133,8 @@ export const TextInput: React.FC<TextInputProps> = ({
         editable={!isDisabled}
         value={value}
         onChangeText={onChangeText}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={handleFocus as RNTextInputFocusHandler}
+        onBlur={handleBlur as RNTextInputBlurHandler}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={hasError ? 'Input has error' : accessibilityHint}
         accessibilityState={{ disabled: isDisabled }}
