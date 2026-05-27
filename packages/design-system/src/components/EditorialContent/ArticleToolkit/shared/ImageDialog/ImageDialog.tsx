@@ -1,20 +1,26 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { Image } from '@/components/index.web';
-import { CameraIcon, CloseIcon } from '@/icons';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { Caption, Image } from '@/components/index.web';
+import { CloseIcon } from '@/icons';
+import type { CtaLinkProps } from '@/types';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
-import classNames from 'classnames';
 
 export interface ImageDialogProps {
   image: ImageData;
   caption?: string;
   credit?: string;
   imgixParams?: string;
+  purchaseLink?: CtaLinkProps;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
   onClose: () => void;
+  currentIndex?: number;
+  totalItems?: number;
+  onPrevious?: () => void;
+  onNext?: () => void;
+  loopNavigation?: boolean;
   dataTestId?: string;
 }
 
@@ -38,33 +44,59 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   caption,
   credit,
   imgixParams,
+  purchaseLink,
   dialogRef,
   isOpen,
   onClose,
+  currentIndex,
+  totalItems,
+  onPrevious,
+  onNext,
+  loopNavigation = false,
   dataTestId = 'image-dialog',
 }) => {
-  const hasCaption = Boolean(caption?.trim());
-  const hasCredit = Boolean(credit?.trim());
+  const hasCaptionContent = Boolean(
+    caption?.trim() ||
+      credit?.trim() ||
+      purchaseLink?.link ||
+      typeof currentIndex === 'number' ||
+      typeof totalItems === 'number' ||
+      onPrevious ||
+      onNext
+  );
   const dialogTitleId = `${dataTestId}-title`;
 
-  // Lock scroll when dialog is open
-  useEffect(() => {
+  // Open/close the native dialog.
+  useLayoutEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     if (isOpen) {
-      dialog.showModal();
+      if (!dialog.open) {
+        dialog.showModal();
+      }
       lockScroll(dataTestId);
-    } else if (dialog.open) {
-      dialog.close();
-      unlockScroll(dataTestId);
+      return () => {
+        unlockScroll(dataTestId);
+      };
     }
 
+    if (dialog.open) {
+      dialog.close();
+    }
+    unlockScroll(dataTestId);
+  }, [dataTestId, dialogRef, isOpen]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+
     return () => {
-      if (dialog.open) dialog.close();
+      if (dialog?.open) {
+        dialog.close();
+      }
       unlockScroll(dataTestId);
     };
-  }, [dataTestId, dialogRef, isOpen]);
+  }, [dataTestId, dialogRef]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === dialogRef.current) onClose();
@@ -94,11 +126,13 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
         </span>
       </button>
 
-      <div className={styles['dialog-content']}>
+      <figure className={styles['dialog-content']}>
         <div className={styles['dialog-image-wrapper']}>
           <Image
-            {...image}
+            src={image.src}
             alt={image.altText}
+            width={image.width}
+            height={image.height}
             className={styles['dialog-image']}
             imgixParams={imgixParams}
             loading="eager"
@@ -106,35 +140,22 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
           />
         </div>
 
-        {(hasCaption || hasCredit) && (
-          <aside className={styles['dialog-caption']} role="region" aria-label="Image information">
-            {hasCaption && (
-              <p
-                className={classNames(
-                  'typography-utility-label-small',
-                  styles['dialog-caption-text']
-                )}
-              >
-                {caption}
-              </p>
-            )}
-
-            {hasCredit && (
-              <div className={styles['dialog-credit-row']}>
-                <CameraIcon size="medium" aria-hidden className={styles['dialog-credit-icon']} />
-                <span
-                  className={classNames(
-                    'typography-utility-label-small',
-                    styles['dialog-credit-text']
-                  )}
-                >
-                  {credit}
-                </span>
-              </div>
-            )}
-          </aside>
+        {hasCaptionContent && (
+          <Caption
+            caption={caption}
+            credit={credit}
+            purchaseLink={purchaseLink}
+            variant="lightbox"
+            currentIndex={currentIndex}
+            totalItems={totalItems}
+            onPrevious={onPrevious}
+            onNext={onNext}
+            loopNavigation={loopNavigation}
+            className={styles['dialog-caption']}
+            dataTestId={`${dataTestId}-caption`}
+          />
         )}
-      </div>
+      </figure>
     </dialog>
   );
 };

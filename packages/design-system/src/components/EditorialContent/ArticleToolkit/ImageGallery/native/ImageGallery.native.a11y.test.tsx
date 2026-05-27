@@ -1,7 +1,15 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, screen } from '@testing-library/react-native';
 import { ImageGallery } from './ImageGallery.native';
 import { AccessibilityInfo, Platform, ScrollView } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+
+jest.mock('react-native/Libraries/Modal/Modal', () => {
+  const _React = require('react');
+  const { View } = require('react-native');
+  const MockModal = ({ visible, children }: { visible?: boolean; children?: unknown }) =>
+    visible ? _React.createElement(View, null, children) : null;
+  return { __esModule: true, default: MockModal };
+});
 
 jest.spyOn(AccessibilityInfo, 'announceForAccessibility').mockImplementation(jest.fn());
 
@@ -71,5 +79,29 @@ describe('ImageGallery Accessibility (native)', () => {
     const { toJSON } = render(<ImageGallery images={noAltImages} />, { wrapper });
 
     expect(toJSON()).toBeTruthy();
+  });
+
+  it('exposes expand and close controls when expandable', () => {
+    render(
+      <ImageGallery
+        images={[
+          {
+            src: 'https://example.com/1.jpg',
+            altText: 'Accessible image one',
+            caption: 'Caption text',
+            credit: 'Photo credit',
+            width: 800,
+            height: 600,
+          },
+        ]}
+        expandable
+        dataTestId="gallery-a11y"
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 1' }));
+    expect(screen.getByRole('button', { name: 'Close expanded image' })).toBeOnTheScreen();
+    expect(screen.getByText('Photo credit')).toBeOnTheScreen();
   });
 });

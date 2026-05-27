@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useRef } from 'react';
 import classNames from 'classnames';
+import { Caption } from '@/index.web';
 import type { PhotoLayoutType } from '../../types';
 import type { PhotoLayoutProps } from '../PhotoLayout.types';
 import { PhotoLayoutGrid } from './PhotoLayoutGrid';
@@ -35,7 +36,6 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const lastTriggerRef = useRef<HTMLButtonElement | null>(null);
   const image = openIndex !== null ? images[openIndex] : null;
-  const captionText = [caption, imageCredit && `(${imageCredit})`].filter(Boolean).join(' ');
 
   const onClose = () => {
     setOpenIndex(null);
@@ -66,14 +66,13 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
           imgixParams={imgixParams}
           onExpand={handleExpand}
         />
-        {captionText && (
-          <figcaption
-            className={classNames(styles['caption-text'], 'typography-utility-label-small')}
-            data-testid={`${dataTestId}-caption`}
-          >
-            {captionText}
-          </figcaption>
-        )}
+        <Caption
+          caption={caption}
+          credit={imageCredit}
+          variant="inline"
+          className={styles['caption-text']}
+          dataTestId={`${dataTestId}-caption`}
+        />
       </figure>
 
       {image && (

@@ -83,7 +83,8 @@ export {
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
-export { Popover, type PopoverProps } from './Popover/Popover';
+export { Popover } from './Popover/Popover';
+export type { PopoverProps } from './Popover/Popover.types';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
@@ -177,6 +178,13 @@ export {
   CandyBarRenderer,
   type CandyBarRendererProps,
 } from '@/components/CandyBar/web/CandyBarRenderer/CandyBarRenderer';
+export {
+  CAPTION_VARIANTS,
+  type CaptionBaseProps,
+  type CaptionProps,
+  type CaptionVariant,
+} from '@/components/Caption/Caption.types';
+export { Caption } from '@/components/Caption/web/Caption';
 export * from '@/components/EditorialContent/ArticleToolkit/index';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';

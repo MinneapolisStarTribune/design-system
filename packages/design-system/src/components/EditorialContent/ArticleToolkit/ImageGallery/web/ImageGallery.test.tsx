@@ -5,6 +5,30 @@ import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
 
+beforeEach(() => {
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
+  });
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
+});
+
 const images = [
   {
     src: 'https://picsum.photos/1080/720?1',
@@ -12,6 +36,10 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&q=75',
+    purchaseLink: {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -40,9 +68,23 @@ describe('ImageGallery', () => {
   });
 
   it('shows caption and credit', () => {
-    const { getByText } = renderWithProvider(<ImageGallery images={images} />);
+    const { getByTestId, getByText } = renderWithProvider(<ImageGallery images={images} />);
+    expect(getByTestId('image-gallery-caption')).toHaveTextContent('Caption 1 (Photo credit 1)');
     expect(getByText(/Caption 1/i)).toBeInTheDocument();
     expect(getByText(/Photo credit 1/i)).toBeInTheDocument();
+  });
+
+  it('renders pagination and navigation from the shared caption', () => {
+    const { getByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(getByTestId('image-gallery-caption-pagination')).toHaveTextContent('1/2');
+    expect(getAllByRole('button')).toHaveLength(2);
+  });
+
+  it('does not render buy reprint in the inline gallery caption', () => {
+    const { queryByTestId } = renderWithProvider(<ImageGallery images={images} />);
+
+    expect(queryByTestId('image-gallery-caption-purchase-link')).not.toBeInTheDocument();
   });
 
   it('renders controls when multiple images', () => {
@@ -101,6 +143,70 @@ describe('ImageGallery', () => {
     expect(getByTestId('image-gallery')).toBeInTheDocument();
   });
 
+  it('does not render expand control by default', () => {
+    const { queryByTestId } = renderWithProvider(
+      <ImageGallery images={images} dataTestId="gallery" />
+    );
+    expect(queryByTestId('gallery-expand-button-0')).not.toBeInTheDocument();
+  });
+
+  it('renders expand control on each slide when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+    expect(getByTestId('gallery-expand-button-0')).toBeInTheDocument();
+    expect(getByTestId('gallery-expand-button-1')).toBeInTheDocument();
+  });
+
+  it('opens and closes expanded dialog for the clicked slide when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    expect(HTMLDialogElement.prototype.showModal).not.toHaveBeenCalled();
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+
+    const dialog = getByTestId('gallery-dialog');
+    expect(dialog.querySelector('img')).toHaveAttribute('alt', 'Image 1');
+
+    fireEvent.click(getByTestId('gallery-dialog-close-button'));
+    expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
+  });
+
+  it('renders dialog pagination and caption navigation when expandable', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    const dialog = getByTestId('gallery-dialog');
+    const buttons = dialog.querySelectorAll('button');
+
+    expect(getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
+
+    fireEvent.click(buttons[2]);
+
+    expect(getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
+    expect(dialog.querySelector('img')).toHaveAttribute('alt', 'Image 2');
+    expect(getByTestId('gallery-dialog-caption')).toHaveTextContent('Caption 2');
+  });
+
+  it('renders buy reprint in the expanded dialog for the active image', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    expect(getByTestId('gallery-dialog-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
   it('applies custom classNames', () => {
     const { container } = renderWithProvider(
       <ImageGallery
@@ -117,6 +223,5 @@ describe('ImageGallery', () => {
     expect(container.querySelector('.img')).toBeInTheDocument();
     expect(container.querySelector('.wrap')).toBeInTheDocument();
     expect(container.querySelector('.cap')).toBeInTheDocument();
-    expect(container.querySelector('.ctrl')).toBeInTheDocument();
   });
 });

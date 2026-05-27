@@ -7,7 +7,8 @@ import styles from './Popover.module.scss';
 export const PopoverBody: React.FC<{
   children: React.ReactNode;
   scrollable?: boolean;
-}> = ({ children, scrollable }) => {
+  bodyClassName?: string;
+}> = ({ children, scrollable, bodyClassName }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const rafId = useRef<number | null>(null);
   const [atTop, setAtTop] = useState(true);
@@ -50,9 +51,13 @@ export const PopoverBody: React.FC<{
   return (
     <div
       ref={ref}
-      className={classNames(styles.body, {
-        [styles.bodyAtTop]: atTop,
-      })}
+      className={classNames(
+        styles.body,
+        {
+          [styles.bodyAtTop]: atTop,
+        },
+        bodyClassName
+      )}
     >
       {children}
     </div>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { Caption } from '@/index.web';
 import type { InlineVideoProps } from '../InlineVideo.types';
 import styles from './InlineVideo.module.scss';
 
@@ -17,8 +18,6 @@ export const InlineVideo: React.FC<InlineVideoProps> = ({
   dataTestId = 'inline-video',
   ...accessibilityProps
 }) => {
-  const captionText = [caption, videoCredit && `(${videoCredit})`].filter(Boolean).join(' ');
-
   return (
     <figure
       data-testid={dataTestId}
@@ -34,14 +33,13 @@ export const InlineVideo: React.FC<InlineVideoProps> = ({
         {children}
       </div>
 
-      {captionText && (
-        <figcaption
-          className={classNames(styles['caption'], 'typography-utility-label-small')}
-          data-testid={`${dataTestId}-caption`}
-        >
-          {captionText}
-        </figcaption>
-      )}
+      <Caption
+        caption={caption}
+        credit={videoCredit}
+        variant="inline"
+        className={styles.caption}
+        dataTestId={`${dataTestId}-caption`}
+      />
     </figure>
   );
 };

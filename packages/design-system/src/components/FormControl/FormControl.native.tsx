@@ -24,6 +24,9 @@ import {
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
+type RNTextInputFocusHandler = NonNullable<RNTextInputProps['onFocus']>;
+type RNTextInputBlurHandler = NonNullable<RNTextInputProps['onBlur']>;
+
 export interface FormControlProps extends NativeBaseProps {
   size?: FormControlSize;
   isDisabled?: boolean;
@@ -189,12 +192,12 @@ const FormControlTextInput = React.forwardRef<RNTextInputRef, FormControlTextInp
 
     const handleFocus = (e: Parameters<NonNullable<RNTextInputProps['onFocus']>>[0]) => {
       setFocused(true);
-      onFocus?.(e);
+      onFocus?.(e as Parameters<RNTextInputFocusHandler>[0]);
     };
 
     const handleBlur = (e: Parameters<NonNullable<RNTextInputProps['onBlur']>>[0]) => {
       setFocused(false);
-      onBlur?.(e);
+      onBlur?.(e as Parameters<RNTextInputBlurHandler>[0]);
     };
 
     const leftIcon = icon && iconPosition === 'start' ? icon : null;
@@ -212,8 +215,8 @@ const FormControlTextInput = React.forwardRef<RNTextInputRef, FormControlTextInp
           testID={dataTestId}
           value={value}
           defaultValue={defaultValue}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={handleFocus as RNTextInputFocusHandler}
+          onBlur={handleBlur as RNTextInputBlurHandler}
           style={[inputBase, { color: textColor }]}
           underlineColorAndroid="transparent"
           accessibilityState={{ disabled: isDisabled }}

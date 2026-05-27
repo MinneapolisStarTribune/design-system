@@ -61,6 +61,7 @@ function createLayout(theme: NativeTheme, size: ButtonSize | 'x-small', isIconOn
 
 export const Button: React.FC<ButtonNativeProps> = ({
   color = 'neutral',
+  surface = 'light',
   capitalize = false,
   variant = 'filled',
   size = 'medium',
@@ -115,15 +116,15 @@ export const Button: React.FC<ButtonNativeProps> = ({
       testID={testID}
       style={({ pressed }) => {
         const showPressed = pressed && !isDisabled && !isLoading;
-        const surface = getNativeButtonSurface(theme, color, variant, showPressed);
+        const buttonSurface = getNativeButtonSurface(theme, color, variant, showPressed, surface);
         const row: ViewStyle = {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           ...layout,
-          backgroundColor: surface.backgroundColor,
-          borderWidth: surface.borderWidth ?? 0,
-          borderColor: surface.borderColor,
+          backgroundColor: buttonSurface.backgroundColor,
+          borderWidth: buttonSurface.borderWidth ?? 0,
+          borderColor: buttonSurface.borderColor,
           opacity: isDisabled || isLoading ? 0.4 : 1,
         };
         if (!isIconOnly && hasAnyIcon) {
@@ -134,21 +135,21 @@ export const Button: React.FC<ButtonNativeProps> = ({
     >
       {({ pressed }) => {
         const showPressed = pressed && !isDisabled && !isLoading;
-        const surface = getNativeButtonSurface(theme, color, variant, showPressed);
+        const buttonSurface = getNativeButtonSurface(theme, color, variant, showPressed, surface);
 
         const leftIcon =
           isIconOnly || iconPosition === 'start'
-            ? enhanceButtonIconNative(icon, iconSizeName, surface.color)
+            ? enhanceButtonIconNative(icon, iconSizeName, buttonSurface.color)
             : null;
         const rightIcon =
           !isIconOnly && iconPosition === 'end'
-            ? enhanceButtonIconNative(icon, iconSizeName, surface.color)
+            ? enhanceButtonIconNative(icon, iconSizeName, buttonSurface.color)
             : null;
 
         return (
           <View style={nativeStyles.inner}>
             {isLoading ? (
-              <ActivityIndicator color={surface.color} />
+              <ActivityIndicator color={buttonSurface.color} />
             ) : (
               <>
                 {leftIcon}
@@ -157,7 +158,7 @@ export const Button: React.FC<ButtonNativeProps> = ({
                     size={labelSize}
                     weight="semibold"
                     capitalize={capitalize}
-                    style={{ color: surface.color }}
+                    style={{ color: buttonSurface.color }}
                   >
                     {children}
                   </UtilityLabel>
