@@ -9,18 +9,30 @@ const sampleImages = [
     altText: 'Mountain landscape',
     caption: 'A beautiful mountain view.',
     credit: 'Photo by Picsum',
+    purchaseLink: {
+      link: 'https://www.startribune.com/photos/reprints',
+      label: 'Buy Reprint',
+    },
   },
   {
     src: 'https://picsum.photos/id/1016/1080/720',
     altText: 'Forest road',
     caption: 'Road through dense forest.',
     credit: 'Photo by Picsum',
+    purchaseLink: {
+      link: 'https://www.startribune.com/photos/reprints',
+      label: 'Buy Reprint',
+    },
   },
   {
     src: 'https://picsum.photos/id/1018/1080/720',
     altText: 'River and hills',
     caption: 'Calm river between hills.',
     credit: 'Photo by Picsum',
+    purchaseLink: {
+      link: 'https://www.startribune.com/photos/reprints',
+      label: 'Buy Reprint',
+    },
   },
 ];
 
@@ -35,7 +47,7 @@ const meta: Meta<typeof ImageGallery> = {
     },
     images: {
       control: 'object',
-      description: 'Array of images with src, altText, caption, credit.',
+      description: 'Array of images with src, altText, caption, credit, purchaseLink.',
     },
     'aria-label': {
       control: 'text',
