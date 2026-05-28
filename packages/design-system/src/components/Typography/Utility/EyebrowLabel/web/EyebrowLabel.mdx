@@ -17,8 +17,11 @@ This initial implementation supports:
 - optional subscriber-only state via `isSubscriberOnly`: shows a leading key icon and hides the brand logo (same rule as live: no brand mark, only the indicator + text). You can combine `color="live"` with `isSubscriberOnly` for key + live dot + label if needed
 - brand-driven logo selection (`startribune` or `varsity`)
 - background contrast via `background` (`on-light` or `on-dark`) and legacy `isBackground`
+- polymorphic roots: **`span`** (default), **`label`** (with **`htmlFor`**), or a **link** via **`as="a"`** / **`as={NextLink}`** + **`href`** — the link is the root element (no wrapper); clickable roots show **`cursor: pointer`**
 
 Use this component for short categorical labels (for example section names, promo context, or live states). Keep text concise so the label stays scannable.
+
+For navigation, use **`as="a"`** with **`href`** for a plain anchor, or **`as={NextLink}`** from **`next/link`** in the App Router (pass **`prefetch`**, **`replace`**, **`scroll`** as needed). Anchor attributes such as **`target`** and **`rel`** are forwarded through the root.
 
 Render `EyebrowLabel` inside your app’s **`DesignSystemProvider`** (Storybook does this in the preview) so **`brand`** and theme context resolve when you omit explicit props.
 
@@ -80,15 +83,27 @@ The visible label text comes from **`label`** when set; otherwise **`children`**
     </tr>
     <tr>
       <td><code>as</code></td>
-      <td><code>span</code> <em>(default)</em> or <code>label</code> root. Use <code>label</code> with <code>htmlFor</code> to associate the eyebrow with a control ID.</td>
+      <td>
+        Root element: <code>span</code> <em>(default)</em>, <code>label</code>, or <code>a</code>. Use <code>as=&#123;NextLink&#125;</code> with <code>href</code> for client-side routing (this package does not import <code>next/link</code>).
+      </td>
+    </tr>
+    <tr>
+      <td><code>href</code></td>
+      <td>
+        Navigation target when the root is a link (<code>as=&quot;a&quot;</code> or a router <code>Link</code> component). Applies <code>cursor: pointer</code> on the root.
+      </td>
+    </tr>
+    <tr>
+      <td><code>prefetch</code> · <code>replace</code> · <code>scroll</code></td>
+      <td>Optional; forwarded when <code>as</code> is a framework router link (e.g. Next.js <code>Link</code>).</td>
     </tr>
     <tr>
       <td><code>htmlFor</code></td>
-      <td>Applies to <code>as=&quot;label&quot;</code> — sets the native <code>for</code> attribute linking to <code>id</code> on the paired input.</td>
+      <td>When <code>as=&quot;label&quot;</code>, sets the native <code>for</code> attribute linking to <code>id</code> on the paired input.</td>
     </tr>
     <tr>
       <td><code>id</code></td>
-      <td>Passed to the root <code>span</code> or <code>label</code>.</td>
+      <td>Passed to the root element.</td>
     </tr>
     <tr>
       <td><code>className</code></td>
@@ -116,7 +131,9 @@ The visible label text comes from **`label`** when set; otherwise **`children`**
     </tr>
     <tr>
       <td><em>Additional DOM props</em></td>
-      <td>Attributes such as <code>role</code>, <code>tabIndex</code>, <code>onClick</code>, <code>data-*</code>, <code>title</code>, etc. are forwarded to the root <code>span</code> or <code>label</code>.</td>
+      <td>
+        Attributes such as <code>target</code>, <code>rel</code>, <code>role</code>, <code>tabIndex</code>, <code>data-*</code>, <code>title</code>, etc. are forwarded to the root (<code>span</code>, <code>label</code>, or link).
+      </td>
     </tr>
   </tbody>
 </table>
@@ -231,6 +248,52 @@ import { CameraIcon } from '@minneapolisstartribune/design-system/icons';
 **Result**
 
 <Canvas of={EyebrowLabelStories.DocsCustomIconMediumOnLight} sourceState="hidden" />
+
+### Clickable eyebrow — plain anchor (`as="a"`)
+
+The styled eyebrow is the `<a>` itself (no inner wrapper). Hover shows a pointer cursor.
+
+```tsx
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel
+  as="a"
+  href="/election"
+  size="medium"
+  color="live"
+  background="on-light"
+  label="Election"
+/>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsAsAnchorOnLight} sourceState="hidden" />
+
+### Clickable eyebrow — Next.js App Router (`as={NextLink}`)
+
+In your app, import **`NextLink`** from **`next/link`**. Storybook uses a mock link with the same **`href`** + **`children`** contract.
+
+```tsx
+import NextLink from 'next/link';
+import { EyebrowLabel } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowLabel
+  as={NextLink}
+  href="/election"
+  prefetch={false}
+  size="medium"
+  color="brand"
+  background="on-light"
+  logo
+  brand="startribune"
+  label="Election"
+/>
+```
+
+**Result**
+
+<Canvas of={EyebrowLabelStories.DocsAsNextLinkOnLight} sourceState="hidden" />
 
 ---
 
