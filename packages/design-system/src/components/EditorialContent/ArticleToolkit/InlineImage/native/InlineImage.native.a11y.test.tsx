@@ -15,6 +15,10 @@ describe('InlineImage Accessibility (native)', () => {
   const image = {
     src: 'https://picsum.photos/id/1018/1200/800',
     altText: 'Alternative text for the image',
+    purchaseLink: {
+      link: 'https://www.startribune.com/photos',
+      label: 'Buy Reprint',
+    },
   };
 
   it('exposes image semantics with accessible name', () => {
@@ -27,7 +31,7 @@ describe('InlineImage Accessibility (native)', () => {
   });
 
   it('exposes purchase link semantics when purchaseLink is provided', () => {
-    render(<InlineImage image={image} caption="Caption" purchaseLink="https://example.com" />, {
+    render(<InlineImage image={image} caption="Caption" />, {
       wrapper,
     });
 

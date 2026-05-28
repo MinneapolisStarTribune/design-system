@@ -15,6 +15,10 @@ jest.mock('react-native/Libraries/Modal/Modal', () => {
 const image = {
   src: 'https://picsum.photos/id/1018/1200/800',
   altText: 'Alternative text for the image',
+  purchaseLink: {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  },
 };
 
 describe('InlineImage (native)', () => {
@@ -56,13 +60,16 @@ describe('InlineImage (native)', () => {
     );
 
     expect(screen.getByTestId(`${dataTestId}-caption`)).toBeOnTheScreen();
-    expect(screen.getByText('Image caption (Image credit)')).toBeOnTheScreen();
+    expect(screen.getByTestId(`${dataTestId}-caption`)).toHaveTextContent(
+      /Image caption\s*\(Image credit\)/
+    );
   });
 
-  it('does not render caption block when both caption and credit are empty', () => {
+  it('renders purchase link when caption and credit are empty', () => {
     render(<InlineImage dataTestId={dataTestId} image={image} caption="" credit="" />, { wrapper });
 
-    expect(screen.queryByTestId(`${dataTestId}-caption`)).toBeNull();
+    expect(screen.getByTestId(`${dataTestId}-caption`)).toBeOnTheScreen();
+    expect(screen.getByTestId(`${dataTestId}-purchase-link`)).toBeOnTheScreen();
   });
 
   it('renders purchase link and opens URL on press', async () => {
@@ -70,15 +77,9 @@ describe('InlineImage (native)', () => {
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
-    render(
-      <InlineImage
-        dataTestId={dataTestId}
-        image={image}
-        caption="Image caption"
-        purchaseLink={purchaseLink}
-      />,
-      { wrapper }
-    );
+    render(<InlineImage dataTestId={dataTestId} image={image} caption="Image caption" />, {
+      wrapper,
+    });
 
     fireEvent.press(screen.getByTestId(`${dataTestId}-purchase-link`));
 

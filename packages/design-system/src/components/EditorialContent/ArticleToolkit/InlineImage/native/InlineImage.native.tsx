@@ -130,7 +130,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   objectFit = 'cover',
   style,
   variant = 'standard',
-  purchaseLink,
   ...accessibilityProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -177,7 +176,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           caption={caption}
           credit={credit}
           variant="inline"
-          purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
+          purchaseLink={image.purchaseLink}
           dataTestId={dataTestId}
         />
       </View>

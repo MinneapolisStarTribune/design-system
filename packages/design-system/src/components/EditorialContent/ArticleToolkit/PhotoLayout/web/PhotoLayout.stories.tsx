@@ -56,6 +56,7 @@ export const Configurable: Story = {
     imageCredit: 'Star Tribune staff/The Minnesota Star Tribune',
     variant: 'immersive',
     expandable: false,
+    purchaseLink: { link: 'https://www.startribune.com/photos', label: 'Buy Reprint' },
   },
 };
 
@@ -75,6 +76,7 @@ export const AllLevels: Story = {
             caption={`${count}-up immersive layout showcasing ${count} related visuals arranged in a structured grid format.`}
             variant="immersive"
             imageCredit="Star Tribune staff/The Minnesota Star Tribune"
+            purchaseLink={{ link: 'https://www.startribune.com/photos', label: 'Buy Reprint' }}
           />
         </div>
       ))}

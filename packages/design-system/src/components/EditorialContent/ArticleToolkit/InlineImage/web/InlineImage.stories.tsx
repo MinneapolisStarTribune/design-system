@@ -27,10 +27,6 @@ const meta: Meta<InlineImageProps> = {
       control: 'text',
       description: 'Credit for the inline image',
     },
-    purchaseLink: {
-      control: 'text',
-      description: 'Purchase link for the inline image',
-    },
     variant: {
       control: 'radio',
       options: Object.values(ARTICLE_BODY_VARIANTS),
@@ -58,6 +54,10 @@ type Story = StoryObj<InlineImageProps>;
 const image = {
   src: 'https://picsum.photos/id/1018/1200/800',
   altText: 'Alternative text for the image',
+  purchaseLink: {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  },
 };
 
 const defaultArgs: InlineImageProps = {
@@ -97,7 +97,7 @@ export const AllVariants: Story = {
 
       <div>
         <h3 style={{ marginBottom: 8 }}>With Purchase Link</h3>
-        <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+        <InlineImage {...args} />
       </div>
     </div>
   ),

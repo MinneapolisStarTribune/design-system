@@ -27,7 +27,7 @@ export const Caption: React.FC<CaptionProps> = ({
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
-  const [buttonSize, setButtonSize] = useState<'small' | 'medium'>('medium');
+  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
 
   const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
@@ -74,7 +74,7 @@ export const Caption: React.FC<CaptionProps> = ({
 
       const width = window.innerWidth;
 
-      setButtonSize(width <= 1024 ? 'small' : 'medium');
+      setButtonSize(width < 1160 ? 'small' : 'large');
     };
 
     handleResize();
@@ -116,9 +116,10 @@ export const Caption: React.FC<CaptionProps> = ({
     );
   };
 
-  const hasTopRowContent = caption || credit || purchaseLink?.link;
+  const hasTopRowContent =
+    caption || credit || purchaseLink?.link || (!isLightbox && hasNavigation);
 
-  const hasBottomRowContent = hasPagination || hasNavigation;
+  const hasBottomRowContent = isLightbox && (hasPagination || hasNavigation);
 
   if (!caption && !credit && !purchaseLink?.link && !hasNavigation) {
     return null;
@@ -169,6 +170,8 @@ export const Caption: React.FC<CaptionProps> = ({
               </>
             )}
           </div>
+
+          {!isLightbox && renderNavigation()}
         </div>
       )}
 

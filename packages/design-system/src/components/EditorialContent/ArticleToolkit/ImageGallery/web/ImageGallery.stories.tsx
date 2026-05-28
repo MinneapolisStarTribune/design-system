@@ -4,16 +4,18 @@ import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 import { ImageItem } from '../ImageGallery.types';
 
-type StoryArgs = React.ComponentProps<typeof ImageGallery> & {
-  showBuyReprint: boolean;
-};
+type StoryArgs = React.ComponentProps<typeof ImageGallery>;
 
 const images: ImageItem[] = [
   {
     src: 'https://picsum.photos/1080/720?1',
     altText: 'Image 1',
-    caption: 'Editorial image with caption.',
-    credit: '(Photo: Star Tribune)',
+    caption: `General Manager Heather Ann Mady with Moua outside the building that will house Diane's Place.`,
+    credit: '(Rebecca McAlpine/Star Tribune)',
+    purchaseLink: {
+      link: 'https://www.startribune.com/photos/reprints',
+      label: 'Buy Reprint',
+    },
     imgixParams: 'w=800&auto=format,compress',
   },
   {
@@ -34,17 +36,6 @@ const CustomImage = ({ src, alt, ...rest }: ImageProps): React.ReactElement => (
   <img src={src} alt={alt} {...rest} />
 );
 
-const getStoryImages = (sourceImages: ImageItem[], showBuyReprint: boolean): ImageItem[] =>
-  sourceImages.map((image, index) => ({
-    ...image,
-    purchaseLink: showBuyReprint
-      ? {
-          label: 'Buy Reprint',
-          link: `https://www.startribune.com/photos?image=${index + 1}`,
-        }
-      : undefined,
-  }));
-
 const meta: Meta<StoryArgs> = {
   title: 'Editorial Content/Article Toolkit/Image Gallery',
   component: ImageGallery,
@@ -52,7 +43,6 @@ const meta: Meta<StoryArgs> = {
     variant: 'standard',
     images,
     expandable: false,
-    showBuyReprint: false,
   },
   argTypes: {
     variant: {
@@ -73,10 +63,6 @@ const meta: Meta<StoryArgs> = {
       control: 'boolean',
       description: 'Opens the active slide in a full-screen dialog',
     },
-    showBuyReprint: {
-      control: 'boolean',
-      description: 'Enables or disables lightbox Buy Reprint links across the sample images',
-    },
   },
 };
 
@@ -88,9 +74,7 @@ export const Configurable: Story = {
   args: {
     expandable: true,
   },
-  render: ({ showBuyReprint, images: storyImages, ...args }) => (
-    <ImageGallery {...args} images={getStoryImages(storyImages, showBuyReprint)} />
-  ),
+  render: ({ images: storyImages, ...args }) => <ImageGallery {...args} images={storyImages} />,
 };
 
 export const AllVariants: Story = {
@@ -98,16 +82,16 @@ export const AllVariants: Story = {
     controls: { disable: true },
   },
 
-  render: ({ showBuyReprint, images: storyImages, ...args }) => {
-    const resolvedImages = getStoryImages(storyImages, showBuyReprint);
+  render: ({ images: storyImages, ...args }) => {
+    const resolvedImages = storyImages;
 
     return (
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 40 }}>
         {/* STANDARD */}
-        <ImageGallery {...args} variant="standard" images={resolvedImages} />
+        <ImageGallery {...args} variant="standard" images={resolvedImages} expandable={true} />
 
         {/* IMMERSIVE */}
-        <ImageGallery {...args} variant="immersive" images={resolvedImages} />
+        <ImageGallery {...args} variant="immersive" images={resolvedImages} expandable={true} />
 
         {/* CUSTOM IMAGE */}
         <ImageGallery {...args} ImageComponent={CustomImage} images={resolvedImages} />

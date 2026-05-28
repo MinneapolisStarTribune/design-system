@@ -19,7 +19,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   objectFit = 'cover',
   style,
   variant = 'standard',
-  purchaseLink,
   ...accessibilityProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +54,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           caption={caption}
           credit={credit}
           variant="inline"
-          purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
+          purchaseLink={image?.purchaseLink}
           dataTestId={`${dataTestId}-caption`}
         />
       </figure>
@@ -63,7 +62,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         image={image}
         caption={caption}
         credit={credit}
-        purchaseLink={purchaseLink ? { link: purchaseLink, label: 'Buy Reprint' } : undefined}
+        purchaseLink={image?.purchaseLink}
         imgixParams={imgixParams}
         dialogRef={dialogRef}
         isOpen={isOpen}

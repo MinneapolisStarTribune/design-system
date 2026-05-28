@@ -25,6 +25,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
   imgixParams,
   dataTestId = 'photo-layout',
   expandable = false,
+  purchaseLink,
   ...accessibilityProps
 }) => {
   const images = useMemo(
@@ -72,6 +73,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
           variant="inline"
           className={styles['caption-text']}
           dataTestId={`${dataTestId}-caption`}
+          purchaseLink={purchaseLink}
         />
       </figure>
 

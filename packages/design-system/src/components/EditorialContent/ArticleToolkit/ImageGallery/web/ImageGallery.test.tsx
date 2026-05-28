@@ -75,16 +75,19 @@ describe('ImageGallery', () => {
   });
 
   it('renders pagination and navigation from the shared caption', () => {
-    const { getByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+    const { queryByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(getByTestId('image-gallery-caption-pagination')).toHaveTextContent('1/2');
+    expect(queryByTestId('image-gallery-caption-pagination')).not.toBeInTheDocument();
     expect(getAllByRole('button')).toHaveLength(2);
   });
 
-  it('does not render buy reprint in the inline gallery caption', () => {
-    const { queryByTestId } = renderWithProvider(<ImageGallery images={images} />);
+  it('renders buy reprint in the inline gallery caption for the active image', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(queryByTestId('image-gallery-caption-purchase-link')).not.toBeInTheDocument();
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
   it('renders controls when multiple images', () => {

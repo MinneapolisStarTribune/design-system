@@ -77,7 +77,7 @@ describe('Caption', () => {
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 
-  it('renders gallery pagination and navigation in inline variant', () => {
+  it('renders gallery navigation (without pagination) in inline variant', () => {
     renderWithProvider(
       <Caption
         caption="A scenic mountain view."
@@ -89,7 +89,7 @@ describe('Caption', () => {
       />
     );
 
-    expect(screen.getByTestId('caption-pagination')).toHaveTextContent('2/5');
+    expect(screen.queryByTestId('caption-pagination')).not.toBeInTheDocument();
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 
