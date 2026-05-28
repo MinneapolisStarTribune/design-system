@@ -36,6 +36,7 @@
 /* Docs / MDX links: match design-system link tokens (see Link inline + JSON   */
 /* color.link — default / hover / visited; theme CSS sets vars per brand).     */
 /* Caption Buy Reprint is exempt — see Caption.module.scss (.caption-purchase-link). */
+/* Eyebrow label/badge navigation links are exempt — see .ds-eyebrow-link in their module SCSS. */
 /* -------------------------------------------------------------------------- */
 
 .sbdocs a[href] {
