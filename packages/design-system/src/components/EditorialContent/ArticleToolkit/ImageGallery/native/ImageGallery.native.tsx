@@ -23,14 +23,7 @@ import {
   type ImageItem,
   Variant,
 } from '../ImageGallery.types';
-import {
-  Button,
-  CameraFilledIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CloseIcon,
-  ExpandIcon,
-} from '@/index.native';
+import { Caption, CameraFilledIcon, CloseIcon, ExpandIcon } from '@/index.native';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import {
   Image as DSImage,
@@ -62,9 +55,6 @@ const getMaxWidth = (width: number, variant: Variant): number => {
   if (width < BREAKPOINTS.medium) return 535;
   return 712;
 };
-
-const getButtonSize = (width: number): 'small' | 'large' =>
-  width < BREAKPOINTS.medium ? 'small' : 'large';
 
 const buildImageUri = (src: string, imgixParams?: string): string => {
   if (!imgixParams) {
@@ -249,20 +239,7 @@ function createStyles(theme: NativeTheme) {
     } as TextStyle,
     bottomSection: {
       marginTop: theme.spacing8,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      gap: theme.spacing20,
-    } as ViewStyle,
-    captionContainer: { flex: 1 } as ViewStyle,
-    caption: { color: theme.colorTextOnLightSecondary } as TextStyle,
-    controls: {
-      flexDirection: 'row',
-      gap: theme.spacing4,
-      marginLeft: theme.spacing16,
-    } as ViewStyle,
-    navButton: {
-      borderWidth: 1,
-      borderColor: theme.colorBorderOnDarkSubtle01,
+      width: '100%',
     } as ViewStyle,
   };
 }
@@ -276,8 +253,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   style,
   imageStyle,
   wrapperStyle,
-  captionStyle,
-  controlsStyle,
+  captionStyle: _captionStyle,
+  controlsStyle: _controlsStyle,
   dataTestId = 'image-gallery',
   'aria-label': ariaLabel,
 }) => {
@@ -312,7 +289,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const spaceBetween = getSpaceBetween(dimensions.width);
   const maxWidth = getMaxWidth(dimensions.width, variant);
-  const buttonSize = getButtonSize(dimensions.width);
 
   const BASE_WIDTH = 390;
   const scale = dimensions.width / BASE_WIDTH;
@@ -473,33 +449,18 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         </View>
 
         <View style={styles.bottomSection}>
-          <View style={styles.captionContainer}>
-            {(currentImage?.caption || currentImage?.credit) && (
-              <Text style={[styles.caption, captionStyle]}>
-                {currentImage.caption}
-                {currentImage.credit ? ` ${currentImage.credit}` : ''}
-              </Text>
-            )}
-          </View>
-
-          {total > 1 && (
-            <View style={[styles.controls, controlsStyle]}>
-              <Button
-                variant="ghost"
-                size={buttonSize}
-                icon={<ChevronLeftIcon />}
-                onPress={handlePrev}
-                style={styles.navButton}
-              />
-              <Button
-                variant="ghost"
-                size={buttonSize}
-                icon={<ChevronRightIcon />}
-                onPress={handleNext}
-                style={styles.navButton}
-              />
-            </View>
-          )}
+          <Caption
+            caption={currentImage?.caption}
+            credit={currentImage?.credit}
+            purchaseLink={currentImage?.purchaseLink}
+            variant="inline"
+            currentIndex={activeImageIndex + 1}
+            totalItems={total}
+            onPrevious={total > 1 ? handlePrev : undefined}
+            onNext={total > 1 ? handleNext : undefined}
+            loopNavigation={hasLoop}
+            dataTestId={`${dataTestId}-caption`}
+          />
         </View>
       </View>
 
