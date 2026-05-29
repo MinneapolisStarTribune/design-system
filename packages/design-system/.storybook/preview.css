@@ -35,11 +35,12 @@
 /* -------------------------------------------------------------------------- */
 /* Docs / MDX links: match design-system link tokens (see Link inline + JSON   */
 /* color.link — default / hover / visited; theme CSS sets vars per brand).     */
-/* Caption Buy Reprint is exempt — see Caption.module.scss (.caption-purchase-link). */
-/* Eyebrow label/badge navigation links are exempt — see .ds-eyebrow-link in their module SCSS. */
+/* Exempt component-owned links via global hooks on the anchor (not module SCSS): */
+/*   .caption-purchase-link — Caption Buy Reprint                               */
+/*   .ds-eyebrow-link — EyebrowLabel / EyebrowBadge navigation links            */
 /* -------------------------------------------------------------------------- */
 
-.sbdocs a[href] {
+.sbdocs a[href]:not(.caption-purchase-link):not(.ds-eyebrow-link) {
   color: var(--color-link-text-default);
   font-weight: inherit;
   text-decoration: underline;
@@ -47,17 +48,17 @@
   text-underline-offset: 0.12em;
 }
 
-.sbdocs a[href]:hover {
+.sbdocs a[href]:not(.caption-purchase-link):not(.ds-eyebrow-link):hover {
   color: var(--color-link-text-hover);
   text-decoration-color: var(--color-link-underline-hover);
 }
 
-.sbdocs a[href]:visited:not(:hover) {
+.sbdocs a[href]:not(.caption-purchase-link):not(.ds-eyebrow-link):visited:not(:hover) {
   color: var(--color-link-text-visited);
   text-decoration-color: var(--color-link-underline-visited);
 }
 
-.sbdocs a[href]:focus-visible {
+.sbdocs a[href]:not(.caption-purchase-link):not(.ds-eyebrow-link):focus-visible {
   outline: 2px solid var(--color-link-text-default, currentColor);
   outline-offset: 2px;
   border-radius: 2px;
