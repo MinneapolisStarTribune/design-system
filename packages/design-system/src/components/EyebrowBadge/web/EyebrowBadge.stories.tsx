@@ -8,7 +8,7 @@ import {
 } from '@/components/EyebrowBadge/EyebrowBadge.types';
 
 const meta = {
-  title: 'Feedback & Status/EyebrowBadge',
+  title: 'Editorial Content/EyebrowBadge',
   component: EyebrowBadge,
   parameters: {
     layout: 'centered',
