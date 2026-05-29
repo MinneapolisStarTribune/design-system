@@ -9,7 +9,7 @@ import * as EyebrowBadgeStories from './EyebrowBadge.stories';
 
 Eyebrow Badges highlight top-priority newsroom content and signal urgency or editorial significance. They appear above headlines-just like standard Eyebrow Labels-but are reserved for the highest-visibility stories across the site, including homepage leads, section fronts, and article pages.
 
-Badges come in Showcase, Breaking, Live, and Sponsored variants, each representing a distinct editorial state. They may include a secondary label for timestamps or series titles. Eyebrow Badges are always non-interactive and strictly used in editorial contexts.
+Badges come in Showcase, Breaking, Live, and Sponsored variants, each representing a distinct editorial state. They may include a secondary label for timestamps or series titles. By default the root is a **`span`**; use **`as="a"`** or **`as={NextLink}`** with **`href`** when the badge should navigate (the link is the root—no wrapper, with **`cursor: pointer`** on hover).
 
 [Figma — Eyebrow Badge (Core Components)](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-525&p=f&m=dev)
 
@@ -89,11 +89,35 @@ Badges come in Showcase, Breaking, Live, and Sponsored variants, each representi
         <code>as</code>
       </td>
       <td>
-        <code>'span' | 'div'</code>
+        <code>'span' | 'div' | 'a'</code> or router <code>Link</code>
       </td>
       <td>No</td>
       <td>
-        Root element type. Defaults to <code>'span'</code>.
+        Root element. Defaults to <code>'span'</code>. Use <code>'a'</code> or <code>as=&#123;NextLink&#125;</code> with <code>href</code> for navigation.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>href</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>No</td>
+      <td>
+        Navigation target when the root is a link. Applies <code>cursor: pointer</code> on the root.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>prefetch</code> · <code>replace</code> · <code>scroll</code>
+      </td>
+      <td>
+        <code>boolean</code>
+      </td>
+      <td>No</td>
+      <td>
+        Forwarded when <code>as</code> is a framework router link (e.g. Next.js <code>Link</code>).
       </td>
     </tr>
     <tr>
@@ -133,8 +157,8 @@ Badges come in Showcase, Breaking, Live, and Sponsored variants, each representi
       <td>HTML/ARIA props</td>
       <td>No</td>
       <td>
-        Additional accessibility and DOM props (for example <code>aria-label</code>,{' '}
-        <code>onClick</code>, <code>role</code>) are forwarded to the root element.
+        Additional accessibility and DOM props (for example <code>aria-label</code>, <code>target</code>,{' '}
+        <code>rel</code>, <code>role</code>) are forwarded to the root element.
       </td>
     </tr>
   </tbody>
@@ -200,6 +224,46 @@ Output:
 Output:
 
 <Canvas of={EyebrowBadgeStories.ExampleSponsoredAsDiv} sourceState="hidden" />
+
+## Example: Live badge as link (`as="a"`)
+
+```tsx
+<EyebrowBadge
+  as="a"
+  href="/live"
+  label="Live"
+  secondaryLabel="Updated 12 mins ago"
+  variant="live"
+  size="large"
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleAsAnchor} sourceState="hidden" />
+
+## Example: Breaking badge with Next.js Link
+
+In your app, use **`NextLink`** from **`next/link`**. Storybook renders a mock with the same **`href`** contract.
+
+```tsx
+import NextLink from 'next/link';
+import { EyebrowBadge } from '@minneapolisstartribune/design-system/web';
+
+<EyebrowBadge
+  as={NextLink}
+  href="/breaking"
+  prefetch={false}
+  label="Breaking"
+  secondaryLabel="Developing story"
+  variant="breaking"
+  size="large"
+/>
+```
+
+Output:
+
+<Canvas of={EyebrowBadgeStories.ExampleAsNextLink} sourceState="hidden" />
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
