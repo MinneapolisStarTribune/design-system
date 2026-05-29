@@ -28,6 +28,7 @@
   color: inherit !important;
   /* Override typography token line-height (1.2) so caps text centers with leading icons. */
   line-height: 1 !important;
+  padding-block-start: 0.1em;
 }
 
 .small {
