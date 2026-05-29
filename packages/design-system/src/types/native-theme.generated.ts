@@ -2016,4 +2016,4 @@ export type NativeTheme =
   | (StartribuneLightTheme & StartribuneTypography)
   | (StartribuneDarkTheme & StartribuneTypography)
   | (VarsityLightTheme & VarsityTypography)
-  | (VarsityDarkTheme & VarsityTypography)
+  | (VarsityDarkTheme & VarsityTypography);
