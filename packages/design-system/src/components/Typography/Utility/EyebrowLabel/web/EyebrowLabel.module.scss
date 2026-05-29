@@ -26,6 +26,8 @@
 
 .label {
   color: inherit !important;
+  /* Tighter line-height so caps text centers with leading icons in the flex row. */
+  line-height: 1;
 }
 
 .small {
