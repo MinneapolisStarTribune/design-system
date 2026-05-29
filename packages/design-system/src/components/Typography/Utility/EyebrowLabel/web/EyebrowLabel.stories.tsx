@@ -99,7 +99,7 @@ const DOCS_PREVIEW_SURFACE = {
 } as const;
 
 const meta = {
-  title: 'Typography/Utility/EyebrowLabel',
+  title: 'Editorial Content/EyebrowLabel',
   component: EyebrowLabel,
   parameters: {
     layout: 'centered',
