@@ -4,7 +4,7 @@ import { FormControl } from '@/components/FormControl/FormControl';
 import { FORM_GROUP_CAPTION_VARIANTS } from './FormGroup.Caption';
 
 const meta = {
-  title: 'Forms/FormGroup/Caption',
+  title: 'Forms/FormGroup/Form Caption',
   component: FormGroup.Caption,
   parameters: {
     layout: 'centered',
@@ -14,11 +14,11 @@ const meta = {
     variant: {
       control: 'select',
       options: FORM_GROUP_CAPTION_VARIANTS,
-      description: 'Caption variant',
+      description: 'Form caption variant',
     },
     children: {
       control: 'text',
-      description: 'Caption text',
+      description: 'Form caption text',
     },
   },
 } satisfies Meta<typeof FormGroup.Caption>;
@@ -47,7 +47,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          'All caption variants (info, error, success) displayed together for comparison within their form groups.',
+          'All form caption variants (info, error, success) displayed together for comparison within their form groups.',
       },
     },
   },

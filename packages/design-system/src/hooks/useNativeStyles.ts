@@ -8,15 +8,10 @@ import varsityLightTheme from '@mobile/themes/varsity-light.js';
 import varsityDarkTheme from '@mobile/themes/varsity-dark.js';
 import startribuneTypography from '@mobile/typography/startribune-typography.js';
 import varsityTypography from '@mobile/typography/varsity-typography.js';
+import type { NativeTheme as NativeThemeType } from '@/types/native-theme.generated';
 
-type BaseThemeTokens =
-  | typeof startribuneLightTheme
-  | typeof startribuneDarkTheme
-  | typeof varsityLightTheme
-  | typeof varsityDarkTheme;
-
-type TypographyTokens = typeof startribuneTypography | typeof varsityTypography;
-export type NativeTheme = BaseThemeTokens & TypographyTokens;
+export type { NativeTheme } from '@/types/native-theme.generated';
+type NativeTheme = NativeThemeType;
 type NativeStyleMap = Record<string, TextStyle>;
 
 /**
@@ -43,8 +38,7 @@ export function useNativeStyles<T>(factory: (theme: NativeTheme) => T): T {
           ? varsityLightTheme
           : varsityDarkTheme;
 
-    const typography: TypographyTokens =
-      brand === 'startribune' ? startribuneTypography : varsityTypography;
+    const typography = brand === 'startribune' ? startribuneTypography : varsityTypography;
 
     return {
       ...baseTheme,

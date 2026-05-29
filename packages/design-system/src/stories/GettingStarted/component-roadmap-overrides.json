@@ -1,4 +1,8 @@
 {
+  "Caption": {
+    "native": false,
+    "web": true
+  },
   "FormGroup.Caption": {
     "native": true,
     "web": true

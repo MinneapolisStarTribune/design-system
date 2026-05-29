@@ -5,6 +5,25 @@
   white-space: nowrap;
 }
 
+/* Polymorphic `as="a"` / router Link: no underline; tone/label tokens own text color. */
+.clickable {
+  cursor: pointer;
+  text-decoration: none;
+
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    text-decoration: none;
+  }
+
+  [class*='typography-'] {
+    text-decoration: none;
+  }
+}
+
 .label {
   color: inherit !important;
 }

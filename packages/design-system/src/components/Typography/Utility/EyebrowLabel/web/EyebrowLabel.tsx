@@ -9,7 +9,7 @@ import type {
   EyebrowLabelProps,
   EyebrowLabelSize,
 } from '../EyebrowLabel.types';
-import { cloneElement, isValidElement, useContext } from 'react';
+import React, { cloneElement, isValidElement, useContext } from 'react';
 import styles from './EyebrowLabel.module.scss';
 
 const TYPOGRAPHY_BY_SIZE: Record<EyebrowLabelSize, 'small' | 'medium' | 'large'> = {
@@ -48,10 +48,10 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   isBackground = false,
   background,
   brand,
-  as = 'span',
+  as: As = 'span',
+  href,
   className,
   dataTestId,
-  htmlFor,
   style,
   ...rest
 }) => {
@@ -59,7 +59,7 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
   const resolvedBrand = brand ?? context?.brand ?? 'startribune';
   const resolvedBackground = background ?? (isBackground ? 'on-dark' : 'on-light');
   const labelText = label ?? children;
-  const Component = as;
+  const isClickable = (typeof As === 'string' && As === 'a') || href != null;
   const toneClassName =
     color === 'brand'
       ? resolvedBackground === 'on-light'
@@ -78,14 +78,8 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
     ...(logoColor !== undefined ? { color: logoColor } : { style: { color: 'inherit' as const } }),
   };
 
-  return (
-    <Component
-      className={classNames(styles.eyebrowLabel, styles[size], toneClassName, className)}
-      data-testid={dataTestId}
-      htmlFor={as === 'label' ? htmlFor : undefined}
-      style={style}
-      {...rest}
-    >
+  const content = (
+    <>
       {showBrandLogo && resolvedBrand === 'startribune' && (
         <LogoStribBlackIcon {...logoIconCommonProps} />
       )}
@@ -113,7 +107,26 @@ export const EyebrowLabel: React.FC<EyebrowLabelProps> = ({
       <UtilityLabel size={typographySize} weight="semibold" capitalize className={styles.label}>
         {labelText}
       </UtilityLabel>
-    </Component>
+    </>
+  );
+
+  return React.createElement(
+    As,
+    {
+      className: classNames(
+        styles.eyebrowLabel,
+        styles[size],
+        toneClassName,
+        isClickable && styles.clickable,
+        isClickable && 'ds-eyebrow-link',
+        className
+      ),
+      'data-testid': dataTestId,
+      href,
+      style,
+      ...rest,
+    },
+    content
   );
 };
 
@@ -122,6 +135,7 @@ export type {
   EyebrowLabelAsElement,
   EyebrowLabelColor,
   EyebrowLabelProps,
+  EyebrowLabelRouterLinkProps,
   EyebrowLabelSize,
 } from '../EyebrowLabel.types';
 export {

@@ -7,16 +7,16 @@ import * as PopoverStories from './Popover.stories';
 
 # Popover
 
-Popovers provide lightweight, focused surfaces for quick actions or supplemental context. They open on click or focus, can include text, links, and simple actions, and now support richer content through a flexible slot—such as menu items or form controls. Popovers auto-size to their content, reposition as needed, and close when the user clicks outside, presses Escape, or completes an action.
+Popovers provide lightweight, focused surfaces for quick actions or supplemental context. They open on click or focus, can include text, links, and simple actions, and support richer content through a flexible slot such as menu items or form controls. Popovers auto-size to their content, reposition as needed, and close when the user clicks outside, presses Escape, or completes an action.
 
 ## Anatomy
 
-1. **Container** — The outer surface that holds the popover content and handles positioning and elevation.  
-2. **Close button** — Allows users to manually dismiss the popover.  
-3. **Title (optional)** — Helps users understand the purpose of the popover.  
-4. **Description** — Primary supporting text.  
-5. **Header divider (optional)** — Separates header from content when needed.  
-6. **Custom content (optional)** — Flexible slot for menus, actions, or forms.  
+1. **Container** — The outer surface that holds the popover content and handles positioning and elevation.
+2. **Close button** — Allows users to manually dismiss the popover.
+3. **Title (optional)** — Helps users understand the purpose of the popover.
+4. **Description** — Primary supporting text.
+5. **Header divider (optional)** — Separates header from content when needed.
+6. **Custom content (optional)** — Flexible slot for menus, actions, or forms.
 7. **Pointer** — Directional arrow connecting popover to trigger.
 
 ## Usage
@@ -27,6 +27,7 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 - Add a divider when separating header and content
 - Provide `aria-label` when no heading is present
 - Avoid overcrowding content — prefer simple, focused interactions
+- Use `containerClassName`, `contentClassName`, `wrapperClassName`, and related props for granular customization
 
 <table>
   <thead>
@@ -35,29 +36,140 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
       <th>Role</th>
     </tr>
   </thead>
+
   <tbody>
     <tr>
       <td><code>Popover</code></td>
-      <td>Handles positioning, visibility, interactions, and portal rendering.</td>
+      <td>
+        Handles positioning, visibility, interactions, portal rendering,
+        and layout customization.
+      </td>
     </tr>
+
     <tr>
       <td><code>Popover.Heading</code></td>
-      <td>Optional title section with close button.</td>
+      <td>
+        Optional title section with close button and customizable layout.
+      </td>
     </tr>
+
     <tr>
       <td><code>Popover.Description</code></td>
-      <td>Primary text content.</td>
+      <td>Primary supporting text content.</td>
     </tr>
+
     <tr>
       <td><code>Popover.Body</code></td>
-      <td>Container for custom or scrollable content.</td>
+      <td>
+        Container for custom or scrollable content.
+      </td>
     </tr>
+
     <tr>
       <td><code>Popover.Divider</code></td>
       <td>Visual separator between sections.</td>
     </tr>
+
   </tbody>
 </table>
+
+## Customization Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Applies To</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>wrapperClassName</code></td>
+      <td>Popover wrapper</td>
+      <td>Custom classes for the floating wrapper element.</td>
+    </tr>
+
+    <tr>
+      <td><code>containerClassName</code></td>
+      <td>Popover container</td>
+      <td>Custom classes for the container element.</td>
+    </tr>
+
+    <tr>
+      <td><code>contentClassName</code></td>
+      <td>Popover content</td>
+      <td>Custom classes for the content wrapper.</td>
+    </tr>
+
+    <tr>
+      <td><code>arrowClassName</code></td>
+      <td>Popover arrow</td>
+      <td>Custom classes for the floating arrow.</td>
+    </tr>
+
+    <tr>
+      <td><code>headerClassName</code></td>
+      <td>Popover.Heading</td>
+      <td>Custom classes for the heading container.</td>
+    </tr>
+
+    <tr>
+      <td><code>titleClassName</code></td>
+      <td>Popover.Heading</td>
+      <td>Custom classes for the title element.</td>
+    </tr>
+
+    <tr>
+      <td><code>closeButtonClassName</code></td>
+      <td>Popover.Heading</td>
+      <td>Custom classes for the close button.</td>
+    </tr>
+
+    <tr>
+      <td><code>bodyClassName</code></td>
+      <td>Popover.Body</td>
+      <td>Custom classes for the body section.</td>
+    </tr>
+
+    <tr>
+      <td><code>descriptionClassName</code></td>
+      <td>Popover.Description</td>
+      <td>Custom classes for the description section.</td>
+    </tr>
+
+    <tr>
+      <td><code>dividerClassName</code></td>
+      <td>Popover.Divider</td>
+      <td>Custom classes for the divider.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Example
+
+```tsx
+<Popover
+  trigger={<Button>Open</Button>}
+  placement="bottom"
+  containerClassName="custom-popover-container"
+>
+  <Popover.Heading headerClassName="gap-2" closeButtonClassName="rounded-full">
+    Title
+  </Popover.Heading>
+
+  <Popover.Description>Sample description</Popover.Description>
+
+  <Popover.Divider />
+
+  <Popover.Body bodyClassName="custom-popover-body">
+    {' '}
+    <UtilityBody>Content</UtilityBody>
+  </Popover.Body>
+</Popover>
+```
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 

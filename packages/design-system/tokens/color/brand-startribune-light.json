@@ -206,6 +206,18 @@
         "Shared control styles (filled, outlined, ghost, utility) are defined in base colors and work across all brands and component types."
       ]
     },
+    "caption": {
+      "purchase-link": {
+        "accent-on-dark-surface": {
+          "description": "Buy Reprint underline and hover on dark surfaces (lightbox).",
+          "value": "{color.emerald-green.600}"
+        },
+        "accent-on-light-surface": {
+          "description": "Buy Reprint underline and hover on light surfaces (inline).",
+          "value": "{color.emerald-green.800}"
+        }
+      }
+    },
     "checkbox": {
       "background": {
         "selected": {

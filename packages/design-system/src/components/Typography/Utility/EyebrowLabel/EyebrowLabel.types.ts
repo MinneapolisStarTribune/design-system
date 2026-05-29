@@ -1,7 +1,7 @@
+import type { ComponentPropsWithoutRef, ElementType, ReactElement, ReactNode } from 'react';
 import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
 import type { Brand } from '@/providers/theme-helpers';
 import type { IconColor } from '@/components/Icon/Icon.types';
-import type { ReactElement } from 'react';
 
 export type EyebrowLabelCustomIconProps = {
   className?: string;
@@ -17,11 +17,19 @@ export type EyebrowLabelColor = (typeof EYEBROW_LABEL_COLORS)[number];
 export const EYEBROW_LABEL_BACKGROUNDS = ['on-light', 'on-dark'] as const;
 export type EyebrowLabelBackground = (typeof EYEBROW_LABEL_BACKGROUNDS)[number];
 
-export const EYEBROW_LABEL_AS_ELEMENTS = ['span', 'label'] as const;
+/** Supported static roots. Use `as={NextLink}` (or similar) with `href` for client navigation. */
+export const EYEBROW_LABEL_AS_ELEMENTS = ['span', 'label', 'a'] as const;
 export type EyebrowLabelAsElement = (typeof EYEBROW_LABEL_AS_ELEMENTS)[number];
 
-export interface EyebrowLabelProps extends BaseProps, AccessibilityProps {
-  children?: React.ReactNode;
+/** Forwarded when `as` is a framework router link (e.g. Next.js `Link`). */
+export type EyebrowLabelRouterLinkProps = {
+  prefetch?: boolean;
+  replace?: boolean;
+  scroll?: boolean;
+};
+
+interface EyebrowLabelSharedProps extends BaseProps, AccessibilityProps {
+  children?: ReactNode;
   label?: string;
   size?: EyebrowLabelSize;
   color?: EyebrowLabelColor;
@@ -50,7 +58,32 @@ export interface EyebrowLabelProps extends BaseProps, AccessibilityProps {
   background?: EyebrowLabelBackground;
   /** Uses provider brand when not supplied. */
   brand?: Brand;
-  as?: EyebrowLabelAsElement;
+  /** When `as="label"`, associates the label with a form control. */
   htmlFor?: string;
-  id?: string;
 }
+
+/**
+ * Polymorphic eyebrow label: styles apply to the root from `as`.
+ * - Default: `span`
+ * - `as="label"` — pass `htmlFor`
+ * - `as="a"` or `as={NextLink}` — pass `href` (and optional router props)
+ */
+export type EyebrowLabelProps = EyebrowLabelSharedProps &
+  EyebrowLabelRouterLinkProps & {
+    as?: ElementType;
+  } & Omit<
+    ComponentPropsWithoutRef<'span'>,
+    keyof EyebrowLabelSharedProps | keyof EyebrowLabelRouterLinkProps
+  > &
+  Partial<
+    Omit<
+      ComponentPropsWithoutRef<'a'>,
+      keyof EyebrowLabelSharedProps | keyof EyebrowLabelRouterLinkProps
+    >
+  > &
+  Partial<
+    Omit<
+      ComponentPropsWithoutRef<'label'>,
+      keyof EyebrowLabelSharedProps | keyof EyebrowLabelRouterLinkProps
+    >
+  >;

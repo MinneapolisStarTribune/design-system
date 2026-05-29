@@ -3,6 +3,30 @@ import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 
+beforeEach(() => {
+  Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+    configurable: true,
+    writable: true,
+    value: false,
+  });
+
+  HTMLDialogElement.prototype.showModal = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: true,
+    });
+  });
+
+  HTMLDialogElement.prototype.close = vi.fn(() => {
+    Object.defineProperty(HTMLDialogElement.prototype, 'open', {
+      configurable: true,
+      writable: true,
+      value: false,
+    });
+  });
+});
+
 const images = [
   {
     src: 'https://picsum.photos/1080/720?1',
@@ -10,6 +34,10 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&auto=format,compress',
+    purchaseLink: {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -31,6 +59,10 @@ describe('ImageGallery Accessibility', () => {
 
     it('has no accessibility violations with single image', async () => {
       await expectNoA11yViolations(<ImageGallery images={[images[0]]} variant="standard" />);
+    });
+
+    it('has no accessibility violations when expandable', async () => {
+      await expectNoA11yViolations(<ImageGallery images={images} variant="standard" expandable />);
     });
   });
 
@@ -56,6 +88,16 @@ describe('ImageGallery Accessibility', () => {
 
       // ensure at least one focusable element is focused
       expect(renderResult.container.ownerDocument.activeElement).toBeTruthy();
+
+      await checkA11y();
+    });
+
+    it('has no violations after opening expand dialog', async () => {
+      const { renderResult, checkA11y } = await renderAndCheckA11y(
+        <ImageGallery images={images} variant="standard" expandable dataTestId="gallery-a11y" />
+      );
+
+      await userEvent.click(renderResult.getByTestId('gallery-a11y-expand-button-0'));
 
       await checkA11y();
     });

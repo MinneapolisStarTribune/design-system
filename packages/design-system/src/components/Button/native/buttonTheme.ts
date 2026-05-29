@@ -1,12 +1,41 @@
 import type { NativeTheme } from '@/hooks/useNativeStyles';
 import type { ButtonColor, ButtonVariant } from '../Button.types';
 
+export type ButtonSurface = 'light' | 'dark';
+
 export type ButtonSurfaceColors = {
   backgroundColor: string;
   color: string;
   borderColor?: string;
   borderWidth?: number;
 };
+
+function getDarkNeutralButtonSurface(
+  theme: NativeTheme,
+  variant: ButtonVariant,
+  pressed: boolean
+): ButtonSurfaceColors {
+  if (variant === 'filled') {
+    return {
+      backgroundColor: pressed ? theme.colorNeutral200 : theme.colorBaseWhite,
+      color: theme.colorNeutral950,
+    };
+  }
+
+  if (variant === 'outlined') {
+    return {
+      backgroundColor: pressed ? theme.colorNeutral800 : 'transparent',
+      color: theme.colorBaseWhite,
+      borderColor: theme.colorBaseWhite,
+      borderWidth: 1,
+    };
+  }
+
+  return {
+    backgroundColor: pressed ? theme.colorNeutral800 : 'transparent',
+    color: theme.colorBaseWhite,
+  };
+}
 
 /**
  * Maps web-equivalent hover tokens to pressed state on native.
@@ -15,8 +44,13 @@ export function getNativeButtonSurface(
   theme: NativeTheme,
   color: ButtonColor,
   variant: ButtonVariant,
-  pressed: boolean
+  pressed: boolean,
+  surface: ButtonSurface = 'light'
 ): ButtonSurfaceColors {
+  if (surface === 'dark' && color === 'neutral') {
+    return getDarkNeutralButtonSurface(theme, variant, pressed);
+  }
+
   if (color === 'neutral') {
     if (variant === 'filled') {
       return {

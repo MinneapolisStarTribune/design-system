@@ -76,14 +76,20 @@
     }
   }
 
-  @media (min-width: var(--breakpoint-medium-min)) {
+  /*
+   * CSS custom properties cannot be used in @media query conditions — they
+   * resolve at the cascade/computed-value stage, after media features have
+   * already been evaluated. Keep these literal pixel values in sync with
+   * tokens/primitives/breakpoint.json (medium.min, large.min).
+   */
+  @media (min-width: 768px) {
     .icon {
       width: var(--spacing-16);
       height: var(--spacing-16);
     }
   }
 
-  @media (min-width: var(--breakpoint-large-min)) {
+  @media (min-width: 1160px) {
     .icon {
       width: var(--spacing-20);
       height: var(--spacing-20);

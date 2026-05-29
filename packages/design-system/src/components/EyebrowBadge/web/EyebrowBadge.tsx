@@ -1,12 +1,13 @@
 'use client';
 
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import {
   EYEBROW_BADGE_SIZES,
   EYEBROW_BADGE_VARIANTS,
   type EyebrowBadgeProps,
+  type EyebrowBadgeRouterLinkProps,
   type EyebrowBadgeSize,
   type EyebrowBadgeVariant,
 } from '@/components/EyebrowBadge/EyebrowBadge.types';
@@ -17,6 +18,7 @@ export {
   EYEBROW_BADGE_SIZES,
   EYEBROW_BADGE_VARIANTS,
   type EyebrowBadgeProps,
+  type EyebrowBadgeRouterLinkProps,
   type EyebrowBadgeSize,
   type EyebrowBadgeVariant,
 };
@@ -30,7 +32,8 @@ export const EyebrowBadge: React.FC<EyebrowBadgeProps> = ({
   className,
   style,
   dataTestId,
-  as: Component = 'span',
+  as: As = 'span',
+  href,
   ...accessibilityProps
 }) => {
   const dsContext = useContext(DesignSystemContext);
@@ -44,19 +47,10 @@ export const EyebrowBadge: React.FC<EyebrowBadgeProps> = ({
   const showcaseDarkSurface =
     variant === 'showcase' && isDarkColorScheme ? styles.showcaseWhenDark : undefined;
 
-  return (
-    <Component
-      className={classNames(
-        styles.eyebrowBadge,
-        styles[`variant-${variant}`],
-        showcaseDarkSurface,
-        size === 'small' ? styles.sizeSmall : styles.sizeLarge,
-        className
-      )}
-      style={style}
-      data-testid={dataTestId}
-      {...accessibilityProps}
-    >
+  const isClickable = (typeof As === 'string' && As === 'a') || href != null;
+
+  const content = (
+    <>
       <span className={styles.badge}>
         {shouldShowDot ? <span className={styles.badgeDot} aria-hidden /> : null}
         <UtilityLabel size={labelSize} weight="semibold" capitalize className={styles.primaryLabel}>
@@ -74,6 +68,26 @@ export const EyebrowBadge: React.FC<EyebrowBadgeProps> = ({
           {secondaryLabel}
         </UtilityLabel>
       ) : null}
-    </Component>
+    </>
+  );
+
+  return React.createElement(
+    As,
+    {
+      className: classNames(
+        styles.eyebrowBadge,
+        styles[`variant-${variant}`],
+        showcaseDarkSurface,
+        size === 'small' ? styles.sizeSmall : styles.sizeLarge,
+        isClickable && styles.clickable,
+        isClickable && 'ds-eyebrow-link',
+        className
+      ),
+      style,
+      'data-testid': dataTestId,
+      href,
+      ...accessibilityProps,
+    },
+    content
   );
 };

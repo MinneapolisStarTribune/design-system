@@ -112,31 +112,25 @@ jobs:
 
             # Build PR body
             if [ "$HAS_CONFLICTS" = true ]; then
-              PR_BODY="## ⚠️ Merge conflicts detected
-
-This PR has merge conflicts that need manual resolution.
-
-### What happened
-\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression.
-
-### What to do
-1. Check out this PR locally
-2. Resolve the conflicts
-3. Push the resolution
-4. Get review and merge
-
-\`\`\`sh
-gh pr checkout <this-pr-number>
-git merge main
-# resolve conflicts
-git push
-\`\`\`"
+              PR_BODY="## ⚠️ Merge conflicts detected"$'\n\n'\
+              "This PR has merge conflicts that need manual resolution."$'\n\n'\
+              "### What happened"$'\n'\
+              "\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression."$'\n\n'\
+              "### What to do"$'\n'\
+              "1. Check out this PR locally"$'\n'\
+              "2. Resolve the conflicts"$'\n'\
+              "3. Push the resolution"$'\n'\
+              "4. Get review and merge"$'\n\n'\
+              '```sh'$'\n'\
+              "gh pr checkout <this-pr-number>"$'\n'\
+              "git merge main"$'\n'\
+              "# resolve conflicts"$'\n'\
+              "git push"$'\n'\
+              '```'
             else
-              PR_BODY="## ✅ Clean merge — no conflicts
-
-\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression.
-
-This should merge cleanly. Review and merge when ready."
+              PR_BODY="## ✅ Clean merge - no conflicts"$'\n\n'\
+              "\`release/$MERGED_VERSION\` was merged into \`main\`. This PR brings those changes into \`$branch\` to prevent regression."$'\n\n'\
+              "This should merge cleanly. Review and merge when ready."
             fi
 
             # Create the PR

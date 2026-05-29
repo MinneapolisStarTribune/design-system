@@ -1,0 +1,160 @@
+.caption {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-20);
+}
+
+.caption-row {
+  flex: 0 1 auto;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-12);
+  min-width: 0;
+}
+
+.top-row + .bottom-row,
+.credit-row + .bottom-row {
+  margin-top: var(--spacing-12);
+}
+
+/* ---------- CONTENT ---------- */
+
+.caption-text {
+  word-break: break-word;
+  color: var(--color-text-on-light-secondary);
+}
+
+.credit-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  line-height: 1.4;
+  margin-top: var(--spacing-12);
+  margin-bottom: var(--spacing-20);
+}
+
+.credit-icon {
+  flex-shrink: 0;
+}
+
+.pagination {
+  flex-shrink: 0;
+}
+
+/* ---------- NAVIGATION ---------- */
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  margin-left: auto;
+  max-width: 100%;
+}
+
+.variant-inline .navButton {
+  border: 1px solid var(--color-border-on-dark-subtle-01);
+}
+
+.variant-lightbox .navButton {
+  border: 1px solid var(--color-border-on-dark-subtle-01);
+}
+
+/* ---------- CTA ---------- */
+
+.purchase-link-separator {
+  margin: 0 var(--spacing-4);
+}
+
+.purchase-link {
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-thickness: auto;
+  text-decoration-skip-ink: auto;
+  text-underline-offset: 8%;
+  text-underline-position: from-font;
+
+  &:focus-visible {
+    outline: 2px solid
+      var(
+        --caption-purchase-link-accent,
+        var(--color-caption-purchase-link-accent-on-light-surface)
+      );
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- INLINE ---------- */
+
+.variant-inline {
+  color: var(--color-text-on-light-secondary);
+
+  .purchase-link {
+    --caption-purchase-link-accent: var(--color-caption-purchase-link-accent-on-light-surface);
+    color: var(--color-text-on-light-secondary);
+    text-decoration-color: var(--caption-purchase-link-accent);
+
+    &:hover {
+      color: var(--caption-purchase-link-accent);
+    }
+  }
+}
+
+/* ---------- LIGHTBOX ---------- */
+
+.variant-lightbox {
+  // color: var(--color-text-on-dark-primary);
+
+  [class*='typography-'] {
+    color: var(--color-text-on-dark-primary);
+  }
+
+  .caption-text,
+  .purchase-link,
+  .pagination,
+  .purchase-link-separator {
+    color: var(--color-text-on-dark-primary);
+  }
+
+  .credit-text {
+    color: var(--color-text-on-dark-tertiary);
+  }
+
+  .purchase-link {
+    --caption-purchase-link-accent: var(--color-caption-purchase-link-accent-on-dark-surface);
+    text-decoration-color: var(--caption-purchase-link-accent);
+
+    &:hover {
+      color: var(--caption-purchase-link-accent);
+    }
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1024px) {
+  .bottom-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .navigation {
+    margin-left: auto;
+  }
+}

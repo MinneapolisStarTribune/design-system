@@ -180,6 +180,84 @@ describe('Popover', () => {
       expect(screen.getByText('Content')).toBeInTheDocument();
     });
   });
+
+  it('applies wrapperClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} wrapperClassName="custom-wrapper">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      const content = screen.getByText('Content');
+
+      const wrapper = content.closest('.custom-wrapper');
+
+      expect(wrapper).toHaveClass('custom-wrapper');
+    });
+  });
+
+  it('applies containerClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} containerClassName="custom-container">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      const content = screen.getByText('Content');
+
+      const container = content.closest('.custom-container');
+
+      expect(container).toHaveClass('custom-container');
+    });
+  });
+
+  it('applies contentClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} contentClassName="custom-content">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      const content = screen.getByText('Content');
+
+      const contentEl = content.closest('.custom-content');
+
+      expect(contentEl).toHaveClass('custom-content');
+    });
+  });
+
+  it('applies arrowClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} arrowClassName="custom-arrow">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      const arrow = document.querySelector('svg.custom-arrow');
+
+      expect(arrow).toHaveClass('custom-arrow');
+    });
+  });
 });
 
 describe('Popover.Body', () => {
@@ -200,6 +278,22 @@ describe('Popover.Body', () => {
       expect(screen.getByTestId('body')).toBeInTheDocument();
     });
   });
+
+  it('applies bodyClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Body bodyClassName="custom-body">Body</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.custom-body')).toBeInTheDocument();
+    });
+  });
 });
 
 describe('Popover.Heading', () => {
@@ -211,6 +305,7 @@ describe('Popover.Heading', () => {
         <Popover.Heading>
           <span data-testid="heading">Heading</span>
         </Popover.Heading>
+
         <Popover.Body>Body</Popover.Body>
       </Popover>
     );
@@ -220,6 +315,70 @@ describe('Popover.Heading', () => {
     await waitFor(() => {
       expect(screen.getByTestId('heading')).toBeInTheDocument();
       expect(screen.getByLabelText('Close popover')).toBeInTheDocument();
+    });
+  });
+
+  it('applies heading classNames', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading
+          headerClassName="custom-header"
+          titleClassName="custom-title"
+          closeButtonClassName="custom-close-button"
+        >
+          Heading
+        </Popover.Heading>
+
+        <Popover.Body>Body</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.custom-header')).toBeInTheDocument();
+      expect(document.querySelector('.custom-title')).toBeInTheDocument();
+      expect(document.querySelector('.custom-close-button')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Popover.Description', () => {
+  it('applies descriptionClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Description descriptionClassName="custom-description">
+          Description
+        </Popover.Description>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.custom-description')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('Popover.Divider', () => {
+  it('applies dividerClassName', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Divider dividerClassName="custom-divider" />
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      expect(document.querySelector('.custom-divider')).toBeInTheDocument();
     });
   });
 });

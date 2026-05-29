@@ -99,7 +99,7 @@ const DOCS_PREVIEW_SURFACE = {
 } as const;
 
 const meta = {
-  title: 'Typography/Utility/EyebrowLabel',
+  title: 'Editorial Content/EyebrowLabel',
   component: EyebrowLabel,
   parameters: {
     layout: 'centered',
@@ -148,7 +148,12 @@ const meta = {
     as: {
       control: 'select',
       options: EYEBROW_LABEL_AS_ELEMENTS,
-      description: 'HTML element to render.',
+      description:
+        'Root element: `span` (default), `label` (with `htmlFor`), or `a`. For Next.js, use `as={NextLink}` with `href` in app code.',
+    },
+    href: {
+      control: 'text',
+      description: 'Navigation target when `as="a"` or `as={NextLink}`.',
     },
   },
 } satisfies Meta<typeof EyebrowLabel>;
@@ -312,6 +317,84 @@ export const DocsSubscriberOnlyMediumOnLight: Story = {
       }}
     >
       <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+/** Minimal stand-in for `next/link` in Storybook. In your app: `import NextLink from 'next/link'`. */
+function StoryMockNextLink({
+  href,
+  className,
+  children,
+  prefetch,
+  ...rest
+}: React.ComponentPropsWithoutRef<'a'> & { prefetch?: boolean }) {
+  return (
+    <a
+      href={href}
+      className={className}
+      data-prefetch={prefetch === undefined ? undefined : String(prefetch)}
+      {...rest}
+    >
+      {children}
+    </a>
+  );
+}
+
+export const DocsAsAnchorOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    as: 'a',
+    href: '/election',
+    size: 'medium',
+    color: 'live',
+    background: 'on-light',
+    label: 'Election',
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} />
+    </div>
+  ),
+};
+
+export const DocsAsNextLinkOnLight: Story = {
+  tags: ['!dev'],
+  args: {
+    href: '/election',
+    prefetch: false,
+    size: 'medium',
+    color: 'brand',
+    background: 'on-light',
+    logo: true,
+    brand: 'startribune',
+    label: 'Election',
+  },
+  parameters: {
+    chromatic: { disable: true },
+    controls: { disable: true },
+  },
+  render: (args) => (
+    <div
+      style={{
+        display: 'inline-block',
+        padding: '1rem',
+        background: DOCS_PREVIEW_SURFACE.onLight,
+        borderRadius: '0.25rem',
+      }}
+    >
+      <EyebrowLabel {...args} as={StoryMockNextLink} />
     </div>
   ),
 };

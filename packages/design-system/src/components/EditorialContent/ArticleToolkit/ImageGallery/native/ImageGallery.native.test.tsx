@@ -1,7 +1,15 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, screen } from '@testing-library/react-native';
 import { ScrollView } from 'react-native';
 import { ImageGallery } from './ImageGallery.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+
+jest.mock('react-native/Libraries/Modal/Modal', () => {
+  const _React = require('react');
+  const { View } = require('react-native');
+  const MockModal = ({ visible, children }: { visible?: boolean; children?: unknown }) =>
+    visible ? _React.createElement(View, null, children) : null;
+  return { __esModule: true, default: MockModal };
+});
 
 const wrapper = TestWrapperInDesignSystemProvider({ brand: 'startribune' });
 
@@ -121,5 +129,33 @@ describe('ImageGallery (native)', () => {
     });
 
     expect(queryByText('1/2')).toBeNull();
+  });
+
+  it('does not render expand controls by default', () => {
+    render(<ImageGallery images={images} dataTestId="gallery" />, { wrapper });
+
+    expect(screen.queryByTestId('gallery-expand-button-0')).toBeNull();
+  });
+
+  it('renders expand controls per slide when expandable', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    expect(screen.getByTestId('gallery-expand-button-0')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-expand-button-1')).toBeOnTheScreen();
+  });
+
+  it('opens and closes expanded dialog for the pressed slide when expandable', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    expect(screen.queryByTestId('gallery-dialog')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-1'));
+
+    expect(screen.getByTestId('gallery-dialog')).toBeOnTheScreen();
+    expect(screen.getByText('Caption two')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('gallery-dialog-close-button'));
+
+    expect(screen.queryByTestId('gallery-dialog')).toBeNull();
   });
 });
