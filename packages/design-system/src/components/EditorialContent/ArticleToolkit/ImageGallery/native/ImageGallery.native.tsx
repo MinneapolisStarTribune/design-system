@@ -31,11 +31,12 @@ import {
   CloseIcon,
   ExpandIcon,
 } from '@/index.native';
-import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
+import { Caption } from '@/components/Caption/native/Caption.native';
 import {
   Image as DSImage,
   ImageProps as NativeImageProps,
 } from '@/components/Image/native/Image.native';
+import type { CtaLinkProps } from '@/types';
 
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
@@ -92,6 +93,7 @@ type GalleryStyles = ReturnType<typeof createStyles>;
 type ImageGalleryExpandModalProps = {
   visible: boolean;
   image: ImageItem | null;
+  purchaseLink?: CtaLinkProps;
   styles: GalleryStyles;
   dataTestId: string;
   onClose: () => void;
@@ -100,6 +102,7 @@ type ImageGalleryExpandModalProps = {
 const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   visible,
   image,
+  purchaseLink,
   styles,
   dataTestId,
   onClose,
@@ -110,8 +113,6 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
 
   const uri = buildImageUri(image.src, image.imgixParams);
   const aspectRatio = (image.width ?? 1080) / (image.height ?? 720);
-  const hasCaption = Boolean(image.caption?.trim());
-  const hasCredit = Boolean(image.credit?.trim());
 
   return (
     <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
@@ -141,23 +142,14 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
           />
         </View>
 
-        {hasCaption || hasCredit ? (
-          <View style={styles.dialogCaption}>
-            {hasCaption ? (
-              <UtilityLabel size="small" weight="regular" style={styles.dialogCaptionText}>
-                {image.caption}
-              </UtilityLabel>
-            ) : null}
-            {hasCredit ? (
-              <View style={styles.dialogCreditRow}>
-                <CameraFilledIcon color="on-dark-primary" size="medium" />
-                <UtilityLabel size="small" weight="regular" style={styles.dialogCreditText}>
-                  {image.credit}
-                </UtilityLabel>
-              </View>
-            ) : null}
-          </View>
-        ) : null}
+        <Caption
+          caption={image.caption}
+          credit={image.credit}
+          purchaseLink={purchaseLink}
+          variant="lightbox"
+          style={styles.dialogCaption}
+          dataTestId={`${dataTestId}-dialog-caption`}
+        />
       </View>
     </Modal>
   );
@@ -215,20 +207,8 @@ function createStyles(theme: NativeTheme) {
       maxHeight: '100%',
     } as ImageStyle,
     dialogCaption: {
-      gap: theme.spacing8,
+      width: '100%',
     } as ViewStyle,
-    dialogCaptionText: {
-      color: theme.colorTextOnDarkPrimary,
-    } as TextStyle,
-    dialogCreditRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing4,
-    } as ViewStyle,
-    dialogCreditText: {
-      color: theme.colorTextOnDarkSecondary,
-      flexShrink: 1,
-    } as TextStyle,
     image: {
       width: '100%',
       height: '100%',
@@ -271,6 +251,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   images,
   variant = 'standard',
   expandable = false,
+  purchaseLink,
   loop,
   ImageComponent,
   style,
@@ -396,6 +377,10 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const expandedImage =
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
 
+  const expandedPurchaseLink: CtaLinkProps | undefined =
+    expandedImage?.purchaseLink ??
+    (purchaseLink ? { label: 'Buy Reprint', link: purchaseLink } : undefined);
+
   if (!total) return null;
 
   return (
@@ -507,6 +492,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         <ImageGalleryExpandModal
           visible={expandedIndex !== null}
           image={expandedImage}
+          purchaseLink={expandedPurchaseLink}
           styles={styles}
           dataTestId={dataTestId}
           onClose={() => setExpandedIndex(null)}

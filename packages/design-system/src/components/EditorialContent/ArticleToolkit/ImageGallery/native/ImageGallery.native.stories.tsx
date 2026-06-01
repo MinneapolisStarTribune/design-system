@@ -24,6 +24,14 @@ const sampleImages = [
   },
 ];
 
+const sampleImagesWithReprint = sampleImages.map((image, index) => ({
+  ...image,
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: `https://www.startribune.com/photos?image=${index + 1}`,
+  },
+}));
+
 const meta: Meta<typeof ImageGallery> = {
   title: 'Editorial Content/Article Toolkit/ImageGallery',
   component: ImageGallery,
@@ -62,6 +70,23 @@ export const Configurable: Story = {
     variant: 'standard',
     expandable: false,
     'aria-label': 'Image gallery',
+  },
+};
+
+export const LightboxWithBuyReprint: Story = {
+  args: {
+    images: sampleImagesWithReprint,
+    variant: 'standard',
+    expandable: true,
+    'aria-label': 'Image gallery with expandable lightbox',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Tap the expand control on a slide to open the lightbox. The expanded view renders the shared Caption in its lightbox variant with caption, attribution, and the optional Buy Reprint CTA when a `purchaseLink` is configured (per image, or via the gallery-level `purchaseLink` fallback).',
+      },
+    },
   },
 };
 

@@ -158,4 +158,48 @@ describe('ImageGallery (native)', () => {
 
     expect(screen.queryByTestId('gallery-dialog')).toBeNull();
   });
+
+  it('renders the Buy Reprint CTA in the expanded dialog from a per-image purchaseLink', () => {
+    const imagesWithPurchase = [
+      {
+        ...images[0],
+        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
+      },
+      images[1],
+    ];
+
+    render(<ImageGallery images={imagesWithPurchase} expandable dataTestId="gallery" />, {
+      wrapper,
+    });
+
+    expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('falls back to the gallery-level purchaseLink for the Buy Reprint CTA', () => {
+    render(
+      <ImageGallery
+        images={images}
+        expandable
+        purchaseLink="https://www.startribune.com/photos"
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('does not render a Buy Reprint CTA in the expanded dialog when none is configured', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
+  });
 });
