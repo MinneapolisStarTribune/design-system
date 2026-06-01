@@ -202,4 +202,38 @@ describe('ImageGallery (native)', () => {
 
     expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
   });
+
+  it('renders the counter and prev/next controls in the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
+    expect(screen.getByTestId('gallery-dialog-caption-previous')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-next')).toBeOnTheScreen();
+  });
+
+  it('advances to the next image from the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+    expect(screen.getByText('Caption one')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-next'));
+
+    expect(screen.getByText('Caption two')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
+  });
+
+  it('goes back to the previous image from the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-1'));
+    expect(screen.getByText('Caption two')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-previous'));
+
+    expect(screen.getByText('Caption one')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
+  });
 });

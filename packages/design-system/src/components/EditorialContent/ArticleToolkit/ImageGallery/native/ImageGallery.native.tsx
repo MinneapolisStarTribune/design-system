@@ -94,6 +94,10 @@ type ImageGalleryExpandModalProps = {
   visible: boolean;
   image: ImageItem | null;
   purchaseLink?: CtaLinkProps;
+  currentIndex?: number;
+  totalItems?: number;
+  onPrevious?: () => void;
+  onNext?: () => void;
   styles: GalleryStyles;
   dataTestId: string;
   onClose: () => void;
@@ -103,6 +107,10 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   visible,
   image,
   purchaseLink,
+  currentIndex,
+  totalItems,
+  onPrevious,
+  onNext,
   styles,
   dataTestId,
   onClose,
@@ -147,6 +155,10 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
           credit={image.credit}
           purchaseLink={purchaseLink}
           variant="lightbox"
+          currentIndex={currentIndex}
+          totalItems={totalItems}
+          onPrevious={onPrevious}
+          onNext={onNext}
           style={styles.dialogCaption}
           dataTestId={`${dataTestId}-dialog-caption`}
         />
@@ -372,6 +384,29 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     setDimensions({ width, height });
   };
 
+  /** Moves the expanded (lightbox) view to a logical image index and keeps the carousel in sync. */
+  const goToExpandedImage = (nextLogicalIndex: number) => {
+    if (nextLogicalIndex < 0 || nextLogicalIndex >= total) {
+      return;
+    }
+
+    setExpandedIndex(nextLogicalIndex);
+
+    const slideIndex = hasLoop ? nextLogicalIndex + 1 : nextLogicalIndex;
+    setIndex(slideIndex);
+    scrollTo(slideIndex);
+  };
+
+  const handleExpandedPrevious = () => {
+    if (expandedIndex === null) return;
+    goToExpandedImage(expandedIndex - 1);
+  };
+
+  const handleExpandedNext = () => {
+    if (expandedIndex === null) return;
+    goToExpandedImage(expandedIndex + 1);
+  };
+
   const activeImageIndex = total > 0 ? toLogicalImageIndex(index, hasLoop, total) : 0;
   const currentImage = total > 0 ? images[activeImageIndex] : undefined;
   const expandedImage =
@@ -493,6 +528,10 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           visible={expandedIndex !== null}
           image={expandedImage}
           purchaseLink={expandedPurchaseLink}
+          currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
+          totalItems={total}
+          onPrevious={handleExpandedPrevious}
+          onNext={handleExpandedNext}
           styles={styles}
           dataTestId={dataTestId}
           onClose={() => setExpandedIndex(null)}
