@@ -1,3 +1,4 @@
+import React from 'react';
 import { EyebrowLabel } from './EyebrowLabel';
 import eyebrowStyles from './EyebrowLabel.module.scss';
 import { renderWithProvider } from '@/test-utils/render';
@@ -182,5 +183,50 @@ describe('EyebrowLabel', () => {
     const { getByText } = renderWithProvider(<EyebrowLabel size="large">Label</EyebrowLabel>);
 
     expect(getByText('Label')).toHaveClass('typography-utility-label-semibold-large-caps');
+  });
+
+  describe('polymorphic as', () => {
+    it('renders as anchor with href as root element', () => {
+      const { getByRole } = renderWithProvider(
+        <EyebrowLabel as="a" href="/section" color="live">
+          Live
+        </EyebrowLabel>
+      );
+
+      const link = getByRole('link', { name: 'Live' });
+      expect(link.tagName).toBe('A');
+      expect(link).toHaveAttribute('href', '/section');
+      expect(link).toHaveClass(eyebrowStyles.clickable);
+      expect(link).toHaveClass('ds-eyebrow-link');
+    });
+
+    it('forwards props to a custom link component', () => {
+      const RouterLink = React.forwardRef<
+        HTMLAnchorElement,
+        { href: string; children?: React.ReactNode; prefetch?: boolean }
+      >(({ href, children, prefetch, ...rest }, ref) => (
+        <a ref={ref} href={href} data-test-prefetch={String(prefetch)} {...rest}>
+          {children}
+        </a>
+      ));
+      RouterLink.displayName = 'RouterLink';
+
+      const { getByRole } = renderWithProvider(
+        <EyebrowLabel as={RouterLink} href="/election" label="Election" prefetch={false} />
+      );
+
+      const el = getByRole('link', { name: 'Election' });
+      expect(el).toHaveAttribute('href', '/election');
+      expect(el).toHaveAttribute('data-test-prefetch', 'false');
+      expect(el).toHaveClass(eyebrowStyles.clickable);
+    });
+
+    it('does not apply clickable styles on default span', () => {
+      const { getByTestId } = renderWithProvider(
+        <EyebrowLabel data-testid="eyebrow">Label</EyebrowLabel>
+      );
+
+      expect(getByTestId('eyebrow')).not.toHaveClass(eyebrowStyles.clickable);
+    });
   });
 });
