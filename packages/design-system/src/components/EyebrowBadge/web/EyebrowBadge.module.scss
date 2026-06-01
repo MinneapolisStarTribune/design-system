@@ -4,6 +4,25 @@
   gap: var(--spacing-8);
 }
 
+/* Polymorphic `as="a"` / router Link: no underline; variant/label tokens own text color. */
+.clickable {
+  cursor: pointer;
+  text-decoration: none;
+
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus,
+  &:focus-visible {
+    text-decoration: none;
+  }
+
+  [class*='typography-'] {
+    text-decoration: none;
+  }
+}
+
 .badge {
   display: inline-flex;
   box-sizing: border-box;

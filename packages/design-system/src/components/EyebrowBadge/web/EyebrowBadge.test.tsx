@@ -1,3 +1,4 @@
+import React from 'react';
 import { EyebrowBadge } from './EyebrowBadge';
 import styles from './EyebrowBadge.module.scss';
 import { renderWithProvider } from '@/test-utils/render';
@@ -74,5 +75,45 @@ describe('EyebrowBadge', () => {
       { colorScheme: 'light' }
     );
     expect(container.firstChild).not.toHaveClass(styles.showcaseWhenDark);
+  });
+
+  describe('polymorphic as', () => {
+    it('renders as anchor with href as root element', () => {
+      const { getByRole } = renderWithProvider(
+        <EyebrowBadge as="a" href="/live" label="Live" variant="live" />
+      );
+
+      const link = getByRole('link', { name: 'Live' });
+      expect(link.tagName).toBe('A');
+      expect(link).toHaveAttribute('href', '/live');
+      expect(link).toHaveClass(styles.clickable);
+      expect(link).toHaveClass('ds-eyebrow-link');
+    });
+
+    it('forwards props to a custom link component', () => {
+      const RouterLink = React.forwardRef<
+        HTMLAnchorElement,
+        { href: string; children?: React.ReactNode; prefetch?: boolean }
+      >(({ href, children, prefetch, ...rest }, ref) => (
+        <a ref={ref} href={href} data-test-prefetch={String(prefetch)} {...rest}>
+          {children}
+        </a>
+      ));
+      RouterLink.displayName = 'RouterLink';
+
+      const { getByRole } = renderWithProvider(
+        <EyebrowBadge as={RouterLink} href="/breaking" label="Breaking" prefetch={false} />
+      );
+
+      const el = getByRole('link', { name: 'Breaking' });
+      expect(el).toHaveAttribute('href', '/breaking');
+      expect(el).toHaveAttribute('data-test-prefetch', 'false');
+      expect(el).toHaveClass(styles.clickable);
+    });
+
+    it('does not apply clickable styles on default span', () => {
+      const { container } = renderWithProvider(<EyebrowBadge label="Live" />);
+      expect(container.firstChild).not.toHaveClass(styles.clickable);
+    });
   });
 });

@@ -8,7 +8,7 @@ import {
 } from '@/components/EyebrowBadge/EyebrowBadge.types';
 
 const meta = {
-  title: 'Feedback & Status/EyebrowBadge',
+  title: 'Editorial Content/EyebrowBadge',
   component: EyebrowBadge,
   parameters: {
     layout: 'centered',
@@ -27,6 +27,12 @@ const meta = {
     as: {
       control: 'select',
       options: EYEBROW_BADGE_AS_ELEMENTS,
+      description:
+        'Root element: `span` (default), `div`, or `a`. For Next.js, use `as={NextLink}` with `href` in app code.',
+    },
+    href: {
+      control: 'text',
+      description: 'Navigation target when `as="a"` or `as={NextLink}`.',
     },
     showDot: {
       control: 'boolean',
@@ -85,6 +91,57 @@ export const ExampleShowcaseSmall: Story = {
   parameters: {
     controls: { disable: true },
   },
+};
+
+/** Minimal stand-in for `next/link` in Storybook. In your app: `import NextLink from 'next/link'`. */
+function StoryMockNextLink({
+  href,
+  className,
+  children,
+  prefetch,
+  ...rest
+}: React.ComponentPropsWithoutRef<'a'> & { prefetch?: boolean }) {
+  return (
+    <a
+      href={href}
+      className={className}
+      data-prefetch={prefetch === undefined ? undefined : String(prefetch)}
+      {...rest}
+    >
+      {children}
+    </a>
+  );
+}
+
+export const ExampleAsAnchor: Story = {
+  tags: ['!dev'],
+  args: {
+    as: 'a',
+    href: '/live',
+    label: 'Live',
+    secondaryLabel: 'Updated 12 mins ago',
+    variant: 'live',
+    size: 'large',
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
+export const ExampleAsNextLink: Story = {
+  tags: ['!dev'],
+  args: {
+    href: '/breaking',
+    prefetch: false,
+    label: 'Breaking',
+    secondaryLabel: 'Developing story',
+    variant: 'breaking',
+    size: 'large',
+  },
+  parameters: {
+    controls: { disable: true },
+  },
+  render: (args) => <EyebrowBadge {...args} as={StoryMockNextLink} />,
 };
 
 export const ExampleSponsoredAsDiv: Story = {
