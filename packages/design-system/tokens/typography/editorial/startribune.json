@@ -758,7 +758,7 @@
             "font-family": "{font.family.publico-headline}",
             "font-size": 20,
             "font-style": "italic",
-            "font-weight": 400,
+            "font-weight": 300,
             "line-height": 1.15
           }
         },
@@ -767,7 +767,7 @@
             "font-family": "{font.family.publico-headline}",
             "font-size": 18,
             "font-style": "italic",
-            "font-weight": 400,
+            "font-weight": 300,
             "line-height": 1.15
           }
         }
