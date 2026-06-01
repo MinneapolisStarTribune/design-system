@@ -1,9 +1,15 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ScrollView, Text, View } from 'react-native';
 
 import { ImageGallery } from './ImageGallery.native';
+import type { ImageItem } from '../ImageGallery.types';
 
-const sampleImages = [
+type StoryArgs = React.ComponentProps<typeof ImageGallery> & {
+  showBuyReprint: boolean;
+};
+
+const sampleImages: ImageItem[] = [
   {
     src: 'https://picsum.photos/id/1015/1080/720',
     altText: 'Mountain landscape',
@@ -24,17 +30,27 @@ const sampleImages = [
   },
 ];
 
-const sampleImagesWithReprint = sampleImages.map((image, index) => ({
-  ...image,
-  purchaseLink: {
-    label: 'Buy Reprint',
-    link: `https://www.startribune.com/photos?image=${index + 1}`,
-  },
-}));
+const getStoryImages = (sourceImages: ImageItem[], showBuyReprint: boolean): ImageItem[] =>
+  sourceImages.map((image, index) => ({
+    ...image,
+    purchaseLink: showBuyReprint
+      ? {
+          label: 'Buy Reprint',
+          link: `https://www.startribune.com/photos?image=${index + 1}`,
+        }
+      : undefined,
+  }));
 
-const meta: Meta<typeof ImageGallery> = {
+const meta: Meta<StoryArgs> = {
   title: 'Editorial Content/Article Toolkit/ImageGallery',
   component: ImageGallery,
+  args: {
+    images: sampleImages,
+    variant: 'standard',
+    expandable: false,
+    showBuyReprint: false,
+    'aria-label': 'Image gallery',
+  },
   argTypes: {
     variant: {
       control: 'radio',
@@ -43,7 +59,7 @@ const meta: Meta<typeof ImageGallery> = {
     },
     images: {
       control: 'object',
-      description: 'Array of images with src, altText, caption, credit.',
+      description: 'Array of images including caption, credit, and optional lightbox purchaseLink.',
     },
     'aria-label': {
       control: 'text',
@@ -55,95 +71,93 @@ const meta: Meta<typeof ImageGallery> = {
     },
     expandable: {
       control: 'boolean',
-      description: 'Opens the pressed slide in a full-screen modal.',
+      description: 'Opens the pressed slide in a full-screen lightbox.',
+    },
+    showBuyReprint: {
+      control: 'boolean',
+      description: 'Enables or disables the lightbox Buy Reprint link across the sample images.',
     },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ImageGallery>;
+type Story = StoryObj<StoryArgs>;
 
 export const Configurable: Story = {
   args: {
-    images: sampleImages,
-    variant: 'standard',
-    expandable: false,
-    'aria-label': 'Image gallery',
-  },
-};
-
-export const LightboxWithBuyReprint: Story = {
-  args: {
-    images: sampleImagesWithReprint,
-    variant: 'standard',
     expandable: true,
-    'aria-label': 'Image gallery with expandable lightbox',
   },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Tap the expand control on a slide to open the lightbox. The expanded view renders the shared Caption in its lightbox variant with caption, attribution, and the optional Buy Reprint CTA when a `purchaseLink` is configured (per image, or via the gallery-level `purchaseLink` fallback).',
-      },
-    },
-  },
+  render: ({ showBuyReprint, images: storyImages, ...args }) => (
+    <ImageGallery {...args} images={getStoryImages(storyImages, showBuyReprint)} />
+  ),
 };
 
 export const AllVariants: Story = {
-  args: {
-    images: sampleImages,
-    variant: 'standard',
-    expandable: false,
-    'aria-label': 'Image gallery',
+  parameters: {
+    controls: { disable: true },
   },
 
-  render: (args) => (
-    <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
-      <View>
-        <ImageGallery {...args} variant="standard" aria-label="Standard gallery" />
-      </View>
+  render: ({ showBuyReprint, images: storyImages, ...args }) => {
+    const resolvedImages = getStoryImages(storyImages, showBuyReprint);
 
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
-      <View>
-        <ImageGallery {...args} variant="immersive" aria-label="Immersive gallery" />
-      </View>
+    return (
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
+        <View>
+          <ImageGallery
+            {...args}
+            variant="standard"
+            images={resolvedImages}
+            aria-label="Standard gallery"
+          />
+        </View>
 
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
-      <View>
-        <ImageGallery
-          {...args}
-          images={[sampleImages[0]]}
-          variant="standard"
-          aria-label="Single image gallery"
-        />
-      </View>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
+        <View>
+          <ImageGallery
+            {...args}
+            variant="immersive"
+            images={resolvedImages}
+            aria-label="Immersive gallery"
+          />
+        </View>
 
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Without Caption</Text>
-      <View>
-        <ImageGallery
-          {...args}
-          images={[
-            {
-              src: 'https://picsum.photos/id/1020/1080/720',
-              altText: 'No caption image',
-            },
-          ]}
-          variant="standard"
-          aria-label="Gallery without caption"
-        />
-      </View>
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
+        <View>
+          <ImageGallery
+            {...args}
+            images={[resolvedImages[0]]}
+            variant="standard"
+            aria-label="Single image gallery"
+          />
+        </View>
 
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Many Images (Scroll Test)</Text>
-      <View>
-        <ImageGallery
-          {...args}
-          images={[...sampleImages, ...sampleImages]}
-          variant="immersive"
-          aria-label="Large gallery"
-        />
-      </View>
-    </ScrollView>
-  ),
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Without Caption</Text>
+        <View>
+          <ImageGallery
+            {...args}
+            images={[
+              {
+                src: 'https://picsum.photos/id/1020/1080/720',
+                altText: 'No caption image',
+              },
+            ]}
+            variant="standard"
+            aria-label="Gallery without caption"
+          />
+        </View>
+
+        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Many Images (Scroll Test)</Text>
+        <View>
+          <ImageGallery
+            {...args}
+            images={[...resolvedImages, ...resolvedImages]}
+            variant="immersive"
+            aria-label="Large gallery"
+          />
+        </View>
+      </ScrollView>
+    );
+  },
 };
