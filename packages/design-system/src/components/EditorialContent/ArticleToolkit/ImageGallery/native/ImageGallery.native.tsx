@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   Image,
+  findNodeHandle,
   type ViewStyle,
   type TextStyle,
   type StyleProp,
@@ -115,6 +116,8 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   dataTestId,
   onClose,
 }) => {
+  const closeButtonRef = useRef<View>(null);
+
   if (!image) {
     return null;
   }
@@ -122,8 +125,22 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   const uri = buildImageUri(image.src, image.imgixParams);
   const aspectRatio = (image.width ?? 1080) / (image.height ?? 720);
 
+  /** Move screen-reader focus into the dialog so users land on the close control, not behind it. */
+  const focusCloseButton = () => {
+    const tag = closeButtonRef.current ? findNodeHandle(closeButtonRef.current) : null;
+    if (tag != null) {
+      AccessibilityInfo.setAccessibilityFocus(tag);
+    }
+  };
+
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent
+      onRequestClose={onClose}
+      onShow={focusCloseButton}
+    >
       <View
         style={styles.dialogOverlay}
         testID={`${dataTestId}-dialog`}
@@ -131,6 +148,7 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
         accessibilityLabel="Expanded image view"
       >
         <Pressable
+          ref={closeButtonRef}
           accessibilityRole="button"
           accessibilityLabel="Close expanded image"
           onPress={onClose}
@@ -284,6 +302,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const styles = useNativeStyles(createStyles);
   const scrollRef = useRef<ScrollView>(null);
+  const expandButtonRefs = useRef<Record<number, View | null>>({});
+  const triggerIndexRef = useRef<number | null>(null);
+  const prevExpandedIndexRef = useRef<number | null>(null);
 
   const [dimensions, setDimensions] = useState(() => {
     const { width } = Dimensions.get('window');
@@ -384,6 +405,28 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     setDimensions({ width, height });
   };
 
+  const openExpandedImage = (logicalIndex: number) => {
+    triggerIndexRef.current = logicalIndex;
+    setExpandedIndex(logicalIndex);
+  };
+
+  const closeExpandedImage = () => {
+    setExpandedIndex(null);
+  };
+
+  // Return screen-reader focus to the triggering expand button once the dialog closes.
+  useEffect(() => {
+    if (expandedIndex === null && prevExpandedIndexRef.current !== null) {
+      const triggerIndex = triggerIndexRef.current;
+      const node = triggerIndex === null ? null : expandButtonRefs.current[triggerIndex];
+      const tag = node ? findNodeHandle(node) : null;
+      if (tag != null) {
+        AccessibilityInfo.setAccessibilityFocus(tag);
+      }
+    }
+    prevExpandedIndexRef.current = expandedIndex;
+  }, [expandedIndex]);
+
   /** Moves the expanded (lightbox) view to a logical image index and keeps the carousel in sync. */
   const goToExpandedImage = (nextLogicalIndex: number) => {
     if (nextLogicalIndex < 0 || nextLogicalIndex >= total) {
@@ -466,10 +509,13 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
                     />
                     {expandable ? (
                       <Pressable
+                        ref={(node) => {
+                          expandButtonRefs.current[logicalIndex] = node;
+                        }}
                         accessibilityRole="button"
                         accessibilityLabel={`Expand image ${logicalIndex + 1} of ${total}`}
                         accessibilityHint="Opens expanded image view"
-                        onPress={() => setExpandedIndex(logicalIndex)}
+                        onPress={() => openExpandedImage(logicalIndex)}
                         style={styles.expandButton}
                         testID={`${dataTestId}-expand-button-${logicalIndex}`}
                       >
@@ -534,7 +580,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           onNext={handleExpandedNext}
           styles={styles}
           dataTestId={dataTestId}
-          onClose={() => setExpandedIndex(null)}
+          onClose={closeExpandedImage}
         />
       ) : null}
     </>
