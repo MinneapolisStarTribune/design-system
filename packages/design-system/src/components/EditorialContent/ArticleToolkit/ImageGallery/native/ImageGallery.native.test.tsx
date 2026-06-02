@@ -68,7 +68,7 @@ describe('ImageGallery (native)', () => {
   it('renders caption and credit', () => {
     const { getByText } = render(<ImageGallery images={images} />, { wrapper });
 
-    expect(getByText('Caption one Credit one')).toBeTruthy();
+    expect(getByText('Caption one (Credit one)')).toBeTruthy();
   });
 
   it('renders navigation buttons for multiple images', () => {
