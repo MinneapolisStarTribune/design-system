@@ -10,7 +10,8 @@ describe('InlineVideo Accessibility (native)', () => {
     render(
       <InlineVideo dataTestId="inline-video-a11y">
         <Text>Accessible video player</Text>
-      </InlineVideo>
+      </InlineVideo>,
+      { wrapper }
     );
 
     expect(screen.getByTestId('inline-video-a11y')).toBeOnTheScreen();
@@ -34,7 +35,8 @@ describe('InlineVideo Accessibility (native)', () => {
 
   it('maps aria-label to accessibilityLabel on the root', () => {
     render(
-      <InlineVideo dataTestId="inline-video-a11y" aria-label="Video: General Manager interview" />
+      <InlineVideo dataTestId="inline-video-a11y" aria-label="Video: General Manager interview" />,
+      { wrapper }
     );
 
     const root = screen.getByTestId('inline-video-a11y');
@@ -42,7 +44,7 @@ describe('InlineVideo Accessibility (native)', () => {
   });
 
   it('maps aria-hidden to hide the subtree from the accessibility tree', () => {
-    render(<InlineVideo dataTestId="inline-video-a11y" aria-hidden />);
+    render(<InlineVideo dataTestId="inline-video-a11y" aria-hidden />, { wrapper });
 
     const root = screen.getByTestId('inline-video-a11y', { includeHiddenElements: true });
     expect(root.props.accessibilityElementsHidden).toBe(true);
@@ -50,7 +52,7 @@ describe('InlineVideo Accessibility (native)', () => {
   });
 
   it('uses auto importantForAccessibility when not aria-hidden', () => {
-    render(<InlineVideo dataTestId="inline-video-a11y" />);
+    render(<InlineVideo dataTestId="inline-video-a11y" />, { wrapper });
 
     const root = screen.getByTestId('inline-video-a11y');
     expect(root.props.importantForAccessibility).toBe('auto');
