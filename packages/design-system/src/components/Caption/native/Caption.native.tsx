@@ -35,6 +35,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   totalItems,
   onPrevious,
   onNext,
+  loopNavigation = false,
   analytics: analyticsOverride,
   onPurchaseLinkClick,
   onNavigationClick,
@@ -55,8 +56,8 @@ export const Caption: React.FC<CaptionNativeProps> = ({
 
   const hasPagination = typeof currentIndex === 'number' && typeof totalItems === 'number';
 
-  const canGoPrevious = hasPagination && currentIndex > 1;
-  const canGoNext = hasPagination && currentIndex < totalItems;
+  const canGoPrevious = loopNavigation || (hasPagination && currentIndex > 1);
+  const canGoNext = loopNavigation || (hasPagination && currentIndex < totalItems);
 
   const showPurchaseLink = Boolean(purchaseLink?.link);
 
@@ -115,8 +116,16 @@ export const Caption: React.FC<CaptionNativeProps> = ({
       return null;
     }
 
-    const previousIndex = Math.max((currentIndex ?? 1) - 1, 1);
-    const nextIndex = Math.min((currentIndex ?? 1) + 1, totalItems ?? 1);
+    const previousIndex = loopNavigation
+      ? (currentIndex ?? 1) === 1
+        ? (totalItems ?? 1)
+        : (currentIndex ?? 1) - 1
+      : Math.max((currentIndex ?? 1) - 1, 1);
+    const nextIndex = loopNavigation
+      ? (currentIndex ?? 1) === (totalItems ?? 1)
+        ? 1
+        : (currentIndex ?? 1) + 1
+      : Math.min((currentIndex ?? 1) + 1, totalItems ?? 1);
 
     return (
       <View style={styles.navigation}>
