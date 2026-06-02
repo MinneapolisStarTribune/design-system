@@ -28,8 +28,11 @@ const meta: Meta<InlineImageProps> = {
       description: 'Credit for the inline image',
     },
     purchaseLink: {
-      control: 'text',
-      description: 'Purchase link for the inline image',
+      control: 'object',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
     },
     variant: {
       control: 'radio',
@@ -66,6 +69,10 @@ const defaultArgs: InlineImageProps = {
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'standard',
   expandable: false,
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  },
 };
 
 const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
@@ -97,7 +104,13 @@ export const AllVariants: Story = {
 
       <div>
         <h3 style={{ marginBottom: 8 }}>With Purchase Link</h3>
-        <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+        <InlineImage
+          {...args}
+          purchaseLink={{
+            label: 'Buy Reprint',
+            link: 'https://www.startribune.com/photos',
+          }}
+        />
       </div>
     </div>
   ),

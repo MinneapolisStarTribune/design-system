@@ -66,7 +66,10 @@ describe('InlineImage (native)', () => {
   });
 
   it('renders purchase link and opens URL on press', async () => {
-    const purchaseLink = 'https://www.startribune.com/photos';
+    const purchaseLink = {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    };
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
@@ -83,7 +86,7 @@ describe('InlineImage (native)', () => {
     fireEvent.press(screen.getByTestId(`${dataTestId}-purchase-link`));
 
     await waitFor(() => {
-      expect(openURLSpy).toHaveBeenCalledWith(purchaseLink);
+      expect(openURLSpy).toHaveBeenCalledWith(purchaseLink.link);
     });
   });
 

@@ -46,6 +46,19 @@ const buildImageUri = (src: string, imgixParams?: string): string => {
   return `${src}${src.includes('?') ? '&' : '?'}${imgixParams}`;
 };
 
+const resolvePurchaseLink = (
+  purchaseLink: InlineImageProps['purchaseLink']
+): { label: string; link: string } | undefined => {
+  if (!purchaseLink?.link) {
+    return undefined;
+  }
+
+  return {
+    label: purchaseLink.label ?? 'Buy Reprint',
+    link: purchaseLink.link,
+  };
+};
+
 const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps['variant']>) => {
   const standardMaxWidth = theme.semanticArticleToolkitMaxWidthStandardFullDesktop;
   const immersiveMaxWidth = theme.semanticArticleToolkitMaxWidthImmersiveLargeDesktop;
@@ -158,20 +171,21 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   const captionText = [caption, credit && `(${credit})`].filter(Boolean).join(' ');
   const hasDialogText = Boolean(caption?.trim()) || Boolean(credit?.trim());
   const imageStyle = (style ?? {}) as ImageStyle;
+  const resolvedPurchaseLink = resolvePurchaseLink(purchaseLink);
 
   const openPurchaseLink = async () => {
-    if (!purchaseLink) {
+    if (!resolvedPurchaseLink) {
       return;
     }
 
     try {
-      const canOpenPurchaseLink = await Linking.canOpenURL(purchaseLink);
+      const canOpenPurchaseLink = await Linking.canOpenURL(resolvedPurchaseLink.link);
 
       if (!canOpenPurchaseLink) {
         return;
       }
 
-      await Linking.openURL(purchaseLink);
+      await Linking.openURL(resolvedPurchaseLink.link);
     } catch (error) {
       console.warn('Failed to open purchase link', error);
     }
@@ -215,7 +229,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           <View testID={`${dataTestId}-caption`}>
             <UtilityLabel size="small" weight="regular" style={styles.captionText}>
               {captionText}
-              {purchaseLink ? (
+              {resolvedPurchaseLink ? (
                 <>
                   <Text
                     style={styles.purchaseLinkSeparator}
@@ -227,11 +241,11 @@ export const InlineImage: React.FC<InlineImageProps> = ({
                   <Text
                     style={styles.purchaseLinkText}
                     accessibilityRole="link"
-                    accessibilityLabel="Buy Reprint"
+                    accessibilityLabel={resolvedPurchaseLink.label}
                     onPress={openPurchaseLink}
                     testID={`${dataTestId}-purchase-link`}
                   >
-                    Buy Reprint
+                    {resolvedPurchaseLink.label}
                   </Text>
                 </>
               ) : null}
