@@ -7,13 +7,13 @@ const wrapper = TestWrapperInDesignSystemProvider();
 
 describe('InlineVideo (native)', () => {
   it('renders with the default test id', () => {
-    render(<InlineVideo />);
+    render(<InlineVideo />, { wrapper });
 
     expect(screen.getByTestId('inline-video')).toBeOnTheScreen();
   });
 
   it('renders with a custom test id', () => {
-    render(<InlineVideo dataTestId="custom-inline-video" />);
+    render(<InlineVideo dataTestId="custom-inline-video" />, { wrapper });
 
     expect(screen.getByTestId('custom-inline-video')).toBeOnTheScreen();
   });
@@ -22,7 +22,8 @@ describe('InlineVideo (native)', () => {
     render(
       <InlineVideo dataTestId="inline-video-test">
         <Text>Native video player</Text>
-      </InlineVideo>
+      </InlineVideo>,
+      { wrapper }
     );
 
     expect(screen.getByText('Native video player')).toBeOnTheScreen();
@@ -31,7 +32,7 @@ describe('InlineVideo (native)', () => {
   it('forwards native view styles to the root', () => {
     const style = { marginTop: 16 };
 
-    render(<InlineVideo dataTestId="inline-video-test" style={style} />);
+    render(<InlineVideo dataTestId="inline-video-test" style={style} />, { wrapper });
 
     expect(screen.getByTestId('inline-video-test').props.style).toEqual(style);
   });
