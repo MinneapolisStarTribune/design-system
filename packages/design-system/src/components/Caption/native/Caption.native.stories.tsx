@@ -10,7 +10,7 @@ const meta = {
     layout: 'padded',
   },
   argTypes: {
-    caption: { control: 'text', description: 'Caption text' },
+    caption: { control: 'object', description: 'Caption text' },
     credit: { control: 'text', description: 'Image attribution / credit' },
     variant: {
       control: 'radio',
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 
 const defaultArgs: CaptionNativeProps = {
   caption:
-    'Barb Dentz, an advocate with Tennessee Families for Vaccines, met with her state representative, Sam Whitson, to discuss the state’s declining childhood immunization rates in January.',
+    "Barb Dentz, an advocate with Tennessee Families for Vaccines, met with her state representative, Sam Whitson, to discuss the state's declining childhood immunization rates in January.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'inline',
 };
@@ -48,6 +48,7 @@ export const Configurable: Story = {
     currentIndex: 1,
     totalItems: 5,
   }),
+  render: (args) => <Caption {...args} />,
 };
 
 export const AllVariants: Story = {
