@@ -455,9 +455,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const expandedImage =
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
 
-  const expandedPurchaseLink: CtaLinkProps | undefined =
-    expandedImage?.purchaseLink ??
-    (purchaseLink ? { label: 'Buy Reprint', link: purchaseLink } : undefined);
+  const expandedPurchaseLink = expandedImage?.purchaseLink ?? purchaseLink;
 
   if (!total) return null;
 

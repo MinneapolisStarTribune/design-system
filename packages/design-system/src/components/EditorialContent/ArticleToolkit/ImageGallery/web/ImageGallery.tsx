@@ -70,14 +70,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const total = images.length;
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
-  const dialogPurchaseLink =
-    dialogImage?.purchaseLink ??
-    (purchaseLink
-      ? {
-          label: 'Buy Reprint',
-          link: purchaseLink,
-        }
-      : undefined);
+  const dialogPurchaseLink = dialogImage?.purchaseLink ?? purchaseLink;
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 

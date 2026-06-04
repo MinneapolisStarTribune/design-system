@@ -73,9 +73,12 @@ const meta: Meta<StoryArgs> = {
       control: 'boolean',
       description: 'Opens the pressed slide in a full-screen lightbox.',
     },
-    showBuyReprint: {
-      control: 'boolean',
-      description: 'Enables or disables the lightbox Buy Reprint link across the sample images.',
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
     },
   },
 };

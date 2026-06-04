@@ -184,7 +184,7 @@ describe('ImageGallery (native)', () => {
       <ImageGallery
         images={images}
         expandable
-        purchaseLink="https://www.startribune.com/photos"
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
         dataTestId="gallery"
       />,
       { wrapper }
