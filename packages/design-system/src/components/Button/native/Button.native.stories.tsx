@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
@@ -6,30 +7,20 @@ import {
   BUTTON_VARIANTS,
   ICON_ONLY_BUTTON_SIZES,
   type ButtonColor,
+  type ButtonNativeProps,
   type ButtonSize,
   type ButtonVariant,
   type IconOnlyButtonSize,
 } from '@/components/Button/Button.types';
+import { AvatarIcon, ArrowRightIcon } from '@/icons';
 import { Button } from './Button.native';
 
-function StoryIcon(props: { width?: number; height?: number; color?: string }) {
-  return (
-    <View
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      style={{
-        width: props.width ?? 16,
-        height: props.height ?? 16,
-        borderRadius: 3,
-        backgroundColor: props.color ?? 'rgba(128,128,128,0.9)',
-      }}
-    />
-  );
-}
+/** Story-only arg for toggling demo icon in Configurable (matches web). */
+type ConfigurableArgs = ButtonNativeProps & { showIcon?: boolean };
 
 const meta = {
   title: 'Actions/Button',
-  component: Button,
+  component: Button as ComponentType<ConfigurableArgs>,
   argTypes: {
     color: { control: 'select', options: BUTTON_COLORS },
     variant: { control: 'select', options: BUTTON_VARIANTS },
@@ -37,7 +28,16 @@ const meta = {
     capitalize: { control: 'boolean' },
     isDisabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
-    iconPosition: { control: 'radio', options: ['start', 'end'] },
+    showIcon: {
+      control: 'boolean',
+      description:
+        'Stories only: toggles AvatarIcon. In apps, pass icon={<YourIcon />} (see Button `icon` prop docs).',
+    },
+    iconPosition: {
+      control: 'radio',
+      options: ['start', 'end'],
+      if: { arg: 'showIcon', truthy: true },
+    },
   },
   parameters: {
     docs: {
@@ -47,22 +47,33 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<ConfigurableArgs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Configurable: Story = {
+export const Configurable: StoryObj<ConfigurableArgs> = {
   args: {
-    color: 'neutral',
+    color: 'brand',
     variant: 'filled',
-    size: 'medium',
+    size: 'large',
     capitalize: false,
     isDisabled: false,
     isLoading: false,
+    showIcon: false,
     iconPosition: 'end',
-    children: 'Button',
+    children: 'See More',
     onPress: () => {},
+  },
+  render: (args) => {
+    const { showIcon, iconPosition, ...buttonProps } = args as ConfigurableArgs;
+    return (
+      <Button
+        {...buttonProps}
+        icon={showIcon ? <AvatarIcon /> : undefined}
+        {...(showIcon ? { iconPosition: iconPosition ?? 'end' } : {})}
+      />
+    );
   },
 };
 
@@ -113,10 +124,10 @@ export const AllVariants: Story = {
 
       <Text style={styles.sectionTitle}>Icons</Text>
       <View style={styles.rowWrap}>
-        <Button icon={<StoryIcon />} iconPosition="start" onPress={() => {}}>
+        <Button icon={<AvatarIcon />} iconPosition="start" onPress={() => {}}>
           Leading
         </Button>
-        <Button icon={<StoryIcon />} iconPosition="end" onPress={() => {}}>
+        <Button icon={<ArrowRightIcon />} iconPosition="end" onPress={() => {}}>
           Trailing
         </Button>
       </View>
@@ -127,7 +138,7 @@ export const AllVariants: Story = {
           <Button
             key={size}
             size={size}
-            icon={<StoryIcon />}
+            icon={<AvatarIcon />}
             accessibilityLabel={`${size} icon`}
             onPress={() => {}}
             testID={`icon-only-${size}`}

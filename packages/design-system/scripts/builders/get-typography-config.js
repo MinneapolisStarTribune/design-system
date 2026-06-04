@@ -79,6 +79,8 @@ function getTypographyConfig(brand) {
    * - fontSize (number) → number
    * - lineHeight (number, multiplier) → absolute px when ≤10, else number
    * - fontFamily → variant-specific PostScript name via font data lookup
+   * - fontWeight / fontStyle omitted from output (used only for font file lookup; RN Android
+   *   mis-renders when they are set alongside a named custom font file)
    */
   StyleDictionary.registerTransform({
     name: 'value/mobile-breakpoint',
@@ -116,6 +118,8 @@ function getTypographyConfig(brand) {
           const familyName = val.split(',')[0].trim();
           const lookupKey = `${familyName}|${fontWeight}|${fontStyle}`;
           result[camelKey] = fontVariantMap[lookupKey] || familyName;
+        } else if (camelKey === 'fontWeight' || camelKey === 'fontStyle') {
+          // Keep in source tokens for web CSS and font lookup above; do not emit for RN.
         } else if (camelKey === 'letterSpacing') {
           // Convert CSS letterSpacing (e.g. "0.01em", "-0.02em", "0") to a
           // plain number for React Native. em-based values are resolved
