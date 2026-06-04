@@ -85,29 +85,95 @@ If you see **`Error: osascript -e tell app "System Events" to count processes wh
 
 **Workaround if you prefer not to change Accessibility:** Open the **Simulator** yourself first (**Xcode → Open Developer Tool → Simulator**, then pick a device). Then run `yarn storybook:native`, wait for Metro to start, and press **`i`** to launch the app on the already-open Simulator.
 
+## Where to run commands
+
+Mobile Storybook is a workspace inside the design-system monorepo. **Run install, tokens, builds, and Storybook from the repository root** unless you are targeting a physical device (see below).
+
+| Task | Where | Command |
+| ---- | ----- | ------- |
+| Install dependencies | **Repo root** | `yarn install` |
+| Build mobile tokens | **Repo root** | `yarn tokens` |
+| Build iOS / Android dev client | **Repo root** (recommended) | `yarn build:ios` / `yarn build:android` |
+| Start Metro / open simulator | **Repo root** (recommended) | `yarn storybook:native`, `yarn storybook:ios`, or `yarn storybook:android` |
+| Build on a physical device | **`apps/mobile-storybook/`** | `npx expo run:ios --device` or `npx expo run:android --device` |
+
+Equivalent commands from `apps/mobile-storybook/`: `yarn ios`, `yarn android`, `yarn storybook`, `yarn storybook:ios`, `yarn storybook:android`. They invoke the same Expo scripts as the root shortcuts.
+
+**Do not** run `yarn` or native tooling from `apps/mobile-storybook/ios/` or `apps/mobile-storybook/android/`. Use `yarn build:ios` (root) or `yarn ios` (app folder) so Expo manages CocoaPods and Gradle.
+
+More detail: [apps/mobile-storybook/README.md — Where to run commands](../apps/mobile-storybook/README.md#where-to-run-commands).
+
+### `pod install` failed after an Expo SDK upgrade
+
+If `yarn build:ios` stops with **Something went wrong running `pod install`**, the iOS lockfile is usually stale (e.g. `fast_float` version mismatch between `Podfile.lock` and React Native 0.81).
+
+From `apps/mobile-storybook/ios/`:
+
+```bash
+export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+rm -rf Pods Podfile.lock build
+pod install
+```
+
+Then from the repo root: `yarn build:ios`. See [mobile-storybook troubleshooting](../apps/mobile-storybook/README.md#troubleshooting) for UTF-8 locale errors from CocoaPods.
+
+### Android build after an Expo SDK upgrade
+
+Android does not use CocoaPods. After upgrading to Expo 54, build the dev client from the **repo root**:
+
+```bash
+yarn build:android
+```
+
+This runs `expo run:android` in the mobile-storybook workspace (same pattern as iOS). Prerequisites: [Android setup](#android-setup), an emulator running or a device connected via USB.
+
+If the build fails with Gradle or dependency errors, clean and rebuild:
+
+```bash
+cd apps/mobile-storybook/android
+./gradlew clean
+cd ../../..
+yarn build:android
+```
+
+Daily development: `yarn storybook:android` (Metro + emulator). Rebuild native only after `app.json` or native dependency changes.
+
 ## Running mobile Storybook
 
-Mobile Storybook runs only in a **development build** (via `expo-dev-client`), **not** in Expo Go. Expo Go uses its own bundled runtime and will crash on Storybook dependencies.
+Metro starts in **development build** mode (`--dev-client`). You can run Storybook in two ways:
 
-1. **First time (and after native config changes):** **Build** the dev client: from the **repo root** run `yarn build:ios` (or `yarn build:android`). This compiles the native app and installs it on the simulator/emulator.
-2. **Start Metro** from the **repo root**: `yarn storybook:native` (or `yarn storybook:ios` / `yarn storybook:android`). The scripts use `--dev-client` so Metro connects to the built app, not Expo Go.
-3. **Open the "mobile-storybook" app** on the simulator — the one the build installed, not Expo Go.
+### Development build (recommended)
 
-Code changes (stories, components) are served by Metro and update via Fast Refresh — no need to rebuild unless you change native config or dependencies.
+Best for simulator/emulator and full native support (Reanimated, worklets, all Storybook addons).
 
-From the **repo root**:
+1. **First time (and after native config changes):** From the **repo root**, `yarn build:ios` or `yarn build:android`.
+2. **Start Metro:** `yarn storybook:native`, or `yarn storybook:ios` / `yarn storybook:android`.
+3. Open the **mobile-storybook** app on the simulator (installed in step 1).
 
 ```bash
 yarn install
-yarn build:ios          # first time only
-yarn storybook:native   # daily development
+yarn tokens               # before first run; after token file changes
+yarn build:ios            # first time, and after Expo SDK / native dependency upgrades
+yarn storybook:ios        # daily development
 ```
 
-The dev client app opens automatically and connects to Metro.
+Code changes hot-reload via Fast Refresh. Rebuild native only when `app.json` or native dependencies change.
+
+### Expo Go (physical device, optional)
+
+Useful for a quick test on a real phone without building native code. Works when dependencies match **Expo SDK 54** and Expo Go on the device is up to date. Some stories may not work if they need native modules Expo Go does not include.
+
+1. From the **repo root:** `yarn storybook:native`
+2. In the Metro terminal, press **`s`** (`switch to Expo Go`) until Metro shows **Using Expo Go**
+3. Scan the QR code with the **Expo Go** app (same Wi‑Fi as your Mac)
+
+Press **`s`** again (`switch to development build`) to return to dev-client mode. See [mobile-storybook README — Run locally](../apps/mobile-storybook/README.md#run-locally) for the full comparison table.
 
 ## Viewing on a physical device
 
-Connect your device (USB or same Wi-Fi). From **`apps/mobile-storybook/`** run `npx expo run:ios --device` (or `run:android --device`). Phone and Mac must be on the same network so the device can load the bundle from Metro.
+**Expo Go:** `yarn storybook:native` → press **`s`** for Expo Go mode → scan QR (Expo Go app, SDK 54, same Wi‑Fi).
+
+**Dev client:** From **`apps/mobile-storybook/`**, run `npx expo run:ios --device` or `run:android --device` once to install the app. Then `yarn storybook:native` from the repo root (stay in development build mode; do not press **`s`** to switch to Expo Go). Phone and Mac must be on the same network.
 
 ## Mirroring your phone to your Mac (AirPlay / QuickTime)
 
