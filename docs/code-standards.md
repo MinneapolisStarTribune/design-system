@@ -293,6 +293,8 @@ Use only these two native style hooks:
 - Vitest excludes `*.native.test.tsx` and `*.native.a11y.test.tsx` files
 - Jest matches native test files by the `*.native.*` naming convention
 
+See [Testing: Web vs Native](./testing-web-and-native.md) for why we use Jest on native and Vitest + jsdom on web (and how `react-test-renderer` fits in).
+
 ### Variant Values Must Come From Typed Sources
 
 - Do not hardcode variant arrays (for example, `['small', 'large']`) inside tests/stories.

@@ -1,11 +1,18 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { ActivityIndicator, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import { AvatarIcon, ArrowRightIcon } from '@/icons/index.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import {
   BUTTON_COLORS,
   BUTTON_SIZES,
   BUTTON_VARIANTS,
   ICON_ONLY_BUTTON_SIZES,
+  type ButtonColor,
+  type ButtonSize,
+  type ButtonVariant,
+  type IconOnlyButtonSize,
 } from '../Button.types';
 import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 import { Button } from './Button.native';
@@ -102,7 +109,7 @@ describe('Button (native)', () => {
     ).toThrow(/x-small size is only valid for icon-only/);
   });
 
-  it.each(ICON_ONLY_BUTTON_SIZES)('renders icon-only at %s size', (size) => {
+  it.each(ICON_ONLY_BUTTON_SIZES)('renders icon-only at %s size', (size: IconOnlyButtonSize) => {
     render(
       <Button size={size} icon={<MockIcon />} accessibilityLabel="Close" onPress={() => {}} />,
       { wrapper }
@@ -111,7 +118,7 @@ describe('Button (native)', () => {
     expect(screen.getByTestId('mock-icon', { includeHiddenElements: true })).toBeOnTheScreen();
   });
 
-  it.each(BUTTON_COLORS)('renders filled %s color', (color) => {
+  it.each(BUTTON_COLORS)('renders filled %s color', (color: ButtonColor) => {
     render(
       <Button color={color} variant="filled" onPress={() => {}}>
         {color}
@@ -121,7 +128,7 @@ describe('Button (native)', () => {
     expect(screen.getByText(color)).toBeOnTheScreen();
   });
 
-  it.each(BUTTON_VARIANTS)('renders %s variant (neutral)', (variant) => {
+  it.each(BUTTON_VARIANTS)('renders %s variant (neutral)', (variant: ButtonVariant) => {
     render(
       <Button variant={variant} onPress={() => {}}>
         {variant}
@@ -131,7 +138,7 @@ describe('Button (native)', () => {
     expect(screen.getByText(variant)).toBeOnTheScreen();
   });
 
-  it.each(BUTTON_SIZES)('renders %s size', (size) => {
+  it.each(BUTTON_SIZES)('renders %s size', (size: ButtonSize) => {
     render(
       <Button size={size} onPress={() => {}}>
         {size}
@@ -161,6 +168,118 @@ describe('Button (native)', () => {
     );
     expect(screen.getByTestId('mock-icon', { includeHiddenElements: true })).toBeOnTheScreen();
     expect(screen.getByText('Next')).toBeOnTheScreen();
+  });
+
+  describe('design-system icons (SvgXml)', () => {
+    it('renders AvatarIcon for icon-only buttons with scaled dimensions', () => {
+      render(
+        <Button
+          size="medium"
+          icon={<AvatarIcon testID="avatar-icon" />}
+          accessibilityLabel="Profile"
+          onPress={() => {}}
+        />,
+        { wrapper }
+      );
+
+      const icon = screen.getByTestId('avatar-icon', { includeHiddenElements: true });
+      expect(icon).toBeOnTheScreen();
+      expect(icon.props.width).toBe(24);
+      expect(icon.props.height).toBe(24);
+    });
+
+    it('renders AvatarIcon at start for text buttons (story: Leading)', () => {
+      render(
+        <Button icon={<AvatarIcon testID="leading-icon" />} iconPosition="start" onPress={() => {}}>
+          Leading
+        </Button>,
+        { wrapper }
+      );
+
+      const icon = screen.getByTestId('leading-icon', { includeHiddenElements: true });
+      expect(icon).toBeOnTheScreen();
+      expect(icon.props.width).toBe(16);
+      expect(icon.props.height).toBe(16);
+      expect(screen.getByText('Leading')).toBeOnTheScreen();
+    });
+
+    it('renders ArrowRightIcon at end for text buttons (story: Trailing)', () => {
+      render(
+        <Button
+          icon={<ArrowRightIcon testID="trailing-icon" />}
+          iconPosition="end"
+          onPress={() => {}}
+        >
+          Trailing
+        </Button>,
+        { wrapper }
+      );
+
+      const icon = screen.getByTestId('trailing-icon', { includeHiddenElements: true });
+      expect(icon).toBeOnTheScreen();
+      expect(icon.props.width).toBe(16);
+      expect(icon.props.height).toBe(16);
+      expect(screen.getByText('Trailing')).toBeOnTheScreen();
+    });
+
+    it('applies button foreground color into the icon SVG (currentColor replacement)', () => {
+      const theme = {
+        ...nativeTokenFixtures.startribune.light.theme,
+        ...nativeTokenFixtures.startribune.light.typography,
+      };
+      const { color } = getNativeButtonSurface(theme, 'brand', 'filled', false, 'light');
+
+      render(
+        <Button
+          color="brand"
+          variant="filled"
+          icon={<AvatarIcon testID="colored-icon" />}
+          onPress={() => {}}
+        >
+          Brand
+        </Button>,
+        { wrapper }
+      );
+
+      const icon = screen.getByTestId('colored-icon', { includeHiddenElements: true });
+      expect(typeof icon.props.xml).toBe('string');
+      expect(icon.props.xml).toContain(color);
+      expect(icon.props.xml).not.toMatch(/currentcolor/i);
+    });
+
+    it('hides icon while loading and shows ActivityIndicator', () => {
+      const { UNSAFE_getByType } = render(
+        <Button icon={<AvatarIcon testID="loading-icon" />} isLoading onPress={() => {}}>
+          Save
+        </Button>,
+        { wrapper }
+      );
+
+      expect(
+        screen.queryByTestId('loading-icon', { includeHiddenElements: true })
+      ).not.toBeOnTheScreen();
+      expect(UNSAFE_getByType(ActivityIndicator)).toBeTruthy();
+    });
+
+    it.each(ICON_ONLY_BUTTON_SIZES)(
+      'renders SvgXml for icon-only %s',
+      (size: IconOnlyButtonSize) => {
+        const { UNSAFE_getAllByType } = render(
+          <Button
+            size={size}
+            icon={<AvatarIcon testID={`icon-only-${size}`} />}
+            accessibilityLabel={`${size} icon`}
+            onPress={() => {}}
+          />,
+          { wrapper }
+        );
+
+        expect(
+          screen.getByTestId(`icon-only-${size}`, { includeHiddenElements: true })
+        ).toBeOnTheScreen();
+        expect(UNSAFE_getAllByType(SvgXml).length).toBeGreaterThan(0);
+      }
+    );
   });
 
   it('uses white foreground for ghost neutral button on dark surface', () => {
