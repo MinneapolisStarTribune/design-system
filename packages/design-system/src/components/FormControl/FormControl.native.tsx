@@ -4,9 +4,7 @@ import {
   TextInput as RNTextInput,
   type TextInput as RNTextInputRef,
   View,
-  type NativeSyntheticEvent,
   type StyleProp,
-  type TextInputFocusEventData,
   type TextInputProps as RNTextInputProps,
   type TextStyle,
   type ViewStyle,
@@ -192,12 +190,12 @@ const FormControlTextInput = React.forwardRef<RNTextInputRef, FormControlTextInp
       [fieldSurfaceTokens, focused, hasError, hasSuccess, isDark, isDisabled, isFilled]
     );
 
-    const handleFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    const handleFocus = (e: Parameters<NonNullable<RNTextInputProps['onFocus']>>[0]) => {
       setFocused(true);
       onFocus?.(e as Parameters<RNTextInputFocusHandler>[0]);
     };
 
-    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    const handleBlur = (e: Parameters<NonNullable<RNTextInputProps['onBlur']>>[0]) => {
       setFocused(false);
       onBlur?.(e as Parameters<RNTextInputBlurHandler>[0]);
     };
