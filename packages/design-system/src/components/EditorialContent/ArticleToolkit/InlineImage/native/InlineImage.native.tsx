@@ -96,8 +96,8 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
     },
     expandButton: {
       position: 'absolute',
-      right: theme.spacing8,
-      bottom: theme.spacing8,
+      right: theme.spacing16,
+      top: theme.spacing16,
       width: 40,
       height: 40,
       borderRadius: 20,
