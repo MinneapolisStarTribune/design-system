@@ -44,6 +44,7 @@ export type IconColor = keyof typeof ICON_COLOR_TOKENS;
 export type IconWrapperProps = Omit<SVGProps<SVGSVGElement>, 'color'> & {
   size?: IconSize;
   color?: IconColor;
+  testID?: string;
 };
 
 export type IconComponent = React.ComponentType<SVGProps<SVGSVGElement> & { size?: IconSize }>;
