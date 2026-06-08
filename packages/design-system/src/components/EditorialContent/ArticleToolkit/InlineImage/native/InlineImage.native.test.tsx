@@ -107,6 +107,31 @@ describe('InlineImage (native)', () => {
     expect(screen.queryByTestId(`${dataTestId}-dialog`)).toBeNull();
   });
 
+  it('renders purchase link in the expanded dialog when expandable', () => {
+    const purchaseLink = {
+      label: 'Buy Reprint',
+      link: 'https://www.startribune.com/photos',
+    };
+
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Caption in dialog"
+        purchaseLink={purchaseLink}
+        expandable
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId(`${dataTestId}-expand-button`));
+
+    const dialog = screen.getByTestId(`${dataTestId}-dialog`);
+    expect(
+      within(dialog).getByTestId(`${dataTestId}-dialog-caption-purchase-link`)
+    ).toBeOnTheScreen();
+  });
+
   it('uses the requested objectFit as image resizeMode', () => {
     render(<InlineImage dataTestId={dataTestId} image={image} objectFit="contain" />, { wrapper });
 
