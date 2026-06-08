@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react-native';
-import { Linking } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineImage } from './InlineImage.native';
 
@@ -83,7 +83,7 @@ describe('InlineImage (native)', () => {
       { wrapper }
     );
 
-    fireEvent.press(screen.getByTestId(`${dataTestId}-purchase-link`));
+    fireEvent.press(screen.getByTestId(`${dataTestId}-caption-purchase-link`));
 
     await waitFor(() => {
       expect(openURLSpy).toHaveBeenCalledWith(purchaseLink.link);
@@ -130,6 +130,22 @@ describe('InlineImage (native)', () => {
     expect(
       within(dialog).getByTestId(`${dataTestId}-dialog-caption-purchase-link`)
     ).toBeOnTheScreen();
+  });
+
+  it('uses a wider max width for immersive than standard', () => {
+    const standardRender = render(
+      <InlineImage dataTestId="standard" image={image} variant="standard" />,
+      { wrapper }
+    );
+    const immersiveRender = render(
+      <InlineImage dataTestId="immersive" image={image} variant="immersive" />,
+      { wrapper }
+    );
+
+    const standardStyle = StyleSheet.flatten(standardRender.getByTestId('standard').props.style);
+    const immersiveStyle = StyleSheet.flatten(immersiveRender.getByTestId('immersive').props.style);
+
+    expect(immersiveStyle.maxWidth).toBeGreaterThan(standardStyle.maxWidth as number);
   });
 
   it('uses the requested objectFit as image resizeMode', () => {

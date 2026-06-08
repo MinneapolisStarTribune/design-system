@@ -81,10 +81,28 @@ describe('ImageGallery', () => {
     expect(getAllByRole('button')).toHaveLength(2);
   });
 
-  it('does not render buy reprint in the inline gallery caption', () => {
-    const { queryByTestId } = renderWithProvider(<ImageGallery images={images} />);
+  it('renders buy reprint in the inline gallery caption for the active image', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(queryByTestId('image-gallery-caption-purchase-link')).not.toBeInTheDocument();
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
+  it('falls back to the gallery-level purchaseLink in the inline caption', () => {
+    const imagesWithoutPurchase = images.map(({ purchaseLink: _purchaseLink, ...image }) => image);
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={imagesWithoutPurchase}
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
   it('renders controls when multiple images', () => {

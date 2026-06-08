@@ -62,8 +62,7 @@ const meta: Meta<StoryArgs> = {
     },
     images: {
       control: 'object',
-      description:
-        'Array of image items including caption, credit, and optional lightbox purchaseLink',
+      description: 'Array of image items including caption, credit, and optional purchaseLink',
     },
     ImageComponent: {
       control: false,
@@ -75,7 +74,7 @@ const meta: Meta<StoryArgs> = {
     },
     showBuyReprint: {
       control: 'boolean',
-      description: 'Enables or disables lightbox Buy Reprint links across the sample images',
+      description: 'Enables or disables Buy Reprint links across the sample images',
     },
   },
 };

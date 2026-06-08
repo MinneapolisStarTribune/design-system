@@ -45,7 +45,7 @@ const meta = {
     },
     images: {
       control: 'object',
-      description: 'Array of images including caption, credit, and optional lightbox purchaseLink.',
+      description: 'Array of images including caption, credit, and optional purchaseLink.',
     },
     'aria-label': {
       control: 'text',

@@ -9,7 +9,7 @@ export interface ImageItem {
   credit?: string;
   height?: number;
   imgixParams?: string;
-  /** Optional Buy Reprint CTA shown only in the expanded lightbox view. */
+  /** Optional Buy Reprint CTA shown in the carousel caption and expanded lightbox view. */
   purchaseLink?: CtaLinkProps;
   src: string;
   width?: number;

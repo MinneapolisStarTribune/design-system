@@ -159,6 +159,33 @@ describe('ImageGallery (native)', () => {
     expect(screen.queryByTestId('gallery-dialog')).toBeNull();
   });
 
+  it('renders the Buy Reprint CTA in the carousel from a per-image purchaseLink', () => {
+    const imagesWithPurchase = [
+      {
+        ...images[0],
+        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
+      },
+      images[1],
+    ];
+
+    render(<ImageGallery images={imagesWithPurchase} dataTestId="gallery" />, { wrapper });
+
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('falls back to the gallery-level purchaseLink in the carousel caption', () => {
+    render(
+      <ImageGallery
+        images={images}
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+  });
+
   it('renders the Buy Reprint CTA in the expanded dialog from a per-image purchaseLink', () => {
     const imagesWithPurchase = [
       {

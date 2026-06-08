@@ -1,18 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Image,
-  Linking,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ImageStyle,
-} from 'react-native';
+import { Image, Modal, Pressable, StyleSheet, View, type ImageStyle } from 'react-native';
 import { CloseIcon, ExpandIcon } from '@/icons';
 import { Caption } from '@/components/Caption/native/Caption.native';
-import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 import type { InlineImageProps } from '../InlineImage.types';
 
 const DEFAULT_TEST_ID = 'inline-image';
@@ -47,19 +38,6 @@ const buildImageUri = (src: string, imgixParams?: string): string => {
   return `${src}${src.includes('?') ? '&' : '?'}${imgixParams}`;
 };
 
-const resolvePurchaseLink = (
-  purchaseLink: InlineImageProps['purchaseLink']
-): { label: string; link: string } | undefined => {
-  if (!purchaseLink?.link) {
-    return undefined;
-  }
-
-  return {
-    label: purchaseLink.label ?? 'Buy Reprint',
-    link: purchaseLink.link,
-  };
-};
-
 const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps['variant']>) => {
   const standardMaxWidth = theme.semanticArticleToolkitMaxWidthStandardFullDesktop;
   const immersiveMaxWidth = theme.semanticArticleToolkitMaxWidthImmersiveLargeDesktop;
@@ -83,17 +61,6 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
     image: {
       width: '100%',
       height: '100%',
-    },
-    captionText: {
-      color: theme.colorTextOnLightSecondary,
-    },
-    purchaseLinkSeparator: {
-      marginHorizontal: theme.spacing4,
-    },
-    purchaseLinkText: {
-      color: theme.colorLinkTextDefault,
-      textDecorationLine: 'underline',
-      textDecorationColor: theme.colorLinkUnderlineDefault,
     },
     expandButton: {
       position: 'absolute',
@@ -157,29 +124,10 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const styles = useNativeStyles((theme) => createStyles(theme, variant));
   const imageUri = useMemo(() => buildImageUri(image.src, imgixParams), [image.src, imgixParams]);
-  const captionText = [caption, credit && `(${credit})`].filter(Boolean).join(' ');
   const imageStyle = (style ?? {}) as ImageStyle;
   const resolvedPurchaseLink = resolvePurchaseLink(purchaseLink);
   const hasDialogCaptionContent =
     Boolean(caption?.trim()) || Boolean(credit?.trim()) || Boolean(resolvedPurchaseLink);
-
-  const openPurchaseLink = async () => {
-    if (!resolvedPurchaseLink) {
-      return;
-    }
-
-    try {
-      const canOpenPurchaseLink = await Linking.canOpenURL(resolvedPurchaseLink.link);
-
-      if (!canOpenPurchaseLink) {
-        return;
-      }
-
-      await Linking.openURL(resolvedPurchaseLink.link);
-    } catch (error) {
-      console.warn('Failed to open purchase link', error);
-    }
-  };
 
   return (
     <>
@@ -215,33 +163,13 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           ) : null}
         </View>
 
-        {captionText ? (
-          <View testID={`${dataTestId}-caption`}>
-            <UtilityLabel size="small" weight="regular" style={styles.captionText}>
-              {captionText}
-              {resolvedPurchaseLink ? (
-                <>
-                  <Text
-                    style={styles.purchaseLinkSeparator}
-                    accessibilityElementsHidden
-                    importantForAccessibility="no"
-                  >
-                    •
-                  </Text>
-                  <Text
-                    style={styles.purchaseLinkText}
-                    accessibilityRole="link"
-                    accessibilityLabel={resolvedPurchaseLink.label}
-                    onPress={openPurchaseLink}
-                    testID={`${dataTestId}-purchase-link`}
-                  >
-                    {resolvedPurchaseLink.label}
-                  </Text>
-                </>
-              ) : null}
-            </UtilityLabel>
-          </View>
-        ) : null}
+        <Caption
+          caption={caption}
+          credit={credit}
+          purchaseLink={resolvedPurchaseLink}
+          variant="inline"
+          dataTestId={`${dataTestId}-caption`}
+        />
       </View>
 
       <Modal
@@ -280,7 +208,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
             <Caption
               caption={caption}
               credit={credit}
-              purchaseLink={purchaseLink}
+              purchaseLink={resolvedPurchaseLink}
               variant="lightbox"
               style={styles.dialogCaption}
               dataTestId={`${dataTestId}-dialog-caption`}

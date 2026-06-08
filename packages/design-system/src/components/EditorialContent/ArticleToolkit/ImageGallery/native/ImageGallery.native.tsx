@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   Image,
+  Linking,
   findNodeHandle,
   type ViewStyle,
   type TextStyle,
@@ -38,6 +39,7 @@ import {
   ImageProps as NativeImageProps,
 } from '@/components/Image/native/Image.native';
 import type { CtaLinkProps } from '@/types';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
@@ -265,6 +267,14 @@ function createStyles(theme: NativeTheme) {
     } as ViewStyle,
     captionContainer: { flex: 1 } as ViewStyle,
     caption: { color: theme.colorTextOnLightSecondary } as TextStyle,
+    purchaseLinkSeparator: {
+      marginHorizontal: theme.spacing4,
+    } as TextStyle,
+    purchaseLinkText: {
+      color: theme.colorLinkTextDefault,
+      textDecorationLine: 'underline',
+      textDecorationColor: theme.colorLinkUnderlineDefault,
+    } as TextStyle,
     controls: {
       flexDirection: 'row',
       gap: theme.spacing4,
@@ -455,7 +465,27 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const expandedImage =
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
 
-  const expandedPurchaseLink = expandedImage?.purchaseLink ?? purchaseLink;
+  const activePurchaseLink = resolvePurchaseLink(currentImage?.purchaseLink ?? purchaseLink);
+  const expandedPurchaseLink = resolvePurchaseLink(expandedImage?.purchaseLink ?? purchaseLink);
+  const hasCarouselCaption = Boolean(
+    currentImage?.caption || currentImage?.credit || activePurchaseLink
+  );
+
+  const openActivePurchaseLink = async () => {
+    if (!activePurchaseLink?.link) {
+      return;
+    }
+
+    try {
+      const canOpen = await Linking.canOpenURL(activePurchaseLink.link);
+      if (!canOpen) {
+        return;
+      }
+      await Linking.openURL(activePurchaseLink.link);
+    } catch (error) {
+      console.warn('Failed to open purchase link', error);
+    }
+  };
 
   if (!total) return null;
 
@@ -536,35 +566,59 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           )}
         </View>
 
-        <View style={styles.bottomSection}>
-          <View style={styles.captionContainer}>
-            {(currentImage?.caption || currentImage?.credit) && (
-              <Text style={[styles.caption, captionStyle]}>
-                {currentImage.caption}
-                {currentImage.credit ? ` ${currentImage.credit}` : ''}
-              </Text>
+        {(hasCarouselCaption || total > 1) && (
+          <View style={styles.bottomSection}>
+            <View style={styles.captionContainer}>
+              {hasCarouselCaption && (
+                <Text style={[styles.caption, captionStyle]} testID="image-gallery-caption">
+                  {currentImage?.caption}
+                  {currentImage?.credit ? ` ${currentImage.credit}` : ''}
+                  {activePurchaseLink ? (
+                    <>
+                      {(currentImage?.caption || currentImage?.credit) && (
+                        <Text
+                          style={styles.purchaseLinkSeparator}
+                          accessibilityElementsHidden
+                          importantForAccessibility="no"
+                        >
+                          •
+                        </Text>
+                      )}
+                      <Text
+                        style={styles.purchaseLinkText}
+                        accessibilityRole="link"
+                        accessibilityLabel={activePurchaseLink.label}
+                        onPress={openActivePurchaseLink}
+                        testID="image-gallery-caption-purchase-link"
+                      >
+                        {activePurchaseLink.label}
+                      </Text>
+                    </>
+                  ) : null}
+                </Text>
+              )}
+            </View>
+
+            {total > 1 && (
+              <View style={[styles.controls, controlsStyle]}>
+                <Button
+                  variant="ghost"
+                  size={buttonSize}
+                  icon={<ChevronLeftIcon />}
+                  onPress={handlePrev}
+                  style={styles.navButton}
+                />
+                <Button
+                  variant="ghost"
+                  size={buttonSize}
+                  icon={<ChevronRightIcon />}
+                  onPress={handleNext}
+                  style={styles.navButton}
+                />
+              </View>
             )}
           </View>
-
-          {total > 1 && (
-            <View style={[styles.controls, controlsStyle]}>
-              <Button
-                variant="ghost"
-                size={buttonSize}
-                icon={<ChevronLeftIcon />}
-                onPress={handlePrev}
-                style={styles.navButton}
-              />
-              <Button
-                variant="ghost"
-                size={buttonSize}
-                icon={<ChevronRightIcon />}
-                onPress={handleNext}
-                style={styles.navButton}
-              />
-            </View>
-          )}
-        </View>
+        )}
       </View>
 
       {expandable ? (
