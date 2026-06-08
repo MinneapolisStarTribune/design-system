@@ -20,7 +20,61 @@ describe('Caption', () => {
     );
   });
 
-  it('renders Buy Reprint only when purchaseLink.link is configured', () => {
+  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.label is empty', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: '',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is missing', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: 'Buy Reprint',
+        }}
+      />
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is empty', () => {
+    renderWithProvider(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: '',
+        }}
+      />
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+  });
+
+  it('renders Buy Reprint only when purchaseLink.label and link are configured', () => {
     renderWithProvider(
       <Caption
         caption="A scenic mountain view."
@@ -146,6 +200,7 @@ describe('Caption', () => {
       <Caption
         caption="A scenic mountain view."
         purchaseLink={{
+          label: 'Buy Reprint',
           link: 'https://www.startribune.com/photos',
         }}
         onPurchaseLinkClick={onPurchaseLinkClick}

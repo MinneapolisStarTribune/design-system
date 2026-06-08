@@ -7,19 +7,7 @@ import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
 import { InlineImageContent } from './InlineImageContent';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
-
-const resolvePurchaseLink = (
-  purchaseLink: InlineImageProps['purchaseLink']
-): { label: string; link: string } | undefined => {
-  if (!purchaseLink?.link) {
-    return undefined;
-  }
-
-  return {
-    label: purchaseLink.label ?? 'Buy Reprint',
-    link: purchaseLink.link,
-  };
-};
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,

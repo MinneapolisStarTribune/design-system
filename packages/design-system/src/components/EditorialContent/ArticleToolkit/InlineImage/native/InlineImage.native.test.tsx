@@ -65,6 +65,38 @@ describe('InlineImage (native)', () => {
     expect(screen.queryByTestId(`${dataTestId}-caption`)).toBeNull();
   });
 
+  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is missing', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: 'Buy Reprint',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
+  });
+
   it('renders purchase link and opens URL on press', async () => {
     const purchaseLink = {
       label: 'Buy Reprint',

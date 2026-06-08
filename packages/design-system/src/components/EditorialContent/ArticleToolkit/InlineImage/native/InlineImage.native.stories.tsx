@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage.native';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const meta = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -79,10 +80,19 @@ const defaultArgs: InlineImageProps = {
 const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
   ...defaultArgs,
   ...overrides,
+  purchaseLink:
+    'purchaseLink' in overrides
+      ? overrides.purchaseLink
+        ? { ...overrides.purchaseLink }
+        : undefined
+      : { ...defaultArgs.purchaseLink! },
 });
 
 export const Configurable: Story = {
   args: storyArgs(),
+  render: ({ purchaseLink, ...args }) => (
+    <InlineImage {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
+  ),
 };
 
 export const AllVariants: Story = {

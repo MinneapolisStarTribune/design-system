@@ -6,22 +6,21 @@ export type ResolvedPurchaseLink = {
 };
 
 export const hasPurchaseLink = (purchaseLink?: CtaLinkProps): boolean => {
-  return Boolean(purchaseLink?.link?.trim());
+  return Boolean(purchaseLink?.label?.trim() && purchaseLink?.link?.trim());
 };
 
 export const resolvePurchaseLink = (
   purchaseLink?: CtaLinkProps
 ): ResolvedPurchaseLink | undefined => {
   const link = purchaseLink?.link?.trim();
+  const label = purchaseLink?.label?.trim();
 
-  if (!link) {
+  if (!link || !label) {
     return undefined;
   }
 
-  const label = purchaseLink?.label?.trim();
-
   return {
-    label: label || 'Buy Reprint',
+    label,
     link,
   };
 };

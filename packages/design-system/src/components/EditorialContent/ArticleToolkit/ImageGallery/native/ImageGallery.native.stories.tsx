@@ -4,6 +4,7 @@ import { ScrollView, Text, View } from 'react-native';
 import type { ImageProps as NativeImageProps } from '@/components/Image/native/Image.native';
 import type { ImageGalleryNativeProps, ImageItem } from '../ImageGallery.types';
 import { ImageGallery } from './ImageGallery.native';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const sampleImages: ImageItem[] = [
   {
@@ -89,10 +90,19 @@ const storyArgs = (
 ): ImageGalleryNativeProps<NativeImageProps> => ({
   ...defaultArgs,
   ...overrides,
+  purchaseLink:
+    'purchaseLink' in overrides
+      ? overrides.purchaseLink
+        ? { ...overrides.purchaseLink }
+        : undefined
+      : { ...defaultArgs.purchaseLink! },
 });
 
 export const Configurable: Story = {
-  args: storyArgs({ expandable: true }),
+  args: storyArgs(),
+  render: ({ purchaseLink, ...args }) => (
+    <ImageGallery {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
+  ),
 };
 
 export const AllVariants: Story = {

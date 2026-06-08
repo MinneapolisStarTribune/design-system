@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const meta: Meta<InlineImageProps> = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -82,6 +83,9 @@ const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps 
 
 export const Configurable: Story = {
   args: storyArgs(),
+  render: ({ purchaseLink, ...args }) => (
+    <InlineImage {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
+  ),
 };
 
 export const AllVariants: Story = {
