@@ -159,8 +159,6 @@
   display: block;
   box-sizing: border-box;
   padding: 0; /* Reset browser defaults - spacing comes from wrapper padding + gap */
-  font-family: inherit;
-  font-size: inherit;
   line-height: 1.25; /* Tighter line-height for better vertical alignment with icons */
   color: var(--color-text-on-light-primary);
   background: transparent;
