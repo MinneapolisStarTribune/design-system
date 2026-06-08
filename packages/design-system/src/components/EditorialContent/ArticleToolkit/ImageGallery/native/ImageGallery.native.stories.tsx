@@ -1,13 +1,9 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ScrollView, Text, View } from 'react-native';
 
+import type { ImageProps as NativeImageProps } from '@/components/Image/native/Image.native';
+import type { ImageGalleryNativeProps, ImageItem } from '../ImageGallery.types';
 import { ImageGallery } from './ImageGallery.native';
-import type { ImageItem } from '../ImageGallery.types';
-
-type StoryArgs = React.ComponentProps<typeof ImageGallery> & {
-  showBuyReprint: boolean;
-};
 
 const sampleImages: ImageItem[] = [
   {
@@ -30,26 +26,16 @@ const sampleImages: ImageItem[] = [
   },
 ];
 
-const getStoryImages = (sourceImages: ImageItem[], showBuyReprint: boolean): ImageItem[] =>
-  sourceImages.map((image, index) => ({
-    ...image,
-    purchaseLink: showBuyReprint
-      ? {
-          label: 'Buy Reprint',
-          link: `https://www.startribune.com/photos?image=${index + 1}`,
-        }
-      : undefined,
-  }));
-
-const meta: Meta<StoryArgs> = {
+const meta = {
   title: 'Editorial Content/Article Toolkit/ImageGallery',
   component: ImageGallery,
-  args: {
-    images: sampleImages,
-    variant: 'standard',
-    expandable: false,
-    showBuyReprint: false,
-    'aria-label': 'Image gallery',
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        type: 'dynamic',
+      },
+    },
   },
   argTypes: {
     variant: {
@@ -81,86 +67,108 @@ const meta: Meta<StoryArgs> = {
       },
     },
   },
-};
+} satisfies Meta<typeof ImageGallery>;
 
 export default meta;
 
-type Story = StoryObj<StoryArgs>;
+type Story = StoryObj<typeof meta>;
+
+const defaultArgs: ImageGalleryNativeProps<NativeImageProps> = {
+  images: sampleImages,
+  variant: 'standard',
+  expandable: false,
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  },
+  'aria-label': 'Image gallery',
+};
+
+const storyArgs = (
+  overrides: Partial<ImageGalleryNativeProps<NativeImageProps>> = {}
+): ImageGalleryNativeProps<NativeImageProps> => ({
+  ...defaultArgs,
+  ...overrides,
+});
 
 export const Configurable: Story = {
-  args: {
-    expandable: true,
-  },
-  render: ({ showBuyReprint, images: storyImages, ...args }) => (
-    <ImageGallery {...args} images={getStoryImages(storyImages, showBuyReprint)} />
-  ),
+  args: storyArgs({ expandable: true }),
 };
 
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
   },
+  args: storyArgs(),
+  render: (args) => (
+    <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          variant="standard"
+          images={args.images}
+          aria-label="Standard gallery"
+        />
+      </View>
 
-  render: ({ showBuyReprint, images: storyImages, ...args }) => {
-    const resolvedImages = getStoryImages(storyImages, showBuyReprint);
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          variant="immersive"
+          images={args.images}
+          aria-label="Immersive gallery"
+        />
+      </View>
 
-    return (
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
-        <View>
-          <ImageGallery
-            {...args}
-            variant="standard"
-            images={resolvedImages}
-            aria-label="Standard gallery"
-          />
-        </View>
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Expandable With Purchase Link</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          expandable
+          purchaseLink={{
+            label: 'Buy Reprint',
+            link: 'https://www.startribune.com/photos',
+          }}
+          aria-label="Expandable gallery with purchase link"
+        />
+      </View>
 
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
-        <View>
-          <ImageGallery
-            {...args}
-            variant="immersive"
-            images={resolvedImages}
-            aria-label="Immersive gallery"
-          />
-        </View>
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          images={[args.images[0]]}
+          variant="standard"
+          aria-label="Single image gallery"
+        />
+      </View>
 
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
-        <View>
-          <ImageGallery
-            {...args}
-            images={[resolvedImages[0]]}
-            variant="standard"
-            aria-label="Single image gallery"
-          />
-        </View>
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Without Caption</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          images={[
+            {
+              src: 'https://picsum.photos/id/1020/1080/720',
+              altText: 'No caption image',
+            },
+          ]}
+          variant="standard"
+          aria-label="Gallery without caption"
+        />
+      </View>
 
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Without Caption</Text>
-        <View>
-          <ImageGallery
-            {...args}
-            images={[
-              {
-                src: 'https://picsum.photos/id/1020/1080/720',
-                altText: 'No caption image',
-              },
-            ]}
-            variant="standard"
-            aria-label="Gallery without caption"
-          />
-        </View>
-
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Many Images (Scroll Test)</Text>
-        <View>
-          <ImageGallery
-            {...args}
-            images={[...resolvedImages, ...resolvedImages]}
-            variant="immersive"
-            aria-label="Large gallery"
-          />
-        </View>
-      </ScrollView>
-    );
-  },
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Many Images (Scroll Test)</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          images={[...args.images, ...args.images]}
+          variant="immersive"
+          aria-label="Large gallery"
+        />
+      </View>
+    </ScrollView>
+  ),
 };
