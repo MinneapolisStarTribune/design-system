@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage.native';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const meta = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -29,8 +30,11 @@ const meta = {
       description: 'Credit for the inline image.',
     },
     purchaseLink: {
-      control: 'text',
-      description: 'Purchase link for image reprints.',
+      control: 'object',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
     },
     variant: {
       control: 'radio',
@@ -67,15 +71,28 @@ const defaultArgs: InlineImageProps = {
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'standard',
   expandable: false,
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  },
 };
 
 const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
   ...defaultArgs,
   ...overrides,
+  purchaseLink:
+    'purchaseLink' in overrides
+      ? overrides.purchaseLink
+        ? { ...overrides.purchaseLink }
+        : undefined
+      : { ...defaultArgs.purchaseLink! },
 });
 
 export const Configurable: Story = {
   args: storyArgs(),
+  render: ({ purchaseLink, ...args }) => (
+    <InlineImage {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
+  ),
 };
 
 export const AllVariants: Story = {
@@ -97,7 +114,13 @@ export const AllVariants: Story = {
         </View>
         <View style={styles.item}>
           <Text style={styles.heading}>With Purchase Link</Text>
-          <InlineImage {...args} purchaseLink="https://www.startribune.com/photos" />
+          <InlineImage
+            {...args}
+            purchaseLink={{
+              label: 'Buy Reprint',
+              link: 'https://www.startribune.com/photos',
+            }}
+          />
         </View>
       </View>
     </ScrollView>

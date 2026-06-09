@@ -17,7 +17,13 @@ const meta = {
       options: CAPTION_VARIANTS,
       description: 'Caption presentation variant',
     },
-    purchaseLink: { control: 'object', description: 'Optional Buy Reprint CTA' },
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
+    },
     currentIndex: { control: 'number', description: 'Current pagination index' },
     totalItems: { control: 'number', description: 'Total number of items' },
   },
@@ -29,9 +35,13 @@ type Story = StoryObj<typeof meta>;
 
 const defaultArgs: CaptionNativeProps = {
   caption:
-    'Barb Dentz, an advocate with Tennessee Families for Vaccines, met with her state representative, Sam Whitson, to discuss the state’s declining childhood immunization rates in January.',
+    "Barb Dentz, an advocate with Tennessee Families for Vaccines, met with her state representative, Sam Whitson, to discuss the state's declining childhood immunization rates in January.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
   variant: 'inline',
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  },
 };
 
 const storyArgs = (overrides: Partial<CaptionNativeProps> = {}): CaptionNativeProps => ({
@@ -41,10 +51,6 @@ const storyArgs = (overrides: Partial<CaptionNativeProps> = {}): CaptionNativePr
 
 export const Configurable: Story = {
   args: storyArgs({
-    purchaseLink: {
-      label: 'Buy Reprint',
-      link: 'https://www.startribune.com/photos',
-    },
     currentIndex: 1,
     totalItems: 5,
   }),

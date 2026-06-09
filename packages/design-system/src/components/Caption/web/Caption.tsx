@@ -51,13 +51,17 @@ export const Caption: React.FC<CaptionProps> = ({
     onNext?.();
   };
 
+  const purchaseLinkHref = purchaseLink?.link?.trim();
+  const purchaseLinkLabel = purchaseLink?.label?.trim();
+  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
+
   const handlePurchaseClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     track({
       event: 'link_click',
       component: 'Caption',
-      label: purchaseLink?.label ?? 'Buy Reprint',
+      label: purchaseLinkLabel,
       cta_type: 'buy_reprint',
-      href: purchaseLink?.link,
+      href: purchaseLinkHref,
       variant,
       ...analyticsOverride,
     });
@@ -116,11 +120,11 @@ export const Caption: React.FC<CaptionProps> = ({
     );
   };
 
-  const hasTopRowContent = caption || credit || purchaseLink?.link;
+  const hasTopRowContent = caption || credit || showPurchaseLink;
 
   const hasBottomRowContent = hasPagination || hasNavigation;
 
-  if (!caption && !credit && !purchaseLink?.link && !hasNavigation) {
+  if (!caption && !credit && !showPurchaseLink && !hasNavigation) {
     return null;
   }
 
@@ -152,19 +156,19 @@ export const Caption: React.FC<CaptionProps> = ({
               </span>
             )}
 
-            {purchaseLink?.link && (
+            {showPurchaseLink && (
               <>
                 {(caption || (!isLightbox && credit)) && (
                   <span className={styles['purchase-link-separator']}>•</span>
                 )}
 
                 <a
-                  href={purchaseLink.link}
+                  href={purchaseLinkHref}
                   className={classNames(styles['purchase-link'], 'caption-purchase-link')}
                   onClick={handlePurchaseClick}
                   data-testid={`${dataTestId}-purchase-link`}
                 >
-                  {purchaseLink.label ?? 'Buy Reprint'}
+                  {purchaseLinkLabel}
                 </a>
               </>
             )}

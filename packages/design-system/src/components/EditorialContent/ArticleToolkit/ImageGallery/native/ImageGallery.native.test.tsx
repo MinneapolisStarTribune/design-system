@@ -68,7 +68,7 @@ describe('ImageGallery (native)', () => {
   it('renders caption and credit', () => {
     const { getByText } = render(<ImageGallery images={images} />, { wrapper });
 
-    expect(getByText('Caption one (Credit one)')).toBeTruthy();
+    expect(getByText('Caption one Credit one')).toBeTruthy();
   });
 
   it('renders navigation buttons for multiple images', () => {
@@ -157,5 +157,110 @@ describe('ImageGallery (native)', () => {
     fireEvent.press(screen.getByTestId('gallery-dialog-close-button'));
 
     expect(screen.queryByTestId('gallery-dialog')).toBeNull();
+  });
+
+  it('renders the Buy Reprint CTA in the carousel from a per-image purchaseLink', () => {
+    const imagesWithPurchase = [
+      {
+        ...images[0],
+        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
+      },
+      images[1],
+    ];
+
+    render(<ImageGallery images={imagesWithPurchase} dataTestId="gallery" />, { wrapper });
+
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('falls back to the gallery-level purchaseLink in the carousel caption', () => {
+    render(
+      <ImageGallery
+        images={images}
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('renders the Buy Reprint CTA in the expanded dialog from a per-image purchaseLink', () => {
+    const imagesWithPurchase = [
+      {
+        ...images[0],
+        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
+      },
+      images[1],
+    ];
+
+    render(<ImageGallery images={imagesWithPurchase} expandable dataTestId="gallery" />, {
+      wrapper,
+    });
+
+    expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('falls back to the gallery-level purchaseLink for the Buy Reprint CTA', () => {
+    render(
+      <ImageGallery
+        images={images}
+        expandable
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+  });
+
+  it('does not render a Buy Reprint CTA in the expanded dialog when none is configured', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
+  });
+
+  it('renders the counter and prev/next controls in the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
+    expect(screen.getByTestId('gallery-dialog-caption-previous')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-next')).toBeOnTheScreen();
+  });
+
+  it('advances to the next image from the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+    expect(screen.getByText('Caption one')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-next'));
+
+    expect(screen.getByText('Caption two')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
+  });
+
+  it('goes back to the previous image from the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-1'));
+    expect(screen.getByText('Caption two')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-previous'));
+
+    expect(screen.getByText('Caption one')).toBeOnTheScreen();
+    expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('1/2');
   });
 });
