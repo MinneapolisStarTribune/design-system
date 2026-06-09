@@ -33,7 +33,65 @@ describe('Caption (native)', () => {
     expect(screen.getByText('A scenic mountain view. (Star Tribune staff)')).toBeOnTheScreen();
   });
 
-  it('renders Buy Reprint only when purchaseLink.link is configured', () => {
+  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+    render(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.label is empty', () => {
+    render(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: '',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is missing', () => {
+    render(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: 'Buy Reprint',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is empty', () => {
+    render(
+      <Caption
+        caption="A scenic mountain view."
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: '',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+  });
+
+  it('renders Buy Reprint only when purchaseLink.label and link are configured', () => {
     render(
       <Caption
         caption="A scenic mountain view."
@@ -131,6 +189,7 @@ describe('Caption (native)', () => {
       <Caption
         caption="A scenic mountain view."
         purchaseLink={{
+          label: 'Buy Reprint',
           link: 'https://www.startribune.com/photos',
         }}
         onPurchaseLinkClick={onPurchaseLinkClick}

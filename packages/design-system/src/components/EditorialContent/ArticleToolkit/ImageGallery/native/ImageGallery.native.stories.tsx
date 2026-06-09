@@ -1,44 +1,43 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react';
 import { ScrollView, Text, View } from 'react-native';
 
+import type { ImageProps as NativeImageProps } from '@/components/Image/native/Image.native';
+import type { ImageGalleryNativeProps, ImageItem } from '../ImageGallery.types';
 import { ImageGallery } from './ImageGallery.native';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
-const sampleImages = [
+const sampleImages: ImageItem[] = [
   {
     src: 'https://picsum.photos/id/1015/1080/720',
     altText: 'Mountain landscape',
     caption: 'A beautiful mountain view.',
     credit: 'Photo by Picsum',
-    purchaseLink: {
-      link: 'https://www.startribune.com/photos/reprints',
-      label: 'Buy Reprint',
-    },
   },
   {
     src: 'https://picsum.photos/id/1016/1080/720',
     altText: 'Forest road',
     caption: 'Road through dense forest.',
     credit: 'Photo by Picsum',
-    purchaseLink: {
-      link: 'https://www.startribune.com/photos/reprints',
-      label: 'Buy Reprint',
-    },
   },
   {
     src: 'https://picsum.photos/id/1018/1080/720',
     altText: 'River and hills',
     caption: 'Calm river between hills.',
     credit: 'Photo by Picsum',
-    purchaseLink: {
-      link: 'https://www.startribune.com/photos/reprints',
-      label: 'Buy Reprint',
-    },
   },
 ];
 
-const meta: Meta<typeof ImageGallery> = {
+const meta = {
   title: 'Editorial Content/Article Toolkit/ImageGallery',
   component: ImageGallery,
+  parameters: {
+    layout: 'padded',
+    docs: {
+      source: {
+        type: 'dynamic',
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'radio',
@@ -47,7 +46,7 @@ const meta: Meta<typeof ImageGallery> = {
     },
     images: {
       control: 'object',
-      description: 'Array of images with src, altText, caption, credit, purchaseLink.',
+      description: 'Array of images including caption, credit, and optional purchaseLink.',
     },
     'aria-label': {
       control: 'text',
@@ -59,49 +58,98 @@ const meta: Meta<typeof ImageGallery> = {
     },
     expandable: {
       control: 'boolean',
-      description: 'Opens the pressed slide in a full-screen modal.',
+      description: 'Opens the pressed slide in a full-screen lightbox.',
+    },
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
     },
   },
-};
+} satisfies Meta<typeof ImageGallery>;
 
 export default meta;
 
-type Story = StoryObj<typeof ImageGallery>;
+type Story = StoryObj<typeof meta>;
+
+const defaultArgs: ImageGalleryNativeProps<NativeImageProps> = {
+  images: sampleImages,
+  variant: 'standard',
+  expandable: false,
+  purchaseLink: {
+    label: 'Buy Reprint',
+    link: 'https://www.startribune.com/photos',
+  },
+  'aria-label': 'Image gallery',
+};
+
+const storyArgs = (
+  overrides: Partial<ImageGalleryNativeProps<NativeImageProps>> = {}
+): ImageGalleryNativeProps<NativeImageProps> => ({
+  ...defaultArgs,
+  ...overrides,
+  purchaseLink:
+    'purchaseLink' in overrides
+      ? overrides.purchaseLink
+        ? { ...overrides.purchaseLink }
+        : undefined
+      : { ...defaultArgs.purchaseLink! },
+});
 
 export const Configurable: Story = {
-  args: {
-    images: sampleImages,
-    variant: 'standard',
-    expandable: false,
-    'aria-label': 'Image gallery',
-  },
+  args: storyArgs(),
+  render: ({ purchaseLink, ...args }) => (
+    <ImageGallery {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
+  ),
 };
 
 export const AllVariants: Story = {
-  args: {
-    images: sampleImages,
-    variant: 'standard',
-    expandable: false,
-    'aria-label': 'Image gallery',
+  parameters: {
+    controls: { disable: true },
   },
-
+  args: storyArgs(),
   render: (args) => (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 32 }}>
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Standard Variant</Text>
       <View>
-        <ImageGallery {...args} variant="standard" aria-label="Standard gallery" />
+        <ImageGallery
+          {...args}
+          variant="standard"
+          images={args.images}
+          aria-label="Standard gallery"
+        />
       </View>
 
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Immersive Variant</Text>
       <View>
-        <ImageGallery {...args} variant="immersive" aria-label="Immersive gallery" />
+        <ImageGallery
+          {...args}
+          variant="immersive"
+          images={args.images}
+          aria-label="Immersive gallery"
+        />
+      </View>
+
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Expandable With Purchase Link</Text>
+      <View>
+        <ImageGallery
+          {...args}
+          expandable
+          purchaseLink={{
+            label: 'Buy Reprint',
+            link: 'https://www.startribune.com/photos',
+          }}
+          aria-label="Expandable gallery with purchase link"
+        />
       </View>
 
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Single Image</Text>
       <View>
         <ImageGallery
           {...args}
-          images={[sampleImages[0]]}
+          images={[args.images[0]]}
           variant="standard"
           aria-label="Single image gallery"
         />
@@ -126,7 +174,7 @@ export const AllVariants: Story = {
       <View>
         <ImageGallery
           {...args}
-          images={[...sampleImages, ...sampleImages]}
+          images={[...args.images, ...args.images]}
           variant="immersive"
           aria-label="Large gallery"
         />

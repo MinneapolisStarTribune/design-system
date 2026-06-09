@@ -1,4 +1,4 @@
-import { StyleSheet, type TextStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
 import type { CaptionVariant } from '../Caption.types';
 
@@ -39,11 +39,10 @@ export const createCaptionStyles = (theme: NativeTheme, variant: CaptionVariant)
     purchaseLinkText: {
       color: isLightbox ? theme.colorTextOnDarkPrimary : theme.colorTextOnLightSecondary,
       textDecorationLine: 'underline',
-      textDecorationSkipInk: 'auto',
       textDecorationColor: isLightbox
         ? theme.colorCaptionPurchaseLinkAccentOnDarkSurface
         : theme.colorCaptionPurchaseLinkAccentOnLightSurface,
-    } as TextStyle & { textDecorationSkipInk?: 'auto' },
+    },
     creditRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -71,7 +70,7 @@ export const createCaptionStyles = (theme: NativeTheme, variant: CaptionVariant)
     },
     navButton: {
       borderWidth: 1,
-      borderColor: theme.colorBorderOnDarkSubtle01,
+      borderColor: isLightbox ? theme.colorBorderOnDarkSubtle01 : theme.colorBorderOnLightSubtle01,
     },
   });
 };

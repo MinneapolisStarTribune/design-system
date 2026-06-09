@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
+import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
 import type { InlineVideoNativeProps } from '../InlineVideo.types';
-import { Caption } from '@/index.native';
 
 export const InlineVideo: React.FC<InlineVideoNativeProps> = ({
   children,
@@ -12,6 +12,8 @@ export const InlineVideo: React.FC<InlineVideoNativeProps> = ({
   'aria-label': ariaLabel,
   'aria-hidden': ariaHidden,
 }) => {
+  const captionText = [caption, videoCredit && `(${videoCredit})`].filter(Boolean).join(' ');
+
   return (
     <View
       style={style}
@@ -22,7 +24,11 @@ export const InlineVideo: React.FC<InlineVideoNativeProps> = ({
     >
       {children}
 
-      <Caption caption={caption} credit={videoCredit} variant="inline" dataTestId={dataTestId} />
+      {captionText && (
+        <UtilityLabel size="small" dataTestId={`${dataTestId}-caption`}>
+          {captionText}
+        </UtilityLabel>
+      )}
     </View>
   );
 };
