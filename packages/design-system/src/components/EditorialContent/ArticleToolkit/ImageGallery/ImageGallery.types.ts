@@ -1,5 +1,5 @@
 import { AccessibilityProps, BaseProps, CtaLinkProps } from '@/types';
-import { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import { StyleProp, ViewStyle, ImageStyle } from 'react-native';
 
 export type Variant = 'standard' | 'immersive';
 
@@ -9,7 +9,7 @@ export interface ImageItem {
   credit?: string;
   height?: number;
   imgixParams?: string;
-  /** Optional Buy Reprint CTA shown only in the expanded lightbox view. */
+  /** Optional Buy Reprint CTA for this image item. */
   purchaseLink?: CtaLinkProps;
   src: string;
   width?: number;
@@ -33,6 +33,6 @@ export interface ImageGalleryProps<TImageProps> extends ImageGalleryBaseProps<TI
 export interface ImageGalleryNativeProps<TImageProps> extends ImageGalleryBaseProps<TImageProps> {
   imageStyle?: StyleProp<ImageStyle>;
   wrapperStyle?: StyleProp<ViewStyle>;
-  captionStyle?: StyleProp<TextStyle>;
+  captionStyle?: StyleProp<ViewStyle>;
   controlsStyle?: StyleProp<ViewStyle>;
 }

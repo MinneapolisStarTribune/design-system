@@ -9,5 +9,6 @@ export interface PhotoLayoutProps extends ArticleToolkitBaseProps {
   imgixParams?: string;
   variant?: 'immersive'; // Restricting variant to 'immersive' for now, can be expanded in the future if needed
   expandable?: boolean;
+  /** Optional Buy Reprint CTA shown with inline and expanded caption contexts. */
   purchaseLink?: CtaLinkProps;
 }

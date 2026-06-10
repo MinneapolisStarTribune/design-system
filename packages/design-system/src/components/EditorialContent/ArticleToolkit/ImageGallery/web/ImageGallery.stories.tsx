@@ -52,8 +52,7 @@ const meta: Meta<StoryArgs> = {
     },
     images: {
       control: 'object',
-      description:
-        'Array of image items including caption, credit, and optional lightbox purchaseLink',
+      description: 'Array of image items including caption, credit, and optional purchaseLink',
     },
     ImageComponent: {
       control: false,

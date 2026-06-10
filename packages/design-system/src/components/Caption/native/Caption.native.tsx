@@ -16,7 +16,7 @@ import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@/icons/index.nat
 import type { CaptionNativeProps } from '../Caption.types';
 import { createCaptionStyles } from './Caption.styles';
 
-const TABLET_BREAKPOINT = 768;
+const TABLET_BREAKPOINT = 1024;
 const DESKTOP_NAV_BREAKPOINT = 1160;
 
 const renderCaptionNode = (value: React.ReactNode): React.ReactNode => {
@@ -59,7 +59,9 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   const canGoPrevious = loopNavigation || (hasPagination && currentIndex > 1);
   const canGoNext = loopNavigation || (hasPagination && currentIndex < totalItems);
 
-  const showPurchaseLink = Boolean(purchaseLink?.link);
+  const purchaseLinkHref = purchaseLink?.link?.trim();
+  const purchaseLinkLabel = purchaseLink?.label?.trim();
+  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
 
   const hasTopRowContent = caption || credit || showPurchaseLink || (!isLightbox && hasNavigation);
 
@@ -86,9 +88,9 @@ export const Caption: React.FC<CaptionNativeProps> = ({
     track({
       event: 'link_click',
       component: 'Caption',
-      label: purchaseLink?.label ?? 'Buy Reprint',
+      label: purchaseLinkLabel,
       cta_type: 'buy_reprint',
-      href: purchaseLink?.link,
+      href: purchaseLinkHref,
       variant,
       ...analyticsOverride,
     });
@@ -96,16 +98,16 @@ export const Caption: React.FC<CaptionNativeProps> = ({
     purchaseLink?.onPress?.();
     onPurchaseLinkClick?.();
 
-    if (!purchaseLink?.link) {
+    if (!purchaseLinkHref) {
       return;
     }
 
     try {
-      const canOpen = await Linking.canOpenURL(purchaseLink.link);
+      const canOpen = await Linking.canOpenURL(purchaseLinkHref);
       if (!canOpen) {
         return;
       }
-      await Linking.openURL(purchaseLink.link);
+      await Linking.openURL(purchaseLinkHref);
     } catch (error) {
       console.warn('Failed to open purchase link', error);
     }
@@ -185,11 +187,11 @@ export const Caption: React.FC<CaptionNativeProps> = ({
           <Text
             style={styles.purchaseLinkText}
             accessibilityRole="link"
-            accessibilityLabel={purchaseLink?.label ?? 'Buy Reprint'}
+            accessibilityLabel={purchaseLinkLabel}
             onPress={handlePurchasePress}
             testID={`${dataTestId}-purchase-link`}
           >
-            {purchaseLink?.label ?? 'Buy Reprint'}
+            {purchaseLinkLabel}
           </Text>
         </>
       ) : null}

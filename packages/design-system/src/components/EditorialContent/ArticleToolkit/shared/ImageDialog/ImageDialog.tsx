@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import { Caption, Image } from '@/components/index.web';
 import { CloseIcon } from '@/icons';
 import type { CtaLinkProps } from '@/types';
+import { hasPurchaseLink } from '../PurchaseLink/resolvePurchaseLink';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
 
@@ -58,7 +59,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   const hasCaptionContent = Boolean(
     caption?.trim() ||
       credit?.trim() ||
-      purchaseLink?.link ||
+      hasPurchaseLink(purchaseLink) ||
       typeof currentIndex === 'number' ||
       typeof totalItems === 'number' ||
       onPrevious ||

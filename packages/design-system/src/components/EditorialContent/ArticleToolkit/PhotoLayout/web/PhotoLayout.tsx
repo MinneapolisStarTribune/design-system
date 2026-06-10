@@ -82,6 +82,7 @@ export const PhotoLayout: React.FC<PhotoLayoutProps> = ({
           caption={caption}
           image={image}
           credit={imageCredit}
+          purchaseLink={purchaseLink}
           imgixParams={imgixParams}
           dialogRef={dialogRef}
           isOpen={openIndex !== null}

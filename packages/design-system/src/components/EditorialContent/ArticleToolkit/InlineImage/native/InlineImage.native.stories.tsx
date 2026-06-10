@@ -28,6 +28,10 @@ const meta = {
       control: 'text',
       description: 'Credit for the inline image.',
     },
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA object. Renders only when label and link are set.',
+    },
     variant: {
       control: 'radio',
       options: Object.values(ARTICLE_BODY_VARIANTS),
@@ -55,16 +59,16 @@ type Story = StoryObj<typeof meta>;
 const image = {
   src: 'https://picsum.photos/id/1018/1200/800',
   altText: 'Alternative text for the image',
-  purchaseLink: {
-    link: 'https://www.startribune.com/photos',
-    label: 'Buy Reprint',
-  },
 };
 
 const defaultArgs: InlineImageProps = {
   image,
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
+  purchaseLink: {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  },
   variant: 'standard',
   expandable: false,
 };
@@ -76,6 +80,7 @@ const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps 
 
 export const Configurable: Story = {
   args: storyArgs(),
+  render: ({ ...args }) => <InlineImage {...args} />,
 };
 
 export const AllVariants: Story = {

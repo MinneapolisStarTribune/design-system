@@ -7,7 +7,7 @@
  * @see architecture/article-toolkit-variants.md
  */
 
-import type { BaseProps, AccessibilityProps, CtaLinkProps } from '@/types/globalTypes';
+import type { BaseProps, AccessibilityProps } from '@/types/globalTypes';
 
 /**
  * Layout variants for article body and article toolkit components.
@@ -73,7 +73,6 @@ export interface ImageData {
   altText: string;
   width?: number;
   height?: number;
-  purchaseLink?: CtaLinkProps;
 }
 
 /**

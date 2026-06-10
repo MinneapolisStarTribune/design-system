@@ -7,10 +7,12 @@ import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
 import { InlineImageContent } from './InlineImageContent';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,
   image,
+  purchaseLink,
   caption,
   className,
   credit,
@@ -34,6 +36,8 @@ export const InlineImage: React.FC<InlineImageProps> = ({
     setIsOpen(false);
     lastTriggerRef.current?.focus();
   };
+  const resolvedPurchaseLink = resolvePurchaseLink(purchaseLink);
+
   return (
     <>
       <figure
@@ -54,7 +58,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           caption={caption}
           credit={credit}
           variant="inline"
-          purchaseLink={image?.purchaseLink}
+          purchaseLink={resolvedPurchaseLink}
           dataTestId={`${dataTestId}-caption`}
         />
       </figure>
@@ -62,7 +66,7 @@ export const InlineImage: React.FC<InlineImageProps> = ({
         image={image}
         caption={caption}
         credit={credit}
-        purchaseLink={image?.purchaseLink}
+        purchaseLink={resolvedPurchaseLink}
         imgixParams={imgixParams}
         dialogRef={dialogRef}
         isOpen={isOpen}

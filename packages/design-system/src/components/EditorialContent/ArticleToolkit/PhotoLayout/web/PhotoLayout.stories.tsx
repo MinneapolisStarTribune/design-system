@@ -22,6 +22,10 @@ const meta: Meta<PhotoLayoutProps> = {
     expandable: {
       control: 'boolean',
     },
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA object. Renders only when label and link are set.',
+    },
   },
 };
 

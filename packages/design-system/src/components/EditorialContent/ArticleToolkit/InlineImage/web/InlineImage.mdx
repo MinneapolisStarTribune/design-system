@@ -59,7 +59,7 @@ Use when you want readers to be able to purchase a reprint of the image.
 - **image** – Image object `{ src: string, altText: string }`.
 - **caption** – Optional descriptive text for the image.
 - **credit** – Optional credit line for the image.
-- **purchaseLink** – Optional link for purchasing photo reprints.
+- **purchaseLink** – Optional link object `{ label, link }` for purchasing photo reprints. The Buy Reprint CTA is shown only when `label` and `link` are both provided.
 - **variant** – Article variant: `'standard' | 'immersive'`.
 - **expandable** – Enables click-to-expand behavior for immersive viewing.
 - **imgixParams** – Optional image transformation parameters.

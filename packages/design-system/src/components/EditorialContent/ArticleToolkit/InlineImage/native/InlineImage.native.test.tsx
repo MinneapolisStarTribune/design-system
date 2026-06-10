@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen, within, waitFor } from '@testing-library/react-native';
-import { Linking } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 import { InlineImage } from './InlineImage.native';
 
@@ -15,10 +15,11 @@ jest.mock('react-native/Libraries/Modal/Modal', () => {
 const image = {
   src: 'https://picsum.photos/id/1018/1200/800',
   altText: 'Alternative text for the image',
-  purchaseLink: {
-    link: 'https://www.startribune.com/photos',
-    label: 'Buy Reprint',
-  },
+};
+
+const purchaseLink = {
+  link: 'https://www.startribune.com/photos',
+  label: 'Buy Reprint',
 };
 
 describe('InlineImage (native)', () => {
@@ -66,25 +67,73 @@ describe('InlineImage (native)', () => {
   });
 
   it('renders purchase link when caption and credit are empty', () => {
-    render(<InlineImage dataTestId={dataTestId} image={image} caption="" credit="" />, { wrapper });
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption=""
+        credit=""
+        purchaseLink={purchaseLink}
+      />,
+      { wrapper }
+    );
 
     expect(screen.getByTestId(`${dataTestId}-caption`)).toBeOnTheScreen();
-    expect(screen.getByTestId(`${dataTestId}-purchase-link`)).toBeOnTheScreen();
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is missing', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: 'Buy Reprint',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
   });
 
   it('renders purchase link and opens URL on press', async () => {
-    const purchaseLink = 'https://www.startribune.com/photos';
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
-    render(<InlineImage dataTestId={dataTestId} image={image} caption="Image caption" />, {
-      wrapper,
-    });
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={purchaseLink}
+      />,
+      {
+        wrapper,
+      }
+    );
 
-    fireEvent.press(screen.getByTestId(`${dataTestId}-purchase-link`));
+    fireEvent.press(screen.getByTestId(`${dataTestId}-caption-purchase-link`));
 
     await waitFor(() => {
-      expect(openURLSpy).toHaveBeenCalledWith(purchaseLink);
+      expect(openURLSpy).toHaveBeenCalledWith(purchaseLink.link);
     });
   });
 
@@ -103,6 +152,42 @@ describe('InlineImage (native)', () => {
 
     fireEvent.press(screen.getByTestId(`${dataTestId}-dialog-close-button`));
     expect(screen.queryByTestId(`${dataTestId}-dialog`)).toBeNull();
+  });
+
+  it('renders purchase link in the expanded dialog when expandable', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Caption in dialog"
+        purchaseLink={purchaseLink}
+        expandable
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId(`${dataTestId}-expand-button`));
+
+    const dialog = screen.getByTestId(`${dataTestId}-dialog`);
+    expect(
+      within(dialog).getByTestId(`${dataTestId}-dialog-caption-purchase-link`)
+    ).toBeOnTheScreen();
+  });
+
+  it('uses a wider max width for immersive than standard', () => {
+    const standardRender = render(
+      <InlineImage dataTestId="standard" image={image} variant="standard" />,
+      { wrapper }
+    );
+    const immersiveRender = render(
+      <InlineImage dataTestId="immersive" image={image} variant="immersive" />,
+      { wrapper }
+    );
+
+    const standardStyle = StyleSheet.flatten(standardRender.getByTestId('standard').props.style);
+    const immersiveStyle = StyleSheet.flatten(immersiveRender.getByTestId('immersive').props.style);
+
+    expect(immersiveStyle.maxWidth).toBeGreaterThan(standardStyle.maxWidth as number);
   });
 
   it('uses the requested objectFit as image resizeMode', () => {

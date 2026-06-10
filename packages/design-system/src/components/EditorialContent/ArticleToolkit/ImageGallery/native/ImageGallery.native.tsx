@@ -11,8 +11,8 @@ import {
   Modal,
   Pressable,
   Image,
+  findNodeHandle,
   type ViewStyle,
-  type TextStyle,
   type StyleProp,
   type LayoutChangeEvent,
   type ImageStyle,
@@ -23,13 +23,14 @@ import {
   type ImageItem,
   Variant,
 } from '../ImageGallery.types';
-import { Caption, CameraFilledIcon, CloseIcon, ExpandIcon } from '@/index.native';
-import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
+import { CameraFilledIcon, CloseIcon, ExpandIcon } from '@/index.native';
+import { Caption } from '@/components/Caption/native/Caption.native';
 import {
   Image as DSImage,
   ImageProps as NativeImageProps,
 } from '@/components/Image/native/Image.native';
-
+import type { CtaLinkProps } from '@/types';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { createDesignSystemError } from '@/utils/errorPrefix';
@@ -82,6 +83,11 @@ type GalleryStyles = ReturnType<typeof createStyles>;
 type ImageGalleryExpandModalProps = {
   visible: boolean;
   image: ImageItem | null;
+  purchaseLink?: CtaLinkProps;
+  currentIndex?: number;
+  totalItems?: number;
+  onPrevious?: () => void;
+  onNext?: () => void;
   styles: GalleryStyles;
   dataTestId: string;
   onClose: () => void;
@@ -90,21 +96,40 @@ type ImageGalleryExpandModalProps = {
 const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   visible,
   image,
+  purchaseLink,
+  currentIndex,
+  totalItems,
+  onPrevious,
+  onNext,
   styles,
   dataTestId,
   onClose,
 }) => {
+  const closeButtonRef = useRef<View>(null);
+
   if (!image) {
     return null;
   }
 
   const uri = buildImageUri(image.src, image.imgixParams);
   const aspectRatio = (image.width ?? 1080) / (image.height ?? 720);
-  const hasCaption = Boolean(image.caption?.trim());
-  const hasCredit = Boolean(image.credit?.trim());
+
+  /** Move screen-reader focus into the dialog so users land on the close control, not behind it. */
+  const focusCloseButton = () => {
+    const tag = closeButtonRef.current ? findNodeHandle(closeButtonRef.current) : null;
+    if (tag != null) {
+      AccessibilityInfo.setAccessibilityFocus(tag);
+    }
+  };
 
   return (
-    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent
+      onRequestClose={onClose}
+      onShow={focusCloseButton}
+    >
       <View
         style={styles.dialogOverlay}
         testID={`${dataTestId}-dialog`}
@@ -112,6 +137,7 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
         accessibilityLabel="Expanded image view"
       >
         <Pressable
+          ref={closeButtonRef}
           accessibilityRole="button"
           accessibilityLabel="Close expanded image"
           onPress={onClose}
@@ -131,23 +157,18 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
           />
         </View>
 
-        {hasCaption || hasCredit ? (
-          <View style={styles.dialogCaption}>
-            {hasCaption ? (
-              <UtilityLabel size="small" weight="regular" style={styles.dialogCaptionText}>
-                {image.caption}
-              </UtilityLabel>
-            ) : null}
-            {hasCredit ? (
-              <View style={styles.dialogCreditRow}>
-                <CameraFilledIcon color="on-dark-primary" size="medium" />
-                <UtilityLabel size="small" weight="regular" style={styles.dialogCreditText}>
-                  {image.credit}
-                </UtilityLabel>
-              </View>
-            ) : null}
-          </View>
-        ) : null}
+        <Caption
+          caption={image.caption}
+          credit={image.credit}
+          purchaseLink={purchaseLink}
+          variant="lightbox"
+          currentIndex={currentIndex}
+          totalItems={totalItems}
+          onPrevious={onPrevious}
+          onNext={onNext}
+          style={styles.dialogCaption}
+          dataTestId={`${dataTestId}-dialog-caption`}
+        />
       </View>
     </Modal>
   );
@@ -205,20 +226,8 @@ function createStyles(theme: NativeTheme) {
       maxHeight: '100%',
     } as ImageStyle,
     dialogCaption: {
-      gap: theme.spacing8,
+      width: '100%',
     } as ViewStyle,
-    dialogCaptionText: {
-      color: theme.colorTextOnDarkPrimary,
-    } as TextStyle,
-    dialogCreditRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing4,
-    } as ViewStyle,
-    dialogCreditText: {
-      color: theme.colorTextOnDarkSecondary,
-      flexShrink: 1,
-    } as TextStyle,
     image: {
       width: '100%',
       height: '100%',
@@ -239,8 +248,8 @@ function createStyles(theme: NativeTheme) {
     } as TextStyle,
     bottomSection: {
       marginTop: theme.spacing8,
-      width: '100%',
     } as ViewStyle,
+    captionContainer: { width: '100%' } as ViewStyle,
   };
 }
 
@@ -253,8 +262,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   style,
   imageStyle,
   wrapperStyle,
-  captionStyle: _captionStyle,
-  controlsStyle: _controlsStyle,
+  captionStyle,
   dataTestId = 'image-gallery',
   'aria-label': ariaLabel,
 }) => {
@@ -268,6 +276,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const styles = useNativeStyles(createStyles);
   const scrollRef = useRef<ScrollView>(null);
+  const expandButtonRefs = useRef<Record<number, View | null>>({});
+  const triggerIndexRef = useRef<number | null>(null);
+  const prevExpandedIndexRef = useRef<number | null>(null);
 
   const [dimensions, setDimensions] = useState(() => {
     const { width } = Dimensions.get('window');
@@ -289,7 +300,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const spaceBetween = getSpaceBetween(dimensions.width);
   const maxWidth = getMaxWidth(dimensions.width, variant);
-
   const BASE_WIDTH = 390;
   const scale = dimensions.width / BASE_WIDTH;
 
@@ -367,10 +377,61 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     setDimensions({ width, height });
   };
 
+  const openExpandedImage = (logicalIndex: number) => {
+    triggerIndexRef.current = logicalIndex;
+    setExpandedIndex(logicalIndex);
+  };
+
+  const closeExpandedImage = () => {
+    setExpandedIndex(null);
+  };
+
+  // Return screen-reader focus to the triggering expand button once the dialog closes.
+  useEffect(() => {
+    if (expandedIndex === null && prevExpandedIndexRef.current !== null) {
+      const triggerIndex = triggerIndexRef.current;
+      const node = triggerIndex === null ? null : expandButtonRefs.current[triggerIndex];
+      const tag = node ? findNodeHandle(node) : null;
+      if (tag != null) {
+        AccessibilityInfo.setAccessibilityFocus(tag);
+      }
+    }
+    prevExpandedIndexRef.current = expandedIndex;
+  }, [expandedIndex]);
+
+  /** Moves the expanded (lightbox) view to a logical image index and keeps the carousel in sync. */
+  const goToExpandedImage = (nextLogicalIndex: number) => {
+    if (nextLogicalIndex < 0 || nextLogicalIndex >= total) {
+      return;
+    }
+
+    setExpandedIndex(nextLogicalIndex);
+
+    const slideIndex = hasLoop ? nextLogicalIndex + 1 : nextLogicalIndex;
+    setIndex(slideIndex);
+    scrollTo(slideIndex);
+  };
+
+  const handleExpandedPrevious = () => {
+    if (expandedIndex === null) return;
+    goToExpandedImage(expandedIndex - 1);
+  };
+
+  const handleExpandedNext = () => {
+    if (expandedIndex === null) return;
+    goToExpandedImage(expandedIndex + 1);
+  };
+
   const activeImageIndex = total > 0 ? toLogicalImageIndex(index, hasLoop, total) : 0;
   const currentImage = total > 0 ? images[activeImageIndex] : undefined;
   const expandedImage =
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
+  const normalizedCredit = currentImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
+
+  const activePurchaseLink = resolvePurchaseLink(currentImage?.purchaseLink);
+  const expandedPurchaseLink = resolvePurchaseLink(expandedImage?.purchaseLink);
+  const hasCarouselFooter =
+    Boolean(currentImage?.caption || normalizedCredit || activePurchaseLink) || total > 1;
 
   if (!total) return null;
 
@@ -380,6 +441,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         style={[styles.gallery, style as StyleProp<ViewStyle>]}
         testID={dataTestId}
         accessibilityLabel={ariaLabel}
+        accessibilityElementsHidden={expandedIndex !== null}
+        importantForAccessibility={expandedIndex !== null ? 'no-hide-descendants' : 'auto'}
         onLayout={handleLayout}
       >
         <View style={styles.innerContainer}>
@@ -422,10 +485,13 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
                     />
                     {expandable ? (
                       <Pressable
+                        ref={(node) => {
+                          expandButtonRefs.current[logicalIndex] = node;
+                        }}
                         accessibilityRole="button"
                         accessibilityLabel={`Expand image ${logicalIndex + 1} of ${total}`}
                         accessibilityHint="Opens expanded image view"
-                        onPress={() => setExpandedIndex(logicalIndex)}
+                        onPress={() => openExpandedImage(logicalIndex)}
                         style={styles.expandButton}
                         testID={`${dataTestId}-expand-button-${logicalIndex}`}
                       >
@@ -448,29 +514,36 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           )}
         </View>
 
-        <View style={styles.bottomSection}>
-          <Caption
-            caption={currentImage?.caption}
-            credit={currentImage?.credit}
-            purchaseLink={currentImage?.purchaseLink}
-            variant="inline"
-            currentIndex={activeImageIndex + 1}
-            totalItems={total}
-            onPrevious={total > 1 ? handlePrev : undefined}
-            onNext={total > 1 ? handleNext : undefined}
-            loopNavigation={hasLoop}
-            dataTestId={`${dataTestId}-caption`}
-          />
-        </View>
+        {hasCarouselFooter && (
+          <View style={styles.bottomSection}>
+            <Caption
+              caption={currentImage?.caption}
+              credit={normalizedCredit}
+              purchaseLink={activePurchaseLink}
+              variant="inline"
+              currentIndex={total > 1 ? activeImageIndex + 1 : undefined}
+              totalItems={total > 1 ? total : undefined}
+              onPrevious={handlePrev}
+              onNext={handleNext}
+              style={[styles.captionContainer, captionStyle as StyleProp<ViewStyle>]}
+              dataTestId="image-gallery-caption"
+            />
+          </View>
+        )}
       </View>
 
       {expandable ? (
         <ImageGalleryExpandModal
           visible={expandedIndex !== null}
           image={expandedImage}
+          purchaseLink={expandedPurchaseLink}
+          currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
+          totalItems={total}
+          onPrevious={handleExpandedPrevious}
+          onNext={handleExpandedNext}
           styles={styles}
           dataTestId={dataTestId}
-          onClose={() => setExpandedIndex(null)}
+          onClose={closeExpandedImage}
         />
       ) : null}
     </>
