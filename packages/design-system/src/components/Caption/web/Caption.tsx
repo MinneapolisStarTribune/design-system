@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@/icons';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { DEFAULT_PURCHASE_LINK_LABEL } from '../Caption.constants';
 
 import type { CaptionProps } from '../Caption.types';
 import styles from './Caption.module.scss';
@@ -52,8 +53,8 @@ export const Caption: React.FC<CaptionProps> = ({
   };
 
   const purchaseLinkHref = purchaseLink?.link?.trim();
-  const purchaseLinkLabel = purchaseLink?.label?.trim();
-  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
+  const purchaseLinkLabel = purchaseLink?.label?.trim() || DEFAULT_PURCHASE_LINK_LABEL;
+  const showPurchaseLink = Boolean(purchaseLinkHref);
 
   const handlePurchaseClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     track({

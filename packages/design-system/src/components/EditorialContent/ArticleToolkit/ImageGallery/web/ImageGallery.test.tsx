@@ -94,6 +94,41 @@ describe('ImageGallery', () => {
     );
   });
 
+  it('renders default Buy Reprint when gallery-level purchaseLink.label is missing', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
+  it('renders default Buy Reprint when gallery-level purchaseLink.label is empty', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          label: '  ',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
   it('prefers the image-level purchase link over the gallery-level purchase link', () => {
     const { getByTestId } = renderWithProvider(
       <ImageGallery

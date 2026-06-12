@@ -110,7 +110,6 @@ export const Configurable: Story = {
     },
   },
   parameters: {
-    controls: { disable: true },
     docs: {
       source: {
         code: `<ImageGallery

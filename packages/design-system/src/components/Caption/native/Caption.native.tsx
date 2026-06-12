@@ -15,6 +15,7 @@ import { useNativeStyles } from '@/hooks/useNativeStyles';
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@/icons/index.native';
 import type { CaptionNativeProps } from '../Caption.types';
 import { createCaptionStyles } from './Caption.styles';
+import { DEFAULT_PURCHASE_LINK_LABEL } from '../Caption.constants';
 
 const TABLET_BREAKPOINT = 1024;
 const DESKTOP_NAV_BREAKPOINT = 1160;
@@ -60,8 +61,8 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   const canGoNext = loopNavigation || (hasPagination && currentIndex < totalItems);
 
   const purchaseLinkHref = purchaseLink?.link?.trim();
-  const purchaseLinkLabel = purchaseLink?.label?.trim();
-  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
+  const purchaseLinkLabel = purchaseLink?.label?.trim() || DEFAULT_PURCHASE_LINK_LABEL;
+  const showPurchaseLink = Boolean(purchaseLinkHref);
 
   const hasTopRowContent = caption || credit || showPurchaseLink || (!isLightbox && hasNavigation);
 

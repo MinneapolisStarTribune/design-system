@@ -188,6 +188,20 @@ describe('ImageGallery (native)', () => {
     });
   });
 
+  it('renders default Buy Reprint CTA when gallery-level purchaseLink.label is missing', () => {
+    render(
+      <ImageGallery
+        images={images}
+        purchaseLink={{ link: 'https://www.startribune.com/photos' }}
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
+  });
+
   it('prefers the image-level purchaseLink over the gallery-level purchaseLink in both places', async () => {
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true);
     jest.spyOn(Linking, 'openURL').mockResolvedValue(true);

@@ -91,8 +91,8 @@ describe('InlineImage', () => {
     expect(captionElement).not.toBeInTheDocument();
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
-    const { queryByTestId } = renderWithProvider(
+  it('renders default Buy Reprint when purchaseLink.label is missing', () => {
+    const { getByTestId } = renderWithProvider(
       <InlineImage
         dataTestId={dataTestId}
         image={image}
@@ -103,7 +103,23 @@ describe('InlineImage', () => {
       />
     );
 
-    expect(queryByTestId(`${dataTestId}-caption-purchase-link`)).not.toBeInTheDocument();
+    expect(getByTestId(`${dataTestId}-caption-purchase-link`)).toHaveTextContent('Buy Reprint');
+  });
+
+  it('renders default Buy Reprint when purchaseLink.label is empty', () => {
+    const { getByTestId } = renderWithProvider(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: '   ',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId(`${dataTestId}-caption-purchase-link`)).toHaveTextContent('Buy Reprint');
   });
 
   it('does not render Buy Reprint when purchaseLink.link is missing', () => {

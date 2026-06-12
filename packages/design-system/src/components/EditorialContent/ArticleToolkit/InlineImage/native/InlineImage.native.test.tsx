@@ -82,7 +82,7 @@ describe('InlineImage (native)', () => {
     expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+  it('renders default Buy Reprint when purchaseLink.label is missing', () => {
     render(
       <InlineImage
         dataTestId={dataTestId}
@@ -95,7 +95,26 @@ describe('InlineImage (native)', () => {
       { wrapper }
     );
 
-    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
+  });
+
+  it('renders default Buy Reprint when purchaseLink.label is empty', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: '   ',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
   });
 
   it('does not render Buy Reprint when purchaseLink.link is missing', () => {
