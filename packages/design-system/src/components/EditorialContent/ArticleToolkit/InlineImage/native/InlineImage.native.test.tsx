@@ -17,6 +17,11 @@ const image = {
   altText: 'Alternative text for the image',
 };
 
+const purchaseLink = {
+  link: 'https://www.startribune.com/photos',
+  label: 'Buy Reprint',
+};
+
 describe('InlineImage (native)', () => {
   const wrapper = TestWrapperInDesignSystemProvider({ brand: 'startribune' });
   const dataTestId = 'inline-image-test';
@@ -56,16 +61,28 @@ describe('InlineImage (native)', () => {
     );
 
     expect(screen.getByTestId(`${dataTestId}-caption`)).toBeOnTheScreen();
-    expect(screen.getByText('Image caption (Image credit)')).toBeOnTheScreen();
+    expect(screen.getByTestId(`${dataTestId}-caption`)).toHaveTextContent(
+      /Image caption\s*\(Image credit\)/
+    );
   });
 
-  it('does not render caption block when both caption and credit are empty', () => {
-    render(<InlineImage dataTestId={dataTestId} image={image} caption="" credit="" />, { wrapper });
+  it('renders purchase link when caption and credit are empty', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption=""
+        credit=""
+        purchaseLink={purchaseLink}
+      />,
+      { wrapper }
+    );
 
-    expect(screen.queryByTestId(`${dataTestId}-caption`)).toBeNull();
+    expect(screen.getByTestId(`${dataTestId}-caption`)).toBeOnTheScreen();
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+  it('renders default Buy Reprint when purchaseLink.label is missing', () => {
     render(
       <InlineImage
         dataTestId={dataTestId}
@@ -78,7 +95,26 @@ describe('InlineImage (native)', () => {
       { wrapper }
     );
 
-    expect(screen.queryByTestId(`${dataTestId}-caption-purchase-link`)).toBeNull();
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
+  });
+
+  it('renders default Buy Reprint when purchaseLink.label is empty', () => {
+    render(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: '   ',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />,
+      { wrapper }
+    );
+
+    expect(screen.getByTestId(`${dataTestId}-caption-purchase-link`)).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
   });
 
   it('does not render Buy Reprint when purchaseLink.link is missing', () => {
@@ -98,10 +134,6 @@ describe('InlineImage (native)', () => {
   });
 
   it('renders purchase link and opens URL on press', async () => {
-    const purchaseLink = {
-      label: 'Buy Reprint',
-      link: 'https://www.startribune.com/photos',
-    };
     jest.spyOn(Linking, 'canOpenURL').mockResolvedValueOnce(true);
     const openURLSpy = jest.spyOn(Linking, 'openURL').mockResolvedValueOnce(true);
 
@@ -112,7 +144,9 @@ describe('InlineImage (native)', () => {
         caption="Image caption"
         purchaseLink={purchaseLink}
       />,
-      { wrapper }
+      {
+        wrapper,
+      }
     );
 
     fireEvent.press(screen.getByTestId(`${dataTestId}-caption-purchase-link`));
@@ -140,11 +174,6 @@ describe('InlineImage (native)', () => {
   });
 
   it('renders purchase link in the expanded dialog when expandable', () => {
-    const purchaseLink = {
-      label: 'Buy Reprint',
-      link: 'https://www.startribune.com/photos',
-    };
-
     render(
       <InlineImage
         dataTestId={dataTestId}

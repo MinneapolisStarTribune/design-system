@@ -33,7 +33,7 @@ describe('Caption (native)', () => {
     expect(screen.getByText('A scenic mountain view. (Star Tribune staff)')).toBeOnTheScreen();
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+  it('renders default Buy Reprint when purchaseLink.label is missing', () => {
     render(
       <Caption
         caption="A scenic mountain view."
@@ -44,10 +44,11 @@ describe('Caption (native)', () => {
       { wrapper }
     );
 
-    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+    expect(screen.getByTestId('caption-purchase-link')).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is empty', () => {
+  it('renders default Buy Reprint when purchaseLink.label is empty', () => {
     render(
       <Caption
         caption="A scenic mountain view."
@@ -59,7 +60,8 @@ describe('Caption (native)', () => {
       { wrapper }
     );
 
-    expect(screen.queryByTestId('caption-purchase-link')).toBeNull();
+    expect(screen.getByTestId('caption-purchase-link')).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
   });
 
   it('does not render Buy Reprint when purchaseLink.link is missing', () => {
