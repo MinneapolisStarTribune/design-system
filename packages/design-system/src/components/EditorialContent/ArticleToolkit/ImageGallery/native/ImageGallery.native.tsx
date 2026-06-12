@@ -258,6 +258,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   variant = 'standard',
   expandable = false,
   loop,
+  purchaseLink,
   ImageComponent,
   style,
   imageStyle,
@@ -428,8 +429,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
   const normalizedCredit = currentImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
 
-  const activePurchaseLink = resolvePurchaseLink(currentImage?.purchaseLink);
-  const expandedPurchaseLink = resolvePurchaseLink(expandedImage?.purchaseLink);
+  const activePurchaseLink =
+    resolvePurchaseLink(currentImage?.purchaseLink) ?? resolvePurchaseLink(purchaseLink);
   const hasCarouselFooter =
     Boolean(currentImage?.caption || normalizedCredit || activePurchaseLink) || total > 1;
 
@@ -536,7 +537,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         <ImageGalleryExpandModal
           visible={expandedIndex !== null}
           image={expandedImage}
-          purchaseLink={expandedPurchaseLink}
+          purchaseLink={activePurchaseLink}
           currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
           totalItems={total}
           onPrevious={handleExpandedPrevious}

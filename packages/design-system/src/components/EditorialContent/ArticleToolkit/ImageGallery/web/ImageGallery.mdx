@@ -37,8 +37,10 @@ When `expandable` is enabled, readers can open the **active slide** in a full-sc
 ### Caption-driven gallery controls
 
 - `ImageGallery` delegates inline caption text, credit, counter, and next/previous controls to the shared `Caption` component.
-- Add `purchaseLink` to each image item (`images[index].purchaseLink`) to render the optional Buy Reprint CTA for that specific image.
+- Add `purchaseLink` at the gallery level to share one Buy Reprint CTA across the active image.
+- Add `purchaseLink` to each image item (`images[index].purchaseLink`) when a specific image needs its own CTA.
 - The Buy Reprint CTA is shown only when the image item's `purchaseLink` includes both `label` and `link`.
+- When both are present, the image item purchase link takes precedence.
 - In immersive mode, caption navigation stays enabled at the edges and wraps with the looping swiper.
 
 ### Custom image component

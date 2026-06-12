@@ -21,6 +21,7 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   expandable?: boolean;
   variant?: Variant;
   loop?: boolean;
+  purchaseLink?: CtaLinkProps;
   ImageComponent?: React.ComponentType<TImageProps>;
 }
 

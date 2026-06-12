@@ -20,6 +20,7 @@ import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
 
 import styles from './ImageGallery.module.scss';
 import { ImageGalleryProps } from '../ImageGallery.types';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 
 /**
  * SSR-safe spacing helper
@@ -39,6 +40,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   images,
   variant = 'standard',
   expandable = false,
+  purchaseLink,
   ImageComponent,
   className,
   imageClassName,
@@ -61,6 +63,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
   const normalizedCredit = activeImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
+  const activePurchaseLink = resolvePurchaseLink(activeImage?.purchaseLink ?? purchaseLink);
 
   const handlePreviousSlide = (): void => {
     swiperRef.current?.slidePrev();
@@ -205,7 +208,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             caption={activeImage?.caption}
             credit={normalizedCredit}
             variant="inline"
-            purchaseLink={activeImage?.purchaseLink}
+            purchaseLink={activePurchaseLink}
             {...navigationProps}
             className={classNames(styles.caption, captionClassName)}
             dataTestId="image-gallery-caption"
@@ -224,7 +227,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
           {...navigationProps}
           caption={dialogImage.caption}
           credit={dialogImage.credit}
-          purchaseLink={dialogImage.purchaseLink}
+          purchaseLink={activePurchaseLink}
           imgixParams={dialogImage.imgixParams}
           dialogRef={dialogRef}
           isOpen={isDialogOpen}

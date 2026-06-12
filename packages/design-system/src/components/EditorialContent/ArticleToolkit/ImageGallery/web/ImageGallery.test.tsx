@@ -36,10 +36,6 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&q=75',
-    purchaseLink: {
-      label: 'Buy Reprint',
-      link: 'https://www.startribune.com/photos',
-    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -81,12 +77,46 @@ describe('ImageGallery', () => {
     expect(getAllByRole('button')).toHaveLength(2);
   });
 
-  it('renders buy reprint in the inline gallery caption for the active image', () => {
-    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
+  it('renders buy reprint in the inline gallery caption from the gallery-level purchase link', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
 
     expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
       'href',
       'https://www.startribune.com/photos'
+    );
+  });
+
+  it('prefers the image-level purchase link over the gallery-level purchase link', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={[
+          {
+            ...images[0],
+            purchaseLink: {
+              label: 'Image Buy Reprint',
+              link: 'https://www.startribune.com/photos?image=1',
+            },
+          },
+          images[1],
+        ]}
+        purchaseLink={{
+          label: 'Gallery Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos?image=1'
     );
   });
 
@@ -199,7 +229,15 @@ describe('ImageGallery', () => {
 
   it('renders buy reprint in the expanded dialog for the active image', () => {
     const { getByTestId } = renderWithProvider(
-      <ImageGallery images={images} expandable dataTestId="gallery" />
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
+        expandable
+        dataTestId="gallery"
+      />
     );
 
     fireEvent.click(getByTestId('gallery-expand-button-0'));
