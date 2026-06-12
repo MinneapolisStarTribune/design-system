@@ -219,7 +219,9 @@ describe('ImageGallery (native)', () => {
     fireEvent.press(screen.getByTestId('gallery-dialog-caption-purchase-link'));
 
     await waitFor(() => {
-      expect(Linking.openURL).toHaveBeenLastCalledWith('https://www.startribune.com/photos?image=1');
+      expect(Linking.openURL).toHaveBeenLastCalledWith(
+        'https://www.startribune.com/photos?image=1'
+      );
     });
   });
 
