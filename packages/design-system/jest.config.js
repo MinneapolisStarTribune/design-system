@@ -12,6 +12,7 @@ module.exports = {
   moduleDirectories: ['node_modules', rootNodeModules],
   moduleNameMapper: {
     '\\.svg\\?react$': '<rootDir>/src/test-utils/mocks/svgReactStub.tsx',
+    '^@/icons$': '<rootDir>/src/icons/index.native.ts',
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@mobile/themes/(.*)$': '<rootDir>/dist/mobile/themes/$1',
     '^@mobile/typography/(.*)$': '<rootDir>/dist/mobile/typography/$1',

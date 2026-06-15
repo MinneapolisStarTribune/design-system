@@ -15,6 +15,7 @@ import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 import styles from './ImageGallery.module.scss';
 import { ImageGalleryProps } from '../ImageGallery.types';
@@ -70,14 +71,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   const total = images.length;
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
-  const dialogPurchaseLink =
-    dialogImage?.purchaseLink ??
-    (purchaseLink
-      ? {
-          label: 'Buy Reprint',
-          link: purchaseLink,
-        }
-      : undefined);
+  const activePurchaseLink = resolvePurchaseLink(activeImage?.purchaseLink ?? purchaseLink);
+  const dialogPurchaseLink = resolvePurchaseLink(dialogImage?.purchaseLink ?? purchaseLink);
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
@@ -176,7 +171,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   };
 
   const captionsTypography = 'typography-utility-text-regular-x-small';
-  const hasBottomSection = Boolean(activeImage?.caption || activeImage?.credit || total > 1);
+  const hasBottomSection = Boolean(
+    activeImage?.caption || activeImage?.credit || activePurchaseLink || total > 1
+  );
 
   if (!images?.length) return null;
 
@@ -255,6 +252,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             <Caption
               caption={activeImage?.caption}
               credit={normalizeCredit(activeImage?.credit)}
+              purchaseLink={activePurchaseLink}
               currentIndex={total > 1 ? currentImageProgress : undefined}
               totalItems={total > 1 ? total : undefined}
               onPrevious={total > 1 ? prev : undefined}

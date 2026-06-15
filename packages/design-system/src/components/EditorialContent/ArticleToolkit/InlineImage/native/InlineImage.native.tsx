@@ -1,17 +1,9 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Image,
-  Linking,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ImageStyle,
-} from 'react-native';
-import { CameraIcon, CloseIcon, ExpandIcon } from '@/icons';
-import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/native/UtilityLabel.native';
+import { Image, Modal, Pressable, StyleSheet, View, type ImageStyle } from 'react-native';
+import { CloseIcon, ExpandIcon } from '@/icons';
+import { Caption } from '@/components/Caption/native/Caption.native';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
+import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 import type { InlineImageProps } from '../InlineImage.types';
 
 const DEFAULT_TEST_ID = 'inline-image';
@@ -70,21 +62,10 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
       width: '100%',
       height: '100%',
     },
-    captionText: {
-      color: theme.colorTextOnLightSecondary,
-    },
-    purchaseLinkSeparator: {
-      marginHorizontal: theme.spacing4,
-    },
-    purchaseLinkText: {
-      color: theme.colorLinkTextDefault,
-      textDecorationLine: 'underline',
-      textDecorationColor: theme.colorLinkUnderlineDefault,
-    },
     expandButton: {
       position: 'absolute',
-      right: theme.spacing8,
-      bottom: theme.spacing8,
+      right: theme.spacing16,
+      top: theme.spacing16,
       width: 40,
       height: 40,
       borderRadius: 20,
@@ -121,19 +102,7 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
       aspectRatio,
     },
     dialogCaption: {
-      gap: theme.spacing8,
-    },
-    dialogCaptionText: {
-      color: theme.colorTextOnDarkPrimary,
-    },
-    dialogCreditRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: theme.spacing4,
-    },
-    dialogCreditText: {
-      color: theme.colorTextOnDarkSecondary,
-      flexShrink: 1,
+      width: '100%',
     },
   });
 };
@@ -155,27 +124,10 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const styles = useNativeStyles((theme) => createStyles(theme, variant));
   const imageUri = useMemo(() => buildImageUri(image.src, imgixParams), [image.src, imgixParams]);
-  const captionText = [caption, credit && `(${credit})`].filter(Boolean).join(' ');
-  const hasDialogText = Boolean(caption?.trim()) || Boolean(credit?.trim());
   const imageStyle = (style ?? {}) as ImageStyle;
-
-  const openPurchaseLink = async () => {
-    if (!purchaseLink) {
-      return;
-    }
-
-    try {
-      const canOpenPurchaseLink = await Linking.canOpenURL(purchaseLink);
-
-      if (!canOpenPurchaseLink) {
-        return;
-      }
-
-      await Linking.openURL(purchaseLink);
-    } catch (error) {
-      console.warn('Failed to open purchase link', error);
-    }
-  };
+  const resolvedPurchaseLink = resolvePurchaseLink(purchaseLink);
+  const hasDialogCaptionContent =
+    Boolean(caption?.trim()) || Boolean(credit?.trim()) || Boolean(resolvedPurchaseLink);
 
   return (
     <>
@@ -211,33 +163,13 @@ export const InlineImage: React.FC<InlineImageProps> = ({
           ) : null}
         </View>
 
-        {captionText ? (
-          <View testID={`${dataTestId}-caption`}>
-            <UtilityLabel size="small" weight="regular" style={styles.captionText}>
-              {captionText}
-              {purchaseLink ? (
-                <>
-                  <Text
-                    style={styles.purchaseLinkSeparator}
-                    accessibilityElementsHidden
-                    importantForAccessibility="no"
-                  >
-                    •
-                  </Text>
-                  <Text
-                    style={styles.purchaseLinkText}
-                    accessibilityRole="link"
-                    accessibilityLabel="Buy Reprint"
-                    onPress={openPurchaseLink}
-                    testID={`${dataTestId}-purchase-link`}
-                  >
-                    Buy Reprint
-                  </Text>
-                </>
-              ) : null}
-            </UtilityLabel>
-          </View>
-        ) : null}
+        <Caption
+          caption={caption}
+          credit={credit}
+          purchaseLink={resolvedPurchaseLink}
+          variant="inline"
+          dataTestId={`${dataTestId}-caption`}
+        />
       </View>
 
       <Modal
@@ -272,22 +204,15 @@ export const InlineImage: React.FC<InlineImageProps> = ({
             />
           </View>
 
-          {hasDialogText ? (
-            <View style={styles.dialogCaption}>
-              {caption?.trim() ? (
-                <UtilityLabel size="small" weight="regular" style={styles.dialogCaptionText}>
-                  {caption}
-                </UtilityLabel>
-              ) : null}
-              {credit?.trim() ? (
-                <View style={styles.dialogCreditRow}>
-                  <CameraIcon color="on-dark-primary" size="medium" />
-                  <UtilityLabel size="small" weight="regular" style={styles.dialogCreditText}>
-                    {credit}
-                  </UtilityLabel>
-                </View>
-              ) : null}
-            </View>
+          {hasDialogCaptionContent ? (
+            <Caption
+              caption={caption}
+              credit={credit}
+              purchaseLink={resolvedPurchaseLink}
+              variant="lightbox"
+              style={styles.dialogCaption}
+              dataTestId={`${dataTestId}-dialog-caption`}
+            />
           ) : null}
         </View>
       </Modal>

@@ -24,7 +24,10 @@ const meta: Meta<CaptionProps> = {
     },
     purchaseLink: {
       control: 'object',
-      description: 'Optional Buy Reprint CTA',
+      description: 'Optional Buy Reprint CTA: { label, link }.',
+      table: {
+        type: { summary: '{ label?: string; link?: string }' },
+      },
     },
     analytics: {
       control: 'object',
