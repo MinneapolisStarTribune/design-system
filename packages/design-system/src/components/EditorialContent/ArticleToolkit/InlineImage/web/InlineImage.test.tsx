@@ -90,4 +90,34 @@ describe('InlineImage', () => {
     const captionElement = el.querySelector('figcaption');
     expect(captionElement).not.toBeInTheDocument();
   });
+
+  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+    const { queryByTestId } = renderWithProvider(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(queryByTestId(`${dataTestId}-caption-purchase-link`)).not.toBeInTheDocument();
+  });
+
+  it('does not render Buy Reprint when purchaseLink.link is missing', () => {
+    const { queryByTestId } = renderWithProvider(
+      <InlineImage
+        dataTestId={dataTestId}
+        image={image}
+        caption="Image caption"
+        purchaseLink={{
+          label: 'Buy Reprint',
+        }}
+      />
+    );
+
+    expect(queryByTestId(`${dataTestId}-caption-purchase-link`)).not.toBeInTheDocument();
+  });
 });
