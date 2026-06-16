@@ -12,9 +12,6 @@ This repo's conventions align with the [Engineering Testing Strategy](https://mi
 - [What to Test](#what-to-test)
 - [Test Types and When to Use Each](#test-types-and-when-to-use-each)
 - [File Locations and Naming](#file-locations-and-naming)
-- [Mock Data](#mock-data)
-- [Snapshots](#snapshots)
-- [Test Helpers](#test-helpers)
 - [Selectors](#selectors)
 - [Writing a New Test: Decision Tree](#writing-a-new-test-decision-tree)
 - [CI Integration](#ci-integration)
@@ -52,7 +49,7 @@ Prioritize testing in this order:
 2. **Components with business logic.** Components that transform data, branch on conditions, or manage interactive state (toggles, tabs, filters).
 3. **Utility functions.** Pure functions with branching logic, data transformations, formatters.
 
-Do not write Vitest tests for:
+Do not write tests for:
 
 - Type definitions
 - Static configuration objects with no logic
@@ -289,7 +286,6 @@ Chromatic runs in CI on every PR, capturing visual snapshots and executing play 
 
 **When to add a story:** Any reusable component in `src/components/`. Stories are not needed for page level components or one off layout wrappers.
 
-**When to add a play function:** Components with interactive behavior that changes visible state. Accordions, dropdowns, tabs, toggles, sortable tables, search inputs, menus. Do not add play functions to purely static components.
 
 **Static story pattern (visual documentation):**
 
@@ -363,7 +359,6 @@ export const ToggleBehavior: Story = {
 - Follow the existing `title` hierarchy: Foundations, Global, Actions & Inputs, Layout & Containers, Navigation, Game, Editorial Content, User Controls, Ads & Sponsors
 - Use `tags: ['autodocs']` for automatic documentation generation
 - Keep static stories and interaction stories in the same file. Use descriptive export names to distinguish them (e.g., `Default`, `OpenState`, `ToggleBehavior`, `KeyboardNavigation`)
-- Play functions should use the same selector priority as Vitest tests: `getByRole` first, `getByText` second, `getByTestId` last resort
 - Use `{ canvas, userEvent }` from the play function context — `canvas` is pre-scoped to the story element. Import only `expect` from `storybook/test`
 - Always `await` `userEvent` methods and `expect` calls inside play functions
 
@@ -456,8 +451,6 @@ Rules:
 
 - Test files use the `.test.ts` or `.test.tsx` extension
 - Test files sit next to the file they test
-- Large JSON test data sits next to its test file with a `.testdata.json` extension
-- Snapshot files are auto generated in `__snapshots__/` directories
 
 
 ### Storybook
@@ -465,60 +458,15 @@ Rules:
 Stories live alongside their components.
 
 ```
-src/components/
-  Accordion/
-    index.tsx
-    accordion.stories.tsx                # story file
-  DataTable/
-    Interactive.tsx
-    interactiveDataTable.stories.ts      # story file
+packages/design-system/src/components/
+  Radio/
+    web/
+      Radio.tsx
+      Radio.stories.tsx                # story file
+    native/
+      Radio.native.tst
+      Radio.native.stories.ts      # story file
 ```
-
-## Snapshots
-
-Use snapshots for verifying complex rendered output, especially tabular data. Snapshots make stat tables, score displays, and structured data easy to review in PRs and catch regressions.
-
-**Use `parseTableToText` for table snapshots.** This helper renders HTML tables as formatted plain text, making snapshots readable and diffable.
-
-```typescript
-import parseTableToText from '@/test/helpers/parseTableToText';
-
-const tables = screen.getAllByRole('table');
-expect(parseTableToText(tables[0])).toMatchSnapshot();
-```
-
-**Snapshot output looks like this:**
-
-```
-Name              GP  G   A   Pts  PIM  GW  G/GP   PTS/GP  SOG
-----------------  --  --  --  ---  ---  --  -----  ------  ---
-Aiden Sargent #7  19  27  28  55   0    1   1.420  2.890   48
-```
-
-**Generating and updating snapshots:**
-
-- Run `yarn test` to generate new snapshots
-- Run `yarn test --update` to update existing snapshots after intentional changes
-- Always review snapshot diffs in your PR. Do not blindly update snapshots
-
-**Snapshots must be deterministic.** Do not snapshot content that includes timestamps, random IDs, or other values that change between runs. Mock `Date.now()` if needed.
-
-## Test Helpers
-
-Located in `src/test/helpers/`.
-
-**`TestProvider.tsx`** wraps components with required context providers (UserContext, ModalProvider, UserTopicsProvider, AdProvider). Use it as the `wrapper` option when rendering components that depend on app context.
-
-```typescript
-render(<MyComponent />, { wrapper: TestProvider });
-
-// For tests that need a logged in user:
-render(<MyComponent />, {
-  wrapper: ({ children }) => <TestProvider isLoggedIn>{children}</TestProvider>,
-});
-```
-
-**`parseTableToText.ts`** converts an HTML table element into formatted plain text for snapshot testing. See the Snapshots section above.
 
 ## Selectors
 
@@ -563,11 +511,6 @@ expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
 Use this to determine what kind of test to write.
 
 ```
-Is this a new page or route, or a critical component in a page that
-does not have a page level test?
-  YES -> Write a page level integration test
-         Mock data fetchers with __mocks__/, render the page, assert output
-
 Is this a reusable component in src/components/?
   Does it have interactive behavior (clicks, toggles, input)?
     YES -> Write a Storybook story with a play function
@@ -575,6 +518,7 @@ Is this a reusable component in src/components/?
   Does it have business logic or conditional rendering?
     YES -> Write a Vitest component test
            Import the component directly, pass props, assert rendered output
+           Write a Jest test for native.  
   Is it purely presentational?
     YES -> Write a static Storybook story for visual documentation
            Chromatic will handle visual regression
@@ -582,10 +526,6 @@ Is this a reusable component in src/components/?
 Is this a pure utility function?
   YES -> Write a unit test
          Import the function, test input/output pairs
-
-Is this a critical user journey spanning multiple pages?
-  YES -> Write a Playwright E2E test
-         Use page objects, tag with environments
 
 None of the above?
   -> Probably doesn't need a dedicated test. Coverage will come from
@@ -600,7 +540,6 @@ None of the above?
 
 - Vitest runs on every push to main/prod and every PR. Coverage is uploaded to Codecov.
 - Chromatic runs on every PR when component or story files change. It captures visual snapshots and runs play functions. Changes are auto accepted on main.
-- Playwright runs post-deploy, filtered by environment tags (@preview, @stage, @prod).
 
 **Coverage:** Tracked via Codecov. Coverage reports appear on every PR. New code should maintain or improve coverage.
 
@@ -627,38 +566,3 @@ render(<MyClientComponent {...props} />, { wrapper: TestProvider });
 await user.click(screen.getByRole('button', { name: /toggle/i }));
 expect(screen.getByText('New content')).toBeInTheDocument();
 ```
-
-### Reusing base test data across test cases
-
-Define a single set of base props and use `structuredClone` to create variations for each test case. This avoids duplicating large prop objects while keeping each test isolated from mutations.
-
-```typescript
-const baseProps: GameStatsProps = gameStatsTestData as GameStatsProps;
-
-it('should handle boys variant', () => {
-  render(<GameStats {...baseProps} />);
-});
-
-it('should handle girls variant', () => {
-  const props = structuredClone(baseProps);
-  props.gender = 'GIRLS';
-  render(<GameStats {...props} />);
-});
-```
-
-### Creating a shared mock
-
-1. Create `src/<module>/utils/__mocks__/<functionName>.ts`
-2. Export a function with the same signature that returns test data
-3. For large response data, store it in `__mocks__/data/<name>.json` and import it
-
-```typescript
-// src/cda-graphql/utils/__mocks__/getTeamData.ts
-import data from './data/team-data.json';
-
-export default async function getTeamData() {
-  return data;
-}
-```
-
-4. In your test, use `vi.mock(import('@/cda-graphql/utils/getTeamData'))` and Vitest will auto resolve to the mock.
