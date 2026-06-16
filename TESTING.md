@@ -25,7 +25,6 @@ This repo's conventions align with the [Engineering Testing Strategy](https://mi
 | Run Web Tests Only             | Vitest           | `yarn test:web`        |
 | Run Native Tests Only          | Jest             | `yarn test:native`     |
 | Run accessibility tests        | Vitest + Jest    | `yarn test:a11y`       |
-| Run Script Tests               | Vitest           | `yarn test:scripts`    |
 | Run tests with coverage        | Vitest           | `yarn test:coverage`   |
 | Run tests in watch mode        | Vitest           | `yarn test:watch`      |
 | Lint                           | ESLint           | `yarn lint`            |
@@ -35,7 +34,7 @@ Always run `yarn lint`, `yarn format`, and `yarn test` to validate before pushin
 
 ## Frameworks
 
-**Unit and integration tests:** Vitest with React Testing Library for web tests. Config in `vitest.config.ts`, setup in `vitest-setup.ts`.  Jest with React Native for Mobile testing.  Config in `jest.config.ts`, setup in `jest.setup.ts`.
+**Unit and integration tests:** Vitest with React Testing Library for web tests. Config in `vitest.config.ts`, setup in `vitest-setup.ts`.  Jest with React Native for Mobile testing.  Config in `jest.config.js`, setup in `jest.setup.ts`.
 
 **Component visual and interaction testing:** Storybook with Chromatic. Config in `.storybook/main.ts`. Stories live alongside their components in `src/components/`. Chromatic runs visual regression tests in CI on every PR.
 
@@ -426,12 +425,12 @@ packages/design-system/src/components/Button/
   native/
     Button.native.tsx
     Button.native.stories.tsx
-    Button.navite.test.tsx
+    Button.native.test.tsx
     buttonTheme.ts
   web/
     Button.platform-exports.test.ts
     Button.types.ts
-    helpers.ts
+    Helpers.ts
     utilityButtonIconFillVariant.ts
   Button.platform-exports.test.ts
   Button.types.ts
@@ -526,11 +525,11 @@ None of the above?
 
 ## CI Integration
 
-**Pre-commit hook (lefthook):** Automatically runs `yarn vitest related --run {staged_files}` on staged files before every commit. Tests related to your changes must pass to commit.
+**Pre-commit hook (lefthook):** Automatically runs `yarn format`, `yarn lint`, `turbo run typecheck`, `yarn test:web`, and `yarn test:native` on staged files before every commit. Tests related to your changes must pass to commit.
 
 **PR checks:**
 
-- Vitest runs on every push to main/prod and every PR. Coverage is uploaded to Codecov.
+- Vitest and Jest run on every push to main/prod and every PR. Coverage is uploaded to Codecov.
 - Chromatic runs on every PR when component or story files change. It captures visual snapshots and runs play functions. Changes are auto accepted on main.
 
 **Coverage:** Tracked via Codecov. Coverage reports appear on every PR. New code should maintain or improve coverage.
