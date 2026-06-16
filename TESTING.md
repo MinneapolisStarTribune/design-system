@@ -416,7 +416,7 @@ describe('FormGroupDescription Accessibility', () => {
 
 ## File Locations and Naming
 
-### Vitest (unit and integration)
+### Vitest (unit and integration for web) and Jest (unit and integration for native)
 
 Tests are colocated with the source files they test.
 
