@@ -421,7 +421,8 @@ describe('FormGroupDescription Accessibility', () => {
 Tests are colocated with the source files they test.
 
 ```
-packages/design-system/src/components/[component]/
+Example
+packages/design-system/src/components/Button/
   native/
     Button.native.tsx
     Button.native.stories.tsx
@@ -432,20 +433,10 @@ packages/design-system/src/components/[component]/
     Button.types.ts
     helpers.ts
     utilityButtonIconFillVariant.ts
-```
-
-```
-packages/design-system/src/components/[component]/native/
-web
-navtive
-  Button.native.tsx
-  Button.native.stories.tsx
-  Button.native.test.tsx
-  buttonTheme.ts
-Button.platform-exports.test.ts
-Button.types.ts
-helpers.ts
-utilityButtonIconFillVariant.ts
+  Button.platform-exports.test.ts
+  Button.types.ts
+  helpers.ts
+  utilityButtonIconFillVariant.ts
 ```
 
 Rules:
