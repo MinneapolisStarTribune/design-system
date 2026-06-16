@@ -58,7 +58,9 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   const canGoPrevious = hasPagination && currentIndex > 1;
   const canGoNext = hasPagination && currentIndex < totalItems;
 
-  const showPurchaseLink = Boolean(purchaseLink?.link);
+  const purchaseLinkHref = purchaseLink?.link?.trim();
+  const purchaseLinkLabel = purchaseLink?.label?.trim();
+  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
 
   const hasTopRowContent = caption || credit || showPurchaseLink || (!isLightbox && hasNavigation);
 
@@ -85,9 +87,9 @@ export const Caption: React.FC<CaptionNativeProps> = ({
     track({
       event: 'link_click',
       component: 'Caption',
-      label: purchaseLink?.label ?? 'Buy Reprint',
+      label: purchaseLinkLabel,
       cta_type: 'buy_reprint',
-      href: purchaseLink?.link,
+      href: purchaseLinkHref,
       variant,
       ...analyticsOverride,
     });
@@ -95,16 +97,16 @@ export const Caption: React.FC<CaptionNativeProps> = ({
     purchaseLink?.onPress?.();
     onPurchaseLinkClick?.();
 
-    if (!purchaseLink?.link) {
+    if (!purchaseLinkHref) {
       return;
     }
 
     try {
-      const canOpen = await Linking.canOpenURL(purchaseLink.link);
+      const canOpen = await Linking.canOpenURL(purchaseLinkHref);
       if (!canOpen) {
         return;
       }
-      await Linking.openURL(purchaseLink.link);
+      await Linking.openURL(purchaseLinkHref);
     } catch (error) {
       console.warn('Failed to open purchase link', error);
     }
@@ -176,11 +178,11 @@ export const Caption: React.FC<CaptionNativeProps> = ({
           <Text
             style={styles.purchaseLinkText}
             accessibilityRole="link"
-            accessibilityLabel={purchaseLink?.label ?? 'Buy Reprint'}
+            accessibilityLabel={purchaseLinkLabel}
             onPress={handlePurchasePress}
             testID={`${dataTestId}-purchase-link`}
           >
-            {purchaseLink?.label ?? 'Buy Reprint'}
+            {purchaseLinkLabel}
           </Text>
         </>
       ) : null}

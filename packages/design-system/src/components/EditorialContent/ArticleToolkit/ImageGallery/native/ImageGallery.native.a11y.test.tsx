@@ -104,4 +104,63 @@ describe('ImageGallery Accessibility (native)', () => {
     expect(screen.getByRole('button', { name: 'Close expanded image' })).toBeOnTheScreen();
     expect(screen.getByText('Photo credit')).toBeOnTheScreen();
   });
+
+  it('marks the expanded view as an accessibility modal', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery-a11y" />, { wrapper });
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 2' }));
+
+    const modal = screen.getByLabelText('Expanded image view');
+    expect(modal).toBeOnTheScreen();
+    expect(modal.props.accessibilityViewIsModal).toBe(true);
+  });
+
+  it('exposes accessible prev/next controls in the lightbox', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery-a11y" />, { wrapper });
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 2' }));
+
+    expect(screen.getByRole('button', { name: 'Previous image (1 of 2)' })).toBeOnTheScreen();
+    expect(screen.getByRole('button', { name: 'Next image (2 of 2)' })).toBeOnTheScreen();
+  });
+
+  it('announces the lightbox counter as a polite live region', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery-a11y" />, { wrapper });
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 2' }));
+
+    const counter = screen.getByLabelText('Image 1 of 2');
+    expect(counter).toBeOnTheScreen();
+    expect(counter.props.accessibilityLiveRegion).toBe('polite');
+  });
+
+  it('keeps the lightbox counter in sync when navigating', () => {
+    render(<ImageGallery images={images} expandable dataTestId="gallery-a11y" />, { wrapper });
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 2' }));
+    fireEvent.press(screen.getByRole('button', { name: 'Next image (2 of 2)' }));
+
+    expect(screen.getByLabelText('Image 2 of 2')).toBeOnTheScreen();
+  });
+
+  it('returns screen-reader focus to the triggering control when the lightbox closes', () => {
+    // findNodeHandle yields null under the test renderer (no real native node), so stub it to a
+    // tag to verify the focus-restore wiring fires when the dialog closes.
+    const findNodeHandleSpy = jest
+      .spyOn(require('react-native'), 'findNodeHandle')
+      .mockReturnValue(1);
+    const setFocusSpy = jest
+      .spyOn(AccessibilityInfo, 'setAccessibilityFocus')
+      .mockImplementation(jest.fn());
+
+    render(<ImageGallery images={images} expandable dataTestId="gallery-a11y" />, { wrapper });
+
+    fireEvent.press(screen.getByRole('button', { name: 'Expand image 1 of 2' }));
+    fireEvent.press(screen.getByLabelText('Close expanded image'));
+
+    expect(setFocusSpy).toHaveBeenCalledWith(1);
+
+    setFocusSpy.mockRestore();
+    findNodeHandleSpy.mockRestore();
+  });
 });
