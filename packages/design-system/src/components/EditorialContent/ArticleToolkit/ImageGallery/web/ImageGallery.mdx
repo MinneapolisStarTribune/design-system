@@ -11,7 +11,7 @@ Displays a collection of images with optional captions, credits, caption-driven 
 
 ### Variant
 
-- **Standard:** Constrained to article width. Use for inline editorial content.
+- **Standard:** Fills the parent container width — no fixed max-width is applied. Constrain the width at the layout level (e.g. wrap in an article column). Use for inline editorial content.
 - **Immersive:** Full-bleed layout with centered active image and adjacent image peek.
 
 ### Layout behavior
@@ -19,11 +19,14 @@ Displays a collection of images with optional captions, credits, caption-driven 
 - Uses CSS aspect ratio to prevent layout shift.
 - Images scale responsively with consistent layout.
 - Immersive mode centers active slide with adjacent previews.
+- Set `aspectRatio` to apply one consistent wrapper ratio across the entire gallery, such as `1 / 1` or `3 / 2`.
+- Set `spaceBetween` to override the default slide gap when consumers need custom immersive spacing behavior.
 
 ### Image sizing
 
 - Provide `width` and `height` to reserve layout space and prevent CLS.
-- Internally uses `aspect-ratio` for better responsive stability.
+- Provide `aspectRatio` when the gallery should keep one shared frame regardless of each image's intrinsic dimensions.
+- Without `aspectRatio`, the wrapper falls back to the default component styling.
 
 ### Imgix support
 
@@ -37,6 +40,7 @@ When `expandable` is enabled, readers can open the **active slide** in a full-sc
 ### Caption-driven gallery controls
 
 - `ImageGallery` delegates inline caption text, credit, counter, and next/previous controls to the shared `Caption` component.
+- Use `onIndexChange` to receive the active (1-based) slide index without observing Swiper DOM classes.
 - Add `purchaseLink` at the gallery level to share one Buy Reprint CTA across the active image.
 - Add `purchaseLink` to each image item (`images[index].purchaseLink`) when a specific image needs its own CTA.
 - The Buy Reprint CTA is shown only when the image item's `purchaseLink` includes both `label` and `link`.
