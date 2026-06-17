@@ -44,9 +44,8 @@ Do not introduce additional test runners or E2E frameworks without team consensu
 
 Prioritize testing in this order:
 
-1. **Pages and routes.** These are the highest value tests. They exercise data fetching, component composition, and rendering together. Most new tests should be at this level.
-2. **Components with business logic.** Components that transform data, branch on conditions, or manage interactive state (toggles, tabs, filters).
-3. **Utility functions.** Pure functions with branching logic, data transformations, formatters.
+1. **Components with business logic.** Components that transform data, branch on conditions, or manage interactive state (toggles, tabs, filters).
+2. **Utility functions.** Pure functions with branching logic, data transformations, formatters.
 
 Do not write tests for:
 
@@ -428,10 +427,20 @@ packages/design-system/src/components/Button/
     Button.native.test.tsx
     buttonTheme.ts
   web/
-    Button.platform-exports.test.ts
+    Button.stories.tsx
+    Button.test.tsx
     Button.types.ts
-    Helpers.ts
-    utilityButtonIconFillVariant.ts
+    Button.utils.ts
+    ButtonGroup.mdx
+    ButtonGroup.modules.scss
+    ButtonGroup.stories.tsx
+    ButtonGroup.test.tsx
+    UtilityButtons.mdx
+    UtilityButton.tsx
+    UtilityButton.a11y.test.tsx
+    UtilityButton.module.scss
+    UtilityButton.stories.tsx
+    UtilityButton.test.tsx
   Button.platform-exports.test.ts
   Button.types.ts
   helpers.ts
@@ -455,7 +464,7 @@ packages/design-system/src/components/
       Radio.tsx
       Radio.stories.tsx                # story file
     native/
-      Radio.native.tst
+      Radio.native.tsx
       Radio.native.stories.ts      # story file
 ```
 
@@ -536,15 +545,6 @@ None of the above?
 
 ## Common Patterns
 
-### Testing async server components
-
-```typescript
-// Call the component as an async function, then render the result
-const page = await MyPage({
-  params: Promise.resolve({ id: '123' }),
-});
-render(page, { wrapper: TestProvider });
-```
 
 ### Testing client components with state
 
