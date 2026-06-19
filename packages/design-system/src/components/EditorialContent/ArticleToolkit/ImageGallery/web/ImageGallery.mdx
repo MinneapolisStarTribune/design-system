@@ -32,13 +32,15 @@ Displays a collection of images with optional captions, credits, caption-driven 
 
 ### Expandable
 
-When `expandable` is enabled, readers can open the **active slide** in a full-screen dialog (same behavior as `InlineImage`). The same shared `Caption` treatment powers inline and lightbox modes, and the optional Buy Reprint link is rendered only in the expanded lightbox view.
+When `expandable` is enabled, readers can open the **active slide** in a full-screen dialog (same behavior as `InlineImage`). The same shared `Caption` treatment powers inline and lightbox modes.
 
 ### Caption-driven gallery controls
 
 - `ImageGallery` delegates inline caption text, credit, counter, and next/previous controls to the shared `Caption` component.
-- Add `purchaseLink` to an image item to render the optional Buy Reprint CTA in the expanded lightbox view.
-- The `Configurable` story includes a `showBuyReprint` control to toggle the sample lightbox CTA on or off across all demo images.
+- Add `purchaseLink` at the gallery level to share one Buy Reprint CTA across the active image.
+- Add `purchaseLink` to each image item (`images[index].purchaseLink`) when a specific image needs its own CTA.
+- The Buy Reprint CTA is shown only when the image item's `purchaseLink` includes both `label` and `link`.
+- When both are present, the image item purchase link takes precedence.
 - In immersive mode, caption navigation stays enabled at the edges and wraps with the looping swiper.
 
 ### Custom image component

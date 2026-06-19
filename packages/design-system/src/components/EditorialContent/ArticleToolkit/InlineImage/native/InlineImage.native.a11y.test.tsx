@@ -17,6 +17,11 @@ describe('InlineImage Accessibility (native)', () => {
     altText: 'Alternative text for the image',
   };
 
+  const purchaseLink = {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  };
+
   it('exposes image semantics with accessible name', () => {
     render(<InlineImage image={image} />, { wrapper });
 
@@ -27,16 +32,9 @@ describe('InlineImage Accessibility (native)', () => {
   });
 
   it('exposes purchase link semantics when purchaseLink is provided', () => {
-    render(
-      <InlineImage
-        image={image}
-        caption="Caption"
-        purchaseLink={{ label: 'Buy Reprint', link: 'https://example.com' }}
-      />,
-      {
-        wrapper,
-      }
-    );
+    render(<InlineImage image={image} caption="Caption" purchaseLink={purchaseLink} />, {
+      wrapper,
+    });
 
     expect(screen.getByRole('link', { name: 'Buy Reprint' })).toBeOnTheScreen();
   });

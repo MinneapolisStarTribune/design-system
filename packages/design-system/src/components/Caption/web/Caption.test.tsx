@@ -20,7 +20,7 @@ describe('Caption', () => {
     );
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is missing', () => {
+  it('renders default Buy Reprint when purchaseLink.label is missing', () => {
     renderWithProvider(
       <Caption
         caption="A scenic mountain view."
@@ -30,10 +30,14 @@ describe('Caption', () => {
       />
     );
 
-    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+    expect(screen.getByTestId('caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(screen.getByTestId('caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
-  it('does not render Buy Reprint when purchaseLink.label is empty', () => {
+  it('renders default Buy Reprint when purchaseLink.label is empty', () => {
     renderWithProvider(
       <Caption
         caption="A scenic mountain view."
@@ -44,7 +48,11 @@ describe('Caption', () => {
       />
     );
 
-    expect(screen.queryByTestId('caption-purchase-link')).not.toBeInTheDocument();
+    expect(screen.getByTestId('caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(screen.getByTestId('caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
   });
 
   it('does not render Buy Reprint when purchaseLink.link is missing', () => {
@@ -131,7 +139,7 @@ describe('Caption', () => {
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 
-  it('renders gallery pagination and navigation in inline variant', () => {
+  it('renders gallery navigation (without pagination) in inline variant', () => {
     renderWithProvider(
       <Caption
         caption="A scenic mountain view."
@@ -143,7 +151,7 @@ describe('Caption', () => {
       />
     );
 
-    expect(screen.getByTestId('caption-pagination')).toHaveTextContent('2/5');
+    expect(screen.queryByTestId('caption-pagination')).not.toBeInTheDocument();
     expect(screen.getAllByRole('button')).toHaveLength(2);
   });
 

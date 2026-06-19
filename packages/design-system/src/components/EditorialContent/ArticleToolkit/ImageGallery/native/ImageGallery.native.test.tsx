@@ -1,5 +1,5 @@
-import { render, fireEvent, screen } from '@testing-library/react-native';
-import { ScrollView } from 'react-native';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { Linking, ScrollView } from 'react-native';
 import { ImageGallery } from './ImageGallery.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
 
@@ -68,7 +68,7 @@ describe('ImageGallery (native)', () => {
   it('renders caption and credit', () => {
     const { getByText } = render(<ImageGallery images={images} />, { wrapper });
 
-    expect(getByText('Caption one Credit one')).toBeTruthy();
+    expect(getByText('Caption one (Credit one)')).toBeTruthy();
   });
 
   it('renders navigation buttons for multiple images', () => {
@@ -159,67 +159,84 @@ describe('ImageGallery (native)', () => {
     expect(screen.queryByTestId('gallery-dialog')).toBeNull();
   });
 
-  it('renders the Buy Reprint CTA in the carousel from a per-image purchaseLink', () => {
-    const imagesWithPurchase = [
-      {
-        ...images[0],
-        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
-      },
-      images[1],
-    ];
+  it('renders the Buy Reprint CTA in both carousel and dialog from the gallery-level purchaseLink', async () => {
+    jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true);
+    jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
 
-    render(<ImageGallery images={imagesWithPurchase} dataTestId="gallery" />, { wrapper });
-
-    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
-  });
-
-  it('falls back to the gallery-level purchaseLink in the carousel caption', () => {
     render(
       <ImageGallery
         images={images}
         purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        expandable
         dataTestId="gallery"
       />,
       { wrapper }
     );
 
     expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
-  });
 
-  it('renders the Buy Reprint CTA in the expanded dialog from a per-image purchaseLink', () => {
-    const imagesWithPurchase = [
-      {
-        ...images[0],
-        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
-      },
-      images[1],
-    ];
-
-    render(<ImageGallery images={imagesWithPurchase} expandable dataTestId="gallery" />, {
-      wrapper,
+    fireEvent.press(screen.getByTestId('image-gallery-caption-purchase-link'));
+    await waitFor(() => {
+      expect(Linking.openURL).toHaveBeenCalledWith('https://www.startribune.com/photos');
     });
 
-    expect(screen.queryByTestId('gallery-dialog-caption-purchase-link')).toBeNull();
-
     fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-purchase-link'));
 
-    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+    await waitFor(() => {
+      expect(Linking.openURL).toHaveBeenLastCalledWith('https://www.startribune.com/photos');
+    });
   });
 
-  it('falls back to the gallery-level purchaseLink for the Buy Reprint CTA', () => {
+  it('renders default Buy Reprint CTA when gallery-level purchaseLink.label is missing', () => {
     render(
       <ImageGallery
         images={images}
-        expandable
-        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        purchaseLink={{ link: 'https://www.startribune.com/photos' }}
         dataTestId="gallery"
       />,
       { wrapper }
     );
 
-    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+    expect(screen.getByTestId('image-gallery-caption-purchase-link')).toBeOnTheScreen();
+    expect(screen.getByText('Buy Reprint')).toBeOnTheScreen();
+  });
 
-    expect(screen.getByTestId('gallery-dialog-caption-purchase-link')).toBeOnTheScreen();
+  it('prefers the image-level purchaseLink over the gallery-level purchaseLink in both places', async () => {
+    jest.spyOn(Linking, 'canOpenURL').mockResolvedValue(true);
+    jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+
+    const imagesWithPurchase = [
+      {
+        ...images[0],
+        purchaseLink: { label: 'Buy Reprint', link: 'https://www.startribune.com/photos?image=1' },
+      },
+      images[1],
+    ];
+
+    render(
+      <ImageGallery
+        images={imagesWithPurchase}
+        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        expandable
+        dataTestId="gallery"
+      />,
+      { wrapper }
+    );
+
+    fireEvent.press(screen.getByTestId('image-gallery-caption-purchase-link'));
+    await waitFor(() => {
+      expect(Linking.openURL).toHaveBeenCalledWith('https://www.startribune.com/photos?image=1');
+    });
+
+    fireEvent.press(screen.getByTestId('gallery-expand-button-0'));
+    fireEvent.press(screen.getByTestId('gallery-dialog-caption-purchase-link'));
+
+    await waitFor(() => {
+      expect(Linking.openURL).toHaveBeenLastCalledWith(
+        'https://www.startribune.com/photos?image=1'
+      );
+    });
   });
 
   it('does not render a Buy Reprint CTA in the expanded dialog when none is configured', () => {

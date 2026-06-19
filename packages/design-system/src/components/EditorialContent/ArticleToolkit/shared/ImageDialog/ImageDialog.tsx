@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import { Caption, Image } from '@/components/index.web';
 import { CloseIcon } from '@/icons';
 import type { CtaLinkProps } from '@/types';
-import { hasPurchaseLink } from '../resolvePurchaseLink';
+import { hasPurchaseLink } from '../PurchaseLink/resolvePurchaseLink';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
 
