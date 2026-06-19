@@ -1,0 +1,53 @@
+/* Floating panel wrapper (positioning context for arrow) */
+.wrapper {
+  position: relative;
+
+  border-radius: var(--radius-8);
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  background: var(--color-background-dark-gray-02);
+  overflow: visible;
+}
+
+/* Arrow styling */
+.arrow {
+  overflow: visible;
+}
+
+/* Container */
+.container {
+  display: flex;
+  max-width: 300px;
+  padding: var(--spacing-6) var(--spacing-12);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Content wrapper */
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+/* Label styling */
+.label {
+  word-wrap: break-word;
+  color: var(--color-base-white) !important;
+}
+
+/* Icon styling */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  color: var(--color-base-white);
+}

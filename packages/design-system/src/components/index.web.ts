@@ -88,6 +88,9 @@ export type { PopoverProps } from './Popover/Popover.types';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
+export { Tooltip } from './Tooltip/Tooltip';
+export type { TooltipProps } from './Tooltip/Tooltip.types';
+export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
