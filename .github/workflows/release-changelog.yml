@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.test_tag || github.event.release.tag_name }}
           fetch-depth: 0
@@ -207,7 +207,7 @@ jobs:
 
       - name: Post to Test Channel
         if: steps.get-merged-prs.outputs.has_updates == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.post_to_test_channel == 'true'
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_TEST_RELEASE_WEBHOOK }}
           webhook-type: webhook-trigger
@@ -220,7 +220,7 @@ jobs:
 
       - name: Post to Product Slack Channel (Design System)
         if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
           webhook-type: webhook-trigger
@@ -233,7 +233,7 @@ jobs:
 
       - name: Post to Product Slack Channel (Shared UI Library)
         if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
           webhook-type: webhook-trigger
@@ -246,7 +246,7 @@ jobs:
 
       - name: Post to General Channel (All Updates)
         if: steps.generate-changelog.outputs.has_updates == 'true' && github.event_name == 'release'
-        uses: slackapi/slack-github-action@v3.0.2
+        uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
           webhook-type: webhook-trigger

@@ -40,6 +40,9 @@ export const Link: React.FC<LinkProps> = (props) => {
   const icon = isInline ? undefined : (props as LinkUtilityProps).icon;
   const iconPosition = isInline ? 'end' : ((props as LinkUtilityProps).iconPosition ?? 'end');
 
+  const size = ((props as LinkUtilityProps).size ??
+    'medium') as keyof typeof LINK_SIZE_TO_UTILITY_BODY_TOKEN;
+
   const rootClass = classNames(
     styles.link,
     isInline && styles.inline,
@@ -51,9 +54,7 @@ export const Link: React.FC<LinkProps> = (props) => {
   const label = isInline ? (
     <span className={styles.inlineLabel}>{children}</span>
   ) : (
-    <span
-      className={`typography-utility-text-medium-${LINK_SIZE_TO_UTILITY_BODY_TOKEN[(props as LinkUtilityProps).size]}`}
-    >
+    <span className={`typography-utility-text-medium-${LINK_SIZE_TO_UTILITY_BODY_TOKEN[size]}`}>
       {children}
     </span>
   );
