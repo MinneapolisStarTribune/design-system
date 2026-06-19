@@ -64,7 +64,7 @@ export const createCaptionStyles = (theme: NativeTheme, variant: CaptionVariant)
     navigation: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: theme.spacing8,
+      gap: theme.spacing4,
       flexShrink: 0,
       marginLeft: 'auto',
     },

@@ -3,7 +3,7 @@ import { Image, Modal, Pressable, StyleSheet, View, type ImageStyle } from 'reac
 import { CloseIcon, ExpandIcon } from '@/icons';
 import { Caption } from '@/components/Caption/native/Caption.native';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 import type { InlineImageProps } from '../InlineImage.types';
 
 const DEFAULT_TEST_ID = 'inline-image';
@@ -110,6 +110,7 @@ const createStyles = (theme: NativeTheme, variant: NonNullable<InlineImageProps[
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,
   image,
+  purchaseLink,
   caption,
   className: _className,
   credit,
@@ -118,7 +119,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   objectFit = 'cover',
   style,
   variant = 'standard',
-  purchaseLink,
   ...accessibilityProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
