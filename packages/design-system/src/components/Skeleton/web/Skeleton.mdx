@@ -1,0 +1,104 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SkeletonStories from './Skeleton.stories';
+
+<Meta of={SkeletonStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+{/* Edit the markdown below. Do not remove the blocks at the bottom of the file. */}
+
+# Skeleton
+
+Skeletons are lightweight loading placeholders that hint at the structure of content while data is being fetched. They reduce perceived wait time by showing users where text, images, avatars, or UI elements will appear.
+
+Use skeletons for short, predictable loading moments. Remove them as soon as real content is available — a skeleton that lingers longer than the content it replaces undermines trust.
+
+## Anatomy
+
+A Skeleton renders a single inert block with two shapes:
+
+1. **Rectangle** — spans the full width of its container by default. Used for text lines, images, cards, and any block-level content.
+2. **Circle** — fixed diameter, used for avatars and icon placeholders.
+
+## Usage guidelines
+
+### When to use skeletons
+
+- Content loads in a predictable, short window (under ~3 seconds).
+- You know roughly what the layout will look like when content arrives.
+- The loading state replaces a specific piece of UI, not the whole page.
+
+### When not to use skeletons
+
+- Loading time is unpredictable or long — prefer a spinner or progress indicator.
+- The shape of the loaded content is unknown ahead of time.
+- The section is non-critical and can simply render empty.
+
+### Size
+
+The `size` prop maps to fixed token values and controls height (rectangle) or diameter (circle):
+
+- **Small** — tight text lines, secondary metadata, captions.
+- **Medium** (default) — standard body text, most UI placeholders.
+- **Large** — headings, prominent image areas.
+
+Use `width` and `height` overrides for custom dimensions when the token sizes do not fit your layout.
+
+### Background (light / dark)
+
+- **`light`** (default) — use on white or light-gray surfaces.
+- **`dark`** — use when the skeleton sits on a dark region (e.g., a dark card or module) while the page still renders light-theme CSS on `:root`. This mirrors the same `surface` pattern used by `Button`.
+
+### Accessibility
+
+Skeletons are hidden from assistive technology by default (`aria-hidden="true"`). If the loading region needs to be announced, wrap it in a `role="status"` container with an appropriate `aria-label`:
+
+```tsx
+<div role="status" aria-label="Loading article">
+  <Skeleton variant="rectangle" size="large" />
+  <Skeleton variant="rectangle" size="medium" width="80%" />
+</div>
+```
+
+### Animation
+
+The default pulse animation (`animate={true}`) draws attention to in-progress loading without being distracting. Set `animate={false}` when a parent container already handles animation, or when rendering in a reduced-motion context.
+
+## Composition examples
+
+**Text block placeholder**
+
+```tsx
+<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+  <Skeleton variant="rectangle" size="large" />
+  <Skeleton variant="rectangle" size="medium" />
+  <Skeleton variant="rectangle" size="medium" width="70%" />
+</div>
+```
+
+**Author / avatar row**
+
+```tsx
+<div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+  <Skeleton variant="circle" size="medium" />
+  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+    <Skeleton variant="rectangle" size="small" width="40%" />
+    <Skeleton variant="rectangle" size="small" width="25%" />
+  </div>
+</div>
+```
+
+**Article card placeholder**
+
+```tsx
+<div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+  <Skeleton variant="rectangle" height={180} />
+  <Skeleton variant="rectangle" size="large" />
+  <Skeleton variant="rectangle" size="medium" width="80%" />
+</div>
+```
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+{/* Do not remove the line below — it renders a divider between the documentation and stories. */}
+
+---

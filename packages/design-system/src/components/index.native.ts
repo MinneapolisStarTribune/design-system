@@ -102,6 +102,16 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/native/InlineLink
 export { Link, type LinkProps } from './Link/native/Link.native';
 export { Radio } from './Radio/native/Radio.native';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
+export { Skeleton } from './Skeleton/native/Skeleton.native';
+export {
+  SKELETON_BACKGROUNDS,
+  SKELETON_SIZES,
+  SKELETON_VARIANTS,
+  type SkeletonBackground,
+  type SkeletonNativeProps,
+  type SkeletonSize,
+  type SkeletonVariant,
+} from './Skeleton/Skeleton.types';
 export { ToastNative } from './Toast/native/Toast.native';
 export type { ToastIconProps } from './Toast/native/ToastIcons.native';
 export {
