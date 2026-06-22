@@ -19,12 +19,12 @@ export type SkeletonBaseProps = AccessibilityProps &
     animate?: boolean;
     /**
      * Rectangle defaults to 200px × 25px. Circle defaults to a 64px diameter.
-     * Pass explicit values from the brand side for avatars, images, text lines, etc.
+     * For circles, setting `width` or `height` sets the diameter — the other axis matches.
      */
     width?: number | string;
     /**
      * Rectangle defaults to 25px. Circle defaults to 64px.
-     * Pass explicit values from the brand side for multi-line text, hero images, etc.
+     * For circles, only used when `width` is not set; both axes use the same value.
      */
     height?: number | string;
   };

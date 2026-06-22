@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UtilityLabel } from '@/components/Typography/Utility';
-import {
-  SKELETON_VARIANT_DEFAULTS,
-  SKELETON_VARIANTS,
-  type SkeletonVariant,
-} from '@/components/Skeleton/Skeleton.types';
+import { SKELETON_VARIANT_DEFAULTS, SKELETON_VARIANTS } from '@/components/Skeleton/Skeleton.types';
+import { resolveSkeletonDimensions } from '@/components/Skeleton/resolveSkeletonDimensions';
 import { Skeleton, type SkeletonProps } from './Skeleton';
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
@@ -15,23 +12,17 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-const resolveDimension = (value: number | string | undefined) => {
-  if (value === undefined || value === null || value === '' || value === 0) {
-    return undefined;
-  }
-  return value;
-};
-
 const getSkeletonDimensions = (
-  variant: SkeletonVariant,
+  variant: SkeletonProps['variant'],
   width?: number | string,
   height?: number | string
 ) => {
-  const defaults = SKELETON_VARIANT_DEFAULTS[variant];
+  const defaults = SKELETON_VARIANT_DEFAULTS[variant ?? 'rectangle'];
+  const resolved = resolveSkeletonDimensions(variant ?? 'rectangle', width, height);
 
   return {
-    width: resolveDimension(width) ?? defaults.width,
-    height: resolveDimension(height) ?? defaults.height,
+    width: resolved.width ?? defaults.width,
+    height: resolved.height ?? defaults.height,
   };
 };
 

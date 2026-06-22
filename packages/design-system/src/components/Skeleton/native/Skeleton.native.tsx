@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 import type { SkeletonNativeProps } from '../Skeleton.types';
+import { resolveSkeletonDimensions } from '../resolveSkeletonDimensions';
 import { createSkeletonStyles } from './Skeleton.styles';
 
 export const Skeleton: React.FC<SkeletonNativeProps> = ({
@@ -46,10 +47,7 @@ export const Skeleton: React.FC<SkeletonNativeProps> = ({
 
   const styles = useNativeStyles((theme) => createSkeletonStyles(theme, variant));
 
-  const overrideStyle: ViewStyle = {
-    ...(width !== undefined ? { width: width as ViewStyle['width'] } : undefined),
-    ...(height !== undefined ? { height: height as ViewStyle['height'] } : undefined),
-  };
+  const overrideStyle = resolveSkeletonDimensions(variant, width, height) as ViewStyle;
 
   const handleLayout = (e: LayoutChangeEvent) => {
     setElementWidth(e.nativeEvent.layout.width);

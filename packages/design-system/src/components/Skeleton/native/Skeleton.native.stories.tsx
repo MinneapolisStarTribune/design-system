@@ -5,8 +5,8 @@ import {
   SKELETON_VARIANT_DEFAULTS,
   SKELETON_VARIANTS,
   type SkeletonNativeProps,
-  type SkeletonVariant,
 } from '../Skeleton.types';
+import { resolveSkeletonDimensions } from '../resolveSkeletonDimensions';
 import { Skeleton } from './Skeleton.native';
 
 const SectionLabel = ({ children }: { children: string }) => (
@@ -15,23 +15,18 @@ const SectionLabel = ({ children }: { children: string }) => (
   </UtilityLabel>
 );
 
-const resolveDimension = (value: number | string | undefined) => {
-  if (value === undefined || value === null || value === '' || value === 0) {
-    return undefined;
-  }
-  return value;
-};
-
 const getSkeletonDimensions = (
-  variant: SkeletonVariant,
+  variant: SkeletonNativeProps['variant'],
   width?: number | string,
   height?: number | string
 ) => {
-  const defaults = SKELETON_VARIANT_DEFAULTS[variant];
+  const resolvedVariant = variant ?? 'rectangle';
+  const defaults = SKELETON_VARIANT_DEFAULTS[resolvedVariant];
+  const resolved = resolveSkeletonDimensions(resolvedVariant, width, height);
 
   return {
-    width: resolveDimension(width) ?? defaults.width,
-    height: resolveDimension(height) ?? defaults.height,
+    width: resolved.width ?? defaults.width,
+    height: resolved.height ?? defaults.height,
   };
 };
 
