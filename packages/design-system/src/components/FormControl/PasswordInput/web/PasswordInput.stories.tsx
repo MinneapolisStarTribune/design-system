@@ -104,6 +104,9 @@ const ControlledPasswordInput = (args: Record<string, unknown>) => {
       {Boolean(args.isError) && (
         <FormGroup.Caption variant="error">Password is required.</FormGroup.Caption>
       )}
+      {Boolean(args.isSuccess) && !args.isError && (
+        <FormGroup.Caption variant="success">Password meets requirements.</FormGroup.Caption>
+      )}
     </FormGroup>
   );
 };
@@ -116,7 +119,7 @@ export const Configurable: Story = {
     defaultPasswordVisible: false,
     isDisabled: false,
     isError: false,
-    isSuccess: false,
+    isSuccess: true,
   },
   render: (args) => <ControlledPasswordInput {...args} />,
 };
