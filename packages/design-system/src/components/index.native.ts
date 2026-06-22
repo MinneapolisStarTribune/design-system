@@ -104,12 +104,8 @@ export { Radio } from './Radio/native/Radio.native';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Skeleton } from './Skeleton/native/Skeleton.native';
 export {
-  SKELETON_BACKGROUNDS,
-  SKELETON_SIZES,
   SKELETON_VARIANTS,
-  type SkeletonBackground,
   type SkeletonNativeProps,
-  type SkeletonSize,
   type SkeletonVariant,
 } from './Skeleton/Skeleton.types';
 export { ToastNative } from './Toast/native/Toast.native';

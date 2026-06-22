@@ -90,12 +90,8 @@ export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
 export {
   Skeleton,
-  SKELETON_BACKGROUNDS,
-  SKELETON_SIZES,
   SKELETON_VARIANTS,
-  type SkeletonBackground,
   type SkeletonProps,
-  type SkeletonSize,
   type SkeletonVariant,
 } from './Skeleton/web/Skeleton';
 export type {

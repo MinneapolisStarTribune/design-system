@@ -14,10 +14,12 @@ Use skeletons for short, predictable loading moments. Remove them as soon as rea
 
 ## Anatomy
 
-A Skeleton renders a single inert block with two shapes:
+A Skeleton renders a single inert block with two shape variants:
 
-1. **Rectangle** — spans the full width of its container by default. Used for text lines, images, cards, and any block-level content.
-2. **Circle** — fixed diameter, used for avatars and icon placeholders.
+1. **Rectangle** (`variant="rectangle"`) — defaults to 200px × 25px. Used for text lines, images, cards, and any block-level content.
+2. **Circle** (`variant="circle"`) — defaults to a 64px diameter (`aspect-ratio: 1 / 1`). Used for avatars and icon placeholders.
+
+Both shapes share the same fixed neutral shimmer palette and do not change appearance based on parent background or app theme.
 
 ## Usage guidelines
 
@@ -33,20 +35,121 @@ A Skeleton renders a single inert block with two shapes:
 - The shape of the loaded content is unknown ahead of time.
 - The section is non-critical and can simply render empty.
 
-### Size
+### Dimensions
 
-The `size` prop maps to fixed token values and controls height (rectangle) or diameter (circle):
+Each variant ships with fixed default dimensions. Override with `width` and `height` when the placeholder needs to match specific content:
 
-- **Small** — tight text lines, secondary metadata, captions.
-- **Medium** (default) — standard body text, most UI placeholders.
-- **Large** — headings, prominent image areas.
+- **Rectangle** — `200px × 25px` by default. Pass `width` and/or `height` for text lines, images, cards, and other block placeholders.
+- **Circle** — `64px × 64px` by default. Pass equal `width` and `height` values when a different diameter is needed.
 
-Use `width` and `height` overrides for custom dimensions when the token sizes do not fit your layout.
+On web you can also use `className` for layout utilities (e.g. Tailwind `w-32 h-8`) when that fits your app.
 
-### Background (light / dark)
+There are no preset size tokens (`small` / `medium` / `large`) and no `background` prop — the shimmer uses a **fixed neutral palette** (`#e3e5e8` → `#c8ccd0` on web) that stays the same on light and dark parent surfaces.
 
-- **`light`** (default) — use on white or light-gray surfaces.
-- **`dark`** — use when the skeleton sits on a dark region (e.g., a dark card or module) while the page still renders light-theme CSS on `:root`. This mirrors the same `surface` pattern used by `Button`.
+### Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>variant</code>
+      </td>
+      <td>
+        <code>'circle' | 'rectangle'</code>
+      </td>
+      <td>
+        <code>'rectangle'</code>
+      </td>
+      <td>Shape of the placeholder.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>animate</code>
+      </td>
+      <td>
+        <code>boolean</code>
+      </td>
+      <td>
+        <code>true</code>
+      </td>
+      <td>Runs the shimmer animation when true.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>width</code>
+      </td>
+      <td>
+        <code>number | string</code>
+      </td>
+      <td>
+        <code>200</code> (rectangle) / <code>64</code> (circle)
+      </td>
+      <td>Overrides default width. Number = pixels; string = CSS values like <code>"70%"</code>.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>height</code>
+      </td>
+      <td>
+        <code>number | string</code>
+      </td>
+      <td>
+        <code>25</code> (rectangle) / <code>64</code> (circle)
+      </td>
+      <td>Overrides default height. Number = pixels; string = CSS values like <code>"100%"</code>.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>className</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>—</td>
+      <td>Web only. Additional CSS classes.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>style</code>
+      </td>
+      <td>
+        <code>React.CSSProperties</code>
+      </td>
+      <td>—</td>
+      <td>Web only. Inline styles (merged with dimension overrides).</td>
+    </tr>
+    <tr>
+      <td>
+        <code>dataTestId</code>
+      </td>
+      <td>
+        <code>string</code>
+      </td>
+      <td>—</td>
+      <td>Test ID attribute.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>aria-hidden</code>
+      </td>
+      <td>
+        <code>boolean</code>
+      </td>
+      <td>
+        <code>true</code>
+      </td>
+      <td>Hides the skeleton from assistive technology.</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Accessibility
 
@@ -54,14 +157,14 @@ Skeletons are hidden from assistive technology by default (`aria-hidden="true"`)
 
 ```tsx
 <div role="status" aria-label="Loading article">
-  <Skeleton variant="rectangle" size="large" />
-  <Skeleton variant="rectangle" size="medium" width="80%" />
+  <Skeleton variant="rectangle" height={24} />
+  <Skeleton variant="rectangle" height={16} width="80%" />
 </div>
 ```
 
 ### Animation
 
-The default pulse animation (`animate={true}`) draws attention to in-progress loading without being distracting. Set `animate={false}` when a parent container already handles animation, or when rendering in a reduced-motion context.
+The default shimmer animation (`animate={true}`) draws attention to in-progress loading without being distracting. Set `animate={false}` when a parent container already handles animation, or when rendering in a reduced-motion context.
 
 ## Composition examples
 
@@ -69,9 +172,9 @@ The default pulse animation (`animate={true}`) draws attention to in-progress lo
 
 ```tsx
 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-  <Skeleton variant="rectangle" size="large" />
-  <Skeleton variant="rectangle" size="medium" />
-  <Skeleton variant="rectangle" size="medium" width="70%" />
+  <Skeleton variant="rectangle" height={24} />
+  <Skeleton variant="rectangle" height={16} />
+  <Skeleton variant="rectangle" height={16} width="70%" />
 </div>
 ```
 
@@ -79,10 +182,10 @@ The default pulse animation (`animate={true}`) draws attention to in-progress lo
 
 ```tsx
 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-  <Skeleton variant="circle" size="medium" />
+  <Skeleton variant="circle" />
   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-    <Skeleton variant="rectangle" size="small" width="40%" />
-    <Skeleton variant="rectangle" size="small" width="25%" />
+    <Skeleton variant="rectangle" height={12} width="40%" />
+    <Skeleton variant="rectangle" height={12} width="25%" />
   </div>
 </div>
 ```
@@ -92,8 +195,8 @@ The default pulse animation (`animate={true}`) draws attention to in-progress lo
 ```tsx
 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
   <Skeleton variant="rectangle" height={180} />
-  <Skeleton variant="rectangle" size="large" />
-  <Skeleton variant="rectangle" size="medium" width="80%" />
+  <Skeleton variant="rectangle" height={24} />
+  <Skeleton variant="rectangle" height={16} width="80%" />
 </div>
 ```
 

@@ -2,29 +2,16 @@
 
 import classNames from 'classnames';
 import {
-  SKELETON_BACKGROUNDS,
-  SKELETON_SIZES,
   SKELETON_VARIANTS,
-  type SkeletonBackground,
   type SkeletonProps,
-  type SkeletonSize,
   type SkeletonVariant,
 } from '@/components/Skeleton/Skeleton.types';
 import styles from './Skeleton.module.scss';
 
-export {
-  SKELETON_BACKGROUNDS,
-  SKELETON_SIZES,
-  SKELETON_VARIANTS,
-  type SkeletonBackground,
-  type SkeletonProps,
-  type SkeletonSize,
-  type SkeletonVariant,
-};
+export { SKELETON_VARIANTS, type SkeletonProps, type SkeletonVariant };
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   variant = 'rectangle',
-  size = 'medium',
   animate = true,
   width,
   height,
@@ -47,7 +34,6 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       className={classNames(
         styles.skeleton,
         styles[`variant-${variant}`],
-        styles[`size-${size}`],
         animate && styles.animate,
         className
       )}

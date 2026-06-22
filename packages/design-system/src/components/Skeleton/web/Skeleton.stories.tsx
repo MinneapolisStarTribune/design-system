@@ -1,11 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import {
-  Skeleton,
-  SKELETON_BACKGROUNDS,
-  SKELETON_SIZES,
-  SKELETON_VARIANTS,
-  type SkeletonProps,
-} from './Skeleton';
+import { Skeleton, SKELETON_VARIANTS, type SkeletonProps } from './Skeleton';
 
 const meta: Meta<SkeletonProps> = {
   title: 'Status & Feedback/Skeleton',
@@ -21,29 +15,37 @@ const meta: Meta<SkeletonProps> = {
     variant: {
       control: 'radio',
       options: [...SKELETON_VARIANTS],
-      description: 'Shape of the placeholder',
-    },
-    size: {
-      control: 'radio',
-      options: [...SKELETON_SIZES],
-      description: 'Height (rectangle) or diameter (circle)',
-    },
-    background: {
-      control: 'radio',
-      options: [...SKELETON_BACKGROUNDS],
-      description: 'Surface the skeleton sits on — light or dark',
+      description: 'Shape of the placeholder.',
+      table: {
+        type: { summary: "'circle' | 'rectangle'" },
+        defaultValue: { summary: "'rectangle'" },
+      },
     },
     animate: {
       control: 'boolean',
-      description: 'Runs the pulse animation when true',
+      description: 'Runs the shimmer animation when true.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' },
+      },
     },
     width: {
-      control: 'text',
-      description: 'Override default width',
+      control: { type: 'number' },
+      description:
+        'Override default width. Pass a number for pixels (e.g. `200`) or a string in app code for CSS values (e.g. `"70%"`).',
+      table: {
+        type: { summary: 'number | string' },
+        defaultValue: { summary: '200 (rectangle) / 64 (circle)' },
+      },
     },
     height: {
-      control: 'text',
-      description: 'Override default height',
+      control: { type: 'number' },
+      description:
+        'Override default height. Pass a number for pixels (e.g. `25`) or a string in app code for CSS values (e.g. `"100%"`).',
+      table: {
+        type: { summary: 'number | string' },
+        defaultValue: { summary: '25 (rectangle) / 64 (circle)' },
+      },
     },
   },
 };
@@ -55,8 +57,6 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     variant: 'rectangle',
-    size: 'medium',
-    background: 'light',
     animate: true,
   },
 };
@@ -67,73 +67,78 @@ export const AllVariants: Story = {
   },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32, padding: 16 }}>
-      {/* Rectangle sizes */}
       <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <strong>Rectangle</strong>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <Skeleton variant="rectangle" size="small" />
-          <Skeleton variant="rectangle" size="medium" />
-          <Skeleton variant="rectangle" size="large" />
-        </div>
+        <strong>Rectangle — default (200px × 25px)</strong>
+        <Skeleton variant="rectangle" />
       </section>
 
-      {/* Circle sizes */}
+      <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <strong>Rectangle — custom dimensions</strong>
+        <Skeleton variant="rectangle" height={24} />
+        <Skeleton variant="rectangle" height={32} width="70%" />
+        <Skeleton variant="rectangle" height={180} />
+      </section>
+
       <section>
-        <strong>Circle</strong>
+        <strong>Circle — default (64px)</strong>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-            <Skeleton variant="circle" size="small" />
-            <span style={{ fontSize: 12 }}>Small</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-            <Skeleton variant="circle" size="medium" />
-            <span style={{ fontSize: 12 }}>Medium</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-            <Skeleton variant="circle" size="large" />
-            <span style={{ fontSize: 12 }}>Large</span>
+          <Skeleton variant="circle" />
+          <Skeleton variant="circle" width={32} height={32} />
+          <Skeleton variant="circle" width={56} height={56} />
+        </div>
+      </section>
+
+      <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <strong>On light surface</strong>
+        <div
+          style={{
+            backgroundColor: '#fff',
+            border: '1px solid #e3e5e8',
+            padding: 16,
+            borderRadius: 8,
+          }}
+        >
+          <Skeleton variant="rectangle" />
+        </div>
+      </section>
+
+      <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <strong>On dark surface</strong>
+        <div
+          style={{
+            backgroundColor: '#0d0d0d',
+            padding: 16,
+            borderRadius: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+          }}
+        >
+          <Skeleton variant="rectangle" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <Skeleton variant="circle" />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <Skeleton variant="rectangle" height={12} />
+              <Skeleton variant="rectangle" height={12} width="60%" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Dark surface */}
-      <section
-        style={{
-          backgroundColor: '#111',
-          padding: 16,
-          borderRadius: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
-        }}
-      >
-        <strong style={{ color: '#fff' }}>Dark surface</strong>
-        <Skeleton variant="rectangle" size="medium" background="dark" />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <Skeleton variant="circle" size="medium" background="dark" />
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <Skeleton variant="rectangle" size="small" background="dark" />
-            <Skeleton variant="rectangle" size="small" background="dark" width="60%" />
-          </div>
-        </div>
-      </section>
-
-      {/* Article card placeholder */}
       <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <strong>Article card placeholder</strong>
         <Skeleton variant="rectangle" height={180} />
-        <Skeleton variant="rectangle" size="large" />
-        <Skeleton variant="rectangle" size="medium" width="80%" />
+        <Skeleton variant="rectangle" height={24} />
+        <Skeleton variant="rectangle" height={16} width="80%" />
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Skeleton variant="circle" size="small" />
-          <Skeleton variant="rectangle" size="small" width={120} />
+          <Skeleton variant="circle" width={32} height={32} />
+          <Skeleton variant="rectangle" height={12} width={120} />
         </div>
       </section>
 
-      {/* Static */}
       <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <strong>Static (animate=false)</strong>
-        <Skeleton variant="rectangle" size="medium" animate={false} />
+        <Skeleton variant="rectangle" animate={false} />
       </section>
     </div>
   ),

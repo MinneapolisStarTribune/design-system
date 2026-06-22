@@ -1,47 +1,25 @@
 import { StyleSheet } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
-import type { SkeletonSize, SkeletonVariant } from '../Skeleton.types';
+import type { SkeletonVariant } from '../Skeleton.types';
 
-export const createSkeletonStyles = (
-  theme: NativeTheme,
-  variant: SkeletonVariant,
-  size: SkeletonSize
-) => {
+export const createSkeletonStyles = (theme: NativeTheme, variant: SkeletonVariant) => {
   const isCircle = variant === 'circle';
-
-  const circleDimensions = {
-    small: theme.spacing32,
-    medium: theme.spacing40,
-    large: theme.spacing48,
-  }[size];
-
-  const rectHeight = {
-    small: theme.spacing12,
-    medium: theme.spacing16,
-    large: theme.spacing24,
-  }[size];
-
-  const rectRadius = {
-    small: theme.radius2,
-    medium: theme.radius4,
-    large: theme.radius6,
-  }[size];
 
   return StyleSheet.create({
     root: {
       overflow: 'hidden',
       flexShrink: 0,
-      backgroundColor: theme.colorBackgroundLightGray02,
+      backgroundColor: theme.colorNeutral200,
       ...(isCircle
         ? {
-            width: circleDimensions,
-            height: circleDimensions,
+            width: theme.spacing64,
+            height: theme.spacing64,
             borderRadius: theme.radiusFull,
           }
         : {
-            width: '100%',
-            height: rectHeight,
-            borderRadius: rectRadius,
+            width: 200,
+            height: 25,
+            borderRadius: theme.radius4,
           }),
     },
     shimmer: {
@@ -49,7 +27,7 @@ export const createSkeletonStyles = (
       top: 0,
       bottom: 0,
       width: '100%',
-      backgroundColor: theme.colorBackgroundLightGray01,
+      backgroundColor: theme.colorNeutral100,
       opacity: 0.8,
     },
   });
