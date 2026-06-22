@@ -5,6 +5,11 @@ import type { NativeViewStylingProps } from '@/types/native-base-props';
 export const SKELETON_VARIANTS = ['circle', 'rectangle'] as const;
 export type SkeletonVariant = (typeof SKELETON_VARIANTS)[number];
 
+export const SKELETON_VARIANT_DEFAULTS = {
+  rectangle: { width: 200, height: 25 },
+  circle: { width: 64, height: 64 },
+} as const satisfies Record<SkeletonVariant, { width: number; height: number }>;
+
 /** Shared props for web and native Skeleton. */
 export type SkeletonBaseProps = AccessibilityProps &
   Pick<BaseProps, 'dataTestId'> & {
