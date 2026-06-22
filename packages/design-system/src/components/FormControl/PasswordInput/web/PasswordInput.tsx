@@ -50,7 +50,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   const isVisible = passwordVisible ?? uncontrolledVisible;
   const toggleIconSize = TOGGLE_ICON_SIZE[size];
   const validationIconSize = VALIDATION_ICON_SIZE[size];
-  const iconStyle = { color: 'currentColor' } as const;
+  const toggleIconStyle = { color: 'currentColor' } as const;
 
   const setVisible = (nextVisible: boolean) => {
     if (passwordVisible === undefined) {
@@ -111,7 +111,11 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           <span
             className={classNames(styles['validation-icon'], styles['validation-icon-success'])}
           >
-            <CheckIcon size={validationIconSize} style={iconStyle} aria-hidden />
+            <CheckIcon
+              size={validationIconSize}
+              className={styles['success-check-icon']}
+              aria-hidden
+            />
           </span>
         )}
         <button
@@ -123,9 +127,9 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           onClick={handleToggle}
         >
           {isVisible ? (
-            <ShowEyeIcon size={toggleIconSize} style={iconStyle} aria-hidden />
+            <ShowEyeIcon size={toggleIconSize} style={toggleIconStyle} aria-hidden />
           ) : (
-            <HideEyeIcon size={toggleIconSize} style={iconStyle} aria-hidden />
+            <HideEyeIcon size={toggleIconSize} style={toggleIconStyle} aria-hidden />
           )}
         </button>
       </div>

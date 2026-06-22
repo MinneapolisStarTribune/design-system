@@ -85,7 +85,7 @@ describe('PasswordInput', () => {
       />
     );
 
-    expect(container.querySelector('[class*="validation-icon-success"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="success-check-icon"]')).toBeInTheDocument();
 
     rerender(
       <FormControl.PasswordInput
@@ -97,6 +97,7 @@ describe('PasswordInput', () => {
     );
 
     expect(container.querySelector('[class*="validation-icon-success"]')).not.toBeInTheDocument();
+    expect(container.querySelector('[class*="success-check-icon"]')).not.toBeInTheDocument();
     expect(container.querySelector('[class*="has-success-icon"]')).not.toBeInTheDocument();
   });
 
