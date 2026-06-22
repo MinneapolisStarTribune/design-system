@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { TextInput } from '@/components/FormControl/TextInput/web/TextInput';
-import { HideEyeIcon, ShowEyeIcon, SuccessIcon } from '@/icons';
+import { CheckIcon, HideEyeIcon, ShowEyeIcon } from '@/icons';
 import type { IconSize } from '@/components/Icon/Icon.types';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import type { PasswordInputProps } from '../PasswordInput.types';
@@ -111,7 +111,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           <span
             className={classNames(styles['validation-icon'], styles['validation-icon-success'])}
           >
-            <SuccessIcon size={validationIconSize} style={iconStyle} aria-hidden />
+            <CheckIcon size={validationIconSize} style={iconStyle} aria-hidden />
           </span>
         )}
         <button
