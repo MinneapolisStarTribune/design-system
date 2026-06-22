@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { TextInput } from '@/components/FormControl/TextInput/web/TextInput';
-import { ErrorIcon, HideEyeIcon, ShowEyeIcon, SuccessIcon } from '@/icons';
+import { HideEyeIcon, ShowEyeIcon, SuccessIcon } from '@/icons';
 import type { IconSize } from '@/components/Icon/Icon.types';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import type { PasswordInputProps } from '../PasswordInput.types';
@@ -45,7 +45,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
 
   const hasError = isError ?? formGroupContext?.hasError ?? false;
   const hasSuccess = isSuccess ?? formGroupContext?.hasSuccess ?? false;
-  const showValidationIcon = hasError || (hasSuccess && !hasError);
+  const showSuccessIcon = hasSuccess && !hasError;
 
   const isVisible = passwordVisible ?? uncontrolledVisible;
   const toggleIconSize = TOGGLE_ICON_SIZE[size];
@@ -94,7 +94,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           styles['password-input'],
           styles[`password-input-${size}`],
           rounded && styles['password-input-rounded'],
-          showValidationIcon && styles['has-validation-icon'],
+          showSuccessIcon && styles['has-success-icon'],
           className
         )}
         onCopy={handleCopy}
@@ -107,18 +107,11 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           rounded && styles[`trailing-rounded-${size}`]
         )}
       >
-        {showValidationIcon && (
+        {showSuccessIcon && (
           <span
-            className={classNames(
-              styles['validation-icon'],
-              hasError ? styles['validation-icon-error'] : styles['validation-icon-success']
-            )}
+            className={classNames(styles['validation-icon'], styles['validation-icon-success'])}
           >
-            {hasError ? (
-              <ErrorIcon size={validationIconSize} style={iconStyle} aria-hidden />
-            ) : (
-              <SuccessIcon size={validationIconSize} style={iconStyle} aria-hidden />
-            )}
+            <SuccessIcon size={validationIconSize} style={iconStyle} aria-hidden />
           </span>
         )}
         <button

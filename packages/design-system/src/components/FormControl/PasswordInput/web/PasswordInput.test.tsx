@@ -75,8 +75,8 @@ describe('PasswordInput', () => {
     expect(input).toHaveValue('secret-value');
   });
 
-  it('shows validation icons in success and error states', () => {
-    const { rerender, getByLabelText, container } = renderWithProvider(
+  it('shows success icon only in success state, not in error state', () => {
+    const { rerender, container } = renderWithProvider(
       <FormControl.PasswordInput
         aria-label="Password"
         autoComplete="current-password"
@@ -96,17 +96,17 @@ describe('PasswordInput', () => {
       />
     );
 
-    expect(container.querySelector('[class*="validation-icon-error"]')).toBeInTheDocument();
-    expect(getByLabelText('Password')).toHaveAttribute('type', 'password');
+    expect(container.querySelector('[class*="validation-icon-success"]')).not.toBeInTheDocument();
+    expect(container.querySelector('[class*="has-success-icon"]')).not.toBeInTheDocument();
   });
 
-  it('applies extra padding when validation icon is present', () => {
+  it('applies extra padding when success icon is present', () => {
     const { container, rerender } = renderWithProvider(
       <FormControl.PasswordInput aria-label="Password" autoComplete="current-password" />
     );
 
     const inputWrapper = container.querySelector('[class*="password-input-medium"]');
-    expect(inputWrapper?.className.includes('has-validation-icon')).toBe(false);
+    expect(inputWrapper?.className.includes('has-success-icon')).toBe(false);
 
     rerender(
       <FormControl.PasswordInput
@@ -117,7 +117,7 @@ describe('PasswordInput', () => {
       />
     );
 
-    expect(container.querySelector('[class*="has-validation-icon"]')).toBeInTheDocument();
+    expect(container.querySelector('[class*="has-success-icon"]')).toBeInTheDocument();
   });
 
   it('passes autocomplete to the input', () => {

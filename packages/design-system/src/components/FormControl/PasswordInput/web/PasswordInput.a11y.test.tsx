@@ -21,7 +21,7 @@ describe('PasswordInput Accessibility', () => {
     );
   });
 
-  it('has no violations in error state with validation icon', async () => {
+  it('has no violations in error state', async () => {
     await expectNoA11yViolations(
       <FormControl.PasswordInput
         aria-label="Password"
@@ -32,7 +32,7 @@ describe('PasswordInput Accessibility', () => {
     );
   });
 
-  it('has no violations in success state with validation icon', async () => {
+  it('has no violations in success state with checkmark icon', async () => {
     await expectNoA11yViolations(
       <FormControl.PasswordInput
         aria-label="Password"
