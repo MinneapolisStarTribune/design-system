@@ -1,3 +1,4 @@
+import { DEFAULT_PURCHASE_LINK_LABEL } from '@/components/Caption/Caption.constants';
 import type { CtaLinkProps } from '@/types';
 
 export type ResolvedPurchaseLink = {
@@ -6,16 +7,16 @@ export type ResolvedPurchaseLink = {
 };
 
 export const hasPurchaseLink = (purchaseLink?: CtaLinkProps): boolean => {
-  return Boolean(purchaseLink?.label?.trim() && purchaseLink?.link?.trim());
+  return Boolean(purchaseLink?.link?.trim());
 };
 
 export const resolvePurchaseLink = (
   purchaseLink?: CtaLinkProps
 ): ResolvedPurchaseLink | undefined => {
   const link = purchaseLink?.link?.trim();
-  const label = purchaseLink?.label?.trim();
+  const label = purchaseLink?.label?.trim() || DEFAULT_PURCHASE_LINK_LABEL;
 
-  if (!link || !label) {
+  if (!link) {
     return undefined;
   }
 
