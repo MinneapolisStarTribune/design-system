@@ -35,7 +35,7 @@ export interface TextInputProps
   /** Override invalid state for screen readers */
   'aria-invalid'?: boolean;
   /** Input type for web text fields. */
-  type?: 'text' | 'email' | 'number';
+  type?: 'text' | 'email' | 'number' | 'password';
 }
 
 export const TextInput: React.FC<TextInputProps> = ({

@@ -41,6 +41,10 @@ export {
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
+  PasswordInput,
+  type PasswordInputProps,
+} from './FormControl/PasswordInput/web/PasswordInput';
+export {
   RadioGroup,
   type RadioGroupProps,
   type RadioOption,
