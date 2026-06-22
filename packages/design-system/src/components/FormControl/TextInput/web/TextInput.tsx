@@ -47,6 +47,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   isDisabled = false,
   isError = false,
   isSuccess = false,
+  showSuccessIcon = true,
   className,
   dataTestId,
   'aria-label': ariaLabel,
@@ -100,7 +101,12 @@ export const TextInput: React.FC<TextInputProps> = ({
   const rightIcon = icon && iconPosition === 'end' ? iconElement : undefined;
 
   // Validated/success state shows checkmark icon at end (per design spec)
-  const successCheckmark = hasSuccess && !hasError ? <SuccessIcon aria-hidden /> : null;
+  const successCheckmark =
+    showSuccessIcon && hasSuccess && !hasError ? (
+      <span className={styles.iconSuccess}>
+        <SuccessIcon aria-hidden />
+      </span>
+    ) : null;
 
   const wrapperClasses = classNames(
     styles.wrapper,

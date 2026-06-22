@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { TextInput } from '@/components/FormControl/TextInput/web/TextInput';
-import { HideEyeIcon, ShowEyeIcon } from '@/icons';
+import { ErrorIcon, HideEyeIcon, ShowEyeIcon, SuccessIcon } from '@/icons';
 import type { IconSize } from '@/components/Icon/Icon.types';
+import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import type { PasswordInputProps } from '../PasswordInput.types';
 import type { TextInputSize } from '../../TextInput/TextInput.types';
 import styles from './PasswordInput.module.scss';
@@ -17,6 +18,12 @@ const TOGGLE_ICON_SIZE: Record<TextInputSize, IconSize> = {
   large: 'small',
 };
 
+const VALIDATION_ICON_SIZE: Record<TextInputSize, IconSize> = {
+  small: 'x-small',
+  medium: 'small',
+  large: 'small',
+};
+
 export const PasswordInput: React.FC<PasswordInputProps> = ({
   defaultPasswordVisible = false,
   passwordVisible,
@@ -24,16 +31,26 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   autoComplete,
   className,
   size = 'medium',
+  rounded = false,
   isDisabled = false,
+  isError = false,
+  isSuccess = false,
   onCopy,
   onCut,
   ...props
 }) => {
+  const formGroupContext = useFormGroupContext();
   const [uncontrolledVisible, setUncontrolledVisible] = useState(defaultPasswordVisible);
   const [announcement, setAnnouncement] = useState('');
 
+  const hasError = isError ?? formGroupContext?.hasError ?? false;
+  const hasSuccess = isSuccess ?? formGroupContext?.hasSuccess ?? false;
+  const showValidationIcon = hasError || (hasSuccess && !hasError);
+
   const isVisible = passwordVisible ?? uncontrolledVisible;
-  const iconSize = TOGGLE_ICON_SIZE[size];
+  const toggleIconSize = TOGGLE_ICON_SIZE[size];
+  const validationIconSize = VALIDATION_ICON_SIZE[size];
+  const iconStyle = { color: 'currentColor' } as const;
 
   const setVisible = (nextVisible: boolean) => {
     if (passwordVisible === undefined) {
@@ -66,39 +83,59 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
       <TextInput
         {...props}
         size={size}
+        rounded={rounded}
         type={isVisible ? 'text' : 'password'}
         autoComplete={autoComplete}
         isDisabled={isDisabled}
+        isError={isError}
+        isSuccess={isSuccess}
+        showSuccessIcon={false}
         className={classNames(
           styles['password-input'],
           styles[`password-input-${size}`],
+          rounded && styles['password-input-rounded'],
+          showValidationIcon && styles['has-validation-icon'],
           className
         )}
         onCopy={handleCopy}
         onCut={handleCut}
       />
-      <button
-        type="button"
-        className={classNames(styles.toggle, styles[`toggle-${size}`])}
-        aria-label={isVisible ? 'Hide password' : 'Show password'}
-        aria-pressed={isVisible}
-        disabled={isDisabled}
-        onClick={handleToggle}
-      >
-        {isVisible ? (
-          <ShowEyeIcon
-            size={iconSize}
-            color={isDisabled ? 'state-disabled-on-light' : 'on-light-tertiary'}
-            aria-hidden
-          />
-        ) : (
-          <HideEyeIcon
-            size={iconSize}
-            color={isDisabled ? 'state-disabled-on-light' : 'on-light-tertiary'}
-            aria-hidden
-          />
+      <div
+        className={classNames(
+          styles.trailing,
+          styles[`trailing-${size}`],
+          rounded && styles[`trailing-rounded-${size}`]
         )}
-      </button>
+      >
+        {showValidationIcon && (
+          <span
+            className={classNames(
+              styles['validation-icon'],
+              hasError ? styles['validation-icon-error'] : styles['validation-icon-success']
+            )}
+          >
+            {hasError ? (
+              <ErrorIcon size={validationIconSize} style={iconStyle} aria-hidden />
+            ) : (
+              <SuccessIcon size={validationIconSize} style={iconStyle} aria-hidden />
+            )}
+          </span>
+        )}
+        <button
+          type="button"
+          className={classNames(styles.toggle, styles[`toggle-${size}`])}
+          aria-label={isVisible ? 'Hide password' : 'Show password'}
+          aria-pressed={isVisible}
+          disabled={isDisabled}
+          onClick={handleToggle}
+        >
+          {isVisible ? (
+            <ShowEyeIcon size={toggleIconSize} style={iconStyle} aria-hidden />
+          ) : (
+            <HideEyeIcon size={toggleIconSize} style={iconStyle} aria-hidden />
+          )}
+        </button>
+      </div>
       <span className={styles['sr-only']} aria-live="polite" aria-atomic="true">
         {announcement}
       </span>

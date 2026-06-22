@@ -89,7 +89,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const ControlledPasswordInput = (args: Record<string, unknown>) => {
-  const [value, setValue] = useState('Some value');
+  const [value, setValue] = useState('password123!');
 
   return (
     <FormGroup>
@@ -182,11 +182,11 @@ export const AllVariants: Story = {
         placeholderText="Placeholder text"
         autoComplete="current-password"
       />
-      <VariantCell label="State: Filled" value="Some value" autoComplete="current-password" />
-      <VariantCell label="State: Hidden" value="Some value" autoComplete="current-password" />
+      <VariantCell label="State: Filled" value="password123!" autoComplete="current-password" />
+      <VariantCell label="State: Hidden" value="password123!" autoComplete="current-password" />
       <VariantCell
         label="State: Visible"
-        value="Some value"
+        value="password123!"
         defaultPasswordVisible
         autoComplete="current-password"
       />
@@ -205,9 +205,26 @@ export const AllVariants: Story = {
         autoComplete="current-password"
       />
       <VariantCell
+        label="State: Error (Filled)"
+        value="password123!"
+        isError
+        caption="Password is required."
+        captionVariant="error"
+        autoComplete="current-password"
+      />
+      <VariantCell
         label="State: Success"
-        value="StrongPassword1!"
+        value="password123!"
         isSuccess
+        caption="Password meets requirements."
+        captionVariant="success"
+        autoComplete="new-password"
+      />
+      <VariantCell
+        label="State: Success (Visible)"
+        value="password123!"
+        isSuccess
+        defaultPasswordVisible
         caption="Password meets requirements."
         captionVariant="success"
         autoComplete="new-password"

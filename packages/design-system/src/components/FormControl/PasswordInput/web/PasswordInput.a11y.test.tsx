@@ -21,6 +21,28 @@ describe('PasswordInput Accessibility', () => {
     );
   });
 
+  it('has no violations in error state with validation icon', async () => {
+    await expectNoA11yViolations(
+      <FormControl.PasswordInput
+        aria-label="Password"
+        autoComplete="current-password"
+        isError
+        defaultValue="password123!"
+      />
+    );
+  });
+
+  it('has no violations in success state with validation icon', async () => {
+    await expectNoA11yViolations(
+      <FormControl.PasswordInput
+        aria-label="Password"
+        autoComplete="current-password"
+        isSuccess
+        defaultValue="password123!"
+      />
+    );
+  });
+
   it('has no violations when visibility is toggled', async () => {
     const user = userEvent.setup();
     const { renderResult, checkA11y } = await renderAndCheckA11y(
