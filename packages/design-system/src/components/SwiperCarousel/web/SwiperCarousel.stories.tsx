@@ -20,6 +20,8 @@ const meta: Meta<StoryArgs> = {
     loop: false,
     centeredSlides: false,
     size: 'medium',
+    // eslint-disable-next-line no-console
+    onSwipe: (info) => console.log('onSwipe', info),
   },
 
   argTypes: {
@@ -39,6 +41,7 @@ const meta: Meta<StoryArgs> = {
     breakpoints: { control: false },
     className: { control: false },
     children: { control: false },
+    onSwipe: { control: false },
   },
 };
 export default meta;
@@ -96,7 +99,13 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-<SwiperCarousel slidesPerView="auto" spaceBetween={16}>
+<SwiperCarousel
+  slidesPerView="auto"
+  spaceBetween={16}
+  onSwipe={({ direction, activeIndex, previousIndex }) => {
+    console.log('swiped', direction, activeIndex, previousIndex);
+  }}
+>
   {items.map((i) => (
     <SwiperCarousel.Slide key={i}>
       <DemoCard index={i} />
@@ -107,9 +116,9 @@ export const Configurable: Story = {
 
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
     <FormGroup>
-          <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
-        </FormGroup>
-        <SwiperCarousel.Navigation size={args.size}/>
+      <FormGroup.Caption variant="info">Captions (Formgroup.caption Used)</FormGroup.Caption>
+    </FormGroup>
+    <SwiperCarousel.Navigation />
   </div>
 </SwiperCarousel>
         `,
