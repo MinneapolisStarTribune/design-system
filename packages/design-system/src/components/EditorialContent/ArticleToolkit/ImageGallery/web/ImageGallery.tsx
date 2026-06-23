@@ -242,7 +242,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                         dataTestId={`${dataTestId}-expand-button-${index}`}
                       />
                     )}
-                    s
                   </div>
                 </SwiperSlide>
               );
