@@ -14,6 +14,8 @@ export interface BaseTextInputProps extends FormControlProps {
   isError?: boolean;
   /** When true, shows success border. Parent/FormGroup manages validation state. */
   isSuccess?: boolean;
+  /** When false, suppresses the trailing success checkmark (e.g. PasswordInput renders its own). */
+  showSuccessIcon?: boolean;
   /** Per-input tracking data merged into the blur event. Use to distinguish inputs (e.g. form_field, module_name). */
   analytics?: Record<string, unknown>;
 }

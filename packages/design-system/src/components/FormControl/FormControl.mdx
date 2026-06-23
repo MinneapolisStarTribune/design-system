@@ -8,7 +8,7 @@ import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
 
 `FormControl` is a namespaced entry point for concrete input controls.
 
-It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.NumberInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, or `FormControl.Switch`.
+It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.NumberInput`, `FormControl.PasswordInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, or `FormControl.Switch`.
 
 For field wiring and labeling semantics, pair controls with `FormGroup`. For submit/layout semantics, use `Form`.
 
@@ -48,6 +48,20 @@ Number input:
     placeholderText={1000}
     value={buildNumber}
     onChange={(e) => setBuildNumber(e.target.value)}
+  />
+</FormGroup>
+```
+
+Password input:
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Password</FormGroup.Label>
+  <FormControl.PasswordInput
+    placeholderText="Enter password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    autoComplete="current-password"
   />
 </FormGroup>
 ```
@@ -104,6 +118,7 @@ Switch:
 - `FormControl`: namespace container for form controls
 - `FormControl.TextInput`: text input control
 - `FormControl.NumberInput`: number input control
+- `FormControl.PasswordInput`: password input control with show/hide toggle
 - `FormControl.Checkbox`: checkbox control
 - `FormControl.CheckboxGroup`: grouped checkbox control
 - `FormControl.RadioGroup`: grouped radio control
