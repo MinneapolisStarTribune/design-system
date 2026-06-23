@@ -1,0 +1,65 @@
+@keyframes skeletonShimmerH {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes skeletonShimmerD {
+  0% {
+    background-position: 200% 200%;
+  }
+  100% {
+    background-position: -200% -200%;
+  }
+}
+
+.skeleton {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  /*
+   * Fixed hex palette (from neutral primitives) so the shimmer stays consistent
+   * regardless of app theme or parent surface color.
+   */
+  --skeleton-from: #e3e5e8;
+  --skeleton-to: #c8ccd0;
+
+  &.variant-rectangle {
+    width: 200px;
+    height: 25px;
+    border-radius: var(--radius-4);
+    background: linear-gradient(
+      89deg,
+      var(--skeleton-from) 1.21%,
+      var(--skeleton-to) 50.09%,
+      var(--skeleton-from) 98.96%
+    );
+    background-size: 400% 100%;
+
+    &.animate {
+      animation: skeletonShimmerH 1.5s ease-in-out infinite;
+    }
+  }
+
+  &.variant-circle {
+    width: var(--spacing-64);
+    height: var(--spacing-64);
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-full);
+    background: linear-gradient(
+      235deg,
+      var(--skeleton-from) 7.04%,
+      var(--skeleton-to) 51.62%,
+      var(--skeleton-from) 96.2%
+    );
+    background-size: 400% 400%;
+
+    &.animate {
+      animation: skeletonShimmerD 1.5s ease-in-out infinite;
+    }
+  }
+}
