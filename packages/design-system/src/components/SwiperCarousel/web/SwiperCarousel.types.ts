@@ -11,6 +11,11 @@ export interface SwiperCarouselProps {
   loop?: boolean;
   centeredSlides?: boolean;
   className?: string;
+  onSwipe?: (info: {
+    direction: 'prev' | 'next';
+    activeIndex: number;
+    previousIndex: number;
+  }) => void;
 }
 
 export type NavigationSize = IconOnlyButtonSize;
