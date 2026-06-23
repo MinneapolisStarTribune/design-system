@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
-import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
+import { ImageGallery } from './ImageGallery';
 
 beforeEach(() => {
   Object.defineProperty(HTMLDialogElement.prototype, 'open', {
@@ -209,6 +209,64 @@ describe('ImageGallery', () => {
     const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
     fireEvent(window, new Event('resize'));
     expect(getByTestId('image-gallery')).toBeInTheDocument();
+  });
+
+  it('calls onIndexChange with the initial 1-based index', () => {
+    const onIndexChange = vi.fn();
+
+    renderWithProvider(<ImageGallery images={images} onIndexChange={onIndexChange} />);
+
+    expect(onIndexChange).toHaveBeenCalledWith(1);
+  });
+
+  it('respects explicit spaceBetween prop without resize dependency', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} spaceBetween={32} />);
+    fireEvent(window, new Event('resize'));
+    expect(getByTestId('image-gallery')).toBeInTheDocument();
+  });
+
+  it('applies one gallery-level aspect ratio to every slide wrapper', () => {
+    const mixedImages = [
+      {
+        src: 'https://picsum.photos/1080/1080?1',
+        altText: 'Square image',
+        width: 1080,
+        height: 1080,
+      },
+      {
+        src: 'https://picsum.photos/1080/720?2',
+        altText: 'Landscape image',
+        width: 1080,
+        height: 720,
+      },
+      {
+        src: 'https://picsum.photos/720/1080?3',
+        altText: 'Portrait image',
+      },
+    ];
+
+    const { container } = renderWithProvider(
+      <ImageGallery images={mixedImages} aspectRatio="1 / 1" />
+    );
+    const wrappers = Array.from(container.querySelectorAll('.swiper-slide > div'));
+
+    expect(wrappers).toHaveLength(3);
+    wrappers.forEach((wrapper) => {
+      expect(wrapper).toHaveStyle({ aspectRatio: '1 / 1' });
+    });
+  });
+
+  it('applies gallery-level aspect ratio to the expanded dialog wrapper', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable aspectRatio="1 / 1" dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    const dialog = getByTestId('gallery-dialog');
+    const dialogImageWrapper = dialog.querySelector('figure > div');
+
+    expect(dialogImageWrapper).toHaveStyle({ aspectRatio: '1 / 1' });
   });
 
   it('does not render expand control by default', () => {
