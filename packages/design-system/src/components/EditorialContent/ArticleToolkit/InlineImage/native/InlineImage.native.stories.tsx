@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage.native';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const meta = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -31,10 +30,7 @@ const meta = {
     },
     purchaseLink: {
       control: 'object',
-      description: 'Optional Buy Reprint CTA: { label, link }.',
-      table: {
-        type: { summary: '{ label?: string; link?: string }' },
-      },
+      description: 'Optional Buy Reprint CTA object. Renders only when label and link are set.',
     },
     variant: {
       control: 'radio',
@@ -69,30 +65,22 @@ const defaultArgs: InlineImageProps = {
   image,
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
+  purchaseLink: {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  },
   variant: 'standard',
   expandable: false,
-  purchaseLink: {
-    label: 'Buy Reprint',
-    link: 'https://www.startribune.com/photos',
-  },
 };
 
 const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
   ...defaultArgs,
   ...overrides,
-  purchaseLink:
-    'purchaseLink' in overrides
-      ? overrides.purchaseLink
-        ? { ...overrides.purchaseLink }
-        : undefined
-      : { ...defaultArgs.purchaseLink! },
 });
 
 export const Configurable: Story = {
   args: storyArgs(),
-  render: ({ purchaseLink, ...args }) => (
-    <InlineImage {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
-  ),
+  render: ({ ...args }) => <InlineImage {...args} />,
 };
 
 export const AllVariants: Story = {
@@ -114,13 +102,7 @@ export const AllVariants: Story = {
         </View>
         <View style={styles.item}>
           <Text style={styles.heading}>With Purchase Link</Text>
-          <InlineImage
-            {...args}
-            purchaseLink={{
-              label: 'Buy Reprint',
-              link: 'https://www.startribune.com/photos',
-            }}
-          />
+          <InlineImage {...args} />
         </View>
       </View>
     </ScrollView>

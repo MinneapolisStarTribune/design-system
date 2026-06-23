@@ -94,4 +94,19 @@ describe('PhotoLayout', () => {
     expect(imageElements[0]).toHaveAttribute('src', `${images[0].src}?${imgixParams}`);
     expect(imageElements[1]).toHaveAttribute('src', `${images[1].src}?${imgixParams}`);
   });
+
+  it('renders default Buy Reprint in inline caption when purchaseLink.label is missing', () => {
+    const { getByTestId } = renderWithProvider(
+      <PhotoLayout
+        imageList={images}
+        purchaseLink={{ link: 'https://www.startribune.com/photos' }}
+      />
+    );
+
+    expect(getByTestId('photo-layout-caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(getByTestId('photo-layout-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
 });

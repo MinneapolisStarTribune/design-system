@@ -22,6 +22,10 @@ const meta: Meta<PhotoLayoutProps> = {
     expandable: {
       control: 'boolean',
     },
+    purchaseLink: {
+      control: 'object',
+      description: 'Optional Buy Reprint CTA object. Renders only when label and link are set.',
+    },
   },
 };
 
@@ -56,6 +60,7 @@ export const Configurable: Story = {
     imageCredit: 'Star Tribune staff/The Minnesota Star Tribune',
     variant: 'immersive',
     expandable: false,
+    purchaseLink: { link: 'https://www.startribune.com/photos', label: 'Buy Reprint' },
   },
 };
 
@@ -75,6 +80,7 @@ export const AllLevels: Story = {
             caption={`${count}-up immersive layout showcasing ${count} related visuals arranged in a structured grid format.`}
             variant="immersive"
             imageCredit="Star Tribune staff/The Minnesota Star Tribune"
+            purchaseLink={{ link: 'https://www.startribune.com/photos', label: 'Buy Reprint' }}
           />
         </div>
       ))}

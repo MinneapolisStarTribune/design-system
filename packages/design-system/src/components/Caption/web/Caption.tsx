@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import { ChevronLeftIcon, ChevronRightIcon, CameraIcon } from '@/icons';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { DEFAULT_PURCHASE_LINK_LABEL } from '../Caption.constants';
 
 import type { CaptionProps } from '../Caption.types';
 import styles from './Caption.module.scss';
@@ -27,7 +28,7 @@ export const Caption: React.FC<CaptionProps> = ({
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
-  const [buttonSize, setButtonSize] = useState<'small' | 'medium'>('medium');
+  const [buttonSize, setButtonSize] = useState<'small' | 'large'>('large');
 
   const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
@@ -52,8 +53,8 @@ export const Caption: React.FC<CaptionProps> = ({
   };
 
   const purchaseLinkHref = purchaseLink?.link?.trim();
-  const purchaseLinkLabel = purchaseLink?.label?.trim();
-  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
+  const purchaseLinkLabel = purchaseLink?.label?.trim() || DEFAULT_PURCHASE_LINK_LABEL;
+  const showPurchaseLink = Boolean(purchaseLinkHref);
 
   const handlePurchaseClick: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
     track({
@@ -78,7 +79,7 @@ export const Caption: React.FC<CaptionProps> = ({
 
       const width = window.innerWidth;
 
-      setButtonSize(width <= 1024 ? 'small' : 'medium');
+      setButtonSize(width < 1160 ? 'small' : 'large');
     };
 
     handleResize();
@@ -120,9 +121,9 @@ export const Caption: React.FC<CaptionProps> = ({
     );
   };
 
-  const hasTopRowContent = caption || credit || showPurchaseLink;
+  const hasTopRowContent = caption || credit || showPurchaseLink || (!isLightbox && hasNavigation);
 
-  const hasBottomRowContent = hasPagination || hasNavigation;
+  const hasBottomRowContent = isLightbox && (hasPagination || hasNavigation);
 
   if (!caption && !credit && !showPurchaseLink && !hasNavigation) {
     return null;
@@ -173,6 +174,8 @@ export const Caption: React.FC<CaptionProps> = ({
               </>
             )}
           </div>
+
+          {!isLightbox && renderNavigation()}
         </div>
       )}
 

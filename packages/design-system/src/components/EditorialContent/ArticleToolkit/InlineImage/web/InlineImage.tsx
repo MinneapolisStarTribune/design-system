@@ -7,11 +7,12 @@ import type { InlineImageProps } from '../InlineImage.types';
 import styles from './InlineImage.module.scss';
 import { InlineImageContent } from './InlineImageContent';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 
 export const InlineImage: React.FC<InlineImageProps> = ({
   expandable = false,
   image,
+  purchaseLink,
   caption,
   className,
   credit,
@@ -20,7 +21,6 @@ export const InlineImage: React.FC<InlineImageProps> = ({
   objectFit = 'cover',
   style,
   variant = 'standard',
-  purchaseLink,
   ...accessibilityProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);

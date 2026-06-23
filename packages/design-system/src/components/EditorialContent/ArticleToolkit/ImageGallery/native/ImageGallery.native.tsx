@@ -11,10 +11,8 @@ import {
   Modal,
   Pressable,
   Image,
-  Linking,
   findNodeHandle,
   type ViewStyle,
-  type TextStyle,
   type StyleProp,
   type LayoutChangeEvent,
   type ImageStyle,
@@ -25,22 +23,14 @@ import {
   type ImageItem,
   Variant,
 } from '../ImageGallery.types';
-import {
-  Button,
-  CameraFilledIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CloseIcon,
-  ExpandIcon,
-} from '@/index.native';
+import { CameraFilledIcon, CloseIcon, ExpandIcon } from '@/index.native';
 import { Caption } from '@/components/Caption/native/Caption.native';
 import {
   Image as DSImage,
   ImageProps as NativeImageProps,
 } from '@/components/Image/native/Image.native';
 import type { CtaLinkProps } from '@/types';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
-
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 import { useNativeStyles, type NativeTheme } from '@/hooks/useNativeStyles';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { createDesignSystemError } from '@/utils/errorPrefix';
@@ -66,9 +56,6 @@ const getMaxWidth = (width: number, variant: Variant): number => {
   if (width < BREAKPOINTS.medium) return 535;
   return 712;
 };
-
-const getButtonSize = (width: number): 'small' | 'large' =>
-  width < BREAKPOINTS.medium ? 'small' : 'large';
 
 const buildImageUri = (src: string, imgixParams?: string): string => {
   if (!imgixParams) {
@@ -261,29 +248,8 @@ function createStyles(theme: NativeTheme) {
     } as TextStyle,
     bottomSection: {
       marginTop: theme.spacing8,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      gap: theme.spacing20,
     } as ViewStyle,
-    captionContainer: { flex: 1 } as ViewStyle,
-    caption: { color: theme.colorTextOnLightSecondary } as TextStyle,
-    purchaseLinkSeparator: {
-      marginHorizontal: theme.spacing4,
-    } as TextStyle,
-    purchaseLinkText: {
-      color: theme.colorLinkTextDefault,
-      textDecorationLine: 'underline',
-      textDecorationColor: theme.colorLinkUnderlineDefault,
-    } as TextStyle,
-    controls: {
-      flexDirection: 'row',
-      gap: theme.spacing4,
-      marginLeft: theme.spacing16,
-    } as ViewStyle,
-    navButton: {
-      borderWidth: 1,
-      borderColor: theme.colorBorderOnDarkSubtle01,
-    } as ViewStyle,
+    captionContainer: { width: '100%' } as ViewStyle,
   };
 }
 
@@ -291,14 +257,13 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   images,
   variant = 'standard',
   expandable = false,
-  purchaseLink,
   loop,
+  purchaseLink,
   ImageComponent,
   style,
   imageStyle,
   wrapperStyle,
   captionStyle,
-  controlsStyle,
   dataTestId = 'image-gallery',
   'aria-label': ariaLabel,
 }) => {
@@ -336,8 +301,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const spaceBetween = getSpaceBetween(dimensions.width);
   const maxWidth = getMaxWidth(dimensions.width, variant);
-  const buttonSize = getButtonSize(dimensions.width);
-
   const BASE_WIDTH = 390;
   const scale = dimensions.width / BASE_WIDTH;
 
@@ -464,28 +427,12 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const currentImage = total > 0 ? images[activeImageIndex] : undefined;
   const expandedImage =
     expandedIndex !== null && total > 0 ? (images[expandedIndex] ?? null) : null;
+  const normalizedCredit = currentImage?.credit?.trim().replace(/^\((.*)\)$/, '$1');
 
-  const activePurchaseLink = resolvePurchaseLink(currentImage?.purchaseLink ?? purchaseLink);
-  const expandedPurchaseLink = resolvePurchaseLink(expandedImage?.purchaseLink ?? purchaseLink);
-  const hasCarouselCaption = Boolean(
-    currentImage?.caption || currentImage?.credit || activePurchaseLink
-  );
-
-  const openActivePurchaseLink = async () => {
-    if (!activePurchaseLink?.link) {
-      return;
-    }
-
-    try {
-      const canOpen = await Linking.canOpenURL(activePurchaseLink.link);
-      if (!canOpen) {
-        return;
-      }
-      await Linking.openURL(activePurchaseLink.link);
-    } catch (error) {
-      console.warn('Failed to open purchase link', error);
-    }
-  };
+  const activePurchaseLink =
+    resolvePurchaseLink(currentImage?.purchaseLink) ?? resolvePurchaseLink(purchaseLink);
+  const hasCarouselFooter =
+    Boolean(currentImage?.caption || normalizedCredit || activePurchaseLink) || total > 1;
 
   if (!total) return null;
 
@@ -495,6 +442,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         style={[styles.gallery, style as StyleProp<ViewStyle>]}
         testID={dataTestId}
         accessibilityLabel={ariaLabel}
+        accessibilityElementsHidden={expandedIndex !== null}
+        importantForAccessibility={expandedIndex !== null ? 'no-hide-descendants' : 'auto'}
         onLayout={handleLayout}
       >
         <View style={styles.innerContainer}>
@@ -566,57 +515,20 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           )}
         </View>
 
-        {(hasCarouselCaption || total > 1) && (
+        {hasCarouselFooter && (
           <View style={styles.bottomSection}>
-            <View style={styles.captionContainer}>
-              {hasCarouselCaption && (
-                <Text style={[styles.caption, captionStyle]} testID="image-gallery-caption">
-                  {currentImage?.caption}
-                  {currentImage?.credit ? ` ${currentImage.credit}` : ''}
-                  {activePurchaseLink ? (
-                    <>
-                      {(currentImage?.caption || currentImage?.credit) && (
-                        <Text
-                          style={styles.purchaseLinkSeparator}
-                          accessibilityElementsHidden
-                          importantForAccessibility="no"
-                        >
-                          •
-                        </Text>
-                      )}
-                      <Text
-                        style={styles.purchaseLinkText}
-                        accessibilityRole="link"
-                        accessibilityLabel={activePurchaseLink.label}
-                        onPress={openActivePurchaseLink}
-                        testID="image-gallery-caption-purchase-link"
-                      >
-                        {activePurchaseLink.label}
-                      </Text>
-                    </>
-                  ) : null}
-                </Text>
-              )}
-            </View>
-
-            {total > 1 && (
-              <View style={[styles.controls, controlsStyle]}>
-                <Button
-                  variant="ghost"
-                  size={buttonSize}
-                  icon={<ChevronLeftIcon />}
-                  onPress={handlePrev}
-                  style={styles.navButton}
-                />
-                <Button
-                  variant="ghost"
-                  size={buttonSize}
-                  icon={<ChevronRightIcon />}
-                  onPress={handleNext}
-                  style={styles.navButton}
-                />
-              </View>
-            )}
+            <Caption
+              caption={currentImage?.caption}
+              credit={normalizedCredit}
+              purchaseLink={activePurchaseLink}
+              variant="inline"
+              currentIndex={total > 1 ? activeImageIndex + 1 : undefined}
+              totalItems={total > 1 ? total : undefined}
+              onPrevious={handlePrev}
+              onNext={handleNext}
+              style={[styles.captionContainer, captionStyle as StyleProp<ViewStyle>]}
+              dataTestId="image-gallery-caption"
+            />
           </View>
         )}
       </View>
@@ -625,7 +537,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         <ImageGalleryExpandModal
           visible={expandedIndex !== null}
           image={expandedImage}
-          purchaseLink={expandedPurchaseLink}
+          purchaseLink={activePurchaseLink}
           currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
           totalItems={total}
           onPrevious={handleExpandedPrevious}
