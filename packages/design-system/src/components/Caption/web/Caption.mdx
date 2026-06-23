@@ -67,6 +67,8 @@ Pass `currentIndex`, `totalItems`, and `onPrevious` / `onNext` when the caption 
 - **caption** – Optional editorial caption content.
 - **credit** – Optional attribution or photographer credit.
 - **purchaseLink** – Optional CTA configuration object `{ label, link, onClick }`.
+	- CTA renders only when `link` is present and non-empty.
+	- If `label` is missing or blank, it defaults to **Buy Reprint**.
 - **variant** – Caption presentation variant: `'inline' | 'lightbox'`.
 - **currentIndex** / **totalItems** – Optional gallery pagination for controls and counter.
 - **onPrevious** / **onNext** – Optional gallery navigation handlers.

@@ -1,7 +1,6 @@
 .gallery {
   --overlay-button-bg: rgba(34, 34, 34, 0.3);
   --overlay-button-bg-hover: rgba(34, 34, 34, 0.5);
-
   width: 100%;
 }
 
@@ -13,22 +12,6 @@
 
 /* STANDARD */
 
-.standard .innerContainer {
-  max-width: 712px;
-}
-
-@media (max-width: 1024px) {
-  .standard .innerContainer {
-    max-width: 535px;
-  }
-}
-
-@media (max-width: 640px) {
-  .standard .innerContainer {
-    max-width: 390px;
-  }
-}
-
 .standard .swiper {
   overflow: hidden;
 }
@@ -36,8 +19,6 @@
 .standard .slide {
   width: 100%;
 }
-
-/* IMMERSIVE */
 
 /* IMMERSIVE */
 
@@ -62,6 +43,10 @@
   max-width: 100%;
 }
 
+.immersiveSlide {
+  height: auto;
+}
+
 @media (max-width: 1024px) {
   .immersive .slide {
     width: 535px;
@@ -82,44 +67,72 @@
   }
 }
 
-/* IMAGE */
+@media screen and (min-width: 1024px) and (max-width: 1140px), (max-width: 389px) {
+  .immersive .slide {
+    max-width: 90%;
+  }
+}
 
 .imageWrapper {
   position: relative;
-  aspect-ratio: 3 / 2;
   overflow: hidden;
 }
 
+.containWrapper {
+  background-color: #171717; /* neutral-900 */
+}
+
+
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  /* shared base */
   display: block;
   border-radius: var(--semantic-photo-layout-border-radius);
 }
 
-/* BOTTOM */
+.coverImage {
+  /* FIX 1 cover branch — mirrors PhotoGallery: cover && "object-cover" */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.containImage {
+  /* FIX 1 contain branch — mirrors PhotoGallery: contain && "!object-contain" */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mediaTag {
+  position: absolute;
+  bottom: var(--spacing-16);
+  left: var(--spacing-16);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-6);
+  border-radius: var(--radius-6);
+  background: #0000004d;
+  z-index: 1;
+
+  span {
+    color: var(--color-base-white);
+  }
+}
+
 
 .standard .bottomSection {
-  max-width: 712px;
   margin: 8px auto 0;
-}
-
-@media (max-width: 1024px) {
-  .standard .bottomSection {
-    max-width: 535px;
-  }
-}
-
-@media (max-width: 640px) {
-  .standard .bottomSection {
-    max-width: 390px;
-  }
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-20);
 }
 
 .immersive .bottomSection {
   max-width: 1080px;
   margin: var(--spacing-8) auto 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 @media (max-width: 1024px) {
@@ -132,6 +145,16 @@
   .immersive .bottomSection {
     max-width: 390px;
   }
+}
+
+.controls {
+  display: flex;
+  gap: var(--spacing-4);
+  margin-left: var(--spacing-16);
+}
+
+.navButton {
+  border: 1px solid var(--color-border-on-dark-subtle-01);
 }
 
 /* SWIPER */
@@ -144,6 +167,7 @@
   position: absolute;
   bottom: 8px;
 }
+
 
 .caption {
   color: var(--color-text-on-light-secondary) !important;

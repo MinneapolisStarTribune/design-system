@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import { Caption, Image } from '@/components/index.web';
 import { CloseIcon } from '@/icons';
 import type { CtaLinkProps } from '@/types';
-import { hasPurchaseLink } from '../resolvePurchaseLink';
+import { hasPurchaseLink } from '../PurchaseLink/resolvePurchaseLink';
 import { type ImageData } from '../../types';
 import styles from './ImageDialog.module.scss';
 
@@ -13,6 +13,7 @@ export interface ImageDialogProps {
   caption?: string;
   credit?: string;
   imgixParams?: string;
+  aspectRatio?: string;
   purchaseLink?: CtaLinkProps;
   dialogRef: React.RefObject<HTMLDialogElement | null>;
   isOpen: boolean;
@@ -45,6 +46,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   caption,
   credit,
   imgixParams,
+  aspectRatio,
   purchaseLink,
   dialogRef,
   isOpen,
@@ -128,7 +130,10 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
       </button>
 
       <figure className={styles['dialog-content']}>
-        <div className={styles['dialog-image-wrapper']}>
+        <div
+          className={styles['dialog-image-wrapper']}
+          style={aspectRatio ? { aspectRatio } : undefined}
+        >
           <Image
             src={image.src}
             alt={image.altText}

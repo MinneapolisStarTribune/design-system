@@ -4,6 +4,7 @@ import React from 'react';
 import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
 import { NumberInput } from './NumberInput/web/NumberInput';
+import { PasswordInput } from './PasswordInput/web/PasswordInput';
 import { Checkbox } from './Checkbox/web/Checkbox';
 import { CheckboxGroup } from './CheckboxGroup/web/CheckboxGroup';
 import { RadioGroup } from './RadioGroup/web/RadioGroup';
@@ -22,6 +23,8 @@ export const FormControl: React.FC<FormControlProps> & {
   TextInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   NumberInput: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  PasswordInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Checkbox: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,6 +49,7 @@ export const FormControl: React.FC<FormControlProps> & {
 // Attach subcomponents
 FormControl.TextInput = TextInput;
 FormControl.NumberInput = NumberInput;
+FormControl.PasswordInput = PasswordInput;
 FormControl.Checkbox = Checkbox;
 FormControl.CheckboxGroup = CheckboxGroup;
 FormControl.RadioGroup = RadioGroup;

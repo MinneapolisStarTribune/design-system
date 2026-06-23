@@ -28,6 +28,7 @@ const Root: React.FC<SwiperCarouselProps> = ({
   loop = false,
   centeredSlides = false,
   className,
+  onSwipe,
 }) => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,6 +38,7 @@ const Root: React.FC<SwiperCarouselProps> = ({
   const [totalSlides, setTotalSlides] = useState(0);
 
   const paginationRef = useRef<HTMLDivElement | null>(null);
+  const isSwipingRef = useRef(false);
 
   // Swiper requires pagination element during render phase, but React lint disallows ref.current usage.
   // Using state via ref callback ensures element is available without violating lint rules.
@@ -108,6 +110,14 @@ const Root: React.FC<SwiperCarouselProps> = ({
             setIsBeginning(!isScrollable || swiper.isBeginning);
             setIsEnd(!isScrollable || swiper.isEnd);
           }}
+          onSliderMove={() => {
+            isSwipingRef.current = true;
+          }}
+          onTouchEnd={() => {
+            setTimeout(() => {
+              isSwipingRef.current = false;
+            }, 0);
+          }}
           onSlideChange={(swiper) => {
             setCurrentPage(swiper.snapIndex);
             setIsBeginning(swiper.isBeginning);
@@ -115,6 +125,15 @@ const Root: React.FC<SwiperCarouselProps> = ({
 
             const index = loop ? swiper.realIndex : swiper.activeIndex;
             setActiveIndex(index);
+
+            if (isSwipingRef.current && onSwipe) {
+              onSwipe({
+                direction: swiper.swipeDirection,
+                activeIndex: index,
+                previousIndex: swiper.previousIndex,
+              });
+            }
+            isSwipingRef.current = false;
           }}
           pagination={
             hasPagination

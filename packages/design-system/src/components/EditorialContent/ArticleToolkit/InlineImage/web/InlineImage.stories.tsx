@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { InlineImageProps } from '../InlineImage.types';
 import { InlineImage } from './InlineImage';
 import { ARTICLE_BODY_VARIANTS } from '../../types';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
 
 const meta: Meta<InlineImageProps> = {
   title: 'Editorial Content/Article Toolkit/Inline Image',
@@ -30,10 +29,7 @@ const meta: Meta<InlineImageProps> = {
     },
     purchaseLink: {
       control: 'object',
-      description: 'Optional Buy Reprint CTA: { label, link }.',
-      table: {
-        type: { summary: '{ label?: string; link?: string }' },
-      },
+      description: 'Optional Buy Reprint CTA object. Renders only when label and link are set.',
     },
     variant: {
       control: 'radio',
@@ -68,12 +64,12 @@ const defaultArgs: InlineImageProps = {
   image,
   caption: "A scenic view of mountains during sunrise, highlighting nature's beauty.",
   credit: 'Star Tribune staff/The Minnesota Star Tribune',
+  purchaseLink: {
+    link: 'https://www.startribune.com/photos',
+    label: 'Buy Reprint',
+  },
   variant: 'standard',
   expandable: false,
-  purchaseLink: {
-    label: 'Buy Reprint',
-    link: 'https://www.startribune.com/photos',
-  },
 };
 
 const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps => ({
@@ -83,9 +79,7 @@ const storyArgs = (overrides: Partial<InlineImageProps> = {}): InlineImageProps 
 
 export const Configurable: Story = {
   args: storyArgs(),
-  render: ({ purchaseLink, ...args }) => (
-    <InlineImage {...args} purchaseLink={resolvePurchaseLink(purchaseLink)} />
-  ),
+  render: ({ ...args }) => <InlineImage {...args} />,
 };
 
 export const AllVariants: Story = {
@@ -108,13 +102,7 @@ export const AllVariants: Story = {
 
       <div>
         <h3 style={{ marginBottom: 8 }}>With Purchase Link</h3>
-        <InlineImage
-          {...args}
-          purchaseLink={{
-            label: 'Buy Reprint',
-            link: 'https://www.startribune.com/photos',
-          }}
-        />
+        <InlineImage {...args} />
       </div>
     </div>
   ),

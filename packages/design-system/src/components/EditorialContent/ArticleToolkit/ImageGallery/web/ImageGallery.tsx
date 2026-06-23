@@ -1,54 +1,63 @@
-'use client';
-
 import React, { useRef, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, A11y, Pagination } from 'swiper/modules';
+import { Navigation, A11y, Pagination, EffectCoverflow } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import 'swiper/css/effect-coverflow';
 
 import classNames from 'classnames';
 import { Caption } from '@/components/Caption/web/Caption';
+import { CameraFilledIcon } from '@/icons';
 import { Image as DSImage, ImageProps } from '@/components/Image/web/Image';
 
 import { ExpandButton } from '../../shared/ExpandButton/ExpandButton';
 import { ImageDialog } from '../../shared/ImageDialog/ImageDialog';
-import { resolvePurchaseLink } from '../../shared/resolvePurchaseLink';
+import { resolvePurchaseLink } from '../../shared/PurchaseLink/resolvePurchaseLink';
 
 import styles from './ImageGallery.module.scss';
-import { ImageGalleryProps } from '../ImageGallery.types';
+import { ImageGalleryProps, ImageItem } from '../ImageGallery.types';
 
-/**
- * SSR-safe spacing helper
- */
-const getSpaceBetween = (): number => {
-  if (typeof window === 'undefined') return 24;
+const TABLET_SPACE_BETWEEN = 16;
+const DESKTOP_SPACE_BETWEEN = 24;
 
+const getDefaultSpaceBetween = (): number => {
+  if (typeof window === 'undefined') return DESKTOP_SPACE_BETWEEN;
   const width = window.innerWidth;
-
   if (width < 640) return 8;
-  if (width < 1024) return 16;
+  if (width < 1024) return TABLET_SPACE_BETWEEN;
+  return DESKTOP_SPACE_BETWEEN;
+};
 
-  return 24;
+const getImageFit = (img: ImageItem): 'cover' | 'contain' => {
+  if (
+    typeof img.width === 'number' &&
+    typeof img.height === 'number' &&
+    img.width > 0 &&
+    img.height > 0
+  ) {
+    const ratio = img.width / img.height;
+    return ratio < 1 ? 'contain' : 'cover';
+  }
+  return 'cover';
 };
 
 const normalizeCredit = (credit?: string): string | undefined => {
-  const trimmedCredit = credit?.trim();
-
-  if (!trimmedCredit) {
-    return undefined;
-  }
-
-  const match = trimmedCredit.match(/^\((.*)\)$/);
-  return match?.[1] ?? trimmedCredit;
+  const trimmed = credit?.trim();
+  if (!trimmed) return undefined;
+  const match = trimmed.match(/^\((.*)\)$/);
+  return match?.[1] ?? trimmed;
 };
 
 export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   images,
   variant = 'standard',
   expandable = false,
+  aspectRatio,
+  spaceBetween: spaceBetweenOverride,
+  onIndexChange,
   purchaseLink,
   ImageComponent,
   className,
@@ -57,6 +66,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   captionClassName,
   controlsClassName,
   dataTestId = 'image-gallery',
+  loop,
 }) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -64,94 +74,44 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const [currentImageProgress, setCurrentImageProgress] = useState<number>(1);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [spaceBetween, setSpaceBetween] = useState<number>(getSpaceBetween);
+  const [responsiveSpaceBetween, setResponsiveSpaceBetween] =
+    useState<number>(getDefaultSpaceBetween());
+  const spaceBetween =
+    typeof spaceBetweenOverride === 'number' ? spaceBetweenOverride : responsiveSpaceBetween;
 
-  const isDialogOpen = expandedIndex !== null;
   const isImmersive = variant === 'immersive';
   const total = images.length;
+  const hasMultipleImages = total > 1;
   const activeImage = images[currentImageProgress - 1];
   const dialogImage = images[expandedIndex ?? 0];
+
+  const wrapperAspectRatio = aspectRatio?.trim() || undefined;
+
   const activePurchaseLink = resolvePurchaseLink(activeImage?.purchaseLink ?? purchaseLink);
   const dialogPurchaseLink = resolvePurchaseLink(dialogImage?.purchaseLink ?? purchaseLink);
 
   const Img: React.ComponentType<ImageProps> = ImageComponent ?? DSImage;
 
-  /**
-   * Single resize listener (optimized + SSR safe)
-   */
+  // Keep slide spacing responsive to window resizes.
   useEffect(() => {
-    const handleResize = (): void => {
-      setSpaceBetween(getSpaceBetween());
-    };
+    if (typeof spaceBetweenOverride === 'number') {
+      return;
+    }
 
+    const handleResize = (): void => setResponsiveSpaceBetween(getDefaultSpaceBetween());
     handleResize();
-
     window.addEventListener('resize', handleResize);
-
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [spaceBetweenOverride]);
 
-  const goToGalleryIndex = (nextIndex: number): void => {
-    if (nextIndex < 0 || nextIndex >= total) {
-      return;
-    }
+  // Notify consumers when the visible image index changes.
+  useEffect(() => {
+    onIndexChange?.(currentImageProgress);
+  }, [currentImageProgress, onIndexChange]);
 
-    const swiper = swiperRef.current;
-
-    if (!swiper) {
-      setCurrentImageProgress(nextIndex + 1);
-      return;
-    }
-
-    if (isImmersive) {
-      swiper.slideToLoop(nextIndex);
-      return;
-    }
-
-    swiper.slideTo(nextIndex);
-  };
-
-  const next = (): void => {
-    if (!isImmersive && currentImageProgress >= total) {
-      return;
-    }
-
-    goToGalleryIndex(isImmersive ? currentImageProgress % total : currentImageProgress);
-  };
-
-  const prev = (): void => {
-    if (!isImmersive && currentImageProgress <= 1) {
-      return;
-    }
-
-    goToGalleryIndex(
-      isImmersive ? (currentImageProgress - 2 + total) % total : currentImageProgress - 2
-    );
-  };
-
-  const goToDialogIndex = (nextIndex: number): void => {
-    setExpandedIndex(nextIndex);
-    goToGalleryIndex(nextIndex);
-  };
-
-  const goToPreviousDialogImage = (): void => {
-    if (expandedIndex === null) {
-      return;
-    }
-
-    goToDialogIndex(expandedIndex - 1);
-  };
-
-  const goToNextDialogImage = (): void => {
-    if (expandedIndex === null) {
-      return;
-    }
-
-    goToDialogIndex(expandedIndex + 1);
-  };
   const onExpand = (index: number, el: HTMLButtonElement): void => {
     lastTriggerRef.current = el;
-    goToDialogIndex(index);
+    setExpandedIndex(index);
   };
 
   const onCloseDialog = (): void => {
@@ -161,21 +121,53 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
 
   const handleSlideChange = (swiper: SwiperType): void => {
     const normalizedIndex = isImmersive ? swiper.realIndex : swiper.activeIndex;
-    const nextIndex = normalizedIndex;
+    setCurrentImageProgress(normalizedIndex + 1);
 
-    setCurrentImageProgress(nextIndex + 1);
-
-    if (expandedIndex !== null && expandedIndex !== nextIndex) {
-      setExpandedIndex(nextIndex);
+    if (expandedIndex !== null && expandedIndex !== normalizedIndex) {
+      setExpandedIndex(normalizedIndex);
     }
   };
 
-  const captionsTypography = 'typography-utility-text-regular-x-small';
-  const hasBottomSection = Boolean(
-    activeImage?.caption || activeImage?.credit || activePurchaseLink || total > 1
-  );
+  const handlePreviousSlide = (): void => {
+    swiperRef.current?.slidePrev();
+  };
+  const handleNextSlide = (): void => {
+    swiperRef.current?.slideNext();
+  };
+
+  const navigationProps = {
+    currentIndex: hasMultipleImages ? currentImageProgress : undefined,
+    totalItems: hasMultipleImages ? total : undefined,
+    onPrevious: hasMultipleImages ? handlePreviousSlide : undefined,
+    onNext: hasMultipleImages ? handleNextSlide : undefined,
+    loopNavigation: isImmersive,
+  };
+
+  const mediaTagTypography = 'typography-utility-label-semibold-large';
 
   if (!images?.length) return null;
+
+  const swiperModules = isImmersive
+    ? [Navigation, A11y, Pagination, EffectCoverflow]
+    : [Navigation, A11y, Pagination];
+
+  const swiperProps = isImmersive
+    ? {
+        effect: 'coverflow' as const,
+        coverflowEffect: {
+          rotate: 0,
+          stretch: 0,
+          depth: 0,
+          modifier: 1,
+          slideShadows: true,
+        },
+        centeredSlides: true,
+        slidesPerView: 'auto' as const,
+      }
+    : {
+        centeredSlides: false,
+        slidesPerView: 1 as const,
+      };
 
   return (
     <>
@@ -192,47 +184,57 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             onSwiper={(swiper: SwiperType) => {
               swiperRef.current = swiper;
             }}
-            modules={[Navigation, A11y, Pagination]}
-            slidesPerView={isImmersive ? 'auto' : 1}
-            centeredSlides={isImmersive}
+            modules={swiperModules}
             spaceBetween={spaceBetween}
-            loop={isImmersive}
+            loop={loop !== undefined ? loop : isImmersive}
             allowTouchMove
-            autoHeight
             onSlideChange={handleSlideChange}
             className={styles.swiper}
+            {...swiperProps}
           >
             {images.map((img, index) => {
-              const width = img.width ?? 1080;
-              const height = img.height ?? 720;
-
               if (!img.altText?.trim()) {
                 console.warn('ImageGallery: missing altText for image', img.src);
               }
 
+              const imageFit = getImageFit(img);
+              const isContain = imageFit === 'contain';
+              const isCover = imageFit === 'cover';
+
               return (
-                <SwiperSlide key={`${img.src}-${index}`} className={styles.slide}>
+                <SwiperSlide
+                  key={`${img.src}-${index}`}
+                  className={classNames(styles.slide, {
+                    [styles.immersiveSlide]: isImmersive,
+                  })}
+                >
                   <div
-                    className={classNames(styles.imageWrapper, wrapperClassName)}
-                    style={
-                      img.width && img.height
-                        ? {
-                            aspectRatio: `${img.width} / ${img.height}`,
-                          }
-                        : undefined
-                    }
+                    className={classNames(
+                      styles.imageWrapper,
+                      {
+                        [styles.containWrapper]: isContain,
+                      },
+                      wrapperClassName
+                    )}
+                    style={wrapperAspectRatio ? { aspectRatio: wrapperAspectRatio } : undefined}
                   >
                     <Img
                       src={img.src}
                       alt={img.altText}
                       imgixParams={img.imgixParams}
-                      className={classNames(styles.image, imageClassName)}
-                      width={width}
-                      height={height}
+                      width={isCover ? 0 : img.width}
+                      height={isCover ? 0 : img.height}
                       loading="lazy"
                       decoding="async"
+                      className={classNames(
+                        styles.image,
+                        {
+                          [styles.coverImage]: isCover,
+                          [styles.containImage]: isContain,
+                        },
+                        imageClassName
+                      )}
                     />
-
                     {expandable && (
                       <ExpandButton
                         onClick={(e) => onExpand(index, e.currentTarget)}
@@ -245,24 +247,28 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
               );
             })}
           </Swiper>
+
+          {!isImmersive && (
+            <div className={styles.mediaTag}>
+              <CameraFilledIcon color="on-dark-primary" size="medium" />
+              <span className={mediaTagTypography}>
+                {currentImageProgress}/{total}
+              </span>
+            </div>
+          )}
         </div>
 
-        {hasBottomSection && (
-          <div className={classNames(styles.bottomSection, controlsClassName)}>
-            <Caption
-              caption={activeImage?.caption}
-              credit={normalizeCredit(activeImage?.credit)}
-              purchaseLink={activePurchaseLink}
-              currentIndex={total > 1 ? currentImageProgress : undefined}
-              totalItems={total > 1 ? total : undefined}
-              onPrevious={total > 1 ? prev : undefined}
-              onNext={total > 1 ? next : undefined}
-              loopNavigation={isImmersive}
-              className={classNames(styles.caption, captionsTypography, captionClassName)}
-              dataTestId="image-gallery-caption"
-            />
-          </div>
-        )}
+        <div className={classNames(styles.bottomSection, controlsClassName)}>
+          <Caption
+            caption={activeImage?.caption}
+            credit={normalizeCredit(activeImage?.credit)}
+            variant="inline"
+            purchaseLink={activePurchaseLink}
+            {...navigationProps}
+            className={classNames(styles.caption, captionClassName)}
+            dataTestId="image-gallery-caption"
+          />
+        </div>
       </div>
 
       {expandable && dialogImage && (
@@ -275,15 +281,12 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
           }}
           caption={dialogImage.caption}
           credit={normalizeCredit(dialogImage.credit)}
+          aspectRatio={wrapperAspectRatio}
           imgixParams={dialogImage.imgixParams}
           purchaseLink={dialogPurchaseLink}
           dialogRef={dialogRef}
-          isOpen={isDialogOpen}
-          currentIndex={expandedIndex === null ? undefined : expandedIndex + 1}
-          totalItems={total}
-          onPrevious={goToPreviousDialogImage}
-          onNext={goToNextDialogImage}
-          loopNavigation={isImmersive}
+          isOpen={expandedIndex !== null}
+          {...navigationProps}
           onClose={onCloseDialog}
           dataTestId={`${dataTestId}-dialog`}
         />

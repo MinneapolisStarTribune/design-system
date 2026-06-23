@@ -41,6 +41,10 @@ export {
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
+  PasswordInput,
+  type PasswordInputProps,
+} from './FormControl/PasswordInput/web/PasswordInput';
+export {
   RadioGroup,
   type RadioGroupProps,
   type RadioOption,
@@ -88,6 +92,12 @@ export type { PopoverProps } from './Popover/Popover.types';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
+export {
+  Skeleton,
+  SKELETON_VARIANTS,
+  type SkeletonProps,
+  type SkeletonVariant,
+} from './Skeleton/web/Skeleton';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,

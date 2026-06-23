@@ -15,8 +15,9 @@ import { useNativeStyles } from '@/hooks/useNativeStyles';
 import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '@/icons/index.native';
 import type { CaptionNativeProps } from '../Caption.types';
 import { createCaptionStyles } from './Caption.styles';
+import { DEFAULT_PURCHASE_LINK_LABEL } from '../Caption.constants';
 
-const TABLET_BREAKPOINT = 768;
+const TABLET_BREAKPOINT = 1024;
 const DESKTOP_NAV_BREAKPOINT = 1160;
 
 const renderCaptionNode = (value: React.ReactNode): React.ReactNode => {
@@ -35,6 +36,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   totalItems,
   onPrevious,
   onNext,
+  loopNavigation = false,
   analytics: analyticsOverride,
   onPurchaseLinkClick,
   onNavigationClick,
@@ -55,12 +57,12 @@ export const Caption: React.FC<CaptionNativeProps> = ({
 
   const hasPagination = typeof currentIndex === 'number' && typeof totalItems === 'number';
 
-  const canGoPrevious = hasPagination && currentIndex > 1;
-  const canGoNext = hasPagination && currentIndex < totalItems;
+  const canGoPrevious = loopNavigation || (hasPagination && currentIndex > 1);
+  const canGoNext = loopNavigation || (hasPagination && currentIndex < totalItems);
 
   const purchaseLinkHref = purchaseLink?.link?.trim();
-  const purchaseLinkLabel = purchaseLink?.label?.trim();
-  const showPurchaseLink = Boolean(purchaseLinkHref && purchaseLinkLabel);
+  const purchaseLinkLabel = purchaseLink?.label?.trim() || DEFAULT_PURCHASE_LINK_LABEL;
+  const showPurchaseLink = Boolean(purchaseLinkHref);
 
   const hasTopRowContent = caption || credit || showPurchaseLink || (!isLightbox && hasNavigation);
 
@@ -117,8 +119,16 @@ export const Caption: React.FC<CaptionNativeProps> = ({
       return null;
     }
 
-    const previousIndex = Math.max((currentIndex ?? 1) - 1, 1);
-    const nextIndex = Math.min((currentIndex ?? 1) + 1, totalItems ?? 1);
+    const previousIndex = loopNavigation
+      ? (currentIndex ?? 1) === 1
+        ? (totalItems ?? 1)
+        : (currentIndex ?? 1) - 1
+      : Math.max((currentIndex ?? 1) - 1, 1);
+    const nextIndex = loopNavigation
+      ? (currentIndex ?? 1) === (totalItems ?? 1)
+        ? 1
+        : (currentIndex ?? 1) + 1
+      : Math.min((currentIndex ?? 1) + 1, totalItems ?? 1);
 
     return (
       <View style={styles.navigation}>

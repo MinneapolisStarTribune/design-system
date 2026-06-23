@@ -16,7 +16,7 @@ jobs:
     outputs:
       uiChanged: ${{ steps.changes.outputs.ui }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dorny/paths-filter@v3
         id: changes
         with:
@@ -33,13 +33,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
       - name: Run Chromatic
-        uses: chromaui/action@v13
+        uses: chromaui/action@v17
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           onlyChanged: true

@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { renderWithProvider } from '@/test-utils/render';
-import { ImageGallery } from './ImageGallery';
 import { ImageProps } from '@/components/Image/web/Image';
 import { fireEvent } from '@testing-library/react';
+import { ImageGallery } from './ImageGallery';
 
 beforeEach(() => {
   Object.defineProperty(HTMLDialogElement.prototype, 'open', {
@@ -36,10 +36,6 @@ const images = [
     caption: 'Caption 1',
     credit: '(Photo credit 1)',
     imgixParams: 'w=800&q=75',
-    purchaseLink: {
-      label: 'Buy Reprint',
-      link: 'https://www.startribune.com/photos',
-    },
   },
   {
     src: 'https://picsum.photos/1080/720?2',
@@ -75,33 +71,87 @@ describe('ImageGallery', () => {
   });
 
   it('renders pagination and navigation from the shared caption', () => {
-    const { getByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
+    const { queryByTestId, getAllByRole } = renderWithProvider(<ImageGallery images={images} />);
 
-    expect(getByTestId('image-gallery-caption-pagination')).toHaveTextContent('1/2');
+    expect(queryByTestId('image-gallery-caption-pagination')).not.toBeInTheDocument();
     expect(getAllByRole('button')).toHaveLength(2);
   });
 
-  it('renders buy reprint in the inline gallery caption for the active image', () => {
-    const { getByTestId } = renderWithProvider(<ImageGallery images={images} />);
-
-    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
-      'href',
-      'https://www.startribune.com/photos'
-    );
-  });
-
-  it('falls back to the gallery-level purchaseLink in the inline caption', () => {
-    const imagesWithoutPurchase = images.map(({ purchaseLink: _purchaseLink, ...image }) => image);
+  it('renders buy reprint in the inline gallery caption from the gallery-level purchase link', () => {
     const { getByTestId } = renderWithProvider(
       <ImageGallery
-        images={imagesWithoutPurchase}
-        purchaseLink={{ label: 'Buy Reprint', link: 'https://www.startribune.com/photos' }}
+        images={images}
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
       />
     );
 
     expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
       'href',
       'https://www.startribune.com/photos'
+    );
+  });
+
+  it('renders default Buy Reprint when gallery-level purchaseLink.label is missing', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
+  it('renders default Buy Reprint when gallery-level purchaseLink.label is empty', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          label: '  ',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveTextContent('Buy Reprint');
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos'
+    );
+  });
+
+  it('prefers the image-level purchase link over the gallery-level purchase link', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery
+        images={[
+          {
+            ...images[0],
+            purchaseLink: {
+              label: 'Image Buy Reprint',
+              link: 'https://www.startribune.com/photos?image=1',
+            },
+          },
+          images[1],
+        ]}
+        purchaseLink={{
+          label: 'Gallery Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
+      />
+    );
+
+    expect(getByTestId('image-gallery-caption-purchase-link')).toHaveAttribute(
+      'href',
+      'https://www.startribune.com/photos?image=1'
     );
   });
 
@@ -161,6 +211,64 @@ describe('ImageGallery', () => {
     expect(getByTestId('image-gallery')).toBeInTheDocument();
   });
 
+  it('calls onIndexChange with the initial 1-based index', () => {
+    const onIndexChange = vi.fn();
+
+    renderWithProvider(<ImageGallery images={images} onIndexChange={onIndexChange} />);
+
+    expect(onIndexChange).toHaveBeenCalledWith(1);
+  });
+
+  it('respects explicit spaceBetween prop without resize dependency', () => {
+    const { getByTestId } = renderWithProvider(<ImageGallery images={images} spaceBetween={32} />);
+    fireEvent(window, new Event('resize'));
+    expect(getByTestId('image-gallery')).toBeInTheDocument();
+  });
+
+  it('applies one gallery-level aspect ratio to every slide wrapper', () => {
+    const mixedImages = [
+      {
+        src: 'https://picsum.photos/1080/1080?1',
+        altText: 'Square image',
+        width: 1080,
+        height: 1080,
+      },
+      {
+        src: 'https://picsum.photos/1080/720?2',
+        altText: 'Landscape image',
+        width: 1080,
+        height: 720,
+      },
+      {
+        src: 'https://picsum.photos/720/1080?3',
+        altText: 'Portrait image',
+      },
+    ];
+
+    const { container } = renderWithProvider(
+      <ImageGallery images={mixedImages} aspectRatio="1 / 1" />
+    );
+    const wrappers = Array.from(container.querySelectorAll('.swiper-slide > div'));
+
+    expect(wrappers).toHaveLength(3);
+    wrappers.forEach((wrapper) => {
+      expect(wrapper).toHaveStyle({ aspectRatio: '1 / 1' });
+    });
+  });
+
+  it('applies gallery-level aspect ratio to the expanded dialog wrapper', () => {
+    const { getByTestId } = renderWithProvider(
+      <ImageGallery images={images} expandable aspectRatio="1 / 1" dataTestId="gallery" />
+    );
+
+    fireEvent.click(getByTestId('gallery-expand-button-0'));
+
+    const dialog = getByTestId('gallery-dialog');
+    const dialogImageWrapper = dialog.querySelector('figure > div');
+
+    expect(dialogImageWrapper).toHaveStyle({ aspectRatio: '1 / 1' });
+  });
+
   it('does not render expand control by default', () => {
     const { queryByTestId } = renderWithProvider(
       <ImageGallery images={images} dataTestId="gallery" />
@@ -214,7 +322,15 @@ describe('ImageGallery', () => {
 
   it('renders buy reprint in the expanded dialog for the active image', () => {
     const { getByTestId } = renderWithProvider(
-      <ImageGallery images={images} expandable dataTestId="gallery" />
+      <ImageGallery
+        images={images}
+        purchaseLink={{
+          label: 'Buy Reprint',
+          link: 'https://www.startribune.com/photos',
+        }}
+        expandable
+        dataTestId="gallery"
+      />
     );
 
     fireEvent.click(getByTestId('gallery-expand-button-0'));
