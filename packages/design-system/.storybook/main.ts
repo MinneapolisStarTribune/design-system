@@ -19,7 +19,12 @@ const config: StorybookConfig = {
     '../src/**/*.mdx',
     '../src/**/!(*.native).stories.@(js|jsx|mjs|ts|tsx)',
   ],
-  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', 'storybook-addon-code-editor'],
+  addons: [
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    'storybook-addon-code-editor',
+    '@storybook/addon-mcp',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
