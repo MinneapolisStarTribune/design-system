@@ -6,6 +6,13 @@ import { renderWithProvider } from '../../test-utils/render';
 import { InformationIcon } from '@/icons';
 
 describe('Tooltip', () => {
+  const originalInnerWidth = window.innerWidth;
+
+  afterEach(() => {
+    window.innerWidth = originalInnerWidth;
+    window.dispatchEvent(new Event('resize'));
+  });
+
   it('renders trigger element', () => {
     renderWithProvider(<Tooltip label="Help text">Help</Tooltip>);
 
@@ -68,6 +75,44 @@ describe('Tooltip', () => {
     await waitFor(() => {
       expect(screen.getByText('Tooltip content')).toBeInTheDocument();
     });
+  });
+
+  it('shows tooltip on tap for responsive width', async () => {
+    const user = userEvent.setup();
+    window.innerWidth = 800;
+    window.dispatchEvent(new Event('resize'));
+
+    renderWithProvider(
+      <Tooltip label="Tooltip content">
+        <Button>Tap me</Button>
+      </Tooltip>
+    );
+
+    const trigger = screen.getByText('Tap me');
+    await user.click(trigger);
+
+    await waitFor(() => {
+      expect(screen.getByText('Tooltip content')).toBeInTheDocument();
+    });
+  });
+
+  it('does not show tooltip on hover for responsive width', async () => {
+    const user = userEvent.setup();
+    window.innerWidth = 800;
+    window.dispatchEvent(new Event('resize'));
+
+    renderWithProvider(
+      <Tooltip label="Tooltip content">
+        <Button>Tap me</Button>
+      </Tooltip>
+    );
+
+    const trigger = screen.getByText('Tap me');
+    await user.hover(trigger);
+
+    await new Promise((r) => setTimeout(r, 300));
+
+    expect(screen.queryByText('Tooltip content')).not.toBeInTheDocument();
   });
 
   it('renders with icon in start position', async () => {

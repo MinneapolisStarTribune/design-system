@@ -15,6 +15,8 @@ import {
   autoUpdate,
   FloatingArrow,
   FloatingPortal,
+  useClick,
+  useDismiss,
   flip,
   offset,
   shift,
@@ -25,6 +27,7 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
+import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import styles from './Tooltip.module.scss';
 import { TooltipProps } from './Tooltip.types';
 import { TooltipPortalRootContext, TooltipPortalRootProvider } from './TooltipContext';
@@ -52,6 +55,8 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   ...rest
 }) => {
   const [open, setOpen] = React.useState(false);
+  const responsiveSize = useResponsiveSize();
+  const isTouchDevice = responsiveSize === 'medium';
   const arrowRef = useRef<SVGSVGElement>(null);
   const tooltipId = useId();
 
@@ -78,13 +83,24 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   });
 
   const hover = useHover(context, {
-    enabled: !isDisabled,
+    enabled: !isDisabled && !isTouchDevice,
     delay: { open: showDelay, close: hideDelay },
   });
   const focus = useFocus(context, { enabled: !isDisabled });
+  const click = useClick(context, {
+    enabled: !isDisabled && isTouchDevice,
+    event: 'click',
+  });
+  const dismiss = useDismiss(context, { enabled: !isDisabled });
   const role = useRole(context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    hover,
+    focus,
+    click,
+    dismiss,
+    role,
+  ]);
 
   const childElement = isValidElement(children)
     ? (children as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })

@@ -7,7 +7,7 @@ import * as TooltipStories from './Tooltip.stories';
 
 # Tooltip
 
-Tooltips provide brief, supplemental information on hover or focus. They’re ideal for clarifying icon-only controls, revealing truncated text, or adding lightweight context that isn’t essential to the primary task. Tooltips should stay short, static, and non-interactive. Use them sparingly, avoid replacing visible labels, and don’t use them for confirmations, warnings, or promotional content.
+Tooltips provide brief, supplemental information on hover or focus. On touch/coarse-pointer responsive layouts, they open on tap. They’re ideal for clarifying icon-only controls, revealing truncated text, or adding lightweight context that isn’t essential to the primary task. Tooltips should stay short, static, and non-interactive. Use them sparingly, avoid replacing visible labels, and don’t use them for confirmations, warnings, or promotional content.
 
 ## Anatomy
 
@@ -23,7 +23,8 @@ Tooltips provide brief, supplemental information on hover or focus. They’re id
 - Use tooltips for clarifying ambiguous UI elements
 - Keep tooltip text concise (under 100 characters when possible)
 - Use tooltips with icon-only buttons
-- Appear on hover and focus, not on click
+- On desktop: appear on hover and focus
+- On responsive touch/coarse-pointer layouts: appear on tap
 - Auto-hide when user moves away or presses Escape
 - Non-interactive: tooltips never contain buttons, links, or form controls
 - Test tooltips on both desktop and mobile
@@ -47,7 +48,7 @@ Tooltips provide brief, supplemental information on hover or focus. They’re id
     <tr>
       <td><code>children</code></td>
       <td>Tooltip trigger</td>
-      <td>The element that triggers the tooltip on hover or focus</td>
+      <td>The element that triggers the tooltip (desktop: hover/focus, touch: tap)</td>
     </tr>
 
     <tr>
@@ -77,7 +78,7 @@ Tooltips provide brief, supplemental information on hover or focus. They’re id
     <tr>
       <td><code>isDisabled</code></td>
       <td>Tooltip</td>
-      <td>Whether the tooltip is disabled and won't show on hover or focus</td>
+      <td>Whether the tooltip is disabled and won't show on hover, focus, or tap</td>
     </tr>
 
     <tr>
@@ -186,7 +187,7 @@ Tooltips provide brief, supplemental information on hover or focus. They’re id
 
 | Feature | Tooltip | Popover |
 |---------|---------|---------|
-| **Trigger** | Hover + Focus | Click |
+| **Trigger** | Hover + Focus (desktop), Tap (touch) | Click |
 | **Focus trap** | No | Yes |
 | **Interactive content** | No | Yes |
 | **Heading/Body** | No | Yes |
