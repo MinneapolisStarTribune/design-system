@@ -9,6 +9,7 @@ import { Checkbox } from './Checkbox/web/Checkbox';
 import { CheckboxGroup } from './CheckboxGroup/web/CheckboxGroup';
 import { RadioGroup } from './RadioGroup/web/RadioGroup';
 import { Select } from './Select/web/Select';
+import { MultiSelect } from './MultiSelect/web/MultiSelect';
 import { Switch } from './Switch/web/Switch';
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
@@ -34,6 +35,8 @@ export const FormControl: React.FC<FormControlProps> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Select: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  MultiSelect: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Switch: React.ComponentType<any>;
   // Add any new form control subcomponents here
 } = () => {
@@ -54,5 +57,6 @@ FormControl.Checkbox = Checkbox;
 FormControl.CheckboxGroup = CheckboxGroup;
 FormControl.RadioGroup = RadioGroup;
 FormControl.Select = Select;
+FormControl.MultiSelect = MultiSelect;
 FormControl.Switch = Switch;
 // Add any new form control subcomponents here
