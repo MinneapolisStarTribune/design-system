@@ -68,26 +68,22 @@ const ConfigurableComponent = (args: Partial<MultiSelectProps>) => {
   const selectedValues = args.value ?? internalValue;
 
   return (
-    <FormGroup>
-      <FormGroup.Label>Interests</FormGroup.Label>
-      <FormControl.MultiSelect
-        {...args}
-        id="multi-select-configurable"
-        options={args.options ?? OPTIONS}
-        value={selectedValues}
-        onChange={(nextValues: string[]) => {
-          setInternalValue(nextValues);
-          args.onChange?.(nextValues);
-        }}
-      />
-      {args.error ? (
-        <FormGroup.Caption variant="error">Please select at least one option</FormGroup.Caption>
-      ) : args.success ? (
-        <FormGroup.Caption variant="success">Selection looks good</FormGroup.Caption>
-      ) : (
+    <div style={{ maxWidth: 380 }}>
+      <FormGroup>
+        <FormGroup.Label>Options</FormGroup.Label>
+        <FormControl.MultiSelect
+          {...args}
+          id="multi-select-configurable"
+          options={args.options ?? OPTIONS}
+          value={selectedValues}
+          onChange={(nextValues: string[]) => {
+            setInternalValue(nextValues);
+            args.onChange?.(nextValues);
+          }}
+        />
         <FormGroup.Caption variant="info">Choose one or more options</FormGroup.Caption>
-      )}
-    </FormGroup>
+      </FormGroup>
+    </div>
   );
 };
 
@@ -98,7 +94,7 @@ export const Configurable: Story = {
     disabled: false,
     error: false,
     success: false,
-    placeholderText: 'Select your interests',
+    placeholderText: 'Select options...',
     options: OPTIONS,
   },
   render: (args) => <ConfigurableComponent {...args} />,
@@ -116,7 +112,7 @@ export const AllVariants: Story = {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
           gap: '2rem 1.5rem',
           padding: '1.5rem',
           width: '100%',
@@ -126,7 +122,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Size: Small</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} size="small" />
           </FormGroup>
         </div>
@@ -134,7 +130,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Size: Medium</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} size="medium" />
           </FormGroup>
         </div>
@@ -142,7 +138,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Size: Large</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} size="large" />
           </FormGroup>
         </div>
@@ -150,7 +146,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Radius: Pointy</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} />
           </FormGroup>
         </div>
@@ -158,7 +154,7 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Radius: Rounded</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} rounded />
           </FormGroup>
         </div>
@@ -166,15 +162,15 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>State: Disabled</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
-            <FormControl.MultiSelect options={OPTIONS} disabled value={['tech']} />
+            <FormGroup.Label>Options</FormGroup.Label>
+            <FormControl.MultiSelect options={OPTIONS} disabled value={['option-1']} />
           </FormGroup>
         </div>
 
         <div style={cellStyle}>
           <SectionLabel>State: Error</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
+            <FormGroup.Label>Options</FormGroup.Label>
             <FormControl.MultiSelect options={OPTIONS} error />
             <FormGroup.Caption variant="error">Please select at least one option</FormGroup.Caption>
           </FormGroup>
@@ -183,8 +179,8 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>State: Success</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
-            <FormControl.MultiSelect options={OPTIONS} success value={['tech', 'sports']} />
+            <FormGroup.Label>Options</FormGroup.Label>
+            <FormControl.MultiSelect options={OPTIONS} success value={['option-1', 'option-2']} />
             <FormGroup.Caption variant="success">Looks good</FormGroup.Caption>
           </FormGroup>
         </div>
@@ -192,8 +188,8 @@ export const AllVariants: Story = {
         <div style={cellStyle}>
           <SectionLabel>Disabled Option + Preselected</SectionLabel>
           <FormGroup>
-            <FormGroup.Label>Interests</FormGroup.Label>
-            <FormControl.MultiSelect options={OPTIONS} value={['tech', 'music']} />
+            <FormGroup.Label>Options</FormGroup.Label>
+            <FormControl.MultiSelect options={OPTIONS} value={['option-5', 'option-2']} />
           </FormGroup>
         </div>
       </div>

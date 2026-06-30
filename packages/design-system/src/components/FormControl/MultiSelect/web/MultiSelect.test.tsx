@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { within } from '@testing-library/react';
+import { waitFor, within } from '@testing-library/react';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
@@ -165,5 +165,92 @@ describe('MultiSelect', () => {
     await user.click(getByRole('option', { name: 'Technology' }));
 
     expect(getByRole('combobox')).toHaveTextContent('Select options');
+  });
+
+  it('focuses selected option when ArrowDown is pressed on trigger', async () => {
+    const user = userEvent.setup();
+
+    const { getByRole } = renderWithProvider(
+      <FormControl.MultiSelect
+        id="interests"
+        options={OPTIONS}
+        value={['sports']}
+        aria-label="Interests"
+      />
+    );
+
+    const trigger = getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+
+    const sportsOption = getByRole('option', { name: 'Sports' });
+
+    await waitFor(() => {
+      expect(sportsOption).toHaveFocus();
+    });
+  });
+
+  it('focuses first enabled option when ArrowDown is pressed and nothing is selected', async () => {
+    const user = userEvent.setup();
+
+    const { getByRole } = renderWithProvider(
+      <FormControl.MultiSelect id="interests" options={OPTIONS} aria-label="Interests" />
+    );
+
+    const trigger = getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+
+    const technologyOption = getByRole('option', { name: 'Technology' });
+
+    await waitFor(() => {
+      expect(technologyOption).toHaveFocus();
+    });
+  });
+
+  it('toggles focused option with Enter after Arrow navigation', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+
+    const { getByRole } = renderWithProvider(
+      <FormControl.MultiSelect
+        id="interests"
+        options={OPTIONS}
+        value={['tech']}
+        onChange={onChange}
+        aria-label="Interests"
+      />
+    );
+
+    const trigger = getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    expect(onChange).toHaveBeenLastCalledWith(['tech', 'sports']);
+  });
+
+  it('closes dropdown and returns focus to trigger on Escape from option', async () => {
+    const user = userEvent.setup();
+
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.MultiSelect id="interests" options={OPTIONS} aria-label="Interests" />
+    );
+
+    const trigger = getByRole('combobox');
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+
+    const technologyOption = getByRole('option', { name: 'Technology' });
+
+    await waitFor(() => {
+      expect(technologyOption).toHaveFocus();
+    });
+
+    await user.keyboard('{Escape}');
+
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
   });
 });

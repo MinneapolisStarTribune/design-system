@@ -1,0 +1,207 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/addon-docs/blocks';
+import * as MultiSelectStories from './MultiSelect.stories';
+
+<Meta of={MultiSelectStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# MultiSelect
+
+MultiSelect inputs allow users to choose multiple values from a predefined list of options. They are useful in forms and filtering flows where selecting more than one value is expected. MultiSelect supports multiple sizes, rounded styling, disabled/error/success states, and `FormGroup` integration for accessible labels and helper messaging.
+
+`<MultiSelect>` keeps the dropdown open while users toggle selections, and displays chosen labels in the trigger as comma-separated text.
+
+## Architecture
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>What it does</th>
+      <th>Required?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FormGroup + FormControl</td>
+      <td>Layout, labels, descriptions, accessibility</td>
+      <td>Recommended</td>
+    </tr>
+    <tr>
+      <td>MultiSelect</td>
+      <td>Dropdown behavior and multi-value selection</td>
+      <td>Always</td>
+    </tr>
+  </tbody>
+</table>
+
+`MultiSelect` works standalone, but when wrapped in `FormGroup`, it automatically connects labels and captions via `aria` attributes.
+
+## Basic usage
+
+```tsx
+import { FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+<FormGroup>
+  <FormGroup.Label>Options</FormGroup.Label>
+  <FormControl.MultiSelect
+    id="topics"
+    options={[
+      { value: 'news', label: 'News' },
+      { value: 'sports', label: 'Sports' },
+      { value: 'culture', label: 'Culture' },
+    ]}
+  />
+</FormGroup>;
+```
+
+## Controlled usage
+
+```tsx
+import { useState } from 'react';
+import { FormControl } from '@minneapolisstartribune/design-system/web';
+
+const [value, setValue] = useState<string[]>([]);
+
+<FormControl.MultiSelect id="topics" value={value} onChange={setValue} options={OPTIONS} />;
+```
+
+## Sizes
+
+```tsx
+<FormControl.MultiSelect size="small" options={OPTIONS} />
+<FormControl.MultiSelect size="medium" options={OPTIONS} />
+<FormControl.MultiSelect size="large" options={OPTIONS} />
+```
+
+## Radius
+
+```tsx
+<FormControl.MultiSelect rounded options={OPTIONS} />
+```
+
+## Placeholder behavior
+
+```tsx
+<FormControl.MultiSelect placeholderText="Select options" options={OPTIONS} />
+```
+
+## States
+
+```tsx
+<FormControl.MultiSelect options={OPTIONS} />
+<FormControl.MultiSelect value={['option-1', 'option-2']} options={OPTIONS} />
+<FormControl.MultiSelect disabled options={OPTIONS} />
+```
+
+## Error state
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Options</FormGroup.Label>
+  <FormControl.MultiSelect error options={OPTIONS} />
+  <FormGroup.Caption variant="error">Please select at least one option</FormGroup.Caption>
+</FormGroup>
+```
+
+## Accessibility
+
+- role="combobox" with aria-expanded
+- aria-controls links combobox to listbox
+- role="listbox" with aria-multiselectable="true"
+- role="option" with aria-selected on each option
+- aria-labelledby via FormGroup
+- fallback aria-label when no label is provided
+
+# Keyboard interaction
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Behavior</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Enter / Space</td>
+      <td>Toggle highlighted option</td>
+    </tr>
+    <tr>
+      <td>Escape</td>
+      <td>Close dropdown</td>
+    </tr>
+  </tbody>
+</table>
+
+## Integration with FormGroup
+
+```tsx
+<FormGroup>
+  <FormGroup.Label>Options</FormGroup.Label>
+  <FormGroup.Description>Select one or more topics</FormGroup.Description>
+
+  <FormControl.MultiSelect options={OPTIONS} />
+
+  <FormGroup.Caption variant="info">Choose one or more options</FormGroup.Caption>
+</FormGroup>
+```
+
+## Truncation behavior
+
+Selected labels are shown in the trigger as comma-separated text and use single-line truncation with ellipsis when content exceeds available width.
+
+In Storybook, the configurable example uses a constrained width so truncation is easy to verify.
+
+## Exports
+
+<table>
+  <thead>
+    <tr>
+      <th>Export</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>MultiSelect</code>
+      </td>
+      <td>Multi-select dropdown component</td>
+    </tr>
+    <tr>
+      <td>
+        <code>MultiSelectProps</code>
+      </td>
+      <td>
+        Web props for <code>MultiSelect</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>MultiSelectOption</code>
+      </td>
+      <td>Option item shape</td>
+    </tr>
+  </tbody>
+</table>
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+## Playground
+
+<Canvas>
+  <Story of={MultiSelectStories.Configurable} />
+</Canvas>
+
+---
+
+## All Variants
+
+<Canvas>
+  <Story of={MultiSelectStories.AllVariants} />
+</Canvas>
+
+<Controls />

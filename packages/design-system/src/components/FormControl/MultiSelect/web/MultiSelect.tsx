@@ -27,6 +27,8 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   const formGroup = useFormGroupContext();
   const generatedId = React.useId();
   const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [internalValue, setInternalValue] = useState<string[]>(value ?? []);
 
@@ -48,6 +50,10 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    optionRefs.current = [];
+  }, [safeOptions]);
 
   const selectedValues = useMemo(
     () => (isControlled ? (value ?? []) : internalValue),
@@ -94,9 +100,56 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     onChange?.(nextValues);
   };
 
+  const focusOptionByIndex = (index: number) => {
+    const target = optionRefs.current[index];
+    if (!target) return;
+    target.focus();
+  };
+
+  const focusOptionAfterOpen = (index: number) => {
+    setIsOpen(true);
+    requestAnimationFrame(() => {
+      focusOptionByIndex(index);
+    });
+  };
+
+  const getNextEnabledIndex = (currentIndex: number, step: 1 | -1) => {
+    let nextIndex = currentIndex;
+
+    for (let i = 0; i < safeOptions.length; i += 1) {
+      nextIndex += step;
+
+      if (nextIndex < 0 || nextIndex >= safeOptions.length) {
+        return currentIndex;
+      }
+
+      if (!safeOptions[nextIndex]?.disabled) {
+        return nextIndex;
+      }
+    }
+
+    return currentIndex;
+  };
+
+  const getFirstEnabledIndex = () => safeOptions.findIndex((option) => !option.disabled);
+
+  const getFirstSelectedEnabledIndex = () =>
+    safeOptions.findIndex((option) => selectedSet.has(option.value) && !option.disabled);
+
+  const getLastEnabledIndex = () => {
+    for (let i = safeOptions.length - 1; i >= 0; i -= 1) {
+      if (!safeOptions[i]?.disabled) {
+        return i;
+      }
+    }
+
+    return -1;
+  };
+
   const handleOptionKeyDown = (
     e: React.KeyboardEvent<HTMLLIElement>,
-    option: MultiSelectOption
+    option: MultiSelectOption,
+    index: number
   ) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -104,13 +157,58 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
       return;
     }
 
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = getNextEnabledIndex(index, 1);
+      focusOptionByIndex(nextIndex);
+      return;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const previousIndex = getNextEnabledIndex(index, -1);
+      focusOptionByIndex(previousIndex);
+      return;
+    }
+
     if (e.key === 'Escape') {
       e.preventDefault();
       setIsOpen(false);
+      triggerRef.current?.focus();
     }
   };
 
   const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (disabled) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const preferredIndex = getFirstSelectedEnabledIndex();
+      const firstEnabledIndex = preferredIndex >= 0 ? preferredIndex : getFirstEnabledIndex();
+
+      if (firstEnabledIndex >= 0) {
+        if (isOpen) {
+          focusOptionByIndex(firstEnabledIndex);
+        } else {
+          focusOptionAfterOpen(firstEnabledIndex);
+        }
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const lastEnabledIndex = getLastEnabledIndex();
+      if (lastEnabledIndex >= 0) {
+        if (isOpen) {
+          focusOptionByIndex(lastEnabledIndex);
+        } else {
+          focusOptionAfterOpen(lastEnabledIndex);
+        }
+      }
+      return;
+    }
+
     if (e.key === 'Escape' && isOpen) {
       e.preventDefault();
       setIsOpen(false);
@@ -162,6 +260,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
         aria-describedby={ariaDescribedBy}
         onClick={toggleOpen}
         onKeyDown={handleTriggerKeyDown}
+        ref={triggerRef}
         disabled={disabled}
         className={classNames(styles['multi-select-trigger'], triggerTypographyClassMap[size], {
           [styles['multi-select-placeholder']]: !isFilled,
@@ -204,7 +303,10 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                   [styles['multi-select-option-disabled']]: option.disabled,
                 })}
                 onClick={() => toggleOption(option)}
-                onKeyDown={(e) => handleOptionKeyDown(e, option)}
+                onKeyDown={(e) => handleOptionKeyDown(e, option, index)}
+                ref={(el) => {
+                  optionRefs.current[index] = el;
+                }}
               >
                 <span className={styles['multi-select-checkmark']} aria-hidden>
                   {isSelected ? (
