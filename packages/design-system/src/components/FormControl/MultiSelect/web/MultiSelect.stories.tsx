@@ -5,13 +5,11 @@ import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import type { MultiSelectProps } from '../MultiSelect.types';
 
-const OPTIONS = [
-  { value: 'tech', label: 'Technology' },
-  { value: 'sports', label: 'Sports' },
-  { value: 'music', label: 'Music' },
-  { value: 'art', label: 'Art', disabled: true },
-  { value: 'travel', label: 'Travel' },
-];
+const OPTIONS = Array.from({ length: 20 }, (_, i) => ({
+  value: `option-${i + 1}`,
+  label: `Option ${i + 1}`,
+  disabled: i === 4, // Disable the 5th option for demonstration
+}));
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{ marginBottom: 4 }}>

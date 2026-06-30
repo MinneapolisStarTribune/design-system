@@ -77,7 +77,7 @@
   {
     "component": "MultiSelect",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "Switch",

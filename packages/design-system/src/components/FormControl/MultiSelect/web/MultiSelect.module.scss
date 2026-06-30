@@ -91,6 +91,30 @@
   padding: 0 var(--spacing-8) 0 var(--spacing-20);
 }
 
+.multi-select-trigger-text-small {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-16);
+  letter-spacing: var(--letter-spacing-0);
+}
+
+.multi-select-trigger-text-medium {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--letter-spacing-0);
+}
+
+.multi-select-trigger-text-large {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-22);
+  letter-spacing: var(--letter-spacing-0);
+}
+
 .multi-select-value {
   flex: 1;
   text-align: left;
@@ -163,10 +187,10 @@
 }
 
 .multi-select-checkmark {
-  width: var(--spacing-16);
-  height: var(--spacing-16);
+  width: var(--spacing-20);
+  height: var(--spacing-20);
   border: 1px solid var(--color-checkbox-border-unchecked);
-  border-radius: var(--radius-2);
+  border-radius: var(--radius-4);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -179,7 +203,7 @@
 }
 
 .multi-select-check-icon {
-  color: var(--color-checkbox-icon-selected-neutral);
+  color: var(--color-checkbox-icon-selected-neutral) !important;
 }
 
 .multi-select-option-label {
@@ -187,19 +211,30 @@
   min-width: 0;
 }
 
+.multi-select-option-text-small {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-16);
+  letter-spacing: var(--letter-spacing-0);
+}
+
+.multi-select-option-text-medium {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-20);
+  letter-spacing: var(--letter-spacing-0);
+}
+
+.multi-select-option-text-large {
+  font-family: var(--font-family-graphik);
+  font-size: var(--font-size-18);
+  font-weight: var(--font-weight-400);
+  line-height: var(--line-height-22);
+  letter-spacing: var(--letter-spacing-0);
+}
+
 .multi-select-option-label-selected {
   font-weight: 600;
-}
-
-.multi-select-dropdown::-webkit-scrollbar {
-  width: 4px;
-}
-
-.multi-select-dropdown::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.multi-select-dropdown::-webkit-scrollbar-thumb {
-  background: var(--color-select-scrollbar);
-  border-radius: 999px;
 }

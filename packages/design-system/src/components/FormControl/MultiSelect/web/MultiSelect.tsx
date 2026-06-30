@@ -123,6 +123,18 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     large: styles['size-large'],
   };
 
+  const triggerTypographyClassMap: Record<NonNullable<MultiSelectProps['size']>, string> = {
+    small: styles['multi-select-trigger-text-small'],
+    medium: styles['multi-select-trigger-text-medium'],
+    large: styles['multi-select-trigger-text-large'],
+  };
+
+  const optionTypographyClassMap: Record<NonNullable<MultiSelectProps['size']>, string> = {
+    small: styles['multi-select-option-text-small'],
+    medium: styles['multi-select-option-text-medium'],
+    large: styles['multi-select-option-text-large'],
+  };
+
   const containerClasses = classNames(
     styles['multi-select-container'],
     sizeClassMap[size],
@@ -151,17 +163,9 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
         onClick={toggleOpen}
         onKeyDown={handleTriggerKeyDown}
         disabled={disabled}
-        className={classNames(
-          styles['multi-select-trigger'],
-          {
-            [styles['multi-select-placeholder']]: !isFilled,
-          },
-          {
-            'typography-utility-text-regular-small': size === 'small',
-            'typography-utility-text-regular-medium': size === 'medium',
-            'typography-utility-text-regular-large': size === 'large',
-          }
-        )}
+        className={classNames(styles['multi-select-trigger'], triggerTypographyClassMap[size], {
+          [styles['multi-select-placeholder']]: !isFilled,
+        })}
       >
         <span className={styles['multi-select-value']} title={displayText}>
           {displayText}
@@ -205,16 +209,20 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                 <span className={styles['multi-select-checkmark']} aria-hidden>
                   {isSelected ? (
                     <CheckIcon
-                      size="small"
+                      size="checkbox-default"
                       className={styles['multi-select-check-icon']}
                       aria-hidden
                     />
                   ) : null}
                 </span>
                 <span
-                  className={classNames(styles['multi-select-option-label'], {
-                    [styles['multi-select-option-label-selected']]: isSelected,
-                  })}
+                  className={classNames(
+                    styles['multi-select-option-label'],
+                    optionTypographyClassMap[size],
+                    {
+                      [styles['multi-select-option-label-selected']]: isSelected,
+                    }
+                  )}
                 >
                   {option.label}
                 </span>
