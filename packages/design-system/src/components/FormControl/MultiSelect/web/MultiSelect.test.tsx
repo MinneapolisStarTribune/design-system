@@ -225,7 +225,21 @@ describe('MultiSelect', () => {
     const trigger = getByRole('combobox');
     trigger.focus();
     await user.keyboard('{ArrowDown}');
+
+    const technologyOption = getByRole('option', { name: 'Technology' });
+
+    await waitFor(() => {
+      expect(technologyOption).toHaveFocus();
+    });
+
     await user.keyboard('{ArrowDown}');
+
+    const sportsOption = getByRole('option', { name: 'Sports' });
+
+    await waitFor(() => {
+      expect(sportsOption).toHaveFocus();
+    });
+
     await user.keyboard('{Enter}');
 
     expect(onChange).toHaveBeenLastCalledWith(['tech', 'sports']);
