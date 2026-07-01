@@ -16,7 +16,7 @@
 /* Container */
 .container {
   display: flex;
-  max-width: 300px;
+  max-width: 280px;
   padding: var(--spacing-6) var(--spacing-12);
   justify-content: center;
   align-items: center;
@@ -32,13 +32,19 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-4);
+
+  width: 100%;
+  min-width: 0;
 }
 
 /* Label styling */
 .label {
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  min-width: 0;
   color: var(--color-base-white) !important;
 }
 
