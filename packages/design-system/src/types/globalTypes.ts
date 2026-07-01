@@ -59,6 +59,11 @@ export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
 export type Position = (typeof POSITIONS)[number];
 
 /**
+ * Icon position shared across components (Button, Tooltip, etc.)
+ */
+export type IconPosition = 'start' | 'end';
+
+/**
  * Semantic text color tokens. Values map to CSS variables.
  * Consumers use short names: color="on-dark-secondary", color="brand-01".
  */
