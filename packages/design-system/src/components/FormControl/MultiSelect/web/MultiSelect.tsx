@@ -221,17 +221,23 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     large: styles['size-large'],
   };
 
-  const triggerTypographyClassMap: Record<NonNullable<MultiSelectProps['size']>, string> = {
-    small: styles['multi-select-trigger-text-small'],
-    medium: styles['multi-select-trigger-text-medium'],
-    large: styles['multi-select-trigger-text-large'],
-  };
+  const triggerTypographyClass = classNames({
+    'typography-utility-text-regular-small': size === 'small',
+    'typography-utility-text-regular-medium': size === 'medium',
+    'typography-utility-text-regular-large': size === 'large',
+  });
 
-  const optionTypographyClassMap: Record<NonNullable<MultiSelectProps['size']>, string> = {
-    small: styles['multi-select-option-text-small'],
-    medium: styles['multi-select-option-text-medium'],
-    large: styles['multi-select-option-text-large'],
-  };
+  const optionTypographyClass = classNames({
+    'typography-utility-text-regular-small': size === 'small',
+    'typography-utility-text-regular-medium': size === 'medium',
+    'typography-utility-text-regular-large': size === 'large',
+  });
+
+  const placeholderTypographyClass = classNames({
+    'typography-utility-text-italic-small': size === 'small',
+    'typography-utility-text-italic-medium': size === 'medium',
+    'typography-utility-text-italic-large': size === 'large',
+  });
 
   const containerClasses = classNames(
     styles['multi-select-container'],
@@ -262,11 +268,18 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
         onKeyDown={handleTriggerKeyDown}
         ref={triggerRef}
         disabled={disabled}
-        className={classNames(styles['multi-select-trigger'], triggerTypographyClassMap[size], {
-          [styles['multi-select-placeholder']]: !isFilled,
-        })}
+        className={classNames(styles['multi-select-trigger'], triggerTypographyClass)}
       >
-        <span className={styles['multi-select-value']} title={displayText}>
+        <span
+          className={classNames(
+            styles['multi-select-value'],
+            {
+              [styles['multi-select-placeholder']]: !isFilled,
+            },
+            !isFilled && placeholderTypographyClass
+          )}
+          title={displayText}
+        >
           {displayText}
         </span>
 
@@ -325,7 +338,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                 <span
                   className={classNames(
                     styles['multi-select-option-label'],
-                    optionTypographyClassMap[size],
+                    optionTypographyClass,
                     {
                       [styles['multi-select-option-label-selected']]: isSelected,
                     }

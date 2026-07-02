@@ -92,30 +92,6 @@
   padding: 0 var(--spacing-8) 0 var(--spacing-20);
 }
 
-.multi-select-trigger-text-small {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-16);
-  letter-spacing: var(--letter-spacing-0);
-}
-
-.multi-select-trigger-text-medium {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-16);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-20);
-  letter-spacing: var(--letter-spacing-0);
-}
-
-.multi-select-trigger-text-large {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-18);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-22);
-  letter-spacing: var(--letter-spacing-0);
-}
-
 .multi-select-value {
   flex: 1;
   text-align: left;
@@ -126,7 +102,6 @@
 
 .multi-select-placeholder {
   color: var(--color-text-state-disabled-on-light) !important;
-  font-style: italic;
 }
 
 .multi-select-icon {
@@ -216,30 +191,6 @@
   flex: 1;
   min-width: 0;
   color: var(--color-text-on-light-primary);
-}
-
-.multi-select-option-text-small {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-16);
-  letter-spacing: var(--letter-spacing-0);
-}
-
-.multi-select-option-text-medium {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-16);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-20);
-  letter-spacing: var(--letter-spacing-0);
-}
-
-.multi-select-option-text-large {
-  font-family: var(--font-family-graphik);
-  font-size: var(--font-size-18);
-  font-weight: var(--font-weight-400);
-  line-height: var(--line-height-22);
-  letter-spacing: var(--letter-spacing-0);
 }
 
 .multi-select-option-label-selected {
