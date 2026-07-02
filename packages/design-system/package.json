@@ -60,6 +60,7 @@
     "@react-native/babel-preset": "0.81.5",
     "@storybook/addon-a11y": "10.3.5",
     "@storybook/addon-docs": "10.3.5",
+    "@storybook/addon-mcp": "^0.6.0",
     "@storybook/addon-themes": "10.3.5",
     "@storybook/react-vite": "10.3.5",
     "@svgr/core": "^8.1.0",
