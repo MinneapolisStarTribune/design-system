@@ -40,8 +40,6 @@ export const createStyles = (theme: NativeTheme) =>
     },
 
     icon: {
-      width: theme.spacing14,
-      height: theme.spacing14,
       alignItems: 'center',
       justifyContent: 'center',
       marginHorizontal: theme.spacing2,
