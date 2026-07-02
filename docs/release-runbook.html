@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Release Runbook</title>
+  <style>
+  :root {
+    /* Backgrounds — neutral.100 base, light theme */
+    --bg:            #F5F6F7;
+    --surface:       #FFFFFF;
+    --surface-r:     #F9FAFA;
+    --border:        #E3E5E8;
+    --border-faint:  #EDEEF0;
+    /* Brand accent — emerald-green.700 (darker for contrast on light) */
+    --accent:        #009958;
+    --accent-dim:    rgba(0,153,88,.08);
+    --accent-bd:     rgba(0,153,88,.22);
+    /* Manual step / hotfix — orange.600 */
+    --orange:        #D8540D;
+    --orange-dim:    rgba(216,84,13,.08);
+    --orange-bd:     rgba(216,84,13,.22);
+    /* Success / published tags — emerald-green.800 */
+    --green:         #00854B;
+    --green-dim:     rgba(0,133,75,.08);
+    --green-bd:      rgba(0,133,75,.22);
+    /* Warnings — yellow.600 */
+    --yellow:        #EAB308;
+    --yellow-dim:    rgba(234,179,8,.10);
+    --yellow-bd:     rgba(234,179,8,.28);
+    /* Danger — red.600 */
+    --red:           #D63129;
+    --red-dim:       rgba(214,49,41,.08);
+    --red-bd:        rgba(214,49,41,.22);
+    /* Text — neutral.950/700/400 */
+    --text:          #0D0D0D;
+    --text-2:        #585C5F;
+    --text-3:        #A7ADB4;
+    --mono: 'SF Mono','Cascadia Mono','Fira Mono','Consolas',monospace;
+    --sans: system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── TOP BAR ─────────────────────────────── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 0;
+  }
+  .topbar-crumb {
+    font-size: 12px;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-crumb a { color: var(--text-2); text-decoration: none; }
+  .topbar-crumb a:hover { color: var(--text); }
+  .topbar-sep { color: var(--text-3); user-select: none; }
+  .topbar-current { color: var(--text); font-weight: 500; }
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .topbar-pill {
+    background: var(--green-dim);
+    border: 1px solid var(--green-bd);
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* ── LAYOUT ─────────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 218px 1fr;
+    min-height: calc(100vh - 48px);
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 32px 0 64px;
+    position: sticky;
+    top: 48px;
+    height: calc(100vh - 48px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+
+  .toc-section { margin-bottom: 8px; }
+  .toc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 16px 20px 6px;
+    display: block;
+  }
+  .toc-link {
+    display: flex;
+    align-items: center;
+    padding: 5px 20px;
+    font-size: 12.5px;
+    color: var(--text-2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    gap: 8px;
+    transition: color .12s, border-color .12s;
+    line-height: 1.4;
+  }
+  .toc-link:hover { color: var(--text); text-decoration: none; }
+  .toc-link.active { color: var(--accent); border-left-color: var(--accent); }
+  .toc-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; background: var(--text-3); }
+  .toc-link.active .toc-dot { background: var(--accent); }
+  .toc-divider { height: 1px; background: var(--border-faint); margin: 10px 20px; }
+
+  /* ── MAIN ─────────────────────────────── */
+  .main { padding: 52px 60px 80px; min-width: 0; }
+
+  .doc-title {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 10px;
+    letter-spacing: -.01em;
+  }
+  .doc-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-meta-sep { color: var(--text-3); }
+
+  /* ── SECTIONS ─────────────────────────────── */
+  .section { margin-bottom: 60px; scroll-margin-top: 72px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -.01em;
+  }
+  .section-index { font-family: var(--mono); font-size: 11px; color: var(--text-3); font-weight: 400; }
+  .subsection-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin: 28px 0 12px;
+  }
+
+  p { color: var(--text-2); font-size: 13.5px; line-height: 1.72; margin-bottom: 12px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── INLINE CODE ─────────────────────────────── */
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--surface-r);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--text);
+  }
+  code.branch { color: #0064CF; background: rgba(0,100,207,.07); border-color: rgba(0,100,207,.20); }
+  code.tag-v  { color: #48B23F; background: rgba(72,178,63,.07); border-color: rgba(72,178,63,.22); }
+  code.wf     { color: var(--text-2); font-size: 11.5px; }
+
+  /* ── BADGES ─────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  .badge-manual { background: var(--orange-dim); color: var(--orange); border: 1px solid var(--orange-bd); }
+  .badge-auto   { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-bd); }
+  .badge-warn   { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-bd); }
+  .badge-danger { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red-bd); }
+
+  /* ── RELEASE TYPE CARDS ─────────────────────────────── */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  .type-card { background: var(--surface-r); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .type-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .type-card-indicator { width: 3px; border-radius: 3px; align-self: stretch; flex-shrink: 0; margin-top: 2px; }
+  .ind-blue   { background: var(--accent); }
+  .ind-orange { background: var(--orange); }
+  .type-card-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 3px; }
+  .type-card-eg   { font-family: var(--mono); font-size: 11.5px; color: var(--text-2); }
+  .type-card-body { font-size: 13px; color: var(--text-2); line-height: 1.65; }
+  .type-card-body ul { padding-left: 16px; margin-top: 6px; }
+  .type-card-body li { margin-bottom: 3px; }
+
+  /* ── PIPELINE STEPS ─────────────────────────────── */
+  .pipeline { position: relative; display: flex; flex-direction: column; gap: 0; padding-left: 2px; }
+  .pipeline::before {
+    content: '';
+    position: absolute;
+    left: 18px; top: 22px; bottom: 22px;
+    width: 1px;
+    background: var(--border);
+  }
+  .step { display: grid; grid-template-columns: 38px 1fr; gap: 16px; padding: 16px 0; }
+  .step-node {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    position: relative; z-index: 1; flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+  }
+  .step.s-auto .step-node     { background: var(--accent-dim); border-color: var(--accent-bd); color: var(--accent); }
+  .step.s-decision .step-node { background: var(--yellow-dim); border-color: var(--yellow-bd); color: var(--yellow); font-size: 15px; }
+  .step-body { padding-top: 8px; }
+  .step-label {
+    font-weight: 600; font-size: 14px; color: var(--text);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 6px; line-height: 1.35;
+  }
+  .step-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+  .step-desc p  { margin-bottom: 6px; font-size: 13px; }
+  .step-desc ul { padding-left: 18px; margin: 6px 0; }
+  .step-desc li { margin-bottom: 3px; }
+
+  /* ── NOTICES ─────────────────────────────── */
+  .notice {
+    display: flex; gap: 11px; padding: 13px 15px; border-radius: 6px;
+    margin: 14px 0; font-size: 13px; line-height: 1.6; color: var(--text);
+  }
+  .notice-icon   { flex-shrink: 0; font-style: normal; margin-top: 1px; }
+  .notice-warn   { background: var(--yellow-dim); border: 1px solid var(--yellow-bd); }
+  .notice-danger { background: var(--red-dim);    border: 1px solid var(--red-bd); }
+  .notice-info   { background: var(--accent-dim); border: 1px solid var(--accent-bd); }
+
+  /* ── PUBLISH DECISION TABLE ─────────────────────────────── */
+  .pub-table-wrap { overflow-x: auto; margin-top: 12px; }
+  .pub-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 7px; overflow: hidden;
+  }
+  .pub-table th {
+    text-align: left; font-size: 10.5px; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--text-2);
+    padding: 10px 14px; background: var(--surface-r);
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .pub-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .pub-table tr:last-child td { border-bottom: none; }
+  .pub-table tr:hover td { background: rgba(0,0,0,.02); }
+  .cell-yes { color: var(--green);  font-weight: 600; }
+  .cell-opt { color: var(--yellow); font-weight: 600; }
+  .cell-no  { color: var(--text-2); }
+
+  /* ── CI/CD REFERENCE TABLE ─────────────────────────────── */
+  .ci-table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .ci-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .ci-table th {
+    text-align: left; font-size: 10.5px; font-weight: 700;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--text-2);
+    padding: 10px 14px; background: var(--surface-r);
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  .ci-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; line-height: 1.5; }
+  .ci-table tr:last-child td { border-bottom: none; }
+  .ci-table tr:hover td { background: rgba(0,0,0,.02); }
+  .ci-table td:first-child { color: var(--text); }
+
+  /* ── BRANCH PROTECTION ─────────────────────────────── */
+  .prot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+  .prot-card { background: var(--surface-r); border: 1px solid var(--border); border-radius: 7px; padding: 16px; font-size: 13px; }
+  .prot-card-title { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .prot-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--border-faint); font-size: 12.5px; }
+  .prot-row:last-child { border-bottom: none; }
+  .prot-key { color: var(--text-2); flex-shrink: 0; }
+  .prot-val { color: var(--text); font-weight: 500; text-align: right; }
+  .prot-val.v-warn { color: var(--yellow); }
+  .prot-val.v-good { color: var(--green); }
+
+  /* ── FUTURE STATE ─────────────────────────────── */
+  .future-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .future-item { background: var(--surface-r); border: 1px solid var(--border); border-radius: 7px; padding: 16px; display: flex; gap: 14px; font-size: 13px; }
+  .future-item-label { font-weight: 600; color: var(--text); margin-bottom: 4px; font-size: 13px; }
+  .future-item-body  { color: var(--text-2); line-height: 1.65; }
+
+  /* ── QUICK REF ─────────────────────────────── */
+  .qref-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 4px; }
+  .qref-card { background: var(--surface-r); border: 1px solid var(--border); border-radius: 7px; padding: 14px 16px; }
+  .qref-card-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-2); margin-bottom: 8px; }
+  .qref-card-val { font-family: var(--mono); font-size: 12.5px; color: var(--text); line-height: 1.8; }
+
+  /* ── RESPONSIVE ─────────────────────────────── */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 20px 0; display: flex; gap: 0; overflow-x: auto; }
+    .sidebar .toc-section { white-space: nowrap; }
+    .toc-label { padding-bottom: 4px; }
+    .toc-link { padding: 4px 12px; border-left: none; border-bottom: 2px solid transparent; }
+    .toc-link.active { border-bottom-color: var(--accent); border-left: none; }
+    .toc-divider { width: 1px; height: auto; margin: 8px 0; }
+    .main { padding: 32px 24px 60px; }
+    .type-grid, .prot-grid, .qref-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar" role="banner">
+  <nav class="topbar-crumb" aria-label="Breadcrumb">
+    <a href="https://github.com/MinneapolisStarTribune/design-system" target="_blank">Engineering</a>
+    <span class="topbar-sep" aria-hidden="true">/</span>
+    <a href="https://github.com/MinneapolisStarTribune/design-system" target="_blank">Design System</a>
+    <span class="topbar-sep" aria-hidden="true">/</span>
+    <span class="topbar-current">Release Runbook</span>
+  </nav>
+  <div class="topbar-right">
+    <span>Updated Jul 2026</span>
+    <span class="topbar-pill">v1.11.0 current</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Table of contents">
+    <div class="toc-section">
+      <span class="toc-label">Contents</span>
+      <a class="toc-link active" href="#overview"><span class="toc-dot"></span>Overview</a>
+      <a class="toc-link" href="#release-types"><span class="toc-dot"></span>Release Types</a>
+    </div>
+    <div class="toc-divider"></div>
+    <div class="toc-section">
+      <span class="toc-label">Flows</span>
+      <a class="toc-link" href="#feature-release"><span class="toc-dot"></span>Feature Release</a>
+      <a class="toc-link" href="#hotfix-release"><span class="toc-dot"></span>Hotfix / Patch Release</a>
+      <a class="toc-link" href="#absorption"><span class="toc-dot"></span>Absorption Pattern</a>
+    </div>
+    <div class="toc-divider"></div>
+    <div class="toc-section">
+      <span class="toc-label">Reference</span>
+      <a class="toc-link" href="#publish-rules"><span class="toc-dot"></span>When to Publish</a>
+      <a class="toc-link" href="#tag-rules"><span class="toc-dot"></span>Tag Rules</a>
+      <a class="toc-link" href="#cicd"><span class="toc-dot"></span>CI/CD Workflows</a>
+      <a class="toc-link" href="#branch-protection"><span class="toc-dot"></span>Branch Protection</a>
+    </div>
+    <div class="toc-divider"></div>
+    <div class="toc-section">
+      <a class="toc-link" href="#future"><span class="toc-dot"></span>Future State (v2)</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <h1 class="doc-title">Release Runbook</h1>
+    <div class="doc-meta">
+      <span>Design System — MinneapolisStarTribune</span>
+      <span class="doc-meta-sep">·</span>
+      <span>GitHub Packages · npm scope: <code>@minneapolisstartribune</code></span>
+      <span class="doc-meta-sep">·</span>
+      <span>Maintained by: Platform / Shared UI</span>
+    </div>
+
+    <!-- ── OVERVIEW ───────────────────────────── -->
+    <section class="section" id="overview">
+      <h2 class="section-title"><span class="section-index">00</span>Overview</h2>
+      <p>This document is the single source of truth for cutting a release of <code>@minneapolisstartribune/design-system</code>. It covers both <strong>feature releases</strong> (new components, API changes) and <strong>hotfix releases</strong> (urgent patches to a shipped version), including the decision of when to actually publish a package to GitHub Packages and when to absorb the work into the next scheduled release.</p>
+      <p>All release automation runs through GitHub Actions. Manual steps require a person with repository write access. Steps marked <span class="badge badge-auto">auto</span> fire without intervention once the preceding manual step is complete.</p>
+      <div class="notice notice-info">
+        <i class="notice-icon">ℹ</i>
+        <span><strong>Key rule:</strong> Only branches named <code class="branch">release/*</code> may merge into <code class="branch">main</code>. Feature branches, hotfix branches, and any other work must target a release branch first. This is enforced by CI and will block the PR if violated.</span>
+      </div>
+    </section>
+
+    <!-- ── RELEASE TYPES ───────────────────────────── -->
+    <section class="section" id="release-types">
+      <h2 class="section-title"><span class="section-index">01</span>Release Types</h2>
+      <p>We use two categories of release. The version numbers follow semver, but internally we call them "feature" and "hotfix" to be explicit about intent.</p>
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="type-card-header">
+            <div class="type-card-indicator ind-blue"></div>
+            <div>
+              <div class="type-card-name">Feature Release</div>
+              <div class="type-card-eg">e.g. v1.11.0 → v1.12.0</div>
+            </div>
+          </div>
+          <div class="type-card-body">
+            Scheduled releases containing new components, design token updates, or any breaking/non-breaking API changes.
+            <ul>
+              <li>Branch cut from <code class="branch">main</code></li>
+              <li>Multiple feature PRs may land before merge</li>
+              <li><strong>Always published</strong> to GitHub Packages</li>
+              <li>Patch digit is <code>0</code> (e.g., <code class="tag-v">v1.12.0</code>)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="type-card">
+          <div class="type-card-header">
+            <div class="type-card-indicator ind-orange"></div>
+            <div>
+              <div class="type-card-name">Hotfix / Patch Release</div>
+              <div class="type-card-eg">e.g. v1.11.0 → v1.11.1</div>
+            </div>
+          </div>
+          <div class="type-card-body">
+            Targeted fixes to a version already in production. Does not always result in a published package — the work may be absorbed into the next feature release instead.
+            <ul>
+              <li>Branch cut from <code class="branch">main</code> (at the tag commit)</li>
+              <li>Typically one or two focused PRs</li>
+              <li><strong>Optional publish</strong> — see When to Publish</li>
+              <li>Patch digit is &gt; 0 (e.g., <code class="tag-v">v1.11.1</code>)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="notice notice-warn" style="margin-top:20px;">
+        <i class="notice-icon">⚠</i>
+        <span><strong>Terminology note:</strong> In conversation, the team sometimes calls feature releases "major" and hotfixes "minor." This does not map to semver major/minor — the package is still at major version <code>1</code>. Use "feature release" and "hotfix" when communicating to avoid ambiguity.</span>
+      </div>
+    </section>
+
+    <!-- ── FEATURE RELEASE FLOW ───────────────────────────── -->
+    <section class="section" id="feature-release">
+      <h2 class="section-title"><span class="section-index">02</span>Feature Release Flow</h2>
+      <p>Follow these steps in order when cutting a scheduled feature release (e.g., <code class="tag-v">v1.12.0</code>).</p>
+
+      <div class="pipeline" role="list">
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 1">1</div>
+          <div class="step-body">
+            <div class="step-label">Create the release branch <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>Go to <strong><a href="https://github.com/MinneapolisStarTribune/design-system/actions/workflows/create-release-branch.yml" target="_blank">Actions → "Create release branch"</a></strong> → Run workflow.</p>
+              <ul>
+                <li><code>release_version</code>: enter <code>1.12.0</code> or <code>v1.12.0</code> (both accepted)</li>
+                <li><code>base_branch</code>: leave as <code class="branch">main</code> (default)</li>
+              </ul>
+              <p>The workflow creates <code class="branch">release/1.12.0</code> from the tip of <code class="branch">main</code> and pushes it. If the branch already exists, it exits cleanly without error.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 2">2</div>
+          <div class="step-body">
+            <div class="step-label">Develop against the release branch <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>Cut feature branches <strong>from</strong> <code class="branch">release/1.12.0</code> — not from main. Open PRs that target <code class="branch">release/1.12.0</code>.</p>
+              <ul>
+                <li>2 approvals required before merge</li>
+                <li>Squash or merge commit — no rebase</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="step s-auto" role="listitem">
+          <div class="step-node" aria-label="CI checks — automated">CI</div>
+          <div class="step-body">
+            <div class="step-label">PR checks run automatically <span class="badge badge-auto">Auto</span></div>
+            <div class="step-desc">
+              <ul>
+                <li><code class="wf">lint.yml</code> — ESLint, Prettier, TypeScript typecheck</li>
+                <li><code class="wf">component-tests.yml</code> — unit tests + a11y tests with Codecov upload</li>
+                <li><code class="wf">chromatic.yml</code> — visual regression (runs only if <code>.stories.ts/tsx</code> files or Storybook config changed)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 3">3</div>
+          <div class="step-body">
+            <div class="step-label">Open PR: release branch → main <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>When all features are merged into <code class="branch">release/1.12.0</code> and the release is ready to ship, open a PR from <code class="branch">release/1.12.0</code> → <code class="branch">main</code>.</p>
+              <p>The <code class="wf">merging-to-main-restriction</code> check will pass automatically because the source branch starts with <code>release/</code>. All other PR checks also run on this PR. 2 approvals required.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 4">4</div>
+          <div class="step-body">
+            <div class="step-label">Merge the PR into main <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>Approve and merge. Squash or merge commit — match what the team used for feature PRs on this release.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step s-auto" role="listitem">
+          <div class="step-node" aria-label="Back-merge — automated">↻</div>
+          <div class="step-body">
+            <div class="step-label">Back-merge PRs created for higher release branches <span class="badge badge-auto">Auto</span></div>
+            <div class="step-desc">
+              <p><code class="wf">back-merge-main-to-release.yml</code> fires immediately after merge. It finds any release branches with a version number higher than the one just merged (e.g., if <code class="branch">release/1.12.1</code> exists), and opens a PR from <code class="branch">main</code> → that branch. Review and merge these promptly to avoid divergence.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 5">5</div>
+          <div class="step-body">
+            <div class="step-label">Create a GitHub Release and tag <span class="badge badge-manual">Manual — last manual step</span></div>
+            <div class="step-desc">
+              <p>Go to <strong><a href="https://github.com/MinneapolisStarTribune/design-system/releases/new" target="_blank">Releases → "Draft a new release"</a></strong>.</p>
+              <ul>
+                <li>Tag: <code class="tag-v">v1.12.0</code> — must match <code>vX.Y.Z</code> exactly</li>
+                <li>Target: <strong><code class="branch">main</code></strong> — always tag against main, never a release branch</li>
+                <li>Write release notes and click <strong>Publish release</strong></li>
+              </ul>
+              <p>Clicking <strong>Publish release</strong> is the trigger. Everything after this — the npm publish, the version bump, the Slack post — happens automatically. No further action is needed.</p>
+              <div class="notice notice-danger" style="margin-top:10px;">
+                <i class="notice-icon">⚠</i>
+                <span><strong>Tag caution:</strong> "Restrict creations" is currently <strong>unchecked</strong> in branch protection — any team member can push a tag. An accidental tag push triggers the publish pipeline immediately. Coordinate before creating tags. Always double-check that <code class="branch">main</code> is in the correct state before publishing the release.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step s-auto" role="listitem">
+          <div class="step-node" aria-label="Publish — automated">↻</div>
+          <div class="step-body">
+            <div class="step-label">Publish pipeline runs automatically — no action required <span class="badge badge-auto">Auto</span></div>
+            <div class="step-desc">
+              <p><code class="wf">publish.yml</code> fires immediately on the <code>release: published</code> event:</p>
+              <ul>
+                <li>Checks out <code class="branch">main</code> (not the tag ref — the code published always comes from main)</li>
+                <li>Validates tag format — fails early if not <code>vX.Y.Z</code></li>
+                <li>Runs <code>release:verify</code> gates (web, native, a11y)</li>
+                <li>Regenerates and commits the component matrix to main if changed</li>
+                <li>Updates <code>packages/design-system/package.json</code> version → commits "chore: bump version to 1.12.0" → pushes to main</li>
+                <li>Builds and publishes to GitHub Packages as <code>@minneapolisstartribune/design-system@1.12.0</code></li>
+              </ul>
+              <p>Simultaneously, <code class="wf">release-changelog.yml</code> generates a changelog from merged PR titles and posts it to the Slack release channels.</p>
+              <div class="notice notice-info" style="margin-top:10px;">
+                <i class="notice-icon">ℹ</i>
+                <span><strong>Manual escape hatch:</strong> If the pipeline fails and needs to be re-run without creating a new release, go to <strong><a href="https://github.com/MinneapolisStarTribune/design-system/actions/workflows/publish.yml" target="_blank">Actions → "Publish Design System" → Run workflow</a></strong> and enter the version manually. This is the <code>workflow_dispatch</code> path — only use it for reruns, not for normal releases.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── HOTFIX FLOW ───────────────────────────── -->
+    <section class="section" id="hotfix-release">
+      <h2 class="section-title"><span class="section-index">03</span>Hotfix / Patch Release Flow</h2>
+      <p>Use this flow when a critical bug in a shipped version needs to be addressed. The process is nearly identical to a feature release, with one additional decision point: whether the patch should ship as its own version or be absorbed into the next feature release.</p>
+
+      <div class="pipeline" role="list">
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 1">1</div>
+          <div class="step-body">
+            <div class="step-label">Create the hotfix release branch <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>Go to <strong><a href="https://github.com/MinneapolisStarTribune/design-system/actions/workflows/create-release-branch.yml" target="_blank">Actions → "Create release branch"</a></strong>.</p>
+              <ul>
+                <li><code>release_version</code>: <code>1.11.1</code> (the patch version)</li>
+                <li><code>base_branch</code>: <code class="branch">main</code> — since <code class="tag-v">v1.11.0</code> was already merged and tagged on main, the fix should start from there</li>
+              </ul>
+              <p>Creates <code class="branch">release/1.11.1</code> from the tip of main.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 2">2</div>
+          <div class="step-body">
+            <div class="step-label">Develop the fix <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p>Cut fix branches from <code class="branch">release/1.11.1</code>. PRs target <code class="branch">release/1.11.1</code>. Same CI gates and 2-approval requirement apply.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step s-decision" role="listitem">
+          <div class="step-node" aria-label="Decision">?</div>
+          <div class="step-body">
+            <div class="step-label">Decide: standalone patch or absorption? <span class="badge badge-warn">Decision</span></div>
+            <div class="step-desc">
+              <p>This is the key judgment call. See <a href="#publish-rules">When to Publish</a> for the criteria. Two paths:</p>
+              <ul>
+                <li><strong>Publish as <code class="tag-v">v1.11.1</code></strong> — the fix is urgent and consumers need it before the next feature release. Continue to steps 3–4.</li>
+                <li><strong>Absorb into next feature release</strong> — the fix can wait, or is already included in an in-progress feature release branch. Merge <code class="branch">release/1.11.1</code> directly into the next feature release branch (e.g., <code class="branch">release/1.12.0</code>). <code class="tag-v">v1.11.1</code> is never tagged. Skip to that release's flow.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" role="listitem">
+          <div class="step-node" aria-label="Step 3">3</div>
+          <div class="step-body">
+            <div class="step-label">Merge hotfix branch into main and publish <span class="badge badge-manual">Manual</span></div>
+            <div class="step-desc">
+              <p><em>Only if publishing as a standalone patch.</em></p>
+              <p>Open PR from <code class="branch">release/1.11.1</code> → <code class="branch">main</code>, get 2 approvals, merge. Then go to <strong><a href="https://github.com/MinneapolisStarTribune/design-system/releases/new" target="_blank">Releases → "Draft a new release"</a></strong>, create tag <code class="tag-v">v1.11.1</code> targeting <code class="branch">main</code>, and click <strong>Publish release</strong>. That click is the only action required — the npm publish, version bump, and Slack changelog all run automatically from there.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step s-auto" role="listitem">
+          <div class="step-node" aria-label="Back-merge and publish — automated">↻</div>
+          <div class="step-body">
+            <div class="step-label">Back-merge and publish (same as feature release) <span class="badge badge-auto">Auto</span></div>
+            <div class="step-desc">
+              <p>After merge: back-merge workflow fires, creating PRs from <code class="branch">main</code> into any higher release branches (e.g., <code class="branch">release/1.12.0</code> if it exists). After tag + release publish: <code class="wf">publish.yml</code> and <code class="wf">release-changelog.yml</code> fire identically to a feature release.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── ABSORPTION PATTERN ───────────────────────────── -->
+    <section class="section" id="absorption">
+      <h2 class="section-title"><span class="section-index">04</span>Absorption Pattern</h2>
+      <p>The most recent example: hotfix work was done in <code class="branch">release/1.10.1</code>, but <code class="tag-v">v1.10.1</code> was never published. The work was absorbed into <code class="tag-v">v1.11.0</code>, which is the version consumers received.</p>
+      <div class="notice notice-info">
+        <i class="notice-icon">ℹ</i>
+        <span>When a hotfix is absorbed, the hotfix release branch (<code class="branch">release/1.10.1</code>) still existed and was used for development — it was just never merged to main and never tagged. The fix landed in the next feature release branch instead.</span>
+      </div>
+      <div class="subsection-title">Absorption steps</div>
+      <div class="step-desc" style="margin-bottom:12px; font-size:13px; color:var(--text-2); line-height:1.7;">
+        <ol style="padding-left:20px; display:flex; flex-direction:column; gap:6px;">
+          <li>Fix is developed in <code class="branch">release/1.10.1</code> normally</li>
+          <li>Instead of opening a PR to <code class="branch">main</code>, open a PR from <code class="branch">release/1.10.1</code> → <code class="branch">release/1.11.0</code></li>
+          <li>The <code class="wf">merging-to-main-restriction</code> check does not run (target is not main)</li>
+          <li>Normal CI and 2-approval requirement still apply</li>
+          <li>After merge, the fix is part of <code class="branch">release/1.11.0</code> and ships with <code class="tag-v">v1.11.0</code></li>
+          <li><code class="tag-v">v1.10.1</code> is never created — it does not exist in GitHub Packages</li>
+        </ol>
+      </div>
+      <div class="notice notice-warn">
+        <i class="notice-icon">⚠</i>
+        <span>Consumers who pinned to <code class="tag-v">v1.10.0</code> will not automatically receive the hotfix — they need to upgrade to <code class="tag-v">v1.11.0</code>. If the fix is truly urgent and consumers cannot wait for the feature release, publish the standalone patch instead of absorbing it.</span>
+      </div>
+    </section>
+
+    <!-- ── WHEN TO PUBLISH ───────────────────────────── -->
+    <section class="section" id="publish-rules">
+      <h2 class="section-title"><span class="section-index">05</span>When to Publish</h2>
+      <p>Publishing to GitHub Packages is a one-way action — you cannot unpublish a version. Use this table to make the call before creating the GitHub Release.</p>
+      <div class="pub-table-wrap">
+        <table class="pub-table" role="table">
+          <thead>
+            <tr>
+              <th>Scenario</th><th>Publish?</th><th>Tag created?</th><th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Feature release</strong> (e.g., <code class="tag-v">v1.12.0</code>)</td>
+              <td class="cell-yes">Always</td><td class="cell-yes">Yes</td>
+              <td style="color:var(--text-2);">No exceptions. Feature releases must ship to consumers.</td>
+            </tr>
+            <tr>
+              <td><strong>Hotfix — urgent, needed now</strong></td>
+              <td class="cell-yes">Yes</td><td class="cell-yes">Yes</td>
+              <td style="color:var(--text-2);">Consumers cannot wait for the next feature release. Ship the patch.</td>
+            </tr>
+            <tr>
+              <td><strong>Hotfix — absorbed into next feature release</strong></td>
+              <td class="cell-no">No</td><td class="cell-no">No</td>
+              <td style="color:var(--text-2);">Fix lands in the feature release. Hotfix branch discarded after merge.</td>
+            </tr>
+            <tr>
+              <td><strong>Hotfix — next feature release ships soon</strong></td>
+              <td class="cell-opt">Your call</td><td class="cell-opt">Maybe</td>
+              <td style="color:var(--text-2);">If the feature release is days away, absorbing is usually right. If it's weeks, publish the patch.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── TAG RULES ───────────────────────────── -->
+    <section class="section" id="tag-rules">
+      <h2 class="section-title"><span class="section-index">06</span>Tag Rules</h2>
+      <div class="qref-grid" style="margin-bottom:20px;">
+        <div class="qref-card">
+          <div class="qref-card-title">Required format</div>
+          <div class="qref-card-val"><code class="tag-v">vX.Y.Z</code></div>
+        </div>
+        <div class="qref-card">
+          <div class="qref-card-title">Target branch</div>
+          <div class="qref-card-val"><code class="branch">main</code></div>
+        </div>
+        <div class="qref-card">
+          <div class="qref-card-title">Quick links</div>
+          <div class="qref-card-val" style="font-family:var(--sans); font-size:12.5px; display:flex; flex-direction:column; gap:4px;">
+            <a href="https://github.com/MinneapolisStarTribune/design-system/tags" target="_blank">All tags →</a>
+            <a href="https://github.com/MinneapolisStarTribune/design-system/releases" target="_blank">All releases →</a>
+            <a href="https://github.com/MinneapolisStarTribune/design-system/releases/new" target="_blank">New release →</a>
+          </div>
+        </div>
+      </div>
+      <p>Tags are validated by the <code class="wf">validate-tag-format</code> composite action, which rejects anything that doesn't match <code>^v[0-9]+\.[0-9]+\.[0-9]+$</code>. A publish triggered by an invalid tag will fail early at validation.</p>
+      <p>The publish workflow always checks out <code class="branch">main</code> — not the tagged commit. This means the package content published to GitHub Packages always reflects the state of main at the moment the workflow runs, regardless of which commit the tag points to.</p>
+      <div class="notice notice-danger">
+        <i class="notice-icon">⚠</i>
+        <span><strong>"Restrict creations" is unchecked.</strong> GitHub branch protection currently does not restrict who can create tags. Any team member with write access can push a <code class="tag-v">vX.Y.Z</code> tag and trigger the full publish pipeline unintentionally. Coordinate with the team before creating tags, and verify that <code class="branch">main</code> is in the intended state immediately before publishing a release.</span>
+      </div>
+      <div class="subsection-title">Before publishing a release — pre-flight checklist</div>
+      <ul style="padding-left:20px; display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--text-2);">
+        <li>The release branch PR has been merged into <code class="branch">main</code></li>
+        <li>All CI checks on <code class="branch">main</code> are green</li>
+        <li>The intended version number does not already exist — <a href="https://github.com/MinneapolisStarTribune/design-system/tags" target="_blank">check the tags list</a></li>
+        <li>Any back-merge PRs from the previous step are open and acknowledged</li>
+        <li>The tag is being created against the <code class="branch">main</code> branch, not a release branch</li>
+      </ul>
+    </section>
+
+    <!-- ── CI/CD REFERENCE ───────────────────────────── -->
+    <section class="section" id="cicd">
+      <h2 class="section-title"><span class="section-index">07</span>CI/CD Workflow Reference</h2>
+      <p>All workflows live in <code>.github/workflows/</code>. The table below summarizes what fires, when, and what it does.</p>
+      <div class="ci-table-wrap">
+        <table class="ci-table" role="table">
+          <thead>
+            <tr><th>Workflow file</th><th>Trigger</th><th>What it does</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="wf">merging-to-main-restriction.yml</code></td>
+              <td>Any PR</td>
+              <td>Fails the PR if the target is <code class="branch">main</code> and the source branch does not start with <code>release/</code>.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">lint.yml</code></td>
+              <td>PR to <code class="branch">main</code> or <code class="branch">release/**</code></td>
+              <td>Runs ESLint, Prettier format check, and TypeScript typecheck.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">component-tests.yml</code></td>
+              <td>PR to <code class="branch">main</code> or <code class="branch">release/**</code></td>
+              <td>Runs unit tests and a11y tests; uploads coverage and results to Codecov.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">chromatic.yml</code></td>
+              <td>PR to <code class="branch">main</code> or <code class="branch">release/**</code></td>
+              <td>Visual regression via Chromatic. <strong>Only runs</strong> if <code>.stories.ts/tsx</code> files or <code>.storybook/</code> config changed.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">create-release-branch.yml</code></td>
+              <td>Manual dispatch</td>
+              <td>Creates <code class="branch">release/X.Y.Z</code> from a specified base branch. Validates semver format. Exits cleanly if branch already exists.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">publish.yml</code></td>
+              <td>GitHub Release published <em>or</em> manual dispatch</td>
+              <td>Checks out <code class="branch">main</code>; validates tag; runs <code>release:verify</code>; bumps version in package.json; commits and pushes to main; builds; publishes to GitHub Packages.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">release-changelog.yml</code></td>
+              <td>GitHub Release published <em>or</em> manual dispatch</td>
+              <td>Walks merged PRs since the previous tag; categorizes by title keywords; posts formatted changelog to Slack release channels.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">back-merge-main-to-release.yml</code></td>
+              <td>A <code class="branch">release/*</code> branch is merged into <code class="branch">main</code></td>
+              <td>Finds all active release branches with a higher version number and opens PRs from <code class="branch">main</code> into each. Notes merge conflicts in the PR body when detected.</td>
+            </tr>
+            <tr>
+              <td><code class="wf">sync-versions-from-vercel.yml</code></td>
+              <td>Schedule / manual</td>
+              <td>Syncs Storybook version metadata from Vercel production deployments.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── BRANCH PROTECTION ───────────────────────────── -->
+    <section class="section" id="branch-protection">
+      <h2 class="section-title"><span class="section-index">08</span>Branch Protection</h2>
+      <p>Current branch protection settings as configured in <a href="https://github.com/MinneapolisStarTribune/design-system/settings/branches" target="_blank">GitHub repository settings</a>. These are managed manually in the GitHub UI — not in code.</p>
+      <div class="prot-grid">
+        <div class="prot-card">
+          <div class="prot-card-title">main</div>
+          <div class="prot-row"><span class="prot-key">Required approvals</span><span class="prot-val v-good">2</span></div>
+          <div class="prot-row"><span class="prot-key">Allowed merge types</span><span class="prot-val">Squash, Merge commit</span></div>
+          <div class="prot-row"><span class="prot-key">Source branch rule</span><span class="prot-val">release/* only (CI-enforced)</span></div>
+          <div class="prot-row"><span class="prot-key">Restrict creations (tags)</span><span class="prot-val v-warn">Unchecked — open</span></div>
+          <div class="prot-row"><span class="prot-key">Direct pushes</span><span class="prot-val">CI bot only (bypass app)</span></div>
+        </div>
+        <div class="prot-card">
+          <div class="prot-card-title">release/*</div>
+          <div class="prot-row"><span class="prot-key">Required approvals</span><span class="prot-val v-good">2</span></div>
+          <div class="prot-row"><span class="prot-key">Allowed merge types</span><span class="prot-val">Squash, Merge commit</span></div>
+          <div class="prot-row"><span class="prot-key">Who can push directly</span><span class="prot-val">CI bot only (bypass app)</span></div>
+          <div class="prot-row"><span class="prot-key">Feature branches target</span><span class="prot-val">This branch (not main)</span></div>
+        </div>
+      </div>
+      <div class="notice notice-warn" style="margin-top:16px;">
+        <i class="notice-icon">⚠</i>
+        <span>The CI bypass app (<code>GH_BYPASS_APP_ID</code> / <code>GH_BYPASS_APP_SECRET</code>) is used by automated workflows (publish, back-merge, create-release-branch) to push directly to protected branches. These secrets should only ever live in GitHub repository secrets — never in code.</span>
+      </div>
+    </section>
+
+    <!-- ── FUTURE STATE ───────────────────────────── -->
+    <section class="section" id="future">
+      <h2 class="section-title"><span class="section-index">09</span>Future State — v2.0.0</h2>
+      <p>For the next major version, the team is evaluating conventional commits and semantic release tooling to automate the parts of this workflow that are currently manual. Nothing below is decided — it's a direction to investigate.</p>
+      <div class="future-list">
+        <div class="future-item">
+          <div>
+            <div class="future-item-label">Conventional Commits</div>
+            <div class="future-item-body">Standardize commit messages with prefixes: <code>feat:</code>, <code>fix:</code>, <code>chore:</code>, <code>BREAKING CHANGE:</code>. This is the prerequisite for all automation below. Tools: <code>commitlint</code> + a lefthook commit-msg hook (lefthook is already in the repo).</div>
+          </div>
+        </div>
+        <div class="future-item">
+          <div>
+            <div class="future-item-label">Automated versioning</div>
+            <div class="future-item-body">Tools like <code>semantic-release</code>, <code>changesets</code>, or <code>release-please</code> can determine the next version number from commit history and create the GitHub Release automatically. This eliminates the manual tag creation step and its associated risks.</div>
+          </div>
+        </div>
+        <div class="future-item">
+          <div>
+            <div class="future-item-label">Automated changelog</div>
+            <div class="future-item-body">With conventional commits, <code>release-changelog.yml</code> can derive accurate categorized changelogs from commit messages rather than PR title heuristics — removing false positives from keyword matching.</div>
+          </div>
+        </div>
+        <div class="future-item">
+          <div>
+            <div class="future-item-label">Consideration: opinionated vs. flexible</div>
+            <div class="future-item-body"><code>semantic-release</code> is more opinionated and fully automated. <code>changesets</code> is more flexible and keeps humans in the loop for version decisions. Given the current team size and the "optional publish" pattern for hotfixes, <code>changesets</code> may be the better fit — but this is worth a dedicated decision meeting before <code>v2.0.0</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.section[id]');
+  const links = document.querySelectorAll('.toc-link');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(s => obs.observe(s));
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
