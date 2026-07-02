@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      pushed: ${{ steps.push.outputs.pushed }}
     steps:
       # Same token as publish.yml — GITHUB_TOKEN cannot push to protected main.
       - name: Create GitHub App token
@@ -42,13 +44,100 @@ jobs:
         run: node packages/design-system/scripts/sync-versions-from-vercel.js
 
       - name: Commit and push if changed
+        id: push
         run: |
           git config user.name "ci-branch-protection-bypass[bot]"
           git config user.email "ci-branch-protection-bypass[bot]@users.noreply.github.com"
           git add packages/design-system/.storybook/versions.json
           if git diff --staged --quiet; then
             echo "No change to versions.json"
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore(storybook): sync versions from Vercel prod deployments"
             git push origin main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
+
+  back-merge-release-branches:
+    name: Back-merge main into active release branches
+    needs: sync-versions
+    if: needs.sync-versions.outputs.pushed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Back-merge main into release branches
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git fetch origin main
+          git fetch origin 'refs/heads/release/*:refs/remotes/origin/release/*'
+
+          for remote_ref in $(git branch -r --list 'origin/release/*'); do
+            branch="${remote_ref#origin/}"
+            BRANCH_VERSION="${branch#release/}"
+
+            if [[ ! "$BRANCH_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              continue
+            fi
+
+            echo "---"
+            echo "Processing: $branch"
+
+            git checkout "$branch" --quiet
+            git reset --hard "origin/$branch" --quiet
+
+            if git merge-base --is-ancestor origin/main HEAD; then
+              echo "$branch is already up to date with main. Skipping."
+              continue
+            fi
+
+            if git merge origin/main --no-edit -m "chore: back-merge main into $branch (after Vercel version sync)"; then
+              git push origin "$branch"
+              echo "✅ Merged main into $branch"
+            else
+              git merge --abort
+              echo "⚠️ Merge conflict merging main into $branch. Creating PR for manual resolution."
+
+              EXISTING_PR=$(gh pr list \
+                --base "$branch" \
+                --head "main" \
+                --state open \
+                --json number \
+                --jq '.[0].number // empty')
+
+              if [ -n "$EXISTING_PR" ]; then
+                echo "PR #$EXISTING_PR already exists for main → $branch. Skipping."
+              else
+                PR_BODY="## ⚠️ Merge conflicts detected"$'\n\n'\
+                "The Vercel version sync pushed to \`main\`. This PR brings those changes into \`$branch\` so the release → \`main\` PR stays mergeable."$'\n\n'\
+                "Resolve conflicts, get review, and merge."
+
+                gh pr create \
+                  --base "$branch" \
+                  --head "main" \
+                  --title "chore: back-merge main into $branch (after Vercel version sync)" \
+                  --body "$PR_BODY" \
+                  --label "back-merge" 2>/dev/null || \
+                gh pr create \
+                  --base "$branch" \
+                  --head "main" \
+                  --title "chore: back-merge main into $branch (after Vercel version sync)" \
+                  --body "$PR_BODY"
+              fi
+            fi
+          done

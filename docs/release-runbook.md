@@ -60,6 +60,8 @@ When all features are merged and the release is ready to ship, open a PR from `r
 
 The `merging-to-main-restriction` check passes automatically because the source branch starts with `release/`. All other checks also run. 2 approvals required.
 
+`main` requires the release branch to be up to date before merge. When `sync-versions-from-vercel.yml` pushes Storybook metadata to `main`, it **\[Auto\]** back-merges `main` into every active `release/*` branch so release PRs stay current. If GitHub still reports the branch as out of date, click **Update branch** on the PR (or open a `main` → `release/*` PR) before merging.
+
 ### 4. Merge the PR `[Manual]`
 
 Squash or merge commit — match what the team used for feature PRs on this release.
@@ -204,7 +206,7 @@ All workflows live in `.github/workflows/`.
 | `publish.yml` | GitHub Release published _or_ manual dispatch | Checks out `main`; validates tag; runs verify gates; bumps version; builds; publishes to GitHub Packages |
 | `release-changelog.yml` | GitHub Release published _or_ manual dispatch | Generates PR-based changelog; posts to Slack |
 | `back-merge-main-to-release.yml` | `release/*` merged into `main` | Opens PRs from `main` into all higher release branches |
-| `sync-versions-from-vercel.yml` | Schedule / manual | Syncs Storybook version metadata from Vercel |
+| `sync-versions-from-vercel.yml` | Schedule / manual | Syncs Storybook version metadata from Vercel; back-merges `main` into all active `release/*` branches when it pushes |
 
 ---
 

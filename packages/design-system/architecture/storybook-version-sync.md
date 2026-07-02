@@ -29,6 +29,7 @@ The version selector in the Storybook header lets users switch between different
 1. Checkout `main`
 2. Run `scripts/sync-versions-from-vercel.js`
 3. Commit and push `.storybook/versions.json` if it changed
+4. If `main` was updated, back-merge `main` into every active `release/*` branch (via the CI bypass app) so release → `main` PRs are not blocked by the branch-up-to-date rule. On merge conflicts, opens a `main` → `release/*` PR for manual resolution.
 
 ### 2. Sync Script
 
