@@ -204,7 +204,12 @@ export const Select: React.FC<SelectProps> = ({
           {displayLabel}
         </span>
 
-        <span className={styles.selectIcon} aria-hidden>
+        <span
+          className={classNames(styles.selectIcon, {
+            [styles.selectIconOpen]: isOpen,
+          })}
+          aria-hidden
+        >
           <ChevronDownIcon
             size={size}
             color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}

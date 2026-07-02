@@ -39,6 +39,11 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export type {
+  MultiSelectOption,
+  MultiSelectProps,
+} from './FormControl/MultiSelect/MultiSelect.types';
+export { MultiSelect } from './FormControl/MultiSelect/web/MultiSelect';
 export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
 export {
   PasswordInput,

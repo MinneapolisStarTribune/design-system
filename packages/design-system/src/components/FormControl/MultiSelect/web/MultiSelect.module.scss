@@ -1,4 +1,4 @@
-.selectContainer {
+.multi-select-container {
   position: relative;
   width: 100%;
   border: 1px solid var(--color-border-on-dark-strong-01);
@@ -8,54 +8,53 @@
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 
-  &.isRounded {
+  &.is-rounded {
     border-radius: var(--radius-full);
   }
 
-  &.sizeSmall {
+  &.size-small {
     height: var(--spacing-input-sm);
     border-radius: var(--radius-6);
   }
 
-  &.sizeMedium {
+  &.size-medium {
     height: var(--spacing-input-md);
   }
 
-  &.sizeLarge {
+  &.size-large {
     height: var(--spacing-input-lg);
   }
 
-  &:hover:not(.isDisabled):not(.isError):not(.isSuccess) {
+  &:hover:not(.is-disabled):not(.is-error):not(.is-success) {
     border-color: var(--color-border-on-light-strong-02);
   }
 
-  &.isOpen {
+  &.is-open,
+  &:focus-within:not(.is-disabled):not(.is-open) {
     border-color: var(--color-border-state-focus);
     box-shadow: 0 0 0 1px var(--color-border-state-focus);
   }
 
-  &:focus-within:not(.isDisabled):not(.isOpen) {
-    border-color: var(--color-border-state-focus);
-    box-shadow: 0 0 0 1px var(--color-border-state-focus);
-  }
-
-  &.isError {
+  &.is-error {
     border-color: var(--color-red-600);
   }
 
-  &.isDisabled {
+  &.is-success {
+    border-color: var(--color-border-state-success-on-light);
+  }
+
+  &.is-disabled {
     cursor: not-allowed;
     background: var(--color-background-light-gray-01);
     border-color: var(--color-border-state-disabled-on-light);
+
     span {
       color: var(--color-text-state-disabled-on-light);
     }
   }
 }
 
-/* ---------- Trigger ---------- */
-
-.selectTrigger {
+.multi-select-trigger {
   width: 100%;
   height: 100%;
   display: flex;
@@ -63,6 +62,7 @@
   justify-content: space-between;
   gap: var(--spacing-8);
   padding: 0 var(--spacing-8) 0 var(--spacing-12);
+  color: var(--color-text-on-light-primary);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -72,50 +72,50 @@
   }
 }
 
-.selectContainer.sizeSmall .selectTrigger {
+.multi-select-container.size-small .multi-select-trigger {
   padding: 0 var(--spacing-8);
 }
 
-.selectContainer.sizeLarge .selectTrigger {
+.multi-select-container.size-large .multi-select-trigger {
   padding: 0 var(--spacing-8) 0 var(--spacing-16);
 }
 
-/* Pill inputs need extra horizontal padding so content clears the curved ends */
-.selectContainer.isRounded.sizeSmall .selectTrigger {
+.multi-select-container.is-rounded.size-small .multi-select-trigger {
   padding: 0 var(--spacing-8) 0 var(--spacing-12);
 }
 
-.selectContainer.isRounded.sizeMedium .selectTrigger {
+.multi-select-container.is-rounded.size-medium .multi-select-trigger {
   padding: 0 var(--spacing-8) 0 var(--spacing-16);
 }
 
-.selectContainer.isRounded.sizeLarge .selectTrigger {
+.multi-select-container.is-rounded.size-large .multi-select-trigger {
   padding: 0 var(--spacing-8) 0 var(--spacing-20);
 }
 
-.selectValue {
+.multi-select-value {
   flex: 1;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.selectPlaceholder {
+.multi-select-placeholder {
   color: var(--color-text-state-disabled-on-light) !important;
 }
 
-.selectIcon {
+.multi-select-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.15s ease;
 }
 
-.selectIconOpen {
+.multi-select-icon-open {
   transform: rotate(180deg);
 }
 
-/* ---------- Dropdown ---------- */
-
-.selectDropdown {
+.multi-select-dropdown {
   position: absolute;
   top: calc(100% + var(--spacing-8));
   left: 0;
@@ -123,73 +123,76 @@
   padding: var(--spacing-4);
   margin: 0;
   list-style: none;
-  border-radius: var(--radius-8);
+  border-radius: var(--radius-16);
   z-index: 20;
-
   max-height: 280px;
   overflow-y: auto;
-
   background: var(--color-select-background);
   box-sizing: border-box;
-
   box-shadow:
     0 12px 16px -4px rgba(10, 10, 10, 0.08),
     0 2px 6px -2px rgba(10, 10, 10, 0.03);
-
   scrollbar-width: thin;
   scrollbar-color: var(--color-select-scrollbar) transparent;
 }
 
-/* ---------- Options ---------- */
-
-.selectOption {
+.multi-select-option {
   display: flex;
   align-items: center;
-  padding: var(--spacing-12) var(--spacing-16);
+  gap: var(--spacing-8);
+  padding: var(--spacing-12);
   border-radius: var(--radius-4);
-
   cursor: pointer;
   user-select: none;
   transition: background 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-select-hover);
+    outline: none;
+  }
 }
 
-.selectOption:hover,
-.selectOptionSelected {
-  background: var(--color-select-hover);
+.multi-select-option-selected {
+  background: transparent;
 }
 
-.selectOptionSelected {
-  font-weight: 600;
-}
-
-.selectOptionActive {
-  background: var(--color-select-hover);
-}
-
-.selectOptionDisabled {
+.multi-select-option-disabled {
   opacity: 0.4;
   cursor: not-allowed;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: transparent;
   }
 }
 
-/* ---------- Scrollbar ---------- */
-
-.selectDropdown::-webkit-scrollbar {
-  width: 4px;
+.multi-select-checkmark {
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  border: 1px solid var(--color-checkbox-border-unchecked);
+  border-radius: var(--radius-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-checkbox-background-unchecked);
 }
 
-.selectDropdown::-webkit-scrollbar-track {
-  background: transparent;
+.multi-select-option-selected .multi-select-checkmark {
+  background: var(--color-checkbox-background-selected-neutral);
+  border-color: var(--color-checkbox-border-selected-neutral);
 }
 
-.selectDropdown::-webkit-scrollbar-thumb {
-  background: var(--color-select-scrollbar);
-  border-radius: 999px;
+.multi-select-check-icon {
+  color: var(--color-checkbox-icon-selected-neutral) !important;
 }
 
-.selectDropdown::-webkit-scrollbar-thumb:hover {
-  opacity: 0.8;
+.multi-select-option-label {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-on-light-primary);
+}
+
+.multi-select-option-label-selected {
+  font-weight: 600;
 }
