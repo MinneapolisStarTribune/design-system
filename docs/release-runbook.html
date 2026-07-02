@@ -534,6 +534,7 @@
             <div class="step-desc">
               <p>When all features are merged into <code class="branch">release/1.12.0</code> and the release is ready to ship, open a PR from <code class="branch">release/1.12.0</code> → <code class="branch">main</code>.</p>
               <p>The <code class="wf">merging-to-main-restriction</code> check will pass automatically because the source branch starts with <code>release/</code>. All other PR checks also run on this PR. 2 approvals required.</p>
+              <p><code class="branch">main</code> requires the release branch to be up to date before merge. When <code class="wf">sync-versions-from-vercel.yml</code> pushes Storybook metadata to <code class="branch">main</code>, it <span class="badge badge-auto">Auto</span> back-merges <code class="branch">main</code> into every active <code class="branch">release/*</code> branch so release PRs stay current. If GitHub still reports the branch as out of date, click <strong>Update branch</strong> on the PR (or open a <code class="branch">main</code> → <code class="branch">release/*</code> PR) before merging.</p>
             </div>
           </div>
         </div>
@@ -826,7 +827,7 @@
             <tr>
               <td><code class="wf">sync-versions-from-vercel.yml</code></td>
               <td>Schedule / manual</td>
-              <td>Syncs Storybook version metadata from Vercel production deployments.</td>
+              <td>Syncs Storybook version metadata from Vercel; back-merges <code class="branch">main</code> into all active <code class="branch">release/*</code> branches when it pushes.</td>
             </tr>
           </tbody>
         </table>
