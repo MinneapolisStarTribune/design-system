@@ -1,0 +1,201 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as TooltipStories from './Tooltip.stories';
+
+<Meta of={TooltipStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Tooltip
+
+Tooltips provide brief, supplemental information on hover or focus. On touch/coarse-pointer responsive layouts, they open on tap. They’re ideal for clarifying icon-only controls, revealing truncated text, or adding lightweight context that isn’t essential to the primary task. Tooltips should stay short, static, and non-interactive. Use them sparingly, avoid replacing visible labels, and don’t use them for confirmations, warnings, or promotional content.
+
+## Anatomy
+
+1. **Wrapper** — The outer floating container that holds the tooltip content and handles positioning.
+2. **Container** — The surface that wraps the content and applies background, border, and styling.
+3. **Content** — Flexbox wrapper for label and optional icon.
+4. **Label** — Brief supplemental text displayed in the tooltip.
+5. **Icon (optional)** — Visual element positioned before or after the label.
+6. **Pointer** — Directional arrow connecting tooltip to trigger element.
+
+## Usage
+
+- Use tooltips for clarifying ambiguous UI elements
+- Keep tooltip text concise (under 100 characters when possible)
+- Use tooltips with icon-only buttons
+- On desktop: appear on hover and focus
+- On responsive touch/coarse-pointer layouts: appear on tap
+- Auto-hide when user moves away or presses Escape
+- Non-interactive: tooltips never contain buttons, links, or form controls
+- Test tooltips on both desktop and mobile
+
+## Design File
+
+[View in Figma](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=217-18058&m=dev)
+
+## Customization Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Applies To</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td>Tooltip trigger</td>
+      <td>The element that triggers the tooltip (desktop: hover/focus, touch: tap)</td>
+    </tr>
+
+    <tr>
+      <td><code>label</code></td>
+      <td>Tooltip label</td>
+      <td>Brief supplemental text displayed in the tooltip</td>
+    </tr>
+
+    <tr>
+      <td><code>pointer</code></td>
+      <td>Tooltip wrapper</td>
+      <td>Which side of the trigger the tooltip appears on: <code>'top' | 'right' | 'bottom' | 'left'</code></td>
+    </tr>
+
+    <tr>
+      <td><code>icon</code></td>
+      <td>Tooltip content</td>
+      <td>Optional icon to display in the tooltip</td>
+    </tr>
+
+    <tr>
+      <td><code>iconPosition</code></td>
+      <td>Tooltip content</td>
+      <td>Position of the icon relative to the label: <code>'start' | 'end'</code></td>
+    </tr>
+
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td>Tooltip</td>
+      <td>Whether the tooltip is disabled and won't show on hover, focus, or tap</td>
+    </tr>
+
+    <tr>
+      <td><code>showDelay</code></td>
+      <td>Tooltip</td>
+      <td>Delay in milliseconds before showing the tooltip on hover (default: 200)</td>
+    </tr>
+
+    <tr>
+      <td><code>hideDelay</code></td>
+      <td>Tooltip</td>
+      <td>Delay in milliseconds before hiding the tooltip (default: 0)</td>
+    </tr>
+
+    <tr>
+      <td><code>portalRoot</code></td>
+      <td>Tooltip wrapper</td>
+      <td>Element where the tooltip content portals into (defaults to document.body)</td>
+    </tr>
+
+    <tr>
+      <td><code>wrapperClassName</code></td>
+      <td>Tooltip wrapper</td>
+      <td>Custom classes for the floating wrapper element</td>
+    </tr>
+
+    <tr>
+      <td><code>containerClassName</code></td>
+      <td>Tooltip container</td>
+      <td>Custom classes for the container element</td>
+    </tr>
+
+    <tr>
+      <td><code>contentClassName</code></td>
+      <td>Tooltip content</td>
+      <td>Custom classes for the content wrapper</td>
+    </tr>
+
+    <tr>
+      <td><code>labelClassName</code></td>
+      <td>Tooltip label</td>
+      <td>Custom classes for the label text</td>
+    </tr>
+
+    <tr>
+      <td><code>iconClassName</code></td>
+      <td>Tooltip icon</td>
+      <td>Custom classes for the icon element</td>
+    </tr>
+
+    <tr>
+      <td><code>arrowClassName</code></td>
+      <td>Tooltip arrow</td>
+      <td>Custom classes for the arrow element</td>
+    </tr>
+
+    <tr>
+      <td><code>aria-label</code></td>
+      <td>Tooltip</td>
+      <td>Accessible label for the tooltip (use when label text is not descriptive enough)</td>
+    </tr>
+  </tbody>
+</table>
+
+## Example
+
+```tsx
+<Tooltip label="Save your changes" pointer="top">
+  <Button>Save</Button>
+</Tooltip>
+```
+
+```tsx
+<Tooltip
+  label="Required field"
+  icon={<WarningIcon />}
+  iconPosition="start"
+>
+  <input type="text" />
+</Tooltip>
+```
+
+```tsx
+<Tooltip label="Settings" pointer="left" showDelay={500}>
+  <Button icon={<SettingsIcon />} variant="ghost" />
+</Tooltip>
+```
+
+## Accessibility
+
+### Keyboard Navigation
+
+- Tooltips appear when the trigger element receives focus
+- Users can navigate to tooltip triggers using the keyboard
+- Focus is not trapped inside the tooltip
+- Escape key dismisses the tooltip
+
+### Screen Readers
+
+- Tooltips use the `tooltip` ARIA role
+- Trigger elements have `aria-describedby` pointing to the tooltip
+- The tooltip contains an `id` that matches the trigger's `aria-describedby`
+- Descriptive label text conveys tooltip purpose to assistive technologies
+
+## Comparison with Popover
+
+| Feature | Tooltip | Popover |
+|---------|---------|---------|
+| **Trigger** | Hover + Focus (desktop), Tap (touch) | Click |
+| **Focus trap** | No | Yes |
+| **Interactive content** | No | Yes |
+| **Heading/Body** | No | Yes |
+| **Close button** | Auto-hide | Yes |
+| **Use case** | Quick clarification | Detailed information/actions |
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

@@ -40,7 +40,7 @@ Utility links are low-profile, text-style navigation controls. They use **Utilit
 
 Pass any **design-system icon** (or other node) with **`icon`**, and set **`iconPosition`** to **`start`** or **`end`**. Only one icon is supported. Spacing between label and icon is **`spacing.2`** (2px) for all **`size`** values.
 
-**Icon dimensions (viewport)** — **14×14** below the medium breakpoint (&lt;768px), **16×16** at medium (768–1159px), **20×20** at large (≥1160px), matching **Layout → Breakpoints** (`breakpoint.json`). The link wrapper sizes the SVG; you do not need to match **`icon`** `size` to `Link` `size`.
+**Icon dimensions (viewport)** — The icon wrapper matches the passed icon's **`size`** prop (e.g. **`size="x-small"`** → **14×14**, **`small`** → **16×16**, **`medium`** → **20×20**). Set **`size`** on the icon you pass to **`icon`**.
 
 ## Next.js App Router
 

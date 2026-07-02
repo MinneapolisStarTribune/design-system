@@ -1,10 +1,37 @@
 import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import { ArrowRightIcon } from '@/icons';
 import { Link } from './Link';
+import styles from './Link.module.scss';
 import { ArticleBodyText } from '@/components/Typography/ArticleBody/ArticleBodyText/web/ArticleBodyText';
 
 describe('Link (web)', () => {
+  it('sizes icon wrapper from the icon size prop', () => {
+    render(
+      <Link
+        size="medium"
+        href="/article"
+        icon={<ArrowRightIcon size="x-small" />}
+        iconPosition="end"
+      >
+        Read more
+      </Link>
+    );
+
+    const link = screen.getByRole('link', { name: 'Read more' });
+    const iconWrapper = link.querySelector('span[aria-hidden="true"]');
+    expect(iconWrapper).toBeTruthy();
+    expect(iconWrapper).toHaveClass(styles.icon);
+    const wrapper = iconWrapper as HTMLElement;
+    expect(wrapper.style.width).toBe('14px');
+    expect(wrapper.style.height).toBe('14px');
+
+    const svg = iconWrapper?.querySelector('svg');
+    expect(svg).toHaveAttribute('width', '14px');
+    expect(svg).toHaveAttribute('height', '14px');
+  });
+
   it('renders as anchor with href', () => {
     render(
       <Link size="medium" href="/article">

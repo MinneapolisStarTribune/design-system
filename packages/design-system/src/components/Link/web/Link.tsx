@@ -7,6 +7,7 @@ import {
   type LinkUtilityProps,
 } from '../Link.types';
 import styles from './Link.module.scss';
+import { enhanceLinkIcon } from '../Link.helpers';
 
 /**
  * Text link: **utility** (Utility Body sizes) or **inline** (inherits parent typography; use `InlineLink`).
@@ -59,19 +60,14 @@ export const Link: React.FC<LinkProps> = (props) => {
     </span>
   );
 
+  const startIcon = icon && iconPosition === 'start' ? enhanceLinkIcon(icon, styles.icon) : null;
+  const endIcon = icon && iconPosition === 'end' ? enhanceLinkIcon(icon, styles.icon) : null;
+
   const content = (
     <>
-      {icon && iconPosition === 'start' ? (
-        <span className={styles.icon} aria-hidden>
-          {icon}
-        </span>
-      ) : null}
+      {startIcon}
       {label}
-      {icon && iconPosition === 'end' ? (
-        <span className={styles.icon} aria-hidden>
-          {icon}
-        </span>
-      ) : null}
+      {endIcon}
     </>
   );
 
