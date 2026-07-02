@@ -50,6 +50,8 @@ const meta: Meta<StoryArgs> = {
   args: {
     variant: 'standard',
     images,
+    aspectRatio: '3 / 2',
+    spaceBetween: undefined,
     expandable: false,
   },
   argTypes: {
@@ -66,6 +68,18 @@ const meta: Meta<StoryArgs> = {
       control: false,
       description: 'Custom image renderer',
     },
+    aspectRatio: {
+      control: 'text',
+      description: 'Optional gallery-level wrapper aspect ratio applied consistently to all slides',
+    },
+    spaceBetween: {
+      control: 'number',
+      description: 'Optional explicit spacing (px) between slides',
+    },
+    onIndexChange: {
+      control: false,
+      description: 'Callback fired with the 1-based active slide index',
+    },
     expandable: {
       control: 'boolean',
       description: 'Opens the active slide in a full-screen dialog',
@@ -80,30 +94,6 @@ type Story = StoryObj<StoryArgs>;
 export const Configurable: Story = {
   args: {
     expandable: true,
-
-    images: [
-      {
-        src: 'https://picsum.photos/1080/720?1',
-        altText: 'Image 1',
-        caption:
-          "General Manager Heather Ann Mady with Moua outside the building that will house Diane's Place.",
-        credit: '(Rebecca McAlpine/Star Tribune)',
-        imgixParams: 'w=800&auto=format,compress',
-      },
-      {
-        src: 'https://picsum.photos/1080/720?2',
-        altText: 'Image 2',
-        caption: 'Second image example.',
-        credit: '(Photo: Star Tribune)',
-      },
-      {
-        src: 'https://picsum.photos/1080/720?3',
-        altText: 'Image 3',
-        caption: 'Another example image.',
-        credit: '(Photo: Star Tribune)',
-      },
-    ],
-
     purchaseLink: {
       link: 'https://www.startribune.com/photos/reprints',
       label: 'Buy Reprint',
@@ -115,6 +105,7 @@ export const Configurable: Story = {
         code: `<ImageGallery
   variant="standard"
   expandable={true}
+  aspectRatio="3 / 2"
   images={[
     {
       src: 'https://picsum.photos/1080/720?1',
@@ -144,33 +135,35 @@ export const Configurable: Story = {
       },
     },
   },
-  render: ({ images: storyImages, ...args }) => <ImageGallery {...args} images={storyImages} />,
 };
 
 export const AllVariants: Story = {
   parameters: {
     controls: { disable: true },
   },
-
   render: ({ images: storyImages, ...args }) => {
     const resolvedImages = storyImages;
 
     return (
       <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 40 }}>
         <div>
-          <h3>Standard Variant - Gallery Purchase Link</h3>
-          <ImageGallery
-            {...args}
-            variant="standard"
-            images={imagesWithoutPurchaseLink}
-            purchaseLink={galleryPurchaseLink}
-            expandable={true}
-          />
+          <h3>Standard Variant - Gallery Purchase Link (parent max-width: 712px)</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery
+              {...args}
+              variant="standard"
+              images={imagesWithoutPurchaseLink}
+              purchaseLink={galleryPurchaseLink}
+              expandable={true}
+            />
+          </div>
         </div>
 
         <div>
-          <h3>Standard Variant - Individual Purchase Links</h3>
-          <ImageGallery {...args} variant="standard" images={resolvedImages} expandable={true} />
+          <h3>Standard Variant - Individual Purchase Links (parent max-width: 712px)</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery {...args} variant="standard" images={resolvedImages} expandable={true} />
+          </div>
         </div>
 
         <div>
@@ -190,30 +183,64 @@ export const AllVariants: Story = {
         </div>
 
         <div>
+          <h3>Immersive Variant - Custom Slide Spacing (24px)</h3>
+          <ImageGallery
+            {...args}
+            variant="immersive"
+            spaceBetween={24}
+            images={resolvedImages}
+            expandable={true}
+          />
+        </div>
+
+        <div>
           <h3>Custom Image Component</h3>
           <ImageGallery {...args} ImageComponent={CustomImage} images={resolvedImages} />
         </div>
 
         <div>
-          <h3>Images with Dimensions - No Layout Shift</h3>
-          <ImageGallery
-            {...args}
-            images={[
-              {
-                src: 'https://picsum.photos/1080/720',
-                altText: 'Landscape',
-                width: 1080,
-                height: 720,
-                caption: 'No layout shift',
-              },
-              {
-                src: 'https://picsum.photos/800/1200',
-                altText: 'Portrait',
-                width: 800,
-                height: 1200,
-              },
-            ]}
-          />
+          <h3>Images with Dimensions - No Layout Shift (parent max-width: 712px)</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery
+              {...args}
+              images={[
+                {
+                  src: 'https://picsum.photos/1080/720',
+                  altText: 'Landscape',
+                  width: 1080,
+                  height: 720,
+                  caption: 'No layout shift',
+                },
+                {
+                  src: 'https://picsum.photos/800/1200',
+                  altText: 'Portrait',
+                  width: 800,
+                  height: 1200,
+                },
+              ]}
+            />
+          </div>
+        </div>
+
+        <div>
+          <h3>Aspect Ratio - 5 / 3</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery {...args} aspectRatio="5 / 3" images={resolvedImages} />
+          </div>
+        </div>
+
+        <div>
+          <h3>Aspect Ratio - 3 / 2</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery {...args} aspectRatio="3 / 2" images={resolvedImages} />
+          </div>
+        </div>
+
+        <div>
+          <h3>Aspect Ratio - 1 / 1</h3>
+          <div style={{ maxWidth: 712 }}>
+            <ImageGallery {...args} aspectRatio="1 / 1" images={resolvedImages} />
+          </div>
         </div>
 
         <div>
