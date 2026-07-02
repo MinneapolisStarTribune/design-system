@@ -133,6 +133,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.multi-select-icon-open {
+  transform: rotate(180deg);
 }
 
 .multi-select-dropdown {

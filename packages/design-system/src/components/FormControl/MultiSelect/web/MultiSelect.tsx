@@ -270,7 +270,12 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
           {displayText}
         </span>
 
-        <span className={styles['multi-select-icon']} aria-hidden>
+        <span
+          className={classNames(styles['multi-select-icon'], {
+            [styles['multi-select-icon-open']]: isOpen,
+          })}
+          aria-hidden
+        >
           <ChevronDownIcon
             size={size}
             color={disabled ? 'state-disabled-on-light' : 'on-light-primary'}
