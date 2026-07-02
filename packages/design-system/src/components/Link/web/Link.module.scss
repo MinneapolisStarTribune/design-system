@@ -50,8 +50,7 @@
   }
 
   /*
-   * Icon box: spacing tokens + layout breakpoints from theme CSS (`yarn tokens` → `--spacing-*`, `--breakpoint-*`).
-   * SVGs from `Icon` use inline width/height; box + !important fill the slot.
+   * Icon viewport span: width/height set inline from the passed icon's `size` prop.
    */
   .icon {
     display: inline-flex;
@@ -60,39 +59,15 @@
     justify-content: center;
     box-sizing: border-box;
     color: inherit;
-    width: var(--spacing-14);
-    height: var(--spacing-14);
 
     svg {
       display: block;
       flex-shrink: 0;
-      width: 100% !important;
-      height: 100% !important;
       color: inherit !important;
     }
 
     svg path {
       fill: currentColor;
-    }
-  }
-
-  /*
-   * CSS custom properties cannot be used in @media query conditions — they
-   * resolve at the cascade/computed-value stage, after media features have
-   * already been evaluated. Keep these literal pixel values in sync with
-   * tokens/primitives/breakpoint.json (medium.min, large.min).
-   */
-  @media (min-width: 768px) {
-    .icon {
-      width: var(--spacing-16);
-      height: var(--spacing-16);
-    }
-  }
-
-  @media (min-width: 1160px) {
-    .icon {
-      width: var(--spacing-20);
-      height: var(--spacing-20);
     }
   }
 

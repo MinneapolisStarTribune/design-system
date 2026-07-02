@@ -3,6 +3,7 @@ import { Pressable, Text, View, type GestureResponderEvent } from 'react-native'
 import { useNativeStyles } from '@/hooks/useNativeStyles';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/native/UtilityBody.native';
 import { createStyles } from './Link.styles';
+import { enhanceLinkIconNative, getLinkIconViewportPx } from '../Link.helpers';
 import {
   LINK_SIZE_TO_UTILITY_BODY_TOKEN,
   type LinkUtilityProps,
@@ -87,14 +88,25 @@ export const Link: React.FC<LinkProps> = (props) => {
 
   const utilityBodySize = LINK_SIZE_TO_UTILITY_BODY_TOKEN[size];
   const textStyle = disabled ? styles.textDisabled : styles.text;
+  const iconViewportPx = icon ? getLinkIconViewportPx(icon) : 0;
+  const iconViewportStyle = { width: iconViewportPx, height: iconViewportPx };
+
+  const renderIcon = (position: 'start' | 'end') => {
+    if (!icon || iconPosition !== position || !React.isValidElement(icon)) return null;
+    return (
+      <View style={[styles.icon, iconViewportStyle]}>
+        {enhanceLinkIconNative(icon, textStyle.color as string)}
+      </View>
+    );
+  };
 
   const content = (
     <>
-      {icon && iconPosition === 'start' ? <View style={styles.icon}>{icon}</View> : null}
+      {renderIcon('start')}
       <UtilityBody size={utilityBodySize} weight="medium" style={textStyle}>
         {children}
       </UtilityBody>
-      {icon && iconPosition === 'end' ? <View style={styles.icon}>{icon}</View> : null}
+      {renderIcon('end')}
     </>
   );
 
