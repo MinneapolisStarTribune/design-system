@@ -3,7 +3,7 @@
 **Package:** `@minneapolisstartribune/design-system`  
 **Registry:** GitHub Packages  
 **Maintained by:** Platform / Shared UI  
-**Current version:** `v1.11.0`
+**Current version:** `v1.12.0`
 
 ---
 
@@ -21,8 +21,8 @@ All release automation runs through GitHub Actions. Steps marked **\[Auto\]** fi
 
 | Type | Example | Publish? | Description |
 |---|---|---|---|
-| **Feature Release** | `v1.11.0 → v1.12.0` | Always | Scheduled releases with new components, token updates, or API changes. Patch digit is `0`. |
-| **Hotfix / Patch Release** | `v1.11.0 → v1.11.1` | Optional | Targeted fixes to a shipped version. May be absorbed into the next feature release instead. Patch digit is > `0`. |
+| **Feature Release** | `v1.12.0 → v1.13.0` | Always | Scheduled releases with new components, token updates, or API changes. Patch digit is `0`. |
+| **Hotfix / Patch Release** | `v1.12.0 → v1.12.1` | Optional | Targeted fixes to a shipped version. May be absorbed into the next feature release instead. Patch digit is > `0`. |
 
 > **Terminology note:** The team sometimes calls feature releases "major" and hotfixes "minor." This does not map to semver — the package is still at major version `1`. Use "feature release" and "hotfix" to avoid ambiguity.
 
