@@ -52,7 +52,6 @@ export default defineConfig({
         path.resolve(__dirname, 'src/styles/fonts'),
         path.resolve(__dirname, 'src/types'),
         path.resolve(__dirname, 'src/hooks'),
-        path.resolve(__dirname, 'src/utils'),
       ],
       exclude: [
         'src/**/*.test.tsx',
@@ -67,7 +66,6 @@ export default defineConfig({
         'src/components/index.native.ts',
         'src/hooks/useNativeStyles.ts',
         'src/hooks/useNativeStyles.native.test.tsx',
-        'src/utils/fieldSurface.ts',
         'vite.*.config.ts',
         '**/vite.config.ts',
       ],
