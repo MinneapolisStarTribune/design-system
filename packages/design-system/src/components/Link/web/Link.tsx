@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 import {
   LINK_SIZE_TO_UTILITY_BODY_TOKEN,
@@ -18,8 +18,9 @@ import { enhanceLinkIcon } from '../Link.helpers';
  * <Link as={NextLink} href="/news" size="medium">Read more</Link>
  * ```
  */
-export const Link: React.FC<LinkProps> = (props) => {
+export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>((props, ref) => {
   const isInline = props.variant === 'inline';
+  const inlineBrand = isInline ? ((props as LinkInlineProps).brand ?? 'startribune') : undefined;
 
   const {
     as: As = 'a',
@@ -33,7 +34,6 @@ export const Link: React.FC<LinkProps> = (props) => {
     id,
     title,
     variant: _variant,
-    brand,
     size: _size,
     ...anchorRest
   } = props as LinkUtilityProps & Partial<LinkInlineProps>;
@@ -47,7 +47,9 @@ export const Link: React.FC<LinkProps> = (props) => {
   const rootClass = classNames(
     styles.link,
     isInline && styles.inline,
-    isInline && brand && (brand === 'startribune' ? styles.brandStartribune : styles.brandVarsity),
+    isInline &&
+      inlineBrand &&
+      (inlineBrand === 'startribune' ? styles.brandStartribune : styles.brandVarsity),
     disabled && styles.disabled,
     className
   );
@@ -89,31 +91,54 @@ export const Link: React.FC<LinkProps> = (props) => {
   }
 
   const isNativeButton = typeof As === 'string' && As === 'button';
+  const sharedProps = {
+    className: rootClass,
+    'data-testid': dataTestId,
+    onClick,
+    'aria-label': ariaLabel,
+    id,
+    title,
+    ...anchorRest,
+  };
 
-  const rootProps = isNativeButton
-    ? {
-        type: 'button' as const,
-        className: rootClass,
-        'data-testid': dataTestId,
-        onClick,
-        'aria-label': ariaLabel,
-        id,
-        title,
-        ...anchorRest,
-      }
-    : {
-        className: rootClass,
+  if (isNativeButton) {
+    const buttonProps = sharedProps as unknown as React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+    return (
+      <button {...buttonProps} type="button" ref={ref as React.Ref<HTMLButtonElement>}>
+        {content}
+      </button>
+    );
+  }
+
+  if (As === 'a') {
+    return (
+      <a {...sharedProps} href={href ?? '#'} ref={ref as React.Ref<HTMLAnchorElement>}>
+        {content}
+      </a>
+    );
+  }
+
+  if (typeof As === 'string') {
+    return React.createElement(
+      As,
+      {
+        ...sharedProps,
         href: href ?? '#',
-        'data-testid': dataTestId,
-        onClick,
-        'aria-label': ariaLabel,
-        id,
-        title,
-        ...anchorRest,
-      };
+      },
+      content
+    );
+  }
 
-  return React.createElement(As, rootProps, content);
-};
+  return React.createElement(
+    As,
+    {
+      ...sharedProps,
+      href: href ?? '#',
+    },
+    content
+  );
+});
 
 Link.displayName = 'Link';
 

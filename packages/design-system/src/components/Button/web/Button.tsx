@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import type { ElementType, KeyboardEventHandler, MouseEventHandler } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import type { ElementType, KeyboardEventHandler, MouseEventHandler, Ref, RefObject } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import styles from './Button.module.scss';
@@ -39,7 +39,7 @@ export {
  * Web `Button` (polymorphic via `as`). Prop docs live in `Button.types.ts`;
  * token/CSS helpers (`getButtonTokenPrefix`, etc.) live in `Button.utils.ts`.
  */
-export function Button(props: ButtonProps) {
+export const Button = forwardRef<HTMLElement, ButtonProps>((props, ref) => {
   const {
     as,
     type = 'button',
@@ -210,11 +210,23 @@ export function Button(props: ButtonProps) {
         : {}),
   };
 
+  const setCombinedRef = (node: HTMLElement | null) => {
+    buttonRef.current = node;
+
+    if (!ref) return;
+    if (typeof ref === 'function') {
+      ref(node);
+      return;
+    }
+
+    (ref as RefObject<HTMLElement | null>).current = node;
+  };
+
   return (
-    <Comp ref={buttonRef} {...elementProps}>
+    <Comp ref={setCombinedRef as Ref<HTMLElement>} {...elementProps}>
       {inner}
     </Comp>
   );
-}
+});
 
 Button.displayName = 'Button';

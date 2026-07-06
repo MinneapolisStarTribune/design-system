@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import classNames from 'classnames';
 import styles from './UtilityButton.module.scss';
 import { UtilityLabel } from '@/components/Typography/Utility';
@@ -58,68 +58,76 @@ type UtilityButtonNonToggleProps = UtilityButtonBaseProps & {
 
 export type UtilityButtonProps = UtilityButtonToggleProps | UtilityButtonNonToggleProps;
 
-export const UtilityButton: React.FC<UtilityButtonProps> = ({
-  variant = 'default',
-  size = 'large',
-  active,
-  icon,
-  iconPosition = 'start',
-  isDisabled,
-  onClick,
-  label,
-  className,
-  ...props
-}) => {
-  const hasIcon = !!icon;
-  const isIconOnly = hasIcon && !label;
+export const UtilityButton = forwardRef<HTMLButtonElement, UtilityButtonProps>(
+  (
+    {
+      variant = 'default',
+      size = 'large',
+      active,
+      icon,
+      iconPosition = 'start',
+      isDisabled,
+      onClick,
+      label,
+      className,
+      ...props
+    },
+    ref
+  ) => {
+    const hasIcon = !!icon;
+    const isIconOnly = hasIcon && !label;
 
-  const displayIcon = resolveUtilityToggleActiveIcon(icon, variant, active) ?? icon;
-  const iconSize = hasIcon ? getUtilityButtonIconSize(size, isIconOnly) : undefined;
-  const leftIcon =
-    hasIcon && (isIconOnly || iconPosition === 'start')
-      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
-      : null;
-  const rightIcon =
-    hasIcon && !isIconOnly && iconPosition === 'end'
-      ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
-      : null;
+    const displayIcon = resolveUtilityToggleActiveIcon(icon, variant, active) ?? icon;
+    const iconSize = hasIcon ? getUtilityButtonIconSize(size, isIconOnly) : undefined;
+    const leftIcon =
+      hasIcon && (isIconOnly || iconPosition === 'start')
+        ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
+        : null;
+    const rightIcon =
+      hasIcon && !isIconOnly && iconPosition === 'end'
+        ? enhanceButtonIcon(displayIcon, iconSize, styles.icon)
+        : null;
 
-  const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
-  const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
-  const ariaPressed = variant === 'toggle' ? active : undefined;
-  const toggleStateClass =
-    variant === 'toggle' ? (active ? styles.toggleActive : styles.toggleInactive) : undefined;
+    const ariaLabel = (props as React.ButtonHTMLAttributes<HTMLButtonElement>)['aria-label'];
+    const buttonAriaLabel = getUtilityButtonAriaLabel(ariaLabel, label);
+    const ariaPressed = variant === 'toggle' ? active : undefined;
+    const toggleStateClass =
+      variant === 'toggle' ? (active ? styles.toggleActive : styles.toggleInactive) : undefined;
 
-  const combinedClassNames = classNames(
-    styles.utilityButton,
-    styles[variant],
-    toggleStateClass,
-    styles[size],
-    isIconOnly && styles['icon-only'],
-    isDisabled && styles.disabled,
-    className
-  );
+    const combinedClassNames = classNames(
+      styles.utilityButton,
+      styles[variant],
+      toggleStateClass,
+      styles[size],
+      isIconOnly && styles['icon-only'],
+      isDisabled && styles.disabled,
+      className
+    );
 
-  // Map UtilityButton size to UtilityLabel size (large button uses medium label typography per spec)
-  const labelSize = size === 'small' ? 'small' : 'medium';
+    // Map UtilityButton size to UtilityLabel size (large button uses medium label typography per spec)
+    const labelSize = size === 'small' ? 'small' : 'medium';
 
-  return (
-    <button
-      type="button"
-      aria-label={buttonAriaLabel}
-      aria-pressed={ariaPressed}
-      disabled={isDisabled}
-      className={combinedClassNames || undefined}
-      onClick={onClick}
-      {...props}
-    >
-      {leftIcon}
-      {!isIconOnly && label && (
-        <UtilityLabel size={labelSize} weight="semibold">
-          {label}
-        </UtilityLabel>
-      )}
-      {rightIcon}
-    </button>
-  );
-};
+    return (
+      <button
+        ref={ref}
+        type="button"
+        aria-label={buttonAriaLabel}
+        aria-pressed={ariaPressed}
+        disabled={isDisabled}
+        className={combinedClassNames || undefined}
+        onClick={onClick}
+        {...props}
+      >
+        {leftIcon}
+        {!isIconOnly && label && (
+          <UtilityLabel size={labelSize} weight="semibold">
+            {label}
+          </UtilityLabel>
+        )}
+        {rightIcon}
+      </button>
+    );
+  }
+);
+
+UtilityButton.displayName = 'UtilityButton';
