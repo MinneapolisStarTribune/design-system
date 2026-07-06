@@ -30,6 +30,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [internalValue, setInternalValue] = useState<string[]>(value ?? []);
 
   const safeOptions = useMemo(() => (Array.isArray(options) ? options : []), [options]);
@@ -42,6 +43,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
       if (!rootRef.current) return;
       if (!rootRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setActiveIndex(-1);
       }
     };
 
@@ -54,6 +56,15 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   useEffect(() => {
     optionRefs.current = [];
   }, [safeOptions]);
+
+  useEffect(() => {
+    if (!isOpen || activeIndex < 0) return;
+
+    const target = optionRefs.current[activeIndex];
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({ block: 'nearest' });
+    }
+  }, [activeIndex, isOpen]);
 
   const selectedValues = useMemo(
     () => (isControlled ? (value ?? []) : internalValue),
@@ -81,9 +92,22 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   const isFilled = selectedLabels.length > 0;
   const displayText = isFilled ? selectedLabels.join(', ') : placeholderText;
 
+  const getPreferredOpenIndex = () => {
+    const selectedEnabledIndex = getFirstSelectedEnabledIndex();
+    return selectedEnabledIndex >= 0 ? selectedEnabledIndex : getFirstEnabledIndex();
+  };
+
   const toggleOpen = () => {
     if (disabled) return;
-    setIsOpen((prev) => !prev);
+
+    if (isOpen) {
+      setIsOpen(false);
+      setActiveIndex(-1);
+      return;
+    }
+
+    setIsOpen(true);
+    setActiveIndex(getPreferredOpenIndex());
   };
 
   const toggleOption = (option: MultiSelectOption) => {
@@ -98,19 +122,6 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     }
 
     onChange?.(nextValues);
-  };
-
-  const focusOptionByIndex = (index: number) => {
-    const target = optionRefs.current[index];
-    if (!target) return;
-    target.focus();
-  };
-
-  const focusOptionAfterOpen = (index: number) => {
-    setIsOpen(true);
-    requestAnimationFrame(() => {
-      focusOptionByIndex(index);
-    });
   };
 
   const getNextEnabledIndex = (currentIndex: number, step: 1 | -1) => {
@@ -146,65 +157,38 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     return -1;
   };
 
-  const handleOptionKeyDown = (
-    e: React.KeyboardEvent<HTMLLIElement>,
-    option: MultiSelectOption,
-    index: number
-  ) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleOption(option);
-      return;
-    }
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      const nextIndex = getNextEnabledIndex(index, 1);
-      focusOptionByIndex(nextIndex);
-      return;
-    }
-
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      const previousIndex = getNextEnabledIndex(index, -1);
-      focusOptionByIndex(previousIndex);
-      return;
-    }
-
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      setIsOpen(false);
-      triggerRef.current?.focus();
-    }
-  };
-
   const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (disabled) return;
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      const preferredIndex = getFirstSelectedEnabledIndex();
-      const firstEnabledIndex = preferredIndex >= 0 ? preferredIndex : getFirstEnabledIndex();
-
-      if (firstEnabledIndex >= 0) {
-        if (isOpen) {
-          focusOptionByIndex(firstEnabledIndex);
-        } else {
-          focusOptionAfterOpen(firstEnabledIndex);
-        }
+      if (!isOpen) {
+        setIsOpen(true);
+        setActiveIndex(getPreferredOpenIndex());
+        return;
       }
+
+      setActiveIndex((prev) => getNextEnabledIndex(prev, 1));
       return;
     }
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
-      const lastEnabledIndex = getLastEnabledIndex();
-      if (lastEnabledIndex >= 0) {
-        if (isOpen) {
-          focusOptionByIndex(lastEnabledIndex);
-        } else {
-          focusOptionAfterOpen(lastEnabledIndex);
-        }
+      if (!isOpen) {
+        setIsOpen(true);
+        setActiveIndex(getLastEnabledIndex());
+        return;
+      }
+
+      setActiveIndex((prev) => getNextEnabledIndex(prev, -1));
+      return;
+    }
+
+    if ((e.key === 'Enter' || e.key === ' ') && isOpen) {
+      e.preventDefault();
+      const activeOption = activeIndex >= 0 ? safeOptions[activeIndex] : undefined;
+      if (activeOption) {
+        toggleOption(activeOption);
       }
       return;
     }
@@ -212,6 +196,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
     if (e.key === 'Escape' && isOpen) {
       e.preventDefault();
       setIsOpen(false);
+      setActiveIndex(-1);
     }
   };
 
@@ -255,11 +240,15 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   return (
     <div className={containerClasses} ref={rootRef} data-testid={dataTestId}>
       <button
+        id={inputId}
         type="button"
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-controls={isOpen ? listboxId : undefined}
+        aria-activedescendant={
+          isOpen && activeIndex >= 0 ? `${inputId}-option-${activeIndex}` : undefined
+        }
         aria-invalid={hasError || undefined}
         aria-label={!ariaLabelledBy ? (ariaLabelProp ?? placeholderText) : undefined}
         aria-labelledby={ariaLabelledBy}
@@ -307,6 +296,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
         >
           {safeOptions.map((option, index) => {
             const isSelected = selectedSet.has(option.value);
+            const isActive = index === activeIndex;
 
             return (
               <li
@@ -315,13 +305,18 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
                 role="option"
                 aria-selected={isSelected}
                 aria-disabled={option.disabled || undefined}
-                tabIndex={option.disabled ? -1 : 0}
+                tabIndex={-1}
                 className={classNames(styles['multi-select-option'], {
                   [styles['multi-select-option-selected']]: isSelected,
+                  [styles['multi-select-option-active']]: isActive,
                   [styles['multi-select-option-disabled']]: option.disabled,
                 })}
                 onClick={() => toggleOption(option)}
-                onKeyDown={(e) => handleOptionKeyDown(e, option, index)}
+                onMouseEnter={() => {
+                  if (!option.disabled) {
+                    setActiveIndex(index);
+                  }
+                }}
                 ref={(el) => {
                   optionRefs.current[index] = el;
                 }}

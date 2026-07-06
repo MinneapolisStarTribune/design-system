@@ -157,6 +157,10 @@
   background: transparent;
 }
 
+.multi-select-option-active {
+  background: var(--color-select-hover);
+}
+
 .multi-select-option-disabled {
   opacity: 0.4;
   cursor: not-allowed;
