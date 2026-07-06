@@ -167,7 +167,7 @@ describe('MultiSelect', () => {
     expect(getByRole('combobox')).toHaveTextContent('Select options');
   });
 
-  it('focuses selected option when ArrowDown is pressed on trigger', async () => {
+  it('sets selected option as active descendant when ArrowDown is pressed on trigger', async () => {
     const user = userEvent.setup();
 
     const { getByRole } = renderWithProvider(
@@ -186,11 +186,12 @@ describe('MultiSelect', () => {
     const sportsOption = getByRole('option', { name: 'Sports' });
 
     await waitFor(() => {
-      expect(sportsOption).toHaveFocus();
+      expect(trigger).toHaveFocus();
+      expect(trigger).toHaveAttribute('aria-activedescendant', sportsOption.id);
     });
   });
 
-  it('focuses first enabled option when ArrowDown is pressed and nothing is selected', async () => {
+  it('sets first enabled option as active descendant when ArrowDown is pressed and nothing is selected', async () => {
     const user = userEvent.setup();
 
     const { getByRole } = renderWithProvider(
@@ -204,11 +205,12 @@ describe('MultiSelect', () => {
     const technologyOption = getByRole('option', { name: 'Technology' });
 
     await waitFor(() => {
-      expect(technologyOption).toHaveFocus();
+      expect(trigger).toHaveFocus();
+      expect(trigger).toHaveAttribute('aria-activedescendant', technologyOption.id);
     });
   });
 
-  it('toggles focused option with Enter after Arrow navigation', async () => {
+  it('toggles active option with Enter after Arrow navigation', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
 
@@ -229,7 +231,8 @@ describe('MultiSelect', () => {
     const technologyOption = getByRole('option', { name: 'Technology' });
 
     await waitFor(() => {
-      expect(technologyOption).toHaveFocus();
+      expect(trigger).toHaveFocus();
+      expect(trigger).toHaveAttribute('aria-activedescendant', technologyOption.id);
     });
 
     await user.keyboard('{ArrowDown}');
@@ -237,7 +240,8 @@ describe('MultiSelect', () => {
     const sportsOption = getByRole('option', { name: 'Sports' });
 
     await waitFor(() => {
-      expect(sportsOption).toHaveFocus();
+      expect(trigger).toHaveFocus();
+      expect(trigger).toHaveAttribute('aria-activedescendant', sportsOption.id);
     });
 
     await user.keyboard('{Enter}');
@@ -245,7 +249,7 @@ describe('MultiSelect', () => {
     expect(onChange).toHaveBeenLastCalledWith(['tech', 'sports']);
   });
 
-  it('closes dropdown and returns focus to trigger on Escape from option', async () => {
+  it('closes dropdown and keeps focus on trigger on Escape', async () => {
     const user = userEvent.setup();
 
     const { getByRole, queryByRole } = renderWithProvider(
@@ -259,7 +263,8 @@ describe('MultiSelect', () => {
     const technologyOption = getByRole('option', { name: 'Technology' });
 
     await waitFor(() => {
-      expect(technologyOption).toHaveFocus();
+      expect(trigger).toHaveFocus();
+      expect(trigger).toHaveAttribute('aria-activedescendant', technologyOption.id);
     });
 
     await user.keyboard('{Escape}');
