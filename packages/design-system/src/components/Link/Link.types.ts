@@ -24,8 +24,8 @@ type LinkAnchorOmit = Omit<
 
 /** Shared base props for utility Link across web and native implementations. */
 export interface LinkBaseProps extends BaseProps, AccessibilityProps {
-  children: string;
-  size: LinkSize;
+  children: ReactNode;
+  size?: LinkSize;
   icon?: ReactNode;
   iconPosition?: LinkIconPosition;
 }
@@ -51,7 +51,7 @@ export interface LinkUtilityProps extends LinkBaseProps, LinkShared {
 /** Inline link: inherits parent typography; use via `InlineLink` or `Link variant="inline"`. */
 export interface LinkInlineProps extends BaseProps, AccessibilityProps, LinkShared {
   variant: 'inline';
-  brand: InlineLinkBrand;
+  brand?: InlineLinkBrand;
   children: ReactNode;
   /** Ignored for inline links. */
   size?: LinkSize;
