@@ -12,6 +12,7 @@ export const UtilityLabel: React.FC<UtilityLabelNativeProps> = (props) => {
     capitalize = false,
     children,
     dataTestId = 'utility-label',
+    style,
     ...rest
   } = props;
   const styles = useNativeStylesWithDefaults(createStyles);
@@ -19,7 +20,7 @@ export const UtilityLabel: React.FC<UtilityLabelNativeProps> = (props) => {
 
   return (
     <Text
-      style={styles[styleKey]}
+      style={[styles[styleKey], style]}
       accessibilityRole="text"
       testID={dataTestId}
       {...(rest as React.ComponentProps<typeof Text>)}
