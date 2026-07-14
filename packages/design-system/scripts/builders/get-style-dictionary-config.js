@@ -1,5 +1,40 @@
 const fs = require('fs');
 const path = require('path');
+const StyleDictionary = require('style-dictionary').default;
+
+const NATIVE_COLOR_TRANSFORM = 'color/react-native-rgba';
+
+/**
+ * React Native's color parser does not support CSS's modern `rgb(r g b / a%)`
+ * syntax or 4-argument `rgb()`. Keep those forms in the shared source tokens
+ * for web, but convert them in the JavaScript platform to the comma-separated
+ * rgba() form React Native accepts. Handles:
+ *   rgb(0 0 0 / 30%)  →  rgba(0, 0, 0, 0.3)
+ *   rgb(0 0 0 0)      →  rgba(0, 0, 0, 0)
+ *   rgb(0, 0, 0, 0)   →  rgba(0, 0, 0, 0)
+ * Values already parseable by React Native (hex, rgba(), 3-arg rgb()) pass
+ * through unchanged.
+ */
+function toReactNativeRgba(value) {
+  const match = typeof value === 'string' && value.match(
+    /^rgb\(\s*([\d.]+)(?:\s+|\s*,\s*)([\d.]+)(?:\s+|\s*,\s*)([\d.]+)(?:(?:\s*\/\s*|\s+|\s*,\s*)([\d.]+)(%?))?\s*\)$/i
+  );
+
+  if (!match || match[4] === undefined) {
+    return value;
+  }
+
+  const [, red, green, blue, alpha, percentSign] = match;
+  const alphaNumber = percentSign ? Number(alpha) / 100 : Number(alpha);
+  return `rgba(${red}, ${green}, ${blue}, ${alphaNumber})`;
+}
+
+StyleDictionary.registerTransform({
+  name: NATIVE_COLOR_TRANSFORM,
+  type: 'value',
+  filter: (token) => token.path[0] === 'color',
+  transform: (token) => toReactNativeRgba(token.value),
+});
 
 /**
  * Token file loading strategy:
@@ -125,7 +160,7 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
       javascript: {
         // Use name/camel + color/css from the react-native group, but skip size/object
         // so dimension tokens stay as plain numbers (e.g. spacing2 = 2, not { original: 2, ... })
-        transforms: ['name/camel', 'color/css'],
+        transforms: ['name/camel', 'color/css', NATIVE_COLOR_TRANSFORM],
         
         // Output directory for generated JavaScript token files
         buildPath: `dist/mobile/themes/`,
@@ -147,4 +182,4 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 }
 
 module.exports = getStyleDictionaryConfig;
-
+module.exports.toReactNativeRgba = toReactNativeRgba;
