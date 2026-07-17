@@ -1,192 +1,61 @@
 # Release Runbook
 
-**Package:** `@minneapolisstartribune/design-system`  
-**Registry:** GitHub Packages  
-**Maintained by:** Platform / Shared UI  
-**Current version:** `v1.13.1`
+**Package:** `@minneapolisstartribune/design-system`
+**Registry:** GitHub Packages
+**Maintained by:** Platform / Shared UI
 
 ---
 
 ## Overview
 
-This document is the single source of truth for cutting a release of the design system. It covers both **feature releases** (new components, API changes) and **hotfix releases** (urgent patches to a shipped version), including the decision of when to publish a package to GitHub Packages and when to absorb the work into the next scheduled release.
+Releases are managed by [changesets](https://github.com/changesets/changesets). `main` is the single source of truth: every PR targets `main`, and the published package is built from the exact `main` commit that gets tagged. There are no release branches.
 
-All release automation runs through GitHub Actions. Steps marked **\[Auto\]** fire without intervention once the preceding manual step is complete.
+The flow in one paragraph: each PR that changes the package includes a **changeset** (a small file declaring patch/minor/major plus a summary). A bot keeps a **"Version Packages" PR** open against `main` that accumulates pending changesets into a version bump and CHANGELOG entries. **Merging that PR is the release.** CI then builds, publishes to GitHub Packages, tags the commit, creates a GitHub Release, and posts to Slack. No manual tagging, no manual version bumps.
 
-> **Key rule:** Only branches named `release/*` may merge into `main`. Feature branches, hotfix branches, and any other work must target a release branch first. This is enforced by CI and will block the PR if violated.
-
----
-
-## Release Types
-
-| Type | Example | Publish? | Description |
-|---|---|---|---|
-| **Feature Release** | `v1.13.1 → v1.14.0` | Always | Scheduled releases with new components, token updates, or API changes. Patch digit is `0`. |
-| **Hotfix / Patch Release** | `v1.13.1 → v1.13.2` | Optional | Targeted fixes to a shipped version. May be absorbed into the next feature release instead. Patch digit is > `0`. |
-
-> **Terminology note:** The team sometimes calls feature releases "major" and hotfixes "minor." This does not map to semver — the package is still at major version `1`. Use "feature release" and "hotfix" to avoid ambiguity.
+> The old flow (release branches, `merging-to-main-restriction`, manual GitHub Releases triggering `publish.yml`) was removed in the changesets migration. Git history for this file has the old runbook if you ever need it.
 
 ---
 
-## Feature Release Flow
+## Day-to-day: adding a changeset
 
-_Example: cutting `v1.12.0`_
+When your PR changes `packages/design-system`:
 
-### 1. Create the release branch `[Manual]`
+```sh
+yarn changeset
+```
 
-Go to [Actions → "Create release branch"](https://github.com/MinneapolisStarTribune/design-system/actions/workflows/create-release-branch.yml) → **Run workflow**.
+- Pick the bump type. **patch** = bug fix, no API change. **minor** = new component/prop/feature, backwards compatible. **major** = breaking change to the public API (coordinate with the team first).
+- Write the summary for consumers of the library. It becomes the CHANGELOG entry and the release notes, e.g. "Button: added `loading` prop" beats "updated button".
+- Commit the generated `.changeset/*.md` file with your PR.
 
-- `release_version`: `1.12.0` or `v1.12.0` (both accepted)
-- `base_branch`: `main` (default)
+No changeset is needed for docs, CI, or Storybook-only changes. If you want to record explicitly that a PR needs no release, `yarn changeset --empty` documents that.
 
-Creates `release/1.12.0` from the tip of `main`. Exits cleanly if the branch already exists.
+## Cutting a release
 
-### 2. Develop against the release branch `[Manual]`
+1. Look at the open **"chore: version packages"** PR. Its diff is the release: the version bump, and every pending changeset folded into `CHANGELOG.md`.
+2. Sanity-check the bump type (e.g. a release full of fixes should be a patch; an accidental `major` changeset should be caught here).
+3. Get the usual 2 approvals and merge it.
 
-Cut feature branches **from** `release/1.12.0` — not from `main`. Open PRs targeting `release/1.12.0`.
+Everything after the merge is automatic (`.github/workflows/release.yml`):
 
-- 2 approvals required before merge
-- Squash or merge commit — no rebase
+1. `release:verify` gates run (web + native + a11y)
+2. The package builds and publishes to GitHub Packages **from the merged commit**
+3. The commit is tagged `@minneapolisstartribune/design-system@X.Y.Z` and a GitHub Release is created with the changelog
+4. Slack channels are notified (design system, shared UI library, all releases)
 
-### \[Auto\] PR checks run on every PR
+Release cadence is whatever the team wants: merging the Version Packages PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
-- `lint.yml` — ESLint, Prettier, TypeScript typecheck
-- `component-tests.yml` — unit tests + a11y tests with Codecov upload
-- `chromatic.yml` — visual regression (only runs if `.stories.ts/tsx` or `.storybook/` changed)
+> **Tag format change:** tags are now `@minneapolisstartribune/design-system@1.14.0` (created by changesets) instead of `v1.14.0`. Historical `v*` tags up to `v1.13.1` remain and still resolve to the old releases.
 
-### 3. Open PR: `release/1.12.0` → `main` `[Manual]`
+## Hotfixes
 
-When all features are merged and the release is ready to ship, open a PR from `release/1.12.0` → `main`.
+**Fix to the latest published version** (the normal case): trunk-based makes this trivial. Merge the fix PR with a `patch` changeset, then merge the Version Packages PR. Two merges, and the patch is out. If unreleased feature work is already on `main`, it rides along; if it was merged dark (unexported), that's harmless. The old publish-vs-absorb decision still exists in a simpler form: merge the Version PR now (publish) or let the fix wait for the next scheduled release (absorb).
 
-The `merging-to-main-restriction` check passes automatically because the source branch starts with `release/`. All other checks also run. 2 approvals required.
+**Fix to an older published version** (rare): branch from the old tag, cherry-pick the fix, bump the patch version by hand, and publish manually with `yarn npm publish` from `packages/design-system`. This is off the paved road on purpose; in practice consumers upgrade to latest.
 
-### 4. Merge the PR `[Manual]`
+## Prereleases (optional, for big streams like v2)
 
-Squash or merge commit — match what the team used for feature PRs on this release.
-
-### \[Auto\] Back-merge PRs created
-
-`back-merge-main-to-release.yml` fires immediately. It finds any release branches with a version number higher than the one just merged and opens a PR from `main` → that branch. Review and merge these promptly to avoid divergence.
-
-### 5. Create a GitHub Release and tag `[Manual — last manual step]`
-
-Go to [Releases → "Draft a new release"](https://github.com/MinneapolisStarTribune/design-system/releases/new).
-
-- **Tag:** `v1.12.0` — must match `vX.Y.Z` exactly
-- **Target:** `main` — always tag against main, never a release branch
-- Write release notes and click **Publish release**
-
-Clicking **Publish release** is the trigger. Everything after this — the npm publish, the version bump, the Slack post — happens automatically. No further action is needed.
-
-> ⚠️ **Tag caution:** "Restrict creations" is currently **unchecked** in branch protection — any team member with write access can push a tag and trigger the publish pipeline immediately. Coordinate before creating tags and verify `main` is in the correct state.
-
-### \[Auto\] Publish pipeline runs — no action required
-
-`publish.yml` fires on the `release: published` event:
-
-1. Checks out `main` (not the tag ref — published code always comes from `main`)
-2. Validates tag format — fails early if not `vX.Y.Z`
-3. Runs `release:verify` gates (web, native, a11y)
-4. Regenerates and commits the component matrix if changed
-5. Bumps version in `packages/design-system/package.json`, commits, pushes to `main`
-6. Builds and publishes `@minneapolisstartribune/design-system@1.12.0` to GitHub Packages
-
-Simultaneously, `release-changelog.yml` generates a changelog from merged PR titles and posts to Slack.
-
-> **Manual escape hatch:** If the pipeline fails and needs to be re-run, go to [Actions → "Publish Design System" → Run workflow](https://github.com/MinneapolisStarTribune/design-system/actions/workflows/publish.yml) and enter the version manually. Only use this for reruns — not for normal releases.
-
----
-
-## Hotfix / Patch Release Flow
-
-_Example: cutting `v1.11.1`_
-
-### 1. Create the hotfix release branch `[Manual]`
-
-Go to [Actions → "Create release branch"](https://github.com/MinneapolisStarTribune/design-system/actions/workflows/create-release-branch.yml).
-
-- `release_version`: `1.11.1`
-- `base_branch`: `main` (since `v1.11.0` is already on `main`)
-
-Creates `release/1.11.1` from the tip of `main`.
-
-### 2. Develop the fix `[Manual]`
-
-Cut fix branches from `release/1.11.1`. PRs target `release/1.11.1`. Same CI gates and 2-approval requirement apply.
-
-### 3. Decide: standalone patch or absorption? `[Decision]`
-
-See [When to Publish](#when-to-publish) for the criteria.
-
-- **Publish as `v1.11.1`** — the fix is urgent and consumers need it before the next feature release. Continue to step 4.
-- **Absorb into next feature release** — merge `release/1.11.1` into the next feature release branch (e.g., `release/1.12.0`). `v1.11.1` is never tagged. Skip to that release's flow.
-
-### 4. Merge hotfix branch into main and publish `[Manual]`
-
-_Only if publishing as a standalone patch._
-
-Open PR from `release/1.11.1` → `main`, get 2 approvals, merge. Then go to [Releases → "Draft a new release"](https://github.com/MinneapolisStarTribune/design-system/releases/new), create tag `v1.11.1` targeting `main`, and click **Publish release**. The npm publish, version bump, and Slack changelog all run automatically.
-
-### \[Auto\] Back-merge and publish
-
-Same as the feature release — back-merge workflow fires into higher release branches, and `publish.yml` + `release-changelog.yml` run identically.
-
----
-
-## Absorption Pattern
-
-The most recent example: hotfix work was done in `release/1.10.1`, but `v1.10.1` was never published. The work was absorbed into `v1.11.0`.
-
-When a hotfix is absorbed, the hotfix release branch still existed and was used for development — it was just never merged to `main` and never tagged. The fix landed in the next feature release branch instead.
-
-**Steps:**
-
-1. Fix is developed in `release/1.10.1` normally
-2. Open a PR from `release/1.10.1` → `release/1.11.0` (not `main`)
-3. The `merging-to-main-restriction` check does not run (target is not `main`)
-4. Normal CI and 2-approval requirement still apply
-5. After merge, the fix ships with `v1.11.0`
-6. `v1.10.1` is never created — it does not exist in GitHub Packages
-
-> ⚠️ Consumers pinned to `v1.10.0` will not receive the hotfix automatically — they need to upgrade to `v1.11.0`. If the fix is truly urgent, publish the standalone patch instead.
-
----
-
-## When to Publish
-
-Publishing to GitHub Packages is a one-way action — you cannot unpublish a version.
-
-| Scenario | Publish? | Tag created? | Notes |
-|---|---|---|---|
-| Feature release (e.g., `v1.12.0`) | **Always** | Yes | No exceptions. |
-| Hotfix — urgent, needed now | **Yes** | Yes | Consumers cannot wait for the next feature release. |
-| Hotfix — absorbed into next feature release | **No** | No | Fix lands in the feature release instead. |
-| Hotfix — next feature release ships soon | **Your call** | Maybe | Days away → absorb. Weeks away → publish the patch. |
-
----
-
-## Tag Rules
-
-| | |
-|---|---|
-| **Required format** | `vX.Y.Z` (e.g., `v1.12.0`) |
-| **Target branch** | `main` |
-| **Validated by** | `validate-tag-format` action — rejects anything not matching `^v[0-9]+\.[0-9]+\.[0-9]+$` |
-| **Published code source** | Always `main` — the publish workflow checks out `main` regardless of which commit the tag points to |
-
-**Quick links:** [All tags](https://github.com/MinneapolisStarTribune/design-system/tags) · [All releases](https://github.com/MinneapolisStarTribune/design-system/releases) · [New release](https://github.com/MinneapolisStarTribune/design-system/releases/new)
-
-> ⚠️ **"Restrict creations" is unchecked** in branch protection — any team member with write access can push a `vX.Y.Z` tag and trigger the full publish pipeline. Coordinate before creating tags.
-
-### Pre-flight checklist
-
-Before clicking Publish release:
-
-- [ ] Release branch PR has been merged into `main`
-- [ ] All CI checks on `main` are green
-- [ ] Version does not already exist — [check the tags list](https://github.com/MinneapolisStarTribune/design-system/tags)
-- [ ] Back-merge PRs from the previous step are open and acknowledged
-- [ ] Tag is being created against `main`, not a release branch
+For a long-running breaking-change effort, changesets has [prerelease mode](https://github.com/changesets/changesets/blob/main/docs/prereleases.md): on a dedicated branch, `yarn changeset pre enter next` makes publishes come out as `2.0.0-next.N` under a separate dist-tag, so consumers can opt in for testing. Exit with `yarn changeset pre exit` and merge to `main` when it becomes the real release. Don't use this for ordinary "not ready yet" work; merge dark or hold the PR instead (see [git-workflow.md](git-workflow.md)).
 
 ---
 
@@ -196,52 +65,35 @@ All workflows live in `.github/workflows/`.
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| `merging-to-main-restriction.yml` | Any PR | Fails if PR targets `main` and source isn't `release/*` |
-| `lint.yml` | PR to `main` or `release/**` | ESLint, Prettier, TypeScript typecheck |
-| `component-tests.yml` | PR to `main` or `release/**` | Unit + a11y tests; uploads to Codecov |
-| `chromatic.yml` | PR to `main` or `release/**` | Visual regression — only if stories or Storybook config changed |
-| `create-release-branch.yml` | Manual dispatch | Creates `release/X.Y.Z` from specified base branch |
-| `publish.yml` | GitHub Release published _or_ manual dispatch | Checks out `main`; validates tag; runs verify gates; bumps version; builds; publishes to GitHub Packages |
-| `release-changelog.yml` | GitHub Release published _or_ manual dispatch | Generates PR-based changelog; posts to Slack |
-| `back-merge-main-to-release.yml` | `release/*` merged into `main` | Opens PRs from `main` into all higher release branches |
+| `lint.yml` | PR | ESLint, Prettier, TypeScript typecheck |
+| `component-tests.yml` | PR | Unit + a11y tests; uploads to Codecov |
+| `chromatic.yml` | PR | Visual regression — only if stories or Storybook config changed |
+| `release.yml` | Push to `main` / manual dispatch | Runs verify gates, then either updates the Version Packages PR or publishes, tags, creates the GitHub Release, and posts to Slack |
 | `sync-versions-from-vercel.yml` | Schedule / manual | Syncs Storybook version metadata from Vercel |
 
----
+### Required secrets
 
-## Branch Protection
+| Secret | Used for |
+|---|---|
+| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET` | GitHub App that opens the Version Packages PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
+| `GH_PUBLISH_TOKEN` | npm auth for publishing to GitHub Packages |
+| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements |
 
-Managed in [GitHub repository settings](https://github.com/MinneapolisStarTribune/design-system/settings/branches) — not in code.
+## Troubleshooting
 
-### `main`
+**Publish failed after the Version PR merged.** Fix the cause, then re-run `release.yml` via workflow dispatch on `main`. `changeset publish` is idempotent: it only publishes versions that aren't on the registry yet, so re-runs are safe and won't double-publish.
+
+**Version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
+
+**A changeset was wrong (bad bump type or summary).** Changesets are just files in `.changeset/`; edit or delete the file in a normal PR before the release is cut.
+
+**Publishing is a one-way door.** You cannot unpublish from GitHub Packages. The review of the Version Packages PR is the last gate; treat it as such.
+
+## Branch protection (GitHub settings, not code)
 
 | Setting | Value |
 |---|---|
-| Required approvals | 2 |
-| Allowed merge types | Squash, Merge commit |
-| Source branch rule | `release/*` only (CI-enforced) |
-| Restrict creations (tags) | ⚠️ Unchecked — open |
-| Direct pushes | CI bot only (bypass app) |
-
-### `release/*`
-
-| Setting | Value |
-|---|---|
-| Required approvals | 2 |
+| `main` required approvals | 2 |
 | Allowed merge types | Squash, Merge commit |
 | Direct pushes | CI bot only (bypass app) |
-| Feature branches target | This branch (not `main`) |
-
-> The CI bypass app (`GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`) is used by automated workflows to push directly to protected branches. These secrets must only ever live in GitHub repository secrets — never in code.
-
----
-
-## Future State — v2.0.0
-
-The team is evaluating conventional commits and semantic release tooling to automate the parts of this workflow that are currently manual.
-
-| Topic | Detail |
-|---|---|
-| **Conventional Commits** | Standardize prefixes: `feat:`, `fix:`, `chore:`, `BREAKING CHANGE:`. Prerequisite for all automation below. Tool: `commitlint` + lefthook commit-msg hook (lefthook is already in the repo). |
-| **Automated versioning** | `semantic-release`, `changesets`, or `release-please` can determine the next version from commit history and create the GitHub Release automatically — eliminating the manual tag step. |
-| **Automated changelog** | With conventional commits, `release-changelog.yml` can derive accurate changelogs from commit messages rather than PR title heuristics. |
-| **Tooling choice** | `semantic-release` is fully automated and opinionated. `changesets` keeps humans in the loop for version decisions. Given the optional-publish pattern for hotfixes, `changesets` may be the better fit — worth a dedicated discussion before `v2.0.0`. |
+| Tag creation (`@minneapolisstartribune/design-system@*` and `v*`) | Should be restricted to the bypass app via a ruleset, so tag pushes can't trigger or spoof releases |

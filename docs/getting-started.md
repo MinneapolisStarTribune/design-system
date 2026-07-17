@@ -17,7 +17,7 @@ yarn test          # verify everything works
 yarn storybook:web     # opens web Storybook at localhost:6006
 ```
 
-**Git workflow helpers** — this repo uses release branches (`release/*`), not direct work on `main`. Run `./scripts/bootstrap-git-aliases.sh` and follow the printed instructions, or see [git-workflow.md](git-workflow.md) for full details. This gives you `setrelease`, `newbranch`, `syncmybranch`, and `gitpushmybranch`.
+**Git workflow** — trunk-based: branch from `main`, PR back to `main`. PRs that change the published package include a changeset (`yarn changeset`). See [git-workflow.md](git-workflow.md).
 
 **Native (iOS/Android) first-time build** — if you need mobile Storybook, build the dev client once after cloning:
 
@@ -47,7 +47,7 @@ design-system/                          # Repo root (Yarn workspaces + Turbo)
 │       │   └── index.ts                # Public API
 │       ├── tokens/                     # Design token JSON source files
 │       ├── architecture/               # Architecture decision docs
-│       ├── scripts/                    # Build scripts (tokens, icons, git helpers)
+│       ├── scripts/                    # Build scripts (tokens, icons)
 │       ├── .storybook/                 # Storybook configuration
 │       ├── build/                      # Generated token output (not committed)
 │       └── dist/                       # Published package output
@@ -57,19 +57,21 @@ design-system/                          # Repo root (Yarn workspaces + Turbo)
 ## Development Workflow
 
 ```bash
-setrelease                    # Pin the active release branch (one-time)
-newbranch my-feature-name     # Branch from pinned release
+git checkout main && git pull
+git checkout -b feature/my-feature-name
 yarn storybook                # Develop with hot-reload
 yarn test:watch               # Tests in watch mode (separate terminal)
 ```
 
 When you're done, commit as usual. [Lefthook](https://github.com/evilmartians/lefthook) runs Prettier, ESLint, typecheck, related Vitest tests (web), and related Jest tests (native) on staged files automatically — if anything fails, the commit is blocked.
 
+If your change affects the published package, add a changeset before opening the PR:
+
 ```bash
-gitpushmybranch               # Rebase onto release + push
+yarn changeset                # Pick patch/minor/major, write a consumer-facing summary
 ```
 
-Open a PR. CI runs lint, tests, typecheck, and deploys a Storybook preview automatically.
+Push and open a PR to `main`. CI runs lint, tests, typecheck, and deploys a Storybook preview automatically.
 
 **Token changes:** Run `yarn tokens` then restart Storybook.
 
@@ -97,16 +99,6 @@ See [code-standards.md](code-standards.md) for TypeScript, component, and naming
 | `yarn typecheck`       | TypeScript check (no emit)                                                   |
 | `yarn tokens`          | Regenerate tokens from JSON                                                  |
 | `yarn icons`           | Regenerate icon mappings from SVGs                                           |
-
-Git workflow helpers (after [setup](git-workflow.md)):
-
-| Command            | What it does                              |
-| ------------------ | ----------------------------------------- |
-| `setrelease`       | Pin current branch as your release target |
-| `whichrelease`     | Show pinned release branch                |
-| `newbranch <name>` | Branch from pinned release                |
-| `syncmybranch`     | Rebase onto release (no push)             |
-| `gitpushmybranch`  | Rebase + push                             |
 
 ## TypeScript Configuration
 
@@ -149,22 +141,15 @@ Every story file has exactly two stories: **"Configurable"** (interactive contro
 
 ### Deployments (Vercel)
 
-| Environment | URL                                                                       | Trigger                     |
-| ----------- | ------------------------------------------------------------------------- | --------------------------- |
-| Production  | [design-system.startribune.com](https://design-system.startribune.com)    | Merge to `main`             |
-| Stage       | [stage](https://design-system-env-stage-startribune-team-one.vercel.app/) | Merge to lowest `release/*` |
-| Preview     | Unique URL per PR (posted as comment)                                     | Every PR push               |
+| Environment | URL                                                                    | Trigger         |
+| ----------- | ---------------------------------------------------------------------- | --------------- |
+| Production  | [design-system.startribune.com](https://design-system.startribune.com) | Merge to `main` |
+| Preview     | Unique URL per PR (posted as comment)                                  | Every PR push   |
+
+(The stage environment tracked the lowest active `release/*` branch; it was retired with the release-branch workflow.)
 
 ## Releases
 
-Published via [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository). Anyone with write access can create one.
+Managed by [changesets](https://github.com/changesets/changesets). Each PR that changes the package carries a changeset; a bot keeps a "Version Packages" PR open on `main` that accumulates them. Merging that PR is the release: CI runs the `release:verify` gates, builds and publishes the exact merged commit to GitHub Packages, tags it, creates the GitHub Release, and posts to Slack. No manual tagging or version bumps.
 
-1. Create a PR from the release branch into `main`
-2. Once changes are in main, go to GitHub → Releases → "Draft a new release"
-3. Create a semver tag (`0.1.0`, `0.0.8`, etc.)
-4. Write release notes (new features, breaking changes, fixes)
-5. Publish
-6. Once the `Publish` action has succeeded create a new release branch off of main and push that to Github
-   6a. Update our scrum team channel with the new release version name.
-
-CI runs `release:verify` before any version bump, build, or publish step. If a gate fails, the publish workflow stops and logs the failed gate name, command, and exit code. After verification passes, CI extracts the version, updates `package.json`, builds, publishes to GitHub Packages, and commits the version bump back to `main`. No local `yarn publish` needed.
+See [release-runbook.md](release-runbook.md) for the full flow, hotfixes, and troubleshooting.

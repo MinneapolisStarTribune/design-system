@@ -1,0 +1,100 @@
+name: Release
+
+# Trunk-based release flow powered by changesets.
+#
+# On every push to main:
+#   - If there are pending changesets, the changesets action opens/updates the
+#     "Version Packages" PR (version bump + CHANGELOG entries).
+#   - If the push IS the merge of that PR (no pending changesets, version not
+#     yet published), it builds and publishes the exact commit, tags it, and
+#     creates a GitHub Release.
+#
+# Merging the "Version Packages" PR is the release. Everything else is a no-op.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+
+jobs:
+  release:
+    name: Version or publish
+    if: github.repository == 'MinneapolisStarTribune/design-system'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+
+    steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+
+      - name: Run release verification gates (web + native + a11y)
+        run: yarn workspace @minneapolisstartribune/design-system release:verify
+
+      - name: Configure npm auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${GH_PUBLISH_TOKEN}" >> "$HOME/.npmrc"
+        env:
+          GH_PUBLISH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+
+      - name: Create version PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset version
+          publish: yarn release
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+          LEFTHOOK: '0'
+
+      - name: Post release to Slack (Design System)
+        if: steps.changesets.outputs.published == 'true'
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }
+
+      - name: Post release to Slack (Shared UI Library)
+        if: steps.changesets.outputs.published == 'true'
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }
+
+      - name: Post release to Slack (All Releases)
+        if: steps.changesets.outputs.published == 'true'
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }
