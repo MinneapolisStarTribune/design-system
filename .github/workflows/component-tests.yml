@@ -19,6 +19,21 @@ jobs:
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
 
+      # The pre-push lefthook hook normally keeps this file current, but it can
+      # be bypassed (--no-verify, web edits). CI is the backstop, so the
+      # committed matrix always matches the exports on the branch.
+      - name: Check component matrix is current
+        run: |
+          yarn workspace @minneapolisstartribune/design-system generate:component-matrix
+          m=packages/design-system/src/stories/GettingStarted/component-matrix.json
+          node ./node_modules/.bin/prettier --write "$m"
+          if ! git diff --exit-code -- "$m"; then
+            echo "component-matrix.json is stale." >&2
+            echo "Run: yarn workspace @minneapolisstartribune/design-system generate:component-matrix" >&2
+            echo "then commit the result (the pre-push hook normally does this for you)." >&2
+            exit 1
+          fi
+
       - name: Build tokens
         run: yarn workspace @minneapolisstartribune/design-system tokens
 

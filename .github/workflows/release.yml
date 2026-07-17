@@ -14,6 +14,9 @@ name: Release
 on:
   push:
     branches: [main]
+  # Dispatch exists to re-run a failed publish. The job-level ref guard makes
+  # dispatching from any branch other than main a no-op, so the publish path
+  # can never run against a feature branch's commit.
   workflow_dispatch:
 
 concurrency:
@@ -22,7 +25,7 @@ concurrency:
 jobs:
   release:
     name: Version or publish
-    if: github.repository == 'MinneapolisStarTribune/design-system'
+    if: github.ref == 'refs/heads/main' && github.repository == 'MinneapolisStarTribune/design-system'
     runs-on: ubuntu-latest
     permissions:
       contents: write
