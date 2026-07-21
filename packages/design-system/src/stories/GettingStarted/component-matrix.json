@@ -67,7 +67,7 @@
   {
     "component": "PasswordInput",
     "native": false,
-    "web": true
+    "web": false
   },
   {
     "component": "Select",
@@ -77,7 +77,7 @@
   {
     "component": "MultiSelect",
     "native": false,
-    "web": true
+    "web": false
   },
   {
     "component": "Switch",
@@ -97,7 +97,7 @@
   {
     "component": "Skeleton",
     "native": true,
-    "web": true
+    "web": false
   },
   {
     "component": "Toast",
