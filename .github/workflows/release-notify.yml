@@ -1,14 +1,8 @@
 name: Release notifications
 
-# Posts Slack announcements when a GitHub Release is published.
-#
-# Kept separate from release.yml so notifications can be retried (re-run this
-# workflow) without touching the publish job, and so a manually created
-# recovery release (see docs/release-runbook.md) announces itself.
-#
-# Releases created with the default GITHUB_TOKEN would not trigger this
-# workflow (GitHub suppresses recursive workflow runs), but release.yml
-# creates the Release with the GitHub App token, so the event does fire.
+# Posts Slack announcements when a GitHub Release is published. Kept separate
+# from release.yml so a failed notification can be re-run without re-running
+# the publish job.
 
 on:
   release:
