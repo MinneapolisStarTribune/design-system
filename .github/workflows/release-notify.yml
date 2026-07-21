@@ -1,0 +1,57 @@
+name: Release notifications
+
+# Posts Slack announcements when a GitHub Release is published.
+#
+# Kept separate from release.yml so notifications can be retried (re-run this
+# workflow) without touching the publish job, and so a manually created
+# recovery release (see docs/release-runbook.md) announces itself.
+#
+# Releases created with the default GITHUB_TOKEN would not trigger this
+# workflow (GitHub suppresses recursive workflow runs), but release.yml
+# creates the Release with the GitHub App token, so the event does fire.
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  slack:
+    name: Post to Slack
+    if: github.repository == 'MinneapolisStarTribune/design-system' && startsWith(github.event.release.tag_name, '@minneapolisstartribune/design-system@')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${TAG##*@}" >> "$GITHUB_OUTPUT"
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+      - name: Post release to Slack (Design System)
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ steps.version.outputs.version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }
+
+      - name: Post release to Slack (Shared UI Library)
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ steps.version.outputs.version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }
+
+      - name: Post release to Slack (All Releases)
+        uses: slackapi/slack-github-action@v3.0.3
+        with:
+          webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "🚀 Deploying to Production! - Shared UI Library v${{ steps.version.outputs.version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
+            }

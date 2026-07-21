@@ -36,12 +36,12 @@ No changeset is needed for docs, CI, or Storybook-only changes. If you want to r
 2. Sanity-check the bump type (e.g. a release full of fixes should be a patch; an accidental `major` changeset should be caught here).
 3. Get the usual 2 approvals and merge it.
 
-Everything after the merge is automatic (`.github/workflows/release.yml`):
+Everything after the merge is automatic (`.github/workflows/release.yml`, then `release-notify.yml`):
 
 1. `release:verify` gates run (web + native + a11y)
 2. The package builds and publishes to GitHub Packages **from the merged commit**
 3. The commit is tagged `@minneapolisstartribune/design-system@X.Y.Z` and a GitHub Release is created with the changelog
-4. Slack channels are notified (design system, shared UI library, all releases)
+4. Publishing the Release triggers `release-notify.yml`, which posts to Slack (design system, shared UI library, all releases)
 
 Release cadence is whatever the team wants: merging the Version Packages PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
@@ -63,25 +63,34 @@ For a long-running breaking-change effort, changesets has [prerelease mode](http
 
 All workflows live in `.github/workflows/`.
 
-| Workflow | Trigger | What it does |
-|---|---|---|
-| `lint.yml` | PR | ESLint, Prettier, TypeScript typecheck |
-| `component-tests.yml` | PR | Unit + a11y tests; uploads to Codecov |
-| `chromatic.yml` | PR | Visual regression — only if stories or Storybook config changed |
-| `release.yml` | Push to `main` / manual dispatch | Runs verify gates, then either updates the Version Packages PR or publishes, tags, creates the GitHub Release, and posts to Slack |
-| `sync-versions-from-vercel.yml` | Schedule / manual | Syncs Storybook version metadata from Vercel |
+| Workflow                        | Trigger                          | What it does                                                                                                      |
+| ------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `lint.yml`                      | PR                               | ESLint, Prettier, TypeScript typecheck                                                                            |
+| `component-tests.yml`           | PR                               | Unit + a11y tests; uploads to Codecov                                                                             |
+| `chromatic.yml`                 | PR                               | Visual regression — only if stories or Storybook config changed                                                   |
+| `release.yml`                   | Push to `main` / manual dispatch | Runs verify gates, then either updates the Version Packages PR or publishes, tags, and creates the GitHub Release |
+| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to Slack (design system, shared UI library, all releases)                          |
+| `sync-versions-from-vercel.yml` | Schedule / manual                | Syncs Storybook version metadata from Vercel                                                                      |
 
 ### Required secrets
 
-| Secret | Used for |
-|---|---|
-| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET` | GitHub App that opens the Version Packages PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
-| `GH_PUBLISH_TOKEN` | npm auth for publishing to GitHub Packages |
-| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements |
+| Secret                                                                                                 | Used for                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`                                                            | GitHub App that opens the Version Packages PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
+| `GH_PUBLISH_TOKEN`                                                                                     | npm auth for publishing to GitHub Packages                                                                                       |
+| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements                                                                                                            |
 
 ## Troubleshooting
 
-**Publish failed after the Version PR merged.** Fix the cause, then re-run `release.yml` via workflow dispatch on `main`. `changeset publish` is idempotent: it only publishes versions that aren't on the registry yet, so re-runs are safe and won't double-publish.
+**Publish failed before anything reached the registry** (verify gates, build, npm error). Fix the cause, then re-run `release.yml` via workflow dispatch on `main`. `changeset publish` only publishes versions that aren't on the registry yet, so re-runs are safe and won't double-publish.
+
+**Publish succeeded but the tag or GitHub Release is missing.** A re-run will **not** recover this: changesets sees the version already on the registry, reports nothing published, and the re-run goes green without doing anything. Recover by hand from a checkout of the released commit on `main`:
+
+1. Missing tag: `yarn changeset tag && git push --tags`
+2. Missing Release: `gh release create '@minneapolisstartribune/design-system@X.Y.Z'` with the `CHANGELOG.md` entry for that version as the notes
+3. Slack needs no manual step; it fires when the Release is published (`release-notify.yml`)
+
+**Slack posts failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
 
 **Version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
 
@@ -91,9 +100,9 @@ All workflows live in `.github/workflows/`.
 
 ## Branch protection (GitHub settings, not code)
 
-| Setting | Value |
-|---|---|
-| `main` required approvals | 2 |
-| Allowed merge types | Squash, Merge commit |
-| Direct pushes | CI bot only (bypass app) |
+| Setting                                                           | Value                                                                                               |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `main` required approvals                                         | 2                                                                                                   |
+| Allowed merge types                                               | Squash, Merge commit                                                                                |
+| Direct pushes                                                     | CI bot only (bypass app)                                                                            |
 | Tag creation (`@minneapolisstartribune/design-system@*` and `v*`) | Should be restricted to the bypass app via a ruleset, so tag pushes can't trigger or spoof releases |

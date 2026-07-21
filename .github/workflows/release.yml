@@ -68,36 +68,3 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           YARN_NPM_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
           LEFTHOOK: '0'
-
-      - name: Post release to Slack (Design System)
-        if: steps.changesets.outputs.published == 'true'
-        uses: slackapi/slack-github-action@v3.0.3
-        with:
-          webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
-          webhook-type: webhook-trigger
-          payload: |
-            {
-              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
-            }
-
-      - name: Post release to Slack (Shared UI Library)
-        if: steps.changesets.outputs.published == 'true'
-        uses: slackapi/slack-github-action@v3.0.3
-        with:
-          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
-          webhook-type: webhook-trigger
-          payload: |
-            {
-              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
-            }
-
-      - name: Post release to Slack (All Releases)
-        if: steps.changesets.outputs.published == 'true'
-        uses: slackapi/slack-github-action@v3.0.3
-        with:
-          webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
-          webhook-type: webhook-trigger
-          payload: |
-            {
-              "text": "🚀 Deploying to Production! - Shared UI Library v${{ fromJSON(steps.changesets.outputs.publishedPackages)[0].version }}\n\nFull changelog: https://github.com/MinneapolisStarTribune/design-system/releases"
-            }
