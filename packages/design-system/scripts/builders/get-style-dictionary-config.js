@@ -16,16 +16,16 @@ const NATIVE_COLOR_TRANSFORM = 'color/react-native-rgba';
  * through unchanged.
  */
 function toReactNativeRgba(value) {
-  const match = typeof value === 'string' && value.match(
-    /^rgb\(\s*([\d.]+)(?:\s+|\s*,\s*)([\d.]+)(?:\s+|\s*,\s*)([\d.]+)(?:(?:\s*\/\s*|\s+|\s*,\s*)([\d.]+)(%?))?\s*\)$/i
+  if (typeof value !== 'string') return value;
+
+  const match = value.match(
+    /^rgb\(\s*(?<red>[\d.]+)(?:\s+|\s*,\s*)(?<green>[\d.]+)(?:\s+|\s*,\s*)(?<blue>[\d.]+)(?:(?:\s*\/\s*|\s+|\s*,\s*)(?<alpha>[\d.]+)(?<percent>%?))?\s*\)$/i
   );
 
-  if (!match || match[4] === undefined) {
-    return value;
-  }
+  if (!match?.groups?.alpha) return value;
 
-  const [, red, green, blue, alpha, percentSign] = match;
-  const alphaNumber = percentSign ? Number(alpha) / 100 : Number(alpha);
+  const { red, green, blue, alpha, percent } = match.groups;
+  const alphaNumber = percent ? Number(alpha) / 100 : Number(alpha);
   return `rgba(${red}, ${green}, ${blue}, ${alphaNumber})`;
 }
 
@@ -182,4 +182,3 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
 }
 
 module.exports = getStyleDictionaryConfig;
-module.exports.toReactNativeRgba = toReactNativeRgba;

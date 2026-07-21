@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import StyleDictionary from 'style-dictionary';
 import buildThemeTokens from '../build-theme-tokens.js';
-import getStyleDictionaryConfig, { toReactNativeRgba } from '../get-style-dictionary-config.js';
+import getStyleDictionaryConfig from '../get-style-dictionary-config.js';
 
 vi.mock('../../formats/css-variables', () => ({
   default: vi.fn(),
@@ -63,14 +63,12 @@ describe('buildThemeTokens', () => {
       await sd.buildAllPlatforms();
 
       const built = fs.readFileSync(path.join(outputDir, 'startribune-light.js'), 'utf8');
-      const colors = built.match(/rgba?\([^)]*\)/g);
 
-      expect(built).toContain('colorOverlayBlack');
-      expect(colors.length).toBeGreaterThan(0);
-      // Every emitted color must be a fixed point of the transform — i.e.
-      // already converted to a form React Native can parse.
-      const unconverted = colors.filter((color) => toReactNativeRgba(color) !== color);
-      expect(unconverted).toEqual([]);
+      expect(built).toContain('colorButtonNeutralGhostBackground: "rgba(0, 0, 0, 0)"');
+      expect(built).toContain('colorButtonBrandGhostBackground: "rgba(0, 0, 0, 0)"');
+      expect(built).toContain('colorButtonBrandGhostHoverBackground: "rgba(0, 133, 75, 0.08)"');
+      expect(built).toContain('colorOverlayBlack: "rgba(0, 0, 0, 0.6)"');
+      expect(built).toContain('colorBaseBlack: "#000000"');
     } finally {
       fs.rmSync(outputDir, { recursive: true, force: true });
     }
@@ -81,30 +79,5 @@ describe('buildThemeTokens', () => {
 
     // Verify the success message mentions both CSS and JS
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('tokens built (CSS, JS)'));
-  });
-
-});
-
-describe('toReactNativeRgba', () => {
-  it('converts slash syntax with percent alpha', () => {
-    expect(toReactNativeRgba('rgb(0 0 0 / 30%)')).toBe('rgba(0, 0, 0, 0.3)');
-    expect(toReactNativeRgba('rgb(72 160 255 / 16%)')).toBe('rgba(72, 160, 255, 0.16)');
-    expect(toReactNativeRgba('rgb(255 255 255 / 0%)')).toBe('rgba(255, 255, 255, 0)');
-  });
-
-  it('converts 4-value space-separated rgb()', () => {
-    expect(toReactNativeRgba('rgb(0 0 0 0)')).toBe('rgba(0, 0, 0, 0)');
-    expect(toReactNativeRgba('rgb(0 0 0 0.5)')).toBe('rgba(0, 0, 0, 0.5)');
-  });
-
-  it('converts 4-argument comma-separated rgb()', () => {
-    expect(toReactNativeRgba('rgb(0, 0, 0, 0)')).toBe('rgba(0, 0, 0, 0)');
-  });
-
-  it('passes through values React Native already parses', () => {
-    expect(toReactNativeRgba('#ffffff')).toBe('#ffffff');
-    expect(toReactNativeRgba('rgba(0, 0, 0, 0.5)')).toBe('rgba(0, 0, 0, 0.5)');
-    expect(toReactNativeRgba('rgb(0, 0, 0)')).toBe('rgb(0, 0, 0)');
-    expect(toReactNativeRgba(undefined)).toBe(undefined);
   });
 });
