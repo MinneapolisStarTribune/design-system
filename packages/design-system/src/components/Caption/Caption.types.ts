@@ -64,6 +64,11 @@ export interface CaptionProps extends CaptionBaseProps, Pick<BaseProps, 'classNa
    * Fired after Buy Reprint analytics when the purchase link is clicked.
    */
   onPurchaseLinkClick?: React.MouseEventHandler<HTMLAnchorElement>;
+
+  /**
+   * Applied to both the previous and next navigation buttons, letting consumers override their styles.
+   */
+  navButtonClassName?: string;
 }
 
 /** Native Caption — RN view styling and press handler for Buy Reprint. */

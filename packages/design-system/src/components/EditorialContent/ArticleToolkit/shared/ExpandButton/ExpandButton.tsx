@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { ExpandIcon, type IconColor, type IconSize } from '@/icons';
 import styles from './ExpandButton.module.scss';
 
@@ -8,6 +9,7 @@ interface ExpandButtonProps {
   color?: IconColor;
   size?: IconSize;
   dataTestId?: string;
+  className?: string;
 }
 
 export const ExpandButton: React.FC<ExpandButtonProps> = ({
@@ -16,11 +18,12 @@ export const ExpandButton: React.FC<ExpandButtonProps> = ({
   color = 'on-dark-primary',
   size = 'large',
   dataTestId = 'expand-button',
+  className,
 }) => {
   return (
     <button
       type="button"
-      className={styles['expand-button']}
+      className={classNames(styles['expand-button'], className)}
       aria-label={ariaLabel}
       aria-haspopup="dialog"
       onClick={onClick}

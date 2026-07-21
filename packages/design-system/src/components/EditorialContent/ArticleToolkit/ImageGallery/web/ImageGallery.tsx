@@ -67,6 +67,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
   wrapperClassName,
   captionClassName,
   controlsClassName,
+  navButtonClassName,
+  expandButtonClassName,
+  closeButtonClassName,
   dataTestId = 'image-gallery',
   loop,
 }) => {
@@ -242,6 +245,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
                         onClick={(e) => onExpand(index, e.currentTarget)}
                         ariaLabel={`Expand image ${index + 1} of ${total}`}
                         dataTestId={`${dataTestId}-expand-button-${index}`}
+                        className={expandButtonClassName}
                       />
                     )}
                   </div>
@@ -268,6 +272,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
             purchaseLink={activePurchaseLink}
             {...navigationProps}
             className={classNames(styles.caption, captionClassName)}
+            navButtonClassName={navButtonClassName}
             dataTestId="image-gallery-caption"
           />
         </div>
@@ -291,6 +296,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<ImageProps>> = ({
           {...navigationProps}
           onClose={onCloseDialog}
           dataTestId={`${dataTestId}-dialog`}
+          navButtonClassName={navButtonClassName}
+          closeButtonClassName={closeButtonClassName}
         />
       )}
     </>

@@ -25,6 +25,7 @@ export const Caption: React.FC<CaptionProps> = ({
   onPurchaseLinkClick,
   onNavigationClick,
   className,
+  navButtonClassName,
   dataTestId = 'caption',
   ...accessibilityProps
 }) => {
@@ -100,7 +101,7 @@ export const Caption: React.FC<CaptionProps> = ({
           icon={<ChevronLeftIcon />}
           onClick={handlePrevious}
           isDisabled={!canGoPrevious}
-          className={styles.navButton}
+          className={classNames(styles.navButton, navButtonClassName)}
           aria-label={`Previous image (${Math.max((currentIndex ?? 1) - 1, 1)} of ${totalItems})`}
         />
 
@@ -111,7 +112,7 @@ export const Caption: React.FC<CaptionProps> = ({
           icon={<ChevronRightIcon />}
           onClick={handleNext}
           isDisabled={!canGoNext}
-          className={styles.navButton}
+          className={classNames(styles.navButton, navButtonClassName)}
           aria-label={`Next image (${Math.min(
             (currentIndex ?? 1) + 1,
             totalItems ?? 1
