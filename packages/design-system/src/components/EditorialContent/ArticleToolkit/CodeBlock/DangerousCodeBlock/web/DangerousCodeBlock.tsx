@@ -1,20 +1,23 @@
 'use client';
 
-import React, { useRef, useLayoutEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import styles from './DangerousCodeBlock.module.scss';
 import type { BaseDangerousCodeBlockProps } from '../DangerousCodeBlock.types';
-import { cleanMarkup } from '../DangerousCodeBlock.utils';
+import { activateScripts, cleanMarkup, neutralizeScripts } from '../DangerousCodeBlock.utils';
 
 export type DangerousCodeBlockProps = BaseDangerousCodeBlockProps;
 
 /**
- * DangerousCodeBlock renders raw HTML using React's
- * `dangerouslySetInnerHTML` and excutes any `<scripts> elements
- * contained within that markup.
+ * Renders trusted raw HTML via `dangerouslySetInnerHTML` and runs any <script>
+ * tags inside it.
  *
- * Security: The provided `markup` must come from a trusted source. This component
- * intentionally bypasses React's HTML escaping and can executes scripts.
+ * Scripts are held inert during render and run once on the client (see
+ * neutralizeScripts / activateScripts), so a fresh server-rendered load doesn't
+ * run them twice — the flash this component fixes.
+ *
+ * Security: `markup` must come from a trusted source; this bypasses React's
+ * escaping and executes scripts.
  */
 export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   markup,
@@ -26,48 +29,17 @@ export const DangerousCodeBlock: React.FC<DangerousCodeBlockProps> = ({
   ...accessibilityProps
 }) => {
   const elRef = useRef<HTMLDivElement>(null);
-  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const content = useMemo(() => {
-    return cleanMarkup(markup, cleanQuotes);
+    return neutralizeScripts(cleanMarkup(markup, cleanQuotes));
   }, [markup, cleanQuotes]);
 
-  const executeScripts = useCallback(() => {
-    const el = elRef.current;
-
-    if (!el) return;
-
-    const scripts = el.querySelectorAll('script');
-    if (scripts.length === 0) return;
-
-    scripts.forEach((oldScript) => {
-      const newScript = document.createElement('script');
-
-      Array.from(oldScript.attributes).forEach((attr) => {
-        newScript.setAttribute(attr.name, attr.value);
-      });
-
-      if (oldScript.src) {
-        newScript.src = oldScript.src;
-      } else {
-        newScript.textContent = oldScript.textContent;
-      }
-
-      if (!newScript.defer) newScript.defer = true;
-
-      oldScript.parentNode?.replaceChild(newScript, oldScript);
-    });
-  }, []);
-
-  useLayoutEffect(() => {
-    if (timeout.current) clearTimeout(timeout.current);
-
-    timeout.current = setTimeout(executeScripts, 500);
-
-    return () => {
-      if (timeout.current) clearTimeout(timeout.current);
-    };
-  }, [content, executeScripts]);
+  // Keyed on content so unrelated re-renders don't re-run scripts — only new markup does.
+  useEffect(() => {
+    if (elRef.current) {
+      activateScripts(elRef.current);
+    }
+  }, [content]);
 
   return (
     <div
