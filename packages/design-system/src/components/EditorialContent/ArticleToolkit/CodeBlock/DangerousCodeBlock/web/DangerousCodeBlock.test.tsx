@@ -1,5 +1,7 @@
+import { renderToStaticMarkup } from 'react-dom/server';
 import { renderWithProvider } from '@/test-utils/render';
 import { DangerousCodeBlock } from './DangerousCodeBlock';
+import { DEFERRED_SCRIPT_TYPE } from '../DangerousCodeBlock.utils';
 import styles from './DangerousCodeBlock.module.scss';
 
 describe('DangerousCodeBlock', () => {
@@ -49,16 +51,24 @@ describe('DangerousCodeBlock', () => {
     expect(container.innerHTML).toContain('"Hello"');
   });
 
-  it('renders script tags in markup', () => {
-    const scriptMarkup = `
-      <div id="test-script">Test</div>
-      <script>window.__TEST_SCRIPT__ = true;</script>
-    `;
+  it('keeps scripts inert in server-rendered HTML so the browser skips them on parse', () => {
+    const html = renderToStaticMarkup(
+      <DangerousCodeBlock markup={`<script>window.__RAN__ = true;</script>`} />
+    );
 
-    renderWithProvider(<DangerousCodeBlock markup={scriptMarkup} />);
+    expect(html).toContain(`type="${DEFERRED_SCRIPT_TYPE}"`);
+    // No live <script> the browser would execute while parsing the page.
+    expect(html).not.toMatch(/<script(?![^>]*x-deferred-script)/i);
+  });
 
-    const scripts = document.querySelectorAll('script');
+  it('activates scripts on the client after mount', () => {
+    const scriptMarkup = `<div id="chart"></div><script>window.__RAN__ = true;</script>`;
+    const { getByTestId } = renderWithProvider(<DangerousCodeBlock markup={scriptMarkup} />);
 
-    expect(scripts.length).toBeGreaterThan(0);
+    const wrapper = getByTestId('dangerous-code-block');
+
+    // The inert marker is gone and a real script with its original type is in its place.
+    expect(wrapper.querySelector(`script[type="${DEFERRED_SCRIPT_TYPE}"]`)).toBeNull();
+    expect(wrapper.querySelector('script')?.type).toBe('text/javascript');
   });
 });
