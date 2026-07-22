@@ -205,6 +205,7 @@ export {
 export { Caption } from '@/components/Caption/web/Caption';
 export * from '@/components/EditorialContent/ArticleToolkit/index';
 export { SwiperCarousel } from '@/components/SwiperCarousel/web/SwiperCarousel';
+export { useSwiperContext } from '@/components/SwiperCarousel/web/SwiperCarousel.context';
 export { type SwiperCarouselProps } from '@/components/SwiperCarousel/web/SwiperCarousel.types';
 export { TOAST_VARIANTS, type ToastProps, type ToastVariant } from '@/components/Toast/Toast.types';
 export { Toast } from '@/components/Toast/web/Toast';
