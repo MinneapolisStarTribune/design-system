@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { AvatarIcon, ArrowRightIcon } from '@/icons/index.native';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
@@ -38,6 +38,30 @@ describe('Button (native)', () => {
     render(<Button onPress={() => {}}>Submit</Button>, { wrapper });
     expect(screen.getByText('Submit')).toBeOnTheScreen();
     expect(screen.getByRole('button')).toBeOnTheScreen();
+  });
+
+  it('applies caps typography when capitalize is enabled', () => {
+    const theme = {
+      ...nativeTokenFixtures.startribune.light.theme,
+      ...nativeTokenFixtures.startribune.light.typography,
+    };
+    const buttonSurface = getNativeButtonSurface(theme, 'neutral', 'filled', false, 'light');
+
+    render(
+      <Button capitalize onPress={() => {}}>
+        Submit request
+      </Button>,
+      { wrapper }
+    );
+
+    const flattenedStyle = StyleSheet.flatten(screen.getByText('Submit request').props.style);
+
+    expect(flattenedStyle).toEqual(
+      expect.objectContaining({
+        textTransform: 'uppercase',
+        color: buttonSurface.color,
+      })
+    );
   });
 
   it('calls onPress when pressed', () => {
