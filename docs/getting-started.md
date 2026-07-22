@@ -150,6 +150,6 @@ Every story file has exactly two stories: **"Configurable"** (interactive contro
 
 ## Releases
 
-Managed by [changesets](https://github.com/changesets/changesets). Each PR that changes the package carries a changeset; a bot keeps a "Version Packages" PR open on `main` that accumulates them. Merging that PR is the release: CI runs the `release:verify` gates, builds and publishes the exact merged commit to GitHub Packages, tags it, creates the GitHub Release, and posts to Slack. No manual tagging or version bumps.
+Managed by [changesets](https://github.com/changesets/changesets). Each PR that changes the package carries a changeset; a bot keeps a "chore: version packages" PR open on `main` that accumulates them. Merging that PR is the release: CI runs the `release:verify` gates, builds and publishes the exact merged commit to GitHub Packages, tags it, creates the GitHub Release, and posts an announcement to Slack. No manual tagging or version bumps.
 
 See [release-runbook.md](release-runbook.md) for the full flow, hotfixes, and troubleshooting.

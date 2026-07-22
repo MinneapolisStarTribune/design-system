@@ -3,11 +3,11 @@ name: Component Tests
 on:
   workflow_call:
   pull_request:
-    branches: [main, 'release/**']
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true  # Cancel old runs when new commits pushed
+  cancel-in-progress: true # Cancel old runs when new commits pushed
 
 jobs:
   tests:
@@ -23,16 +23,7 @@ jobs:
       # be bypassed (--no-verify, web edits). CI is the backstop, so the
       # committed matrix always matches the exports on the branch.
       - name: Check component matrix is current
-        run: |
-          yarn workspace @minneapolisstartribune/design-system generate:component-matrix
-          m=packages/design-system/src/stories/GettingStarted/component-matrix.json
-          node ./node_modules/.bin/prettier --write "$m"
-          if ! git diff --exit-code -- "$m"; then
-            echo "component-matrix.json is stale." >&2
-            echo "Run: yarn workspace @minneapolisstartribune/design-system generate:component-matrix" >&2
-            echo "then commit the result (the pre-push hook normally does this for you)." >&2
-            exit 1
-          fi
+        run: ./packages/design-system/scripts/component-matrix.sh check
 
       - name: Build tokens
         run: yarn workspace @minneapolisstartribune/design-system tokens
@@ -61,9 +52,9 @@ jobs:
         uses: dorny/test-reporter@v2
         if: always()
         with:
-          name: "Unit Test Report"
-          path: "packages/design-system/reports/unit-junit.xml"
-          reporter: "java-junit"
+          name: 'Unit Test Report'
+          path: 'packages/design-system/reports/unit-junit.xml'
+          reporter: 'java-junit'
           fail-on-error: true
 
       - name: Run a11y tests with coverage
@@ -90,7 +81,7 @@ jobs:
         uses: dorny/test-reporter@v2
         if: always()
         with:
-          name: "Accessibility Test Report"
-          path: "packages/design-system/reports/a11y-junit.xml"
-          reporter: "java-junit"
+          name: 'Accessibility Test Report'
+          path: 'packages/design-system/reports/a11y-junit.xml'
+          reporter: 'java-junit'
           fail-on-error: true

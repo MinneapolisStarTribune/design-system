@@ -4,12 +4,13 @@ name: Release
 #
 # On every push to main:
 #   - If there are pending changesets, the changesets action opens/updates the
-#     "Version Packages" PR (version bump + CHANGELOG entries).
+#     "chore: version packages" PR (version bump + CHANGELOG entries).
 #   - If the push IS the merge of that PR (no pending changesets, version not
 #     yet published), it builds and publishes the exact commit, tags it, and
 #     creates a GitHub Release.
 #
-# Merging the "Version Packages" PR is the release. Everything else is a no-op.
+# Merging the "chore: version packages" PR is the release. Everything else is
+# a no-op.
 
 on:
   push:

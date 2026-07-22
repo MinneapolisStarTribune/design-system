@@ -10,7 +10,7 @@
 
 Releases are managed by [changesets](https://github.com/changesets/changesets). `main` is the single source of truth: every PR targets `main`, and the published package is built from the exact `main` commit that gets tagged. There are no release branches.
 
-The flow in one paragraph: each PR that changes the package includes a **changeset** (a small file declaring patch/minor/major plus a summary). A bot keeps a **"Version Packages" PR** open against `main` that accumulates pending changesets into a version bump and CHANGELOG entries. **Merging that PR is the release.** CI then builds, publishes to GitHub Packages, tags the commit, creates a GitHub Release, and posts to Slack. No manual tagging, no manual version bumps.
+The flow in one paragraph: each PR that changes the package includes a **changeset** (a small file declaring patch/minor/major plus a summary). A bot keeps a **"chore: version packages"** PR (the version PR) open against `main` that accumulates pending changesets into a version bump and CHANGELOG entries. **Merging that PR is the release.** CI then builds, publishes to GitHub Packages, tags the commit, creates a GitHub Release, and announces it in Slack. No manual tagging, no manual version bumps.
 
 > The old flow (release branches, `merging-to-main-restriction`, manual GitHub Releases triggering `publish.yml`) was removed in the changesets migration. Git history for this file has the old runbook if you ever need it.
 
@@ -30,6 +30,8 @@ yarn changeset
 
 No changeset is needed for docs, CI, or Storybook-only changes. If you want to record explicitly that a PR needs no release, `yarn changeset --empty` documents that.
 
+CI enforces this: the **Require changeset** check (`changeset-check.yml`) fails any PR that changes the published package without a changeset. An empty changeset satisfies it.
+
 ## Cutting a release
 
 1. Look at the open **"chore: version packages"** PR. Its diff is the release: the version bump, and every pending changeset folded into `CHANGELOG.md`.
@@ -41,15 +43,15 @@ Everything after the merge is automatic (`.github/workflows/release.yml`, then `
 1. `release:verify` gates run (web + native + a11y)
 2. The package builds and publishes to GitHub Packages **from the merged commit**
 3. The commit is tagged `@minneapolisstartribune/design-system@X.Y.Z` and a GitHub Release is created with the changelog
-4. Publishing the Release triggers `release-notify.yml`, which posts to Slack (design system, shared UI library, all releases)
+4. Publishing the Release triggers `release-notify.yml`, which posts an announcement with a link to the Release to Slack (design system, shared UI library, all releases). The changelog itself lives in the Release body and `CHANGELOG.md`, not in the Slack message.
 
-Release cadence is whatever the team wants: merging the Version Packages PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
+Release cadence is whatever the team wants: merging the version PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
 > **Tag format change:** tags are now `@minneapolisstartribune/design-system@1.14.0` (created by changesets) instead of `v1.14.0`. Historical `v*` tags up to `v1.13.1` remain and still resolve to the old releases.
 
 ## Hotfixes
 
-**Fix to the latest published version** (the normal case): trunk-based makes this trivial. Merge the fix PR with a `patch` changeset, then merge the Version Packages PR. Two merges, and the patch is out. If unreleased feature work is already on `main`, it rides along; if it was merged dark (unexported), that's harmless. The old publish-vs-absorb decision still exists in a simpler form: merge the Version PR now (publish) or let the fix wait for the next scheduled release (absorb).
+**Fix to the latest published version** (the normal case): trunk-based makes this trivial. Merge the fix PR with a `patch` changeset, then merge the version PR. Two merges, and the patch is out. If unreleased feature work is already on `main`, it rides along; if it was merged dark (unexported), that's harmless. The old publish-vs-absorb decision still exists in a simpler form: merge the version PR now (publish) or let the fix wait for the next scheduled release (absorb).
 
 **Fix to an older published version** (rare): branch from the old tag, cherry-pick the fix, bump the patch version by hand, and publish manually with `yarn npm publish` from `packages/design-system`. This is off the paved road on purpose; in practice consumers upgrade to latest.
 
@@ -63,22 +65,23 @@ For a long-running breaking-change effort, changesets has [prerelease mode](http
 
 All workflows live in `.github/workflows/`.
 
-| Workflow                        | Trigger                          | What it does                                                                                                      |
-| ------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `lint.yml`                      | PR                               | ESLint, Prettier, TypeScript typecheck                                                                            |
-| `component-tests.yml`           | PR                               | Unit + a11y tests; uploads to Codecov                                                                             |
-| `chromatic.yml`                 | PR                               | Visual regression — only if stories or Storybook config changed                                                   |
-| `release.yml`                   | Push to `main` / manual dispatch | Runs verify gates, then either updates the Version Packages PR or publishes, tags, and creates the GitHub Release |
-| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to Slack (design system, shared UI library, all releases)                          |
-| `sync-versions-from-vercel.yml` | Schedule / manual                | Syncs Storybook version metadata from Vercel                                                                      |
+| Workflow                        | Trigger                          | What it does                                                                                             |
+| ------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `lint.yml`                      | PR                               | ESLint, Prettier, TypeScript typecheck                                                                   |
+| `component-tests.yml`           | PR                               | Unit + a11y tests; uploads to Codecov                                                                    |
+| `chromatic.yml`                 | PR                               | Visual regression — only if stories or Storybook config changed                                          |
+| `changeset-check.yml`           | PR                               | Fails PRs that change the published package without a changeset                                          |
+| `release.yml`                   | Push to `main` / manual dispatch | Runs verify gates, then either updates the version PR or publishes, tags, and creates the GitHub Release |
+| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to Slack (design system, shared UI library, all releases)                 |
+| `sync-versions-from-vercel.yml` | Schedule / manual                | Syncs Storybook version metadata from Vercel                                                             |
 
 ### Required secrets
 
-| Secret                                                                                                 | Used for                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`                                                            | GitHub App that opens the Version Packages PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
-| `GH_PUBLISH_TOKEN`                                                                                     | npm auth for publishing to GitHub Packages                                                                                       |
-| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements                                                                                                            |
+| Secret                                                                                                 | Used for                                                                                                                |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`                                                            | GitHub App that opens the version PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
+| `GH_PUBLISH_TOKEN`                                                                                     | npm auth for publishing to GitHub Packages                                                                              |
+| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements                                                                                                   |
 
 ## Troubleshooting
 
@@ -90,19 +93,22 @@ All workflows live in `.github/workflows/`.
 2. Missing Release: `gh release create '@minneapolisstartribune/design-system@X.Y.Z'` with the `CHANGELOG.md` entry for that version as the notes
 3. Slack needs no manual step; it fires when the Release is published (`release-notify.yml`)
 
+**The version PR merged, but nothing was published and no tag exists.** The release run was probably canceled: the `release-main` concurrency group keeps only the newest queued run, so a merge landing while the version PR's run was still waiting cancels it, and the replacement run sees the new merge's changesets and goes back to updating the version PR. A dispatch re-run won't help for the same reason. Either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
+
 **Slack posts failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
 
-**Version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
+**The version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
 
 **A changeset was wrong (bad bump type or summary).** Changesets are just files in `.changeset/`; edit or delete the file in a normal PR before the release is cut.
 
-**Publishing is a one-way door.** You cannot unpublish from GitHub Packages. The review of the Version Packages PR is the last gate; treat it as such.
+**Publishing is a one-way door.** You cannot unpublish from GitHub Packages. The review of the version PR is the last gate; treat it as such.
 
 ## Branch protection (GitHub settings, not code)
 
 | Setting                                                           | Value                                                                                               |
 | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | `main` required approvals                                         | 2                                                                                                   |
+| Required checks                                                   | Lint, component tests, and the `Require changeset` job from `changeset-check.yml`                   |
 | Allowed merge types                                               | Squash, Merge commit                                                                                |
 | Direct pushes                                                     | CI bot only (bypass app)                                                                            |
 | Tag creation (`@minneapolisstartribune/design-system@*` and `v*`) | Should be restricted to the bypass app via a ruleset, so tag pushes can't trigger or spoof releases |

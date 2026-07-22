@@ -1,6 +1,6 @@
 # Git Workflow
 
-We use **trunk-based development**: `main` is the single source of truth, all work branches from `main`, and all PRs target `main`. Releases are cut from `main` by merging the automated "Version Packages" PR (see [release-runbook.md](release-runbook.md)).
+We use **trunk-based development**: `main` is the single source of truth, all work branches from `main`, and all PRs target `main`. Releases are cut from `main` by merging the automated "chore: version packages" PR (see [release-runbook.md](release-runbook.md)).
 
 > **Migrating from the old flow?** This repo previously used release branches (`release/X.Y.Z`) with helper aliases (`setrelease`, `newbranch`, `syncmybranch`, `gitpushmybranch`). Those are gone. Delete the `source ".../git-workflow.sh"` line from your `~/.zshrc`/`~/.bashrc`, and branch from `main` like any other repo.
 
@@ -40,7 +40,7 @@ yarn changeset
 
 Pick the bump type (patch/minor/major) and write a one-or-two-sentence summary. That summary becomes the CHANGELOG entry and release notes, so write it for consumers of the library. Commit the generated file in `.changeset/` with your PR.
 
-Changes that don't affect the published package (docs, CI, Storybook-only work) don't need a changeset.
+Changes that don't affect the published package (docs, CI, Storybook-only work) don't need a changeset. CI enforces this: the **Require changeset** check fails a package-changing PR that has no changeset. If the PR intentionally needs no release, `yarn changeset --empty` records that and satisfies the check.
 
 ## What about work that shouldn't ship yet?
 
@@ -52,4 +52,4 @@ Merging to `main` means the code goes out in the next release. If your work isn'
 
 ## Releasing
 
-You don't release from your feature branch. The changesets bot keeps a "Version Packages" PR open against `main` that accumulates all pending changesets. Merging that PR bumps the version, updates the CHANGELOG, publishes to GitHub Packages, tags the commit, and announces in Slack. Details in [release-runbook.md](release-runbook.md).
+You don't release from your feature branch. The changesets bot keeps a "chore: version packages" PR open against `main` that accumulates all pending changesets. Merging that PR bumps the version, updates the CHANGELOG, publishes to GitHub Packages, tags the commit, and announces in Slack. Details in [release-runbook.md](release-runbook.md).
