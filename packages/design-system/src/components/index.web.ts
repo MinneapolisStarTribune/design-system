@@ -39,7 +39,16 @@ export {
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
+export type {
+  MultiSelectOption,
+  MultiSelectProps,
+} from './FormControl/MultiSelect/MultiSelect.types';
+export { MultiSelect } from './FormControl/MultiSelect/web/MultiSelect';
 export { NumberInput, type NumberInputProps } from './FormControl/NumberInput/web/NumberInput';
+export {
+  PasswordInput,
+  type PasswordInputProps,
+} from './FormControl/PasswordInput/web/PasswordInput';
 export {
   RadioGroup,
   type RadioGroupProps,
@@ -88,6 +97,15 @@ export type { PopoverProps } from './Popover/Popover.types';
 export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
+export {
+  Skeleton,
+  SKELETON_VARIANTS,
+  type SkeletonProps,
+  type SkeletonVariant,
+} from './Skeleton/web/Skeleton';
+export { Tooltip } from './Tooltip/Tooltip';
+export type { TooltipProps } from './Tooltip/Tooltip.types';
+export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
