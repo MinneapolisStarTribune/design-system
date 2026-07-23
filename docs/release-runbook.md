@@ -65,23 +65,35 @@ For a long-running breaking-change effort, changesets has [prerelease mode](http
 
 All workflows live in `.github/workflows/`.
 
-| Workflow                        | Trigger                          | What it does                                                                                             |
-| ------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `lint.yml`                      | PR                               | ESLint, Prettier, TypeScript typecheck                                                                   |
-| `component-tests.yml`           | PR                               | Unit + a11y tests; uploads to Codecov                                                                    |
-| `chromatic.yml`                 | PR                               | Visual regression — only if stories or Storybook config changed                                          |
-| `changeset-check.yml`           | PR                               | Fails PRs that change the published package without a changeset                                          |
-| `release.yml`                   | Push to `main` / manual dispatch | Runs verify gates, then either updates the version PR or publishes, tags, and creates the GitHub Release |
-| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to the design system Slack channel                                        |
-| `sync-versions-from-vercel.yml` | Schedule / manual                | Syncs Storybook version metadata from Vercel                                                             |
+| Workflow                         | Trigger                                    | What it does                                                                                             |
+| -------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `lint.yml`                       | PR                                         | ESLint, Prettier, TypeScript typecheck                                                                   |
+| `component-tests.yml`            | PR                                         | Unit + a11y tests; uploads to Codecov                                                                    |
+| `chromatic.yml`                  | PR                                         | Visual regression — only if stories or Storybook config changed                                          |
+| `changeset-check.yml`            | PR                                         | Fails PRs that change the published package without a changeset                                          |
+| `release.yml`                    | Push to `main` / manual dispatch           | Runs verify gates, then either updates the version PR or publishes, tags, and creates the GitHub Release |
+| `release-notify.yml`             | GitHub Release published                   | Posts the release announcement to the design system Slack channel                                        |
+| `storybook-versioned-deploy.yml` | GitHub Release published / manual          | Builds the released tag's Storybook and deploys it to Vercel production                                  |
+| `sync-versions-from-vercel.yml`  | Schedule / after versioned deploy / manual | Rebuilds the version dropdown's `versions.json` from Vercel production deployments                       |
+
+### Storybook environments
+
+Vercel serves three Storybook environments:
+
+- **Production** (`design-system.startribune.com`) — the latest published release. Only `storybook-versioned-deploy.yml` updates it; the Vercel production branch is deliberately set to a branch that never exists so merges to `main` cannot deploy here.
+- **Stage** (`stage-design-system.startribune.com`) — trunk. The `stage` custom environment in the Vercel dashboard tracks `main`, so every merge deploys it through the git integration.
+- **Preview** — every PR branch gets a hashed preview URL through the git integration.
+
+The version dropdown in the Storybook toolbar is built from production deployments: each versioned deploy is stamped with a `vX.Y.Z` label in its metadata, and `sync-versions-from-vercel.yml` turns those into `packages/design-system/.storybook/versions.json` (committed to `main`). The toolbar shows the five most recent entries.
 
 ### Required secrets
 
-| Secret                                      | Used for                                                                                                                |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET` | GitHub App that opens the version PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
-| `GH_PUBLISH_TOKEN`                          | npm auth for publishing to GitHub Packages                                                                              |
-| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`       | Release announcements                                                                                                   |
+| Secret                                                 | Used for                                                                                                                |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`            | GitHub App that opens the version PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
+| `GH_PUBLISH_TOKEN`                                     | npm auth for publishing to GitHub Packages                                                                              |
+| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`                  | Release announcements                                                                                                   |
+| `VERCEL_TOKEN` / `VERCEL_PROJECT_ID` / `VERCEL_ORG_ID` | Storybook deploys to Vercel and the version dropdown sync                                                               |
 
 ## Troubleshooting
 
@@ -96,6 +108,8 @@ All workflows live in `.github/workflows/`.
 **The version PR merged, but nothing was published and no tag exists.** Release runs queue in order (`queue: max` in `release.yml`), so this should only happen if the run was canceled by hand or never started. If nothing package-changing has landed on `main` since, a dispatch re-run publishes it. If newer changesets have already landed, a dispatch run just updates the version PR instead, so either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
 
 **The Slack post failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
+
+**The Storybook production deploy failed, or a version is missing from the dropdown.** Dispatch `storybook-versioned-deploy.yml` with the release tag (either format works: `@minneapolisstartribune/design-system@X.Y.Z` or `vX.Y.Z`). The dropdown updates on the next `sync-versions-from-vercel.yml` run, which fires automatically after the deploy; dispatch it if you don't want to wait.
 
 **The version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
 

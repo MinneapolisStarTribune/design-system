@@ -1,0 +1,60 @@
+name: Storybook versioned deploy
+
+# Builds the released tag's Storybook and deploys it to the Vercel production
+# environment, stamped with a normalized `vX.Y.Z` label in the deployment
+# metadata. `sync-versions-from-vercel.yml` reads that label to build the
+# version dropdown's versions.json.
+
+on:
+  release:
+    types: [published]
+  # Dispatch exists to retry a failed deploy or backfill an older tag.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to deploy (@minneapolisstartribune/design-system@X.Y.Z or vX.Y.Z)'
+        required: true
+
+# Deploys must land in release order and every release needs its own
+# deployment, so queue instead of replacing pending runs.
+concurrency:
+  group: storybook-versioned-deploy
+  queue: max
+
+jobs:
+  deploy:
+    name: Deploy Storybook to Vercel
+    if: github.repository == 'MinneapolisStarTribune/design-system'
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - name: Derive version label from tag
+        id: version
+        # @minneapolisstartribune/design-system@1.14.0 -> v1.14.0, v1.13.1 -> v1.13.1
+        run: |
+          VERSION="${RELEASE_TAG##*@}"
+          echo "label=v${VERSION#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+
+      - name: Build Storybook
+        run: yarn workspace @minneapolisstartribune/design-system build-storybook
+
+      - name: Deploy Storybook to Vercel
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          npx vercel deploy ./packages/design-system/storybook-static \
+            --token="$VERCEL_TOKEN" \
+            --yes \
+            --prod \
+            --meta "githubCommitRef=${{ steps.version.outputs.label }}"
