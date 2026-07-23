@@ -47,6 +47,15 @@ jobs:
       - name: Build Storybook
         run: yarn workspace @minneapolisstartribune/design-system build-storybook
 
+      - name: Mark the upload as prebuilt static output
+        # The Vercel project's build settings exist for the stage/preview git
+        # deploys and also apply to CLI uploads. This per-deployment override
+        # stops Vercel from re-running "storybook build" against the already
+        # built static files (which fails: the upload has no package.json).
+        run: |
+          printf '{ "framework": null, "buildCommand": null, "outputDirectory": null }\n' \
+            > packages/design-system/storybook-static/vercel.json
+
       - name: Deploy Storybook to Vercel
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
