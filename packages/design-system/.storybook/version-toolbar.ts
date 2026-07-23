@@ -4,6 +4,7 @@
 import { addons } from 'storybook/preview-api';
 import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 import versionsList from './versions.json';
+import { version as currentVersion } from '../package.json';
 import { shouldShowVersionsToolbar, VERSION_TOOLBAR_UI_TITLE } from './version-toolbar-hosts';
 
 type VersionsEntry = { version: string; url: string };
@@ -12,10 +13,14 @@ const versions = versionsList as VersionsEntry[];
 
 const VERSION_TOOLBAR_LIMIT = 5;
 
-const recentVersions = versions.slice(0, VERSION_TOOLBAR_LIMIT);
+// A redeployed tag fetches a versions.json that already lists its own
+// version; drop it so the dropdown doesn't repeat the "Current" entry.
+const recentVersions = versions
+  .filter((v) => v.version !== `v${currentVersion}`)
+  .slice(0, VERSION_TOOLBAR_LIMIT);
 
 const versionToolbarItems = [
-  { value: 'current', title: 'Current' },
+  { value: 'current', title: `Current (v${currentVersion})` },
   ...recentVersions.map((v) => ({ value: v.version, title: v.version })),
 ];
 
