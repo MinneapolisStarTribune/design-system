@@ -1,117 +1,55 @@
 # Git Workflow
 
-We use a **main → release/\* → feature** branching strategy designed to keep production stable while allowing fast, low-friction feature development.
+We use **trunk-based development**: `main` is the single source of truth, all work branches from `main`, and all PRs target `main`. Releases are cut from `main` by merging the automated "chore: version packages" PR (see [release-runbook.md](release-runbook.md)).
 
-This document explains:
-
-- How branches are expected to flow
-- How the team selects the active release branch
-- The helper scripts and shell commands that make this easy
+> **Migrating from the old flow?** This repo previously used release branches (`release/X.Y.Z`) with helper aliases (`setrelease`, `newbranch`, `syncmybranch`, `gitpushmybranch`). Those are gone. Delete the `source ".../git-workflow.sh"` line from your `~/.zshrc`/`~/.bashrc`, and branch from `main` like any other repo.
 
 ## Branch Roles
 
-### `main` (Production)
+### `main`
 
-- Represents what is currently in production
-- Protected branch
-- Merges into `main` only come from `release/*`
-
-### `release/*` (Pre‑Prod)
-
-Examples:
-
-```
-release/0.1.0
-release/0.1.1
-```
-
-- Represents the next production release
-- Stage always points at the _lowest_ active release branch (i.e. `release/0.1.0` not `release/0.2.0`)
-- QA and final fixes happen here
-- Feature branches rebase and merge onto this branch, **not `main`**
+- The single source of truth. Every commit on `main` has passed CI and review.
+- Protected: 2 approvals required, squash or merge commit (no rebase).
+- Deploys the production Storybook on every merge.
+- Releases to GitHub Packages are tagged directly on `main` commits, so a tag always points at exactly the code that was published.
 
 ### Feature branches
 
-- Named freely (`feature/foo`, `bugfix/bar`, etc.)
-- Always branch **from the active release branch**
-- Regularly rebased onto the release branch
+- Named freely (`feature/foo`, `fix/SUS-123-bar`, etc.)
+- Branch **from `main`**, PR **to `main`**.
+- Rebase or merge `main` in as needed; short-lived branches are the goal.
 
-## Pinning a Release Branch
+There are no other long-lived branches. No release branches, no develop branch, no back-merges.
 
-**You must pin a release branch before using workflow commands.** This ensures everyone is working against the same release target and prevents accidental drift.
+## Day-to-day
 
-### How to pin
-
-1. Checkout the release branch you want to work with:
-
-   ```sh
-   git checkout release/0.2.0
-   ```
-
-2. Pin it:
-
-   ```sh
-   setrelease
-   ```
-
-This creates a local file:
-
-```
-.git/.release-branch
+```sh
+git checkout main && git pull
+git checkout -b feature/my-thing
+# ...work, commit...
+git push -u origin feature/my-thing
 ```
 
-Containing:
+Open a PR to `main`. CI runs lint, tests, typecheck, Chromatic, and a Storybook preview deploy.
 
+**If your PR changes the published package** (`packages/design-system`), add a changeset before merging:
+
+```sh
+yarn changeset
 ```
-release/0.2.0
-```
 
-From this point on:
+Pick the bump type (patch/minor/major) and write a one-or-two-sentence summary. That summary becomes the CHANGELOG entry and release notes, so write it for consumers of the library. Commit the generated file in `.changeset/` with your PR.
 
-- All workflow commands (`syncmybranch`, `newbranch <name>` etc.) will use this release branch
-- The file is **local only** (never committed)
-- Each developer controls their own pin
+Changes that don't affect the published package (docs, CI, Storybook-only work) don't need a changeset. CI enforces this: the **Require changeset** check fails a package-changing PR that has no changeset. If the PR intentionally needs no release, `yarn changeset --empty` records that and satisfies the check.
 
-### When to change it
+## What about work that shouldn't ship yet?
 
-After we have bumped up our version number, the release captain will create a new release branch and announce it (loudly!) to the team in slack.
+Merging to `main` means the code goes out in the next release. If your work isn't ready to be public:
 
-## Setup
+1. **Merge it dark** (preferred): land the code but don't export it from the public API (`src/index.ts`), or gate it behind a prop/flag. Unexported code is unreachable by consumers and tree-shakes away.
+2. **Hold the PR**: fine for a few days. A branch held for weeks is a sign it should be merged dark instead.
+3. **Prerelease branch** (rare, e.g. a v2 breaking-change stream): changesets supports publishing `-next.N` versions from a dedicated branch. See the runbook before reaching for this.
 
-1. Run the bootstrap script to get your personalized source path:
+## Releasing
 
-   ```sh
-   ./packages/design-system/scripts/bootstrap-git-aliases.sh
-   ```
-
-2. Add the printed `source "..."` line to the end of `~/.zshrc` (or `~/.bashrc`).
-
-3. Reload your shell (`source ~/.zshrc`) and verify:
-
-   ```sh
-   whichrelease   # "command not found" means the path is wrong
-   ```
-
-4. Pin your first release branch:
-
-   ```sh
-   git checkout release/0.1.0   # or whichever release branch exists
-   setrelease
-   whichrelease                 # should print the pinned branch
-   ```
-
-## Available Commands
-
-After setup, these commands are available:
-
-- `setrelease` - Pin the current release branch locally (required before using other commands)
-- `whichrelease` - Show which release branch is currently pinned
-- `newbranch <name>` - Create a new feature branch from the pinned release branch
-- `syncmybranch` - Sync your branch with the pinned release branch (stash, update release branch, rebase, restore). Does NOT push.
-- `gitpushmybranch` - Sync your branch with the pinned release branch, then push to origin. Safe - won't push main/release branches.
-
-These are all defined and live in the below file. If anything needs to change, update it there.
-
-```
-scripts/git-workflow.sh
-```
+You don't release from your feature branch. The changesets bot keeps a "chore: version packages" PR open against `main` that accumulates all pending changesets. Merging that PR bumps the version, updates the CHANGELOG, publishes to GitHub Packages, tags the commit, and announces in Slack. Details in [release-runbook.md](release-runbook.md).

@@ -3,7 +3,7 @@ name: Lint
 on:
   workflow_call:
   pull_request:
-    branches: [main, 'release/**']
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      
+
       - name: Configure Node environment
         uses: ./.github/actions/configure-workflow-node-environment
 
