@@ -13,7 +13,11 @@ const versions = versionsList as VersionsEntry[];
 
 const VERSION_TOOLBAR_LIMIT = 5;
 
-const recentVersions = versions.slice(0, VERSION_TOOLBAR_LIMIT);
+// A redeployed tag fetches a versions.json that already lists its own
+// version; drop it so the dropdown doesn't repeat the "Current" entry.
+const recentVersions = versions
+  .filter((v) => v.version !== `v${currentVersion}`)
+  .slice(0, VERSION_TOOLBAR_LIMIT);
 
 const versionToolbarItems = [
   { value: 'current', title: `Current (v${currentVersion})` },

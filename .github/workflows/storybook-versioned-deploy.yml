@@ -56,7 +56,8 @@ jobs:
           VERCEL_SYNC_TARGET: production
         run: |
           if [ -f packages/design-system/scripts/sync-versions-from-vercel.js ]; then
-            node packages/design-system/scripts/sync-versions-from-vercel.js
+            node packages/design-system/scripts/sync-versions-from-vercel.js \
+              || echo "::warning::versions.json refresh failed; deploying with the committed copy"
           else
             echo "sync script not present at this tag; keeping committed versions.json"
           fi
