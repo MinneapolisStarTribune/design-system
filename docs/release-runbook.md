@@ -80,7 +80,7 @@ All workflows live in `.github/workflows/`.
 
 Vercel serves three Storybook environments:
 
-- **Production** (`design-system.startribune.com`) — the latest published release. Only `storybook-versioned-deploy.yml` updates it; the Vercel production branch is deliberately set to a branch that never exists so merges to `main` cannot deploy here.
+- **Production** (`design-system.startribune.com`) — the latest published release. Only `storybook-versioned-deploy.yml` updates it. The Vercel production branch is `production-release`, an empty placeholder branch that exists only because Vercel requires the production branch to be real; nothing ever pushes to it (`vercel.json` disables git deploys for it as a backstop), so merges to `main` cannot deploy here.
 - **Stage** (`stage-design-system.startribune.com`) — trunk. The `stage` custom environment in the Vercel dashboard tracks `main`, so every merge deploys it through the git integration.
 - **Preview** — every PR branch gets a hashed preview URL through the git integration.
 
