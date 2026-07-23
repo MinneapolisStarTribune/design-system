@@ -48,7 +48,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   const { track } = useAnalytics();
   const isLightbox = variant === 'lightbox';
   const isCompactLayout = width < TABLET_BREAKPOINT;
-  const navButtonSize = width < DESKTOP_NAV_BREAKPOINT ? 'small' : 'large';
+  const navButtonSize = width < DESKTOP_NAV_BREAKPOINT ? 'small' : 'medium';
 
   const styles = useNativeStyles((theme) => createCaptionStyles(theme, variant));
 
