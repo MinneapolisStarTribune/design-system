@@ -20,8 +20,12 @@ on:
   # can never run against a feature branch's commit.
   workflow_dispatch:
 
+# Every push to main is a release decision and must run, in order. Without
+# queue: max, GitHub keeps only one pending run per group and a newer push
+# replaces it, which can cancel a version-PR merge's publish run.
 concurrency:
   group: release-main
+  queue: max
 
 jobs:
   release:

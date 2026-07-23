@@ -53,7 +53,7 @@ Release cadence is whatever the team wants: merging the version PR weekly, per s
 
 **Fix to the latest published version** (the normal case): trunk-based makes this trivial. Merge the fix PR with a `patch` changeset, then merge the version PR. Two merges, and the patch is out. If unreleased feature work is already on `main`, it rides along; if it was merged dark (unexported), that's harmless. The old publish-vs-absorb decision still exists in a simpler form: merge the version PR now (publish) or let the fix wait for the next scheduled release (absorb).
 
-**Fix to an older published version** (rare): branch from the old tag, cherry-pick the fix, bump the patch version by hand, and publish manually with `yarn npm publish` from `packages/design-system`. This is off the paved road on purpose; in practice consumers upgrade to latest.
+**Fix to an older published version** (rare): branch from the old tag, cherry-pick the fix, and bump the patch version by hand. Before publishing, run the checkout's own install, verify, and build steps (the `publish.yml` in that checkout has the exact commands) and confirm `packages/design-system/dist/` contains the entrypoints. `dist` is gitignored and `yarn npm publish` does not run a build, so skipping this publishes a package with no code in it, and there is no unpublish. Then publish with `yarn npm publish` from `packages/design-system`. This is off the paved road on purpose; in practice consumers upgrade to latest.
 
 ## Prereleases (optional, for big streams like v2)
 
@@ -93,7 +93,7 @@ All workflows live in `.github/workflows/`.
 2. Missing Release: `gh release create '@minneapolisstartribune/design-system@X.Y.Z'` with the `CHANGELOG.md` entry for that version as the notes
 3. Slack needs no manual step; it fires when the Release is published (`release-notify.yml`)
 
-**The version PR merged, but nothing was published and no tag exists.** The release run was probably canceled: the `release-main` concurrency group keeps only the newest queued run, so a merge landing while the version PR's run was still waiting cancels it, and the replacement run sees the new merge's changesets and goes back to updating the version PR. A dispatch re-run won't help for the same reason. Either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
+**The version PR merged, but nothing was published and no tag exists.** Release runs queue in order (`queue: max` in `release.yml`), so this should only happen if the run was canceled by hand or never started. If nothing package-changing has landed on `main` since, a dispatch re-run publishes it. If newer changesets have already landed, a dispatch run just updates the version PR instead, so either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
 
 **The Slack post failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
 

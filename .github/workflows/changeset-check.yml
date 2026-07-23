@@ -25,11 +25,14 @@ jobs:
         run: |
           # Files under packages/design-system that ship in the published
           # artifact: excludes tests, stories, snapshots, Storybook config,
-          # docs, and repo tooling under scripts/ and architecture/.
+          # docs, and repo-only tooling in scripts/. Build scripts (builders/,
+          # formats/, create-root-entry-error.cjs, fetch-fonts.js) generate
+          # dist content, so they are NOT exempt.
           package_changes=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- packages/design-system \
             | grep -Ev '\.(test|stories)\.[jt]sx?$' \
             | grep -Ev '\.snap$' \
-            | grep -Ev '^packages/design-system/(\.storybook|architecture|scripts|src/stories)/' \
+            | grep -Ev '^packages/design-system/(\.storybook|architecture|src/stories)/' \
+            | grep -Ev '^packages/design-system/scripts/(builders/build-if-needed|component-matrix|generate-component-matrix|minimal-reporter|release-verify|should-rebuild|sync-versions-from-vercel)' \
             | grep -Ev '\.md$' || true)
 
           if [ -z "$package_changes" ]; then
@@ -37,7 +40,9 @@ jobs:
             exit 0
           fi
 
-          changesets=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- '.changeset/*.md' \
+          # --diff-filter=A: only an added changeset satisfies the check;
+          # deleting or editing an existing one does not.
+          changesets=$(git diff --name-only --diff-filter=A "origin/${BASE_REF}...HEAD" -- '.changeset/*.md' \
             | grep -v '^\.changeset/README\.md$' || true)
 
           if [ -n "$changesets" ]; then
