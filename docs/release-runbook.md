@@ -47,7 +47,7 @@ Everything after the merge is automatic (`.github/workflows/release.yml`, then `
 
 Release cadence is whatever the team wants: merging the version PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
-> **Tag format change:** tags are now `@minneapolisstartribune/design-system@1.15.0` (created by changesets) instead of `v1.15.0`. Historical `v*` tags up to `v1.14.0` remain and still resolve to the old releases.
+> **Tag format change:** tags are now `@minneapolisstartribune/design-system@1.14.0` (created by changesets) instead of `v1.14.0`. Historical `v*` tags up to `v1.13.1` remain and still resolve to the old releases.
 
 ## Hotfixes
 
