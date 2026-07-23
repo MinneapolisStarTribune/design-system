@@ -1,9 +1,8 @@
 name: Release notifications
 
-# Posts Slack announcements when a GitHub Release is published. Kept separate
+# Posts a Slack announcement when a GitHub Release is published. Kept separate
 # from release.yml so a failed notification can be re-run without re-running
-# the publish job. Each post runs even if an earlier channel's webhook fails,
-# so one bad webhook only loses its own channel.
+# the publish job.
 
 on:
   release:
@@ -33,24 +32,6 @@ jobs:
         uses: slackapi/slack-github-action@v3.0.3
         with:
           webhook: ${{ secrets.SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK }}
-          webhook-type: webhook-trigger
-          payload: |
-            { "text": ${{ toJSON(steps.message.outputs.text) }} }
-
-      - name: Post release to Slack (Shared UI Library)
-        if: ${{ !cancelled() }}
-        uses: slackapi/slack-github-action@v3.0.3
-        with:
-          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
-          webhook-type: webhook-trigger
-          payload: |
-            { "text": ${{ toJSON(steps.message.outputs.text) }} }
-
-      - name: Post release to Slack (All Releases)
-        if: ${{ !cancelled() }}
-        uses: slackapi/slack-github-action@v3.0.3
-        with:
-          webhook: ${{ secrets.SLACK_ALL_RELEASES_WEBHOOK }}
           webhook-type: webhook-trigger
           payload: |
             { "text": ${{ toJSON(steps.message.outputs.text) }} }

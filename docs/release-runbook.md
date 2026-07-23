@@ -43,7 +43,7 @@ Everything after the merge is automatic (`.github/workflows/release.yml`, then `
 1. `release:verify` gates run (web + native + a11y)
 2. The package builds and publishes to GitHub Packages **from the merged commit**
 3. The commit is tagged `@minneapolisstartribune/design-system@X.Y.Z` and a GitHub Release is created with the changelog
-4. Publishing the Release triggers `release-notify.yml`, which posts an announcement with a link to the Release to Slack (design system, shared UI library, all releases). The changelog itself lives in the Release body and `CHANGELOG.md`, not in the Slack message.
+4. Publishing the Release triggers `release-notify.yml`, which posts an announcement with a link to the Release to the design system Slack channel. The changelog itself lives in the Release body and `CHANGELOG.md`, not in the Slack message.
 
 Release cadence is whatever the team wants: merging the version PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
@@ -72,7 +72,7 @@ All workflows live in `.github/workflows/`.
 | `chromatic.yml`                 | PR                               | Visual regression — only if stories or Storybook config changed                                          |
 | `changeset-check.yml`           | PR                               | Fails PRs that change the published package without a changeset                                          |
 | `release.yml`                   | Push to `main` / manual dispatch | Runs verify gates, then either updates the version PR or publishes, tags, and creates the GitHub Release |
-| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to Slack (design system, shared UI library, all releases)                 |
+| `release-notify.yml`            | GitHub Release published         | Posts the release announcement to the design system Slack channel                                        |
 | `sync-versions-from-vercel.yml` | Schedule / manual                | Syncs Storybook version metadata from Vercel                                                             |
 
 ### Required secrets
@@ -81,7 +81,7 @@ All workflows live in `.github/workflows/`.
 | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | `GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`                                                            | GitHub App that opens the version PR and pushes tags. Must only ever live in GitHub repository secrets — never in code. |
 | `GH_PUBLISH_TOKEN`                                                                                     | npm auth for publishing to GitHub Packages                                                                              |
-| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`, `SLACK_SHARED_UI_LIBRARY_WEBHOOK`, `SLACK_ALL_RELEASES_WEBHOOK` | Release announcements                                                                                                   |
+| `SLACK_DESIGN_SYSTEM_RELEASE_WEBHOOK`                                                                  | Release announcements                                                                                                   |
 
 ## Troubleshooting
 
@@ -95,7 +95,7 @@ All workflows live in `.github/workflows/`.
 
 **The version PR merged, but nothing was published and no tag exists.** The release run was probably canceled: the `release-main` concurrency group keeps only the newest queued run, so a merge landing while the version PR's run was still waiting cancels it, and the replacement run sees the new merge's changesets and goes back to updating the version PR. A dispatch re-run won't help for the same reason. Either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
 
-**Slack posts failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
+**The Slack post failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
 
 **The version PR has a conflict.** The bot force-updates its branch on every push to `main`; conflicts resolve themselves on the next merge to `main`. If it's stuck, close the PR and the bot will recreate it.
 
