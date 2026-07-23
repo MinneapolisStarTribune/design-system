@@ -36,6 +36,12 @@ export interface ImageGalleryProps<TImageProps> extends ImageGalleryBaseProps<TI
   wrapperClassName?: string;
   captionClassName?: string;
   controlsClassName?: string;
+  /** Applied to the previous/next navigation buttons, in both the inline caption and the expanded dialog. */
+  navButtonClassName?: string;
+  /** Applied to each slide's expand-to-dialog button (only rendered when `expandable` is true). */
+  expandButtonClassName?: string;
+  /** Applied to the expanded dialog's close button (only rendered when `expandable` is true). */
+  closeButtonClassName?: string;
 }
 export interface ImageGalleryNativeProps<TImageProps> extends ImageGalleryBaseProps<TImageProps> {
   imageStyle?: StyleProp<ImageStyle>;

@@ -63,8 +63,8 @@
   top: var(--spacing-16);
   right: var(--spacing-16);
   z-index: 10;
-  width: 44px;
-  height: 44px;
+  width: var(--spacing-button-md);
+  height: var(--spacing-button-md);
   border-radius: var(--radius-full);
   border: none;
   outline: none;

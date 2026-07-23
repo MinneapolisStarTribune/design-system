@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect } from 'react';
+import classNames from 'classnames';
 import { Caption, Image } from '@/components/index.web';
 import { CloseIcon } from '@/icons';
 import type { CtaLinkProps } from '@/types';
@@ -24,6 +25,10 @@ export interface ImageDialogProps {
   onNext?: () => void;
   loopNavigation?: boolean;
   dataTestId?: string;
+  /** Applied to the dialog's close button, alongside its default styles. */
+  closeButtonClassName?: string;
+  /** Applied to the previous/next navigation buttons rendered by the dialog's Caption. */
+  navButtonClassName?: string;
 }
 
 // Keep track of active scroll locks
@@ -57,6 +62,8 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
   onNext,
   loopNavigation = false,
   dataTestId = 'image-dialog',
+  closeButtonClassName,
+  navButtonClassName,
 }) => {
   const hasCaptionContent = Boolean(
     caption?.trim() ||
@@ -119,7 +126,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
       </h2>
       <button
         type="button"
-        className={styles['dialog-close-button']}
+        className={classNames(styles['dialog-close-button'], closeButtonClassName)}
         aria-label="Close expanded image"
         onClick={onClose}
         data-testid={`${dataTestId}-close-button`}
@@ -158,6 +165,7 @@ export const ImageDialog: React.FC<ImageDialogProps> = ({
             onNext={onNext}
             loopNavigation={loopNavigation}
             className={styles['dialog-caption']}
+            navButtonClassName={navButtonClassName}
             dataTestId={`${dataTestId}-caption`}
           />
         )}
