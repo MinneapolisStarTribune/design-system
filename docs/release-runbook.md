@@ -43,7 +43,7 @@ Everything after the merge is automatic (`.github/workflows/release.yml`, then `
 1. `release:verify` gates run (web + native + a11y)
 2. The package builds and publishes to GitHub Packages **from the merged commit**
 3. The commit is tagged `@minneapolisstartribune/design-system@X.Y.Z` and a GitHub Release is created with the changelog
-4. Publishing the Release triggers `release-notify.yml`, which posts an announcement with a link to the Release to the design system Slack channel. The changelog itself lives in the Release body and `CHANGELOG.md`, not in the Slack message.
+4. Publishing the Release triggers `release-notify.yml`, which posts an announcement with a link to the Release to the shared UI library Slack channel. The changelog itself lives in the Release body and `CHANGELOG.md`, not in the Slack message.
 
 Release cadence is whatever the team wants: merging the version PR weekly, per sprint, or on demand are all fine. Unmerged, it just keeps accumulating changes and updating itself.
 
@@ -72,7 +72,7 @@ All workflows live in `.github/workflows/`.
 | `chromatic.yml`                  | PR                                         | Visual regression — only if stories or Storybook config changed                                          |
 | `changeset-check.yml`            | PR                                         | Fails PRs that change the published package without a changeset                                          |
 | `release.yml`                    | Push to `main` / manual dispatch           | Runs verify gates, then either updates the version PR or publishes, tags, and creates the GitHub Release |
-| `release-notify.yml`             | GitHub Release published                   | Posts the release announcement to the design system Slack channel                                        |
+| `release-notify.yml`             | GitHub Release published / manual          | Posts the release announcement to the shared UI library Slack channel                                    |
 | `storybook-versioned-deploy.yml` | GitHub Release published / manual          | Builds the released tag's Storybook and deploys it to Vercel production                                  |
 | `sync-versions-from-vercel.yml`  | Schedule / after versioned deploy / manual | Rebuilds the version dropdown's `versions.json` from Vercel production deployments                       |
 
