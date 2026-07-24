@@ -42,6 +42,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
   onNavigationClick,
   dataTestId = 'caption',
   style,
+  navButtonStyle,
   ...accessibilityProps
 }) => {
   const { width } = useWindowDimensions();
@@ -139,7 +140,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
           icon={<ChevronLeftIcon />}
           onPress={handlePrevious}
           isDisabled={!canGoPrevious}
-          style={styles.navButton}
+          style={[styles.navButton, navButtonStyle]}
           testID={`${dataTestId}-previous`}
           accessibilityLabel={`Previous image (${previousIndex} of ${totalItems})`}
         />
@@ -150,7 +151,7 @@ export const Caption: React.FC<CaptionNativeProps> = ({
           icon={<ChevronRightIcon />}
           onPress={handleNext}
           isDisabled={!canGoNext}
-          style={styles.navButton}
+          style={[styles.navButton, navButtonStyle]}
           testID={`${dataTestId}-next`}
           accessibilityLabel={`Next image (${nextIndex} of ${totalItems})`}
         />

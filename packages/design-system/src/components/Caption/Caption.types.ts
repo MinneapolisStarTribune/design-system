@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { AccessibilityProps, BaseProps, CtaLinkProps } from '../../types';
 import type { NativeViewStylingProps } from '../../types/native-base-props';
 
@@ -74,4 +75,6 @@ export interface CaptionProps extends CaptionBaseProps, Pick<BaseProps, 'classNa
 /** Native Caption — RN view styling and press handler for Buy Reprint. */
 export type CaptionNativeProps = NativeViewStylingProps<CaptionBaseProps> & {
   onPurchaseLinkClick?: () => void;
+  /** Applied to both the previous and next navigation buttons, letting consumers override their styles. */
+  navButtonStyle?: StyleProp<ViewStyle>;
 };
