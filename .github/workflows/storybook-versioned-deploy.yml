@@ -14,6 +14,11 @@ on:
       tag:
         description: 'Release tag to deploy (@minneapolisstartribune/design-system@X.Y.Z or vX.Y.Z)'
         required: true
+      skip_domain:
+        description: 'Deploy without assigning the production domain (backfilling an old version into the dropdown)'
+        required: false
+        default: false
+        type: boolean
 
 # Deploys must land in release order and every release needs its own
 # deployment, so queue instead of replacing pending runs.
@@ -83,5 +88,5 @@ jobs:
           npx vercel deploy ./packages/design-system/storybook-static \
             --token="$VERCEL_TOKEN" \
             --yes \
-            --prod \
+            --prod ${{ inputs.skip_domain && '--skip-domain' || '' }} \
             --meta "githubCommitRef=${{ steps.version.outputs.label }}"
