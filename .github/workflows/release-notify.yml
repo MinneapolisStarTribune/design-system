@@ -43,6 +43,14 @@ jobs:
         uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
-          webhook-type: webhook-trigger
+          # The secret is a classic incoming webhook (messages post as the
+          # Engineering Changelog app). Declaring webhook-trigger made the
+          # action misread Slack's plain "ok" reply as a failure and retry
+          # five delivered posts into six messages.
+          webhook-type: incoming-webhook
+          # At-most-once delivery regardless: a failed post fails the run
+          # (errors: true) and workflow_dispatch is the resend path.
+          errors: true
+          retries: '0'
           payload: |
             { "text": ${{ toJSON(steps.message.outputs.text) }} }
