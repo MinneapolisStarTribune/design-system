@@ -68,28 +68,30 @@
   }
 
   /* Icon-only button styles - perfectly round buttons with specific dimensions */
+  /* Sized via --icon-only-button-size so consumers can override with a plain class instead
+     of out-specificity-ing this 3-class selector. */
   &.icon-only {
     &.large {
-      height: 44px;
-      width: 44px;
+      height: var(--icon-only-button-size, 44px);
+      width: var(--icon-only-button-size, 44px);
       padding: var(--spacing-6);
     }
-    
+
     &.medium {
-      height: 40px;
-      width: 40px;
+      height: var(--icon-only-button-size, 40px);
+      width: var(--icon-only-button-size, 40px);
       padding: var(--spacing-8);
     }
-    
+
     &.small {
-      height: 32px;
-      width: 32px;
+      height: var(--icon-only-button-size, 32px);
+      width: var(--icon-only-button-size, 32px);
       padding: var(--spacing-6);
     }
-    
+
     &.x-small {
-      height: 24px;
-      width: 24px;
+      height: var(--icon-only-button-size, 24px);
+      width: var(--icon-only-button-size, 24px);
       padding: var(--spacing-4);
     }
   }
