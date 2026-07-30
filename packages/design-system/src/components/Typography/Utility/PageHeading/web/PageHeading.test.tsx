@@ -33,6 +33,17 @@ describe('PageHeading', () => {
     expect(getByTestId('h2-heading').tagName).toBe('H2');
   });
 
+  it('supports semantic tag override independent of importance style', () => {
+    const { getByTestId } = renderWithProvider(
+      <PageHeading importance={2} as="h1" dataTestId="semantic-heading">
+        Semantic H1, H2 Style
+      </PageHeading>
+    );
+
+    expect(getByTestId('semantic-heading').tagName).toBe('H1');
+    expect(getByTestId('semantic-heading')).toHaveClass('typography-utility-page-h2');
+  });
+
   it('applies correct class for page heading with h1', () => {
     const { getByTestId } = renderWithProvider(
       <PageHeading importance={1} dataTestId="heading">
