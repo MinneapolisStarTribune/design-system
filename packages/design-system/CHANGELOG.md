@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 1.15.0
+
+### Minor Changes
+
+- [#419](https://github.com/MinneapolisStarTribune/design-system/pull/419) [`614c1a0`](https://github.com/MinneapolisStarTribune/design-system/commit/614c1a091c7d159551627a4e9504475e8455d57a) Thanks [@YuvarajPattabi13](https://github.com/YuvarajPattabi13)! - Add as prop to PageHeading web so semantic heading tag can differ from importance-based visual style.
+
 ## 1.14.0
 
 ### Minor Changes
