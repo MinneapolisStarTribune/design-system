@@ -7,7 +7,7 @@
  * (e.g. meta.githubCommitRef for tag deploys).
  *
  * Requires env: VERCEL_TOKEN, VERCEL_PROJECT_ID, VERCEL_ORG_ID (team)
- * Optional: VERCEL_SYNC_TARGET - deployment target (default: stage for testing, switch to production when ready)
+ * Optional: VERCEL_SYNC_TARGET - deployment target (default: production)
  *
  * Usage: node scripts/sync-versions-from-vercel.js
  */
@@ -18,7 +18,7 @@ const path = require('path');
 const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
 const VERCEL_ORG_ID = process.env.VERCEL_ORG_ID;
-const VERCEL_SYNC_TARGET = process.env.VERCEL_SYNC_TARGET || 'stage';
+const VERCEL_SYNC_TARGET = process.env.VERCEL_SYNC_TARGET || 'production';
 
 const VERSIONS_JSON_PATH = path.join(__dirname, '../.storybook/versions.json');
 const API_BASE = 'https://api.vercel.com';
@@ -30,9 +30,11 @@ if (!VERCEL_TOKEN || !VERCEL_PROJECT_ID) {
 
 /**
  * Extract version string from deployment meta.
- * Handles: githubCommitRef, gitSource.ref
- * - refs/tags/v0.0.11 -> v0.0.11
- * - v0.0.11, release/0.1.0 -> used as version
+ * Handles: githubCommitRef, gitSource.ref, with or without a refs/ prefix
+ * - refs/tags/v0.0.11, v0.0.11 -> v0.0.11
+ * - refs/heads/release/0.1.0, release/0.1.0 -> release/0.1.0
+ * - @minneapolisstartribune/design-system@1.14.0 (changesets tag) -> v1.14.0
+ * Anything else (e.g. main, feature branches) -> null
  */
 function getVersionFromMeta(meta) {
   if (!meta || typeof meta !== 'object') return null;
@@ -40,16 +42,12 @@ function getVersionFromMeta(meta) {
   const ref = meta.githubCommitRef ?? meta.gitSource?.ref;
   if (!ref || typeof ref !== 'string') return null;
 
-  // refs/tags/v0.0.11 -> v0.0.11
-  const tagMatch = ref.match(/refs\/tags\/(.+)$/);
-  if (tagMatch) return tagMatch[1];
+  const bare = ref.replace(/^refs\/(tags|heads)\//, '');
 
-  // refs/heads/release/0.1.0 -> release/0.1.0
-  const branchMatch = ref.match(/refs\/heads\/(.+)$/);
-  if (branchMatch) return branchMatch[1];
+  const changesetTag = bare.match(/^@[^@]+@(\d+\.\d+\.\d+.*)$/);
+  if (changesetTag) return `v${changesetTag[1]}`;
 
-  // v0.0.11 or release/0.1.0 (already plain)
-  if (/^v\d+\.\d+\.\d+/.test(ref) || /^release\/\d+\.\d+\.\d+/.test(ref)) return ref;
+  if (/^v\d+\.\d+\.\d+/.test(bare) || /^release\/\d+\.\d+\.\d+/.test(bare)) return bare;
 
   return null;
 }
@@ -119,7 +117,9 @@ function main() {
 
     const output = JSON.stringify(versions, null, 2) + '\n';
     fs.writeFileSync(VERSIONS_JSON_PATH, output, 'utf8');
-    console.log(`Updated ${VERSIONS_JSON_PATH} with ${versions.length} versions (target: ${VERCEL_SYNC_TARGET})`);
+    console.log(
+      `Updated ${VERSIONS_JSON_PATH} with ${versions.length} versions (target: ${VERCEL_SYNC_TARGET})`
+    );
   })().catch((err) => {
     console.error(err);
     process.exit(1);

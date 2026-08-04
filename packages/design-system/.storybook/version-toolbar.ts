@@ -4,7 +4,12 @@
 import { addons } from 'storybook/preview-api';
 import { GLOBALS_UPDATED } from 'storybook/internal/core-events';
 import versionsList from './versions.json';
-import { shouldShowVersionsToolbar, VERSION_TOOLBAR_UI_TITLE } from './version-toolbar-hosts';
+import { version as currentVersion } from '../package.json';
+import {
+  getCurrentViewKind,
+  shouldShowVersionsToolbar,
+  VERSION_TOOLBAR_UI_TITLE,
+} from './version-toolbar-hosts';
 
 type VersionsEntry = { version: string; url: string };
 
@@ -12,10 +17,31 @@ const versions = versionsList as VersionsEntry[];
 
 const VERSION_TOOLBAR_LIMIT = 5;
 
-const recentVersions = versions.slice(0, VERSION_TOOLBAR_LIMIT);
+/** Evaluated once per preview bundle load in the browser, like showVersionsToolbar below. */
+const currentViewKind = getCurrentViewKind();
+
+// Stage serves main, so its Current is trunk rather than the package version,
+// which on main always reads as the last published release.
+const currentItemTitle =
+  currentViewKind === 'trunk'
+    ? 'Current (main)'
+    : currentViewKind === 'release'
+      ? `Current (v${currentVersion})`
+      : 'Current';
+
+// A redeployed tag fetches a versions.json that already lists its own
+// version; on release hosts drop it so the dropdown doesn't repeat the
+// "Current" entry. Stage keeps every entry: jumping from trunk to the
+// released deployment of the same version is a real navigation.
+const jumpableVersions =
+  currentViewKind === 'release'
+    ? versions.filter((v) => v.version !== `v${currentVersion}`)
+    : versions;
+
+const recentVersions = jumpableVersions.slice(0, VERSION_TOOLBAR_LIMIT);
 
 const versionToolbarItems = [
-  { value: 'current', title: 'Current' },
+  { value: 'current', title: currentItemTitle },
   ...recentVersions.map((v) => ({ value: v.version, title: v.version })),
 ];
 
