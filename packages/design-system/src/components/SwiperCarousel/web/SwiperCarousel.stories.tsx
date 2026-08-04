@@ -19,6 +19,8 @@ const meta: Meta<StoryArgs> = {
     spaceBetween: 16,
     loop: false,
     centeredSlides: false,
+    slidesPerGroup: 1,
+    slidesPerGroupAuto: false,
     size: 'medium',
     // eslint-disable-next-line no-console
     onSwipe: (info) => console.log('onSwipe', info),
@@ -32,6 +34,8 @@ const meta: Meta<StoryArgs> = {
     spaceBetween: { control: { type: 'number' } },
     loop: { control: 'boolean' },
     centeredSlides: { control: 'boolean' },
+    slidesPerGroup: { control: { type: 'number' } },
+    slidesPerGroupAuto: { control: 'boolean' },
 
     size: {
       control: { type: 'select' },
