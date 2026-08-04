@@ -1,0 +1,83 @@
+name: Changeset
+
+# Fails PRs that change the published package without adding a changeset,
+# and PRs that hand-edit the package version (the changesets bot owns it).
+# `yarn changeset --empty` satisfies the check when a PR intentionally
+# needs no release.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Require changeset
+    # The "chore: version packages" PR consumes changesets rather than adding one.
+    if: github.head_ref != 'changeset-release/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Block manual edits to the package version
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          # The changesets bot owns the version field; it changes only via the
+          # "chore: version packages" PR, which skips this job entirely.
+          version_edit=$(git diff "origin/${BASE_REF}...HEAD" -- packages/design-system/package.json \
+            | grep -E '^[+-][[:space:]]*"version":' || true)
+
+          if [ -z "$version_edit" ]; then
+            echo "No manual edit to the package version."
+            exit 0
+          fi
+
+          echo "This PR edits the version field in packages/design-system/package.json:" >&2
+          echo "$version_edit" >&2
+          echo "" >&2
+          echo "Version bumps happen only through the bot's version PR." >&2
+          echo "Remove the manual bump; to release these changes, add a changeset ('yarn changeset')." >&2
+          exit 1
+
+      - name: Check for a changeset when the published package changes
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          # Files under packages/design-system that ship in the published
+          # artifact: excludes tests, stories, snapshots, Storybook config,
+          # docs, and repo-only tooling in scripts/. Build scripts (builders/,
+          # formats/, create-root-entry-error.cjs, fetch-fonts.js) generate
+          # dist content, so they are NOT exempt.
+          package_changes=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- packages/design-system \
+            | grep -Ev '\.(test|stories)\.[jt]sx?$' \
+            | grep -Ev '\.snap$' \
+            | grep -Ev '^packages/design-system/(\.storybook|architecture|src/stories)/' \
+            | grep -Ev '^packages/design-system/scripts/(builders/build-if-needed|component-matrix|generate-component-matrix|minimal-reporter|release-verify|should-rebuild|sync-versions-from-vercel)' \
+            | grep -Ev '\.md$' || true)
+
+          if [ -z "$package_changes" ]; then
+            echo "No published-package changes; changeset not required."
+            exit 0
+          fi
+
+          # --diff-filter=A: only an added changeset satisfies the check;
+          # deleting or editing an existing one does not.
+          changesets=$(git diff --name-only --diff-filter=A "origin/${BASE_REF}...HEAD" -- '.changeset/*.md' \
+            | grep -v '^\.changeset/README\.md$' || true)
+
+          if [ -n "$changesets" ]; then
+            echo "Changeset found:"
+            echo "$changesets"
+            exit 0
+          fi
+
+          echo "This PR changes the published package but has no changeset." >&2
+          echo "" >&2
+          echo "Changed files that affect the package:" >&2
+          echo "$package_changes" >&2
+          echo "" >&2
+          echo "Run 'yarn changeset' and commit the generated file." >&2
+          echo "If this PR should not trigger a release, run 'yarn changeset --empty' instead." >&2
+          exit 1

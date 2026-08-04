@@ -18,13 +18,16 @@ const getHeadingConfig = (importance: PageHeadingProps['importance']) => {
 
 export const PageHeading: React.FC<PageHeadingProps> = ({
   importance,
+  as,
   children,
   dataTestId,
   className,
   color,
   style,
 }) => {
-  const { element: HeadingTag, className: typographyClassName } = getHeadingConfig(importance);
+  const { element: defaultHeadingTag, className: typographyClassName } =
+    getHeadingConfig(importance);
+  const HeadingTag = as ?? defaultHeadingTag;
   const combinedClassNames = classNames(typographyClassName, className);
 
   return React.createElement(

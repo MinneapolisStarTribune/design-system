@@ -1,0 +1,75 @@
+name: Release
+
+# Trunk-based release flow powered by changesets.
+#
+# On every push to main:
+#   - If there are pending changesets, the changesets action opens/updates the
+#     "chore: version packages" PR (version bump + CHANGELOG entries).
+#   - If the push IS the merge of that PR (no pending changesets, version not
+#     yet published), it builds and publishes the exact commit, tags it, and
+#     creates a GitHub Release.
+#
+# Merging the "chore: version packages" PR is the release. Everything else is
+# a no-op.
+
+on:
+  push:
+    branches: [main]
+  # Dispatch exists to re-run a failed publish. The job-level ref guard makes
+  # dispatching from any branch other than main a no-op, so the publish path
+  # can never run against a feature branch's commit.
+  workflow_dispatch:
+
+# Every push to main is a release decision and must run, in order. Without
+# queue: max, GitHub keeps only one pending run per group and a newer push
+# replaces it, which can cancel a version-PR merge's publish run.
+concurrency:
+  group: release-main
+  queue: max
+
+jobs:
+  release:
+    name: Version or publish
+    if: github.ref == 'refs/heads/main' && github.repository == 'MinneapolisStarTribune/design-system'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+
+    steps:
+      - name: Create GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_BYPASS_APP_ID }}
+          private-key: ${{ secrets.GH_BYPASS_APP_SECRET }}
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Configure Node environment
+        uses: ./.github/actions/configure-workflow-node-environment
+
+      - name: Run release verification gates (web + native + a11y)
+        run: yarn workspace @minneapolisstartribune/design-system release:verify
+
+      - name: Configure npm auth for GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${GH_PUBLISH_TOKEN}" >> "$HOME/.npmrc"
+        env:
+          GH_PUBLISH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+
+      - name: Create version PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset version
+          publish: yarn release
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
+          LEFTHOOK: '0'

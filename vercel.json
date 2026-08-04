@@ -11,7 +11,8 @@
   },
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": true,
+      "production-release": false
     }
   }
 }

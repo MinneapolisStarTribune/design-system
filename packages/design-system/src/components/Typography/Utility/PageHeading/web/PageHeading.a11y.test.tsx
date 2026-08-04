@@ -30,5 +30,13 @@ describe('PageHeading Accessibility', () => {
         </PageHeading>
       );
     });
+
+    it('has no violations with semantic tag override', async () => {
+      await expectNoA11yViolations(
+        <PageHeading importance={2} as="h1">
+          Semantic H1, H2 Style
+        </PageHeading>
+      );
+    });
   });
 });

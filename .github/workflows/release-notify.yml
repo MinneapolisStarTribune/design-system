@@ -1,0 +1,56 @@
+name: Release notifications
+
+# Posts a Slack announcement when a GitHub Release is published. Kept separate
+# from release.yml so a failed notification can be re-sent without re-running
+# the publish job. Re-runs of an old run use the old workflow file, so resends
+# go through workflow_dispatch instead.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to announce (@minneapolisstartribune/design-system@X.Y.Z)'
+        required: true
+
+jobs:
+  slack:
+    name: Post to Slack
+    if: github.repository == 'MinneapolisStarTribune/design-system' && startsWith(github.event.release.tag_name || inputs.tag, '@minneapolisstartribune/design-system@')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build announcement message
+        id: message
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Dispatched runs have no release payload; look the URL up by tag.
+          if [ -z "$RELEASE_URL" ]; then
+            RELEASE_URL=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url --jq .url)
+          fi
+          {
+            echo "text<<MSG_EOF"
+            echo "🚀 Deploying to Production! - Shared UI Library v${TAG##*@}"
+            echo ""
+            echo "Full changelog: ${RELEASE_URL}"
+            echo "MSG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Post release to Slack (Shared UI Library)
+        uses: slackapi/slack-github-action@v4.0.0
+        with:
+          webhook: ${{ secrets.SLACK_SHARED_UI_LIBRARY_WEBHOOK }}
+          # The secret is a classic incoming webhook (messages post as the
+          # Engineering Changelog app). Declaring webhook-trigger made the
+          # action misread Slack's plain "ok" reply as a failure and retry
+          # five delivered posts into six messages.
+          webhook-type: incoming-webhook
+          # At-most-once delivery regardless: a failed post fails the run
+          # (errors: true) and workflow_dispatch is the resend path.
+          errors: true
+          retries: '0'
+          payload: |
+            { "text": ${{ toJSON(steps.message.outputs.text) }} }

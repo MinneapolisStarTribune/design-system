@@ -40,8 +40,18 @@ const RELEASE_VERIFY_GATES = [
     command: ['yarn', 'test:native'],
   },
   {
+    // Through turbo so the root `release` script's `turbo run build` step
+    // gets a cache hit instead of rebuilding.
     name: 'build',
-    command: ['yarn', 'build'],
+    command: [
+      'yarn',
+      'run',
+      '-T',
+      'turbo',
+      'run',
+      'build',
+      '--filter=@minneapolisstartribune/design-system',
+    ],
   },
 ];
 
