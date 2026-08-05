@@ -34,6 +34,13 @@ It provides core carousel behavior (scrolling, pagination, navigation) while all
 - 1: single slide view, ideal for image gallery
 - 2,3,...: fixed slides per view, pagination per group
 
+### slidesPerGroupAuto
+
+- Use with `slidesPerView="auto"` to automatically advance by the number of currently visible slides
+- Navigation (buttons, swipe) advances by one group instead of one slide
+- Useful when slide widths vary and you want viewport-aligned grouping
+- Example: 3 visible slides → one navigation step advances 3 slides
+
 ## Pagination behavior
 
 - Disabled by default  
@@ -110,6 +117,18 @@ It provides core carousel behavior (scrolling, pagination, navigation) while all
       <td>boolean</td>
       <td>false</td>
       <td>Centers active slide</td>
+    </tr>
+    <tr>
+      <td>slidesPerGroup</td>
+      <td>number</td>
+      <td>1</td>
+      <td>Number of slides to advance on navigation; navigation advances by this many slides</td>
+    </tr>
+    <tr>
+      <td>slidesPerGroupAuto</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Automatically group slides by the number of currently visible slides; only valid with slidesPerView='auto'</td>
     </tr>
     <tr>
       <td>className</td>

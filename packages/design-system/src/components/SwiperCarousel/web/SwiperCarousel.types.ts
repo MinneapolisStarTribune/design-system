@@ -10,6 +10,8 @@ export interface SwiperCarouselProps {
   breakpoints?: SwiperOptions['breakpoints'];
   loop?: boolean;
   centeredSlides?: boolean;
+  slidesPerGroup?: number;
+  slidesPerGroupAuto?: boolean;
   className?: string;
   onSwipe?: (info: {
     direction: 'prev' | 'next';

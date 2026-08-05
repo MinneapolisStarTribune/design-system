@@ -5,6 +5,11 @@ type CapturedSwiperHandlers = {
   onSliderMove: () => void;
   onTouchEnd: () => void;
   onSlideChange: (swiper: Record<string, unknown>) => void;
+  slidesPerView?: number | 'auto';
+  spaceBetween?: number;
+  slidesPerGroup?: number;
+  slidesPerGroupAuto?: boolean;
+  [key: string]: unknown;
 };
 
 const capturedSwiperProps = vi.hoisted(() => ({ current: {} as CapturedSwiperHandlers }));
@@ -252,6 +257,79 @@ describe('SwiperCarousel', () => {
       });
 
       expect(onSwipe).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('slidesPerGroup and slidesPerGroupAuto', () => {
+    it('forwards slidesPerGroup to Swiper', () => {
+      renderWithProvider(
+        <SwiperCarousel slidesPerGroup={2}>
+          {slides.map((s) => (
+            <SwiperCarousel.Slide key={s}>
+              <div>{s}</div>
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      );
+
+      expect(capturedSwiperProps.current.slidesPerGroup).toBe(2);
+    });
+
+    it('defaults slidesPerGroup to 1', () => {
+      renderWithProvider(
+        <SwiperCarousel>
+          {slides.map((s) => (
+            <SwiperCarousel.Slide key={s}>
+              <div>{s}</div>
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      );
+
+      expect(capturedSwiperProps.current.slidesPerGroup).toBe(1);
+    });
+
+    it('forwards slidesPerGroupAuto to Swiper', () => {
+      renderWithProvider(
+        <SwiperCarousel slidesPerView="auto" slidesPerGroupAuto>
+          {slides.map((s) => (
+            <SwiperCarousel.Slide key={s}>
+              <div>{s}</div>
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      );
+
+      expect(capturedSwiperProps.current.slidesPerGroupAuto).toBe(true);
+    });
+
+    it('defaults slidesPerGroupAuto to false', () => {
+      renderWithProvider(
+        <SwiperCarousel>
+          {slides.map((s) => (
+            <SwiperCarousel.Slide key={s}>
+              <div>{s}</div>
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      );
+
+      expect(capturedSwiperProps.current.slidesPerGroupAuto).toBe(false);
+    });
+
+    it('accepts both slidesPerGroup and slidesPerGroupAuto together', () => {
+      renderWithProvider(
+        <SwiperCarousel slidesPerView="auto" slidesPerGroup={1} slidesPerGroupAuto>
+          {slides.map((s) => (
+            <SwiperCarousel.Slide key={s}>
+              <div>{s}</div>
+            </SwiperCarousel.Slide>
+          ))}
+        </SwiperCarousel>
+      );
+
+      expect(capturedSwiperProps.current.slidesPerGroup).toBe(1);
+      expect(capturedSwiperProps.current.slidesPerGroupAuto).toBe(true);
     });
   });
 });
