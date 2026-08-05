@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 1.16.0
+
+### Minor Changes
+
+- [#422](https://github.com/MinneapolisStarTribune/design-system/pull/422) [`5ce2ff2`](https://github.com/MinneapolisStarTribune/design-system/commit/5ce2ff2ef037c9eb02c39e6de7851b2aab59c58a) Thanks [@SathishKumarRNLT](https://github.com/SathishKumarRNLT)! - Exposes slidesPerGroupAuto and slidesPerGroup props on SwiperCarousel
+
 ## 1.15.0
 
 ### Minor Changes
