@@ -27,6 +27,8 @@ const Root: React.FC<SwiperCarouselProps> = ({
   breakpoints,
   loop = false,
   centeredSlides = false,
+  slidesPerGroup = 1,
+  slidesPerGroupAuto = false,
   className,
   onSwipe,
 }) => {
@@ -91,6 +93,8 @@ const Root: React.FC<SwiperCarouselProps> = ({
           breakpoints={breakpoints}
           loop={loop}
           centeredSlides={centeredSlides}
+          slidesPerGroup={slidesPerGroup}
+          slidesPerGroupAuto={slidesPerGroupAuto}
           onBeforeInit={(swiper) => {
             if (paginationRef.current) {
               // @ts-expect-error Swiper types do not support assigning pagination.el at runtime
