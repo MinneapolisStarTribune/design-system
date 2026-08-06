@@ -48,4 +48,10 @@ export interface ImageGalleryNativeProps<TImageProps> extends ImageGalleryBasePr
   wrapperStyle?: StyleProp<ViewStyle>;
   captionStyle?: StyleProp<ViewStyle>;
   controlsStyle?: StyleProp<ViewStyle>;
+  /** Applied to the previous/next navigation buttons, in both the inline caption and the expanded dialog. */
+  navButtonStyle?: StyleProp<ViewStyle>;
+  /** Applied to each slide's expand-to-dialog button (only rendered when `expandable` is true). */
+  expandButtonStyle?: StyleProp<ViewStyle>;
+  /** Applied to the expanded dialog's close button (only rendered when `expandable` is true). */
+  closeButtonStyle?: StyleProp<ViewStyle>;
 }
