@@ -230,4 +230,38 @@ describe('Tooltip', () => {
       expect(trigger).toHaveAttribute('aria-describedby');
     });
   });
+
+  it('applies default z-index of 9999 to the floating element', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Tooltip label="Tooltip content">
+        <Button>Hover me</Button>
+      </Tooltip>
+    );
+
+    await user.hover(screen.getByText('Hover me'));
+
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip');
+      expect(tooltip).toHaveStyle({ zIndex: 9999 });
+    });
+  });
+
+  it('applies overridden z-index to the floating element', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Tooltip label="Tooltip content" zIndex={10050}>
+        <Button>Hover me</Button>
+      </Tooltip>
+    );
+
+    await user.hover(screen.getByText('Hover me'));
+
+    await waitFor(() => {
+      const tooltip = screen.getByRole('tooltip');
+      expect(tooltip).toHaveStyle({ zIndex: 10050 });
+    });
+  });
 });

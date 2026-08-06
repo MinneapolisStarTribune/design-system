@@ -52,6 +52,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   labelClassName,
   iconClassName,
   'aria-label': ariaLabel,
+  zIndex = 9999,
   ...rest
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -141,7 +142,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
           <div
             // eslint-disable-next-line react-hooks/refs
             ref={refs.setFloating}
-            style={floatingStyles}
+            style={{ ...floatingStyles, zIndex }}
             className={classNames(styles.wrapper, wrapperClassName)}
             role="tooltip"
             id={`tooltip-${tooltipId}`}

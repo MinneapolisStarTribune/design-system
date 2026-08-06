@@ -63,4 +63,7 @@ export type TooltipProps = {
 
   /** Accessible label for the tooltip. Use when label is not descriptive enough. */
   'aria-label'?: string;
+
+  /** Override the z-index of the floating tooltip element. Defaults to 9999. */
+  zIndex?: number;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label'>;
