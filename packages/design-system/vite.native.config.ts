@@ -90,8 +90,12 @@ export default defineConfig({
       fileName: () => 'design-system.es.js',
     },
     rollupOptions: {
-      // react-native-svg must stay external
-      external: ['react', 'react-native-svg', /^react-native(?:\/|$)/],
+      external: [
+        'react',
+        'react-native-svg',
+        /^react-native(?:\/|$)/,
+        /^react-native-webview(?:\/|$)/,
+      ],
       output: {
         globals: {
           react: 'React',
