@@ -54,20 +54,10 @@ yarn add react@19.1.0 react-dom@19.1.0 @floating-ui/react@0.27.19
 **Native** (use the `/native` entry):
 
 ```bash
-yarn add react@19.1.0 react-native@0.81.5 @floating-ui/react-native@0.10.9 react-native-svg@15.15.3 react-native-webview@13.15.0
+yarn add react@19.1.0 react-native@0.81.5 @floating-ui/react-native@0.10.9 react-native-svg@15.15.5 react-native-webview@13.17.0
 ```
 
-`react-native-svg` and `react-native-webview` are optional peers, so web consumers never
-download them.
-
-Expo apps should install them through Expo so the versions match the SDK's native modules:
-
-```bash
-npx expo install react-native-svg react-native-webview
-```
-
-`react-native-svg` backs `Icon`/`Toast` and is needed by every native consumer.
-`react-native-webview` is only needed if you import the code block component.
+`react-native-svg` and `react-native-webview` are optional peers, and are only needed for native consumers.
 
 ## Quick Start
 

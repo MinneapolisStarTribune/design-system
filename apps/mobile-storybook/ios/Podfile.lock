@@ -2174,7 +2174,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-webview (13.15.0):
+  - react-native-webview (13.17.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2883,7 +2883,7 @@ PODS:
     - RNWorklets
     - SocketRocket
     - Yoga
-  - RNSVG (15.15.3):
+  - RNSVG (15.15.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2909,10 +2909,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.15.3)
+    - RNSVG/common (= 15.15.5)
     - SocketRocket
     - Yoga
-  - RNSVG/common (15.15.3):
+  - RNSVG/common (15.15.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -3382,7 +3382,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-safe-area-context: c00143b4823773bba23f2f19f85663ae89ceb460
   react-native-slider: 663776e5683e257de8df8091abc2d93ff6ec67db
-  react-native-webview: 4cbb7f05f2c50671a7dcff4012d3e85faad271e4
+  react-native-webview: 607c8fca1506107f046e39dee8570c5b5e3222bd
   React-NativeModulesApple: ebf2ce72b35870036900d6498b33724386540a71
   React-oscompat: eb0626e8ba1a2c61673c991bf9dc21834898475d
   React-perflogger: 509e1f9a3ee28df71b0a66de806ac515ce951246
@@ -3417,11 +3417,11 @@ SPEC CHECKSUMS:
   RNDateTimePicker: cda4c045beca864cebb3209ef9cc4094f974864c
   RNGestureHandler: 3a73f098d74712952870e948b3d9cf7b6cae9961
   RNReanimated: 1344f982e41a5c0c1b5a5a0759754cb30e1440ce
-  RNSVG: c4d5a438a1c96f7ed7dc66349a5b7e97616fd701
+  RNSVG: 4dd2d79b3cb224bcb3ae666a2adda2ede9d3772f
   RNWorklets: 09a47bd92d3da6e00420a060fcc86e23b745e980
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 728df40394d49f3f471688747cf558158b3a3bd1
 
 PODFILE CHECKSUM: 7c43994ecda6ab64fc32900ccd8c0bafcf613b4d
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.17.0
