@@ -69,11 +69,6 @@ npx expo install react-native-svg react-native-webview
 `react-native-svg` backs `Icon`/`Toast` and is needed by every native consumer.
 `react-native-webview` is only needed if you import the code block component.
 
-```ts
-import { DesignSystemProvider, Icon } from '@minneapolisstartribune/design-system/native';
-import { DangerousCodeBlock } from '@minneapolisstartribune/design-system/native/code-block';
-```
-
 ## Quick Start
 
 ### Web (React)
