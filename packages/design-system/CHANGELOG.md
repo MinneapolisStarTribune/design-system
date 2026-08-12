@@ -1,5 +1,19 @@
 # @minneapolisstartribune/design-system
 
+## 1.17.0
+
+### Minor Changes
+
+- [#425](https://github.com/MinneapolisStarTribune/design-system/pull/425) [`1c3a703`](https://github.com/MinneapolisStarTribune/design-system/commit/1c3a70356daaef4264ddb9a160396423b6580702) Thanks [@YuvarajPattabi13](https://github.com/YuvarajPattabi13)! - Add `zIndex` prop to `Tooltip` to allow consumers to override the default stacking order (`9999`) when the tooltip renders behind fixed headers or other high z-index elements.
+
+### Patch Changes
+
+- [#421](https://github.com/MinneapolisStarTribune/design-system/pull/421) [`0da53d4`](https://github.com/MinneapolisStarTribune/design-system/commit/0da53d4a171494865fd087e673cd8e9251b8b63e) Thanks [@itaha-livefront-strib](https://github.com/itaha-livefront-strib)! - Bumped `react-native-svg` from 15.12.1 to 15.15.3. This resolves the 'Unable to resolve module buffer' error when trying to upgrade the design system package in the mobile repo.
+
+  Consumers must rebuild native (`pod install` / new dev client) — this changes a native module version, so a JS-only update will not pick it up. Apps pinning `react-native-svg` should move to 15.15.3 in lockstep to avoid two copies resolving against one native build.
+
+  [Missing buffer dependency - software-mansion/react-native-svg#2701](https://github.com/software-mansion/react-native-svg/issues/2701).
+
 ## 1.16.0
 
 ### Minor Changes
