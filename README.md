@@ -48,14 +48,16 @@ Add the peers for your platform. These should stay aligned with the package `pee
 **Web** (use the `/web` entry):
 
 ```bash
-yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
+yarn add react@19.1.0 react-dom@19.1.0 @floating-ui/react@0.27.19
 ```
 
 **Native** (use the `/native` entry):
 
 ```bash
-yarn add react@19.0.0 react-native@0.79.0 @floating-ui/react-native@0.10.9
+yarn add react@19.1.0 react-native@0.81.5 @floating-ui/react-native@0.10.9 react-native-svg@15.15.5 react-native-webview@13.17.0
 ```
+
+`react-native-svg` and `react-native-webview` are optional peers, and are only needed for native consumers.
 
 ## Quick Start
 
