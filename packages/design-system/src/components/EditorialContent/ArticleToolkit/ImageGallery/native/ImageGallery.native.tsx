@@ -91,6 +91,8 @@ type ImageGalleryExpandModalProps = {
   styles: GalleryStyles;
   dataTestId: string;
   onClose: () => void;
+  navButtonStyle?: StyleProp<ViewStyle>;
+  closeButtonStyle?: StyleProp<ViewStyle>;
 };
 
 const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
@@ -104,6 +106,8 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
   styles,
   dataTestId,
   onClose,
+  navButtonStyle,
+  closeButtonStyle,
 }) => {
   const closeButtonRef = useRef<View>(null);
 
@@ -141,7 +145,7 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Close expanded image"
           onPress={onClose}
-          style={styles.dialogClose}
+          style={[styles.dialogClose, closeButtonStyle]}
           testID={`${dataTestId}-dialog-close-button`}
         >
           <CloseIcon color="on-dark-primary" size="large" />
@@ -167,6 +171,7 @@ const ImageGalleryExpandModal: React.FC<ImageGalleryExpandModalProps> = ({
           onPrevious={onPrevious}
           onNext={onNext}
           style={styles.dialogCaption}
+          navButtonStyle={navButtonStyle}
           dataTestId={`${dataTestId}-dialog-caption`}
         />
       </View>
@@ -264,6 +269,9 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   imageStyle,
   wrapperStyle,
   captionStyle,
+  navButtonStyle,
+  expandButtonStyle,
+  closeButtonStyle,
   dataTestId = 'image-gallery',
   'aria-label': ariaLabel,
 }) => {
@@ -493,7 +501,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
                         accessibilityLabel={`Expand image ${logicalIndex + 1} of ${total}`}
                         accessibilityHint="Opens expanded image view"
                         onPress={() => openExpandedImage(logicalIndex)}
-                        style={styles.expandButton}
+                        style={[styles.expandButton, expandButtonStyle]}
                         testID={`${dataTestId}-expand-button-${logicalIndex}`}
                       >
                         <ExpandIcon color="on-dark-primary" size="large" />
@@ -527,6 +535,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
               onPrevious={handlePrev}
               onNext={handleNext}
               style={[styles.captionContainer, captionStyle as StyleProp<ViewStyle>]}
+              navButtonStyle={navButtonStyle}
               dataTestId="image-gallery-caption"
             />
           </View>
@@ -545,6 +554,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
           styles={styles}
           dataTestId={dataTestId}
           onClose={closeExpandedImage}
+          navButtonStyle={navButtonStyle}
+          closeButtonStyle={closeButtonStyle}
         />
       ) : null}
     </>

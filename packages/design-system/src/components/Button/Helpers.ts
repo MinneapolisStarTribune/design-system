@@ -99,8 +99,11 @@ export function enhanceButtonIcon(
     ...(typeof existingStyle === 'object' && existingStyle !== null && !Array.isArray(existingStyle)
       ? existingStyle
       : {}),
-    width: pixelSize,
-    height: pixelSize,
+    // Routed through --icon-size so consumers can override it with a plain class instead
+    // of fighting inline-style specificity (the `width`/`height` props below stay plain
+    // px for the SVG attributes, which don't accept var()).
+    width: `var(--icon-size, ${pixelSize})`,
+    height: `var(--icon-size, ${pixelSize})`,
     /* Override Icon wrapper default token so paths using currentColor match button foreground */
     color: 'inherit',
   };

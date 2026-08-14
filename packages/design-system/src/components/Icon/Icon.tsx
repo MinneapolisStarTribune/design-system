@@ -34,11 +34,18 @@ export function createIconWrapper(Component: IconComponent): React.FC<IconWrappe
     ...rest
   }) => {
     const pixel = ICON_PIXEL_SIZES[size];
+    // SVG width/height attributes must stay plain lengths (no var()); the inline `style`
+    // is what actually paints, so route only the style value through a CSS var. Consumers
+    // can then override it with a plain class (`.myIcon { --icon-size: 20px }`) instead of
+    // fighting inline-style specificity. Explicit `width`/`height` props (rare) bypass the
+    // var and are honored as-is in both places.
     const resolvedWidth = width ?? pixel;
     const resolvedHeight = height ?? pixel;
+    const sizeStyleWidth = width ?? `var(--icon-size, ${pixel})`;
+    const sizeStyleHeight = height ?? `var(--icon-size, ${pixel})`;
     const resolvedStyle: React.CSSProperties = {
-      width: resolvedWidth,
-      height: resolvedHeight,
+      width: sizeStyleWidth,
+      height: sizeStyleHeight,
       color: ICON_COLOR_TOKENS[color],
       ...style,
     };
