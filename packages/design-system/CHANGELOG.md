@@ -1,5 +1,14 @@
 # @minneapolisstartribune/design-system
 
+## 2.0.0
+
+### Major Changes
+
+- [#426](https://github.com/MinneapolisStarTribune/design-system/pull/426) [`cf2d8a2`](https://github.com/MinneapolisStarTribune/design-system/commit/cf2d8a273e1ada0527a25a82d8131b0d80dccd05) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Move `react-native-svg` and `react-native-webview` from `dependencies` to optional
+  `peerDependencies` so web consumers no longer install React Native packages transitively.
+
+  **Breaking for native consumers.** Every native consumer must now declare `react-native-svg` as well as `react-native-webview` as their dependencies.
+
 ## 1.17.0
 
 ### Minor Changes
