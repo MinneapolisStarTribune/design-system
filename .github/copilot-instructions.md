@@ -113,3 +113,9 @@ Skip the bot's "chore: version packages" PR entirely.
 `.github/workflows/copilot-code-review.yml` installs dependencies, so types and imports
 resolve across files — use that to check call sites and cross-platform counterparts, not to
 re-report lint or type findings CI already posts.
+
+`.github/skills/code-review/SKILL.md` carries the procedures for the four checks above that
+need a file this diff did not change: confirming web/native parity, resolving a colour or
+spacing literal to the token that already exists, checking a changeset bump against the real
+API delta, and checking a public API change against the docs. Use it before commenting on any
+of those; the rules stay here, the lookups live there.
