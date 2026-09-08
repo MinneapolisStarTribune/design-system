@@ -40,6 +40,137 @@ export const Configurable: Story = {
   },
 };
 
+const AllVariantsDemo = () => (
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 80,
+      padding: 80,
+      width: '100%',
+    }}
+  >
+    <div>
+      <h3 style={{ marginBottom: 24 }}>Description only</h3>
+
+      <TriggerablePopover trigger={<Button>Open</Button>}>
+        <TriggerablePopover.Heading>
+          <TriggerablePopover.Description>
+            This is a triggerable popover, opened when the button is clicked.
+          </TriggerablePopover.Description>
+        </TriggerablePopover.Heading>
+      </TriggerablePopover>
+    </div>
+
+    <div>
+      <h3 style={{ marginBottom: 24 }}>With title</h3>
+
+      <TriggerablePopover trigger={<Button>Open</Button>}>
+        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+        <TriggerablePopover.Description>
+          This is a triggerable popover, opened when the button is clicked.
+        </TriggerablePopover.Description>
+      </TriggerablePopover>
+    </div>
+
+    <div>
+      <h3 style={{ marginBottom: 24 }}>Custom content</h3>
+
+      <TriggerablePopover trigger={<Button>Open</Button>} placement="bottom">
+        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+        <TriggerablePopover.Body>
+          <UtilityBody size="small">Option 1</UtilityBody>
+          <UtilityBody size="small">Option 2</UtilityBody>
+          <UtilityBody size="small">Option 3</UtilityBody>
+          <UtilityBody size="small">Option 4</UtilityBody>
+          <UtilityBody size="small">Option 5</UtilityBody>
+        </TriggerablePopover.Body>
+      </TriggerablePopover>
+    </div>
+
+    <div>
+      <h3 style={{ marginBottom: 24 }}>With divider</h3>
+
+      <TriggerablePopover trigger={<Button>Open</Button>} placement="bottom">
+        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+        <TriggerablePopover.Divider />
+        <TriggerablePopover.Body>
+          <UtilityBody>Sample content popover body</UtilityBody>
+        </TriggerablePopover.Body>
+      </TriggerablePopover>
+    </div>
+
+    <div>
+      <h3 style={{ marginBottom: 24 }}>Scrollable body</h3>
+
+      <TriggerablePopover trigger={<Button>Open</Button>}>
+        <TriggerablePopover.Heading>Scrollable content</TriggerablePopover.Heading>
+        <TriggerablePopover.Description>This list is scrollable</TriggerablePopover.Description>
+        <TriggerablePopover.Divider />
+        <TriggerablePopover.Body>
+          {Array.from({ length: 20 }).map((_, i) => (
+            <UtilityBody key={i}>Item {i + 1}</UtilityBody>
+          ))}
+        </TriggerablePopover.Body>
+      </TriggerablePopover>
+    </div>
+
+    <div>
+      <h3 style={{ marginBottom: 24 }}>All placements</h3>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: 120,
+          padding: 80,
+          placeItems: 'center',
+        }}
+      >
+        <TriggerablePopover placement="top" trigger={<Button>Top</Button>}>
+          <TriggerablePopover.Heading>Top</TriggerablePopover.Heading>
+          <TriggerablePopover.Body>
+            <UtilityBody>Arrow on top</UtilityBody>
+          </TriggerablePopover.Body>
+        </TriggerablePopover>
+
+        <TriggerablePopover placement="right" trigger={<Button>Right</Button>}>
+          <TriggerablePopover.Heading>Right</TriggerablePopover.Heading>
+          <TriggerablePopover.Body>
+            <UtilityBody>Arrow on right</UtilityBody>
+          </TriggerablePopover.Body>
+        </TriggerablePopover>
+
+        <TriggerablePopover placement="left" trigger={<Button>Left</Button>}>
+          <TriggerablePopover.Heading>Left</TriggerablePopover.Heading>
+          <TriggerablePopover.Body>
+            <UtilityBody>Arrow on left</UtilityBody>
+          </TriggerablePopover.Body>
+        </TriggerablePopover>
+
+        <TriggerablePopover placement="bottom" trigger={<Button>Bottom</Button>}>
+          <TriggerablePopover.Heading>Bottom</TriggerablePopover.Heading>
+          <TriggerablePopover.Body>
+            <UtilityBody>Arrow on bottom</UtilityBody>
+          </TriggerablePopover.Body>
+        </TriggerablePopover>
+      </div>
+    </div>
+  </div>
+);
+
+export const AllVariants: Story = {
+  args: {
+    trigger: <Button />,
+    children: null,
+  },
+  render: () => <AllVariantsDemo />,
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+  },
+};
+
 const ExternalTriggerDemo = () => {
   const [log, setLog] = useState<string[]>([]);
   const triggerId = 'storybook-demo-tooltip';

@@ -112,6 +112,17 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
 
   const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
+  const isDarkTheme =
+    typeof document !== 'undefined' &&
+    (document.documentElement.getAttribute('data-theme') === 'dark' ||
+      document.body.classList.contains('sb-dark'));
+  const arrowFill = isDarkTheme
+    ? 'var(--color-background-dark-gray-01)'
+    : 'var(--color-base-white)';
+  const arrowStroke = isDarkTheme
+    ? 'var(--color-border-on-dark-subtle-01)'
+    : 'var(--color-border-on-light-subtle-01)';
+
   const childElement = isValidElement(trigger)
     ? (trigger as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
     : null;
@@ -168,8 +179,8 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
                   context={context}
                   height={ARROW_HEIGHT}
                   width={16}
-                  fill="#fff"
-                  stroke="#E3E5E8"
+                  fill={arrowFill}
+                  stroke={arrowStroke}
                   strokeWidth={1}
                   className={classNames(styles.arrow, arrowClassName)}
                 />
