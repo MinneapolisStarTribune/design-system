@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { useExternalTrigger } from './useExternalTrigger';
+import { installExternalTriggerGlobals, useExternalTrigger } from './useExternalTrigger';
 
 describe('useExternalTrigger', () => {
   afterEach(() => {
@@ -66,6 +66,29 @@ describe('useExternalTrigger', () => {
 
       expect(result.current.injectionSlotProps).toBeNull();
       expect(result.current.forceMount).toBe(false);
+    });
+
+    it('installExternalTriggerGlobals binds the globals without needing any component mounted', () => {
+      installExternalTriggerGlobals();
+      expect(typeof (window as unknown as Record<string, unknown>).openTooltip).toBe('function');
+      expect(typeof (window as unknown as Record<string, unknown>).closeTooltip).toBe('function');
+
+      // No instance registered for this id yet — calling it is a silent no-op, not a throw.
+      expect(() => {
+        (window as unknown as Record<string, (id: string) => void>).openTooltip('not-mounted-yet');
+      }).not.toThrow();
+    });
+
+    it('installExternalTriggerGlobals supports custom global names', () => {
+      installExternalTriggerGlobals({
+        openGlobalName: 'openPromoEager',
+        closeGlobalName: 'closePromoEager',
+      });
+
+      expect(typeof (window as unknown as Record<string, unknown>).openPromoEager).toBe('function');
+      expect(typeof (window as unknown as Record<string, unknown>).closePromoEager).toBe(
+        'function'
+      );
     });
   });
 

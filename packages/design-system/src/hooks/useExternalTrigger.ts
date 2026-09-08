@@ -36,6 +36,21 @@ const bindGlobals = (openGlobalName: string, closeGlobalName: string) => {
   (window as unknown as Record<string, unknown>)[closeGlobalName] = closeById;
 };
 
+/**
+ * Binds the `window.openTooltip`/`window.closeTooltip` globals (or whatever names are given)
+ * immediately, without waiting for any component to call `useExternalTrigger`. Call this once,
+ * eagerly (e.g. at module scope in whatever bootstraps your vendor script), when something might
+ * call these globals before any externally-triggerable component has mounted yet — otherwise the
+ * globals only exist once a `useExternalTrigger` instance's own effect has run. Registering a
+ * specific id is unaffected either way; this only concerns how early the globals themselves exist.
+ */
+export function installExternalTriggerGlobals(
+  options: Pick<UseExternalTriggerOptions, 'openGlobalName' | 'closeGlobalName'> = {}
+) {
+  const { openGlobalName = 'openTooltip', closeGlobalName = 'closeTooltip' } = options;
+  bindGlobals(openGlobalName, closeGlobalName);
+}
+
 export type UseExternalTriggerOptions = {
   /** Name of the `window` global an external script calls to open this component. Default: `"openTooltip"`. */
   openGlobalName?: string;

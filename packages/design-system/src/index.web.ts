@@ -2,6 +2,7 @@
 // This file is sorted alphabetically.
 export * from '@/components/index.web';
 export {
+  installExternalTriggerGlobals,
   useExternalTrigger,
   type UseExternalTriggerOptions,
   type UseExternalTriggerResult,
