@@ -1,6 +1,11 @@
 // Web entrypoint for consuming apps. Import from '@minneapolisstartribune/design-system/web'.
 // This file is sorted alphabetically.
 export * from '@/components/index.web';
+export {
+  useExternalTrigger,
+  type UseExternalTriggerOptions,
+  type UseExternalTriggerResult,
+} from '@/hooks/useExternalTrigger';
 export * from '@/icons';
 export { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 export {
