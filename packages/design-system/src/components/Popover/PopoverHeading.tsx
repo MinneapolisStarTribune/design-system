@@ -16,13 +16,7 @@ export const PopoverHeading: React.FC<{
   closeButtonClassName?: string;
 }> = ({ children, headerClassName, titleClassName, closeButtonClassName }) => {
   const { close } = usePopoverContext();
-  const isDarkTheme =
-    typeof document !== 'undefined' &&
-    (document.documentElement.getAttribute('data-theme') === 'dark' ||
-      document.body.classList.contains('sb-dark'));
-  const typographyClassName = isDarkTheme
-    ? 'typography-utility-section-h6 text-on-dark-primary'
-    : 'typography-utility-section-h6 text-on-light-primary';
+  const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
@@ -33,7 +27,7 @@ export const PopoverHeading: React.FC<{
         variant="ghost"
         size="small"
         icon={<CloseIcon />}
-        surface={isDarkTheme ? 'dark' : 'light'}
+        surface="light"
         aria-label="Close popover"
         className={classNames(styles.closeButton, closeButtonClassName)}
         onClick={close}

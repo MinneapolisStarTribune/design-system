@@ -11,6 +11,15 @@
     0 2px 6px -2px rgba(10, 10, 10, 0.03);
 
   overflow: visible;
+
+  /* Pin the semantic on-light text tokens to their light-theme values, unconditionally (not
+     just under a dark-mode selector): these tokens flip to light colors under [data-theme='dark']
+     at :root, but every popover variant (heading, description, and any body content rendered via
+     UtilityBody etc.) should keep light-mode text regardless of app theme. In light mode these
+     already match the default, so this is a no-op there. */
+  --color-text-on-light-primary: var(--color-neutral-950);
+  --color-text-on-light-secondary: var(--color-neutral-800);
+  --color-text-on-light-tertiary: var(--color-neutral-700);
 }
 
 .sb-dark .wrapper,
@@ -51,12 +60,9 @@
 
   padding-right: var(--spacing-8);
 
-  color: var(--color-text-on-light-primary);
-}
-
-.sb-dark .header,
-[data-theme='dark'] .header {
-  color: var(--color-text-on-dark-primary);
+  /* Fixed (non-theme-swapped) neutral so the popover text stays dark even in dark mode,
+     unlike the semantic on-light/on-dark text tokens which flip per theme. */
+  color: var(--color-neutral-950) !important;
 }
 
 .title{
@@ -78,12 +84,8 @@
   max-width: 192px;
   margin-top: var(--spacing-8);
 
-  color: var(--color-text-on-light-secondary) !important;
-}
-
-.sb-dark .description,
-[data-theme='dark'] .description {
-  color: var(--color-text-on-dark-secondary) !important;
+  /* Fixed (non-theme-swapped) neutral, see .header for why. */
+  color: var(--color-neutral-800) !important;
 }
 
 /* Divider */
