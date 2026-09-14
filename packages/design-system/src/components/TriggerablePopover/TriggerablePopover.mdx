@@ -1,0 +1,100 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as TriggerablePopoverStories from './TriggerablePopover.stories';
+
+<Meta of={TriggerablePopoverStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# TriggerablePopover
+
+A popover that behaves exactly like [`Popover`](?path=/docs/feedback-status-popover--docs) by default, with one addition: it can be given a `triggerId` that makes it addressable from outside React — an external script (a vendor's marketing/paywall widget, e.g. Piano) can open or close it by id, and drop its own content into a dedicated slot inside it.
+
+Use this instead of `Popover` only when something outside your app's own code needs to control when this popover opens, or needs a place to inject its own markup into it. For a normal popover that only ever opens from a click, use `Popover` — it has no vendor-integration machinery to carry around.
+
+## How it works
+
+1. Give the popover a `triggerId` and set `enableInjectionSlot`. This reserves a DOM node with id `${triggerId}-injection-slot` inside the popover, mounted ahead of time (hidden) so it exists before anything tries to find it.
+2. An external script calls `window.openTooltip('your-id')` / `window.closeTooltip('your-id')` to open or close this specific instance. These are plain globals — nothing about them is specific to any one vendor.
+3. When opened this way, the popover renders **only** the injection slot — not `children` — since there's nothing sensible to show alongside content injected by something else. When opened by a normal click on `trigger`, it's the reverse: `children` render, the injection slot stays hidden.
+4. If the popover is later closed by the user (clicking outside, Escape) rather than by the external script itself, a `{ event: 'requestClose', id }` message is posted into whatever's inside the slot — so injected content (typically a sandboxed iframe) can react to a dismissal it didn't initiate itself.
+
+None of this requires the external script to know anything about React. It only needs to know: the id convention (`${triggerId}-injection-slot`), the two global function names, and the `requestClose` message shape.
+
+## Integrating a vendor campaign tool (e.g. Piano Composer)
+
+If the vendor tool lets you author an HTML template for what gets injected (Piano Composer does), that template needs to:
+- Post `{ event: 'triggerTooltip', tooltipId }` to the parent window on load, so *your own bridge script* (configured in the vendor's dashboard, not in this codebase) can call `window.openTooltip(tooltipId)`.
+- Post `{ event: 'closeTooltip', tooltipId }` from its own dismiss control, for the same bridge script to call `window.closeTooltip(tooltipId)`.
+- Listen for `{ event: 'requestClose' }` from the host page and treat it as a dismissal, so the vendor's own frequency-capping/analytics still register the close even when the user didn't use the template's own dismiss button.
+
+```html
+<!-- Generic example vendor campaign template. Placeholders like {{tooltip-id}} stand in for
+     whatever templating syntax the vendor tool uses (e.g. Piano Composer's [%% tooltip-id %%]). -->
+<div class="injected-content">
+  <strong>{{heading}}</strong>
+  <p>{{description}}</p>
+  <button onclick="parent.postMessage({ event: 'closeTooltip', tooltipId: '{{tooltip-id}}' }, '*')">
+    {{dismiss-text}}
+  </button>
+</div>
+<script>
+  window.onload = function () {
+    parent.postMessage({ event: 'triggerTooltip', tooltipId: '{{tooltip-id}}' }, '*');
+  };
+  window.addEventListener('message', function (event) {
+    if (event.data?.event === 'requestClose') {
+      // Tear down / mark dismissed in whatever way this template's runtime expects.
+    }
+  });
+</script>
+```
+
+The vendor's own campaign config is what ties a specific campaign to a specific `triggerId` — that mapping lives in the vendor's dashboard, not in code, and is set up independently per site.
+
+## Props
+
+Same as [`Popover`](?path=/docs/feedback-status-popover--docs) (`placement`, `isDisabled`, `modal`, `open`/`onOpenChange`, the `*ClassName` props, etc.), plus:
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>triggerId</code></td>
+      <td>
+        Unique id an external script can use to open/close this instance. Omit entirely for a
+        popover that only ever opens from <code>trigger</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>enableInjectionSlot</code></td>
+      <td>
+        Reserves the <code>${'{triggerId}'}-injection-slot</code> DOM node. Requires{' '}
+        <code>triggerId</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>externalTriggerOptions</code></td>
+      <td>
+        Overrides for the global function names (default <code>openTooltip</code>/
+        <code>closeTooltip</code>) and the internal timing constants. Only needed if the default
+        names collide with something else on the page, or a specific integration needs different
+        timing.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

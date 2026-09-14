@@ -106,6 +106,8 @@ export {
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
+export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
+export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,

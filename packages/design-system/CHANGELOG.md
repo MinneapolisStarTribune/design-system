@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 2.1.0
+
+### Minor Changes
+
+- [#430](https://github.com/MinneapolisStarTribune/design-system/pull/430) [`a3708e5`](https://github.com/MinneapolisStarTribune/design-system/commit/a3708e55b19e2fd848126e584fe87df97acab8d4) Thanks [@willogura](https://github.com/willogura)! - Add TriggerablePopover component and useExternalTrigger hook for vendor-triggerable popovers.
+
 ## 2.0.0
 
 ### Major Changes
