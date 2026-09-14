@@ -68,6 +68,29 @@ describe('Popover', () => {
     });
   });
 
+  it('uses dark theme colors when the document is in dark mode', async () => {
+    const user = userEvent.setup();
+    document.documentElement.setAttribute('data-theme', 'dark');
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+    await waitFor(() => screen.getByText('Content'));
+
+    const arrow = document.querySelector('svg');
+    const arrowPath = document.querySelector('svg path');
+
+    expect(arrow).toHaveAttribute('fill', 'var(--color-background-dark-gray-01)');
+    expect(arrowPath).toHaveAttribute('stroke', 'var(--color-border-on-dark-subtle-01)');
+
+    document.documentElement.removeAttribute('data-theme');
+  });
+
   it('does not open when isDisabled is true', async () => {
     const user = userEvent.setup();
 

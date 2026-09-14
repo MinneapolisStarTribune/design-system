@@ -9,7 +9,6 @@ import React, {
   useId,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import classNames from 'classnames';
 import {
@@ -28,28 +27,30 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
-import styles from './Popover.module.scss';
-import { PopoverBody } from './PopoverBody';
+import { useExternalTrigger } from '@/hooks/useExternalTrigger';
+import styles from '../Popover/Popover.module.scss';
+import { PopoverBody } from '../Popover/PopoverBody';
 import {
   PopoverContext,
   PopoverPortalRootContext,
   PopoverPortalRootProvider,
-} from './PopoverContext';
-import { PopoverDescription } from './PopoverDescription';
-import { PopoverDivider } from './PopoverDivider';
-import { PopoverHeading } from './PopoverHeading';
-import { PopoverProps } from './Popover.types';
+} from '../Popover/PopoverContext';
+import { PopoverDescription } from '../Popover/PopoverDescription';
+import { PopoverDivider } from '../Popover/PopoverDivider';
+import { PopoverHeading } from '../Popover/PopoverHeading';
+import { TriggerablePopoverProps } from './TriggerablePopover.types';
 
 const ARROW_HEIGHT = 8;
 const GAP = 4;
 
-// Extracted as a constant so it's not recreated on every render.
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
 
-const PopoverRoot: React.FC<PopoverProps> = ({
+const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   trigger,
   children,
+  triggerId,
+  enableInjectionSlot = false,
   placement = 'bottom',
   isDisabled,
   modal = false,
@@ -61,26 +62,27 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   onOpenChange: onOpenChangeProp,
   portalRoot: portalRootProp,
   'aria-label': ariaLabel,
+  externalTriggerOptions,
   ...rest
 }) => {
-  const [openState, setOpenState] = useState(false);
   const arrowRef = useRef<SVGSVGElement>(null);
   const headingId = useId();
 
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
 
-  // Support controlled and uncontrolled modes
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : openState;
+  const { open, handleOpenChange, isExternallyTriggered, forceMount, injectionSlotProps } =
+    useExternalTrigger(triggerId, openProp, onOpenChangeProp, {
+      ...externalTriggerOptions,
+      enableInjectionSlot,
+    });
 
-  const handleOpenChange = useCallback(
+  const guardedHandleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (isDisabled && nextOpen) return;
-      if (!isControlled) setOpenState(nextOpen);
-      onOpenChangeProp?.(nextOpen);
+      handleOpenChange(nextOpen);
     },
-    [isDisabled, isControlled, onOpenChangeProp]
+    [isDisabled, handleOpenChange]
   );
 
   const middleware = useMemo(
@@ -97,7 +99,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   const { refs, context, floatingStyles } = useFloating({
     placement,
     open,
-    onOpenChange: handleOpenChange,
+    onOpenChange: guardedHandleOpenChange,
     whileElementsMounted: autoUpdate,
     middleware,
   });
@@ -108,12 +110,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
-  const close = useCallback(() => {
-    if (!isControlled) {
-      setOpenState(false);
-    }
-    onOpenChangeProp?.(false);
-  }, [isControlled, onOpenChangeProp]);
+  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   const isDarkTheme =
     typeof document !== 'undefined' &&
@@ -134,16 +131,12 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
 
-  // Put ARIA attributes (aria-expanded, aria-haspopup) on the trigger when it's a single
-  // element that allows them (e.g. button). Otherwise use a wrapper with role="button".
   const triggerElement = childElement ? (
     cloneElement(
       childElement,
       getReferenceProps({
         ...childElement.props,
         ref: mergedRef,
-        // Merge consumer styles only when present to avoid creating an extra object
-        // on every render when no custom style is provided
         style: childElement.props.style
           ? { ...childElement.props.style, ...triggerStyle }
           : triggerStyle,
@@ -161,21 +154,20 @@ const PopoverRoot: React.FC<PopoverProps> = ({
     </span>
   );
 
-  // Memoize context value to prevent unnecessary re-renders of all
-  // context consumers when this component re-renders for unrelated reasons.
   const contextValue = useMemo(() => ({ close }), [close]);
 
   return (
     <PopoverPortalRootProvider>
       <PopoverContext.Provider value={contextValue}>
         {triggerElement}
-        {open && (
+        {(open || forceMount) && (
           <FloatingPortal root={resolvedPortalRoot}>
-            <FloatingFocusManager context={context} modal={modal}>
+            <FloatingFocusManager context={context} modal={modal} disabled={!open}>
               <div
                 // eslint-disable-next-line react-hooks/refs
                 ref={refs.setFloating}
-                style={floatingStyles}
+                data-state={open ? 'open' : 'closed'}
+                style={open ? floatingStyles : { ...floatingStyles, display: 'none' }}
                 className={classNames(styles.wrapper, wrapperClassName)}
                 aria-label={ariaLabel}
                 aria-labelledby={ariaLabel ? undefined : `popover-heading-${headingId}`}
@@ -193,7 +185,10 @@ const PopoverRoot: React.FC<PopoverProps> = ({
                   className={classNames(styles.arrow, arrowClassName)}
                 />
                 <div className={classNames(styles.container, containerClassName)}>
-                  <div className={classNames(styles.content, contentClassName)}>{children}</div>
+                  <div className={classNames(styles.content, contentClassName)}>
+                    {!isExternallyTriggered && children}
+                    {injectionSlotProps && <div {...injectionSlotProps} />}
+                  </div>
                 </div>
               </div>
             </FloatingFocusManager>
@@ -204,18 +199,18 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   );
 };
 
-/* Compound API */
+/* Compound API — reuses Popover's sub-components directly; they only depend on PopoverContext. */
 
-type PopoverComponent = React.FC<PopoverProps> & {
+type TriggerablePopoverComponent = React.FC<TriggerablePopoverProps> & {
   Heading: typeof PopoverHeading;
   Description: typeof PopoverDescription;
   Body: typeof PopoverBody;
   Divider: typeof PopoverDivider;
 };
 
-export const Popover = PopoverRoot as PopoverComponent;
+export const TriggerablePopover = TriggerablePopoverRoot as TriggerablePopoverComponent;
 
-Popover.Heading = PopoverHeading;
-Popover.Body = PopoverBody;
-Popover.Description = PopoverDescription;
-Popover.Divider = PopoverDivider;
+TriggerablePopover.Heading = PopoverHeading;
+TriggerablePopover.Body = PopoverBody;
+TriggerablePopover.Description = PopoverDescription;
+TriggerablePopover.Divider = PopoverDivider;
