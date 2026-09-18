@@ -37,6 +37,7 @@ import {
 } from './PopoverContext';
 import { PopoverDescription } from './PopoverDescription';
 import { PopoverDivider } from './PopoverDivider';
+import { PopoverExternalContent } from './PopoverExternalContent';
 import { PopoverHeading } from './PopoverHeading';
 import { PopoverProps } from './Popover.types';
 
@@ -102,18 +103,16 @@ const PopoverRoot: React.FC<PopoverProps> = ({
     middleware,
   });
 
-  const click = useClick(context, { enabled: !isDisabled });
+  const click = useClick(context, { enabled: !isDisabled && Boolean(trigger) });
   const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
   const role = useRole(context, { role: 'dialog' });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
-  const close = useCallback(() => {
-    if (!isControlled) {
-      setOpenState(false);
-    }
-    onOpenChangeProp?.(false);
-  }, [isControlled, onOpenChangeProp]);
+  // Routes through `handleOpenChange` (rather than duplicating its logic) so every close — the
+  // heading's close button, a composed `Popover.ExternalContent`'s dismiss control, an outside
+  // click, or Escape — goes through the same path a consumer's `onOpenChange` observes.
+  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   const isDarkTheme =
     typeof document !== 'undefined' &&
@@ -134,10 +133,20 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
 
+  // Anchor-only mode: `trigger` was omitted entirely, so there's no visible/clickable trigger
+  // element at all — this popover can only ever be opened via a controlled `open` prop the
+  // consumer drives themselves. Render a plain, fully non-interactive anchor (no role, no
+  // tabIndex, no getReferenceProps() spread) so it never becomes locally clickable — structural,
+  // not a toggled state. (Local click-to-open is also already disabled entirely via
+  // `Boolean(trigger)` on `useClick` above.)
+  const isAnchorOnly = !childElement && trigger === undefined;
+
   // Put ARIA attributes (aria-expanded, aria-haspopup) on the trigger when it's a single
-  // element that allows them (e.g. button). Otherwise use a wrapper with role="button".
-  const triggerElement = childElement ? (
-    cloneElement(
+  // element that allows them (e.g. button). Otherwise use a wrapper with role="button" — unless
+  // there's no trigger at all, in which case that wrapper must stay inert (anchor-only mode).
+  let triggerElement: React.ReactNode;
+  if (childElement) {
+    triggerElement = cloneElement(
       childElement,
       getReferenceProps({
         ...childElement.props,
@@ -148,18 +157,27 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           ? { ...childElement.props.style, ...triggerStyle }
           : triggerStyle,
       })
-    )
-  ) : (
-    <span
-      ref={refs.setReference}
-      role="button"
-      tabIndex={isDisabled ? -1 : 0}
-      style={triggerStyle}
-      {...getReferenceProps()}
-    >
-      {trigger}
-    </span>
-  );
+    );
+  } else if (isAnchorOnly) {
+    triggerElement = (
+      <span ref={refs.setReference} style={{ display: 'inline-block' }} aria-hidden />
+    );
+  } else {
+    triggerElement = (
+      <span
+        // Same `refs.setReference` callback as the anchor-only branch above; only one of these
+        // two mutually-exclusive branches ever renders per instance, but the linter can't see that.
+        // eslint-disable-next-line react-hooks/refs
+        ref={refs.setReference}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
+        style={triggerStyle}
+        {...getReferenceProps()}
+      >
+        {trigger}
+      </span>
+    );
+  }
 
   // Memoize context value to prevent unnecessary re-renders of all
   // context consumers when this component re-renders for unrelated reasons.
@@ -211,6 +229,7 @@ type PopoverComponent = React.FC<PopoverProps> & {
   Description: typeof PopoverDescription;
   Body: typeof PopoverBody;
   Divider: typeof PopoverDivider;
+  ExternalContent: typeof PopoverExternalContent;
 };
 
 export const Popover = PopoverRoot as PopoverComponent;
@@ -219,3 +238,4 @@ Popover.Heading = PopoverHeading;
 Popover.Body = PopoverBody;
 Popover.Description = PopoverDescription;
 Popover.Divider = PopoverDivider;
+Popover.ExternalContent = PopoverExternalContent;
