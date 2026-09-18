@@ -1,23 +1,9 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
 import { Button } from '@/components/Button/web/Button';
-import {
-  ExternalTriggerProvider,
-  useTriggerExternal,
-} from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
 import { renderWithProvider } from '../../test-utils/render';
-
-const ExternalTrigger = ({ triggerId }: { triggerId: string }) => {
-  const trigger = useTriggerExternal();
-
-  return (
-    <button type="button" onClick={() => trigger(triggerId)}>
-      Fire external trigger for {triggerId}
-    </button>
-  );
-};
 
 describe('Popover', () => {
   it('renders with trigger element', () => {
@@ -421,108 +407,39 @@ describe('Popover.Divider', () => {
   });
 });
 
-describe('Popover external triggering', () => {
-  it('renders externalContent instead of children when triggered via ExternalTriggerProvider', async () => {
+describe('Popover anchor-only mode (controlled, no trigger)', () => {
+  it('has no clickable/focusable element before opening, while open, or after closing', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <ExternalTriggerProvider>
-        <ExternalTrigger triggerId="share-top" />
-        <Popover
-          triggerId="share-top"
-          trigger={<Button>Open</Button>}
-          externalContent={<Popover.Body>External content</Popover.Body>}
-        >
-          <Popover.Body>App content</Popover.Body>
-        </Popover>
-      </ExternalTriggerProvider>
-    );
+    const AnchorOnly = () => {
+      const [open, setOpen] = useState(false);
 
-    expect(screen.queryByText('External content')).not.toBeInTheDocument();
-
-    await user.click(screen.getByText('Fire external trigger for share-top'));
-
-    await waitFor(() => {
-      expect(screen.getByText('External content')).toBeInTheDocument();
-    });
-    expect(screen.queryByText('App content')).not.toBeInTheDocument();
-  });
-
-  it('reverts to children when reopened locally (trigger click) after externalContent was shown once', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <ExternalTriggerProvider>
-        <ExternalTrigger triggerId="share-top" />
-        <Popover
-          triggerId="share-top"
-          trigger={<Button>Open</Button>}
-          externalContent={<Popover.Body>External content</Popover.Body>}
-        >
-          <Popover.Body>App content</Popover.Body>
-        </Popover>
-      </ExternalTriggerProvider>
-    );
-
-    await user.click(screen.getByText('Fire external trigger for share-top'));
-    await waitFor(() => expect(screen.getByText('External content')).toBeInTheDocument());
-
-    await user.keyboard('{Escape}');
-    await waitFor(() => expect(screen.queryByText('External content')).not.toBeInTheDocument());
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      expect(screen.getByText('App content')).toBeInTheDocument();
-    });
-    expect(screen.queryByText('External content')).not.toBeInTheDocument();
-  });
-
-  it('falls back to children when triggered but no externalContent is provided', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <ExternalTriggerProvider>
-        <ExternalTrigger triggerId="share-top" />
-        <Popover triggerId="share-top" trigger={<Button>Open</Button>}>
-          <Popover.Body>App content</Popover.Body>
-        </Popover>
-      </ExternalTriggerProvider>
-    );
-
-    await user.click(screen.getByText('Fire external trigger for share-top'));
-
-    await waitFor(() => {
-      expect(screen.getByText('App content')).toBeInTheDocument();
-    });
-  });
-
-  it('anchor-only mode (no trigger): nothing is clickable/focusable before triggering, after triggering, or after the triggered popover is dismissed', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <ExternalTriggerProvider>
-        <ExternalTrigger triggerId="anchor-only" />
-        <Popover
-          triggerId="anchor-only"
-          externalContent={
+      return (
+        <>
+          <Popover open={open} onOpenChange={setOpen}>
             <Popover.ExternalContent
               icon={<span>icon</span>}
               heading="Heads up"
-              description="Some external content"
+              description="Some content"
               dismissText="Got it"
             />
-          }
-        />
-      </ExternalTriggerProvider>
-    );
+          </Popover>
 
-    // Only the test's own helper trigger button exists — Popover itself renders no
-    // clickable/focusable element in anchor-only mode.
+          <button type="button" onClick={() => setOpen(true)}>
+            Open externally
+          </button>
+        </>
+      );
+    };
+
+    renderWithProvider(<AnchorOnly />);
+
+    // Only the test's own helper button exists — Popover itself renders no clickable/focusable
+    // element in anchor-only mode.
     expect(screen.getAllByRole('button')).toHaveLength(1);
     expect(document.querySelector('[tabindex]')).not.toBeInTheDocument();
 
-    await user.click(screen.getByText('Fire external trigger for anchor-only'));
+    await user.click(screen.getByText('Open externally'));
 
     await waitFor(() => {
       expect(screen.getByText('Heads up')).toBeInTheDocument();
@@ -537,36 +454,58 @@ describe('Popover external triggering', () => {
     expect(screen.getAllByRole('button')).toHaveLength(1);
     expect(document.querySelector('[tabindex]')).not.toBeInTheDocument();
   });
+});
 
-  // Regression test: mirrors a real bug found and fixed in startribune-web's Radix-based popover,
-  // where opening a second popover's content auto-focused itself, making the first popover see
-  // focus move outside itself and auto-close via its own outside-focus dismiss logic. Fires both
-  // triggers directly from a mount effect — NOT via userEvent.click — since a real click on an
-  // unrelated button would itself count as a legitimate "outside interaction" for floating-ui's
-  // dismiss logic and produce a false failure unrelated to what this test targets.
-  it('keeps two Popovers open simultaneously when both are triggered externally at once', async () => {
-    const BothExternalTriggers = () => {
-      const trigger = useTriggerExternal();
-
-      useEffect(() => {
-        trigger('popover-c');
-        trigger('popover-d');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-
-      return null;
-    };
+describe('Popover.ExternalContent', () => {
+  it('renders icon/heading/description/dismissText and closes on dismiss', async () => {
+    const user = userEvent.setup();
+    const onDismiss = vi.fn();
 
     renderWithProvider(
-      <ExternalTriggerProvider>
-        <BothExternalTriggers />
-        <Popover triggerId="popover-c" trigger={<Button>Third trigger</Button>}>
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.ExternalContent
+          icon={<span>icon</span>}
+          heading="Heads up"
+          description="Some content"
+          dismissText="Got it"
+          onDismiss={onDismiss}
+        />
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Heads up')).toBeInTheDocument();
+      expect(screen.getByText('Some content')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('Got it'));
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(screen.queryByText('Heads up')).not.toBeInTheDocument();
+    });
+  });
+});
+
+// Regression test: mirrors a real bug found and fixed in startribune-web's Radix-based popover,
+// where opening a second popover's content auto-focused itself, making the first popover see
+// focus move outside itself and auto-close via its own outside-focus dismiss logic. Both popovers
+// are mounted already-open (controlled `open={true}` from the start) rather than opened via a
+// click, since a real click on one popover's trigger would itself count as a legitimate "outside
+// interaction" for the other's dismiss logic and produce a false failure unrelated to this test.
+describe('Popover simultaneous instances', () => {
+  it('keeps two Popovers open at once without one stealing focus and closing the other', async () => {
+    renderWithProvider(
+      <>
+        <Popover open trigger={<Button>Third trigger</Button>}>
           <Popover.Body>First content</Popover.Body>
         </Popover>
-        <Popover triggerId="popover-d" trigger={<Button>Fourth trigger</Button>}>
+        <Popover open trigger={<Button>Fourth trigger</Button>}>
           <Popover.Body>Second content</Popover.Body>
         </Popover>
-      </ExternalTriggerProvider>
+      </>
     );
 
     expect(await screen.findByText('First content')).toBeInTheDocument();

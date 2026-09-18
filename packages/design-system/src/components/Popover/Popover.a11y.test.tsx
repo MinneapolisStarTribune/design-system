@@ -1,14 +1,9 @@
-import { useEffect } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { axe } from 'vitest-axe';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button, UtilityBody } from '@/components/index.web';
 import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
-import {
-  ExternalTriggerProvider,
-  useTriggerExternal,
-} from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
 import { Popover } from './Popover';
 
 describe('Popover Accessibility', () => {
@@ -96,40 +91,17 @@ describe('Popover Accessibility', () => {
     await checkA11y();
   });
 
-  it('has no violations when externally triggered with a composed Popover.ExternalContent', async () => {
-    const AutoTrigger = () => {
-      const trigger = useTriggerExternal();
-
-      useEffect(() => {
-        trigger('a11y-demo');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-
-      return null;
-    };
-
+  it('has no violations with a composed Popover.ExternalContent', async () => {
     render(
       <DesignSystemProvider brand="startribune" forceColorScheme="light">
-        <ExternalTriggerProvider>
-          <AutoTrigger />
-          <Popover
-            triggerId="a11y-demo"
-            trigger={<Button>Open</Button>}
-            aria-label="External content example"
-            externalContent={
-              <Popover.ExternalContent
-                icon={<span aria-hidden>icon</span>}
-                heading="Heads up"
-                description="Some external content"
-                dismissText="Got it"
-              />
-            }
-          >
-            <Popover.Body>
-              <UtilityBody>Content</UtilityBody>
-            </Popover.Body>
-          </Popover>
-        </ExternalTriggerProvider>
+        <Popover open aria-label="External content example">
+          <Popover.ExternalContent
+            icon={<span aria-hidden>icon</span>}
+            heading="Heads up"
+            description="Some external content"
+            dismissText="Got it"
+          />
+        </Popover>
       </DesignSystemProvider>
     );
 

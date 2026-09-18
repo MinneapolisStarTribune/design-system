@@ -28,7 +28,6 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
-import { useExternalTriggerState } from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
 import styles from './Popover.module.scss';
 import { PopoverBody } from './PopoverBody';
 import {
@@ -52,8 +51,6 @@ const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as 
 const PopoverRoot: React.FC<PopoverProps> = ({
   trigger,
   children,
-  triggerId,
-  externalContent,
   placement = 'bottom',
   isDisabled,
   modal = false,
@@ -74,20 +71,17 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
 
-  const { isTriggered, dismiss: dismissExternalTrigger } = useExternalTriggerState(triggerId);
-
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : openState || isTriggered;
+  const open = isControlled ? openProp : openState;
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (isDisabled && nextOpen) return;
-      if (!nextOpen) dismissExternalTrigger();
       if (!isControlled) setOpenState(nextOpen);
       onOpenChangeProp?.(nextOpen);
     },
-    [isDisabled, isControlled, onOpenChangeProp, dismissExternalTrigger]
+    [isDisabled, isControlled, onOpenChangeProp]
   );
 
   const middleware = useMemo(
@@ -117,8 +111,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   // Routes through `handleOpenChange` (rather than duplicating its logic) so every close — the
   // heading's close button, a composed `Popover.ExternalContent`'s dismiss control, an outside
-  // click, or Escape — clears the external-trigger state the same way, and a later manual reopen
-  // never shows stale `externalContent`.
+  // click, or Escape — goes through the same path a consumer's `onOpenChange` observes.
   const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   const isDarkTheme =
@@ -141,11 +134,11 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
 
   // Anchor-only mode: `trigger` was omitted entirely, so there's no visible/clickable trigger
-  // element at all — this popover can only ever be opened externally (via `triggerId`). Render a
-  // plain, fully non-interactive anchor (no role, no tabIndex, no getReferenceProps() spread) so
-  // it never becomes locally clickable — structural, not a toggled state, so it stays true even
-  // after an external-trigger-driven open/close cycle. (Local click-to-open is also already
-  // disabled entirely via `Boolean(trigger)` on `useClick` above.)
+  // element at all — this popover can only ever be opened via a controlled `open` prop the
+  // consumer drives themselves. Render a plain, fully non-interactive anchor (no role, no
+  // tabIndex, no getReferenceProps() spread) so it never becomes locally clickable — structural,
+  // not a toggled state. (Local click-to-open is also already disabled entirely via
+  // `Boolean(trigger)` on `useClick` above.)
   const isAnchorOnly = !childElement && trigger === undefined;
 
   // Put ARIA attributes (aria-expanded, aria-haspopup) on the trigger when it's a single
@@ -218,9 +211,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
                   className={classNames(styles.arrow, arrowClassName)}
                 />
                 <div className={classNames(styles.container, containerClassName)}>
-                  <div className={classNames(styles.content, contentClassName)}>
-                    {isTriggered && externalContent ? externalContent : children}
-                  </div>
+                  <div className={classNames(styles.content, contentClassName)}>{children}</div>
                 </div>
               </div>
             </FloatingFocusManager>

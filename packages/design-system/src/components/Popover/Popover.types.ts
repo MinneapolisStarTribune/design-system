@@ -5,27 +5,18 @@ export type Placement = Position;
 
 export type PopoverProps = {
   /**
-   * Omit for a popover with no local open affordance — one that can only ever be opened
-   * externally via `triggerId`, e.g. content that's only ever shown by an external trigger,
+   * Omit for a popover with no local open affordance — one that's only ever opened via a
+   * controlled `open` prop (e.g. driven by some external trigger the consumer wires up itself),
    * placed anywhere on the page with no visible trigger element.
    */
   trigger?: ReactNode;
   /**
-   * Rendered when this popover is open due to a normal in-app interaction (clicking `trigger`).
-   * Not rendered while open due to an external trigger — see `externalContent` instead.
+   * Content shown while the popover is open. `<Popover.ExternalContent .../>` is a fixed-layout
+   * option (icon/heading/description/dismiss) a consumer can pass here for content driven by
+   * something other than a normal click — e.g. compose it conditionally alongside a controlled
+   * `open`/`onOpenChange` pair driven by their own trigger source.
    */
   children?: ReactNode;
-  /**
-   * Unique id an external caller (via `useTriggerExternal()`) can use to open this popover and
-   * supply `externalContent`. Omit entirely for a popover that only ever opens from `trigger`.
-   */
-  triggerId?: string;
-  /**
-   * Rendered instead of `children` while this popover is open because it was triggered
-   * externally (via `triggerId`) — e.g. `<Popover.ExternalContent .../>`. Falls back to
-   * `children` if omitted.
-   */
-  externalContent?: ReactNode;
   /**
    * Which side of the trigger the popover appears on.
    * Defaults to 'bottom'.

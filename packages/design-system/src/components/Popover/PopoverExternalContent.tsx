@@ -19,9 +19,10 @@ export type PopoverExternalContentProps = {
 };
 
 /**
- * Fixed-layout content for a `Popover` shown while it's open due to an external trigger (via
- * `triggerId`) — an icon, a heading, a description, and a dismiss control. Compose as
- * `<Popover.ExternalContent .../>`, passed via the `externalContent` prop.
+ * Fixed-layout content for a `Popover` — an icon, a heading, a description, and a dismiss
+ * control. Compose it as `Popover`'s `children` (e.g. conditionally, alongside a controlled
+ * `open`/`onOpenChange` pair driven by whatever trigger source you like) when you want this
+ * layout instead of writing your own.
  */
 export const PopoverExternalContent: React.FC<PopoverExternalContentProps> = ({
   icon,

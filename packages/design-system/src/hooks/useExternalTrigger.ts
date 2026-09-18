@@ -124,9 +124,9 @@ export type UseExternalTriggerResult = {
  *
  * Renders nothing itself; wire its return value into a popover/dialog-like shell.
  *
- * @deprecated Backs the deprecated `TriggerablePopover`. Use `Popover`'s `triggerId`/
- * `externalContent` props (backed by `ExternalTriggerProvider`/`useExternalTriggerState`/
- * `useTriggerExternal`) instead — it carries a typed payload rather than only a boolean
+ * @deprecated Backs the deprecated `TriggerablePopover`. Use `Popover`'s controlled `open`/
+ * `onOpenChange` props with `@minneapolisstartribune/external-trigger` (or any other trigger
+ * source of your choosing) instead — it carries a typed payload rather than only a boolean
  * open/close signal, and doesn't require the iframe-injection-slot machinery here.
  */
 export function useExternalTrigger(
