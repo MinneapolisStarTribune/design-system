@@ -4,10 +4,12 @@ import React, {
   cloneElement,
   isValidElement,
   ReactElement,
+  useCallback,
   useContext,
   useId,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import classNames from 'classnames';
 import {
@@ -29,8 +31,13 @@ import {
 } from '@floating-ui/react';
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import styles from './Tooltip.module.scss';
+import { TooltipExternalContent } from './TooltipExternalContent';
 import { TooltipProps } from './Tooltip.types';
-import { TooltipPortalRootContext, TooltipPortalRootProvider } from './TooltipContext';
+import {
+  TooltipCloseContext,
+  TooltipPortalRootContext,
+  TooltipPortalRootProvider,
+} from './TooltipContext';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
@@ -39,6 +46,7 @@ const GAP = 0;
 const TooltipRoot: React.FC<TooltipProps> = ({
   children,
   label,
+  content,
   pointer = 'top',
   icon,
   iconPosition = 'start',
@@ -53,16 +61,37 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   iconClassName,
   'aria-label': ariaLabel,
   zIndex = 9999,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
   ...rest
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const [openState, setOpenState] = useState(false);
   const responsiveSize = useResponsiveSize();
   const isTouchDevice = responsiveSize === 'medium';
   const arrowRef = useRef<SVGSVGElement>(null);
   const tooltipId = useId();
 
+  // Rich `content` implies click-triggered, interactive content (links, a dismiss button) — a
+  // hover/focus-revealed `role="tooltip"` element must never contain focusable content, so this
+  // switches both the interaction model and the ARIA role. Plain `label` stays a passive hint.
+  const isRichContent = content !== undefined;
+
   const portalRootFromContext = useContext(TooltipPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
+
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : openState;
+
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (isDisabled && nextOpen) return;
+      if (!isControlled) setOpenState(nextOpen);
+      onOpenChangeProp?.(nextOpen);
+    },
+    [isDisabled, isControlled, onOpenChangeProp]
+  );
+
+  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   const middleware = useMemo(
     () => [
@@ -78,22 +107,22 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   const { refs, context, floatingStyles } = useFloating({
     placement: pointer,
     open,
-    onOpenChange: setOpen,
+    onOpenChange: handleOpenChange,
     whileElementsMounted: autoUpdate,
     middleware,
   });
 
   const hover = useHover(context, {
-    enabled: !isDisabled && !isTouchDevice,
+    enabled: !isDisabled && !isTouchDevice && !isRichContent,
     delay: { open: showDelay, close: hideDelay },
   });
-  const focus = useFocus(context, { enabled: !isDisabled });
+  const focus = useFocus(context, { enabled: !isDisabled && !isRichContent });
   const click = useClick(context, {
-    enabled: !isDisabled && isTouchDevice,
+    enabled: !isDisabled && (isRichContent || isTouchDevice),
     event: 'click',
   });
   const dismiss = useDismiss(context, { enabled: !isDisabled });
-  const role = useRole(context, { role: 'tooltip' });
+  const role = useRole(context, { role: isRichContent ? 'dialog' : 'tooltip' });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
@@ -134,6 +163,8 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   const startIcon = icon && iconPosition === 'start' ? icon : null;
   const endIcon = icon && iconPosition === 'end' ? icon : null;
 
+  const closeContextValue = useMemo(() => ({ close }), [close]);
+
   return (
     <TooltipPortalRootProvider>
       {triggerElement}
@@ -144,7 +175,6 @@ const TooltipRoot: React.FC<TooltipProps> = ({
             ref={refs.setFloating}
             style={{ ...floatingStyles, zIndex }}
             className={classNames(styles.wrapper, wrapperClassName)}
-            role="tooltip"
             id={`tooltip-${tooltipId}`}
             aria-label={ariaLabel}
             {...getFloatingProps()}
@@ -161,20 +191,28 @@ const TooltipRoot: React.FC<TooltipProps> = ({
             />
             <div className={classNames(styles.container)}>
               <div className={classNames(styles.content, contentClassName)}>
-                {startIcon && (
-                  <span className={classNames(styles.icon, iconClassName)}>{startIcon}</span>
-                )}
-                <span
-                  className={classNames(
-                    styles.label,
-                    'typography-utility-text-regular-x-small',
-                    labelClassName
-                  )}
-                >
-                  {label}
-                </span>
-                {endIcon && (
-                  <span className={classNames(styles.icon, iconClassName)}>{endIcon}</span>
+                {isRichContent ? (
+                  <TooltipCloseContext.Provider value={closeContextValue}>
+                    {content}
+                  </TooltipCloseContext.Provider>
+                ) : (
+                  <>
+                    {startIcon && (
+                      <span className={classNames(styles.icon, iconClassName)}>{startIcon}</span>
+                    )}
+                    <span
+                      className={classNames(
+                        styles.label,
+                        'typography-utility-text-regular-x-small',
+                        labelClassName
+                      )}
+                    >
+                      {label}
+                    </span>
+                    {endIcon && (
+                      <span className={classNames(styles.icon, iconClassName)}>{endIcon}</span>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -185,4 +223,12 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   );
 };
 
-export const Tooltip = TooltipRoot;
+/* Compound API */
+
+type TooltipComponent = React.FC<TooltipProps> & {
+  ExternalContent: typeof TooltipExternalContent;
+};
+
+export const Tooltip = TooltipRoot as TooltipComponent;
+
+Tooltip.ExternalContent = TooltipExternalContent;

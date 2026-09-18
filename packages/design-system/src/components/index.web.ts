@@ -105,10 +105,16 @@ export {
 } from './Skeleton/web/Skeleton';
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
-export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
-/** @deprecated Use `Popover`'s `triggerId`/`externalContent` props instead. */
+export {
+  TooltipCloseContext,
+  TooltipPortalRootContext,
+  TooltipPortalRootProvider,
+  useTooltipCloseContext,
+} from './Tooltip/TooltipContext';
+export type { TooltipExternalContentProps } from './Tooltip/TooltipExternalContent';
+/** @deprecated Use `Popover` (with a controlled `open`/`onOpenChange`) instead. */
 export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
-/** @deprecated Use `PopoverProps` (with `triggerId`/`externalContent`) instead. */
+/** @deprecated Use `PopoverProps` (with a controlled `open`/`onOpenChange`) instead. */
 export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,

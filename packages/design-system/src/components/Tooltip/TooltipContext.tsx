@@ -1,6 +1,27 @@
 'use client';
 
-import React, { createContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+
+export type TooltipCloseContextValue = {
+  close: () => void;
+};
+
+export const TooltipCloseContext = createContext<TooltipCloseContextValue | null>(null);
+
+/**
+ * For content rendered via `Tooltip`'s `content` prop (e.g. `Tooltip.ExternalContent`, or your
+ * own custom interactive content) that needs to close the tooltip itself — a dismiss button, for
+ * instance. Throws if used outside a `Tooltip` that was given `content`.
+ */
+export const useTooltipCloseContext = () => {
+  const ctx = useContext(TooltipCloseContext);
+
+  if (!ctx) {
+    throw new Error('Tooltip content components must be used within a Tooltip given `content`');
+  }
+
+  return ctx;
+};
 
 /**
  * Context for the portal root element. When set, Tooltip content renders into this

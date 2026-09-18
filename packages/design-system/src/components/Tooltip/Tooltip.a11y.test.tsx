@@ -39,4 +39,22 @@ describe('Tooltip Accessibility', () => {
 
     await checkA11y();
   });
+
+  it('has no violations with a composed Tooltip.ExternalContent', async () => {
+    await expectNoA11yViolations(
+      <Tooltip
+        open
+        content={
+          <Tooltip.ExternalContent
+            icon={<span aria-hidden>icon</span>}
+            heading="Heads up"
+            description="Some content"
+            dismissText="Got it"
+          />
+        }
+      >
+        <Button>Open</Button>
+      </Tooltip>
+    );
+  });
 });
