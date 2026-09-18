@@ -102,44 +102,53 @@ const ControlledExample = () => {
   );
 };
 
-const ExternalTriggerExample = () => {
+// `useTriggerExternal`/`useExternalTriggerState` must be called by a *descendant* of
+// `ExternalTriggerProvider`, not by the same component that renders the provider — the provider
+// only takes effect for the JSX tree below it, not for hook calls made earlier in the same
+// component's own render. Each example below is split into an outer component that renders the
+// provider and an inner component (a child of it) that actually calls the hook.
+const ExternalTriggerExampleInner = () => {
   const trigger = useTriggerExternal();
 
   return (
-    <ExternalTriggerProvider>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Popover
-          triggerId="story-external-trigger"
-          trigger={<Button>Open</Button>}
-          externalContent={
-            <Popover.ExternalContent
-              icon={<CameraIcon />}
-              heading="Externally triggered"
-              description="This content was shown by calling trigger('story-external-trigger'), not by clicking the trigger."
-              dismissText="Got it"
-            />
-          }
-        >
-          <Popover.Heading>Title</Popover.Heading>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <Popover
+        triggerId="story-external-trigger"
+        trigger={<Button>Open</Button>}
+        externalContent={
+          <Popover.ExternalContent
+            icon={<CameraIcon />}
+            heading="Externally triggered"
+            description="This content was shown by calling trigger('story-external-trigger'), not by clicking the trigger."
+            dismissText="Got it"
+          />
+        }
+      >
+        <Popover.Heading>Title</Popover.Heading>
 
-          <Popover.Body>
-            <UtilityBody>Normal content, shown when opened by clicking the trigger.</UtilityBody>
-          </Popover.Body>
-        </Popover>
+        <Popover.Body>
+          <UtilityBody>Normal content, shown when opened by clicking the trigger.</UtilityBody>
+        </Popover.Body>
+      </Popover>
 
-        <Button variant="outlined" onClick={() => trigger('story-external-trigger')}>
-          Trigger externally
-        </Button>
-      </div>
-    </ExternalTriggerProvider>
+      <Button variant="outlined" onClick={() => trigger('story-external-trigger')}>
+        Trigger externally
+      </Button>
+    </div>
   );
 };
 
-const AnchorOnlyExample = () => {
+const ExternalTriggerExample = () => (
+  <ExternalTriggerProvider>
+    <ExternalTriggerExampleInner />
+  </ExternalTriggerProvider>
+);
+
+const AnchorOnlyExampleInner = () => {
   const trigger = useTriggerExternal();
 
   return (
-    <ExternalTriggerProvider>
+    <>
       <Popover
         triggerId="story-anchor-only"
         externalContent={
@@ -153,9 +162,15 @@ const AnchorOnlyExample = () => {
       />
 
       <Button onClick={() => trigger('story-anchor-only')}>Trigger anchor-only popover</Button>
-    </ExternalTriggerProvider>
+    </>
   );
 };
+
+const AnchorOnlyExample = () => (
+  <ExternalTriggerProvider>
+    <AnchorOnlyExampleInner />
+  </ExternalTriggerProvider>
+);
 
 /**
  * All variants
