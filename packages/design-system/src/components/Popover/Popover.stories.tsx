@@ -2,6 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
 import { Button, UtilityBody } from '@/components/index.web';
 import { CameraIcon } from '@/icons';
+import {
+  ExternalTriggerProvider,
+  useTriggerExternal,
+} from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
 import { useState } from 'react';
 
 const meta = {
@@ -95,6 +99,61 @@ const ControlledExample = () => {
         <UtilityBody>State is managed outside</UtilityBody>
       </Popover.Body>
     </Popover>
+  );
+};
+
+const ExternalTriggerExample = () => {
+  const trigger = useTriggerExternal();
+
+  return (
+    <ExternalTriggerProvider>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <Popover
+          triggerId="story-external-trigger"
+          trigger={<Button>Open</Button>}
+          externalContent={
+            <Popover.ExternalContent
+              icon={<CameraIcon />}
+              heading="Externally triggered"
+              description="This content was shown by calling trigger('story-external-trigger'), not by clicking the trigger."
+              dismissText="Got it"
+            />
+          }
+        >
+          <Popover.Heading>Title</Popover.Heading>
+
+          <Popover.Body>
+            <UtilityBody>Normal content, shown when opened by clicking the trigger.</UtilityBody>
+          </Popover.Body>
+        </Popover>
+
+        <Button variant="outlined" onClick={() => trigger('story-external-trigger')}>
+          Trigger externally
+        </Button>
+      </div>
+    </ExternalTriggerProvider>
+  );
+};
+
+const AnchorOnlyExample = () => {
+  const trigger = useTriggerExternal();
+
+  return (
+    <ExternalTriggerProvider>
+      <Popover
+        triggerId="story-anchor-only"
+        externalContent={
+          <Popover.ExternalContent
+            icon={<CameraIcon />}
+            heading="Anchor-only popover"
+            description="This popover has no trigger element at all — it can only ever be opened externally."
+            dismissText="Got it"
+          />
+        }
+      />
+
+      <Button onClick={() => trigger('story-anchor-only')}>Trigger anchor-only popover</Button>
+    </ExternalTriggerProvider>
   );
 };
 
@@ -255,6 +314,18 @@ export const AllVariants: Story = {
         <h3 style={{ marginBottom: 24 }}>Controlled</h3>
 
         <ControlledExample />
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Externally triggered (triggerId + externalContent)</h3>
+
+        <ExternalTriggerExample />
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Anchor-only (no trigger, external open only)</h3>
+
+        <AnchorOnlyExample />
       </div>
     </div>
   ),

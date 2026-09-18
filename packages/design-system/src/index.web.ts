@@ -15,6 +15,12 @@ export {
   DS_ROOT_BRAND_ATTRIBUTE,
 } from '@/providers/DesignSystemProvider';
 export {
+  ExternalTriggerProvider,
+  type ExternalTriggerProviderProps,
+  useExternalTriggerState,
+  useTriggerExternal,
+} from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
+export {
   type CandyBarActions,
   Snack,
   type SnackCandyBarShowOptions,

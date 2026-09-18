@@ -43,6 +43,9 @@ const bindGlobals = (openGlobalName: string, closeGlobalName: string) => {
  * call these globals before any externally-triggerable component has mounted yet — otherwise the
  * globals only exist once a `useExternalTrigger` instance's own effect has run. Registering a
  * specific id is unaffected either way; this only concerns how early the globals themselves exist.
+ *
+ * @deprecated Part of the deprecated `TriggerablePopover`/`useExternalTrigger` mechanism — see
+ * `useExternalTrigger`'s deprecation note for the replacement.
  */
 export function installExternalTriggerGlobals(
   options: Pick<UseExternalTriggerOptions, 'openGlobalName' | 'closeGlobalName'> = {}
@@ -120,6 +123,11 @@ export type UseExternalTriggerResult = {
  * for either means this hook manages state internally).
  *
  * Renders nothing itself; wire its return value into a popover/dialog-like shell.
+ *
+ * @deprecated Backs the deprecated `TriggerablePopover`. Use `Popover`'s `triggerId`/
+ * `externalContent` props (backed by `ExternalTriggerProvider`/`useExternalTriggerState`/
+ * `useTriggerExternal`) instead — it carries a typed payload rather than only a boolean
+ * open/close signal, and doesn't require the iframe-injection-slot machinery here.
  */
 export function useExternalTrigger(
   id: string | undefined,

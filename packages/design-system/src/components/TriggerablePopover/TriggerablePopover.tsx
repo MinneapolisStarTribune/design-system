@@ -208,6 +208,12 @@ type TriggerablePopoverComponent = React.FC<TriggerablePopoverProps> & {
   Divider: typeof PopoverDivider;
 };
 
+/**
+ * @deprecated Use `Popover` with its `triggerId`/`externalContent` props instead — that mechanism
+ * (backed by the new `ExternalTriggerProvider`) supersedes this component's iframe-injection-slot
+ * approach with a simpler payload-driven one, and avoids maintaining two near-duplicate popover
+ * implementations. This component is kept for existing consumers; it isn't being changed further.
+ */
 export const TriggerablePopover = TriggerablePopoverRoot as TriggerablePopoverComponent;
 
 TriggerablePopover.Heading = PopoverHeading;

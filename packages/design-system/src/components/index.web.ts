@@ -106,7 +106,9 @@ export {
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
+/** @deprecated Use `Popover`'s `triggerId`/`externalContent` props instead. */
 export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
+/** @deprecated Use `PopoverProps` (with `triggerId`/`externalContent`) instead. */
 export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,

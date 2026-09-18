@@ -1,6 +1,14 @@
-import { describe, it } from 'vitest';
+import { useEffect } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { axe } from 'vitest-axe';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button, UtilityBody } from '@/components/index.web';
+import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
+import {
+  ExternalTriggerProvider,
+  useTriggerExternal,
+} from '@/providers/ExternalTriggerProvider/ExternalTriggerProvider';
 import { Popover } from './Popover';
 
 describe('Popover Accessibility', () => {
@@ -86,5 +94,59 @@ describe('Popover Accessibility', () => {
     );
 
     await checkA11y();
+  });
+
+  it('has no violations when externally triggered with a composed Popover.ExternalContent', async () => {
+    const AutoTrigger = () => {
+      const trigger = useTriggerExternal();
+
+      useEffect(() => {
+        trigger('a11y-demo');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
+
+      return null;
+    };
+
+    render(
+      <DesignSystemProvider brand="startribune" forceColorScheme="light">
+        <ExternalTriggerProvider>
+          <AutoTrigger />
+          <Popover
+            triggerId="a11y-demo"
+            trigger={<Button>Open</Button>}
+            aria-label="External content example"
+            externalContent={
+              <Popover.ExternalContent
+                icon={<span aria-hidden>icon</span>}
+                heading="Heads up"
+                description="Some external content"
+                dismissText="Got it"
+              />
+            }
+          >
+            <Popover.Body>
+              <UtilityBody>Content</UtilityBody>
+            </Popover.Body>
+          </Popover>
+        </ExternalTriggerProvider>
+      </DesignSystemProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Heads up')).toBeInTheDocument();
+    });
+
+    const results = await axe(document.body, {
+      rules: {
+        // `FloatingFocusManager` (@floating-ui/react) renders invisible focus-guard <span>s that
+        // get `role="button"` with no accessible name specifically under Safari (detected via
+        // `navigator.vendor` containing "Apple"). jsdom's default `navigator.vendor` also matches
+        // that check, so this fires here purely as a test-environment artifact — unrelated to
+        // this component or its content — and doesn't reproduce in real (non-Safari) browsers.
+        'aria-command-name': { enabled: false },
+      },
+    });
+    expect(results).toHaveNoViolations();
   });
 });
