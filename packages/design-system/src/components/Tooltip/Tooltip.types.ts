@@ -16,10 +16,10 @@ export type TooltipProps = {
   label?: string;
 
   /**
-   * Rich content shown instead of `label`/`icon` — e.g. `<Tooltip.ExternalContent .../>`, or any
-   * custom layout with interactive elements (links, a dismiss button). Providing this switches
-   * the tooltip from its default hover/focus-revealed, non-interactive behavior (ARIA `tooltip`
-   * role) to a click-triggered, interactive one (ARIA `dialog` role) — matching the accessibility
+   * Rich content shown instead of `label`/`icon` — any custom layout, including one with
+   * interactive elements (links, a dismiss button). Providing this switches the tooltip from its
+   * default hover/focus-revealed, non-interactive behavior (ARIA `tooltip` role) to a
+   * click-triggered, interactive one (ARIA `dialog` role) — matching the accessibility
    * expectation that a `tooltip`-role element never contains focusable content.
    */
   content?: ReactNode;

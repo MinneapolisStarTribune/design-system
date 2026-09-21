@@ -31,7 +31,6 @@ import {
 } from '@floating-ui/react';
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import styles from './Tooltip.module.scss';
-import { TooltipExternalContent } from './TooltipExternalContent';
 import { TooltipProps } from './Tooltip.types';
 import {
   TooltipCloseContext,
@@ -223,12 +222,4 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   );
 };
 
-/* Compound API */
-
-type TooltipComponent = React.FC<TooltipProps> & {
-  ExternalContent: typeof TooltipExternalContent;
-};
-
-export const Tooltip = TooltipRoot as TooltipComponent;
-
-Tooltip.ExternalContent = TooltipExternalContent;
+export const Tooltip = TooltipRoot;

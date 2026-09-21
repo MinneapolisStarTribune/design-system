@@ -40,17 +40,16 @@ describe('Tooltip Accessibility', () => {
     await checkA11y();
   });
 
-  it('has no violations with a composed Tooltip.ExternalContent', async () => {
+  it('has no violations with custom rich content', async () => {
     await expectNoA11yViolations(
       <Tooltip
         open
         content={
-          <Tooltip.ExternalContent
-            icon={<span aria-hidden>icon</span>}
-            heading="Heads up"
-            description="Some content"
-            dismissText="Got it"
-          />
+          <div>
+            <p>Heads up</p>
+            <p>Some content</p>
+            <button type="button">Got it</button>
+          </div>
         }
       >
         <Button>Open</Button>

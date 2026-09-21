@@ -9,9 +9,9 @@ export type TooltipCloseContextValue = {
 export const TooltipCloseContext = createContext<TooltipCloseContextValue | null>(null);
 
 /**
- * For content rendered via `Tooltip`'s `content` prop (e.g. `Tooltip.ExternalContent`, or your
- * own custom interactive content) that needs to close the tooltip itself — a dismiss button, for
- * instance. Throws if used outside a `Tooltip` that was given `content`.
+ * For custom interactive content rendered via `Tooltip`'s `content` prop that needs to close the
+ * tooltip itself — a dismiss button, for instance. Throws if used outside a `Tooltip` that was
+ * given `content`.
  */
 export const useTooltipCloseContext = () => {
   const ctx = useContext(TooltipCloseContext);

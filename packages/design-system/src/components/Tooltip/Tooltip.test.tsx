@@ -330,41 +330,4 @@ describe('Tooltip', () => {
       await waitFor(() => expect(screen.getByText('Rich content')).toBeInTheDocument());
     });
   });
-
-  describe('Tooltip.ExternalContent', () => {
-    it('renders icon/heading/description/dismissText and closes on dismiss', async () => {
-      const user = userEvent.setup();
-      const onDismiss = vi.fn();
-
-      renderWithProvider(
-        <Tooltip
-          content={
-            <Tooltip.ExternalContent
-              icon={<span>icon</span>}
-              heading="Heads up"
-              description="Some content"
-              dismissText="Got it"
-              onDismiss={onDismiss}
-            />
-          }
-        >
-          <Button>Open</Button>
-        </Tooltip>
-      );
-
-      await user.click(screen.getByText('Open'));
-
-      await waitFor(() => {
-        expect(screen.getByText('Heads up')).toBeInTheDocument();
-        expect(screen.getByText('Some content')).toBeInTheDocument();
-      });
-
-      await user.click(screen.getByText('Got it'));
-
-      expect(onDismiss).toHaveBeenCalledTimes(1);
-      await waitFor(() => {
-        expect(screen.queryByText('Heads up')).not.toBeInTheDocument();
-      });
-    });
-  });
 });
