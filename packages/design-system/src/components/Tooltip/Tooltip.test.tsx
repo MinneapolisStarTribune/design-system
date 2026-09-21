@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tooltip } from './Tooltip';
+import { useTooltipCloseContext } from './TooltipContext';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../test-utils/render';
 import { InformationIcon } from '@/icons';
@@ -309,6 +310,52 @@ describe('Tooltip', () => {
 
       await user.click(screen.getByText('Open'));
       await waitFor(() => expect(screen.getByText('Rich content')).toBeInTheDocument());
+    });
+
+    it('does not close on outside click or Escape when dismissible is false, but still closes via useTooltipCloseContext', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+
+      const CloseButton = () => {
+        const { close } = useTooltipCloseContext();
+        return (
+          <button type="button" onClick={close}>
+            Close
+          </button>
+        );
+      };
+
+      renderWithProvider(
+        <>
+          <Tooltip
+            content={
+              <div>
+                Rich content
+                <CloseButton />
+              </div>
+            }
+            open
+            onOpenChange={onOpenChange}
+            dismissible={false}
+          >
+            <Button>Open</Button>
+          </Tooltip>
+          <div>Outside</div>
+        </>
+      );
+
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+
+      await user.click(screen.getByText('Outside'));
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+      expect(onOpenChange).not.toHaveBeenCalled();
+
+      await user.keyboard('{Escape}');
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+      expect(onOpenChange).not.toHaveBeenCalled();
+
+      await user.click(screen.getByText('Close'));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
     it('supports controlled open/onOpenChange', async () => {

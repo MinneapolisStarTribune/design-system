@@ -82,6 +82,14 @@ export type TooltipProps = {
    */
   open?: boolean;
 
+  /**
+   * Whether an outside click or Escape closes the tooltip. Defaults to true. Set to false for
+   * content that should only close via its own explicit controls (e.g. a close button or action
+   * inside `content`, using `useTooltipCloseContext`) — for example, content that appeared
+   * unprompted and shouldn't disappear from an unrelated click elsewhere on the page.
+   */
+  dismissible?: boolean;
+
   /** Called when the tooltip requests an open/close transition. Required when `open` is provided. */
   onOpenChange?: (open: boolean) => void;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label' | 'content'>;

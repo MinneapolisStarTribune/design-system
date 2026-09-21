@@ -62,6 +62,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   zIndex = 9999,
   open: openProp,
   onOpenChange: onOpenChangeProp,
+  dismissible = true,
   ...rest
 }) => {
   const [openState, setOpenState] = useState(false);
@@ -120,7 +121,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
     enabled: !isDisabled && (isRichContent || isTouchDevice),
     event: 'click',
   });
-  const dismiss = useDismiss(context, { enabled: !isDisabled });
+  const dismiss = useDismiss(context, { enabled: !isDisabled && dismissible });
   const role = useRole(context, { role: isRichContent ? 'dialog' : 'tooltip' });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
