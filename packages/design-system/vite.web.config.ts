@@ -21,6 +21,13 @@ const WEB_ROLLUP_EXTERNAL = [
   /** Keep in sync with jsx-runtime — consumers' bundlers may resolve dev vs prod runtime by mode. */
   'react/jsx-dev-runtime',
   '@floating-ui/react',
+  /**
+   * Must stay external: it's a React Context provider. Bundling it here would give
+   * PianoCoachmark its own disconnected copy of ExternalTriggerContext instead of sharing the
+   * consuming app's own instance, silently breaking the trigger mechanism (the Provider and
+   * useExternalTriggerState/useTriggerExternal would never see the same Context).
+   */
+  '@minneapolisstartribune/external-trigger',
   'classnames',
   /^swiper(\/.*)?$/,
 ] as const;
