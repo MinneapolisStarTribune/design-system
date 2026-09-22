@@ -13,7 +13,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -30,7 +30,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -41,7 +41,7 @@ describe('Coachmark', () => {
     expect(screen.getByText('Description')).toBeInTheDocument();
   });
 
-  it('renders no action button when actionLabel is omitted', () => {
+  it('renders no action button when ctaText is omitted', () => {
     renderWithProvider(
       <Coachmark open onOpenChange={vi.fn()} title="Title" description="Description">
         <Button>Trigger</Button>
@@ -58,7 +58,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Go somewhere"
+        ctaText="Go somewhere"
         actionHref="/somewhere"
       >
         <Button>Trigger</Button>
@@ -79,7 +79,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
         onAction={onAction}
       >
         <Button>Trigger</Button>
@@ -98,7 +98,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
         secondaryContent={<span>Secondary content</span>}
       >
         <Button>Trigger</Button>
@@ -115,7 +115,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
         icon={<span data-testid="coachmark-icon">icon</span>}
       >
         <Button>Trigger</Button>
@@ -135,7 +135,7 @@ describe('Coachmark', () => {
         onOpenChange={onOpenChange}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -157,7 +157,7 @@ describe('Coachmark', () => {
           onOpenChange={onOpenChange}
           title="Title"
           description="Description"
-          actionLabel="Do it"
+          ctaText="Do it"
         >
           <Button>Trigger</Button>
         </Coachmark>
@@ -183,7 +183,7 @@ describe('Coachmark', () => {
           onOpenChange={onOpenChange}
           title="Title"
           description="Description"
-          actionLabel="Do it"
+          ctaText="Do it"
           dismissOnOutsideClick
         >
           <Button>Trigger</Button>
@@ -196,15 +196,15 @@ describe('Coachmark', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'outside-press');
   });
 
-  it('opens above the trigger when pointer is top', async () => {
+  it('opens above the trigger when position is top', async () => {
     renderWithProvider(
       <Coachmark
         open
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
-        pointer="top"
+        ctaText="Do it"
+        position="top"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -227,7 +227,7 @@ describe('Coachmark', () => {
         onOpenChange={vi.fn()}
         title="Title"
         description="Description"
-        actionLabel="Do it"
+        ctaText="Do it"
       >
         <Button>Trigger</Button>
       </Coachmark>

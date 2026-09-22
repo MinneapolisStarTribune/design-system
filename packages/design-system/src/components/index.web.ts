@@ -1,7 +1,20 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export type { CoachmarkPointer, CoachmarkProps } from './Coachmark/Coachmark.types';
+export type { CoachmarkPosition, CoachmarkProps } from './Coachmark/Coachmark.types';
+export type {
+  ParsePianoCoachmarkResponseVariablesOptions,
+  PianoCoachmarkResponseVariables,
+} from './Coachmark/parsePianoCoachmarkResponseVariables';
+export { parsePianoCoachmarkResponseVariables } from './Coachmark/parsePianoCoachmarkResponseVariables';
+export type {
+  PianoCoachmarkPayload,
+  PianoCoachmarkProps,
+  PianoCtaAction,
+  PianoCtaActionContext,
+  PianoCtaActionRegistry,
+} from './Coachmark/PianoCoachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
+export { PianoCoachmark } from './Coachmark/web/PianoCoachmark';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
 export {

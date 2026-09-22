@@ -48,11 +48,11 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   title,
   description,
   icon,
-  actionLabel,
+  ctaText,
   actionHref,
   onAction,
   secondaryContent,
-  pointer = 'bottom',
+  position = 'bottom',
   dismissOnOutsideClick = false,
   portalRoot: portalRootProp,
   zIndex = 9999,
@@ -75,7 +75,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   );
 
   const { refs, context, floatingStyles } = useFloating({
-    placement: pointer,
+    placement: position,
     open,
     onOpenChange,
     whileElementsMounted: autoUpdate,
@@ -142,7 +142,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               <UtilityBody size="x-small" className={styles.description}>
                 {description}
               </UtilityBody>
-              {actionLabel && (
+              {ctaText && (
                 <div className={styles.actions}>
                   <Button
                     as={actionHref ? 'a' : undefined}
@@ -155,7 +155,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                     capitalize={false}
                     className={styles.actionButton}
                   >
-                    {actionLabel}
+                    {ctaText}
                   </Button>
                   {secondaryContent}
                 </div>

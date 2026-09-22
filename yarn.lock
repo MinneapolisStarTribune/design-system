@@ -3585,6 +3585,7 @@ __metadata:
     "@floating-ui/react": "npm:0.27.19"
     "@floating-ui/react-native": "npm:0.10.9"
     "@jest/globals": "npm:^30.2.0"
+    "@minneapolisstartribune/external-trigger": "portal:../../../strib-platform/packages/external-trigger"
     "@octokit/rest": "npm:^22.0.1"
     "@react-native/babel-preset": "npm:0.81.5"
     "@storybook/addon-a11y": "npm:10.3.5"
@@ -3656,6 +3657,7 @@ __metadata:
   peerDependencies:
     "@floating-ui/react": 0.27.19
     "@floating-ui/react-native": 0.10.9
+    "@minneapolisstartribune/external-trigger": "*"
     react: ^19.1.0
     react-dom: ^19.1.0
     react-native: ^0.81.0
@@ -3666,6 +3668,8 @@ __metadata:
       optional: true
     "@floating-ui/react-native":
       optional: true
+    "@minneapolisstartribune/external-trigger":
+      optional: true
     react-dom:
       optional: true
     react-native:
@@ -3675,6 +3679,14 @@ __metadata:
     react-native-webview:
       optional: true
   languageName: unknown
+  linkType: soft
+
+"@minneapolisstartribune/external-trigger@portal:../../../strib-platform/packages/external-trigger::locator=%40minneapolisstartribune%2Fdesign-system%40workspace%3Apackages%2Fdesign-system":
+  version: 0.0.0-use.local
+  resolution: "@minneapolisstartribune/external-trigger@portal:../../../strib-platform/packages/external-trigger::locator=%40minneapolisstartribune%2Fdesign-system%40workspace%3Apackages%2Fdesign-system"
+  peerDependencies:
+    react: ">=18.2.0"
+  languageName: node
   linkType: soft
 
 "@minneapolisstartribune/mobile-storybook@workspace:apps/mobile-storybook":

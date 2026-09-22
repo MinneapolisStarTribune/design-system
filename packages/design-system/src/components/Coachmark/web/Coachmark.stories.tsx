@@ -17,11 +17,11 @@ const meta = {
     icon: { control: false },
     title: { control: 'text' },
     description: { control: 'text' },
-    actionLabel: { control: 'text' },
+    ctaText: { control: 'text' },
     actionHref: { control: 'text' },
     onAction: { control: false },
     secondaryContent: { control: false },
-    pointer: {
+    position: {
       control: 'select',
       options: ['top', 'bottom'],
     },
@@ -58,8 +58,8 @@ export const Configurable: Story = {
     children: <Button>Show coachmark</Button>,
     title: 'Never miss a story',
     description: 'Create a free account to save articles for later.',
-    actionLabel: 'Create Free Account',
-    pointer: 'bottom',
+    ctaText: 'Create Free Account',
+    position: 'bottom',
     dismissOnOutsideClick: false,
   },
   render: (args) => {
@@ -86,7 +86,7 @@ const [open, setOpen] = useState(true);
   onOpenChange={setOpen}
   title="Never miss a story"
   description="Create a free account to save articles for later."
-  actionLabel="Create Free Account"
+  ctaText="Create Free Account"
 >
   <Button onClick={() => setOpen(!open)}>Show coachmark</Button>
 </Coachmark>
@@ -139,7 +139,7 @@ export const WithSecondaryContent: Story = {
           onOpenChange={setOpen}
           title="Never miss a story"
           description="Create a free account to save articles for later."
-          actionLabel="Create Free Account"
+          ctaText="Create Free Account"
           secondaryContent={<span style={{ fontSize: 12 }}>Already have an account? Log in</span>}
         >
           <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
@@ -157,17 +157,17 @@ export const WithSecondaryContent: Story = {
 export const Positions: Story = {
   args: baseArgs,
   render: () => {
-    const PositionedCoachmark = ({ pointer }: { pointer: 'top' | 'bottom' }) => {
+    const PositionedCoachmark = ({ position }: { position: 'top' | 'bottom' }) => {
       const [open, setOpen] = useState(true);
 
       return (
         <Coachmark
           open={open}
           onOpenChange={setOpen}
-          title={`Opens on the ${pointer}`}
+          title={`Opens on the ${position}`}
           description="The flip middleware still auto-flips this when there isn't room."
-          actionLabel="Got it"
-          pointer={pointer}
+          ctaText="Got it"
+          position={position}
         >
           <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
         </Coachmark>
@@ -176,8 +176,8 @@ export const Positions: Story = {
 
     return (
       <div style={{ display: 'flex', gap: 160, padding: 120 }}>
-        <PositionedCoachmark pointer="top" />
-        <PositionedCoachmark pointer="bottom" />
+        <PositionedCoachmark position="top" />
+        <PositionedCoachmark position="bottom" />
       </div>
     );
   },

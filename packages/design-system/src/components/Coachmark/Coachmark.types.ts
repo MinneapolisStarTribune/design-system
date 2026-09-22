@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export type CoachmarkPointer = 'top' | 'bottom';
+export type CoachmarkPosition = 'top' | 'bottom';
 
 export type CoachmarkProps = {
   /**
@@ -29,7 +29,7 @@ export type CoachmarkProps = {
   icon?: ReactNode;
 
   /** Label for the solid action button. Omit to render the coachmark with no action button. */
-  actionLabel?: string;
+  ctaText?: string;
 
   /** Renders the action as a link to this href instead of a button with `onAction`. */
   actionHref?: string;
@@ -41,7 +41,7 @@ export type CoachmarkProps = {
   secondaryContent?: ReactNode;
 
   /** Which side of `children` the coachmark opens on. Defaults to 'bottom'. */
-  pointer?: CoachmarkPointer;
+  position?: CoachmarkPosition;
 
   /**
    * Whether an outside click or Escape closes the coachmark. Defaults to false -- a coachmark
