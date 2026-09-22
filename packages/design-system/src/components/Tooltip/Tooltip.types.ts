@@ -65,6 +65,11 @@ export type TooltipProps = {
   hideDelay?: number;
 
   wrapperClassName?: string;
+  /**
+   * Applies to the inner container, which has a built-in `max-width: 280px`. Override with an
+   * important (`!`) width utility for content that needs more room to lay out correctly.
+   */
+  containerClassName?: string;
   contentClassName?: string;
   arrowClassName?: string;
   labelClassName?: string;

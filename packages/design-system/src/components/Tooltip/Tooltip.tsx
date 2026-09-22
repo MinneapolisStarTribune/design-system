@@ -54,6 +54,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   showDelay = 200,
   hideDelay = 0,
   wrapperClassName,
+  containerClassName,
   contentClassName,
   arrowClassName,
   labelClassName,
@@ -189,7 +190,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
               strokeWidth={0}
               className={classNames(styles.arrow, arrowClassName)}
             />
-            <div className={classNames(styles.container)}>
+            <div className={classNames(styles.container, containerClassName)}>
               <div className={classNames(styles.content, contentClassName)}>
                 {isRichContent ? (
                   <TooltipCloseContext.Provider value={closeContextValue}>
