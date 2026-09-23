@@ -41,13 +41,15 @@ const ALIGN_SUFFIX: Record<CoachmarkAlign, '' | '-start' | '-end'> = {
 };
 
 function toPlacement(position: CoachmarkPosition, align: CoachmarkAlign) {
-  // `position: 'center'` opts out of top/bottom entirely -- `align` becomes the side instead,
-  // vertically centered on the trigger (floating-ui's bare 'left'/'right' placements already
-  // center on the cross axis by default). 'center' + 'center' has no side to anchor to, so it
-  // falls back to the overall default placement.
+  // `position: 'center'` opts out of top/bottom entirely -- `align` becomes the trigger's own
+  // side instead, and the coachmark opens on the *opposite* side (e.g. `align: 'right'` for a
+  // trigger flush with the right edge of the screen, which opens the coachmark to its left, where
+  // there's room), vertically centered on the trigger (floating-ui's bare 'left'/'right'
+  // placements already center on the cross axis by default). 'center' + 'center' has no side to
+  // anchor to, so it falls back to the overall default placement.
   if (position === 'center') {
-    if (align === 'left') return 'left';
-    if (align === 'right') return 'right';
+    if (align === 'left') return 'right';
+    if (align === 'right') return 'left';
     return 'bottom';
   }
 

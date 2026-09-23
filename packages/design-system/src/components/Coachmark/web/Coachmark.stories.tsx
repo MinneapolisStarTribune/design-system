@@ -229,11 +229,15 @@ export const Alignments: Story = {
 
 /**
  * `position="center"` opts out of top/bottom entirely -- `align="left"`/`"right"` instead places
- * the coachmark to that side of the trigger, vertically centered on it.
+ * the coachmark on the *opposite* side of the trigger (matching how a right-anchored trigger, e.g.
+ * a nav icon flush with the right edge, has room to open on its left, and vice versa), vertically
+ * centered on it.
  */
 export const CenterPosition: Story = {
   args: baseArgs,
   render: () => {
+    const OPPOSITE_SIDE = { left: 'right', right: 'left' } as const;
+
     const SidePlacedCoachmark = ({ align }: { align: 'left' | 'right' }) => {
       const [open, setOpen] = useState(true);
 
@@ -241,7 +245,7 @@ export const CenterPosition: Story = {
         <Coachmark
           open={open}
           onOpenChange={setOpen}
-          title={`Opens on the ${align}`}
+          title={`align="${align}" opens on the ${OPPOSITE_SIDE[align]}`}
           description="Vertically centered on the trigger instead of above/below it."
           ctaText="Got it"
           position="center"

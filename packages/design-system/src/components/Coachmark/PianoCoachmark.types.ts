@@ -25,7 +25,7 @@ export interface PianoCoachmarkPayload {
   /**
    * Which side of the trigger the coachmark opens on. Defaults to "bottom" when omitted.
    * "center" opts out of top/bottom entirely -- combined with `align: "left" | "right"`, the
-   * coachmark opens to that side, vertically centered on the trigger instead.
+   * coachmark instead opens on the side opposite `align`, vertically centered on the trigger.
    */
   position?: CoachmarkPosition;
   /**

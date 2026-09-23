@@ -260,10 +260,10 @@ describe('Coachmark', () => {
   );
 
   it.each([
-    ['left', 'rotate(-90deg)'],
-    ['right', 'rotate(90deg)'],
+    ['left', 'rotate(90deg)'],
+    ['right', 'rotate(-90deg)'],
   ] as const)(
-    'opens to the %s of the trigger, vertically centered, when position is center and align is %s',
+    'opens on the side opposite align (align=%s), vertically centered, when position is center',
     async (align, expectedArrowTransform) => {
       renderWithProvider(
         <Coachmark
@@ -280,7 +280,8 @@ describe('Coachmark', () => {
       );
 
       // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
-      // confirming `align` was used as the side, not silently ignored.
+      // confirming `align` names the trigger's own side, and the coachmark opens opposite it
+      // (e.g. align="right" for a trigger flush with the right edge opens to its left).
       const arrow = screen.getByRole('dialog').querySelector('svg');
       await waitFor(() => expect(arrow).toHaveStyle({ transform: expectedArrowTransform }));
     }

@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 /**
  * Which side of `children` the coachmark opens on. 'center' opts out of top/bottom entirely --
- * combined with `align: 'left' | 'right'`, the coachmark instead opens to that side, vertically
- * centered on `children` (see `align`'s doc comment for the full combination table).
+ * combined with `align: 'left' | 'right'`, the coachmark instead opens to the opposite side,
+ * vertically centered on `children` (see `align`'s doc comment for the full combination table).
  */
 export type CoachmarkPosition = 'top' | 'bottom' | 'center';
 
@@ -12,9 +12,11 @@ export type CoachmarkPosition = 'top' | 'bottom' | 'center';
  * side. Combines with `position` as follows:
  * - `position: 'top' | 'bottom'` -- `align` shifts the coachmark along that edge ('left'/'right'
  *   map onto floating-ui's placement alignment, i.e. '-start'/'-end'; 'center' is no suffix).
- * - `position: 'center'` -- `align` becomes the side instead: 'left'/'right' place the coachmark
- *   to that side, vertically centered on `children`. `align: 'center'` has no side to anchor to
- *   in this case, so it falls back to the overall default (`position: 'bottom'`, centered).
+ * - `position: 'center'` -- `align` describes which side `children` itself sits against (e.g.
+ *   'right' for a trigger flush with the right edge of the screen), and the coachmark opens on
+ *   the *opposite* side, where there's room, vertically centered on `children`. `align: 'center'`
+ *   has no side to anchor to in this case, so it falls back to the overall default
+ *   (`position: 'bottom'`, centered).
  *
  * Physical left/right, not logical start/end, since this is a fixed-locale product with no RTL
  * support.
