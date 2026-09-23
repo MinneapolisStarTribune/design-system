@@ -133,12 +133,18 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   });
 
   // A coachmark is only ever opened externally (e.g. a CMS-driven prompt), never by interacting
-  // with its own trigger -- so unlike Tooltip, there's no hover/focus/click handling here, just
-  // an optional outside-click/Escape dismissal and the dialog role for the floating content.
-  const dismiss = useDismiss(context, { enabled: dismissOnOutsideClick });
+  // with its own trigger -- so unlike Tooltip, there's no hover/focus handling here. Escape/outside
+  // click are opt-in via `dismissOnOutsideClick`, but pressing the trigger itself always dismisses
+  // regardless of that setting -- the trigger is still visible and actionable, so interacting with
+  // it again is an unambiguous signal to close, independent of how outside clicks should behave.
+  const dismiss = useDismiss(context, {
+    outsidePress: dismissOnOutsideClick,
+    escapeKey: dismissOnOutsideClick,
+    referencePress: true,
+  });
   const role = useRole(context, { role: 'dialog' });
 
-  const { getFloatingProps } = useInteractions([dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss, role]);
 
   const childElement = isValidElement(children)
     ? (children as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
@@ -147,10 +153,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const mergedRef = useMergeRefs([refs.setReference, childElement?.ref ?? null]);
 
   const triggerElement = childElement ? (
-    cloneElement(childElement, { ...childElement.props, ref: mergedRef })
+    cloneElement(childElement, getReferenceProps({ ...childElement.props, ref: mergedRef }))
   ) : (
     // eslint-disable-next-line react-hooks/refs
-    <span ref={refs.setReference}>{children}</span>
+    <span ref={refs.setReference} {...getReferenceProps()}>
+      {children}
+    </span>
   );
 
   const close = useCallback(() => onOpenChange(false), [onOpenChange]);

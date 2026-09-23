@@ -172,6 +172,50 @@ describe('Coachmark', () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
+  it('closes when the trigger itself is clicked, even when dismissOnOutsideClick is false', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={onOpenChange}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Trigger' }));
+
+    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'reference-press');
+  });
+
+  it("still calls the trigger's own onClick when it closes the coachmark", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    const onTriggerClick = vi.fn();
+
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={onOpenChange}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button onClick={onTriggerClick}>Trigger</Button>
+      </Coachmark>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Trigger' }));
+
+    expect(onTriggerClick).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'reference-press');
+  });
+
   it('closes on outside click and Escape when dismissOnOutsideClick is true', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
