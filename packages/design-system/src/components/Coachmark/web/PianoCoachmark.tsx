@@ -52,6 +52,7 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({ id, children, ct
       onAction={ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined}
       secondaryContent={ctaAction?.renderSecondary?.({ dismiss })}
       position={payload.position === 'top' ? 'top' : 'bottom'}
+      align={payload.align === 'left' ? 'left' : payload.align === 'right' ? 'right' : 'center'}
       dismissOnOutsideClick={payload.dismissOnOutsideClick ?? false}
     >
       <span style={{ display: 'inline-flex' }}>{children}</span>

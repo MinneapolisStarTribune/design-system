@@ -25,6 +25,10 @@ const meta = {
       control: 'select',
       options: ['top', 'bottom'],
     },
+    align: {
+      control: 'select',
+      options: ['left', 'right', 'center'],
+    },
     dismissOnOutsideClick: { control: 'boolean' },
     zIndex: { control: 'number' },
   },
@@ -60,6 +64,7 @@ export const Configurable: Story = {
     description: 'Create a free account to save articles for later.',
     ctaText: 'Create Free Account',
     position: 'bottom',
+    align: 'center',
     dismissOnOutsideClick: false,
   },
   render: (args) => {
@@ -178,6 +183,42 @@ export const Positions: Story = {
       <div style={{ display: 'flex', gap: 160, padding: 120 }}>
         <PositionedCoachmark position="top" />
         <PositionedCoachmark position="bottom" />
+      </div>
+    );
+  },
+  parameters: {
+    layout: 'fullscreen',
+  },
+};
+
+/**
+ * Left/right/center horizontal alignment relative to the trigger, side by side.
+ */
+export const Alignments: Story = {
+  args: baseArgs,
+  render: () => {
+    const AlignedCoachmark = ({ align }: { align: 'left' | 'right' | 'center' }) => {
+      const [open, setOpen] = useState(true);
+
+      return (
+        <Coachmark
+          open={open}
+          onOpenChange={setOpen}
+          title={`align="${align}"`}
+          description="Independent of position's top/bottom side."
+          ctaText="Got it"
+          align={align}
+        >
+          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
+        </Coachmark>
+      );
+    };
+
+    return (
+      <div style={{ display: 'flex', gap: 160, padding: 120 }}>
+        <AlignedCoachmark align="left" />
+        <AlignedCoachmark align="center" />
+        <AlignedCoachmark align="right" />
       </div>
     );
   },

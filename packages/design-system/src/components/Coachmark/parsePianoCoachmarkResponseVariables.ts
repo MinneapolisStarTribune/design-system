@@ -12,6 +12,7 @@ export interface PianoCoachmarkResponseVariables {
   description?: string;
   icon?: string;
   position?: string;
+  align?: string;
   dismissOnOutsideClick?: boolean;
   ctaText?: string;
   ctaType?: string;
@@ -29,14 +30,15 @@ export interface ParsePianoCoachmarkResponseVariablesOptions {
  * `setResponseVariable` event for an unrelated feature (the call-to-action banner, etc).
  *
  * Encapsulates the defaulting/coercion every consumer would otherwise have to reimplement
- * identically: `position` falls back to "bottom" for any value other than "top", and
- * `dismissOnOutsideClick` is coerced to a strict boolean.
+ * identically: `position` falls back to "bottom" for any value other than "top", `align` falls
+ * back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick` is
+ * coerced to a strict boolean.
  */
 export function parsePianoCoachmarkResponseVariables(
   responseVariables: PianoCoachmarkResponseVariables,
   options: ParsePianoCoachmarkResponseVariablesOptions = {}
 ): { id: string; payload: PianoCoachmarkPayload } | null {
-  const { id, title, description, icon, position, dismissOnOutsideClick, ctaText, ctaType } =
+  const { id, title, description, icon, position, align, dismissOnOutsideClick, ctaText, ctaType } =
     responseVariables;
 
   if (!id || !title || !description || !ctaText || !ctaType) {
@@ -52,6 +54,7 @@ export function parsePianoCoachmarkResponseVariables(
       ctaType,
       icon: options.resolveIcon?.(icon),
       position: position === 'top' ? 'top' : 'bottom',
+      align: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
       dismissOnOutsideClick: dismissOnOutsideClick === true,
     },
   };

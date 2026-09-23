@@ -28,11 +28,21 @@ import { CloseIcon } from '@/icons';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
-import type { CoachmarkProps } from '../Coachmark.types';
+import type { CoachmarkAlign, CoachmarkPosition, CoachmarkProps } from '../Coachmark.types';
 import styles from './Coachmark.module.scss';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
+
+const ALIGN_SUFFIX: Record<CoachmarkAlign, '' | '-start' | '-end'> = {
+  center: '',
+  left: '-start',
+  right: '-end',
+};
+
+function toPlacement(position: CoachmarkPosition, align: CoachmarkAlign) {
+  return `${position}${ALIGN_SUFFIX[align]}` as const;
+}
 
 /**
  * A dismissible, pointed callout that surfaces an unprompted, single action -- e.g. a CMS-driven
@@ -53,6 +63,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   onAction,
   secondaryContent,
   position = 'bottom',
+  align = 'center',
   dismissOnOutsideClick = false,
   portalRoot: portalRootProp,
   zIndex = 9999,
@@ -75,7 +86,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   );
 
   const { refs, context, floatingStyles } = useFloating({
-    placement: position,
+    placement: toPlacement(position, align),
     open,
     onOpenChange,
     whileElementsMounted: autoUpdate,

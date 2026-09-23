@@ -2,6 +2,14 @@ import type { ReactNode } from 'react';
 
 export type CoachmarkPosition = 'top' | 'bottom';
 
+/**
+ * Horizontal alignment of the coachmark relative to `children`, independent of `position`'s
+ * top/bottom side. Maps onto floating-ui's placement alignment ('left' -> '-start', 'right' ->
+ * '-end', 'center' -> no suffix) -- physical left/right, not logical start/end, since this is a
+ * fixed-locale product with no RTL support.
+ */
+export type CoachmarkAlign = 'left' | 'right' | 'center';
+
 export type CoachmarkProps = {
   /**
    * The element the coachmark is anchored to. Rendering/behavior of this element is otherwise
@@ -42,6 +50,9 @@ export type CoachmarkProps = {
 
   /** Which side of `children` the coachmark opens on. Defaults to 'bottom'. */
   position?: CoachmarkPosition;
+
+  /** Horizontal alignment relative to `children`, independent of `position`. Defaults to 'center'. */
+  align?: CoachmarkAlign;
 
   /**
    * Whether an outside click or Escape closes the coachmark. Defaults to false -- a coachmark

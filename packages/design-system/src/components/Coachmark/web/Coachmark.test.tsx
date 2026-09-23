@@ -236,4 +236,26 @@ describe('Coachmark', () => {
     const arrow = screen.getByRole('dialog').querySelector('svg');
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
   });
+
+  it.each(['left', 'right', 'center'] as const)(
+    'accepts align="%s" alongside position without error',
+    async (align) => {
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+          align={align}
+        >
+          <Button>Trigger</Button>
+        </Coachmark>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+    }
+  );
 });

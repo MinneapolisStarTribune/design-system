@@ -19,6 +19,7 @@ describe('parsePianoCoachmarkResponseVariables', () => {
         ctaType: REQUIRED_FIELDS.ctaType,
         icon: undefined,
         position: 'bottom',
+        align: 'center',
         dismissOnOutsideClick: false,
       },
     });
@@ -49,6 +50,19 @@ describe('parsePianoCoachmarkResponseVariables', () => {
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position: 'top' })?.payload
         .position
     ).toBe('top');
+  });
+
+  it('defaults align to center when omitted or unrecognized', () => {
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, align: 'sideways' })?.payload.align
+    ).toBe('center');
+    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.align).toBe('center');
+  });
+
+  it.each(['left', 'right'] as const)('passes align through as %s when given', (align) => {
+    expect(parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, align })?.payload.align).toBe(
+      align
+    );
   });
 
   it('coerces dismissOnOutsideClick to a strict boolean', () => {
