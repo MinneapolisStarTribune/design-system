@@ -103,15 +103,25 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       // decide to switch sides at all -- the coachmark would just get pushed toward center instead
       // of ever flipping.
       flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
-      // `crossAxis: true` matters for left/right placements specifically: shift's default only
-      // adjusts the axis perpendicular to the chosen side (vertical, there), so a left/right
-      // coachmark that still doesn't fully fit even on flip's best-fit side (e.g. a very narrow
-      // viewport) would otherwise be left overflowing past that edge with no further correction.
-      shift({ boundary: resolvedPortalRoot ?? undefined, padding: 20, crossAxis: true }),
+      // Shift must never adjust the *vertical* position: a coachmark has to keep tracking its
+      // trigger even after it scrolls off-screen (e.g. above the viewport), not stay pinned near
+      // the viewport edge once the trigger is no longer nearby. Which of shift's axis options
+      // ("mainAxis"/"crossAxis") maps to vertical depends on the placement's own side -- for
+      // top/bottom, vertical is the side's own axis ("crossAxis" in floating-ui's terms); for
+      // left/right (position="center"), vertical is the alignment axis ("mainAxis"). So vertical
+      // is always disabled, and the other (horizontal) axis is enabled to give the narrow-viewport
+      // buffer fix from before: a left/right coachmark that still doesn't fully fit even on flip's
+      // best-fit side needs that horizontal correction, since flip alone can't shrink it further.
+      shift({
+        boundary: resolvedPortalRoot ?? undefined,
+        padding: 20,
+        mainAxis: position !== 'center',
+        crossAxis: position === 'center',
+      }),
       // eslint-disable-next-line react-hooks/refs
       arrow({ element: arrowRef }),
     ],
-    [resolvedPortalRoot]
+    [resolvedPortalRoot, position]
   );
 
   const { refs, context, floatingStyles } = useFloating({
