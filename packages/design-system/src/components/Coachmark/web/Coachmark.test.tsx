@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -39,6 +40,50 @@ describe('Coachmark', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
+  });
+
+  it('gives the dialog an accessible name/description from title/description', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Never miss a story"
+        description="Create a free account to save articles for later."
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    const dialog = screen.getByRole('dialog', { name: 'Never miss a story' });
+    expect(dialog).toHaveAccessibleDescription('Create a free account to save articles for later.');
+  });
+
+  it('moves focus into the dialog when it opens, and returns it to the trigger on close', async () => {
+    const user = userEvent.setup();
+
+    const ControlledCoachmark = () => {
+      const [open, setOpen] = useState(true);
+      return (
+        <Coachmark
+          open={open}
+          onOpenChange={setOpen}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+        >
+          <Button>Trigger</Button>
+        </Coachmark>
+      );
+    };
+
+    renderWithProvider(<ControlledCoachmark />);
+
+    await waitFor(() => expect(screen.getByRole('dialog')).toHaveFocus());
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Trigger' })).toHaveFocus());
   });
 
   it('renders no action button when ctaText is omitted', () => {
@@ -146,7 +191,7 @@ describe('Coachmark', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it('does not close on outside click or Escape by default', async () => {
+  it('does not close on outside click by default', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
 
@@ -167,9 +212,26 @@ describe('Coachmark', () => {
 
     await user.click(screen.getByText('Outside'));
     expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('closes on Escape even when dismissOnOutsideClick is false', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={onOpenChange}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
 
     await user.keyboard('{Escape}');
-    expect(onOpenChange).not.toHaveBeenCalled();
+    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'escape-key');
   });
 
   it('closes when the trigger itself is clicked, even when dismissOnOutsideClick is false', async () => {
@@ -216,7 +278,7 @@ describe('Coachmark', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'reference-press');
   });
 
-  it('closes on outside click and Escape when dismissOnOutsideClick is true', async () => {
+  it('closes on outside click when dismissOnOutsideClick is true', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
 

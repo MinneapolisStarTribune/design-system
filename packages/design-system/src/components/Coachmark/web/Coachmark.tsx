@@ -14,6 +14,7 @@ import {
   arrow,
   autoUpdate,
   FloatingArrow,
+  FloatingFocusManager,
   FloatingPortal,
   flip,
   offset,
@@ -86,6 +87,8 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const coachmarkId = useId();
+  const titleId = `coachmark-title-${coachmarkId}`;
+  const descriptionId = `coachmark-description-${coachmarkId}`;
 
   const resolvedPortalRoot =
     portalRootProp ?? (typeof document !== 'undefined' ? document.body : null);
@@ -133,13 +136,15 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   });
 
   // A coachmark is only ever opened externally (e.g. a CMS-driven prompt), never by interacting
-  // with its own trigger -- so unlike Tooltip, there's no hover/focus handling here. Escape/outside
-  // click are opt-in via `dismissOnOutsideClick`, but pressing the trigger itself always dismisses
-  // regardless of that setting -- the trigger is still visible and actionable, so interacting with
-  // it again is an unambiguous signal to close, independent of how outside clicks should behave.
+  // with its own trigger -- so unlike Tooltip, there's no hover/focus handling here. Outside click
+  // is opt-in via `dismissOnOutsideClick` (a Piano campaign may want the coachmark to persist until
+  // an explicit action), but Escape and pressing the trigger itself always dismiss regardless of
+  // that setting -- Escape is the standard keyboard convention for closing transient UI, and the
+  // trigger is still visible and actionable, so interacting with it again is an unambiguous signal
+  // to close.
   const dismiss = useDismiss(context, {
     outsidePress: dismissOnOutsideClick,
-    escapeKey: dismissOnOutsideClick,
+    escapeKey: true,
     referencePress: true,
   });
   const role = useRole(context, { role: 'dialog' });
@@ -168,58 +173,83 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       {triggerElement}
       {open && (
         <FloatingPortal root={resolvedPortalRoot}>
-          <div
+          {/* `modal={false}`: a coachmark never blocks the rest of the page -- the underlying
+              content stays fully interactive while it's open. `initialFocus={refs.floating}`
+              moves focus to the panel itself (not its first control) so a screen reader
+              announces the title/description (via aria-labelledby/describedby below) before the
+              user tabs into the close/action buttons -- without this, a coachmark that appears
+              unprompted (e.g. a CMS-driven prompt firing while the user is reading elsewhere on
+              the page) would be entirely undiscoverable to keyboard/screen-reader users. */}
+          <FloatingFocusManager
+            context={context}
+            modal={false}
             // eslint-disable-next-line react-hooks/refs
-            ref={refs.setFloating}
-            style={{ ...floatingStyles, zIndex }}
-            className={styles.wrapper}
-            id={`coachmark-${coachmarkId}`}
-            {...getFloatingProps()}
+            initialFocus={refs.floating}
           >
-            <FloatingArrow
-              ref={arrowRef}
-              context={context}
-              height={ARROW_HEIGHT}
-              width={ARROW_WIDTH}
-              fill="var(--color-background-light-default)"
-              strokeWidth={0}
-              className={styles.arrow}
-            />
-            <button type="button" aria-label="Close" onClick={close} className={styles.closeButton}>
-              <CloseIcon size="medium" />
-            </button>
-            <div className={classNames(styles.body, icon ? styles.bodyCentered : undefined)}>
-              {icon && (
-                <div className={styles.iconBadge} aria-hidden>
-                  {icon}
+            <div
+              // eslint-disable-next-line react-hooks/refs
+              ref={refs.setFloating}
+              style={{ ...floatingStyles, zIndex }}
+              className={styles.wrapper}
+              id={`coachmark-${coachmarkId}`}
+              aria-labelledby={titleId}
+              aria-describedby={descriptionId}
+              {...getFloatingProps()}
+            >
+              <FloatingArrow
+                ref={arrowRef}
+                context={context}
+                height={ARROW_HEIGHT}
+                width={ARROW_WIDTH}
+                fill="var(--color-background-light-default)"
+                strokeWidth={0}
+                className={styles.arrow}
+              />
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={close}
+                className={styles.closeButton}
+              >
+                <CloseIcon size="medium" />
+              </button>
+              <div className={classNames(styles.body, icon ? styles.bodyCentered : undefined)}>
+                {icon && (
+                  <div className={styles.iconBadge} aria-hidden>
+                    {icon}
+                  </div>
+                )}
+                <div id={titleId}>
+                  <UtilityLabel size="large" weight="semibold" className={styles.title}>
+                    {title}
+                  </UtilityLabel>
                 </div>
-              )}
-              <UtilityLabel size="large" weight="semibold" className={styles.title}>
-                {title}
-              </UtilityLabel>
-              <UtilityBody size="x-small" className={styles.description}>
-                {description}
-              </UtilityBody>
-              {ctaText && (
-                <div className={styles.actions}>
-                  <Button
-                    as={actionHref ? 'a' : undefined}
-                    href={actionHref}
-                    type={actionHref ? undefined : 'button'}
-                    onClick={onAction}
-                    variant="filled"
-                    color="neutral"
-                    size="small"
-                    capitalize={false}
-                    className={styles.actionButton}
-                  >
-                    {ctaText}
-                  </Button>
-                  {secondaryContent}
+                <div id={descriptionId}>
+                  <UtilityBody size="x-small" className={styles.description}>
+                    {description}
+                  </UtilityBody>
                 </div>
-              )}
+                {ctaText && (
+                  <div className={styles.actions}>
+                    <Button
+                      as={actionHref ? 'a' : undefined}
+                      href={actionHref}
+                      type={actionHref ? undefined : 'button'}
+                      onClick={onAction}
+                      variant="filled"
+                      color="neutral"
+                      size="small"
+                      capitalize={false}
+                      className={styles.actionButton}
+                    >
+                      {ctaText}
+                    </Button>
+                    {secondaryContent}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          </FloatingFocusManager>
         </FloatingPortal>
       )}
     </>
