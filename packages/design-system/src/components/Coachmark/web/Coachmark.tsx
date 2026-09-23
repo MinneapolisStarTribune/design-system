@@ -93,8 +93,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const middleware = useMemo(
     () => [
       offset(ARROW_HEIGHT),
-      shift({ boundary: resolvedPortalRoot ?? undefined, padding: 0 }),
-      flip({ boundary: resolvedPortalRoot ?? undefined, padding: 0 }),
+      // `padding` here is a safety margin, not visual spacing -- it makes flip/shift react once
+      // the coachmark comes within this many px of the viewport edge, rather than waiting until
+      // it's fully flush (e.g. flip switching sides as soon as a left-aligned coachmark gets this
+      // close to the left edge, such as on a narrower viewport).
+      shift({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
+      flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
       // eslint-disable-next-line react-hooks/refs
       arrow({ element: arrowRef }),
     ],
