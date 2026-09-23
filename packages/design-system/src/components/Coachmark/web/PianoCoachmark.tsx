@@ -51,7 +51,9 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({ id, children, ct
       actionHref={ctaAction?.href}
       onAction={ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined}
       secondaryContent={ctaAction?.renderSecondary?.({ dismiss })}
-      position={payload.position === 'top' ? 'top' : 'bottom'}
+      position={
+        payload.position === 'top' ? 'top' : payload.position === 'center' ? 'center' : 'bottom'
+      }
       align={payload.align === 'left' ? 'left' : payload.align === 'right' ? 'right' : 'center'}
       dismissOnOutsideClick={payload.dismissOnOutsideClick ?? false}
     >

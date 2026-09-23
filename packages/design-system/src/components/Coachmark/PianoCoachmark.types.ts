@@ -22,11 +22,16 @@ export interface PianoCoachmarkPayload {
   ctaType: string;
   /** Optional icon rendered in a circular badge above the title. */
   icon?: ReactNode;
-  /** Which side of the trigger the coachmark opens on. Defaults to "bottom" when omitted. */
+  /**
+   * Which side of the trigger the coachmark opens on. Defaults to "bottom" when omitted.
+   * "center" opts out of top/bottom entirely -- combined with `align: "left" | "right"`, the
+   * coachmark opens to that side, vertically centered on the trigger instead.
+   */
   position?: CoachmarkPosition;
   /**
    * Horizontal alignment relative to the trigger, independent of `position`. Defaults to
-   * "center" when omitted.
+   * "center" when omitted. See `position`'s doc comment for how the two combine when `position`
+   * is "center".
    */
   align?: CoachmarkAlign;
   /**

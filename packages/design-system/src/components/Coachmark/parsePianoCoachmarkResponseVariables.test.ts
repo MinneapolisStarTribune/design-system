@@ -45,11 +45,10 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.position).toBe('bottom');
   });
 
-  it('passes position through as top when given', () => {
+  it.each(['top', 'center'] as const)('passes position through as %s when given', (position) => {
     expect(
-      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position: 'top' })?.payload
-        .position
-    ).toBe('top');
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position })?.payload.position
+    ).toBe(position);
   });
 
   it('defaults align to center when omitted or unrecognized', () => {

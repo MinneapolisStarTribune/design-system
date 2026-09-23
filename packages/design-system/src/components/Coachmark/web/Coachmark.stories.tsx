@@ -23,7 +23,7 @@ const meta = {
     secondaryContent: { control: false },
     position: {
       control: 'select',
-      options: ['top', 'bottom'],
+      options: ['top', 'bottom', 'center'],
     },
     align: {
       control: 'select',
@@ -219,6 +219,51 @@ export const Alignments: Story = {
         <AlignedCoachmark align="left" />
         <AlignedCoachmark align="center" />
         <AlignedCoachmark align="right" />
+      </div>
+    );
+  },
+  parameters: {
+    layout: 'fullscreen',
+  },
+};
+
+/**
+ * `position="center"` opts out of top/bottom entirely -- `align="left"`/`"right"` instead places
+ * the coachmark to that side of the trigger, vertically centered on it.
+ */
+export const CenterPosition: Story = {
+  args: baseArgs,
+  render: () => {
+    const SidePlacedCoachmark = ({ align }: { align: 'left' | 'right' }) => {
+      const [open, setOpen] = useState(true);
+
+      return (
+        <Coachmark
+          open={open}
+          onOpenChange={setOpen}
+          title={`Opens on the ${align}`}
+          description="Vertically centered on the trigger instead of above/below it."
+          ctaText="Got it"
+          position="center"
+          align={align}
+        >
+          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
+        </Coachmark>
+      );
+    };
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 240,
+          padding: 120,
+        }}
+      >
+        <SidePlacedCoachmark align="left" />
+        <SidePlacedCoachmark align="right" />
       </div>
     );
   },

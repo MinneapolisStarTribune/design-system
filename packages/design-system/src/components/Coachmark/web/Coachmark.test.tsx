@@ -258,4 +258,50 @@ describe('Coachmark', () => {
       });
     }
   );
+
+  it.each([
+    ['left', 'rotate(-90deg)'],
+    ['right', 'rotate(90deg)'],
+  ] as const)(
+    'opens to the %s of the trigger, vertically centered, when position is center and align is %s',
+    async (align, expectedArrowTransform) => {
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+          position="center"
+          align={align}
+        >
+          <Button>Trigger</Button>
+        </Coachmark>
+      );
+
+      // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
+      // confirming `align` was used as the side, not silently ignored.
+      const arrow = screen.getByRole('dialog').querySelector('svg');
+      await waitFor(() => expect(arrow).toHaveStyle({ transform: expectedArrowTransform }));
+    }
+  );
+
+  it('falls back to opening below the trigger when position is center and align is also center', async () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        position="center"
+        align="center"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    const arrow = screen.getByRole('dialog').querySelector('svg');
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
+  });
 });

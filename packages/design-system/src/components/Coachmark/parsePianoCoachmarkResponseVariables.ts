@@ -30,8 +30,8 @@ export interface ParsePianoCoachmarkResponseVariablesOptions {
  * `setResponseVariable` event for an unrelated feature (the call-to-action banner, etc).
  *
  * Encapsulates the defaulting/coercion every consumer would otherwise have to reimplement
- * identically: `position` falls back to "bottom" for any value other than "top", `align` falls
- * back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick` is
+ * identically: `position` falls back to "bottom" for any value other than "top"/"center", `align`
+ * falls back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick` is
  * coerced to a strict boolean.
  */
 export function parsePianoCoachmarkResponseVariables(
@@ -53,7 +53,7 @@ export function parsePianoCoachmarkResponseVariables(
       ctaText,
       ctaType,
       icon: options.resolveIcon?.(icon),
-      position: position === 'top' ? 'top' : 'bottom',
+      position: position === 'top' ? 'top' : position === 'center' ? 'center' : 'bottom',
       align: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
       dismissOnOutsideClick: dismissOnOutsideClick === true,
     },
