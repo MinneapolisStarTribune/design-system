@@ -229,7 +229,9 @@ export const Alignments: Story = {
 
 /**
  * `position="center"` opts out of top/bottom entirely -- `align="left"`/`"right"` instead places
- * the coachmark to that side of the trigger, vertically centered on it.
+ * the coachmark to that side of the trigger, vertically centered on it. The same flip middleware
+ * used for top/bottom applies here too, so a trigger flush with a screen edge (with no room on
+ * its aligned side) automatically opens on the opposite side instead.
  */
 export const CenterPosition: Story = {
   args: baseArgs,
