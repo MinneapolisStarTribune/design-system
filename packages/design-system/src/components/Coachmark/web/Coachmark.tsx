@@ -97,8 +97,17 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       // the coachmark comes within this many px of the viewport edge, rather than waiting until
       // it's fully flush (e.g. flip switching sides as soon as a left-aligned coachmark gets this
       // close to the left edge, such as on a narrower viewport).
-      shift({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
+      //
+      // flip must run *before* shift: shift nudges the coachmark back into view along its current
+      // side, which (if it ran first) would quietly absorb the overflow that flip needs to see to
+      // decide to switch sides at all -- the coachmark would just get pushed toward center instead
+      // of ever flipping.
       flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
+      // `crossAxis: true` matters for left/right placements specifically: shift's default only
+      // adjusts the axis perpendicular to the chosen side (vertical, there), so a left/right
+      // coachmark that still doesn't fully fit even on flip's best-fit side (e.g. a very narrow
+      // viewport) would otherwise be left overflowing past that edge with no further correction.
+      shift({ boundary: resolvedPortalRoot ?? undefined, padding: 20, crossAxis: true }),
       // eslint-disable-next-line react-hooks/refs
       arrow({ element: arrowRef }),
     ],
