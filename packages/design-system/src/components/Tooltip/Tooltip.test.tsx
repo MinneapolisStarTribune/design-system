@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tooltip } from './Tooltip';
+import { useTooltipCloseContext } from './TooltipContext';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../test-utils/render';
 import { InformationIcon } from '@/icons';
@@ -262,6 +263,118 @@ describe('Tooltip', () => {
     await waitFor(() => {
       const tooltip = screen.getByRole('tooltip');
       expect(tooltip).toHaveStyle({ zIndex: 10050 });
+    });
+  });
+
+  describe('rich content (click-triggered, interactive)', () => {
+    it('shows content on click rather than hover, and uses the dialog role', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <Tooltip content={<div>Rich content</div>}>
+          <Button>Open</Button>
+        </Tooltip>
+      );
+
+      const trigger = screen.getByText('Open');
+
+      await user.hover(trigger);
+      await new Promise((r) => setTimeout(r, 300));
+      expect(screen.queryByText('Rich content')).not.toBeInTheDocument();
+
+      await user.click(trigger);
+
+      await waitFor(() => {
+        expect(screen.getByText('Rich content')).toBeInTheDocument();
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+    });
+
+    it('closes on outside click and reopens on a subsequent trigger click', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <>
+          <Tooltip content={<div>Rich content</div>}>
+            <Button>Open</Button>
+          </Tooltip>
+          <div>Outside</div>
+        </>
+      );
+
+      await user.click(screen.getByText('Open'));
+      await waitFor(() => expect(screen.getByText('Rich content')).toBeInTheDocument());
+
+      await user.click(screen.getByText('Outside'));
+      await waitFor(() => expect(screen.queryByText('Rich content')).not.toBeInTheDocument());
+
+      await user.click(screen.getByText('Open'));
+      await waitFor(() => expect(screen.getByText('Rich content')).toBeInTheDocument());
+    });
+
+    it('does not close on outside click or Escape when dismissible is false, but still closes via useTooltipCloseContext', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+
+      const CloseButton = () => {
+        const { close } = useTooltipCloseContext();
+        return (
+          <button type="button" onClick={close}>
+            Close
+          </button>
+        );
+      };
+
+      renderWithProvider(
+        <>
+          <Tooltip
+            content={
+              <div>
+                Rich content
+                <CloseButton />
+              </div>
+            }
+            open
+            onOpenChange={onOpenChange}
+            dismissible={false}
+          >
+            <Button>Open</Button>
+          </Tooltip>
+          <div>Outside</div>
+        </>
+      );
+
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+
+      await user.click(screen.getByText('Outside'));
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+      expect(onOpenChange).not.toHaveBeenCalled();
+
+      await user.keyboard('{Escape}');
+      expect(screen.getByText('Rich content')).toBeInTheDocument();
+      expect(onOpenChange).not.toHaveBeenCalled();
+
+      await user.click(screen.getByText('Close'));
+      expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('supports controlled open/onOpenChange', async () => {
+      const onOpenChange = vi.fn();
+      const { rerender } = renderWithProvider(
+        <Tooltip content={<div>Rich content</div>} open={false} onOpenChange={onOpenChange}>
+          <Button>Open</Button>
+        </Tooltip>
+      );
+
+      expect(screen.queryByText('Rich content')).not.toBeInTheDocument();
+
+      rerender(
+        <Tooltip content={<div>Rich content</div>} open onOpenChange={onOpenChange}>
+          <Button>Open</Button>
+        </Tooltip>
+      );
+
+      await waitFor(() => expect(screen.getByText('Rich content')).toBeInTheDocument());
     });
   });
 });

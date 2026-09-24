@@ -98,6 +98,72 @@ const ControlledExample = () => {
   );
 };
 
+// `Popover` has no built-in notion of "external" triggering — a consumer wanting that composes
+// it themselves via the existing controlled `open`/`onOpenChange` props, exactly as shown here.
+// `isExternallyTriggered` is just local state distinguishing "opened by some other trigger" from
+// "opened by clicking this popover's own trigger", so the right content renders either way.
+const ExternalTriggerExample = () => {
+  const [open, setOpen] = useState(false);
+  const [isExternallyTriggered, setIsExternallyTriggered] = useState(false);
+
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (!next) setIsExternallyTriggered(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <Popover open={open} onOpenChange={handleOpenChange} trigger={<Button>Open</Button>}>
+        {isExternallyTriggered ? (
+          <Popover.ExternalContent
+            icon={<CameraIcon />}
+            heading="Externally triggered"
+            description="This content was shown by an external caller setting open=true, not by clicking the trigger."
+            dismissText="Got it"
+          />
+        ) : (
+          <>
+            <Popover.Heading>Title</Popover.Heading>
+
+            <Popover.Body>
+              <UtilityBody>Normal content, shown when opened by clicking the trigger.</UtilityBody>
+            </Popover.Body>
+          </>
+        )}
+      </Popover>
+
+      <Button
+        variant="outlined"
+        onClick={() => {
+          setIsExternallyTriggered(true);
+          setOpen(true);
+        }}
+      >
+        Trigger externally
+      </Button>
+    </div>
+  );
+};
+
+const AnchorOnlyExample = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Popover open={open} onOpenChange={setOpen}>
+        <Popover.ExternalContent
+          icon={<CameraIcon />}
+          heading="Anchor-only popover"
+          description="This popover has no trigger element at all — it can only ever be opened via a controlled open prop."
+          dismissText="Got it"
+        />
+      </Popover>
+
+      <Button onClick={() => setOpen(true)}>Trigger anchor-only popover</Button>
+    </>
+  );
+};
+
 /**
  * All variants
  */
@@ -255,6 +321,20 @@ export const AllVariants: Story = {
         <h3 style={{ marginBottom: 24 }}>Controlled</h3>
 
         <ControlledExample />
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: 24 }}>
+          Externally triggered (controlled open + Popover.ExternalContent)
+        </h3>
+
+        <ExternalTriggerExample />
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Anchor-only (no trigger, external open only)</h3>
+
+        <AnchorOnlyExample />
       </div>
     </div>
   ),

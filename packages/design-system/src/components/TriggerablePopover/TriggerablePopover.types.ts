@@ -4,6 +4,7 @@ import type { UseExternalTriggerOptions } from '@/hooks/useExternalTrigger';
 
 export type Placement = Position;
 
+/** @deprecated Use `PopoverProps` (with `triggerId`/`externalContent`) instead. */
 export type TriggerablePopoverProps = {
   trigger: ReactNode;
   /**

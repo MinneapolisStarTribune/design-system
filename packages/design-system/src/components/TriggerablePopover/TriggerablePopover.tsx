@@ -208,6 +208,14 @@ type TriggerablePopoverComponent = React.FC<TriggerablePopoverProps> & {
   Divider: typeof PopoverDivider;
 };
 
+/**
+ * @deprecated Use `Popover` instead — it supports the same controlled `open`/`onOpenChange`
+ * composition (drive `open` from whatever external trigger source you like, e.g.
+ * `@minneapolisstartribune/external-trigger`) plus a `Popover.ExternalContent` sub-component for
+ * fixed icon/heading/description/dismiss content, without this component's iframe-injection-slot
+ * machinery or maintaining two near-duplicate popover implementations. This component is kept for
+ * existing consumers; it isn't being changed further.
+ */
 export const TriggerablePopover = TriggerablePopoverRoot as TriggerablePopoverComponent;
 
 TriggerablePopover.Heading = PopoverHeading;
