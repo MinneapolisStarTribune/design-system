@@ -26,6 +26,7 @@ export const Select: React.FC<SelectProps> = ({
   const safeOptions = React.useMemo(() => (Array.isArray(options) ? options : []), [options]);
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -85,13 +86,23 @@ export const Select: React.FC<SelectProps> = ({
   }, [isOpen]);
 
   useEffect(() => {
-    if (activeIndex >= 0) {
+    if (isOpen && activeIndex >= 0) {
       const el = optionRefs.current[activeIndex];
       if (el && typeof el.scrollIntoView === 'function') {
         el.scrollIntoView({ block: 'nearest' });
       }
     }
-  }, [activeIndex]);
+  }, [activeIndex, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Reveal the dropdown after its active option, including in scrollable containers.
+    const listbox = listboxRef.current;
+    if (listbox && typeof listbox.scrollIntoView === 'function') {
+      listbox.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     optionRefs.current = [];
@@ -142,6 +153,7 @@ export const Select: React.FC<SelectProps> = ({
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
+          setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
         } else if (activeIndex >= 0) {
           handleSelect(safeOptions[activeIndex]);
         }
@@ -219,6 +231,7 @@ export const Select: React.FC<SelectProps> = ({
 
       {isOpen && (
         <ul
+          ref={listboxRef}
           id={listboxId}
           role="listbox"
           className={classNames(styles.selectDropdown, optionTypographyClass)}
