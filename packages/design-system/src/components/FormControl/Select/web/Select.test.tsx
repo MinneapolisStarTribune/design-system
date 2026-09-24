@@ -98,6 +98,36 @@ describe('Select', () => {
     );
   });
 
+  it.each(['click', 'Enter', 'ArrowDown', 'ArrowUp'])(
+    'keeps an empty list without an active option when opened with %s',
+    async (openWith) => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { getByRole, queryAllByRole } = renderWithProvider(
+        <FormControl.Select id="test" options={[]} onChange={onChange} />
+      );
+      const select = getByRole('combobox');
+
+      if (openWith === 'click') {
+        await user.click(getByRole('button'));
+      } else {
+        select.focus();
+        await user.keyboard(`{${openWith}}`);
+      }
+
+      expect(getByRole('listbox')).toBeInTheDocument();
+      expect(queryAllByRole('option')).toHaveLength(0);
+      expect(select).not.toHaveAttribute('aria-activedescendant');
+
+      for (const key of ['ArrowDown', 'ArrowUp', 'Enter']) {
+        await user.keyboard(`{${key}}`);
+        expect(select).not.toHaveAttribute('aria-activedescendant');
+      }
+
+      expect(onChange).not.toHaveBeenCalled();
+    }
+  );
+
   describe('dropdown scrolling', () => {
     const originalScrollIntoView = Object.getOwnPropertyDescriptor(
       HTMLElement.prototype,
