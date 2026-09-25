@@ -37,6 +37,19 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     expect(parsed?.payload.icon).toBe('resolved:gift');
   });
 
+  it('omits badgeText when not given', () => {
+    expect(
+      parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.badgeText
+    ).toBeUndefined();
+  });
+
+  it('passes badgeText through unchanged when given', () => {
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, badgeText: 'New' })?.payload
+        .badgeText
+    ).toBe('New');
+  });
+
   it('defaults position to bottom when omitted or unrecognized', () => {
     expect(
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position: 'sideways' })?.payload

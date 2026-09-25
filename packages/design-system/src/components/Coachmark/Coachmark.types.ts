@@ -49,6 +49,12 @@ export type CoachmarkProps = {
   /** Optional icon shown in a circular badge above the title. */
   icon?: ReactNode;
 
+  /**
+   * Optional label (e.g. "New") shown in a small pill in the card's top-left corner, straddling
+   * its top edge. Omit to render the coachmark with no badge.
+   */
+  badgeText?: string;
+
   /** Label for the solid action button. Omit to render the coachmark with no action button. */
   ctaText?: string;
 

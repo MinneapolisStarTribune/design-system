@@ -47,6 +47,7 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({ id, children, ct
       title={payload.title}
       description={payload.description}
       icon={payload.icon}
+      badgeText={payload.badgeText}
       ctaText={ctaAction ? payload.ctaText : undefined}
       actionHref={ctaAction?.href}
       onAction={ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined}

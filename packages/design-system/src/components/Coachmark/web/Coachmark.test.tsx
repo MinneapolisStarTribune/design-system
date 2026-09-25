@@ -170,6 +170,39 @@ describe('Coachmark', () => {
     expect(screen.getByTestId('coachmark-icon')).toBeInTheDocument();
   });
 
+  it('renders no badge when badgeText is omitted', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(screen.queryByText('New')).not.toBeInTheDocument();
+  });
+
+  it('renders a badge with the given text when badgeText is present', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        badgeText="New"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(screen.getByText('New')).toBeInTheDocument();
+  });
+
   it('calls onOpenChange(false) when the close button is clicked', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();

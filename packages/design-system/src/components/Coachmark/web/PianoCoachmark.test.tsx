@@ -17,6 +17,7 @@ const PianoTrigger = ({
   ctaText = 'Create Free Account',
   ctaType = 'signup',
   position,
+  badgeText,
   dismissOnOutsideClick,
 }: {
   triggerId: string;
@@ -33,6 +34,7 @@ const PianoTrigger = ({
           ctaText,
           ctaType,
           position,
+          badgeText,
           dismissOnOutsideClick,
         })
       }
@@ -113,6 +115,23 @@ describe('PianoCoachmark', () => {
     await user.click(screen.getByText('Fire'));
 
     expect(await screen.findByTestId('piano-icon')).toBeInTheDocument();
+  });
+
+  it('renders a badge with payload.badgeText when present', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="with-badge" badgeText="New" />
+        <PianoCoachmark id="with-badge" ctaActions={{}}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>
+    );
+
+    await user.click(screen.getByText('Fire piano event for with-badge'));
+
+    expect(await screen.findByText('New')).toBeInTheDocument();
   });
 
   it('renders the registered action as a link when the ctaAction has an href', async () => {

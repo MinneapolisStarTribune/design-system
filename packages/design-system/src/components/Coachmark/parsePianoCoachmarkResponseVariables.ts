@@ -11,6 +11,7 @@ export interface PianoCoachmarkResponseVariables {
   title?: string;
   description?: string;
   icon?: string;
+  badgeText?: string;
   position?: string;
   align?: string;
   dismissOnOutsideClick?: boolean;
@@ -38,8 +39,18 @@ export function parsePianoCoachmarkResponseVariables(
   responseVariables: PianoCoachmarkResponseVariables,
   options: ParsePianoCoachmarkResponseVariablesOptions = {}
 ): { id: string; payload: PianoCoachmarkPayload } | null {
-  const { id, title, description, icon, position, align, dismissOnOutsideClick, ctaText, ctaType } =
-    responseVariables;
+  const {
+    id,
+    title,
+    description,
+    icon,
+    badgeText,
+    position,
+    align,
+    dismissOnOutsideClick,
+    ctaText,
+    ctaType,
+  } = responseVariables;
 
   if (!id || !title || !description || !ctaText || !ctaType) {
     return null;
@@ -53,6 +64,7 @@ export function parsePianoCoachmarkResponseVariables(
       ctaText,
       ctaType,
       icon: options.resolveIcon?.(icon),
+      badgeText: badgeText || undefined,
       position: position === 'top' ? 'top' : position === 'center' ? 'center' : 'bottom',
       align: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
       dismissOnOutsideClick: dismissOnOutsideClick === true,

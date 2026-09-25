@@ -23,6 +23,11 @@ export interface PianoCoachmarkPayload {
   /** Optional icon rendered in a circular badge above the title. */
   icon?: ReactNode;
   /**
+   * Optional label (e.g. "New") rendered in a small pill in the card's top-left corner. Omit for
+   * no badge.
+   */
+  badgeText?: string;
+  /**
    * Which side of the trigger the coachmark opens on. Defaults to "bottom" when omitted.
    * "center" opts out of top/bottom entirely -- combined with `align: "left" | "right"`, the
    * coachmark opens to that side, vertically centered on the trigger instead.

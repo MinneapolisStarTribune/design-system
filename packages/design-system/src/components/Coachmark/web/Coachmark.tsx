@@ -75,6 +75,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   title,
   description,
   icon,
+  badgeText,
   ctaText,
   actionHref,
   onAction,
@@ -196,6 +197,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               aria-describedby={descriptionId}
               {...getFloatingProps()}
             >
+              {badgeText && (
+                <span className={styles.badge}>
+                  <UtilityLabel size="small" weight="semibold" capitalize color="on-dark-primary">
+                    {badgeText}
+                  </UtilityLabel>
+                </span>
+              )}
               <FloatingArrow
                 ref={arrowRef}
                 context={context}

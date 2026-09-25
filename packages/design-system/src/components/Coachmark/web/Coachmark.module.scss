@@ -16,6 +16,18 @@
   overflow: visible;
 }
 
+.badge {
+  position: absolute;
+  top: 0;
+  left: var(--spacing-16);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--color-background-brand);
+}
+
 .closeButton {
   position: absolute;
   top: var(--spacing-8);

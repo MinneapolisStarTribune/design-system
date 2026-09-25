@@ -15,6 +15,7 @@ const meta = {
     open: { control: false },
     onOpenChange: { control: false },
     icon: { control: false },
+    badgeText: { control: 'text' },
     title: { control: 'text' },
     description: { control: 'text' },
     ctaText: { control: 'text' },
@@ -118,6 +119,34 @@ export const WithIcon: Story = {
           title="Added to favorites"
           description="You'll now see updates for this team in your feed."
           icon={<StarIcon size="medium" color="on-dark-primary" />}
+        >
+          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
+        </Coachmark>
+      );
+    };
+
+    return <ControlledCoachmark />;
+  },
+};
+
+/**
+ * With a "New" badge in the card's top-left corner, straddling its top edge -- e.g. to flag a
+ * newly-launched feature the coachmark is introducing.
+ */
+export const WithBadge: Story = {
+  args: baseArgs,
+  render: () => {
+    const ControlledCoachmark = () => {
+      const [open, setOpen] = useState(true);
+
+      return (
+        <Coachmark
+          open={open}
+          onOpenChange={setOpen}
+          title="Explore Athlete Pages"
+          description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
+          icon={<StarIcon size="medium" color="on-dark-primary" />}
+          badgeText="New"
         >
           <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
         </Coachmark>
