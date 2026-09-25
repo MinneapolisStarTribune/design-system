@@ -130,8 +130,8 @@ export const WithIcon: Story = {
 };
 
 /**
- * With a "New" badge in the card's top-left corner, straddling its top edge -- e.g. to flag a
- * newly-launched feature the coachmark is introducing.
+ * With a "New" badge in the card's top-left corner, vertically centered 24px from the card's top
+ * edge -- e.g. to flag a newly-launched feature the coachmark is introducing.
  */
 export const WithBadge: Story = {
   args: baseArgs,

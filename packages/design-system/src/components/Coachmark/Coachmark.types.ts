@@ -50,8 +50,8 @@ export type CoachmarkProps = {
   icon?: ReactNode;
 
   /**
-   * Optional label (e.g. "New") shown in a small pill in the card's top-left corner, straddling
-   * its top edge. Omit to render the coachmark with no badge.
+   * Optional label (e.g. "New") shown in a small pill in the card's top-left corner, vertically
+   * centered 24px from the card's top edge. Omit to render the coachmark with no badge.
    */
   badgeText?: string;
 

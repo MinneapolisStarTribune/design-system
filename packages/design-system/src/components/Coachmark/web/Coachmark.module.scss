@@ -10,6 +10,12 @@
   background: var(--color-background-light-default);
   box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
   overflow: visible;
+
+  /* This panel is tabIndex={-1} (see Coachmark.tsx's FloatingFocusManager) -- it's never reachable
+     via Tab, only ever focused programmatically so a screen reader announces it on open. A sighted
+     keyboard user can't land here the normal way, so the browser's default focus ring would only
+     ever show up as an unexplained flash on open, not a real navigation cue. */
+  outline: none;
 }
 
 .arrow {
@@ -18,7 +24,7 @@
 
 .badge {
   position: absolute;
-  top: 0;
+  top: var(--spacing-24);
   left: var(--spacing-16);
   transform: translateY(-50%);
   display: inline-flex;

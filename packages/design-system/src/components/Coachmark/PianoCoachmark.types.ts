@@ -23,8 +23,8 @@ export interface PianoCoachmarkPayload {
   /** Optional icon rendered in a circular badge above the title. */
   icon?: ReactNode;
   /**
-   * Optional label (e.g. "New") rendered in a small pill in the card's top-left corner. Omit for
-   * no badge.
+   * Optional label (e.g. "New") rendered in a small pill in the card's top-left corner, vertically
+   * centered 24px from the card's top edge. Omit for no badge.
    */
   badgeText?: string;
   /**
