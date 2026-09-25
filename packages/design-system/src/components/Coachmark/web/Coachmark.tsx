@@ -129,6 +129,18 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   );
 
   const { refs, context, floatingStyles } = useFloating({
+    // `strategy: 'fixed'` (not the default 'absolute') matters specifically for triggers inside a
+    // sticky/fixed-positioned ancestor (e.g. a sticky site header): 'absolute' positions in
+    // document coordinates, which stay correct for a normally-scrolling trigger without any JS
+    // (the browser scrolls both together), but for a sticky trigger its on-screen position never
+    // moves while its document coordinates keep changing, so autoUpdate's scroll listener has to
+    // recompute new coordinates every scroll frame -- and that JS-driven recalculation visibly
+    // lags behind the browser's native, JS-free sticky positioning, producing a jerky trail.
+    // 'fixed' uses viewport coordinates instead: for a sticky/fixed trigger those coordinates
+    // don't need to change at all once stuck (autoUpdate's recompute is a no-op), and for a
+    // normally-scrolling trigger they're recomputed on scroll exactly as before -- so this fixes
+    // the sticky case with no special-casing per app, and no change in behavior for the other.
+    strategy: 'fixed',
     placement: toPlacement(position, align),
     open,
     onOpenChange,
