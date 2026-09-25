@@ -44,6 +44,12 @@ export interface PianoCoachmarkPayload {
    * action button's own behavior. Defaults to false when omitted.
    */
   dismissOnOutsideClick?: boolean;
+  /**
+   * Whether to render the registered `ctaAction`'s `renderSecondary` content (e.g. a "Log in"
+   * link below the action button). Defaults to false when omitted -- the secondary content is
+   * opt-in per Piano campaign, not shown just because the `ctaAction` happens to support it.
+   */
+  showLogin?: boolean;
 }
 
 /** Helpers a `PianoCtaAction`'s `onClick`/`renderSecondary` can use. */

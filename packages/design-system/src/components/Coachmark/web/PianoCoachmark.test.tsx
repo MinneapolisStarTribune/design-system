@@ -19,6 +19,7 @@ const PianoTrigger = ({
   position,
   badgeText,
   dismissOnOutsideClick,
+  showLogin,
 }: {
   triggerId: string;
 } & Partial<PianoCoachmarkPayload>) => {
@@ -36,6 +37,7 @@ const PianoTrigger = ({
           position,
           badgeText,
           dismissOnOutsideClick,
+          showLogin,
         })
       }
     >
@@ -174,7 +176,7 @@ describe('PianoCoachmark', () => {
     expect(onClick).toHaveBeenCalledWith({ dismiss: expect.any(Function) });
   });
 
-  it("renders a registered action's secondary content below the action button", async () => {
+  it("renders a registered action's secondary content when showLogin is true", async () => {
     const user = userEvent.setup();
     const customActions = {
       'with-secondary': {
@@ -189,6 +191,7 @@ describe('PianoCoachmark', () => {
           triggerId="with-secondary"
           ctaText="Primary action"
           ctaType="with-secondary"
+          showLogin
         />
         <PianoCoachmark id="with-secondary" ctaActions={customActions}>
           <button type="button">Trigger</button>
@@ -200,6 +203,30 @@ describe('PianoCoachmark', () => {
 
     expect(await screen.findByText('Primary action')).toBeInTheDocument();
     expect(screen.getByText('Secondary content')).toBeInTheDocument();
+  });
+
+  it("omits a registered action's secondary content when showLogin is omitted", async () => {
+    const user = userEvent.setup();
+    const customActions = {
+      'with-secondary': {
+        href: '/somewhere',
+        renderSecondary: () => <span>Secondary content</span>,
+      },
+    };
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="no-login" ctaText="Primary action" ctaType="with-secondary" />
+        <PianoCoachmark id="no-login" ctaActions={customActions}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>
+    );
+
+    await user.click(screen.getByText('Fire piano event for no-login'));
+
+    expect(await screen.findByText('Primary action')).toBeInTheDocument();
+    expect(screen.queryByText('Secondary content')).not.toBeInTheDocument();
   });
 
   it("renders no action button (but keeps the close button working) when ctaType isn't registered", async () => {

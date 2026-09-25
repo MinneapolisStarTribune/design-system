@@ -21,6 +21,7 @@ describe('parsePianoCoachmarkResponseVariables', () => {
         position: 'bottom',
         align: 'center',
         dismissOnOutsideClick: false,
+        showLogin: false,
       },
     });
   });
@@ -88,6 +89,18 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     expect(
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, dismissOnOutsideClick: false })
         ?.payload.dismissOnOutsideClick
+    ).toBe(false);
+  });
+
+  it('coerces showLogin to a strict boolean, defaulting to false when omitted', () => {
+    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.showLogin).toBe(false);
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, showLogin: true })?.payload
+        .showLogin
+    ).toBe(true);
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, showLogin: false })?.payload
+        .showLogin
     ).toBe(false);
   });
 

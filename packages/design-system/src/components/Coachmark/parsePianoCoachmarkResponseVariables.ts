@@ -15,6 +15,7 @@ export interface PianoCoachmarkResponseVariables {
   position?: string;
   align?: string;
   dismissOnOutsideClick?: boolean;
+  showLogin?: boolean;
   ctaText?: string;
   ctaType?: string;
 }
@@ -32,8 +33,9 @@ export interface ParsePianoCoachmarkResponseVariablesOptions {
  *
  * Encapsulates the defaulting/coercion every consumer would otherwise have to reimplement
  * identically: `position` falls back to "bottom" for any value other than "top"/"center", `align`
- * falls back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick` is
- * coerced to a strict boolean.
+ * falls back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick`/
+ * `showLogin` are each coerced to a strict boolean (`showLogin` defaulting to `false`, i.e. no
+ * secondary content, when omitted).
  */
 export function parsePianoCoachmarkResponseVariables(
   responseVariables: PianoCoachmarkResponseVariables,
@@ -48,6 +50,7 @@ export function parsePianoCoachmarkResponseVariables(
     position,
     align,
     dismissOnOutsideClick,
+    showLogin,
     ctaText,
     ctaType,
   } = responseVariables;
@@ -68,6 +71,7 @@ export function parsePianoCoachmarkResponseVariables(
       position: position === 'top' ? 'top' : position === 'center' ? 'center' : 'bottom',
       align: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
       dismissOnOutsideClick: dismissOnOutsideClick === true,
+      showLogin: showLogin === true,
     },
   };
 }
