@@ -50,8 +50,8 @@ const PLACEMENT: Record<CoachmarkPosition, Placement> = {
   'bottom-left': 'bottom-end',
   'bottom-center': 'bottom',
   'bottom-right': 'bottom-start',
-  'left-center': 'left',
-  'right-center': 'right',
+  'center-left': 'left',
+  'center-right': 'right',
 };
 
 /**
@@ -86,10 +86,10 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const resolvedPortalRoot =
     portalRootProp ?? (typeof document !== 'undefined' ? document.body : null);
 
-  // 'left-center'/'right-center' open beside the trigger (floating-ui's bare 'left'/'right'
+  // 'center-left'/'center-right' open beside the trigger (floating-ui's bare 'left'/'right'
   // placements) rather than above/below it -- vertical is the *alignment* axis there instead of
   // the side axis, which is what the shift middleware below needs to know.
-  const isSidePosition = position === 'left-center' || position === 'right-center';
+  const isSidePosition = position === 'center-left' || position === 'center-right';
 
   const middleware = useMemo(
     () => [

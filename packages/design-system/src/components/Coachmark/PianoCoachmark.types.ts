@@ -29,7 +29,7 @@ export interface PianoCoachmarkPayload {
   badgeText?: string;
   /**
    * Which side of the trigger the coachmark opens on, and where along that side -- e.g.
-   * "top-left", "bottom-right", "left-center". Defaults to "bottom-center" when omitted.
+   * "top-left", "bottom-right", "center-left". Defaults to "bottom-center" when omitted.
    */
   position?: CoachmarkPosition;
   /**

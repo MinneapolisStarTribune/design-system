@@ -397,8 +397,8 @@ describe('Coachmark', () => {
   });
 
   it.each([
-    ['left-center', 'rotate(-90deg)'],
-    ['right-center', 'rotate(90deg)'],
+    ['center-left', 'rotate(-90deg)'],
+    ['center-right', 'rotate(90deg)'],
   ] as const)(
     'opens beside the trigger, vertically centered, when position is %s',
     async (position, expectedArrowTransform) => {

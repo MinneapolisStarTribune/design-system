@@ -18,8 +18,8 @@ export const COACHMARK_POSITIONS = [
   'bottom-left',
   'bottom-center',
   'bottom-right',
-  'left-center',
-  'right-center',
+  'center-left',
+  'center-right',
 ] as const;
 
 export type CoachmarkPosition = (typeof COACHMARK_POSITIONS)[number];

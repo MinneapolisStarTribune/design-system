@@ -182,8 +182,8 @@ export const WithSecondaryContent: Story = {
 
 /**
  * All eight `position` values, side by side. 'top'/'bottom' positions open above/below the
- * trigger (with 'left'/'right'/'center' controlling where along that edge); 'left-center'/
- * 'right-center' open beside the trigger instead, vertically centered -- e.g. for a trigger flush
+ * trigger (with 'left'/'right'/'center' controlling where along that edge); 'center-left'/
+ * 'center-right' open beside the trigger instead, vertically centered -- e.g. for a trigger flush
  * against a screen edge with no room above/below. The flip middleware auto-flips any of these
  * when there isn't room (e.g. near a viewport edge, or scrolled close to it).
  */
