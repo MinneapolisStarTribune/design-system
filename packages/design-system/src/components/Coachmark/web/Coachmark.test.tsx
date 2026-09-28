@@ -3,6 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { Coachmark } from './Coachmark';
+import { COACHMARK_POSITIONS } from '../Coachmark.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../../test-utils/render';
 
@@ -335,7 +336,7 @@ describe('Coachmark', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'outside-press');
   });
 
-  it('opens above the trigger when position is top', async () => {
+  it('opens above the trigger when position is top-center', async () => {
     renderWithProvider(
       <Coachmark
         open
@@ -343,7 +344,7 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="top"
+        position="top-center"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -376,56 +377,7 @@ describe('Coachmark', () => {
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
   });
 
-  it.each(['left', 'right', 'center'] as const)(
-    'accepts align="%s" alongside position without error',
-    async (align) => {
-      renderWithProvider(
-        <Coachmark
-          open
-          onOpenChange={vi.fn()}
-          title="Title"
-          description="Description"
-          ctaText="Do it"
-          align={align}
-        >
-          <Button>Trigger</Button>
-        </Coachmark>
-      );
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-    }
-  );
-
-  it.each([
-    ['left', 'rotate(-90deg)'],
-    ['right', 'rotate(90deg)'],
-  ] as const)(
-    'opens to the %s of the trigger, vertically centered, when position is center and align is %s',
-    async (align, expectedArrowTransform) => {
-      renderWithProvider(
-        <Coachmark
-          open
-          onOpenChange={vi.fn()}
-          title="Title"
-          description="Description"
-          ctaText="Do it"
-          position="center"
-          align={align}
-        >
-          <Button>Trigger</Button>
-        </Coachmark>
-      );
-
-      // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
-      // confirming `align` was used as the side, not silently ignored.
-      const arrow = screen.getByRole('dialog').querySelector('svg');
-      await waitFor(() => expect(arrow).toHaveStyle({ transform: expectedArrowTransform }));
-    }
-  );
-
-  it('falls back to opening below the trigger when position is center and align is also center', async () => {
+  it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
     renderWithProvider(
       <Coachmark
         open
@@ -433,14 +385,40 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="center"
-        align="center"
+        position={position}
       >
         <Button>Trigger</Button>
       </Coachmark>
     );
 
-    const arrow = screen.getByRole('dialog').querySelector('svg');
-    await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
   });
+
+  it.each([
+    ['left-center', 'rotate(-90deg)'],
+    ['right-center', 'rotate(90deg)'],
+  ] as const)(
+    'opens beside the trigger, vertically centered, when position is %s',
+    async (position, expectedArrowTransform) => {
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+          position={position}
+        >
+          <Button>Trigger</Button>
+        </Coachmark>
+      );
+
+      // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
+      // confirming the side was actually applied, not silently ignored.
+      const arrow = screen.getByRole('dialog').querySelector('svg');
+      await waitFor(() => expect(arrow).toHaveStyle({ transform: expectedArrowTransform }));
+    }
+  );
 });

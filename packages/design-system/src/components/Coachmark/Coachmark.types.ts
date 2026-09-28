@@ -1,27 +1,28 @@
 import type { ReactNode } from 'react';
 
 /**
- * Which side of `children` the coachmark opens on. 'center' opts out of top/bottom entirely --
- * combined with `align: 'left' | 'right'`, the coachmark instead opens to that side, vertically
- * centered on `children` (see `align`'s doc comment for the full combination table).
- */
-export type CoachmarkPosition = 'top' | 'bottom' | 'center';
-
-/**
- * Horizontal alignment of the coachmark relative to `children`, independent of `position`'s
- * side. Combines with `position` as follows:
- * - `position: 'top' | 'bottom'` -- `align` shifts the coachmark so it visually sits toward that
- *   side of `children` (the coachmark is almost always wider than `children`, so this is the
- *   *opposite* of floating-ui's own '-start'/'-end' cross-axis alignment, which pins the matching
- *   edge in place and lets the card grow away from it; 'center' is no suffix).
- * - `position: 'center'` -- `align` becomes the side instead: 'left'/'right' place the coachmark
- *   to that side, vertically centered on `children`. `align: 'center'` has no side to anchor to
- *   in this case, so it falls back to the overall default (`position: 'bottom'`, centered).
+ * Which side of `children` the coachmark opens on, and where along that side. The first segment
+ * is the side ('top'/'bottom' open above/below `children`; 'left'/'right' open beside it,
+ * vertically centered, e.g. for a trigger flush against a screen edge with no room above/below).
+ * The second segment positions the card along a 'top'/'bottom' side ('left'/'right' shift the
+ * card so it visually sits toward that side of `children`, 'center' centers it) -- 'left'/'right'
+ * have no second axis to position along, so they're always paired with 'center'.
  *
  * Physical left/right, not logical start/end, since this is a fixed-locale product with no RTL
  * support.
  */
-export type CoachmarkAlign = 'left' | 'right' | 'center';
+export const COACHMARK_POSITIONS = [
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+  'left-center',
+  'right-center',
+] as const;
+
+export type CoachmarkPosition = (typeof COACHMARK_POSITIONS)[number];
 
 export type CoachmarkProps = {
   /**
@@ -67,11 +68,11 @@ export type CoachmarkProps = {
   /** Optional content rendered below the action button, e.g. a secondary link. */
   secondaryContent?: ReactNode;
 
-  /** Which side of `children` the coachmark opens on. Defaults to 'bottom'. */
+  /**
+   * Which side of `children` the coachmark opens on, and where along that side. Defaults to
+   * 'bottom-center'.
+   */
   position?: CoachmarkPosition;
-
-  /** Horizontal alignment relative to `children`, independent of `position`. Defaults to 'center'. */
-  align?: CoachmarkAlign;
 
   /**
    * Whether an outside click or Escape closes the coachmark. Defaults to false -- a coachmark

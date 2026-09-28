@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useExternalTriggerState } from '@minneapolisstartribune/external-trigger';
 import { Coachmark } from './Coachmark';
+import { COACHMARK_POSITIONS } from '../Coachmark.types';
 import type { PianoCoachmarkPayload, PianoCoachmarkProps } from '../PianoCoachmark.types';
 
 /**
@@ -53,9 +54,10 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({ id, children, ct
       onAction={ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined}
       secondaryContent={payload.showLogin ? ctaAction?.renderSecondary?.({ dismiss }) : undefined}
       position={
-        payload.position === 'top' ? 'top' : payload.position === 'center' ? 'center' : 'bottom'
+        payload.position && COACHMARK_POSITIONS.includes(payload.position)
+          ? payload.position
+          : 'bottom-center'
       }
-      align={payload.align === 'left' ? 'left' : payload.align === 'right' ? 'right' : 'center'}
       dismissOnOutsideClick={payload.dismissOnOutsideClick ?? false}
     >
       <span style={{ display: 'inline-flex' }}>{children}</span>

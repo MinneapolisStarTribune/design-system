@@ -1,3 +1,4 @@
+import { COACHMARK_POSITIONS } from './Coachmark.types';
 import { parsePianoCoachmarkResponseVariables } from './parsePianoCoachmarkResponseVariables';
 
 const REQUIRED_FIELDS = {
@@ -18,8 +19,7 @@ describe('parsePianoCoachmarkResponseVariables', () => {
         ctaText: REQUIRED_FIELDS.ctaText,
         ctaType: REQUIRED_FIELDS.ctaType,
         icon: undefined,
-        position: 'bottom',
-        align: 'center',
+        position: 'bottom-center',
         dismissOnOutsideClick: false,
         showLogin: false,
       },
@@ -51,31 +51,20 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     ).toBe('New');
   });
 
-  it('defaults position to bottom when omitted or unrecognized', () => {
+  it('defaults position to bottom-center when omitted or unrecognized', () => {
     expect(
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position: 'sideways' })?.payload
         .position
-    ).toBe('bottom');
-    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.position).toBe('bottom');
+    ).toBe('bottom-center');
+    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.position).toBe(
+      'bottom-center'
+    );
   });
 
-  it.each(['top', 'center'] as const)('passes position through as %s when given', (position) => {
+  it.each(COACHMARK_POSITIONS)('passes position through as %s when given', (position) => {
     expect(
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position })?.payload.position
     ).toBe(position);
-  });
-
-  it('defaults align to center when omitted or unrecognized', () => {
-    expect(
-      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, align: 'sideways' })?.payload.align
-    ).toBe('center');
-    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.align).toBe('center');
-  });
-
-  it.each(['left', 'right'] as const)('passes align through as %s when given', (align) => {
-    expect(parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, align })?.payload.align).toBe(
-      align
-    );
   });
 
   it('coerces dismissOnOutsideClick to a strict boolean', () => {

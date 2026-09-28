@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { COACHMARK_POSITIONS, type CoachmarkPosition } from './Coachmark.types';
 import type { PianoCoachmarkPayload } from './PianoCoachmark.types';
 
 /**
@@ -13,11 +14,14 @@ export interface PianoCoachmarkResponseVariables {
   icon?: string;
   badgeText?: string;
   position?: string;
-  align?: string;
   dismissOnOutsideClick?: boolean;
   showLogin?: boolean;
   ctaText?: string;
   ctaType?: string;
+}
+
+function isCoachmarkPosition(value: string | undefined): value is CoachmarkPosition {
+  return COACHMARK_POSITIONS.includes(value as CoachmarkPosition);
 }
 
 export interface ParsePianoCoachmarkResponseVariablesOptions {
@@ -32,10 +36,9 @@ export interface ParsePianoCoachmarkResponseVariablesOptions {
  * `setResponseVariable` event for an unrelated feature (the call-to-action banner, etc).
  *
  * Encapsulates the defaulting/coercion every consumer would otherwise have to reimplement
- * identically: `position` falls back to "bottom" for any value other than "top"/"center", `align`
- * falls back to "center" for any value other than "left"/"right", and `dismissOnOutsideClick`/
- * `showLogin` are each coerced to a strict boolean (`showLogin` defaulting to `false`, i.e. no
- * secondary content, when omitted).
+ * identically: `position` falls back to "bottom-center" for any value other than one of
+ * `COACHMARK_POSITIONS`, and `dismissOnOutsideClick`/`showLogin` are each coerced to a strict
+ * boolean (`showLogin` defaulting to `false`, i.e. no secondary content, when omitted).
  */
 export function parsePianoCoachmarkResponseVariables(
   responseVariables: PianoCoachmarkResponseVariables,
@@ -48,7 +51,6 @@ export function parsePianoCoachmarkResponseVariables(
     icon,
     badgeText,
     position,
-    align,
     dismissOnOutsideClick,
     showLogin,
     ctaText,
@@ -68,8 +70,7 @@ export function parsePianoCoachmarkResponseVariables(
       ctaType,
       icon: options.resolveIcon?.(icon),
       badgeText: badgeText || undefined,
-      position: position === 'top' ? 'top' : position === 'center' ? 'center' : 'bottom',
-      align: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
+      position: isCoachmarkPosition(position) ? position : 'bottom-center',
       dismissOnOutsideClick: dismissOnOutsideClick === true,
       showLogin: showLogin === true,
     },

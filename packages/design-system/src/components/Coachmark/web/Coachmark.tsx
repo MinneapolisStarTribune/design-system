@@ -18,6 +18,7 @@ import {
   FloatingPortal,
   flip,
   offset,
+  type Placement,
   shift,
   useDismiss,
   useFloating,
@@ -29,37 +30,29 @@ import { CloseIcon } from '@/icons';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
-import type { CoachmarkAlign, CoachmarkPosition, CoachmarkProps } from '../Coachmark.types';
+import type { CoachmarkPosition, CoachmarkProps } from '../Coachmark.types';
 import styles from './Coachmark.module.scss';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
-// Inverted from floating-ui's own '-start'/'-end' cross-axis alignment: since the coachmark is
-// almost always wider than its trigger, aligning by the trigger's *matching* edge ('-start' for
-// 'left') pins that edge in place and lets the (wider) card extend away from it -- e.g. 'left'
-// with '-start' pins the card's left edge to the trigger's left edge, so the card actually
-// stretches out to the trigger's right. Swapping the suffixes makes the card visually sit on the
-// named side instead.
-const ALIGN_SUFFIX: Record<CoachmarkAlign, '' | '-start' | '-end'> = {
-  center: '',
-  left: '-end',
-  right: '-start',
+// Maps each combined position directly to a floating-ui placement. The 'left'/'right' suffixes
+// for top/bottom are inverted from floating-ui's own '-start'/'-end' cross-axis alignment: since
+// the coachmark is almost always wider than its trigger, aligning by the trigger's *matching*
+// edge ('-start' for 'left') pins that edge in place and lets the (wider) card extend away from
+// it -- e.g. 'top-left' with '-start' would pin the card's left edge to the trigger's left edge,
+// so the card would actually stretch out to the trigger's right. Using the opposite suffix makes
+// the card visually sit on the named side instead.
+const PLACEMENT: Record<CoachmarkPosition, Placement> = {
+  'top-left': 'top-end',
+  'top-center': 'top',
+  'top-right': 'top-start',
+  'bottom-left': 'bottom-end',
+  'bottom-center': 'bottom',
+  'bottom-right': 'bottom-start',
+  'left-center': 'left',
+  'right-center': 'right',
 };
-
-function toPlacement(position: CoachmarkPosition, align: CoachmarkAlign) {
-  // `position: 'center'` opts out of top/bottom entirely -- `align` becomes the side instead,
-  // vertically centered on the trigger (floating-ui's bare 'left'/'right' placements already
-  // center on the cross axis by default). 'center' + 'center' has no side to anchor to, so it
-  // falls back to the overall default placement.
-  if (position === 'center') {
-    if (align === 'left') return 'left';
-    if (align === 'right') return 'right';
-    return 'bottom';
-  }
-
-  return `${position}${ALIGN_SUFFIX[align]}` as const;
-}
 
 /**
  * A dismissible, pointed callout that surfaces an unprompted, single action -- e.g. a CMS-driven
@@ -80,8 +73,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   actionHref,
   onAction,
   secondaryContent,
-  position = 'bottom',
-  align = 'center',
+  position = 'bottom-center',
   dismissOnOutsideClick = false,
   portalRoot: portalRootProp,
   zIndex = 9999,
@@ -93,6 +85,11 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
 
   const resolvedPortalRoot =
     portalRootProp ?? (typeof document !== 'undefined' ? document.body : null);
+
+  // 'left-center'/'right-center' open beside the trigger (floating-ui's bare 'left'/'right'
+  // placements) rather than above/below it -- vertical is the *alignment* axis there instead of
+  // the side axis, which is what the shift middleware below needs to know.
+  const isSidePosition = position === 'left-center' || position === 'right-center';
 
   const middleware = useMemo(
     () => [
@@ -111,21 +108,21 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       // trigger even after it scrolls off-screen (e.g. above the viewport), not stay pinned near
       // the viewport edge once the trigger is no longer nearby. Which of shift's axis options
       // ("mainAxis"/"crossAxis") maps to vertical depends on the placement's own side -- for
-      // top/bottom, vertical is the side's own axis ("crossAxis" in floating-ui's terms); for
-      // left/right (position="center"), vertical is the alignment axis ("mainAxis"). So vertical
+      // top/bottom positions, vertical is the side's own axis ("crossAxis" in floating-ui's
+      // terms); for left/right positions, vertical is the alignment axis ("mainAxis"). So vertical
       // is always disabled, and the other (horizontal) axis is enabled to give the narrow-viewport
       // buffer fix from before: a left/right coachmark that still doesn't fully fit even on flip's
       // best-fit side needs that horizontal correction, since flip alone can't shrink it further.
       shift({
         boundary: resolvedPortalRoot ?? undefined,
         padding: 20,
-        mainAxis: position !== 'center',
-        crossAxis: position === 'center',
+        mainAxis: !isSidePosition,
+        crossAxis: isSidePosition,
       }),
       // eslint-disable-next-line react-hooks/refs
       arrow({ element: arrowRef }),
     ],
-    [resolvedPortalRoot, position]
+    [resolvedPortalRoot, isSidePosition]
   );
 
   const { refs, context, floatingStyles } = useFloating({
@@ -141,7 +138,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     // normally-scrolling trigger they're recomputed on scroll exactly as before -- so this fixes
     // the sticky case with no special-casing per app, and no change in behavior for the other.
     strategy: 'fixed',
-    placement: toPlacement(position, align),
+    placement: PLACEMENT[position],
     open,
     onOpenChange,
     whileElementsMounted: autoUpdate,

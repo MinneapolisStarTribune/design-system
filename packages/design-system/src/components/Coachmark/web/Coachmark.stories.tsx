@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Coachmark } from './Coachmark';
-import { Button } from '@/components/index.web';
+import { Button, COACHMARK_POSITIONS } from '@/components/index.web';
 import { StarIcon } from '@/icons';
 
 const meta = {
@@ -24,11 +24,7 @@ const meta = {
     secondaryContent: { control: false },
     position: {
       control: 'select',
-      options: ['top', 'bottom', 'center'],
-    },
-    align: {
-      control: 'select',
-      options: ['left', 'right', 'center'],
+      options: COACHMARK_POSITIONS,
     },
     dismissOnOutsideClick: { control: 'boolean' },
     zIndex: { control: 'number' },
@@ -64,8 +60,7 @@ export const Configurable: Story = {
     title: 'Never miss a story',
     description: 'Create a free account to save articles for later.',
     ctaText: 'Create Free Account',
-    position: 'bottom',
-    align: 'center',
+    position: 'bottom-center',
     dismissOnOutsideClick: false,
   },
   render: (args) => {
@@ -186,19 +181,27 @@ export const WithSecondaryContent: Story = {
 };
 
 /**
- * Top vs. bottom placement, side by side.
+ * All eight `position` values, side by side. 'top'/'bottom' positions open above/below the
+ * trigger (with 'left'/'right'/'center' controlling where along that edge); 'left-center'/
+ * 'right-center' open beside the trigger instead, vertically centered -- e.g. for a trigger flush
+ * against a screen edge with no room above/below. The flip middleware auto-flips any of these
+ * when there isn't room (e.g. near a viewport edge, or scrolled close to it).
  */
 export const Positions: Story = {
   args: baseArgs,
   render: () => {
-    const PositionedCoachmark = ({ position }: { position: 'top' | 'bottom' }) => {
+    const PositionedCoachmark = ({
+      position,
+    }: {
+      position: (typeof COACHMARK_POSITIONS)[number];
+    }) => {
       const [open, setOpen] = useState(true);
 
       return (
         <Coachmark
           open={open}
           onOpenChange={setOpen}
-          title={`Opens on the ${position}`}
+          title={position}
           description="The flip middleware still auto-flips this when there isn't room."
           ctaText="Got it"
           position={position}
@@ -209,92 +212,17 @@ export const Positions: Story = {
     };
 
     return (
-      <div style={{ display: 'flex', gap: 160, padding: 120 }}>
-        <PositionedCoachmark position="top" />
-        <PositionedCoachmark position="bottom" />
-      </div>
-    );
-  },
-  parameters: {
-    layout: 'fullscreen',
-  },
-};
-
-/**
- * Left/right/center horizontal alignment relative to the trigger, side by side.
- */
-export const Alignments: Story = {
-  args: baseArgs,
-  render: () => {
-    const AlignedCoachmark = ({ align }: { align: 'left' | 'right' | 'center' }) => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
-          title={`align="${align}"`}
-          description="Independent of position's top/bottom side."
-          ctaText="Got it"
-          align={align}
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
-        </Coachmark>
-      );
-    };
-
-    return (
-      <div style={{ display: 'flex', gap: 160, padding: 120 }}>
-        <AlignedCoachmark align="left" />
-        <AlignedCoachmark align="center" />
-        <AlignedCoachmark align="right" />
-      </div>
-    );
-  },
-  parameters: {
-    layout: 'fullscreen',
-  },
-};
-
-/**
- * `position="center"` opts out of top/bottom entirely -- `align="left"`/`"right"` instead places
- * the coachmark to that side of the trigger, vertically centered on it. The same flip middleware
- * used for top/bottom applies here too, so a trigger flush with a screen edge (with no room on
- * its aligned side) automatically opens on the opposite side instead.
- */
-export const CenterPosition: Story = {
-  args: baseArgs,
-  render: () => {
-    const SidePlacedCoachmark = ({ align }: { align: 'left' | 'right' }) => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
-          title={`Opens on the ${align}`}
-          description="Vertically centered on the trigger instead of above/below it."
-          ctaText="Got it"
-          position="center"
-          align={align}
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
-        </Coachmark>
-      );
-    };
-
-    return (
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 240,
-          padding: 120,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 160,
+          padding: 160,
         }}
       >
-        <SidePlacedCoachmark align="left" />
-        <SidePlacedCoachmark align="right" />
+        {COACHMARK_POSITIONS.map((position) => (
+          <PositionedCoachmark key={position} position={position} />
+        ))}
       </div>
     );
   },
