@@ -82,4 +82,11 @@ export interface PianoCoachmarkProps {
    * signup screen, toggling a favorite) are always app-specific.
    */
   ctaActions: PianoCtaActionRegistry;
+  /**
+   * Called whenever the coachmark's own Piano-triggered open state changes. Lets a consumer
+   * coordinate other UI anchored to the same trigger (e.g. suppressing a hover popover while the
+   * coachmark is showing) without calling `useExternalTriggerState` itself -- keeping that hook's
+   * only call site the one already exercised here.
+   */
+  onTriggeredChange?: (isTriggered: boolean) => void;
 }

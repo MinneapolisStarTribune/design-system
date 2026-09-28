@@ -12,8 +12,17 @@ import type { PianoCoachmarkPayload, PianoCoachmarkProps } from '../PianoCoachma
  * `Coachmark` itself owns all the visual design (typography, spacing, icon badge, close button)
  * so this component only supplies data, never styling.
  */
-export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({ id, children, ctaActions }) => {
+export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({
+  id,
+  children,
+  ctaActions,
+  onTriggeredChange,
+}) => {
   const { payload, isTriggered, dismiss } = useExternalTriggerState<PianoCoachmarkPayload>(id);
+
+  useEffect(() => {
+    onTriggeredChange?.(isTriggered);
+  }, [isTriggered, onTriggeredChange]);
 
   const handleOpenChange = useCallback(
     (next: boolean) => {

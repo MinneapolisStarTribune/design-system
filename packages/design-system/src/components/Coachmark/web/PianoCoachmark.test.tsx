@@ -361,6 +361,31 @@ describe('PianoCoachmark', () => {
     expect(screen.getAllByRole('dialog')).toHaveLength(1);
   });
 
+  it('calls onTriggeredChange with the current triggered state as it changes', async () => {
+    const user = userEvent.setup();
+    const onTriggeredChange = vi.fn();
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="triggered-change" />
+        <PianoCoachmark id="triggered-change" ctaActions={{}} onTriggeredChange={onTriggeredChange}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>
+    );
+
+    expect(onTriggeredChange).toHaveBeenCalledWith(false);
+
+    await user.click(screen.getByText('Fire piano event for triggered-change'));
+    await screen.findByText('Piano title');
+
+    expect(onTriggeredChange).toHaveBeenCalledWith(true);
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+
+    expect(onTriggeredChange).toHaveBeenLastCalledWith(false);
+  });
+
   it('keeps both coachmarks open when two are piano-triggered at once', async () => {
     // Fires both triggers directly, the way Piano's real SDK invokes our handler -- a plain JS
     // function call with no DOM click/pointerdown involved, so opening the second doesn't read as
