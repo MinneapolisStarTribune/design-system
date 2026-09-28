@@ -5,6 +5,7 @@ import { useExternalTriggerState } from '@minneapolisstartribune/external-trigge
 import { Coachmark } from './Coachmark';
 import { COACHMARK_POSITIONS } from '../Coachmark.types';
 import type { PianoCoachmarkPayload, PianoCoachmarkProps } from '../PianoCoachmark.types';
+import styles from './PianoCoachmark.module.scss';
 
 /**
  * Wraps `Coachmark` with Piano's triggered-content contract: it only ever shows content Piano
@@ -56,7 +57,11 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({
       onOpenChange={handleOpenChange}
       title={payload.title}
       description={payload.description}
-      icon={payload.icon}
+      icon={
+        payload.icon ? (
+          <img src={payload.icon} alt="" aria-hidden="true" className={styles.icon} />
+        ) : undefined
+      }
       badgeText={payload.badgeText}
       ctaText={ctaAction ? payload.ctaText : undefined}
       actionHref={ctaAction?.href}

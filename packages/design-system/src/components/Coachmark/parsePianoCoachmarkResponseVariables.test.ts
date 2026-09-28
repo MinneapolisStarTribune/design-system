@@ -26,16 +26,19 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     });
   });
 
-  it('resolves icon via the provided resolveIcon callback', () => {
-    const resolveIcon = vi.fn((name?: string) => `resolved:${name}`);
+  it('passes icon through unchanged as a URL when given', () => {
+    const parsed = parsePianoCoachmarkResponseVariables({
+      ...REQUIRED_FIELDS,
+      icon: 'https://static.startribune.com/assets/piano/coach-mark/star.svg',
+    });
 
-    const parsed = parsePianoCoachmarkResponseVariables(
-      { ...REQUIRED_FIELDS, icon: 'gift' },
-      { resolveIcon }
+    expect(parsed?.payload.icon).toBe(
+      'https://static.startribune.com/assets/piano/coach-mark/star.svg'
     );
+  });
 
-    expect(resolveIcon).toHaveBeenCalledWith('gift');
-    expect(parsed?.payload.icon).toBe('resolved:gift');
+  it('omits icon when not given', () => {
+    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.icon).toBeUndefined();
   });
 
   it('omits badgeText when not given', () => {

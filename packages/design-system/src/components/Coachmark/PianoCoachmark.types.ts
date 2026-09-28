@@ -20,8 +20,12 @@ export interface PianoCoachmarkPayload {
    * button.
    */
   ctaType: string;
-  /** Optional icon rendered in a circular badge above the title. */
-  icon?: ReactNode;
+  /**
+   * Optional image URL (e.g. a Star Tribune CDN asset) rendered in a circular badge above the
+   * title, e.g. "https://static.startribune.com/assets/piano/coach-mark/star.svg". Piano supplies
+   * the full URL directly -- there's no app-side name-to-asset lookup.
+   */
+  icon?: string;
   /**
    * Optional label (e.g. "New") rendered in a small pill in the card's top-left corner, vertically
    * centered 24px from the card's top edge. Omit for no badge.

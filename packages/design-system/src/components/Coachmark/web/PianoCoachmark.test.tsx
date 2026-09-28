@@ -81,8 +81,9 @@ describe('PianoCoachmark', () => {
     expect(dialog).toBeInTheDocument();
   });
 
-  it("passes payload.icon through to Coachmark's icon badge", async () => {
+  it("renders payload.icon as an <img> in Coachmark's icon badge", async () => {
     const user = userEvent.setup();
+    const iconUrl = 'https://static.startribune.com/assets/piano/coach-mark/star.svg';
 
     const IconTrigger = () => {
       const trigger = useTriggerExternal<PianoCoachmarkPayload>();
@@ -96,7 +97,7 @@ describe('PianoCoachmark', () => {
               description: 'Piano description',
               ctaText: 'Create Free Account',
               ctaType: 'signup',
-              icon: <span data-testid="piano-icon">icon</span>,
+              icon: iconUrl,
             })
           }
         >
@@ -116,7 +117,10 @@ describe('PianoCoachmark', () => {
 
     await user.click(screen.getByText('Fire'));
 
-    expect(await screen.findByTestId('piano-icon')).toBeInTheDocument();
+    const dialog = await screen.findByRole('dialog');
+    const icon = dialog.querySelector('img');
+
+    expect(icon).toHaveAttribute('src', iconUrl);
   });
 
   it('renders a badge with payload.badgeText when present', async () => {
