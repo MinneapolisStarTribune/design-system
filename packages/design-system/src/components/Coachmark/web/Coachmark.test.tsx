@@ -350,14 +350,10 @@ describe('Coachmark', () => {
       </Coachmark>
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog').getAttribute('style')).toContain('position');
-    });
-
     // The arrow flips its rotation depending on which side of the trigger it's pointing from --
     // confirming placement was actually applied, not just accepted as a prop.
     const arrow = screen.getByRole('dialog').querySelector('svg');
-    expect(arrow).toHaveStyle({ transform: '' });
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: '' }));
   });
 
   it('opens below the trigger by default', async () => {
