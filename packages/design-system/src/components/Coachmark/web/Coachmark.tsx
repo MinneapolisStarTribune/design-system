@@ -170,7 +170,6 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const triggerElement = childElement ? (
     cloneElement(childElement, getReferenceProps({ ...childElement.props, ref: mergedRef }))
   ) : (
-    // eslint-disable-next-line react-hooks/refs
     <span ref={refs.setReference} {...getReferenceProps()}>
       {children}
     </span>

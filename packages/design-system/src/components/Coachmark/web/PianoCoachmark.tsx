@@ -40,7 +40,6 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({
   const ctaAction = payload ? ctaActions[payload.ctaType] : undefined;
 
   if (payload && isTriggered && !ctaAction) {
-    // eslint-disable-next-line no-console
     console.warn(
       `PianoCoachmark: no ctaAction registered for ctaType "${payload.ctaType}" (id "${id}"). Rendering without an action button.`
     );
