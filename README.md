@@ -110,7 +110,7 @@ See [Native Integration Guide](integration-guides/native.md) for more details.
 
 ## Available Components
 
-Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
+Browse all components interactively in [Storybook](https://design-system.startribune.com).
 
 ## TypeScript Support
 
@@ -247,7 +247,7 @@ yarn add @minneapolisstartribune/design-system@latest
 
 ## Still Having Issues?
 
-- Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples
+- Check the [Storybook](https://design-system.startribune.com) for working examples
 - Review component source code in the repository
 - Open an issue on GitHub with details about your setup and error messages
 - Please reach out to the team in Slack
