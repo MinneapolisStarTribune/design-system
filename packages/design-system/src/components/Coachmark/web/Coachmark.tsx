@@ -229,7 +229,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               >
                 <CloseIcon size="medium" />
               </button>
-              <div className={classNames(styles.body, icon ? styles.bodyCentered : undefined)}>
+              <div
+                className={classNames(
+                  styles.body,
+                  icon ? styles.bodyCentered : undefined,
+                  !ctaText && styles.bodyWithoutActions
+                )}
+              >
                 {icon && (
                   <div className={styles.iconBadge} aria-hidden>
                     {icon}

@@ -118,7 +118,12 @@ export {
 } from './Skeleton/web/Skeleton';
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
-export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
+export {
+  TooltipCloseContext,
+  TooltipPortalRootContext,
+  TooltipPortalRootProvider,
+  useTooltipCloseContext,
+} from './Tooltip/TooltipContext';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,

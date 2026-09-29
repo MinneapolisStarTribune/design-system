@@ -39,4 +39,21 @@ describe('Tooltip Accessibility', () => {
 
     await checkA11y();
   });
+
+  it('has no violations with custom rich content', async () => {
+    await expectNoA11yViolations(
+      <Tooltip
+        open
+        content={
+          <div>
+            <p>Heads up</p>
+            <p>Some content</p>
+            <button type="button">Got it</button>
+          </div>
+        }
+      >
+        <Button>Open</Button>
+      </Tooltip>
+    );
+  });
 });

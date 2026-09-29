@@ -2,13 +2,17 @@
 .wrapper {
   position: relative;
   display: block;
-  max-width: 21rem;
-  padding: var(--spacing-16);
+  max-width: 343px;
+  /* Matches Figma: 24px sides, 16px top, 16px below the CTAs (see .bodyWithoutActions). */
+  padding: var(--spacing-16) var(--spacing-24);
 
   border-radius: var(--radius-16);
   border: 1px solid var(--color-border-on-light-subtle-01);
   background: var(--color-background-light-default);
-  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
+  /* Figma's shadow-xl. */
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
   overflow: visible;
 
   /* This panel is tabIndex={-1} (see Coachmark.tsx's FloatingFocusManager) -- it's never reachable
@@ -59,6 +63,11 @@
   width: 100%;
 }
 
+/* With no CTAs, Figma's body keeps its own 24px bottom padding (16px wrapper + 8px here). */
+.bodyWithoutActions {
+  padding-bottom: var(--spacing-8);
+}
+
 .bodyCentered {
   align-items: center;
   text-align: center;
@@ -93,7 +102,7 @@
   align-items: center;
   gap: var(--spacing-8);
   width: 100%;
-  margin-top: var(--spacing-8);
+  margin-top: var(--spacing-24);
 }
 
 .actionButton {
