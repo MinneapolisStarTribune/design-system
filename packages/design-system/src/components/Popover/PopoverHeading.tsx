@@ -27,7 +27,6 @@ export const PopoverHeading: React.FC<{
         variant="ghost"
         size="small"
         icon={<CloseIcon />}
-        surface="light"
         aria-label="Close popover"
         className={classNames(styles.closeButton, closeButtonClassName)}
         onClick={close}

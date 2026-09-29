@@ -4,12 +4,10 @@ import React, {
   cloneElement,
   isValidElement,
   ReactElement,
-  useCallback,
   useContext,
   useId,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import classNames from 'classnames';
 import {
@@ -32,11 +30,7 @@ import {
 import { useResponsiveSize } from '@/hooks/useResponsiveSize';
 import styles from './Tooltip.module.scss';
 import { TooltipProps } from './Tooltip.types';
-import {
-  TooltipCloseContext,
-  TooltipPortalRootContext,
-  TooltipPortalRootProvider,
-} from './TooltipContext';
+import { TooltipPortalRootContext, TooltipPortalRootProvider } from './TooltipContext';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
@@ -45,7 +39,6 @@ const GAP = 0;
 const TooltipRoot: React.FC<TooltipProps> = ({
   children,
   label,
-  content,
   pointer = 'top',
   icon,
   iconPosition = 'start',
@@ -54,45 +47,22 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   showDelay = 200,
   hideDelay = 0,
   wrapperClassName,
-  containerClassName,
   contentClassName,
   arrowClassName,
   labelClassName,
   iconClassName,
   'aria-label': ariaLabel,
   zIndex = 9999,
-  open: openProp,
-  onOpenChange: onOpenChangeProp,
-  dismissible = true,
   ...rest
 }) => {
-  const [openState, setOpenState] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const responsiveSize = useResponsiveSize();
   const isTouchDevice = responsiveSize === 'medium';
   const arrowRef = useRef<SVGSVGElement>(null);
   const tooltipId = useId();
 
-  // Rich `content` implies click-triggered, interactive content (links, a dismiss button) — a
-  // hover/focus-revealed `role="tooltip"` element must never contain focusable content, so this
-  // switches both the interaction model and the ARIA role. Plain `label` stays a passive hint.
-  const isRichContent = content !== undefined;
-
   const portalRootFromContext = useContext(TooltipPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
-
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : openState;
-
-  const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (isDisabled && nextOpen) return;
-      if (!isControlled) setOpenState(nextOpen);
-      onOpenChangeProp?.(nextOpen);
-    },
-    [isDisabled, isControlled, onOpenChangeProp]
-  );
-
-  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   const middleware = useMemo(
     () => [
@@ -108,22 +78,22 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   const { refs, context, floatingStyles } = useFloating({
     placement: pointer,
     open,
-    onOpenChange: handleOpenChange,
+    onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
     middleware,
   });
 
   const hover = useHover(context, {
-    enabled: !isDisabled && !isTouchDevice && !isRichContent,
+    enabled: !isDisabled && !isTouchDevice,
     delay: { open: showDelay, close: hideDelay },
   });
-  const focus = useFocus(context, { enabled: !isDisabled && !isRichContent });
+  const focus = useFocus(context, { enabled: !isDisabled });
   const click = useClick(context, {
-    enabled: !isDisabled && (isRichContent || isTouchDevice),
+    enabled: !isDisabled && isTouchDevice,
     event: 'click',
   });
-  const dismiss = useDismiss(context, { enabled: !isDisabled && dismissible });
-  const role = useRole(context, { role: isRichContent ? 'dialog' : 'tooltip' });
+  const dismiss = useDismiss(context, { enabled: !isDisabled });
+  const role = useRole(context, { role: 'tooltip' });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
@@ -164,8 +134,6 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   const startIcon = icon && iconPosition === 'start' ? icon : null;
   const endIcon = icon && iconPosition === 'end' ? icon : null;
 
-  const closeContextValue = useMemo(() => ({ close }), [close]);
-
   return (
     <TooltipPortalRootProvider>
       {triggerElement}
@@ -176,6 +144,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
             ref={refs.setFloating}
             style={{ ...floatingStyles, zIndex }}
             className={classNames(styles.wrapper, wrapperClassName)}
+            role="tooltip"
             id={`tooltip-${tooltipId}`}
             aria-label={ariaLabel}
             {...getFloatingProps()}
@@ -190,30 +159,22 @@ const TooltipRoot: React.FC<TooltipProps> = ({
               strokeWidth={0}
               className={classNames(styles.arrow, arrowClassName)}
             />
-            <div className={classNames(styles.container, containerClassName)}>
+            <div className={classNames(styles.container)}>
               <div className={classNames(styles.content, contentClassName)}>
-                {isRichContent ? (
-                  <TooltipCloseContext.Provider value={closeContextValue}>
-                    {content}
-                  </TooltipCloseContext.Provider>
-                ) : (
-                  <>
-                    {startIcon && (
-                      <span className={classNames(styles.icon, iconClassName)}>{startIcon}</span>
-                    )}
-                    <span
-                      className={classNames(
-                        styles.label,
-                        'typography-utility-text-regular-x-small',
-                        labelClassName
-                      )}
-                    >
-                      {label}
-                    </span>
-                    {endIcon && (
-                      <span className={classNames(styles.icon, iconClassName)}>{endIcon}</span>
-                    )}
-                  </>
+                {startIcon && (
+                  <span className={classNames(styles.icon, iconClassName)}>{startIcon}</span>
+                )}
+                <span
+                  className={classNames(
+                    styles.label,
+                    'typography-utility-text-regular-x-small',
+                    labelClassName
+                  )}
+                >
+                  {label}
+                </span>
+                {endIcon && (
+                  <span className={classNames(styles.icon, iconClassName)}>{endIcon}</span>
                 )}
               </div>
             </div>
