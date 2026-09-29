@@ -1,4 +1,4 @@
-import { COACHMARK_POSITIONS } from './Coachmark.types';
+import { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark.types';
 import { parsePianoCoachmarkResponseVariables } from './parsePianoCoachmarkResponseVariables';
 
 const REQUIRED_FIELDS = {
@@ -20,6 +20,7 @@ describe('parsePianoCoachmarkResponseVariables', () => {
         ctaType: REQUIRED_FIELDS.ctaType,
         icon: undefined,
         position: 'bottom-center',
+        alignment: 'center',
         dismissOnOutsideClick: false,
         showLogin: false,
       },
@@ -68,6 +69,20 @@ describe('parsePianoCoachmarkResponseVariables', () => {
     expect(
       parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, position })?.payload.position
     ).toBe(position);
+  });
+
+  it('defaults alignment to center when omitted or unrecognized', () => {
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, alignment: 'sideways' })?.payload
+        .alignment
+    ).toBe('center');
+    expect(parsePianoCoachmarkResponseVariables(REQUIRED_FIELDS)?.payload.alignment).toBe('center');
+  });
+
+  it.each(COACHMARK_ALIGNMENTS)('passes alignment through as %s when given', (alignment) => {
+    expect(
+      parsePianoCoachmarkResponseVariables({ ...REQUIRED_FIELDS, alignment })?.payload.alignment
+    ).toBe(alignment);
   });
 
   it('coerces dismissOnOutsideClick to a strict boolean', () => {

@@ -74,6 +74,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   onAction,
   secondaryContent,
   position = 'bottom-center',
+  alignment = 'center',
   dismissOnOutsideClick = false,
   portalRoot: portalRootProp,
   zIndex = 9999,
@@ -218,7 +219,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                 height={ARROW_HEIGHT}
                 width={ARROW_WIDTH}
                 fill="var(--color-background-light-default)"
-                strokeWidth={0}
+                // Matches .wrapper's `border: 1px solid`. FloatingArrow only strokes the two
+                // exposed slanted edges (never the base, which sits tucked under the panel), so
+                // this reads as the card's own outline continuing around the arrow instead of a
+                // doubled-up border where the arrow meets the panel.
+                stroke="var(--color-border-on-light-subtle-01)"
+                strokeWidth={1}
                 className={styles.arrow}
               />
               <button
@@ -232,7 +238,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               <div
                 className={classNames(
                   styles.body,
-                  icon ? styles.bodyCentered : undefined,
+                  alignment === 'center' ? styles.bodyCentered : undefined,
                   !ctaText && styles.bodyWithoutActions
                 )}
               >
@@ -247,7 +253,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                   </UtilityLabel>
                 </div>
                 <div id={descriptionId}>
-                  <UtilityBody size="x-small" className={styles.description}>
+                  <UtilityBody size="small" className={styles.description}>
                     {description}
                   </UtilityBody>
                 </div>

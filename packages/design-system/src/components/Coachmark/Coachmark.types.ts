@@ -24,6 +24,11 @@ export const COACHMARK_POSITIONS = [
 
 export type CoachmarkPosition = (typeof COACHMARK_POSITIONS)[number];
 
+/** Horizontal alignment of the title/description within the card. */
+export const COACHMARK_ALIGNMENTS = ['left', 'center'] as const;
+
+export type CoachmarkAlignment = (typeof COACHMARK_ALIGNMENTS)[number];
+
 export type CoachmarkProps = {
   /**
    * The element the coachmark is anchored to. Rendering/behavior of this element is otherwise
@@ -73,6 +78,11 @@ export type CoachmarkProps = {
    * 'bottom-center'.
    */
   position?: CoachmarkPosition;
+
+  /**
+   * Horizontal alignment of the title/description. Defaults to 'center'.
+   */
+  alignment?: CoachmarkAlignment;
 
   /**
    * Whether an outside click or Escape closes the coachmark. Defaults to false -- a coachmark

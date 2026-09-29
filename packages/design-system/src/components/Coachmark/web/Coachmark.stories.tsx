@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { CoachmarkProps } from '../Coachmark.types';
 import { Coachmark } from './Coachmark';
-import { Button, COACHMARK_POSITIONS } from '@/components/index.web';
-import { StarIcon } from '@/icons';
+import { Button, COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from '@/components/index.web';
+import { ChevronRightIcon, StarIcon } from '@/icons';
 
 const meta = {
   title: 'Feedback & Status/Coachmark',
@@ -26,6 +26,10 @@ const meta = {
     position: {
       control: 'select',
       options: COACHMARK_POSITIONS,
+    },
+    alignment: {
+      control: 'select',
+      options: COACHMARK_ALIGNMENTS,
     },
     dismissOnOutsideClick: { control: 'boolean' },
     zIndex: { control: 'number' },
@@ -123,7 +127,24 @@ export const WithIcon: Story = {
     <StoryCoachmark
       title="Added to favorites"
       description="You'll now see updates for this team in your feed."
-      icon={<StarIcon size="medium" color="on-dark-primary" />}
+      icon={<StarIcon size="x-large" color="on-dark-primary" />}
+    />
+  ),
+};
+
+/**
+ * With `alignment="left"` -- title/description (and the action button) render left-aligned
+ * instead of the default centered layout. Independent of `icon`: an icon still renders the same
+ * way regardless of `alignment`.
+ */
+export const LeftAligned: Story = {
+  args: baseArgs,
+  render: () => (
+    <StoryCoachmark
+      title="Never miss a story"
+      description="Create a free account to save articles for later."
+      ctaText="Create Free Account"
+      alignment="left"
     />
   ),
 };
@@ -138,7 +159,7 @@ export const WithBadge: Story = {
     <StoryCoachmark
       title="Explore Athlete Pages"
       description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
-      icon={<StarIcon size="medium" color="on-dark-primary" />}
+      icon={<StarIcon size="x-large" color="on-dark-primary" />}
       badgeText="New"
     />
   ),
@@ -155,7 +176,21 @@ export const WithSecondaryContent: Story = {
       title="Never miss a story"
       description="Create a free account to save articles for later."
       ctaText="Create Free Account"
-      secondaryContent={<span style={{ fontSize: 12 }}>Already have an account? Log in</span>}
+      secondaryContent={
+        // Matches the actual typography real consumers use for this slot (e.g.
+        // startribune-web's own login prompt): Graphik regular/medium at 12px, not a bare
+        // browser-default span -- otherwise this story understates how large the text really is.
+        <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: 8 }}>
+          <span className="typography-utility-text-regular-x-small">Already have an account?</span>
+          <span
+            className="typography-utility-text-medium-x-small"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}
+          >
+            Log in
+            <ChevronRightIcon size="x-small" />
+          </span>
+        </span>
+      }
     />
   ),
 };

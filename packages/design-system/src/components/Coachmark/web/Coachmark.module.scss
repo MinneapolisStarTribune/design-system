@@ -2,7 +2,21 @@
 .wrapper {
   position: relative;
   display: block;
-  max-width: 343px;
+  /* A fixed width, not max-width: .body/.description/.actions below are all width: 100%, so
+     without this the panel has nothing forcing a wrap point and shrink-wraps to its longest
+     unwrapped line (e.g. the description rendering as one long line well past its intended
+     295px) instead of the fixed-size card Figma specifies. 345px, not Figma's nominal 343px card
+     width: box-sizing: border-box (below) makes the 1px border consume 2px of content width that
+     Figma's stroke doesn't (Figma strokes don't occupy auto-layout space by default), so this
+     compensates to land the description at the same 295px Figma measures -- verified directly
+     against the description text node's own width in Figma, not derived from the card frame. */
+  width: 345px;
+  /* Without this, `width` sets only the content box under the browser's default content-box
+     model, and padding is added on top -- .body's `width: 100%` would then resolve to the full
+     345px, not the intended 295px content width, since padding wouldn't be subtracted from it.
+     Set explicitly rather than relying on a consuming app's own reset (e.g. Tailwind's preflight)
+     applying globally, since Storybook has no such reset. */
+  box-sizing: border-box;
   /* Matches Figma: 24px sides, 16px top, 16px below the CTAs (see .bodyWithoutActions). */
   padding: var(--spacing-16) var(--spacing-24);
 
@@ -82,7 +96,12 @@
   height: 48px;
   margin-bottom: var(--spacing-12);
   border-radius: var(--radius-full);
-  background: var(--color-background-brand);
+  // Fixed brand blue per Figma spec, not the theme's semantic brand color (--color-background-brand
+  // resolves to each site's own brand color -- green for Star Tribune, etc.) -- this badge stays
+  // the same blue regardless of which site's theme is active by default. A consuming app can still
+  // override just this badge (without affecting anything else that reads --color-background-brand)
+  // by setting --color-coachmark-icon-badge-background in its own global CSS.
+  background: var(--color-coachmark-icon-badge-background, var(--color-cobalt-blue-700));
   color: var(--color-base-white);
 }
 

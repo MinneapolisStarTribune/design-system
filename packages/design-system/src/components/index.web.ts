@@ -1,7 +1,11 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
-export type { CoachmarkPosition, CoachmarkProps } from './Coachmark/Coachmark.types';
-export { COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
+export type {
+  CoachmarkAlignment,
+  CoachmarkPosition,
+  CoachmarkProps,
+} from './Coachmark/Coachmark.types';
+export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export type { PianoCoachmarkResponseVariables } from './Coachmark/parsePianoCoachmarkResponseVariables';
 export { parsePianoCoachmarkResponseVariables } from './Coachmark/parsePianoCoachmarkResponseVariables';
 export type {

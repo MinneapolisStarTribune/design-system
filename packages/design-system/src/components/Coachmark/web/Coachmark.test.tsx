@@ -171,6 +171,59 @@ describe('Coachmark', () => {
     expect(screen.getByTestId('coachmark-icon')).toBeInTheDocument();
   });
 
+  it('defaults to centered alignment when alignment is omitted, regardless of icon', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(screen.getByRole('dialog').querySelector('[class*="bodyCentered"]')).toBeInTheDocument();
+  });
+
+  it('left-aligns the title/description when alignment="left" is given', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        alignment="left"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(
+      screen.getByRole('dialog').querySelector('[class*="bodyCentered"]')
+    ).not.toBeInTheDocument();
+  });
+
+  it('centers when alignment="center" is given explicitly, same as an icon-bearing coachmark', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        alignment="center"
+        icon={<span data-testid="coachmark-icon">icon</span>}
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(screen.getByRole('dialog').querySelector('[class*="bodyCentered"]')).toBeInTheDocument();
+  });
+
   it('renders no badge when badgeText is omitted', () => {
     renderWithProvider(
       <Coachmark

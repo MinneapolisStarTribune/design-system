@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { CoachmarkPosition } from './Coachmark.types';
+import type { CoachmarkAlignment, CoachmarkPosition } from './Coachmark.types';
 
 /**
  * Payload shape for Piano-triggered coachmark content. Field names match Piano's own
@@ -36,6 +36,11 @@ export interface PianoCoachmarkPayload {
    * "top-left", "bottom-right", "center-left". Defaults to "bottom-center" when omitted.
    */
   position?: CoachmarkPosition;
+  /**
+   * Horizontal alignment of the title/description -- "left" or "center". Defaults to "center"
+   * when omitted.
+   */
+  alignment?: CoachmarkAlignment;
   /**
    * Whether an outside click closes the coachmark, in addition to the close button and the
    * action button's own behavior. Defaults to false when omitted.
