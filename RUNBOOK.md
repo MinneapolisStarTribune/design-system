@@ -131,7 +131,7 @@ Generalized from [docs/release-runbook.md](docs/release-runbook.md#troubleshooti
 
 - **Symptoms:** the GitHub Release exists; the shared UI library Slack post did not.
 - **Diagnosis:** open the `release-notify.yml` run for that Release.
-- **Mitigation:** re-run the failed `release-notify.yml` run. It only posts to Slack.
+- **Mitigation:** dispatch `release-notify.yml` with the release tag (`@minneapolisstartribune/design-system@X.Y.Z`). Do not re-run the old run: it uses the workflow file from that run, so a fix to the workflow is not picked up. It only posts to Slack.
 - **Escalate if:** the webhook secret is missing or revoked.
 
 ### Storybook production deploy failed, or a version is missing from the dropdown
