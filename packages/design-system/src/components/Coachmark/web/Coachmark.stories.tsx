@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import type { CoachmarkProps } from '../Coachmark.types';
 import { Coachmark } from './Coachmark';
 import { Button, COACHMARK_POSITIONS } from '@/components/index.web';
 import { StarIcon } from '@/icons';
@@ -44,6 +45,31 @@ const baseArgs = {
   description: 'Description',
 };
 
+type StoryCoachmarkProps = Omit<CoachmarkProps, 'open' | 'onOpenChange' | 'children'> & {
+  anchorLabel?: string;
+};
+
+/**
+ * A coachmark is opened externally (e.g. by Piano), never by its own anchor -- pressing the anchor
+ * dismisses it instead. So the anchor here is a plain button, and a separate "Show coachmark"
+ * button (disabled while it's open) stands in for the external trigger. Toggling from the anchor
+ * itself would dismiss on pointerdown and then immediately reopen on click.
+ */
+const StoryCoachmark = ({ anchorLabel = 'Anchor', ...props }: StoryCoachmarkProps) => {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+      <Coachmark {...props} open={open} onOpenChange={setOpen}>
+        <Button>{anchorLabel}</Button>
+      </Coachmark>
+      <Button variant="outlined" size="small" isDisabled={open} onClick={() => setOpen(true)}>
+        Show coachmark
+      </Button>
+    </div>
+  );
+};
+
 /**
  * A dismissible, pointed callout for an unprompted, single action -- e.g. a CMS-driven prompt to
  * create an account or favorite something. Unlike Tooltip, it's always externally controlled via
@@ -63,19 +89,9 @@ export const Configurable: Story = {
     position: 'bottom-center',
     dismissOnOutsideClick: false,
   },
-  render: (args) => {
-    const ControlledCoachmark = () => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark {...args} open={open} onOpenChange={setOpen}>
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
-        </Coachmark>
-      );
-    };
-
-    return <ControlledCoachmark />;
-  },
+  render: ({ open: _open, onOpenChange: _onOpenChange, children: _children, ...args }) => (
+    <StoryCoachmark {...args} />
+  ),
   parameters: {
     docs: {
       source: {
@@ -89,7 +105,7 @@ const [open, setOpen] = useState(true);
   description="Create a free account to save articles for later."
   ctaText="Create Free Account"
 >
-  <Button onClick={() => setOpen(!open)}>Show coachmark</Button>
+  <Button>Newsletters</Button>
 </Coachmark>
         `,
       },
@@ -103,25 +119,13 @@ const [open, setOpen] = useState(true);
  */
 export const WithIcon: Story = {
   args: baseArgs,
-  render: () => {
-    const ControlledCoachmark = () => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
-          title="Added to favorites"
-          description="You'll now see updates for this team in your feed."
-          icon={<StarIcon size="medium" color="on-dark-primary" />}
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
-        </Coachmark>
-      );
-    };
-
-    return <ControlledCoachmark />;
-  },
+  render: () => (
+    <StoryCoachmark
+      title="Added to favorites"
+      description="You'll now see updates for this team in your feed."
+      icon={<StarIcon size="medium" color="on-dark-primary" />}
+    />
+  ),
 };
 
 /**
@@ -130,26 +134,14 @@ export const WithIcon: Story = {
  */
 export const WithBadge: Story = {
   args: baseArgs,
-  render: () => {
-    const ControlledCoachmark = () => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
-          title="Explore Athlete Pages"
-          description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
-          icon={<StarIcon size="medium" color="on-dark-primary" />}
-          badgeText="New"
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
-        </Coachmark>
-      );
-    };
-
-    return <ControlledCoachmark />;
-  },
+  render: () => (
+    <StoryCoachmark
+      title="Explore Athlete Pages"
+      description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
+      icon={<StarIcon size="medium" color="on-dark-primary" />}
+      badgeText="New"
+    />
+  ),
 };
 
 /**
@@ -158,26 +150,14 @@ export const WithBadge: Story = {
  */
 export const WithSecondaryContent: Story = {
   args: baseArgs,
-  render: () => {
-    const ControlledCoachmark = () => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
-          title="Never miss a story"
-          description="Create a free account to save articles for later."
-          ctaText="Create Free Account"
-          secondaryContent={<span style={{ fontSize: 12 }}>Already have an account? Log in</span>}
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'} coachmark</Button>
-        </Coachmark>
-      );
-    };
-
-    return <ControlledCoachmark />;
-  },
+  render: () => (
+    <StoryCoachmark
+      title="Never miss a story"
+      description="Create a free account to save articles for later."
+      ctaText="Create Free Account"
+      secondaryContent={<span style={{ fontSize: 12 }}>Already have an account? Log in</span>}
+    />
+  ),
 };
 
 /**
@@ -189,43 +169,27 @@ export const WithSecondaryContent: Story = {
  */
 export const Positions: Story = {
   args: baseArgs,
-  render: () => {
-    const PositionedCoachmark = ({
-      position,
-    }: {
-      position: (typeof COACHMARK_POSITIONS)[number];
-    }) => {
-      const [open, setOpen] = useState(true);
-
-      return (
-        <Coachmark
-          open={open}
-          onOpenChange={setOpen}
+  render: () => (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 160,
+        padding: 160,
+      }}
+    >
+      {COACHMARK_POSITIONS.map((position) => (
+        <StoryCoachmark
+          key={position}
+          anchorLabel={position}
           title={position}
           description="The flip middleware still auto-flips this when there isn't room."
           ctaText="Got it"
           position={position}
-        >
-          <Button onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</Button>
-        </Coachmark>
-      );
-    };
-
-    return (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 160,
-          padding: 160,
-        }}
-      >
-        {COACHMARK_POSITIONS.map((position) => (
-          <PositionedCoachmark key={position} position={position} />
-        ))}
-      </div>
-    );
-  },
+        />
+      ))}
+    </div>
+  ),
   parameters: {
     layout: 'fullscreen',
   },
