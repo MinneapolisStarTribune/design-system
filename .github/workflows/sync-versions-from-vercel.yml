@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       # Same token as publish.yml — GITHUB_TOKEN cannot push to protected main.
       - name: Create GitHub App token

@@ -36,6 +36,10 @@ jobs:
       contents: write
       packages: write
       pull-requests: write
+    env:
+      # release:verify's `yarn install --immutable` needs this before the later
+      # publish-auth step below runs, since it happens first in this job.
+      NPM_TOKEN: ${{ secrets.GH_PUBLISH_TOKEN }}
 
     steps:
       - name: Create GitHub App token
