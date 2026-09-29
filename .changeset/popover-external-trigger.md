@@ -1,5 +1,7 @@
 ---
-'@minneapolisstartribune/design-system': minor
+'@minneapolisstartribune/design-system': major
 ---
 
-Add `triggerId`/`externalContent` props to `Popover`, backed by a new generic `ExternalTriggerProvider`/`useExternalTriggerState`/`useTriggerExternal` (a simpler, payload-carrying alternative to the injection-slot mechanism). `TriggerablePopover` and `useExternalTrigger` are now deprecated in favor of this — they still work as before and aren't being removed in this release.
+**Breaking:** Remove the deprecated `TriggerablePopover` component and `useExternalTrigger`/`installExternalTriggerGlobals` hook (plus the `TriggerablePopoverProps`, `UseExternalTriggerOptions` and `UseExternalTriggerResult` types). Use `Popover` with a controlled `open`/`onOpenChange` instead, driven by `@minneapolisstartribune/external-trigger`'s `ExternalTriggerProvider`/`useExternalTriggerState`/`useTriggerExternal`.
+
+Also adds `Popover.ExternalContent`, a `Coachmark` component, and `PianoCoachmark` (with `parsePianoCoachmarkResponseVariables`), which is driven by `@minneapolisstartribune/external-trigger`. That package is a new optional peer dependency, required only if you use `PianoCoachmark`.

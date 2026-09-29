@@ -124,10 +124,6 @@ export {
   TooltipPortalRootProvider,
   useTooltipCloseContext,
 } from './Tooltip/TooltipContext';
-/** @deprecated Use `Popover` (with a controlled `open`/`onOpenChange`) instead. */
-export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
-/** @deprecated Use `PopoverProps` (with a controlled `open`/`onOpenChange`) instead. */
-export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
