@@ -8,7 +8,6 @@ $exit-duration: 200ms;
 $slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
 
 $side-width: 408px;
-/* Figma `Shadow/2xl`; no shadow token exists yet. */
 $side-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
 $close-size: 32px;
 
@@ -18,11 +17,16 @@ $close-size: 32px;
   &[data-status='open'] {
     transform: none;
   }
+
+  /* Emitted with the same selector as the hidden transform, so it wins without !important. */
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+  }
 }
 
 @mixin side($edge) {
   align-items: stretch;
-  justify-content: if($edge == left, flex-start, flex-end);
+  justify-content: if(sass($edge == left): flex-start; else: flex-end);
 
   .panel {
     width: $side-width;
@@ -42,7 +46,8 @@ $close-size: 32px;
   }
 }
 
-@mixin bottom {
+/* Only the mobile bottom sheet has rounded corners; every other placement is square. */
+@mixin bottom($rounded) {
   align-items: flex-end;
   justify-content: stretch;
 
@@ -53,15 +58,21 @@ $close-size: 32px;
     /* Leave a strip of page visible above a tall sheet. */
     max-height: calc(100% - var(--spacing-24));
     border: none;
-    border-radius: var(--radius-24) var(--radius-24) 0 0;
     box-shadow: none;
+
+    @if $rounded {
+      border-radius: var(--radius-24) var(--radius-24) 0 0;
+    } @else {
+      border-radius: 0;
+    }
+
     @include hidden-transform(translateY(100%));
   }
 }
 
-@mixin placement($placement) {
+@mixin placement($placement, $rounded: false) {
   @if $placement == bottom {
-    @include bottom;
+    @include bottom($rounded);
   } @else {
     @include side($placement);
   }
@@ -94,7 +105,7 @@ $close-size: 32px;
 
   .mobile-position-#{$placement} {
     @media (max-width: $mobile-max) {
-      @include placement($placement);
+      @include placement($placement, $rounded: true);
     }
   }
 }
@@ -217,28 +228,58 @@ $close-size: 32px;
     padding: var(--spacing-16) var(--spacing-16) 0;
   }
 
-  /* Scroll hint: bottom fade shown only while more content sits below (needs scroll timelines). */
+  /* Scroll hints: top fade while content sits above, bottom fade while more sits below (needs scroll timelines). */
+  &::before,
   &::after {
     content: '';
     position: sticky;
-    bottom: 0;
+    z-index: 1;
     display: block;
     height: var(--spacing-40);
-    margin-top: calc(-1 * var(--spacing-24));
-    background: linear-gradient(to bottom, transparent, var(--color-background-light-default));
     opacity: 0;
     pointer-events: none;
   }
 
+  &::before {
+    /* Sticky offsets are inset by the scroller's padding; cancel the top padding to pin to the edge. */
+    top: calc(-1 * var(--spacing-16));
+    /* Overlay the first content instead of pushing it down. */
+    margin-bottom: calc(-1 * var(--spacing-40));
+    background: linear-gradient(to top, transparent, var(--color-background-light-default));
+  }
+
+  &::after {
+    bottom: 0;
+    margin-top: calc(-1 * var(--spacing-24));
+    background: linear-gradient(to bottom, transparent, var(--color-background-light-default));
+  }
+
   @supports (animation-timeline: scroll()) {
+    /* The `animation` shorthand resets `animation-timeline`, so set the timeline after it. */
+    &::before {
+      animation: body-scroll-fade-top linear both;
+      animation-timeline: scroll(nearest block);
+    }
+
     &::after {
-      animation: body-scroll-fade linear both;
+      animation: body-scroll-fade-bottom linear both;
       animation-timeline: scroll(nearest block);
     }
   }
 }
 
-@keyframes body-scroll-fade {
+@keyframes body-scroll-fade-top {
+  0% {
+    opacity: 0;
+  }
+
+  10%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes body-scroll-fade-bottom {
   0%,
   90% {
     opacity: 1;
@@ -290,9 +331,5 @@ $close-size: 32px;
   .overlay,
   .panel {
     transition-duration: 1ms;
-  }
-
-  .panel {
-    transform: none !important;
   }
 }

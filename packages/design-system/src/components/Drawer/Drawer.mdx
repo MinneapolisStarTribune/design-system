@@ -23,13 +23,14 @@ modals.
 ## Anatomy
 
 1. **Overlay** — Dims the page, blocks interaction underneath, and locks page scroll.
-2. **Panel** — The surface: full height on the left or right edge, or a sheet on the bottom edge
-   with rounded top corners.
+2. **Panel** — The surface: full height on the left or right edge, or a sheet on the bottom edge.
+   Only the bottom sheet at 767px and below has rounded top corners; every other placement is
+   square.
 3. **Close button** — Top-right dismiss control.
 4. **Heading** — Names the drawer for assistive technology.
 5. **Description (optional)** — One supporting line, announced with the heading.
-6. **Body** — Main content. The only region that scrolls; its bottom edge fades out while more
-   content sits below the fold.
+6. **Body** — Main content. The only region that scrolls; its top edge fades out once content has
+   scrolled above it, and its bottom edge fades out while more content sits below the fold.
 7. **Footer (optional)** — Actions, sharing the row equally.
 
 ## Drawer or Dialog?

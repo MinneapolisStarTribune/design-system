@@ -40,10 +40,16 @@
   transform: translateZ(0);
   display: grid;
   place-items: center;
+  /* Stack the drawer's portal node in the button's cell so opening it doesn't add a row. */
+  > * {
+    grid-area: 1 / 1;
+  }
 }
 
-/* Open drawers lock page scroll; keep the grid scrollable. */
-:global(html):has(.grid),
-:global(body):has(.grid) {
-  overflow: auto !important;
-}
+/*
++ * Open drawers lock page scroll with an inline `overflow: hidden` on <body>. Setting overflow on
++ * <html> stops body's value from propagating to the viewport, so the grid stays scrollable.
++ */
+:global(html):has(.grid) {
+  overflow: auto;
+ }
