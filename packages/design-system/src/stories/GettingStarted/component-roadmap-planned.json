@@ -28,6 +28,7 @@
   { "category": "Layout & Containers", "name": "Divider", "platform": ["web", "native"] },
   { "category": "Layout & Containers", "name": "SectionTitle", "platform": ["web", "native"] },
   { "category": "Layout & Containers", "name": "Modal", "platform": ["web"] },
+  { "category": "Layout & Containers", "name": "Drawer", "platform": ["web"] },
   { "category": "Navigation", "name": "SwiperCarousel", "platform": ["web", "native"] },
   { "category": "Navigation", "name": "Breadcrumb", "platform": ["web", "native"] },
   { "category": "Navigation", "name": "Pagination", "platform": ["web", "native"] },

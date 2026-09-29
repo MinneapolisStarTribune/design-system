@@ -1,0 +1,298 @@
+/* Breakpoints: tokens/primitives/breakpoint.json */
+$mobile-max: 767px;
+$desktop-min: 768px;
+
+/* Keep in sync with ENTER_DURATION / EXIT_DURATION in Drawer.tsx. */
+$enter-duration: 250ms;
+$exit-duration: 200ms;
+$slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
+
+$side-width: 408px;
+/* Figma `Shadow/2xl`; no shadow token exists yet. */
+$side-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
+$close-size: 32px;
+
+@mixin hidden-transform($transform) {
+  transform: $transform;
+
+  &[data-status='open'] {
+    transform: none;
+  }
+}
+
+@mixin side($edge) {
+  align-items: stretch;
+  justify-content: if($edge == left, flex-start, flex-end);
+
+  .panel {
+    width: $side-width;
+    max-width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: $side-shadow;
+
+    @if $edge == left {
+      border-right: 1px solid var(--color-border-on-light-subtle-01);
+      @include hidden-transform(translateX(-100%));
+    } @else {
+      border-left: 1px solid var(--color-border-on-light-subtle-01);
+      @include hidden-transform(translateX(100%));
+    }
+  }
+}
+
+@mixin bottom {
+  align-items: flex-end;
+  justify-content: stretch;
+
+  .panel {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    /* Leave a strip of page visible above a tall sheet. */
+    max-height: calc(100% - var(--spacing-24));
+    border: none;
+    border-radius: var(--radius-24) var(--radius-24) 0 0;
+    box-shadow: none;
+    @include hidden-transform(translateY(100%));
+  }
+}
+
+@mixin placement($placement) {
+  @if $placement == bottom {
+    @include bottom;
+  } @else {
+    @include side($placement);
+  }
+}
+
+.overlay {
+  z-index: 1000;
+  display: flex;
+  background: var(--color-overlay-black);
+  opacity: 0;
+  transition: opacity $enter-duration ease;
+
+  &[data-status='open'] {
+    opacity: 1;
+  }
+
+  &[data-status='close'] {
+    opacity: 0;
+    transition-duration: $exit-duration;
+    pointer-events: none;
+  }
+}
+
+@each $placement in left, right, bottom {
+  .position-#{$placement} {
+    @media (min-width: $desktop-min) {
+      @include placement($placement);
+    }
+  }
+
+  .mobile-position-#{$placement} {
+    @media (max-width: $mobile-max) {
+      @include placement($placement);
+    }
+  }
+}
+
+.panel {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-background-light-default);
+  color: var(--color-text-on-light-primary);
+  transition: transform $enter-duration $slide-easing;
+
+  &[data-status='close'] {
+    transition-duration: $exit-duration;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  /* Shadows are dropped in forced colors. */
+  @media (forced-colors: active) {
+    outline: 1px solid transparent;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-24);
+  right: var(--spacing-24);
+  z-index: 1;
+  width: $close-size;
+  height: $close-size;
+  flex-shrink: 0;
+  border-radius: var(--radius-full) !important;
+
+  @media (max-width: $mobile-max) {
+    top: var(--spacing-20);
+    right: var(--spacing-12);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: calc(#{$close-size} + 2 * var(--spacing-24));
+  margin: 0;
+  padding: var(--spacing-24) var(--spacing-32);
+  color: var(--color-text-on-light-primary);
+  font-family: var(--typography-utility-heading, Graphik);
+
+  @media (max-width: $mobile-max) {
+    min-height: calc(#{$close-size} + 2 * var(--spacing-20));
+    padding: var(--spacing-20) var(--spacing-16);
+  }
+
+  &:has(+ .description) {
+    padding-bottom: 0;
+    min-height: calc(#{$close-size} + var(--spacing-24));
+
+    @media (max-width: $mobile-max) {
+      min-height: calc(#{$close-size} + var(--spacing-20));
+    }
+  }
+}
+
+.description {
+  margin: 0;
+  padding: var(--spacing-8) var(--spacing-32) var(--spacing-24);
+  color: var(--color-text-on-light-secondary);
+
+  @media (max-width: $mobile-max) {
+    padding: var(--spacing-8) var(--spacing-16) var(--spacing-20);
+  }
+}
+
+/* Keep the title clear of the absolutely positioned close button. */
+.withCloseButton {
+  .heading {
+    padding-right: calc(var(--spacing-24) + #{$close-size} + var(--spacing-8));
+
+    @media (max-width: $mobile-max) {
+      padding-right: calc(var(--spacing-12) + #{$close-size} + var(--spacing-12));
+    }
+  }
+
+  /* Without a heading, push the first section below the close button. */
+  > :first-child:not(.heading) {
+    padding-top: calc(var(--spacing-24) + #{$close-size} + var(--spacing-16));
+
+    @media (max-width: $mobile-max) {
+      padding-top: calc(var(--spacing-20) + #{$close-size} + var(--spacing-16));
+    }
+  }
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* No bottom padding: the scroll fade supplies the trailing space. */
+  padding: var(--spacing-16) var(--spacing-32) 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+
+  @media (max-width: $mobile-max) {
+    padding: var(--spacing-16) var(--spacing-16) 0;
+  }
+
+  /* Scroll hint: bottom fade shown only while more content sits below (needs scroll timelines). */
+  &::after {
+    content: '';
+    position: sticky;
+    bottom: 0;
+    display: block;
+    height: var(--spacing-40);
+    margin-top: calc(-1 * var(--spacing-24));
+    background: linear-gradient(to bottom, transparent, var(--color-background-light-default));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    &::after {
+      animation: body-scroll-fade linear both;
+      animation-timeline: scroll(nearest block);
+    }
+  }
+}
+
+@keyframes body-scroll-fade {
+  0%,
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* WebKit scrollbar */
+.body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  border-radius: var(--radius-full);
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-16);
+  flex-shrink: 0;
+  padding: var(--spacing-24) var(--spacing-32)
+    calc(var(--spacing-24) + env(safe-area-inset-bottom, 0px));
+
+  @media (max-width: $mobile-max) {
+    padding: var(--spacing-20) var(--spacing-16)
+      calc(var(--spacing-20) + env(safe-area-inset-bottom, 0px));
+  }
+
+  > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel {
+    transition-duration: 1ms;
+  }
+
+  .panel {
+    transform: none !important;
+  }
+}
