@@ -12,9 +12,9 @@ belongs next to the page rather than in the middle of it — filtering a list, r
 editing settings for what's on screen. It slides in from the **left** or **right** as a
 full-height panel, or rises from the **bottom** as a sheet.
 
-`position` sets the edge at 768px and up; `mobilePosition` sets it at 767px and below. A filter
-panel that sits on the right on desktop and becomes a bottom sheet on phones is
-`position="right" mobilePosition="bottom"`. The switch is handled in CSS, so the same markup serves
+`position` sets the edge at 768px and up (default `right`); `mobilePosition` sets it at 767px and
+below (default `bottom`). So by default a drawer is a side panel on the right on desktop and a
+bottom sheet on phones. The switch is handled in CSS, so the same markup serves
 both and nothing remounts when the viewport crosses the breakpoint.
 
 **Web only.** It relies on portals and CSS media queries; native surfaces should use platform
@@ -26,12 +26,13 @@ modals.
 2. **Panel** — The surface: full height on the left or right edge, or a sheet on the bottom edge.
    Only the bottom sheet at 767px and below has rounded top corners; every other placement is
    square.
-3. **Close button** — Top-right dismiss control.
+3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`.
 4. **Heading** — Names the drawer for assistive technology.
 5. **Description (optional)** — One supporting line, announced with the heading.
 6. **Body** — Main content. The only region that scrolls; its top edge fades out once content has
    scrolled above it, and its bottom edge fades out while more content sits below the fold.
-7. **Footer (optional)** — Actions, sharing the row equally.
+7. **Footer (optional)** — Actions on one row, each sized to its label and sharing the leftover
+   space. Labels never wrap; if the actions don't fit side by side, they stack.
 
 ## Drawer or Dialog?
 
@@ -76,8 +77,10 @@ For contextual, non-blocking content next to a control, use
 - Keep `Drawer.Description` to one sentence; longer copy belongs in `Drawer.Body`
 - Put the primary action **last** in `Drawer.Footer`, so it sits at the end of the row and last in
   tab order
-- Close from your own controls with `useDrawerClose()`, from any component inside the drawer
-- Set `closeButtonLabel` when "Close" alone is ambiguous, e.g. `"Close filters"`
+- The drawer is always controlled: pass `open` and `onClose`. The X icon button, Escape and
+  overlay presses call `onClose`; footer actions close it by setting `open` to `false`
+- Give `Drawer.Footer` an action that closes the drawer, such as "Done" or a primary action that
+  applies and closes
 - Leave drawers dismissable. Use `isDismissable={false}` only when deferring would lose the user's
   work — the close button still works, so keep it unless the footer offers another way out
 - Don't nest drawers, and don't open one on page load
@@ -127,11 +130,6 @@ For contextual, non-blocking content next to a control, use
       <td>Action row pinned below the body.</td>
     </tr>
 
-    <tr>
-      <td><code>useDrawerClose()</code></td>
-      <td>Returns a function that closes the surrounding drawer.</td>
-    </tr>
-
   </tbody>
 </table>
 
@@ -144,8 +142,8 @@ For contextual, non-blocking content next to a control, use
   description first. Pass `initialFocus` (a ref) to start somewhere else, such as a search field.
 - **Focus trap** — Tab and Shift+Tab cycle within the drawer. Everything outside it is hidden from
   assistive technology and page scroll is locked.
-- **Focus on close** — Focus returns to the trigger, or — when the drawer is opened from your own
-  state — to whatever was focused when it opened.
+- **Focus on close** — Focus returns to whatever was focused when the drawer opened, usually the
+  control that opened it.
 - **Dismissal** — Escape and a press on the overlay close the drawer (unless `isDismissable` is
   `false`); the close button always does. There is no gesture-only way to dismiss.
 - **Reflow** — Side drawers are capped at the viewport width and only the body scrolls, so content
@@ -161,13 +159,7 @@ const [open, setOpen] = useState(false);
 
 <Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-<Drawer
-  open={open}
-  onOpenChange={setOpen}
-  position="right"
-  mobilePosition="bottom"
-  closeButtonLabel="Close filters"
->
+<Drawer open={open} onClose={() => setOpen(false)}>
   <Drawer.Heading>Filter Calendar</Drawer.Heading>
 
   <Drawer.Body>{/* filter groups */}</Drawer.Body>

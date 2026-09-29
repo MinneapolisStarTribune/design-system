@@ -1,3 +1,5 @@
+$md: 768px;
+
 .filters {
   display: flex;
   flex-direction: column;
@@ -14,8 +16,12 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 640px), 1fr));
-  gap: var(--spacing-32);
-  padding: var(--spacing-32);
+  gap: var(--spacing-16);
+  padding: var(--spacing-16);
+  @media (min-width: $md) {
+    gap: var(--spacing-32);
+    padding: var(--spacing-32);
+  }
 }
 
 .variant {

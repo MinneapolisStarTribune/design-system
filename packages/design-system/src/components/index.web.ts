@@ -2,7 +2,6 @@
 // Icons are exported from the icons barrel, so we don't need to export them here.
 export { Drawer } from './Drawer/Drawer';
 export { type DrawerProps } from './Drawer/Drawer.types';
-export { useDrawerClose } from './Drawer/DrawerContext';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
 export {

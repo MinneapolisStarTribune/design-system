@@ -30,7 +30,7 @@ const noop = () => {};
 describe('Drawer Accessibility', () => {
   it.each(DRAWER_POSITIONS)('has no violations in the %s position', async (position) => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onOpenChange={noop} position={position}>
+      <Drawer open onClose={noop} position={position}>
         <Drawer.Heading>Filter calendar</Drawer.Heading>
 
         <Drawer.Description>Narrow the games shown on the calendar.</Drawer.Description>
@@ -49,7 +49,7 @@ describe('Drawer Accessibility', () => {
 
   it('has no violations for a drawer named by aria-label', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onOpenChange={noop} aria-label="Game details">
+      <Drawer open onClose={noop} aria-label="Game details">
         <Drawer.Body>
           <UtilityBody size="small">Content without a visible title.</UtilityBody>
         </Drawer.Body>
@@ -59,7 +59,7 @@ describe('Drawer Accessibility', () => {
 
   it('has no violations without the close button', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onOpenChange={noop} isDismissable={false} showCloseButton={false}>
+      <Drawer open onClose={noop} isDismissable={false} showCloseButton={false}>
         <Drawer.Heading>Finish setting up your team</Drawer.Heading>
 
         <Drawer.Footer>
@@ -71,7 +71,7 @@ describe('Drawer Accessibility', () => {
 
   it('has no violations for a filter form', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onOpenChange={noop} mobilePosition="bottom" closeButtonLabel="Close filters">
+      <Drawer open onClose={noop}>
         <Drawer.Heading>Filter calendar</Drawer.Heading>
 
         <Drawer.Body>

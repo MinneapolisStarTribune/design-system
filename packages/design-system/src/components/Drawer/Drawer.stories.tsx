@@ -2,7 +2,6 @@ import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Drawer } from './Drawer';
 import { DRAWER_POSITIONS, type DrawerPosition } from './Drawer.types';
-import { useDrawerClose } from './DrawerContext';
 import { Button, FormControl, FormGroup, UtilityBody, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';
@@ -34,8 +33,7 @@ const SPORTS = [
 // Fake results count for the sample content.
 const countAthletes = (selected: number) => Math.max(12, 999 - selected * 87);
 
-const FilterCalendarContent = () => {
-  const close = useDrawerClose();
+const FilterCalendarContent = ({ onClose }: { onClose: () => void }) => {
   const [gameTypes, setGameTypes] = useState<string[]>(['tournament']);
   const [timeframes, setTimeframes] = useState<string[]>(['morning']);
   const [sports, setSports] = useState<string[]>([]);
@@ -92,7 +90,7 @@ const FilterCalendarContent = () => {
 
       <Drawer.Footer>
         <UtilityButton label="Clear All" onClick={clearAll} />
-        <Button color="brand" onClick={close}>
+        <Button color="brand" onClick={onClose}>
           {`Show ${countAthletes(selectedCount)} Athletes`}
         </Button>
       </Drawer.Footer>
@@ -113,7 +111,6 @@ const meta = {
     },
   },
   argTypes: {
-    trigger: { control: false },
     children: { control: false },
     position: {
       control: 'inline-radio',
@@ -128,8 +125,11 @@ const meta = {
       control: 'inline-radio',
       options: [...DRAWER_POSITIONS],
       description:
-        'The edge the drawer is attached to at 767px and below. Defaults to `position`. Resize the preview to watch it switch.',
-      table: { type: { summary: DRAWER_POSITIONS.join(' | ') } },
+        'The edge the drawer is attached to at 767px and below. Resize the preview to watch it switch.',
+      table: {
+        type: { summary: DRAWER_POSITIONS.join(' | ') },
+        defaultValue: { summary: 'bottom' },
+      },
     },
     isDismissable: {
       control: 'boolean',
@@ -138,27 +138,21 @@ const meta = {
     },
     showCloseButton: {
       control: 'boolean',
-      description: 'Whether the top-right close button is rendered.',
+      description: 'Whether the top-right X icon button is rendered.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
-    },
-    closeButtonLabel: {
-      control: 'text',
-      description: 'Accessible name of the close button.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'Close' } },
     },
     open: {
       control: false,
-      description: 'Controlled open state. Omit it to let the drawer manage its own state.',
+      description: 'Whether the drawer is open.',
       table: { type: { summary: 'boolean' } },
     },
-    onOpenChange: {
-      action: 'onOpenChange',
-      description: 'Called when the drawer requests an open/close transition.',
+    onClose: {
+      action: 'onClose',
+      description:
+        'Called when the drawer requests a close (close button, Escape or overlay press). Footer actions set `open` themselves.',
       table: { type: { summary: '(open: boolean) => void' } },
     },
     initialFocus: { control: false },
-    overlayClassName: { control: 'text' },
-    contentClassName: { control: 'text' },
     portalRoot: { control: false, table: { disable: true } },
   },
 } satisfies Meta<typeof Drawer>;
@@ -169,30 +163,41 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
-    trigger: <Button>Filter calendar</Button>,
+    open: false,
+    onClose: () => {},
     position: 'right',
     mobilePosition: 'bottom',
     isDismissable: true,
     showCloseButton: true,
-    closeButtonLabel: 'Close filters',
-    children: <FilterCalendarContent />,
+    children: null,
+  },
+  render: function Render({ onClose, ...args }) {
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+      setOpen(false);
+      onClose();
+    };
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Filter calendar</Button>
+
+        <Drawer {...args} open={open} onClose={handleClose}>
+          <FilterCalendarContent onClose={() => setOpen(false)} />
+        </Drawer>
+      </>
+    );
   },
   parameters: {
     docs: {
       source: {
         code: `
-const ShowResultsButton = ({ count }) => {
-  const close = useDrawerClose();
+const [open, setOpen] = useState(false);
 
-  return <Button color="brand" onClick={close}>Show {count} Athletes</Button>;
-};
+<Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-<Drawer
-  trigger={<Button>Filter calendar</Button>}
-  position="right"
-  mobilePosition="bottom"
-  closeButtonLabel="Close filters"
->
+<Drawer open={open} onClose={() => setOpen(false)}>
   <Drawer.Heading>Filter Calendar</Drawer.Heading>
 
   <Drawer.Body>
@@ -204,7 +209,9 @@ const ShowResultsButton = ({ count }) => {
 
   <Drawer.Footer>
     <UtilityButton label="Clear All" onClick={clearAll} />
-    <ShowResultsButton count={count} />
+    <Button color="brand" onClick={() => setOpen(false)}>
+      Show {count} Athletes
+    </Button>
   </Drawer.Footer>
 </Drawer>
         `,
@@ -227,7 +234,7 @@ const PositionFrame = ({
   label: string;
   ariaLabel?: string;
   initialOpen: boolean;
-  children: ReactNode;
+  children: (onClose: () => void) => ReactNode;
 }) => {
   const [portalRoot, setPortalRoot] = useState<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(initialOpen);
@@ -244,13 +251,13 @@ const PositionFrame = ({
         {portalRoot && (
           <Drawer
             open={open}
-            onOpenChange={setOpen}
+            onClose={() => setOpen(false)}
             position={position}
             mobilePosition={mobilePosition}
             portalRoot={portalRoot}
             aria-label={ariaLabel}
           >
-            {children}
+            {children(() => setOpen(false))}
           </Drawer>
         )}
       </div>
@@ -258,9 +265,7 @@ const PositionFrame = ({
   );
 };
 
-const ShortContent = () => {
-  const close = useDrawerClose();
-
+const ShortContent = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <Drawer.Heading>Game details</Drawer.Heading>
@@ -271,8 +276,8 @@ const ShortContent = () => {
         </UtilityBody>
       </Drawer.Body>
       <Drawer.Footer>
-        <UtilityButton label="Dismiss" onClick={close} />
-        <Button color="brand" onClick={close}>
+        <UtilityButton label="Dismiss" onClick={onClose} />
+        <Button color="brand" onClick={onClose}>
           Add to calendar
         </Button>
       </Drawer.Footer>
@@ -282,6 +287,8 @@ const ShortContent = () => {
 
 export const AllVariants: Story = {
   args: {
+    open: false,
+    onClose: () => {},
     children: null,
   },
   parameters: {
@@ -304,33 +311,16 @@ export const AllVariants: Story = {
           <PositionFrame
             key={position}
             position={position}
+            mobilePosition={position}
             label={`position="${position}"`}
             initialOpen={initialOpen}
           >
-            <ShortContent />
+            {(onClose) => <ShortContent onClose={onClose} />}
           </PositionFrame>
         ))}
 
-        <PositionFrame
-          position="right"
-          mobilePosition="bottom"
-          label="Filter drawer (scrolling)"
-          initialOpen={initialOpen}
-        >
-          <FilterCalendarContent />
-        </PositionFrame>
-
-        <PositionFrame
-          position="right"
-          label="aria-label, no heading"
-          ariaLabel="Game notes"
-          initialOpen={initialOpen}
-        >
-          <Drawer.Body>
-            <UtilityBody size="small">
-              Content without a visible title. The drawer is named with aria-label.
-            </UtilityBody>
-          </Drawer.Body>
+        <PositionFrame position="right" label="Scrollable drawer" initialOpen={initialOpen}>
+          {(onClose) => <FilterCalendarContent onClose={onClose} />}
         </PositionFrame>
       </div>
     );

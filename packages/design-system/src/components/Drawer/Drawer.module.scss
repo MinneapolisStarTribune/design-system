@@ -308,9 +308,11 @@ $close-size: 32px;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+// Actions keep their label width and share the leftover space. Labels never wrap; when they
+// can't sit side by side, the actions stack full width instead.
 .footer {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: var(--spacing-16);
   flex-shrink: 0;
   padding: var(--spacing-24) var(--spacing-32)
@@ -322,8 +324,8 @@ $close-size: 32px;
   }
 
   > * {
-    flex: 1 1 0;
-    min-width: 0;
+    flex: 1 1 auto;
+    white-space: nowrap;
   }
 }
 

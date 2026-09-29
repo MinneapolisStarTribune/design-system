@@ -1,26 +1,14 @@
 'use client';
 
-import React, {
-  cloneElement,
-  isValidElement,
-  ReactElement,
-  useCallback,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import {
   FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
-  useClick,
   useDismiss,
   useFloating,
   useInteractions,
-  useMergeRefs,
   useRole,
   useTransitionStatus,
 } from '@floating-ui/react';
@@ -39,30 +27,24 @@ import type { DrawerProps } from './Drawer.types';
 const ENTER_DURATION = 250;
 const EXIT_DURATION = 200;
 
-const TRIGGER_WRAPPER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
 // Overrides FloatingOverlay's inline `overflow: auto` so the off-screen panel doesn't add scroll.
 const OVERLAY_STYLE = { overflow: 'hidden' } as const;
 
 const DrawerRoot: React.FC<DrawerProps> = ({
   children,
-  trigger,
-  open: openProp,
-  onOpenChange: onOpenChangeProp,
+  open,
+  onClose,
   position = 'right',
-  mobilePosition,
+  mobilePosition = 'bottom',
   isDismissable = true,
   showCloseButton = true,
-  closeButtonLabel = 'Close',
   initialFocus,
   portalRoot,
   className,
-  overlayClassName,
-  contentClassName,
   style,
   dataTestId = 'drawer',
   'aria-label': ariaLabel,
 }) => {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [hasHeading, setHasHeadingState] = useState(false);
   const [hasDescription, setHasDescription] = useState(false);
   // Read by the dev-only name check, which runs outside of render.
@@ -77,34 +59,22 @@ const DrawerRoot: React.FC<DrawerProps> = ({
   const headingId = `drawer-heading-${instanceId}`;
   const descriptionId = `drawer-description-${instanceId}`;
 
-  const resolvedMobilePosition = mobilePosition ?? position;
-
-  // Support controlled and uncontrolled modes
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : uncontrolledOpen;
-
-  const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (!isControlled) setUncontrolledOpen(nextOpen);
-      onOpenChangeProp?.(nextOpen);
+  // No middleware: the drawer is pinned to a viewport edge, not positioned against an element.
+  const { refs, context } = useFloating({
+    open,
+    onOpenChange: (nextOpen) => {
+      if (!nextOpen) onClose();
     },
-    [isControlled, onOpenChangeProp]
-  );
+  });
 
-  // No middleware: the drawer is pinned to a viewport edge, not positioned against the trigger.
-  const { refs, context } = useFloating({ open, onOpenChange: handleOpenChange });
-
-  const click = useClick(context, { enabled: trigger !== undefined });
   const dismiss = useDismiss(context, { enabled: isDismissable });
   const role = useRole(context, { role: 'dialog' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+  const { getFloatingProps } = useInteractions([dismiss, role]);
 
   const { isMounted, status } = useTransitionStatus(context, {
     duration: { open: ENTER_DURATION, close: EXIT_DURATION },
   });
-
-  const close = useCallback(() => handleOpenChange(false), [handleOpenChange]);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') return;
@@ -125,39 +95,13 @@ const DrawerRoot: React.FC<DrawerProps> = ({
     return () => clearTimeout(timeoutId);
   }, [ariaLabel, isMounted]);
 
-  const triggerElement = isValidElement(trigger)
-    ? (trigger as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
-    : null;
-
-  const mergedTriggerRef = useMergeRefs([refs.setReference, triggerElement?.ref ?? null]);
-
-  // Put reference props on the trigger when it's a single element; otherwise wrap it, like Popover.
-  const renderedTrigger = triggerElement ? (
-    cloneElement(
-      triggerElement,
-      getReferenceProps({ ...triggerElement.props, ref: mergedTriggerRef })
-    )
-  ) : trigger !== undefined ? (
-    <span
-      ref={refs.setReference}
-      role="button"
-      tabIndex={0}
-      style={TRIGGER_WRAPPER_STYLE}
-      {...getReferenceProps()}
-    >
-      {trigger}
-    </span>
-  ) : null;
-
   const contextValue = useMemo(
-    () => ({ close, descriptionId, headingId, setHasDescription, setHasHeading }),
-    [close, descriptionId, headingId, setHasHeading]
+    () => ({ descriptionId, headingId, setHasDescription, setHasHeading }),
+    [descriptionId, headingId, setHasHeading]
   );
 
   return (
     <DrawerContext.Provider value={contextValue}>
-      {renderedTrigger}
-
       {isMounted && (
         <FloatingPortal root={portalRoot ?? undefined}>
           <FloatingOverlay
@@ -168,8 +112,7 @@ const DrawerRoot: React.FC<DrawerProps> = ({
             className={classNames(
               styles.overlay,
               styles[`position-${position}`],
-              styles[`mobile-position-${resolvedMobilePosition}`],
-              overlayClassName
+              styles[`mobile-position-${mobilePosition}`]
             )}
           >
             <FloatingFocusManager
@@ -189,7 +132,7 @@ const DrawerRoot: React.FC<DrawerProps> = ({
                 aria-modal="true"
                 className={classNames(styles.panel, className)}
                 data-position={position}
-                data-mobile-position={resolvedMobilePosition}
+                data-mobile-position={mobilePosition}
                 data-status={status}
                 data-testid={dataTestId}
                 style={style}
@@ -199,19 +142,15 @@ const DrawerRoot: React.FC<DrawerProps> = ({
                     variant="ghost"
                     size="small"
                     icon={<CloseIcon />}
-                    aria-label={closeButtonLabel}
+                    aria-label="Close"
                     className={styles.closeButton}
                     dataTestId={`${dataTestId}-close-button`}
-                    onClick={close}
+                    onClick={onClose}
                   />
                 )}
 
                 <div
-                  className={classNames(
-                    styles.content,
-                    showCloseButton && styles.withCloseButton,
-                    contentClassName
-                  )}
+                  className={classNames(styles.content, showCloseButton && styles.withCloseButton)}
                 >
                   {children}
                 </div>

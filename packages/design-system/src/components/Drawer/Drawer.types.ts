@@ -7,18 +7,22 @@ export type DrawerPosition = (typeof DRAWER_POSITIONS)[number];
 export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
   /** Drawer content. Compose with `Drawer.Heading`, `Drawer.Description`, `Drawer.Body` and `Drawer.Footer`. */
   children: ReactNode;
-  /** Element that opens the drawer on click. Omit it when controlling `open` yourself. */
-  trigger?: ReactNode;
-  /** Controlled open state. If omitted, the component manages open state internally. */
-  open?: boolean;
-  /** Called when the drawer requests an open/close transition. Required when `open` is provided. */
-  onOpenChange?: (open: boolean) => void;
+  /** Whether the drawer is open. */
+  open: boolean;
+  /**
+   * Called when the drawer requests a close — via the X icon button, Escape or an overlay press.
+   * Set `open` to `false` in response. Footer actions set it themselves.
+   */
+  onClose: () => void;
   /**
    * The edge the drawer is attached to at 768px and up.
    * @default 'right'
    */
   position?: DrawerPosition;
-  /** The edge the drawer is attached to at 767px and below. Defaults to `position`. */
+  /**
+   * The edge the drawer is attached to at 767px and below.
+   * @default 'bottom'
+   */
   mobilePosition?: DrawerPosition;
   /**
    * Whether Escape or a press on the overlay dismisses the drawer.
@@ -26,23 +30,14 @@ export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-l
    */
   isDismissable?: boolean;
   /**
-   * Whether the top-right close button is rendered.
+   * Whether the top-right X icon button is rendered.
    * @default true
    */
   showCloseButton?: boolean;
-  /**
-   * Accessible name of the close button.
-   * @default 'Close'
-   */
-  closeButtonLabel?: string;
   /** Element to focus when the drawer opens. Defaults to the panel itself. */
   initialFocus?: RefObject<HTMLElement | null>;
   /** When set, the drawer renders into this element instead of `document.body` (e.g. for Storybook). */
   portalRoot?: HTMLElement | null;
-  /** Applied to the full-screen overlay behind the drawer. */
-  overlayClassName?: string;
-  /** Applied to the wrapper around `children`, inside the panel. */
-  contentClassName?: string;
   /** Accessible label for the drawer. Provide this when no `Drawer.Heading` is rendered. */
   'aria-label'?: string;
   /**

@@ -3,7 +3,6 @@
 import { createContext, useContext } from 'react';
 
 type DrawerContextValue = {
-  close: () => void;
   headingId: string;
   descriptionId: string;
   // Heading/Description report while mounted, so aria-labelledby/-describedby only point at real ids.
@@ -22,6 +21,3 @@ export const useDrawerContext = () => {
 
   return ctx;
 };
-
-/** Returns a function that closes the surrounding drawer. */
-export const useDrawerClose = () => useDrawerContext().close;

@@ -1,11 +1,29 @@
-import { useRef, useState } from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { type ReactNode, useRef, useState } from 'react';
+import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Drawer } from './Drawer';
-import { useDrawerClose } from './DrawerContext';
-import { DRAWER_POSITIONS } from './Drawer.types';
+import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
+
+type TestDrawerProps = Omit<DrawerProps, 'open' | 'onClose' | 'children'> & {
+  triggerLabel?: string;
+  children: ReactNode | ((close: () => void) => ReactNode);
+};
+
+// Pairs an opening button with a drawer whose open state lives in the harness, like consumers do.
+const TestDrawer = ({ triggerLabel = 'Open', children, ...props }: TestDrawerProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>{triggerLabel}</Button>
+      <Drawer {...props} open={open} onClose={() => setOpen(false)}>
+        {typeof children === 'function' ? children(() => setOpen(false)) : children}
+      </Drawer>
+    </>
+  );
+};
 
 const openDrawer = async (user: ReturnType<typeof userEvent.setup>, name = 'Open') => {
   await user.click(screen.getByText(name));
@@ -20,43 +38,25 @@ const expectClosed = () =>
 
 describe('Drawer', () => {
   describe('rendering', () => {
-    it('renders the trigger without the drawer', () => {
+    it('renders nothing while closed', () => {
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Content</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       expect(screen.getByText('Open')).toBeInTheDocument();
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
-    it('opens when the trigger is clicked', async () => {
+    it('renders when open is set', async () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Drawer content</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
-
-      await openDrawer(user);
-
-      expect(screen.getByText('Drawer content')).toBeInTheDocument();
-    });
-
-    it('wraps a non-element trigger in a focusable button', async () => {
-      const user = userEvent.setup();
-
-      renderWithProvider(
-        <Drawer trigger="Open" aria-label="Filters">
-          <Drawer.Body>Drawer content</Drawer.Body>
-        </Drawer>
-      );
-
-      const trigger = screen.getByRole('button', { name: 'Open' });
-
-      expect(trigger).toHaveAttribute('tabindex', '0');
 
       await openDrawer(user);
 
@@ -67,14 +67,14 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>}>
+        <TestDrawer>
           <Drawer.Heading>Filter calendar</Drawer.Heading>
           <Drawer.Description>Narrow the games shown.</Drawer.Description>
           <Drawer.Body>Body copy</Drawer.Body>
           <Drawer.Footer>
             <Button>Apply</Button>
           </Drawer.Footer>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -91,9 +91,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters" position={position}>
+        <TestDrawer aria-label="Filters" position={position}>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -108,9 +108,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -118,28 +118,23 @@ describe('Drawer', () => {
       expect(drawer).toHaveAttribute('data-position', 'right');
     });
 
-    it('uses position on mobile unless mobilePosition is set', async () => {
+    it('defaults to a bottom sheet on mobile unless mobilePosition is set', async () => {
       const user = userEvent.setup();
 
       renderWithProvider(
         <>
-          <Drawer
-            trigger={<Button>Open side</Button>}
+          <TestDrawer
+            triggerLabel="Open side"
             aria-label="Side"
             position="left"
+            mobilePosition="left"
             dataTestId="side"
           >
             <Drawer.Body>Body copy</Drawer.Body>
-          </Drawer>
-          <Drawer
-            trigger={<Button>Open sheet</Button>}
-            aria-label="Sheet"
-            position="right"
-            mobilePosition="bottom"
-            dataTestId="sheet"
-          >
+          </TestDrawer>
+          <TestDrawer triggerLabel="Open sheet" aria-label="Sheet" dataTestId="sheet">
             <Drawer.Body>Body copy</Drawer.Body>
-          </Drawer>
+          </TestDrawer>
         </>
       );
 
@@ -158,28 +153,19 @@ describe('Drawer', () => {
       expect(screen.getByTestId('sheet-overlay').className).toMatch(/mobile-position-bottom/);
     });
 
-    it('passes className, style, overlayClassName and contentClassName through', async () => {
+    it('passes className and style through to the panel', async () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer
-          trigger={<Button>Open</Button>}
-          aria-label="Filters"
-          className="custom-panel"
-          style={{ maxWidth: 320 }}
-          overlayClassName="custom-overlay"
-          contentClassName="custom-content"
-        >
+        <TestDrawer aria-label="Filters" className="custom-panel" style={{ maxWidth: 320 }}>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
 
       expect(drawer).toHaveClass('custom-panel');
       expect(drawer.style.maxWidth).toBe('320px');
-      expect(screen.getByTestId('drawer-overlay')).toHaveClass('custom-overlay');
-      expect(screen.getByText('Body copy').parentElement).toHaveClass('custom-content');
     });
 
     it('renders into a custom portal root', async () => {
@@ -188,9 +174,9 @@ describe('Drawer', () => {
       document.body.append(portalRoot);
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters" portalRoot={portalRoot}>
+        <TestDrawer aria-label="Filters" portalRoot={portalRoot}>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -212,10 +198,10 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>}>
+        <TestDrawer>
           <Drawer.Heading>Filter calendar</Drawer.Heading>
           <Drawer.Description>Narrow the games shown.</Drawer.Description>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -229,9 +215,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -246,9 +232,9 @@ describe('Drawer', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>}>
+        <TestDrawer>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -265,35 +251,17 @@ describe('Drawer', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>}>
+        <TestDrawer>
           <Drawer.Heading>Filter calendar</Drawer.Heading>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      await act(() => new Promise((resolve) => setTimeout(resolve, 10)));
 
       expect(warn).not.toHaveBeenCalled();
 
       warn.mockRestore();
-    });
-
-    it('uses closeButtonLabel as the close button name', async () => {
-      const user = userEvent.setup();
-
-      renderWithProvider(
-        <Drawer
-          trigger={<Button>Open</Button>}
-          aria-label="Filters"
-          closeButtonLabel="Close filters"
-        >
-          <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
-      );
-
-      await openDrawer(user);
-
-      expect(screen.getByRole('button', { name: 'Close filters' })).toBeInTheDocument();
     });
   });
 
@@ -302,9 +270,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -317,9 +285,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters" showCloseButton={false}>
+        <TestDrawer aria-label="Filters" showCloseButton={false}>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -331,9 +299,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -346,9 +314,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -361,9 +329,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -376,9 +344,9 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters" isDismissable={false}>
+        <TestDrawer aria-label="Filters" isDismissable={false}>
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -392,21 +360,17 @@ describe('Drawer', () => {
       await expectClosed();
     });
 
-    it('closes from a consumer control via useDrawerClose', async () => {
+    it('closes from a footer control that sets open to false', async () => {
       const user = userEvent.setup();
 
-      const ApplyButton = () => {
-        const close = useDrawerClose();
-
-        return <Button onClick={close}>Apply</Button>;
-      };
-
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
-          <Drawer.Footer>
-            <ApplyButton />
-          </Drawer.Footer>
-        </Drawer>
+        <TestDrawer aria-label="Filters">
+          {(close) => (
+            <Drawer.Footer>
+              <Button onClick={close}>Apply</Button>
+            </Drawer.Footer>
+          )}
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -415,19 +379,19 @@ describe('Drawer', () => {
       await expectClosed();
     });
 
-    it('reports open changes without self-closing when controlled', async () => {
+    it('calls onClose without closing until open changes', async () => {
       const user = userEvent.setup();
-      const onOpenChange = vi.fn();
+      const onClose = vi.fn();
 
       renderWithProvider(
-        <Drawer open onOpenChange={onOpenChange} aria-label="Filters">
+        <Drawer open onClose={onClose} aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
         </Drawer>
       );
 
       await user.click(screen.getByRole('button', { name: 'Close' }));
 
-      expect(onOpenChange).toHaveBeenCalledWith(false);
+      expect(onClose).toHaveBeenCalledTimes(1);
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
   });
@@ -437,11 +401,11 @@ describe('Drawer', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>
             <Button>First action</Button>
           </Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       const drawer = await openDrawer(user);
@@ -456,12 +420,12 @@ describe('Drawer', () => {
         const inputRef = useRef<HTMLInputElement>(null);
 
         return (
-          <Drawer trigger={<Button>Open</Button>} aria-label="Filters" initialFocus={inputRef}>
+          <TestDrawer aria-label="Filters" initialFocus={inputRef}>
             <Drawer.Body>
               <Button>Before</Button>
               <input ref={inputRef} aria-label="Search teams" />
             </Drawer.Body>
-          </Drawer>
+          </TestDrawer>
         );
       };
 
@@ -478,12 +442,12 @@ describe('Drawer', () => {
       renderWithProvider(
         <>
           <Button>Outside</Button>
-          <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+          <TestDrawer aria-label="Filters">
             <Drawer.Footer>
               <Button>Clear all</Button>
               <Button>Apply</Button>
             </Drawer.Footer>
-          </Drawer>
+          </TestDrawer>
         </>
       );
 
@@ -511,13 +475,13 @@ describe('Drawer', () => {
       await waitFor(() => expect(apply).toHaveFocus());
     });
 
-    it('returns focus to the trigger on close', async () => {
+    it('returns focus to the opening control on close', async () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Drawer trigger={<Button>Open</Button>} aria-label="Filters">
+        <TestDrawer aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </TestDrawer>
       );
 
       await openDrawer(user);
@@ -525,31 +489,6 @@ describe('Drawer', () => {
       await expectClosed();
 
       await waitFor(() => expect(screen.getByText('Open').closest('button')).toHaveFocus());
-    });
-
-    it('returns focus to the opening control when controlled without a trigger', async () => {
-      const user = userEvent.setup();
-
-      const Harness = () => {
-        const [open, setOpen] = useState(false);
-
-        return (
-          <>
-            <Button onClick={() => setOpen(true)}>Filters</Button>
-            <Drawer open={open} onOpenChange={setOpen} aria-label="Filters">
-              <Drawer.Body>Body copy</Drawer.Body>
-            </Drawer>
-          </>
-        );
-      };
-
-      renderWithProvider(<Harness />);
-
-      await openDrawer(user, 'Filters');
-      await user.keyboard('{Escape}');
-      await expectClosed();
-
-      await waitFor(() => expect(screen.getByText('Filters').closest('button')).toHaveFocus());
     });
   });
 });
