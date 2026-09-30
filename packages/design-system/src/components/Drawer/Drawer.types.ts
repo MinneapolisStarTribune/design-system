@@ -1,11 +1,11 @@
 import type { ReactNode, RefObject } from 'react';
 import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
 
-export const DRAWER_POSITIONS = ['left', 'right', 'bottom'] as const;
+export const DRAWER_POSITIONS = ['left', 'right', 'top', 'bottom'] as const;
 export type DrawerPosition = (typeof DRAWER_POSITIONS)[number];
 
 export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
-  /** Drawer content. Compose with `Drawer.Heading`, `Drawer.Description`, `Drawer.Body` and `Drawer.Footer`. */
+  /** Drawer content. Compose with `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`. */
   children: ReactNode;
   /** Whether the drawer is open. */
   open: boolean;
@@ -24,11 +24,6 @@ export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-l
    * @default 'bottom'
    */
   mobilePosition?: DrawerPosition;
-  /**
-   * Whether Escape or a press on the overlay dismisses the drawer.
-   * @default true
-   */
-  isDismissable?: boolean;
   /**
    * Whether the top-right X icon button is rendered.
    * @default true

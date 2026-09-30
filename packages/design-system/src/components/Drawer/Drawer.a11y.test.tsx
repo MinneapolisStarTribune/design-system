@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import axeCore from 'axe-core';
-import { Drawer } from './Drawer';
+import * as Drawer from './Drawer';
 import { DRAWER_POSITIONS } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityBody } from '@/components/index.web';
 import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
@@ -30,10 +30,8 @@ const noop = () => {};
 describe('Drawer Accessibility', () => {
   it.each(DRAWER_POSITIONS)('has no violations in the %s position', async (position) => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onClose={noop} position={position}>
+      <Drawer.Root open onClose={noop} position={position}>
         <Drawer.Heading>Filter calendar</Drawer.Heading>
-
-        <Drawer.Description>Narrow the games shown on the calendar.</Drawer.Description>
 
         <Drawer.Body>
           <UtilityBody size="small">Filter content.</UtilityBody>
@@ -43,35 +41,35 @@ describe('Drawer Accessibility', () => {
           <Button variant="outlined">Clear all</Button>
           <Button color="brand">Show 999 athletes</Button>
         </Drawer.Footer>
-      </Drawer>
+      </Drawer.Root>
     );
   });
 
   it('has no violations for a drawer named by aria-label', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onClose={noop} aria-label="Game details">
+      <Drawer.Root open onClose={noop} aria-label="Game details">
         <Drawer.Body>
           <UtilityBody size="small">Content without a visible title.</UtilityBody>
         </Drawer.Body>
-      </Drawer>
+      </Drawer.Root>
     );
   });
 
   it('has no violations without the close button', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onClose={noop} isDismissable={false} showCloseButton={false}>
+      <Drawer.Root open onClose={noop} showCloseButton={false}>
         <Drawer.Heading>Finish setting up your team</Drawer.Heading>
 
         <Drawer.Footer>
           <Button color="brand">Continue</Button>
         </Drawer.Footer>
-      </Drawer>
+      </Drawer.Root>
     );
   });
 
   it('has no violations for a filter form', async () => {
     await renderOpenDrawerAndCheckA11y(
-      <Drawer open onClose={noop}>
+      <Drawer.Root open onClose={noop}>
         <Drawer.Heading>Filter calendar</Drawer.Heading>
 
         <Drawer.Body>
@@ -104,7 +102,7 @@ describe('Drawer Accessibility', () => {
           <Button variant="outlined">Clear all</Button>
           <Button color="brand">Show 999 athletes</Button>
         </Drawer.Footer>
-      </Drawer>
+      </Drawer.Root>
     );
   });
 });

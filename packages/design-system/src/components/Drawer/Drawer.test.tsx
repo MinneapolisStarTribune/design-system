@@ -1,7 +1,7 @@
 import { type ReactNode, useRef, useState } from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Drawer } from './Drawer';
+import * as Drawer from './Drawer';
 import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
@@ -18,9 +18,9 @@ const TestDrawer = ({ triggerLabel = 'Open', children, ...props }: TestDrawerPro
   return (
     <>
       <Button onClick={() => setOpen(true)}>{triggerLabel}</Button>
-      <Drawer {...props} open={open} onClose={() => setOpen(false)}>
+      <Drawer.Root {...props} open={open} onClose={() => setOpen(false)}>
         {typeof children === 'function' ? children(() => setOpen(false)) : children}
-      </Drawer>
+      </Drawer.Root>
     </>
   );
 };
@@ -69,7 +69,6 @@ describe('Drawer', () => {
       renderWithProvider(
         <TestDrawer>
           <Drawer.Heading>Filter calendar</Drawer.Heading>
-          <Drawer.Description>Narrow the games shown.</Drawer.Description>
           <Drawer.Body>Body copy</Drawer.Body>
           <Drawer.Footer>
             <Button>Apply</Button>
@@ -82,7 +81,6 @@ describe('Drawer', () => {
       expect(
         screen.getByRole('heading', { level: 2, name: 'Filter calendar' })
       ).toBeInTheDocument();
-      expect(screen.getByText('Narrow the games shown.')).toBeInTheDocument();
       expect(screen.getByText('Body copy')).toBeInTheDocument();
       expect(screen.getByText('Apply')).toBeInTheDocument();
     });
@@ -188,19 +186,18 @@ describe('Drawer', () => {
 
     it('throws when a section is used outside a Drawer', () => {
       expect(() => renderWithProvider(<Drawer.Heading>Orphan</Drawer.Heading>)).toThrow(
-        'Drawer components must be used within <Drawer>'
+        'Drawer components must be used within <Drawer.Root>'
       );
     });
   });
 
-  describe('accessible name and description', () => {
-    it('names the drawer from the heading and description', async () => {
+  describe('accessible name', () => {
+    it('names the drawer from the heading', async () => {
       const user = userEvent.setup();
 
       renderWithProvider(
         <TestDrawer>
           <Drawer.Heading>Filter calendar</Drawer.Heading>
-          <Drawer.Description>Narrow the games shown.</Drawer.Description>
         </TestDrawer>
       );
 
@@ -208,7 +205,6 @@ describe('Drawer', () => {
 
       expect(drawer).toHaveAttribute('aria-modal', 'true');
       expect(drawer).toHaveAccessibleName('Filter calendar');
-      expect(drawer).toHaveAccessibleDescription('Narrow the games shown.');
     });
 
     it('falls back to aria-label when there is no heading', async () => {
@@ -340,26 +336,6 @@ describe('Drawer', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    it('ignores Escape and overlay presses when isDismissable is false', async () => {
-      const user = userEvent.setup();
-
-      renderWithProvider(
-        <TestDrawer aria-label="Filters" isDismissable={false}>
-          <Drawer.Body>Body copy</Drawer.Body>
-        </TestDrawer>
-      );
-
-      await openDrawer(user);
-      await user.keyboard('{Escape}');
-      await user.click(screen.getByTestId('drawer-overlay'));
-
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-
-      await user.click(screen.getByRole('button', { name: 'Close' }));
-
-      await expectClosed();
-    });
-
     it('closes from a footer control that sets open to false', async () => {
       const user = userEvent.setup();
 
@@ -384,9 +360,9 @@ describe('Drawer', () => {
       const onClose = vi.fn();
 
       renderWithProvider(
-        <Drawer open onClose={onClose} aria-label="Filters">
+        <Drawer.Root open onClose={onClose} aria-label="Filters">
           <Drawer.Body>Body copy</Drawer.Body>
-        </Drawer>
+        </Drawer.Root>
       );
 
       await user.click(screen.getByRole('button', { name: 'Close' }));

@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Drawer } from './Drawer';
+import * as Drawer from './Drawer';
 import { DRAWER_POSITIONS, type DrawerPosition } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityBody, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
@@ -100,7 +100,7 @@ const FilterCalendarContent = ({ onClose }: { onClose: () => void }) => {
 
 const meta = {
   title: 'Layout & Containers/Drawer',
-  component: Drawer,
+  component: Drawer.Root,
   parameters: {
     layout: 'centered',
     docs: {
@@ -131,11 +131,6 @@ const meta = {
         defaultValue: { summary: 'bottom' },
       },
     },
-    isDismissable: {
-      control: 'boolean',
-      description: 'Whether Escape or a press on the overlay dismisses the drawer.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
-    },
     showCloseButton: {
       control: 'boolean',
       description: 'Whether the top-right X icon button is rendered.',
@@ -155,7 +150,7 @@ const meta = {
     initialFocus: { control: false },
     portalRoot: { control: false, table: { disable: true } },
   },
-} satisfies Meta<typeof Drawer>;
+} satisfies Meta<typeof Drawer.Root>;
 
 export default meta;
 
@@ -167,7 +162,6 @@ export const Configurable: Story = {
     onClose: () => {},
     position: 'right',
     mobilePosition: 'bottom',
-    isDismissable: true,
     showCloseButton: true,
     children: null,
   },
@@ -183,9 +177,9 @@ export const Configurable: Story = {
       <>
         <Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-        <Drawer {...args} open={open} onClose={handleClose}>
+        <Drawer.Root {...args} open={open} onClose={handleClose}>
           <FilterCalendarContent onClose={() => setOpen(false)} />
-        </Drawer>
+        </Drawer.Root>
       </>
     );
   },
@@ -197,7 +191,7 @@ const [open, setOpen] = useState(false);
 
 <Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-<Drawer open={open} onClose={() => setOpen(false)}>
+<Drawer.Root open={open} onClose={() => setOpen(false)}>
   <Drawer.Heading>Filter Calendar</Drawer.Heading>
 
   <Drawer.Body>
@@ -213,7 +207,7 @@ const [open, setOpen] = useState(false);
       Show {count} Athletes
     </Button>
   </Drawer.Footer>
-</Drawer>
+</Drawer.Root>
         `,
       },
     },
@@ -229,7 +223,7 @@ const PositionFrame = ({
   initialOpen,
   children,
 }: {
-  position: DrawerPosition;
+  position?: DrawerPosition;
   mobilePosition?: DrawerPosition;
   label: string;
   ariaLabel?: string;
@@ -249,7 +243,7 @@ const PositionFrame = ({
         <Button onClick={() => setOpen(true)}>Open</Button>
 
         {portalRoot && (
-          <Drawer
+          <Drawer.Root
             open={open}
             onClose={() => setOpen(false)}
             position={position}
@@ -258,7 +252,7 @@ const PositionFrame = ({
             aria-label={ariaLabel}
           >
             {children(() => setOpen(false))}
-          </Drawer>
+          </Drawer.Root>
         )}
       </div>
     </figure>
@@ -269,7 +263,6 @@ const ShortContent = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <Drawer.Heading>Game details</Drawer.Heading>
-      <Drawer.Description>Minneapolis South at Edina · Friday, 7pm</Drawer.Description>
       <Drawer.Body>
         <UtilityBody size="small">
           Kickoff moved from 6pm. Buses leave the south lot at 5:15pm.
@@ -298,7 +291,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          "Every position in its own frame. Drawers start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don't take over the page — use Open.",
+          "The default placement (`position='right'`, `mobilePosition='bottom'`), then each position passed as both `position` and `mobilePosition`, each in its own frame. The default frame switches from a right panel to a bottom sheet below 768px. Drawers start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don't take over the page — use Open.",
       },
     },
   },
@@ -307,21 +300,24 @@ export const AllVariants: Story = {
 
     return (
       <div className={styles.grid}>
+        <PositionFrame
+          label='Default (position="right", mobilePosition="bottom")'
+          initialOpen={initialOpen}
+        >
+          {(onClose) => <FilterCalendarContent onClose={onClose} />}
+        </PositionFrame>
+
         {DRAWER_POSITIONS.map((position) => (
           <PositionFrame
             key={position}
             position={position}
             mobilePosition={position}
-            label={`position="${position}"`}
+            label={`position="${position}" mobilePosition="${position}"`}
             initialOpen={initialOpen}
           >
             {(onClose) => <ShortContent onClose={onClose} />}
           </PositionFrame>
         ))}
-
-        <PositionFrame position="right" label="Scrollable drawer" initialOpen={initialOpen}>
-          {(onClose) => <FilterCalendarContent onClose={onClose} />}
-        </PositionFrame>
       </div>
     );
   },

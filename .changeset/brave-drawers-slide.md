@@ -2,6 +2,4 @@
 '@minneapolisstartribune/design-system': minor
 ---
 
-Add `Drawer` (web): a modal panel attached to the left, right or bottom edge of the viewport, with `Drawer.Heading`, `Drawer.Description`, `Drawer.Body` and `Drawer.Footer`. The drawer is controlled with `open` and `onClose`.
-
-`--color-overlay-black` (native: `colorOverlayBlack`) is now `rgb(0 0 0 / 80%)`, up from 60%, to match the design files.
+Add `Drawer` (web): a modal panel attached to the left, right, top or bottom edge.
