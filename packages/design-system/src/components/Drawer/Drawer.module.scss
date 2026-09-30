@@ -183,12 +183,16 @@ $md: 768px;
   margin: 0;
   padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
-  font-family: var(--typography-utility-heading, Graphik);
 
   @media (width >= $md) {
     min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-24));
     padding: var(--spacing-24) var(--spacing-32);
   }
+}
+
+/* Scoped under .panel to outrank the typography class, whose stylesheet may load after this one. */
+.panel .heading {
+  font-family: var(--semantic-heading-font-family);
 }
 
 /* Keep the title clear of the absolutely positioned close button. */
@@ -316,13 +320,7 @@ $md: 768px;
   flex-wrap: wrap;
   gap: var(--spacing-16);
   flex-shrink: 0;
-  padding: var(--spacing-20) var(--spacing-16)
-    calc(var(--spacing-20) + env(safe-area-inset-bottom, 0px));
-
-  @media (width >= $md) {
-    padding: var(--spacing-24) var(--spacing-32)
-      calc(var(--spacing-24) + env(safe-area-inset-bottom, 0px));
-  }
+  padding: var(--spacing-24) var(--spacing-32);
 
   > * {
     flex: 1 1 auto;

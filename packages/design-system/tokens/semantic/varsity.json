@@ -49,6 +49,12 @@
         }
       }
     },
+    "heading": {
+      "font-family": {
+        "description": "Shared heading typeface for overlay and container titles (drawer, dialog, card)",
+        "value": "{font.family.graphik}"
+      }
+    },
     "inline-image": {
       "aspect-ratio": {
         "value": "3/2"

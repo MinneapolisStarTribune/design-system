@@ -43,15 +43,7 @@ For contextual, non-blocking content next to a control, use
   overlay presses call `onClose`; footer actions close it by setting `open` to `false`
 - Give `Drawer.Footer` an action that closes the drawer, such as "Done" or a primary action that
   applies and closes
-- Don't nest drawers, and don't open one on page load
-
-### Filter drawers
-
-- Apply filters from an explicit footer action ("Show 999 Athletes") rather than on every change,
-  so the page underneath doesn't reflow behind the overlay
-- Put the result count in the primary button's label. It's announced when the user reaches the
-  button; don't add a live region that announces every checkbox change
-- Offer a "Clear All" action next to it
+- Don't nest drawers
 
 <table>
   <thead>
@@ -101,7 +93,9 @@ const [open, setOpen] = useState(false);
   <Drawer.Body>{/* filter groups */}</Drawer.Body>
 
   <Drawer.Footer>
-    <UtilityButton label="Clear All" onClick={clearAll} />
+    <Button variant="outlined" onClick={clearAll}>
+      Clear All
+    </Button>
     <Button color="brand" onClick={() => setOpen(false)}>
       Show {count} Athletes
     </Button>
