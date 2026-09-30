@@ -132,36 +132,54 @@ export const AllVariants: Story = {
     controls: { disable: true },
   },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 80, padding: 80 }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 160 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 280, padding: 80, width: '100%' }}>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Default (centered)</h3>
         <StoryCoachmark
-          anchorLabel="Default (centered)"
           title="Never miss a story"
           description="Create a free account to save articles for later."
           ctaText="Create Free Account"
         />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>alignment=left</h3>
         <StoryCoachmark
-          anchorLabel="alignment=left"
           title="Never miss a story"
           description="Create a free account to save articles for later."
           ctaText="Create Free Account"
           alignment="left"
         />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>With icon</h3>
         <StoryCoachmark
-          anchorLabel="With icon"
           title="Added to favorites"
           description="You'll now see updates for this team in your feed."
           icon={<StarIcon size="x-large" color="on-dark-primary" />}
         />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>With badge</h3>
         <StoryCoachmark
-          anchorLabel="With badge"
           title="Explore Athlete Pages"
           description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
-          icon={<StarIcon size="x-large" color="on-dark-primary" />}
+          // PianoCoachmark always renders `icon` as an <img> from a CMS-supplied URL (see its
+          // own icon prop), never a design-system icon component -- mirrored here, at the same
+          // 35x35 size (PianoCoachmark.module.scss's .icon), for an accurate preview.
+          icon={
+            <img
+              src="https://static.startribune.com/assets/piano/coach-mark/star.svg"
+              alt=""
+              aria-hidden="true"
+              style={{ width: 35, height: 35 }}
+            />
+          }
           badgeText="New"
         />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>With secondary content</h3>
         <StoryCoachmark
-          anchorLabel="With secondary content"
           title="Never miss a story"
           description="Create a free account to save articles for later."
           ctaText="Create Free Account"
@@ -185,24 +203,28 @@ export const AllVariants: Story = {
           }
         />
       </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 160,
-        }}
-      >
-        {COACHMARK_POSITIONS.map((position) => (
-          <StoryCoachmark
-            key={position}
-            anchorLabel={position}
-            title={position}
-            description="The flip middleware still auto-flips this when there isn't room."
-            ctaText="Got it"
-            position={position}
-          />
-        ))}
-      </div>
+      {COACHMARK_POSITIONS.map((position) => (
+        <div key={position}>
+          <h3 style={{ marginBottom: 24 }}>{`position="${position}"`}</h3>
+          <div
+            // 'center-left'/'center-right' open beside the trigger, at the same height as the
+            // label above -- shifting just the trigger (not the label) right gives the panel
+            // room to extend left without reaching back far enough to cover that label text.
+            style={
+              position === 'center-left' || position === 'center-right'
+                ? { marginLeft: 400 }
+                : undefined
+            }
+          >
+            <StoryCoachmark
+              title={position}
+              description="The flip middleware still auto-flips this when there isn't room."
+              ctaText="Got it"
+              position={position}
+            />
+          </div>
+        </div>
+      ))}
     </div>
   ),
 };
