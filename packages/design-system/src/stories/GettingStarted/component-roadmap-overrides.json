@@ -3,6 +3,10 @@
     "native": false,
     "web": true
   },
+  "Drawer": {
+    "native": false,
+    "web": true
+  },
   "FormGroup.Caption": {
     "native": true,
     "web": true
