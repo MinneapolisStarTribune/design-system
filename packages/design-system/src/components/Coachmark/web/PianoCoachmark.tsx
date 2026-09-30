@@ -72,6 +72,9 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({
       position={payload.position}
       alignment={payload.alignment}
       dismissOnOutsideClick={payload.dismissOnOutsideClick ?? false}
+      // Attributes every tracking event to the Piano campaign that triggered it, without the
+      // consuming app having to remember to pass this itself.
+      analytics={{ piano_id: id, cta_type: payload.ctaType }}
     >
       <span style={{ display: 'inline-flex' }}>{children}</span>
     </Coachmark>

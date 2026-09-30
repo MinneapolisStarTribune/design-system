@@ -29,6 +29,9 @@ export const COACHMARK_ALIGNMENTS = ['left', 'center'] as const;
 
 export type CoachmarkAlignment = (typeof COACHMARK_ALIGNMENTS)[number];
 
+/** Extra data to merge into the tracking event(s) (web analytics). */
+export type CoachmarkAnalytics = Record<string, unknown>;
+
 export type CoachmarkProps = {
   /**
    * The element the coachmark is anchored to. Rendering/behavior of this element is otherwise
@@ -96,4 +99,10 @@ export type CoachmarkProps = {
 
   /** z-index override for the floating panel. */
   zIndex?: number;
+
+  /**
+   * Extra data merged into `coachmark_shown`/`coachmark_dismiss`/`coachmark_cta_click` tracking
+   * events (see `useAnalytics`/`AnalyticsProvider`), e.g. a Piano campaign id.
+   */
+  analytics?: CoachmarkAnalytics;
 };

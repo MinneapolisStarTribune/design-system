@@ -451,4 +451,30 @@ describe('PianoCoachmark', () => {
     expect(await screen.findByText('Title C')).toBeInTheDocument();
     expect(await screen.findByText('Title D')).toBeInTheDocument();
   });
+
+  it("attributes tracking events to Piano's id and ctaType", async () => {
+    const user = userEvent.setup();
+    const mockOnTrackingEvent = vi.fn();
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="analytics-test" ctaType="signup" />
+        <PianoCoachmark id="analytics-test" ctaActions={{}}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>,
+      { mockOnTrackingEvent }
+    );
+
+    await user.click(screen.getByText('Fire piano event for analytics-test'));
+    await screen.findByRole('dialog');
+
+    expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'coachmark_shown',
+        piano_id: 'analytics-test',
+        cta_type: 'signup',
+      })
+    );
+  });
 });

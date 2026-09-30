@@ -5,6 +5,7 @@ import React, {
   isValidElement,
   ReactElement,
   useCallback,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -18,6 +19,7 @@ import {
   FloatingPortal,
   flip,
   offset,
+  type OpenChangeReason,
   type Placement,
   shift,
   useDismiss,
@@ -30,12 +32,16 @@ import { CloseIcon } from '@/icons';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import type { CoachmarkPosition, CoachmarkProps } from '../Coachmark.types';
 import { alignmentShift } from './alignmentShiftMiddleware';
 import styles from './Coachmark.module.scss';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
+
+/** Why the coachmark closed, reported on its `coachmark_dismiss` tracking event. */
+type DismissReason = 'close_button' | 'trigger_press' | 'outside_press' | 'escape_key' | 'other';
 
 // 'left'/'right' map to the opposite floating-ui '-start'/'-end' suffix, since the card is wider
 // than its trigger: pinning the *matching* edge would stretch the card away from the named side.
@@ -74,11 +80,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   dismissOnOutsideClick = false,
   portalRoot: portalRootProp,
   zIndex = 9999,
+  analytics: analyticsOverride,
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const coachmarkId = useId();
   const titleId = `coachmark-title-${coachmarkId}`;
   const descriptionId = `coachmark-description-${coachmarkId}`;
+  const { track } = useAnalytics();
 
   const resolvedPortalRoot =
     portalRootProp ?? (typeof document !== 'undefined' ? document.body : null);
@@ -113,6 +121,27 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     [resolvedPortalRoot, isSidePosition]
   );
 
+  // Captured by `handleOpenChange`/`close` below and read by the shown/dismiss tracking effect
+  // when `open` next flips to false, so `coachmark_dismiss` can report *why* it closed.
+  const dismissReasonRef = useRef<DismissReason>('other');
+
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
+      if (!nextOpen) {
+        dismissReasonRef.current =
+          reason === 'reference-press'
+            ? 'trigger_press'
+            : reason === 'outside-press'
+              ? 'outside_press'
+              : reason === 'escape-key'
+                ? 'escape_key'
+                : 'other';
+      }
+      onOpenChange(nextOpen);
+    },
+    [onOpenChange]
+  );
+
   const { refs, context, floatingStyles } = useFloating({
     // 'fixed' (not 'absolute') avoids a jerky trail behind a sticky/fixed trigger: 'absolute'
     // positions in document coordinates, which keep changing under a stuck trigger and so need
@@ -120,7 +149,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     strategy: 'fixed',
     placement: PLACEMENT[position],
     open,
-    onOpenChange,
+    onOpenChange: handleOpenChange,
     whileElementsMounted: autoUpdate,
     middleware,
   });
@@ -169,7 +198,53 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     </span>
   );
 
-  const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+  const close = useCallback(() => {
+    dismissReasonRef.current = 'close_button';
+    onOpenChange(false);
+  }, [onOpenChange]);
+
+  // Fires `coachmark_shown`/`coachmark_dismiss` exactly once per open/close transition, even
+  // though `open` isn't the effect's only dependency -- the emitted-ref guards re-firing if e.g.
+  // `title` changes while it's already open, which shouldn't count as a second "shown".
+  const hasEmittedShownRef = useRef(false);
+  useEffect(() => {
+    if (open && !hasEmittedShownRef.current) {
+      hasEmittedShownRef.current = true;
+      track({
+        event: 'coachmark_shown',
+        component: 'Coachmark',
+        title,
+        position,
+        alignment,
+        ...analyticsOverride,
+      });
+    } else if (!open && hasEmittedShownRef.current) {
+      hasEmittedShownRef.current = false;
+      track({
+        event: 'coachmark_dismiss',
+        component: 'Coachmark',
+        title,
+        position,
+        alignment,
+        dismiss_reason: dismissReasonRef.current,
+        ...analyticsOverride,
+      });
+      dismissReasonRef.current = 'other';
+    }
+  }, [open, title, position, alignment, analyticsOverride, track]);
+
+  const handleActionClick = useCallback(() => {
+    track({
+      event: 'coachmark_cta_click',
+      component: 'Coachmark',
+      title,
+      cta_text: ctaText,
+      position,
+      alignment,
+      ...analyticsOverride,
+    });
+    onAction?.();
+  }, [track, title, ctaText, position, alignment, analyticsOverride, onAction]);
 
   return (
     <>
@@ -257,7 +332,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                       as={actionHref ? 'a' : undefined}
                       href={actionHref}
                       type={actionHref ? undefined : 'button'}
-                      onClick={onAction}
+                      onClick={handleActionClick}
                       variant="filled"
                       color="neutral"
                       size="small"

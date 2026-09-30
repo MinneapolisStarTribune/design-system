@@ -339,7 +339,7 @@ describe('Coachmark', () => {
     );
 
     await user.keyboard('{Escape}');
-    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'escape-key');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it('closes when the trigger itself is clicked, even when dismissOnOutsideClick is false', async () => {
@@ -360,7 +360,7 @@ describe('Coachmark', () => {
 
     await user.click(screen.getByRole('button', { name: 'Trigger' }));
 
-    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'reference-press');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("still calls the trigger's own onClick when it closes the coachmark", async () => {
@@ -383,7 +383,7 @@ describe('Coachmark', () => {
     await user.click(screen.getByRole('button', { name: 'Trigger' }));
 
     expect(onTriggerClick).toHaveBeenCalledTimes(1);
-    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'reference-press');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it('closes on outside click when dismissOnOutsideClick is true', async () => {
@@ -407,7 +407,235 @@ describe('Coachmark', () => {
     );
 
     await user.click(screen.getByText('Outside'));
-    expect(onOpenChange).toHaveBeenCalledWith(false, expect.anything(), 'outside-press');
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  describe('analytics', () => {
+    it('emits coachmark_shown when it renders open', () => {
+      const mockOnTrackingEvent = vi.fn();
+
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Never miss a story"
+          description="Description"
+          ctaText="Do it"
+          position="bottom-center"
+          alignment="center"
+        >
+          <Button>Trigger</Button>
+        </Coachmark>,
+        { mockOnTrackingEvent }
+      );
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'coachmark_shown',
+          component: 'Coachmark',
+          title: 'Never miss a story',
+          position: 'bottom-center',
+          alignment: 'center',
+        })
+      );
+    });
+
+    it('emits no tracking event when it renders closed', () => {
+      const mockOnTrackingEvent = vi.fn();
+
+      renderWithProvider(
+        <Coachmark
+          open={false}
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+        >
+          <Button>Trigger</Button>
+        </Coachmark>,
+        { mockOnTrackingEvent }
+      );
+
+      expect(mockOnTrackingEvent).not.toHaveBeenCalled();
+    });
+
+    it('emits coachmark_dismiss with dismiss_reason "close_button" when the close button is clicked', async () => {
+      const user = userEvent.setup();
+      const mockOnTrackingEvent = vi.fn();
+
+      function Wrapper() {
+        const [open, setOpen] = useState(true);
+        return (
+          <Coachmark
+            open={open}
+            onOpenChange={setOpen}
+            title="Title"
+            description="Description"
+            ctaText="Do it"
+          >
+            <Button>Trigger</Button>
+          </Coachmark>
+        );
+      }
+
+      renderWithProvider(<Wrapper />, { mockOnTrackingEvent });
+      mockOnTrackingEvent.mockClear(); // drop the initial coachmark_shown event
+
+      await user.click(screen.getByRole('button', { name: 'Close' }));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_dismiss', dismiss_reason: 'close_button' })
+      );
+    });
+
+    it('emits coachmark_dismiss with dismiss_reason "trigger_press" when the trigger is clicked', async () => {
+      const user = userEvent.setup();
+      const mockOnTrackingEvent = vi.fn();
+
+      function Wrapper() {
+        const [open, setOpen] = useState(true);
+        return (
+          <Coachmark
+            open={open}
+            onOpenChange={setOpen}
+            title="Title"
+            description="Description"
+            ctaText="Do it"
+          >
+            <Button>Trigger</Button>
+          </Coachmark>
+        );
+      }
+
+      renderWithProvider(<Wrapper />, { mockOnTrackingEvent });
+      mockOnTrackingEvent.mockClear();
+
+      await user.click(screen.getByRole('button', { name: 'Trigger' }));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_dismiss', dismiss_reason: 'trigger_press' })
+      );
+    });
+
+    it('emits coachmark_dismiss with dismiss_reason "escape_key" when Escape closes it', async () => {
+      const user = userEvent.setup();
+      const mockOnTrackingEvent = vi.fn();
+
+      function Wrapper() {
+        const [open, setOpen] = useState(true);
+        return (
+          <Coachmark
+            open={open}
+            onOpenChange={setOpen}
+            title="Title"
+            description="Description"
+            ctaText="Do it"
+            dismissOnOutsideClick
+          >
+            <Button>Trigger</Button>
+          </Coachmark>
+        );
+      }
+
+      renderWithProvider(<Wrapper />, { mockOnTrackingEvent });
+      mockOnTrackingEvent.mockClear();
+
+      await user.keyboard('{Escape}');
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_dismiss', dismiss_reason: 'escape_key' })
+      );
+    });
+
+    it('emits coachmark_dismiss with dismiss_reason "outside_press" when an outside click closes it', async () => {
+      const user = userEvent.setup();
+      const mockOnTrackingEvent = vi.fn();
+
+      function Wrapper() {
+        const [open, setOpen] = useState(true);
+        return (
+          <>
+            <Coachmark
+              open={open}
+              onOpenChange={setOpen}
+              title="Title"
+              description="Description"
+              ctaText="Do it"
+              dismissOnOutsideClick
+            >
+              <Button>Trigger</Button>
+            </Coachmark>
+            <div>Outside</div>
+          </>
+        );
+      }
+
+      renderWithProvider(<Wrapper />, { mockOnTrackingEvent });
+      mockOnTrackingEvent.mockClear();
+
+      await user.click(screen.getByText('Outside'));
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_dismiss', dismiss_reason: 'outside_press' })
+      );
+    });
+
+    it('emits coachmark_cta_click (not coachmark_dismiss) when the action button is clicked', async () => {
+      const user = userEvent.setup();
+      const mockOnTrackingEvent = vi.fn();
+      const onAction = vi.fn();
+
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+          onAction={onAction}
+        >
+          <Button>Trigger</Button>
+        </Coachmark>,
+        { mockOnTrackingEvent }
+      );
+      mockOnTrackingEvent.mockClear();
+
+      await user.click(screen.getByRole('button', { name: 'Do it' }));
+
+      expect(onAction).toHaveBeenCalledTimes(1);
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: 'coachmark_cta_click',
+          component: 'Coachmark',
+          cta_text: 'Do it',
+        })
+      );
+      expect(mockOnTrackingEvent).not.toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_dismiss' })
+      );
+    });
+
+    it('merges the analytics prop into emitted events', () => {
+      const mockOnTrackingEvent = vi.fn();
+
+      renderWithProvider(
+        <Coachmark
+          open
+          onOpenChange={vi.fn()}
+          title="Title"
+          description="Description"
+          ctaText="Do it"
+          analytics={{ piano_id: 'newsletter-prompt' }}
+        >
+          <Button>Trigger</Button>
+        </Coachmark>,
+        { mockOnTrackingEvent }
+      );
+
+      expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({ event: 'coachmark_shown', piano_id: 'newsletter-prompt' })
+      );
+    });
   });
 
   it('opens above the trigger when position is top-center', async () => {
