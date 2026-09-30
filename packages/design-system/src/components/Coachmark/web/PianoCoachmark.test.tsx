@@ -477,4 +477,35 @@ describe('PianoCoachmark', () => {
       })
     );
   });
+
+  it('emits coachmark_dismiss when closed via the close button, even though that unmounts Coachmark entirely (rather than passing it open={false})', async () => {
+    const user = userEvent.setup();
+    const mockOnTrackingEvent = vi.fn();
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="dismiss-analytics-test" ctaType="signup" />
+        <PianoCoachmark id="dismiss-analytics-test" ctaActions={{}}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>,
+      { mockOnTrackingEvent }
+    );
+
+    await user.click(screen.getByText('Fire piano event for dismiss-analytics-test'));
+    await screen.findByRole('dialog');
+    mockOnTrackingEvent.mockClear(); // drop the coachmark_shown event
+
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'coachmark_dismiss',
+        dismiss_reason: 'close_button',
+        piano_id: 'dismiss-analytics-test',
+        cta_type: 'signup',
+      })
+    );
+  });
 });

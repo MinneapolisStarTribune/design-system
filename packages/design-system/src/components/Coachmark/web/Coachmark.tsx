@@ -203,23 +203,23 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     onOpenChange(false);
   }, [onOpenChange]);
 
-  // Fires `coachmark_shown`/`coachmark_dismiss` exactly once per open/close transition, even
-  // though `open` isn't the effect's only dependency -- the emitted-ref guards re-firing if e.g.
-  // `title` changes while it's already open, which shouldn't count as a second "shown".
-  const hasEmittedShownRef = useRef(false);
+  // Fires `coachmark_shown` on open and `coachmark_dismiss` on close, via cleanup rather than a
+  // second branch watching `open` go back to false -- a consumer (e.g. `PianoCoachmark`) may
+  // unmount this entire component to close it, rather than keeping it mounted with `open={false}`,
+  // and only a cleanup function is guaranteed to still run in that case.
   useEffect(() => {
-    if (open && !hasEmittedShownRef.current) {
-      hasEmittedShownRef.current = true;
-      track({
-        event: 'coachmark_shown',
-        component: 'Coachmark',
-        title,
-        position,
-        alignment,
-        ...analyticsOverride,
-      });
-    } else if (!open && hasEmittedShownRef.current) {
-      hasEmittedShownRef.current = false;
+    if (!open) return;
+
+    track({
+      event: 'coachmark_shown',
+      component: 'Coachmark',
+      title,
+      position,
+      alignment,
+      ...analyticsOverride,
+    });
+
+    return () => {
       track({
         event: 'coachmark_dismiss',
         component: 'Coachmark',
@@ -230,7 +230,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
         ...analyticsOverride,
       });
       dismissReasonRef.current = 'other';
-    }
+    };
   }, [open, title, position, alignment, analyticsOverride, track]);
 
   const handleActionClick = useCallback(() => {
