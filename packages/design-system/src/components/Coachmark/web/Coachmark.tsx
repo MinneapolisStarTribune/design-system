@@ -31,18 +31,14 @@ import { Button } from '@/components/Button/web/Button';
 import { UtilityLabel } from '@/components/Typography/Utility/UtilityLabel/web/UtilityLabel';
 import { UtilityBody } from '@/components/Typography/Utility/UtilityBody/web/UtilityBody';
 import type { CoachmarkPosition, CoachmarkProps } from '../Coachmark.types';
+import { alignmentShift } from './alignmentShiftMiddleware';
 import styles from './Coachmark.module.scss';
 
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
-// Maps each combined position directly to a floating-ui placement. The 'left'/'right' suffixes
-// for top/bottom are inverted from floating-ui's own '-start'/'-end' cross-axis alignment: since
-// the coachmark is almost always wider than its trigger, aligning by the trigger's *matching*
-// edge ('-start' for 'left') pins that edge in place and lets the (wider) card extend away from
-// it -- e.g. 'top-left' with '-start' would pin the card's left edge to the trigger's left edge,
-// so the card would actually stretch out to the trigger's right. Using the opposite suffix makes
-// the card visually sit on the named side instead.
+// 'left'/'right' map to the opposite floating-ui '-start'/'-end' suffix, since the card is wider
+// than its trigger: pinning the *matching* edge would stretch the card away from the named side.
 const PLACEMENT: Record<CoachmarkPosition, Placement> = {
   'top-left': 'top-end',
   'top-center': 'top',
@@ -87,33 +83,24 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const resolvedPortalRoot =
     portalRootProp ?? (typeof document !== 'undefined' ? document.body : null);
 
-  // 'center-left'/'center-right' open beside the trigger (floating-ui's bare 'left'/'right'
-  // placements) rather than above/below it -- vertical is the *alignment* axis there instead of
-  // the side axis, which is what the shift middleware below needs to know.
+  // 'center-left'/'center-right' open beside the trigger, so vertical is their *alignment* axis
+  // rather than the side axis -- shift below needs to know which.
   const isSidePosition = position === 'center-left' || position === 'center-right';
 
   const middleware = useMemo(
     () => [
       offset(ARROW_HEIGHT),
-      // `padding` here is a safety margin, not visual spacing -- it makes flip/shift react once
-      // the coachmark comes within this many px of the viewport edge, rather than waiting until
-      // it's fully flush (e.g. flip switching sides as soon as a left-aligned coachmark gets this
-      // close to the left edge, such as on a narrower viewport).
-      //
-      // flip must run *before* shift: shift nudges the coachmark back into view along its current
-      // side, which (if it ran first) would quietly absorb the overflow that flip needs to see to
-      // decide to switch sides at all -- the coachmark would just get pushed toward center instead
-      // of ever flipping.
-      flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
-      // Shift must never adjust the *vertical* position: a coachmark has to keep tracking its
-      // trigger even after it scrolls off-screen (e.g. above the viewport), not stay pinned near
-      // the viewport edge once the trigger is no longer nearby. Which of shift's axis options
-      // ("mainAxis"/"crossAxis") maps to vertical depends on the placement's own side -- for
-      // top/bottom positions, vertical is the side's own axis ("crossAxis" in floating-ui's
-      // terms); for left/right positions, vertical is the alignment axis ("mainAxis"). So vertical
-      // is always disabled, and the other (horizontal) axis is enabled to give the narrow-viewport
-      // buffer fix from before: a left/right coachmark that still doesn't fully fit even on flip's
-      // best-fit side needs that horizontal correction, since flip alone can't shrink it further.
+      // Order matters: flip must see the real overflow before shift absorbs it, and
+      // alignmentShift must run before the general shift below for the same reason.
+      // `crossAxis: false` restricts flip to side flips (top<->bottom) -- its default also flips
+      // alignment immediately on overflow, preempting alignmentShift's 40%-budget behavior.
+      flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20, crossAxis: false }),
+      // Shifts 'top/bottom-left/right' back into view along the alignment axis, up to 40% of the
+      // card's width, before flipping alignment. No-op for centered/side positions.
+      alignmentShift({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
+      // Vertical is always disabled here -- a coachmark must keep tracking its trigger even off
+      // -screen, not get pinned near the viewport edge. Horizontal is a fallback safety net for
+      // whatever alignmentShift didn't fully resolve.
       shift({
         boundary: resolvedPortalRoot ?? undefined,
         padding: 20,
@@ -127,17 +114,9 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   );
 
   const { refs, context, floatingStyles } = useFloating({
-    // `strategy: 'fixed'` (not the default 'absolute') matters specifically for triggers inside a
-    // sticky/fixed-positioned ancestor (e.g. a sticky site header): 'absolute' positions in
-    // document coordinates, which stay correct for a normally-scrolling trigger without any JS
-    // (the browser scrolls both together), but for a sticky trigger its on-screen position never
-    // moves while its document coordinates keep changing, so autoUpdate's scroll listener has to
-    // recompute new coordinates every scroll frame -- and that JS-driven recalculation visibly
-    // lags behind the browser's native, JS-free sticky positioning, producing a jerky trail.
-    // 'fixed' uses viewport coordinates instead: for a sticky/fixed trigger those coordinates
-    // don't need to change at all once stuck (autoUpdate's recompute is a no-op), and for a
-    // normally-scrolling trigger they're recomputed on scroll exactly as before -- so this fixes
-    // the sticky case with no special-casing per app, and no change in behavior for the other.
+    // 'fixed' (not 'absolute') avoids a jerky trail behind a sticky/fixed trigger: 'absolute'
+    // positions in document coordinates, which keep changing under a stuck trigger and so need
+    // a JS recompute every scroll frame that visibly lags the browser's native sticky behavior.
     strategy: 'fixed',
     placement: PLACEMENT[position],
     open,
@@ -146,12 +125,9 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     middleware,
   });
 
-  // A coachmark is only ever opened externally (e.g. a CMS-driven prompt), never by interacting
-  // with its own trigger -- so unlike Tooltip, there's no hover/focus handling here. Outside click
-  // and Escape are both opt-in via `dismissOnOutsideClick`, per its own documented contract (a
-  // Piano campaign may want the coachmark to persist until an explicit action) -- pressing the
-  // trigger itself always dismisses regardless of that setting, since the trigger is still visible
-  // and actionable, so interacting with it again is an unambiguous signal to close.
+  // A coachmark only ever opens externally (e.g. Piano) -- unlike Tooltip, no hover/focus here.
+  // Outside click/Escape are opt-in via `dismissOnOutsideClick`; the trigger itself always
+  // dismisses regardless, since interacting with it again is an unambiguous close signal.
   const dismiss = useDismiss(context, {
     outsidePress: dismissOnOutsideClick,
     escapeKey: dismissOnOutsideClick,
@@ -161,16 +137,11 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
 
   const { getReferenceProps, getFloatingProps } = useInteractions([dismiss, role]);
 
-  // `useRole`'s reference props assume the standard disclosure pattern (clicking/hovering the
-  // reference opens the floating element), auto-adding aria-expanded/aria-haspopup/aria-controls
-  // for it -- wrong here, since `children` is only a positioning anchor, never what opens a
-  // coachmark (that's always Piano, externally). Applied to arbitrary/non-interactive `children`
-  // (e.g. a plain wrapping span), aria-expanded is also flatly invalid ARIA without a role that
-  // supports it. Strip just these three *after* getReferenceProps runs (not by omitting them from
-  // its input/output some other way): it's what composes a passed-in onClick (e.g. `children`'s
-  // own) together with the interactions' own handlers (e.g. the `referencePress` dismiss handler
-  // from `dismiss` above) -- calling it with no arguments, or re-spreading its result over the
-  // child's own props, would silently drop that composition and lose one side's handler.
+  // `useRole` assumes the standard disclosure pattern and auto-adds aria-expanded/aria-haspopup
+  // /aria-controls to the reference -- invalid here since `children` is just a positioning anchor
+  // (Piano opens the coachmark, not the trigger). Stripped from getReferenceProps' *output*
+  // (not its input, and not called with no args) to keep its handler composition (e.g. a
+  // passed-in onClick alongside the `referencePress` dismiss handler) intact.
   const stripReferenceRoleAria = <T extends Record<string, unknown>>(props: T) => {
     const {
       'aria-expanded': _ariaExpanded,
@@ -204,24 +175,14 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     <>
       {triggerElement}
       {open && (
-        // `preserveTabOrder={false}`: FloatingPortal's own hidden "outside" focus guards (separate
-        // from FloatingFocusManager's `guards` prop below) are unlabeled role="button" elements
-        // that fail axe's aria-command-name rule, and exist to preserve a specific Tab order
-        // across the portal boundary -- unnecessary for a non-modal panel where Tab should just
-        // move on to the rest of the page naturally, same as it would with no portal at all.
+        // preserveTabOrder's hidden guard elements are unlabeled and fail axe's
+        // aria-command-name rule; unnecessary for a non-modal panel.
         <FloatingPortal root={resolvedPortalRoot} preserveTabOrder={false}>
-          {/* `modal={false}`: a coachmark never blocks the rest of the page -- the underlying
-              content stays fully interactive while it's open. `initialFocus={refs.floating}`
-              moves focus to the panel itself (not its first control) so a screen reader
-              announces the title/description (via aria-labelledby/describedby below) before the
-              user tabs into the close/action buttons -- without this, a coachmark that appears
-              unprompted (e.g. a CMS-driven prompt firing while the user is reading elsewhere on
-              the page) would be entirely undiscoverable to keyboard/screen-reader users.
-              `guards={false}`: the hidden tab-guard elements floating-ui renders to trap focus
-              are unlabeled interactive (role="button") elements, which fails axe's
-              aria-command-name rule -- and since this is non-modal, focus isn't meant to be
-              trapped in the first place; Tab should be free to move past the panel into the
-              rest of the page, same as clicking outside it already can. */}
+          {/* modal={false}: a coachmark never blocks the rest of the page. initialFocus moves
+              focus to the panel itself so a screen reader announces title/description before an
+              unprompted coachmark would otherwise go undiscovered. guards={false}: same
+              aria-command-name issue as preserveTabOrder above, and focus isn't meant to be
+              trapped in a non-modal panel anyway. */}
           <FloatingFocusManager
             context={context}
             modal={false}
