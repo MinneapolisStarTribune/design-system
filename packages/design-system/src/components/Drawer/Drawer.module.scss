@@ -1,21 +1,64 @@
-.overlay {
-  /* Keep in sync with ENTER_DURATION / EXIT_DURATION in DrawerRoot.tsx. */
-  --drawer-enter-duration: 250ms;
-  --drawer-exit-duration: 200ms;
-  --drawer-slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
-  --drawer-close-size: 32px;
+$md: 768px;
 
+// Each placement sets every layout variable, so the desktop placement fully replaces the mobile
+// one instead of inheriting leftovers (e.g. a sheet's radius on a side panel).
+@mixin side-panel($edge) {
   --drawer-align: stretch;
-  --drawer-justify: flex-end;
   --drawer-panel-width: 408px;
   --drawer-panel-max-width: 100%;
   --drawer-panel-height: 100%;
   --drawer-panel-max-height: none;
   --drawer-panel-radius: 0;
   --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
-  --drawer-panel-border-left: 1px;
+
+  @if $edge == left {
+    --drawer-justify: flex-start;
+    --drawer-panel-border-left: 0;
+    --drawer-panel-border-right: 1px;
+    --drawer-panel-hidden-transform: translateX(-100%);
+  } @else {
+    --drawer-justify: flex-end;
+    --drawer-panel-border-left: 1px;
+    --drawer-panel-border-right: 0;
+    --drawer-panel-hidden-transform: translateX(100%);
+  }
+}
+
+@mixin sheet($edge, $rounded: false) {
+  --drawer-justify: stretch;
+  --drawer-panel-width: 100%;
+  --drawer-panel-max-width: none;
+  --drawer-panel-height: auto;
+  /* Leave a strip of page visible beyond a tall sheet. */
+  --drawer-panel-max-height: calc(100% - var(--spacing-24));
+  --drawer-panel-shadow: none;
+  --drawer-panel-border-left: 0;
   --drawer-panel-border-right: 0;
-  --drawer-panel-hidden-transform: translateX(100%);
+  --drawer-panel-radius: 0;
+
+  @if $edge == top {
+    --drawer-align: flex-start;
+    --drawer-panel-hidden-transform: translateY(-100%);
+
+    @if $rounded {
+      --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
+    }
+  } @else {
+    --drawer-align: flex-end;
+    --drawer-panel-hidden-transform: translateY(100%);
+
+    @if $rounded {
+      --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
+    }
+  }
+}
+
+.overlay {
+  /* Keep in sync with ENTER_DURATION / EXIT_DURATION in DrawerRoot.tsx. */
+  --drawer-enter-duration: 250ms;
+  --drawer-exit-duration: 200ms;
+  --drawer-slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --drawer-close-size: 32px;
 
   z-index: 1000;
   display: flex;
@@ -36,90 +79,38 @@
   }
 }
 
-@media (width >= 768px) {
+/* Only the mobile top and bottom sheets have rounded corners; every other placement is square. */
+.mobile-position-left {
+  @include side-panel(left);
+}
+
+.mobile-position-right {
+  @include side-panel(right);
+}
+
+.mobile-position-top {
+  @include sheet(top, $rounded: true);
+}
+
+.mobile-position-bottom {
+  @include sheet(bottom, $rounded: true);
+}
+
+@media (width >= $md) {
   .position-left {
-    --drawer-justify: flex-start;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-border-right: 1px;
-    --drawer-panel-hidden-transform: translateX(-100%);
+    @include side-panel(left);
   }
 
   .position-right {
-    --drawer-justify: flex-end;
-    --drawer-panel-border-left: 1px;
-    --drawer-panel-border-right: 0;
-    --drawer-panel-hidden-transform: translateX(100%);
+    @include side-panel(right);
   }
 
   .position-top {
-    --drawer-align: flex-start;
-    --drawer-justify: stretch;
-    --drawer-panel-width: 100%;
-    --drawer-panel-max-width: none;
-    --drawer-panel-height: auto;
-    /* Leave a strip of page visible below a tall sheet. */
-    --drawer-panel-max-height: calc(100% - var(--spacing-24));
-    --drawer-panel-shadow: none;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-hidden-transform: translateY(-100%);
+    @include sheet(top);
   }
 
   .position-bottom {
-    --drawer-align: flex-end;
-    --drawer-justify: stretch;
-    --drawer-panel-width: 100%;
-    --drawer-panel-max-width: none;
-    --drawer-panel-height: auto;
-    /* Leave a strip of page visible above a tall sheet. */
-    --drawer-panel-max-height: calc(100% - var(--spacing-24));
-    --drawer-panel-shadow: none;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-hidden-transform: translateY(100%);
-  }
-}
-
-@media (width < 768px) {
-  /* Only the mobile top and bottom sheets have rounded corners; every other placement is square. */
-  .mobile-position-left {
-    --drawer-justify: flex-start;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-border-right: 1px;
-    --drawer-panel-hidden-transform: translateX(-100%);
-  }
-
-  .mobile-position-right {
-    --drawer-justify: flex-end;
-    --drawer-panel-border-left: 1px;
-    --drawer-panel-border-right: 0;
-    --drawer-panel-hidden-transform: translateX(100%);
-  }
-
-  .mobile-position-top {
-    --drawer-align: flex-start;
-    --drawer-justify: stretch;
-    --drawer-panel-width: 100%;
-    --drawer-panel-max-width: none;
-    --drawer-panel-height: auto;
-    /* Leave a strip of page visible below a tall sheet. */
-    --drawer-panel-max-height: calc(100% - var(--spacing-24));
-    --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
-    --drawer-panel-shadow: none;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-hidden-transform: translateY(-100%);
-  }
-
-  .mobile-position-bottom {
-    --drawer-align: flex-end;
-    --drawer-justify: stretch;
-    --drawer-panel-width: 100%;
-    --drawer-panel-max-width: none;
-    --drawer-panel-height: auto;
-    /* Leave a strip of page visible above a tall sheet. */
-    --drawer-panel-max-height: calc(100% - var(--spacing-24));
-    --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
-    --drawer-panel-shadow: none;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-hidden-transform: translateY(100%);
+    @include sheet(bottom);
   }
 }
 
@@ -163,17 +154,17 @@
 
 .closeButton {
   position: absolute;
-  top: var(--spacing-24);
-  right: var(--spacing-24);
+  top: var(--spacing-20);
+  right: var(--spacing-12);
   z-index: 1;
   width: var(--drawer-close-size);
   height: var(--drawer-close-size);
   flex-shrink: 0;
   border-radius: var(--radius-full) !important;
 
-  @media (width < 768px) {
-    top: var(--spacing-20);
-    right: var(--spacing-12);
+  @media (width >= $md) {
+    top: var(--spacing-24);
+    right: var(--spacing-24);
   }
 }
 
@@ -188,34 +179,34 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-24));
+  min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-20));
   margin: 0;
-  padding: var(--spacing-24) var(--spacing-32);
+  padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
   font-family: var(--typography-utility-heading, Graphik);
 
-  @media (width < 768px) {
-    min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-20));
-    padding: var(--spacing-20) var(--spacing-16);
+  @media (width >= $md) {
+    min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-24));
+    padding: var(--spacing-24) var(--spacing-32);
   }
 }
 
 /* Keep the title clear of the absolutely positioned close button. */
 .withCloseButton {
   .heading {
-    padding-right: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-8));
+    padding-right: calc(var(--spacing-12) + var(--drawer-close-size) + var(--spacing-12));
 
-    @media (width < 768px) {
-      padding-right: calc(var(--spacing-12) + var(--drawer-close-size) + var(--spacing-12));
+    @media (width >= $md) {
+      padding-right: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-8));
     }
   }
 
   /* Without a heading, push the first section below the close button. */
   > :first-child:not(.heading) {
-    padding-top: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-16));
+    padding-top: calc(var(--spacing-20) + var(--drawer-close-size) + var(--spacing-16));
 
-    @media (width < 768px) {
-      padding-top: calc(var(--spacing-20) + var(--drawer-close-size) + var(--spacing-16));
+    @media (width >= $md) {
+      padding-top: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-16));
     }
   }
 }
@@ -224,7 +215,7 @@
   flex: 1 1 auto;
   min-height: 0;
   /* No bottom padding: the scroll fade supplies the trailing space. */
-  padding: var(--spacing-16) var(--spacing-32) 0;
+  padding: var(--spacing-16) var(--spacing-16) 0;
   overflow-y: auto;
   overscroll-behavior: contain;
 
@@ -232,8 +223,8 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 
-  @media (width < 768px) {
-    padding: var(--spacing-16) var(--spacing-16) 0;
+  @media (width >= $md) {
+    padding: var(--spacing-16) var(--spacing-32) 0;
   }
 
   /* Scroll hints: top fade while content sits above, bottom fade while more sits below (needs scroll timelines). */
@@ -325,12 +316,12 @@
   flex-wrap: wrap;
   gap: var(--spacing-16);
   flex-shrink: 0;
-  padding: var(--spacing-24) var(--spacing-32)
-    calc(var(--spacing-24) + env(safe-area-inset-bottom, 0px));
+  padding: var(--spacing-20) var(--spacing-16)
+    calc(var(--spacing-20) + env(safe-area-inset-bottom, 0px));
 
-  @media (width < 768px) {
-    padding: var(--spacing-20) var(--spacing-16)
-      calc(var(--spacing-20) + env(safe-area-inset-bottom, 0px));
+  @media (width >= $md) {
+    padding: var(--spacing-24) var(--spacing-32)
+      calc(var(--spacing-24) + env(safe-area-inset-bottom, 0px));
   }
 
   > * {

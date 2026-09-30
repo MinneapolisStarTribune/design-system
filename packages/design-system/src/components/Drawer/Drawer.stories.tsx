@@ -145,7 +145,7 @@ const meta = {
       action: 'onClose',
       description:
         'Called when the drawer requests a close (close button, Escape or overlay press). Footer actions set `open` themselves.',
-      table: { type: { summary: '(open: boolean) => void' } },
+      table: { type: { summary: '() => void' } },
     },
     initialFocus: { control: false },
     portalRoot: { control: false, table: { disable: true } },
