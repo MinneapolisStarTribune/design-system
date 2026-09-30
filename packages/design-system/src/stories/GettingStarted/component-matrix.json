@@ -147,7 +147,7 @@
   {
     "component": "Drawer",
     "native": false,
-    "web": true
+    "web": false
   },
   {
     "component": "SwiperCarousel",
