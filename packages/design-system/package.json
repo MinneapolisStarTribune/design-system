@@ -17,6 +17,12 @@
       "import": "./dist/web/index.web.es.js",
       "default": "./dist/web/index.web.es.js"
     },
+    "./web/piano": {
+      "types": "./dist/web/piano.web.d.ts",
+      "require": "./dist/web/piano.web.cjs.js",
+      "import": "./dist/web/piano.web.es.js",
+      "default": "./dist/web/piano.web.es.js"
+    },
     "./web/components.css": "./dist/web/components.css",
     "./web/*": {
       "default": "./dist/web/*"

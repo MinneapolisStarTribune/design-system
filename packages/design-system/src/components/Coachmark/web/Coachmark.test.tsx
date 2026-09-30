@@ -301,7 +301,7 @@ describe('Coachmark', () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
-  it('closes on Escape even when dismissOnOutsideClick is false', async () => {
+  it('does not close on Escape when dismissOnOutsideClick is false (the default)', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
 
@@ -312,6 +312,27 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    await user.keyboard('{Escape}');
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('closes on Escape when dismissOnOutsideClick is true', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={onOpenChange}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        dismissOnOutsideClick
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -445,29 +466,41 @@ describe('Coachmark', () => {
     });
   });
 
-  it.each([
-    ['center-left', 'rotate(-90deg)'],
-    ['center-right', 'rotate(90deg)'],
-  ] as const)(
-    'opens beside the trigger, vertically centered, when position is %s',
-    async (position, expectedArrowTransform) => {
-      renderWithProvider(
-        <Coachmark
-          open
-          onOpenChange={vi.fn()}
-          title="Title"
-          description="Description"
-          ctaText="Do it"
-          position={position}
-        >
-          <Button>Trigger</Button>
-        </Coachmark>
-      );
+  it('opens beside the trigger, vertically centered, when position is center-left', async () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        position="center-left"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
 
-      // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
-      // confirming the side was actually applied, not silently ignored.
-      const arrow = screen.getByRole('dialog').querySelector('svg');
-      await waitFor(() => expect(arrow).toHaveStyle({ transform: expectedArrowTransform }));
-    }
-  );
+    // The arrow's rotation reflects which side floating-ui actually placed the dialog on --
+    // confirming the side was actually applied, not silently ignored.
+    const arrow = screen.getByRole('dialog').querySelector('svg');
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(-90deg)' }));
+  });
+
+  it('opens beside the trigger, vertically centered, when position is center-right', async () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        position="center-right"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    const arrow = screen.getByRole('dialog').querySelector('svg');
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(90deg)' }));
+  });
 });

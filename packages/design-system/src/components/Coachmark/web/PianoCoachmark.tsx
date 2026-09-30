@@ -63,7 +63,11 @@ export const PianoCoachmark: React.FC<PianoCoachmarkProps> = ({
       badgeText={payload.badgeText}
       ctaText={ctaAction ? payload.ctaText : undefined}
       actionHref={ctaAction?.href}
-      onAction={ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined}
+      // `onClick` is documented as ignored when `href` is set -- suppress it here so an action
+      // defining both doesn't navigate and invoke the callback.
+      onAction={
+        !ctaAction?.href && ctaAction?.onClick ? () => ctaAction.onClick?.({ dismiss }) : undefined
+      }
       secondaryContent={payload.showLogin ? ctaAction?.renderSecondary?.({ dismiss }) : undefined}
       position={payload.position}
       alignment={payload.alignment}

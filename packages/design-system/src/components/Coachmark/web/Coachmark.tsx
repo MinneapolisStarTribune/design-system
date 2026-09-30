@@ -148,19 +148,38 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
 
   // A coachmark is only ever opened externally (e.g. a CMS-driven prompt), never by interacting
   // with its own trigger -- so unlike Tooltip, there's no hover/focus handling here. Outside click
-  // is opt-in via `dismissOnOutsideClick` (a Piano campaign may want the coachmark to persist until
-  // an explicit action), but Escape and pressing the trigger itself always dismiss regardless of
-  // that setting -- Escape is the standard keyboard convention for closing transient UI, and the
-  // trigger is still visible and actionable, so interacting with it again is an unambiguous signal
-  // to close.
+  // and Escape are both opt-in via `dismissOnOutsideClick`, per its own documented contract (a
+  // Piano campaign may want the coachmark to persist until an explicit action) -- pressing the
+  // trigger itself always dismisses regardless of that setting, since the trigger is still visible
+  // and actionable, so interacting with it again is an unambiguous signal to close.
   const dismiss = useDismiss(context, {
     outsidePress: dismissOnOutsideClick,
-    escapeKey: true,
+    escapeKey: dismissOnOutsideClick,
     referencePress: true,
   });
   const role = useRole(context, { role: 'dialog' });
 
   const { getReferenceProps, getFloatingProps } = useInteractions([dismiss, role]);
+
+  // `useRole`'s reference props assume the standard disclosure pattern (clicking/hovering the
+  // reference opens the floating element), auto-adding aria-expanded/aria-haspopup/aria-controls
+  // for it -- wrong here, since `children` is only a positioning anchor, never what opens a
+  // coachmark (that's always Piano, externally). Applied to arbitrary/non-interactive `children`
+  // (e.g. a plain wrapping span), aria-expanded is also flatly invalid ARIA without a role that
+  // supports it. Strip just these three *after* getReferenceProps runs (not by omitting them from
+  // its input/output some other way): it's what composes a passed-in onClick (e.g. `children`'s
+  // own) together with the interactions' own handlers (e.g. the `referencePress` dismiss handler
+  // from `dismiss` above) -- calling it with no arguments, or re-spreading its result over the
+  // child's own props, would silently drop that composition and lose one side's handler.
+  const stripReferenceRoleAria = <T extends Record<string, unknown>>(props: T) => {
+    const {
+      'aria-expanded': _ariaExpanded,
+      'aria-haspopup': _ariaHaspopup,
+      'aria-controls': _ariaControls,
+      ...rest
+    } = props;
+    return rest;
+  };
 
   const childElement = isValidElement(children)
     ? (children as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
@@ -169,9 +188,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const mergedRef = useMergeRefs([refs.setReference, childElement?.ref ?? null]);
 
   const triggerElement = childElement ? (
-    cloneElement(childElement, getReferenceProps({ ...childElement.props, ref: mergedRef }))
+    cloneElement(
+      childElement,
+      stripReferenceRoleAria(getReferenceProps({ ...childElement.props, ref: mergedRef }))
+    )
   ) : (
-    <span ref={refs.setReference} {...getReferenceProps()}>
+    <span ref={refs.setReference} {...stripReferenceRoleAria(getReferenceProps())}>
       {children}
     </span>
   );
@@ -182,17 +204,28 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     <>
       {triggerElement}
       {open && (
-        <FloatingPortal root={resolvedPortalRoot}>
+        // `preserveTabOrder={false}`: FloatingPortal's own hidden "outside" focus guards (separate
+        // from FloatingFocusManager's `guards` prop below) are unlabeled role="button" elements
+        // that fail axe's aria-command-name rule, and exist to preserve a specific Tab order
+        // across the portal boundary -- unnecessary for a non-modal panel where Tab should just
+        // move on to the rest of the page naturally, same as it would with no portal at all.
+        <FloatingPortal root={resolvedPortalRoot} preserveTabOrder={false}>
           {/* `modal={false}`: a coachmark never blocks the rest of the page -- the underlying
               content stays fully interactive while it's open. `initialFocus={refs.floating}`
               moves focus to the panel itself (not its first control) so a screen reader
               announces the title/description (via aria-labelledby/describedby below) before the
               user tabs into the close/action buttons -- without this, a coachmark that appears
               unprompted (e.g. a CMS-driven prompt firing while the user is reading elsewhere on
-              the page) would be entirely undiscoverable to keyboard/screen-reader users. */}
+              the page) would be entirely undiscoverable to keyboard/screen-reader users.
+              `guards={false}`: the hidden tab-guard elements floating-ui renders to trap focus
+              are unlabeled interactive (role="button") elements, which fails axe's
+              aria-command-name rule -- and since this is non-modal, focus isn't meant to be
+              trapped in the first place; Tab should be free to move past the panel into the
+              rest of the page, same as clicking outside it already can. */}
           <FloatingFocusManager
             context={context}
             modal={false}
+            guards={false}
             // eslint-disable-next-line react-hooks/refs
             initialFocus={refs.floating}
           >

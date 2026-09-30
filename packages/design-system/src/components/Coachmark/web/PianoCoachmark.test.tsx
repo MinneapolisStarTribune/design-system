@@ -302,7 +302,7 @@ describe('PianoCoachmark', () => {
     expect(screen.getByText('Piano title')).toBeInTheDocument();
   });
 
-  it('closes on Escape even when dismissOnOutsideClick is false', async () => {
+  it('does not close on Escape when dismissOnOutsideClick is false (the default)', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -315,6 +315,26 @@ describe('PianoCoachmark', () => {
     );
 
     await user.click(screen.getByText('Fire piano event for no-escape-opt-out'));
+
+    await screen.findByText('Piano title');
+
+    await user.keyboard('{Escape}');
+    expect(screen.getByText('Piano title')).toBeInTheDocument();
+  });
+
+  it('closes on Escape when the payload opts in via dismissOnOutsideClick', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <ExternalTriggerProvider>
+        <PianoTrigger triggerId="escape-opt-in" dismissOnOutsideClick />
+        <PianoCoachmark id="escape-opt-in" ctaActions={{}}>
+          <button type="button">Trigger</button>
+        </PianoCoachmark>
+      </ExternalTriggerProvider>
+    );
+
+    await user.click(screen.getByText('Fire piano event for escape-opt-in'));
 
     await screen.findByText('Piano title');
 

@@ -53,6 +53,7 @@ export default defineConfig({
     dts({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
+        path.resolve(__dirname, 'src/piano.web.ts'),
         path.resolve(__dirname, 'src/components'),
         path.resolve(__dirname, 'src/icons'),
         path.resolve(__dirname, 'src/providers'),
@@ -115,7 +116,13 @@ export default defineConfig({
     emptyOutDir: false,
     outDir: 'dist/web',
     lib: {
-      entry: 'src/index.web.ts',
+      // Two separate entries, not one: piano.web.ts must resolve independently of index.web.ts
+      // so importing from the main entrypoint never pulls in PianoCoachmark's optional peer
+      // dependency (see components/index.web.ts).
+      entry: {
+        'index.web': path.resolve(__dirname, 'src/index.web.ts'),
+        'piano.web': path.resolve(__dirname, 'src/piano.web.ts'),
+      },
       name: 'DesignSystem',
     },
     rollupOptions: {

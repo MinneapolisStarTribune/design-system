@@ -60,19 +60,29 @@ export interface PianoCtaActionContext {
   dismiss: () => void;
 }
 
-/**
- * Defines how a single `ctaType` value (from Piano's response variables) renders and behaves.
- * Registries are plain objects keyed by `ctaType`, so any app can supply its own without needing
- * a code change here -- see `PianoCoachmark`'s `ctaActions` prop.
- */
-export interface PianoCtaAction {
-  /** Renders the button as a link to this href instead of a button with `onClick`. */
-  href?: string;
-  /** Called when the button is clicked. Ignored when `href` is set -- navigation handles it. */
-  onClick?: (context: PianoCtaActionContext) => void;
+interface PianoCtaActionBase {
   /** Optional content rendered below the button, e.g. a secondary login link. */
   renderSecondary?: (context: PianoCtaActionContext) => ReactNode;
 }
+
+/**
+ * Defines how a single `ctaType` value (from Piano's response variables) renders and behaves.
+ * Registries are plain objects keyed by `ctaType`, so any app can supply its own without needing
+ * a code change here -- see `PianoCoachmark`'s `ctaActions` prop. A primary action -- `href` (the
+ * button renders as a link) or `onClick` (a button with a handler) -- is required; a registry
+ * entry with neither would render an enabled-looking button that does nothing.
+ */
+export type PianoCtaAction =
+  | (PianoCtaActionBase & {
+      /** Renders the button as a link to this href instead of a button with `onClick`. */
+      href: string;
+      onClick?: never;
+    })
+  | (PianoCtaActionBase & {
+      href?: never;
+      /** Called when the button is clicked. */
+      onClick: (context: PianoCtaActionContext) => void;
+    });
 
 export type PianoCtaActionRegistry = Record<string, PianoCtaAction>;
 

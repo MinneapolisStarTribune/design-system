@@ -118,114 +118,91 @@ const [open, setOpen] = useState(true);
 };
 
 /**
- * With an icon badge above the title, and no action button -- e.g. informational content with no
- * follow-up action.
+ * Every variant/combination rendered statically for Chromatic visual regression -- alignment,
+ * icon, badge, secondary content, and all eight `position` values. 'top'/'bottom' positions open
+ * above/below the trigger (with 'left'/'right'/'center' controlling where along that edge);
+ * 'center-left'/'center-right' open beside the trigger instead, vertically centered -- e.g. for a
+ * trigger flush against a screen edge with no room above/below. The flip middleware auto-flips
+ * any of these when there isn't room (e.g. near a viewport edge, or scrolled close to it).
  */
-export const WithIcon: Story = {
+export const AllVariants: Story = {
   args: baseArgs,
-  render: () => (
-    <StoryCoachmark
-      title="Added to favorites"
-      description="You'll now see updates for this team in your feed."
-      icon={<StarIcon size="x-large" color="on-dark-primary" />}
-    />
-  ),
-};
-
-/**
- * With `alignment="left"` -- title/description (and the action button) render left-aligned
- * instead of the default centered layout. Independent of `icon`: an icon still renders the same
- * way regardless of `alignment`.
- */
-export const LeftAligned: Story = {
-  args: baseArgs,
-  render: () => (
-    <StoryCoachmark
-      title="Never miss a story"
-      description="Create a free account to save articles for later."
-      ctaText="Create Free Account"
-      alignment="left"
-    />
-  ),
-};
-
-/**
- * With a "New" badge in the card's top-left corner, vertically centered 24px from the card's top
- * edge -- e.g. to flag a newly-launched feature the coachmark is introducing.
- */
-export const WithBadge: Story = {
-  args: baseArgs,
-  render: () => (
-    <StoryCoachmark
-      title="Explore Athlete Pages"
-      description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
-      icon={<StarIcon size="x-large" color="on-dark-primary" />}
-      badgeText="New"
-    />
-  ),
-};
-
-/**
- * With secondary content below the action button -- e.g. a login link for users who already have
- * an account.
- */
-export const WithSecondaryContent: Story = {
-  args: baseArgs,
-  render: () => (
-    <StoryCoachmark
-      title="Never miss a story"
-      description="Create a free account to save articles for later."
-      ctaText="Create Free Account"
-      secondaryContent={
-        // Matches the actual typography real consumers use for this slot (e.g.
-        // startribune-web's own login prompt): Graphik regular/medium at 12px, not a bare
-        // browser-default span -- otherwise this story understates how large the text really is.
-        <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: 8 }}>
-          <span className="typography-utility-text-regular-x-small">Already have an account?</span>
-          <span
-            className="typography-utility-text-medium-x-small"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}
-          >
-            Log in
-            <ChevronRightIcon size="x-small" />
-          </span>
-        </span>
-      }
-    />
-  ),
-};
-
-/**
- * All eight `position` values, side by side. 'top'/'bottom' positions open above/below the
- * trigger (with 'left'/'right'/'center' controlling where along that edge); 'center-left'/
- * 'center-right' open beside the trigger instead, vertically centered -- e.g. for a trigger flush
- * against a screen edge with no room above/below. The flip middleware auto-flips any of these
- * when there isn't room (e.g. near a viewport edge, or scrolled close to it).
- */
-export const Positions: Story = {
-  args: baseArgs,
-  render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 160,
-        padding: 160,
-      }}
-    >
-      {COACHMARK_POSITIONS.map((position) => (
-        <StoryCoachmark
-          key={position}
-          anchorLabel={position}
-          title={position}
-          description="The flip middleware still auto-flips this when there isn't room."
-          ctaText="Got it"
-          position={position}
-        />
-      ))}
-    </div>
-  ),
   parameters: {
     layout: 'fullscreen',
+    controls: { disable: true },
   },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 80, padding: 80 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 160 }}>
+        <StoryCoachmark
+          anchorLabel="Default (centered)"
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Create Free Account"
+        />
+        <StoryCoachmark
+          anchorLabel="alignment=left"
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Create Free Account"
+          alignment="left"
+        />
+        <StoryCoachmark
+          anchorLabel="With icon"
+          title="Added to favorites"
+          description="You'll now see updates for this team in your feed."
+          icon={<StarIcon size="x-large" color="on-dark-primary" />}
+        />
+        <StoryCoachmark
+          anchorLabel="With badge"
+          title="Explore Athlete Pages"
+          description="Tap on any athlete's name to visit their page and view their season stats, games, media and more."
+          icon={<StarIcon size="x-large" color="on-dark-primary" />}
+          badgeText="New"
+        />
+        <StoryCoachmark
+          anchorLabel="With secondary content"
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Create Free Account"
+          secondaryContent={
+            // Matches the actual typography real consumers use for this slot (e.g.
+            // startribune-web's own login prompt): Graphik regular/medium at 12px, not a bare
+            // browser-default span -- otherwise this story understates how large the text
+            // really is.
+            <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: 8 }}>
+              <span className="typography-utility-text-regular-x-small">
+                Already have an account?
+              </span>
+              <span
+                className="typography-utility-text-medium-x-small"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}
+              >
+                Log in
+                <ChevronRightIcon size="x-small" />
+              </span>
+            </span>
+          }
+        />
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 160,
+        }}
+      >
+        {COACHMARK_POSITIONS.map((position) => (
+          <StoryCoachmark
+            key={position}
+            anchorLabel={position}
+            title={position}
+            description="The flip middleware still auto-flips this when there isn't room."
+            ctaText="Got it"
+            position={position}
+          />
+        ))}
+      </div>
+    </div>
+  ),
 };
