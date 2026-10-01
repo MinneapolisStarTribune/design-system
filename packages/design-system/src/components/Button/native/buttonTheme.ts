@@ -37,6 +37,55 @@ function getDarkNeutralButtonSurface(
   };
 }
 
+/*
+ * Pressed colors for error buttons, precomputed from web's `color-mix()` (no equivalent in RN):
+ * filled = 85% foreground over background, outlined/ghost = 12% foreground tint.
+ */
+const ERROR_PRESSED = {
+  light: { filled: '#bd3b3b', tint: 'rgb(177 27 27 / 12%)' },
+  dark: { filled: '#e6adad', tint: 'rgb(254 202 202 / 12%)' },
+};
+
+/**
+ * Error colors - for destructive actions (e.g. Delete). Mirrors web: no button-error-* tokens yet, so
+ * these build on the semantic error pair; filled inverts it so contrast holds in light and dark.
+ * Dark surface uses the dark-theme values of that pair (web `.surfaceDark`).
+ */
+function getErrorButtonSurface(
+  theme: NativeTheme,
+  variant: ButtonVariant,
+  pressed: boolean,
+  surface: ButtonSurface
+): ButtonSurfaceColors {
+  /* Dark app theme's semantic pair is red-200 / red-950, same as the dark-surface override */
+  const isDark = surface === 'dark' || theme.colorSemanticErrorForeground === theme.colorRed200;
+  const foreground = isDark ? theme.colorRed200 : theme.colorSemanticErrorForeground;
+  const background = isDark ? theme.colorRed950 : theme.colorSemanticErrorBackground;
+  const pressedColors = ERROR_PRESSED[isDark ? 'dark' : 'light'];
+  const pressedTint = pressedColors.tint;
+
+  if (variant === 'filled') {
+    return {
+      backgroundColor: pressed ? pressedColors.filled : foreground,
+      color: background,
+    };
+  }
+
+  if (variant === 'outlined') {
+    return {
+      backgroundColor: pressed ? pressedTint : 'transparent',
+      color: foreground,
+      borderColor: foreground,
+      borderWidth: 1,
+    };
+  }
+
+  return {
+    backgroundColor: pressed ? pressedTint : 'transparent',
+    color: foreground,
+  };
+}
+
 /**
  * Maps web-equivalent hover tokens to pressed state on native.
  */
@@ -49,6 +98,10 @@ export function getNativeButtonSurface(
 ): ButtonSurfaceColors {
   if (surface === 'dark' && color === 'neutral') {
     return getDarkNeutralButtonSurface(theme, variant, pressed);
+  }
+
+  if (color === 'error') {
+    return getErrorButtonSurface(theme, variant, pressed, surface);
   }
 
   if (color === 'neutral') {
