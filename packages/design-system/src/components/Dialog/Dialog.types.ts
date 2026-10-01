@@ -27,3 +27,13 @@ export interface DialogProps extends ModalSharedProps {
 }
 
 export type DialogSectionProps = ModalSectionProps;
+
+export interface DialogActionsProps extends DialogSectionProps {
+  /**
+   * At mobile breakpoint, stack the actions full width — the common pattern for short
+   * confirmations. Turn it off to keep them side by side, for dialogs with more content like
+   * forms. No effect from 768px up.
+   * @default true
+   */
+  stackOnMobile?: boolean;
+}

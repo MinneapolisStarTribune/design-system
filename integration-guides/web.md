@@ -162,6 +162,7 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 - The dialog is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response. Focus returns to the opening control on close.
 - Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title.
 - For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. Use `color="error"` on the destructive button. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
+- At 767px and below, `Dialog.Actions` stacks its actions full width, the usual pattern for confirmations. For forms and longer content, pass `stackOnMobile={false}` to keep them side by side. It has no effect from 768px up.
 - `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
 - It shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
 - The switch between sheet and centered dialog is read from the viewport on the client, like Drawer's `position`. During SSR it resolves the bottom sheet, then updates after hydration.
