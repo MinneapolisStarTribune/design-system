@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import axeCore from 'axe-core';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS } from './Drawer.types';
+import { DRAWER_POSITIONS } from './Drawer.constants';
 import { Button, FormControl, FormGroup, UtilityBody } from '@/components/index.web';
 import { DesignSystemProvider } from '@/providers/DesignSystemProvider';
 

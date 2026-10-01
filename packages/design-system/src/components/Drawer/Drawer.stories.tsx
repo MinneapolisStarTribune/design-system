@@ -1,7 +1,8 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
+import { DRAWER_POSITIONS } from './Drawer.constants';
+import type { DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';

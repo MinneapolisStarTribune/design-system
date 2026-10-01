@@ -1,7 +1,7 @@
 import type { ReactNode, RefObject } from 'react';
 import type { AccessibilityProps, BaseProps, Responsive } from '@/types/globalTypes';
+import type { DRAWER_POSITIONS } from './Drawer.constants';
 
-export const DRAWER_POSITIONS = ['left', 'right', 'top', 'bottom'] as const;
 export type DrawerPosition = (typeof DRAWER_POSITIONS)[number];
 
 export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
