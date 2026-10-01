@@ -59,6 +59,19 @@ export const POSITIONS = ['top', 'right', 'bottom', 'left'] as const;
 export type Position = (typeof POSITIONS)[number];
 
 /**
+ * Viewport breakpoints, smallest first. Mirrors tokens/primitives/breakpoint.json.
+ */
+export const BREAKPOINTS = ['small', 'medium', 'large'] as const;
+
+export type Breakpoint = (typeof BREAKPOINTS)[number];
+
+/**
+ * A prop value for every screen size, or an object keyed by breakpoint. Each key applies from
+ * that breakpoint up; sizes below the smallest key fall back to the component's default.
+ */
+export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
+
+/**
  * Icon position shared across components (Button, Tooltip, etc.)
  */
 export type IconPosition = 'start' | 'end';

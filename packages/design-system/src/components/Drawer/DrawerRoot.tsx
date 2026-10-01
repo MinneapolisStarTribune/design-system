@@ -13,11 +13,13 @@ import {
   useTransitionStatus,
 } from '@floating-ui/react';
 import { Button } from '@/components/Button/web/Button';
+import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { CloseIcon } from '@/icons';
+import type { Responsive } from '@/types/globalTypes';
 import { createDesignSystemError } from '@/utils/errorPrefix';
 import styles from './Drawer.module.scss';
 import { DrawerContext } from './DrawerContext';
-import type { DrawerProps } from './Drawer.types';
+import type { DrawerPosition, DrawerProps } from './Drawer.types';
 
 // Keep in sync with the transition durations in Drawer.module.scss.
 const ENTER_DURATION = 250;
@@ -26,12 +28,14 @@ const EXIT_DURATION = 200;
 // Overrides FloatingOverlay's inline `overflow: auto` so the off-screen panel doesn't add scroll.
 const OVERLAY_STYLE = { overflow: 'hidden' } as const;
 
+// A bottom sheet on phones, a right side panel from 768px up.
+const DEFAULT_POSITION: Responsive<DrawerPosition> = { small: 'bottom', medium: 'right' };
+
 export const DrawerRoot: React.FC<DrawerProps> = ({
   children,
   open,
   onClose,
-  position = 'right',
-  mobilePosition = 'bottom',
+  position,
   showCloseButton = true,
   initialFocus,
   portalRoot,
@@ -48,6 +52,8 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
     hasHeadingRef.current = nextHasHeading;
     setHasHeadingState(nextHasHeading);
   }, []);
+
+  const resolvedPosition = useResponsiveValue(position, DEFAULT_POSITION);
 
   const instanceId = useId();
   const headingId = `drawer-heading-${instanceId}`;
@@ -102,11 +108,7 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
             data-status={status}
             data-testid={`${dataTestId}-overlay`}
             style={OVERLAY_STYLE}
-            className={classNames(
-              styles.overlay,
-              styles[`position-${position}`],
-              styles[`mobile-position-${mobilePosition}`]
-            )}
+            className={classNames(styles.overlay, styles[`position-${resolvedPosition}`])}
           >
             <FloatingFocusManager
               context={context}
@@ -121,8 +123,6 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
                 aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
                 aria-modal="true"
                 className={classNames(styles.panel, className)}
-                data-position={position}
-                data-mobile-position={mobilePosition}
                 data-status={status}
                 data-testid={dataTestId}
                 style={style}

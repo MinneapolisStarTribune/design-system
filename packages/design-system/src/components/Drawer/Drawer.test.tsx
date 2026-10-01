@@ -2,9 +2,10 @@ import { type ReactNode, useRef, useState } from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
+import { DRAWER_POSITIONS, type DrawerPosition, type DrawerProps } from './Drawer.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
+import { mockViewport } from '@/test-utils/viewport';
 
 type TestDrawerProps = Omit<DrawerProps, 'open' | 'onClose' | 'children'> & {
   triggerLabel?: string;
@@ -28,8 +29,19 @@ const TestDrawer = ({ triggerLabel = 'Open', children, ...props }: TestDrawerPro
 const openDrawer = async (user: ReturnType<typeof userEvent.setup>, name = 'Open') => {
   await user.click(screen.getByText(name));
 
-  return waitFor(() => screen.getByRole('dialog'));
+  // Wait out the enter transition so its status update doesn't land outside act.
+  return waitFor(() => {
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAttribute('data-status', 'open');
+    return dialog;
+  });
 };
+
+// The resolved edge is applied as a `position-*` class on the overlay.
+const expectPosition = (position: DrawerPosition) =>
+  expect(screen.getByTestId('drawer-overlay').className).toMatch(
+    new RegExp(`(^|_|\\s)position-${position}(_|\\s|$)`)
+  );
 
 const expectClosed = () =>
   waitFor(() => {
@@ -94,61 +106,76 @@ describe('Drawer', () => {
         </TestDrawer>
       );
 
-      const drawer = await openDrawer(user);
+      await openDrawer(user);
 
-      expect(drawer).toHaveAttribute('data-position', position);
-      expect(screen.getByTestId('drawer-overlay').className).toMatch(
-        new RegExp(`position-${position}`)
-      );
+      expectPosition(position);
     });
 
-    it('defaults to the right edge', async () => {
-      const user = userEvent.setup();
+    describe('responsive position', () => {
+      let viewport: ReturnType<typeof mockViewport>;
 
-      renderWithProvider(
-        <TestDrawer aria-label="Filters">
-          <Drawer.Body>Body copy</Drawer.Body>
-        </TestDrawer>
-      );
+      afterEach(() => viewport.restore());
 
-      const drawer = await openDrawer(user);
+      it('defaults to a bottom sheet on phones and a right panel from 768px up', async () => {
+        viewport = mockViewport(375);
+        const user = userEvent.setup();
 
-      expect(drawer).toHaveAttribute('data-position', 'right');
-    });
-
-    it('defaults to a bottom sheet on mobile unless mobilePosition is set', async () => {
-      const user = userEvent.setup();
-
-      renderWithProvider(
-        <>
-          <TestDrawer
-            triggerLabel="Open side"
-            aria-label="Side"
-            position="left"
-            mobilePosition="left"
-            dataTestId="side"
-          >
+        renderWithProvider(
+          <TestDrawer aria-label="Filters">
             <Drawer.Body>Body copy</Drawer.Body>
           </TestDrawer>
-          <TestDrawer triggerLabel="Open sheet" aria-label="Sheet" dataTestId="sheet">
+        );
+
+        await openDrawer(user);
+
+        expectPosition('bottom');
+
+        viewport.resize(1024);
+
+        expectPosition('right');
+      });
+
+      it('applies a plain position at every size', async () => {
+        viewport = mockViewport(375);
+        const user = userEvent.setup();
+
+        renderWithProvider(
+          <TestDrawer aria-label="Filters" position="left">
             <Drawer.Body>Body copy</Drawer.Body>
           </TestDrawer>
-        </>
-      );
+        );
 
-      await user.click(screen.getByText('Open side'));
-      await waitFor(() => screen.getByTestId('side'));
+        await openDrawer(user);
 
-      expect(screen.getByTestId('side')).toHaveAttribute('data-mobile-position', 'left');
+        expectPosition('left');
 
-      await user.keyboard('{Escape}');
-      await expectClosed();
+        viewport.resize(1200);
 
-      await user.click(screen.getByText('Open sheet'));
-      await waitFor(() => screen.getByTestId('sheet'));
+        expectPosition('left');
+      });
 
-      expect(screen.getByTestId('sheet')).toHaveAttribute('data-mobile-position', 'bottom');
-      expect(screen.getByTestId('sheet-overlay').className).toMatch(/mobile-position-bottom/);
+      it('uses the default below the smallest breakpoint key', async () => {
+        viewport = mockViewport(375);
+        const user = userEvent.setup();
+
+        renderWithProvider(
+          <TestDrawer aria-label="Filters" position={{ large: 'left' }}>
+            <Drawer.Body>Body copy</Drawer.Body>
+          </TestDrawer>
+        );
+
+        await openDrawer(user);
+
+        expectPosition('bottom');
+
+        viewport.resize(800);
+
+        expectPosition('right');
+
+        viewport.resize(1200);
+
+        expectPosition('left');
+      });
     });
 
     it('passes className and style through to the panel', async () => {

@@ -24,13 +24,9 @@
   }
 }
 
-/*
- * Each placement sets every layout variable, so the desktop placement fully replaces the mobile
- * one instead of inheriting leftovers (e.g. a sheet's radius on a side panel). Only the mobile
- * top and bottom sheets have rounded corners; every other placement is square.
- */
-.mobile-position-left,
-.mobile-position-right {
+/* The position class is resolved in JS from the responsive `position` prop. */
+.position-left,
+.position-right {
   --drawer-align: stretch;
   --drawer-panel-width: 408px;
   --drawer-panel-max-width: 100%;
@@ -40,22 +36,22 @@
   --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
 }
 
-.mobile-position-left {
+.position-left {
   --drawer-justify: flex-start;
   --drawer-panel-border-left: 0;
   --drawer-panel-border-right: 1px;
   --drawer-panel-hidden-transform: translateX(-100%);
 }
 
-.mobile-position-right {
+.position-right {
   --drawer-justify: flex-end;
   --drawer-panel-border-left: 1px;
   --drawer-panel-border-right: 0;
   --drawer-panel-hidden-transform: translateX(100%);
 }
 
-.mobile-position-top,
-.mobile-position-bottom {
+.position-top,
+.position-bottom {
   --drawer-justify: stretch;
   --drawer-panel-width: 100%;
   --drawer-panel-max-width: none;
@@ -67,66 +63,23 @@
   --drawer-panel-border-right: 0;
 }
 
-.mobile-position-top {
+.position-top {
   --drawer-align: flex-start;
   --drawer-panel-hidden-transform: translateY(-100%);
   --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
 }
 
-.mobile-position-bottom {
+.position-bottom {
   --drawer-align: flex-end;
   --drawer-panel-hidden-transform: translateY(100%);
   --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
 }
 
+/* Rounded corners are a phone sheet treatment; from 768px up every placement is square. */
 @media (width >= 768px) {
-  .position-left,
-  .position-right {
-    --drawer-align: stretch;
-    --drawer-panel-width: 408px;
-    --drawer-panel-max-width: 100%;
-    --drawer-panel-height: 100%;
-    --drawer-panel-max-height: none;
-    --drawer-panel-radius: 0;
-    --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
-  }
-
-  .position-left {
-    --drawer-justify: flex-start;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-border-right: 1px;
-    --drawer-panel-hidden-transform: translateX(-100%);
-  }
-
-  .position-right {
-    --drawer-justify: flex-end;
-    --drawer-panel-border-left: 1px;
-    --drawer-panel-border-right: 0;
-    --drawer-panel-hidden-transform: translateX(100%);
-  }
-
   .position-top,
   .position-bottom {
-    --drawer-justify: stretch;
-    --drawer-panel-width: 100%;
-    --drawer-panel-max-width: none;
-    --drawer-panel-height: auto;
-    /* Leave a strip of page visible beyond a tall sheet. */
-    --drawer-panel-max-height: calc(100% - var(--spacing-24));
-    --drawer-panel-shadow: none;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-border-right: 0;
     --drawer-panel-radius: 0;
-  }
-
-  .position-top {
-    --drawer-align: flex-start;
-    --drawer-panel-hidden-transform: translateY(-100%);
-  }
-
-  .position-bottom {
-    --drawer-align: flex-end;
-    --drawer-panel-hidden-transform: translateY(100%);
   }
 }
 

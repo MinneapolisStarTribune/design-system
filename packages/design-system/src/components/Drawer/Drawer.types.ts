@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject } from 'react';
-import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
+import type { AccessibilityProps, BaseProps, Responsive } from '@/types/globalTypes';
 
 export const DRAWER_POSITIONS = ['left', 'right', 'top', 'bottom'] as const;
 export type DrawerPosition = (typeof DRAWER_POSITIONS)[number];
@@ -15,15 +15,12 @@ export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-l
    */
   onClose: () => void;
   /**
-   * The edge the drawer is attached to at 768px and up.
-   * @default 'right'
+   * The edge the drawer is attached to. Pass one edge for every screen size, or an object keyed
+   * by breakpoint (`small`, `medium` 768px+, `large` 1160px+); each key applies from that
+   * breakpoint up, and sizes below the smallest key use the default.
+   * @default { small: 'bottom', medium: 'right' }
    */
-  position?: DrawerPosition;
-  /**
-   * The edge the drawer is attached to at 767px and below.
-   * @default 'bottom'
-   */
-  mobilePosition?: DrawerPosition;
+  position?: Responsive<DrawerPosition>;
   /**
    * Whether the top-right X icon button is rendered.
    * @default true

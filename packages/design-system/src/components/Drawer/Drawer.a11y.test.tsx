@@ -15,7 +15,8 @@ const renderOpenDrawerAndCheckA11y = async (ui: React.ReactElement) => {
     </DesignSystemProvider>
   );
 
-  await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+  // Wait for the enter transition to settle so its status update lands inside act, not mid-scan.
+  await waitFor(() => expect(screen.getByRole('dialog')).toHaveAttribute('data-status', 'open'));
 
   const results = await axeCore.run({
     include: [['body']],

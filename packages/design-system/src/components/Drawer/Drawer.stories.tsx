@@ -1,7 +1,7 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS, type DrawerPosition } from './Drawer.types';
+import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';
@@ -115,20 +115,11 @@ const meta = {
     position: {
       control: 'inline-radio',
       options: [...DRAWER_POSITIONS],
-      description: 'The edge the drawer is attached to at 768px and up.',
-      table: {
-        type: { summary: DRAWER_POSITIONS.join(' | ') },
-        defaultValue: { summary: 'right' },
-      },
-    },
-    mobilePosition: {
-      control: 'inline-radio',
-      options: [...DRAWER_POSITIONS],
       description:
-        'The edge the drawer is attached to at 767px and below. Resize the preview to watch it switch.',
+        'The edge the drawer is attached to — one edge for every screen size, or an object keyed by breakpoint (`small`, `medium` 768px+, `large` 1160px+). Leave it unset and resize the preview to watch the default switch.',
       table: {
-        type: { summary: DRAWER_POSITIONS.join(' | ') },
-        defaultValue: { summary: 'bottom' },
+        type: { summary: `Responsive<${DRAWER_POSITIONS.join(' | ')}>` },
+        defaultValue: { summary: "{ small: 'bottom', medium: 'right' }" },
       },
     },
     showCloseButton: {
@@ -160,8 +151,6 @@ export const Configurable: Story = {
   args: {
     open: false,
     onClose: () => {},
-    position: 'right',
-    mobilePosition: 'bottom',
     showCloseButton: true,
     children: null,
   },
@@ -217,14 +206,12 @@ const [open, setOpen] = useState(false);
 // Renders a drawer inside its own frame so positions can be compared side by side.
 const PositionFrame = ({
   position,
-  mobilePosition,
   label,
   ariaLabel,
   initialOpen,
   children,
 }: {
-  position?: DrawerPosition;
-  mobilePosition?: DrawerPosition;
+  position?: DrawerProps['position'];
   label: string;
   ariaLabel?: string;
   initialOpen: boolean;
@@ -245,7 +232,6 @@ const PositionFrame = ({
             open={open}
             onClose={() => setOpen(false)}
             position={position}
-            mobilePosition={mobilePosition}
             portalRoot={portalRoot}
             aria-label={ariaLabel}
           >
@@ -285,7 +271,7 @@ export const AllVariants: Story = {
     docs: {
       description: {
         story:
-          "The default placement (`position='right'`, `mobilePosition='bottom'`), then each position passed as both `position` and `mobilePosition`, each in its own frame. The default frame switches from a right panel to a bottom sheet below 768px. Drawers start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don't take over the page — use Open.",
+          "The default placement (`position={{ small: 'bottom', medium: 'right' }}`), then each position passed as a single value, which applies at every size, each in its own frame. The default frame switches from a right panel to a bottom sheet below 768px. Drawers start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don't take over the page — use Open.",
       },
     },
   },
@@ -295,7 +281,7 @@ export const AllVariants: Story = {
     return (
       <div className={styles.grid}>
         <PositionFrame
-          label='Default (position="right", mobilePosition="bottom")'
+          label="Default (position={{ small: 'bottom', medium: 'right' }})"
           initialOpen={initialOpen}
         >
           {(onClose) => <FilterCalendarContent onClose={onClose} />}
@@ -305,8 +291,7 @@ export const AllVariants: Story = {
           <PositionFrame
             key={position}
             position={position}
-            mobilePosition={position}
-            label={`position="${position}" mobilePosition="${position}"`}
+            label={`position="${position}"`}
             initialOpen={initialOpen}
           >
             {(onClose) => <ShortContent onClose={onClose} />}
