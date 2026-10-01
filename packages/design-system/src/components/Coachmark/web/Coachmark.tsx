@@ -40,6 +40,13 @@ import styles from './Coachmark.module.scss';
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
+// How close the card's position is allowed to get to the viewport edge, and (via
+// Coachmark.module.scss's `max-width: min(345px, calc(100vw - 2 * 24px))`, which must stay in
+// sync with this value) how wide the card itself is allowed to render -- without that CSS half,
+// the card keeps rendering at its content's natural width right up until the viewport is already
+// narrower than that, instead of shrinking early enough to leave this same margin on both sides.
+const VIEWPORT_EDGE_PADDING = 24;
+
 /** Why the coachmark closed, reported on its `coachmark_dismiss` tracking event. */
 type DismissReason = 'close_button' | 'trigger_press' | 'outside_press' | 'escape_key' | 'other';
 
@@ -102,16 +109,20 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       // alignmentShift must run before the general shift below for the same reason.
       // `crossAxis: false` restricts flip to side flips (top<->bottom) -- its default also flips
       // alignment immediately on overflow, preempting alignmentShift's 40%-budget behavior.
-      flip({ boundary: resolvedPortalRoot ?? undefined, padding: 20, crossAxis: false }),
+      flip({
+        boundary: resolvedPortalRoot ?? undefined,
+        padding: VIEWPORT_EDGE_PADDING,
+        crossAxis: false,
+      }),
       // Shifts 'top/bottom-left/right' back into view along the alignment axis, up to 40% of the
       // card's width, before flipping alignment. No-op for centered/side positions.
-      alignmentShift({ boundary: resolvedPortalRoot ?? undefined, padding: 20 }),
+      alignmentShift({ boundary: resolvedPortalRoot ?? undefined, padding: VIEWPORT_EDGE_PADDING }),
       // Vertical is always disabled here -- a coachmark must keep tracking its trigger even off
       // -screen, not get pinned near the viewport edge. Horizontal is a fallback safety net for
       // whatever alignmentShift didn't fully resolve.
       shift({
         boundary: resolvedPortalRoot ?? undefined,
-        padding: 20,
+        padding: VIEWPORT_EDGE_PADDING,
         mainAxis: !isSidePosition,
         crossAxis: isSidePosition,
       }),
