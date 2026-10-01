@@ -2,7 +2,7 @@ import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
 import { DRAWER_POSITIONS, type DrawerPosition } from './Drawer.types';
-import { Button, FormControl, FormGroup, UtilityBody, UtilityButton } from '@/components/index.web';
+import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';
 
@@ -235,9 +235,7 @@ const PositionFrame = ({
 
   return (
     <figure className={styles.variant}>
-      <figcaption className={styles.caption}>
-        <UtilityBody size="small">{label}</UtilityBody>
-      </figcaption>
+      <figcaption className={styles.caption}>{label}</figcaption>
 
       <div ref={setPortalRoot} className={styles.frame}>
         <Button onClick={() => setOpen(true)}>Open</Button>
@@ -263,11 +261,7 @@ const ShortContent = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <Drawer.Heading>Game details</Drawer.Heading>
-      <Drawer.Body>
-        <UtilityBody size="small">
-          Kickoff moved from 6pm. Buses leave the south lot at 5:15pm.
-        </UtilityBody>
-      </Drawer.Body>
+      <Drawer.Body>Kickoff moved from 6pm. Buses leave the south lot at 5:15pm.</Drawer.Body>
       <Drawer.Footer>
         <UtilityButton label="Dismiss" onClick={onClose} />
         <Button color="brand" onClick={onClose}>

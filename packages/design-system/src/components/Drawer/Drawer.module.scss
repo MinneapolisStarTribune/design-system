@@ -1,58 +1,3 @@
-$md: 768px;
-
-// Each placement sets every layout variable, so the desktop placement fully replaces the mobile
-// one instead of inheriting leftovers (e.g. a sheet's radius on a side panel).
-@mixin side-panel($edge) {
-  --drawer-align: stretch;
-  --drawer-panel-width: 408px;
-  --drawer-panel-max-width: 100%;
-  --drawer-panel-height: 100%;
-  --drawer-panel-max-height: none;
-  --drawer-panel-radius: 0;
-  --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
-
-  @if $edge == left {
-    --drawer-justify: flex-start;
-    --drawer-panel-border-left: 0;
-    --drawer-panel-border-right: 1px;
-    --drawer-panel-hidden-transform: translateX(-100%);
-  } @else {
-    --drawer-justify: flex-end;
-    --drawer-panel-border-left: 1px;
-    --drawer-panel-border-right: 0;
-    --drawer-panel-hidden-transform: translateX(100%);
-  }
-}
-
-@mixin sheet($edge, $rounded: false) {
-  --drawer-justify: stretch;
-  --drawer-panel-width: 100%;
-  --drawer-panel-max-width: none;
-  --drawer-panel-height: auto;
-  /* Leave a strip of page visible beyond a tall sheet. */
-  --drawer-panel-max-height: calc(100% - var(--spacing-24));
-  --drawer-panel-shadow: none;
-  --drawer-panel-border-left: 0;
-  --drawer-panel-border-right: 0;
-  --drawer-panel-radius: 0;
-
-  @if $edge == top {
-    --drawer-align: flex-start;
-    --drawer-panel-hidden-transform: translateY(-100%);
-
-    @if $rounded {
-      --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
-    }
-  } @else {
-    --drawer-align: flex-end;
-    --drawer-panel-hidden-transform: translateY(100%);
-
-    @if $rounded {
-      --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
-    }
-  }
-}
-
 .overlay {
   /* Keep in sync with ENTER_DURATION / EXIT_DURATION in DrawerRoot.tsx. */
   --drawer-enter-duration: 250ms;
@@ -79,38 +24,109 @@ $md: 768px;
   }
 }
 
-/* Only the mobile top and bottom sheets have rounded corners; every other placement is square. */
+/*
+ * Each placement sets every layout variable, so the desktop placement fully replaces the mobile
+ * one instead of inheriting leftovers (e.g. a sheet's radius on a side panel). Only the mobile
+ * top and bottom sheets have rounded corners; every other placement is square.
+ */
+.mobile-position-left,
+.mobile-position-right {
+  --drawer-align: stretch;
+  --drawer-panel-width: 408px;
+  --drawer-panel-max-width: 100%;
+  --drawer-panel-height: 100%;
+  --drawer-panel-max-height: none;
+  --drawer-panel-radius: 0;
+  --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
+}
+
 .mobile-position-left {
-  @include side-panel(left);
+  --drawer-justify: flex-start;
+  --drawer-panel-border-left: 0;
+  --drawer-panel-border-right: 1px;
+  --drawer-panel-hidden-transform: translateX(-100%);
 }
 
 .mobile-position-right {
-  @include side-panel(right);
+  --drawer-justify: flex-end;
+  --drawer-panel-border-left: 1px;
+  --drawer-panel-border-right: 0;
+  --drawer-panel-hidden-transform: translateX(100%);
+}
+
+.mobile-position-top,
+.mobile-position-bottom {
+  --drawer-justify: stretch;
+  --drawer-panel-width: 100%;
+  --drawer-panel-max-width: none;
+  --drawer-panel-height: auto;
+  /* Leave a strip of page visible beyond a tall sheet. */
+  --drawer-panel-max-height: calc(100% - var(--spacing-24));
+  --drawer-panel-shadow: none;
+  --drawer-panel-border-left: 0;
+  --drawer-panel-border-right: 0;
 }
 
 .mobile-position-top {
-  @include sheet(top, $rounded: true);
+  --drawer-align: flex-start;
+  --drawer-panel-hidden-transform: translateY(-100%);
+  --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
 }
 
 .mobile-position-bottom {
-  @include sheet(bottom, $rounded: true);
+  --drawer-align: flex-end;
+  --drawer-panel-hidden-transform: translateY(100%);
+  --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
 }
 
-@media (width >= $md) {
+@media (width >= 768px) {
+  .position-left,
+  .position-right {
+    --drawer-align: stretch;
+    --drawer-panel-width: 408px;
+    --drawer-panel-max-width: 100%;
+    --drawer-panel-height: 100%;
+    --drawer-panel-max-height: none;
+    --drawer-panel-radius: 0;
+    --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
+  }
+
   .position-left {
-    @include side-panel(left);
+    --drawer-justify: flex-start;
+    --drawer-panel-border-left: 0;
+    --drawer-panel-border-right: 1px;
+    --drawer-panel-hidden-transform: translateX(-100%);
   }
 
   .position-right {
-    @include side-panel(right);
+    --drawer-justify: flex-end;
+    --drawer-panel-border-left: 1px;
+    --drawer-panel-border-right: 0;
+    --drawer-panel-hidden-transform: translateX(100%);
+  }
+
+  .position-top,
+  .position-bottom {
+    --drawer-justify: stretch;
+    --drawer-panel-width: 100%;
+    --drawer-panel-max-width: none;
+    --drawer-panel-height: auto;
+    /* Leave a strip of page visible beyond a tall sheet. */
+    --drawer-panel-max-height: calc(100% - var(--spacing-24));
+    --drawer-panel-shadow: none;
+    --drawer-panel-border-left: 0;
+    --drawer-panel-border-right: 0;
+    --drawer-panel-radius: 0;
   }
 
   .position-top {
-    @include sheet(top);
+    --drawer-align: flex-start;
+    --drawer-panel-hidden-transform: translateY(-100%);
   }
 
   .position-bottom {
-    @include sheet(bottom);
+    --drawer-align: flex-end;
+    --drawer-panel-hidden-transform: translateY(100%);
   }
 }
 
@@ -162,7 +178,7 @@ $md: 768px;
   flex-shrink: 0;
   border-radius: var(--radius-full) !important;
 
-  @media (width >= $md) {
+  @media (width >= 768px) {
     top: var(--spacing-24);
     right: var(--spacing-24);
   }
@@ -184,7 +200,7 @@ $md: 768px;
   padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
 
-  @media (width >= $md) {
+  @media (width >= 768px) {
     min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-24));
     padding: var(--spacing-24) var(--spacing-32);
   }
@@ -200,7 +216,7 @@ $md: 768px;
   .heading {
     padding-right: calc(var(--spacing-12) + var(--drawer-close-size) + var(--spacing-12));
 
-    @media (width >= $md) {
+    @media (width >= 768px) {
       padding-right: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-8));
     }
   }
@@ -209,7 +225,7 @@ $md: 768px;
   > :first-child:not(.heading) {
     padding-top: calc(var(--spacing-20) + var(--drawer-close-size) + var(--spacing-16));
 
-    @media (width >= $md) {
+    @media (width >= 768px) {
       padding-top: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-16));
     }
   }
@@ -227,7 +243,7 @@ $md: 768px;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 
-  @media (width >= $md) {
+  @media (width >= 768px) {
     padding: var(--spacing-16) var(--spacing-32) 0;
   }
 
@@ -246,8 +262,11 @@ $md: 768px;
   &::before {
     /* Sticky offsets are inset by the scroller's padding; cancel the top padding to pin to the edge. */
     top: calc(-1 * var(--spacing-16));
-    /* Overlay the first content instead of pushing it down. */
-    margin-bottom: calc(-1 * var(--spacing-40));
+    /*
+     * Sized only by its scroll animation, which runs only while the body overflows. A static
+     * 40px box would itself overflow content shorter than it and make the body scrollable.
+     */
+    height: 0;
     background: linear-gradient(to top, transparent, var(--color-background-light-default));
   }
 
@@ -289,13 +308,18 @@ $md: 768px;
   }
 }
 
+/* Negative margin overlays the first content instead of pushing it down. */
 @keyframes body-scroll-fade-top {
   0% {
+    height: var(--spacing-40);
+    margin-bottom: calc(-1 * var(--spacing-40));
     opacity: 0;
   }
 
   10%,
   100% {
+    height: var(--spacing-40);
+    margin-bottom: calc(-1 * var(--spacing-40));
     opacity: 1;
   }
 }
