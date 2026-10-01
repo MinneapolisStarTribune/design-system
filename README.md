@@ -141,22 +141,6 @@ import { Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/
 </Drawer.Root>;
 ```
 
-`Dialog` follows the same shape — `Dialog.Root`, `Dialog.Title`, `Dialog.Content` and `Dialog.Actions`, typed by `DialogProps` (web only):
-
-```tsx
-import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
-
-<Dialog.Root open={open} onClose={() => setOpen(false)}>
-  <Dialog.Title>Delete game?</Dialog.Title>
-  <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
-  <Dialog.Actions>
-    <Button color="brand" onClick={deleteGame}>
-      Delete
-    </Button>
-  </Dialog.Actions>
-</Dialog.Root>;
-```
-
 ### Importing Types
 
 You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.

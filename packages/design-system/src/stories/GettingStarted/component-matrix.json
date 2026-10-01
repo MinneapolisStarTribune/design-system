@@ -142,7 +142,7 @@
   {
     "component": "Dialog",
     "native": false,
-    "web": true
+    "web": false
   },
   {
     "component": "Drawer",
