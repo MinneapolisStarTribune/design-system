@@ -300,8 +300,7 @@ export const AllVariants: Story = {
     layout: 'fullscreen',
     docs: {
       description: {
-        story:
-          'A long form, a short confirmation (an `alertdialog` that focuses Cancel and is described by its content), a dialog without the close button and one named by `aria-label`, each in its own frame. Below 768px each becomes a bottom sheet. Dialogs start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don’t take over the page — use Open.',
+        story: 'Main variants of the dialog component.',
       },
     },
   },
