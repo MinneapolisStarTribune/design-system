@@ -1,13 +1,24 @@
 'use client';
 
+import { useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Drawer.module.scss';
+import { useDrawerContext } from './DrawerContext';
 import type { DrawerSectionProps } from './Drawer.types';
 
 /** Main content region; the only part of the panel that scrolls. */
 export const DrawerBody: React.FC<DrawerSectionProps> = ({ children, className, dataTestId }) => {
+  const { bodyId, setHasBody } = useDrawerContext();
+
+  useEffect(() => {
+    setHasBody(true);
+
+    return () => setHasBody(false);
+  }, [setHasBody]);
+
   return (
     <div
+      id={bodyId}
       className={classNames('typography-utility-text-regular-small', styles.body, className)}
       data-testid={dataTestId}
     >

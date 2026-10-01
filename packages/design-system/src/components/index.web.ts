@@ -1,5 +1,7 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
+export * as Dialog from './Dialog/Dialog';
+export { type DialogProps } from './Dialog/Dialog.types';
 export * as Drawer from './Drawer/Drawer';
 export { type DrawerProps } from './Drawer/Drawer.types';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';

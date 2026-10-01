@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import {
+  type OpenChangeReason,
   FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
@@ -19,7 +20,7 @@ import type { Responsive } from '@/types/globalTypes';
 import { createDesignSystemError } from '@/utils/errorPrefix';
 import styles from './Drawer.module.scss';
 import { DrawerContext } from './DrawerContext';
-import type { DrawerPosition, DrawerProps } from './Drawer.types';
+import type { DrawerCloseReason, DrawerPosition, DrawerProps } from './Drawer.types';
 
 // Keep in sync with the transition durations in Drawer.module.scss.
 const ENTER_DURATION = 250;
@@ -38,12 +39,21 @@ const OVERLAY_STYLE = { overflow: 'hidden' } as const;
 // A bottom sheet on phones, a right side panel from 768px up.
 const DEFAULT_POSITION: Responsive<DrawerPosition> = { small: 'bottom', medium: 'right' };
 
+// useDismiss only closes on Escape and outside (overlay) presses.
+const CLOSE_REASONS: Partial<Record<OpenChangeReason, DrawerCloseReason>> = {
+  'escape-key': 'escapeKey',
+  'outside-press': 'overlayPress',
+};
+
 export const DrawerRoot: React.FC<DrawerProps> = ({
   children,
   open,
   onClose,
   position,
   showCloseButton = true,
+  role = 'dialog',
+  describeWithBody = role === 'alertdialog',
+  closeLabel = 'Close',
   initialFocus,
   portalRoot,
   className,
@@ -54,6 +64,7 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
   const [hasHeading, setHasHeadingState] = useState(false);
   // Read by the dev-only name check, which runs outside of render.
   const hasHeadingRef = useRef(false);
+  const [hasBody, setHasBody] = useState(false);
 
   const setHasHeading = useCallback((nextHasHeading: boolean) => {
     hasHeadingRef.current = nextHasHeading;
@@ -64,6 +75,7 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
 
   const instanceId = useId();
   const headingId = `drawer-heading-${instanceId}`;
+  const bodyId = `drawer-body-${instanceId}`;
 
   // No middleware: the drawer is pinned to a viewport edge, not positioned against an element.
   const {
@@ -71,15 +83,17 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
     context,
   } = useFloating({
     open,
-    onOpenChange: (nextOpen) => {
-      if (!nextOpen) onClose();
+    onOpenChange: (nextOpen, _event, reason) => {
+      const closeReason = reason && CLOSE_REASONS[reason];
+
+      if (!nextOpen && closeReason) onClose(closeReason);
     },
   });
 
   const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'dialog' });
+  const roleProps = useRole(context, { role });
 
-  const { getFloatingProps } = useInteractions([dismiss, role]);
+  const { getFloatingProps } = useInteractions([dismiss, roleProps]);
 
   const { isMounted, status } = useTransitionStatus(context, {
     duration: prefersReducedMotion()
@@ -98,7 +112,7 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
       console.warn(
         createDesignSystemError(
           'Drawer',
-          'Add a <Drawer.Heading> or an `aria-label` so the drawer has an accessible name.'
+          'Add a <Drawer.Heading> (or <Dialog.Title>) or an `aria-label` so it has an accessible name.'
         )
       );
     }, 0);
@@ -106,7 +120,10 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
     return () => clearTimeout(timeoutId);
   }, [ariaLabel, isMounted]);
 
-  const contextValue = useMemo(() => ({ headingId, setHasHeading }), [headingId, setHasHeading]);
+  const contextValue = useMemo(
+    () => ({ headingId, setHasHeading, bodyId, setHasBody }),
+    [headingId, setHasHeading, bodyId]
+  );
 
   return (
     <DrawerContext.Provider value={contextValue}>
@@ -130,6 +147,7 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
                 {...getFloatingProps()}
                 aria-label={ariaLabel}
                 aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
+                aria-describedby={describeWithBody && hasBody ? bodyId : undefined}
                 aria-modal="true"
                 className={classNames(styles.panel, className)}
                 data-status={status}
@@ -141,10 +159,10 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
                     variant="ghost"
                     size="small"
                     icon={<CloseIcon />}
-                    aria-label="Close"
+                    aria-label={closeLabel}
                     className={styles.closeButton}
                     dataTestId={`${dataTestId}-close-button`}
-                    onClick={onClose}
+                    onClick={() => onClose('closeButton')}
                   />
                 )}
 

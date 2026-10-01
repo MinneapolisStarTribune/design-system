@@ -1,8 +1,10 @@
 import type { ReactNode, RefObject } from 'react';
 import type { AccessibilityProps, BaseProps, Responsive } from '@/types/globalTypes';
-import type { DRAWER_POSITIONS } from './Drawer.constants';
+import type { DRAWER_CLOSE_REASONS, DRAWER_POSITIONS, DRAWER_ROLES } from './Drawer.constants';
 
 export type DrawerPosition = (typeof DRAWER_POSITIONS)[number];
+export type DrawerRole = (typeof DRAWER_ROLES)[number];
+export type DrawerCloseReason = (typeof DRAWER_CLOSE_REASONS)[number];
 
 export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
   /** Drawer content. Compose with `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`. */
@@ -10,10 +12,29 @@ export interface DrawerProps extends BaseProps, Pick<AccessibilityProps, 'aria-l
   /** Whether the drawer is open. */
   open: boolean;
   /**
-   * Called when the drawer requests a close — via the X icon button, Escape or an overlay press.
-   * Set `open` to `false` in response. Footer actions set it themselves.
+   * Called when the drawer requests a close — via the X icon button, Escape or an overlay press —
+   * with what triggered it (`'closeButton' | 'escapeKey' | 'overlayPress'`). Set `open` to `false`
+   * in response, or ignore a reason (e.g. `'overlayPress'` while a form has unsaved input). Footer
+   * actions set it themselves.
    */
-  onClose: () => void;
+  onClose: (reason: DrawerCloseReason) => void;
+  /**
+   * The ARIA role. Use `alertdialog` for urgent interruptions that need a response, like
+   * confirming a deletion.
+   * @default 'dialog'
+   */
+  role?: DrawerRole;
+  /**
+   * Whether `Drawer.Body` describes the drawer via `aria-describedby`, so screen readers announce it
+   * with the name. Keep it for short messages; long or interactive content is noisy when read out.
+   * @default true for `role="alertdialog"`, false otherwise
+   */
+  describeWithBody?: boolean;
+  /**
+   * Accessible label for the X icon button.
+   * @default 'Close'
+   */
+  closeLabel?: string;
   /**
    * The edge the drawer is attached to. Pass one edge for every screen size, or an object keyed
    * by breakpoint (`small`, `medium` 768px+, `large` 1160px+); each key applies from that

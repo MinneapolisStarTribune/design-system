@@ -495,4 +495,160 @@ describe('Drawer', () => {
       await waitFor(() => expect(screen.getByText('Open').closest('button')).toHaveFocus());
     });
   });
+
+  describe('role and description', () => {
+    // Rendered open so the role can be queried without the dialog-only open helper.
+    const waitForOpen = (role: 'dialog' | 'alertdialog') =>
+      waitFor(() => {
+        const panel = screen.getByRole(role);
+        expect(panel).toHaveAttribute('data-status', 'open');
+        return panel;
+      });
+
+    it('uses the dialog role by default, without a description', async () => {
+      renderWithProvider(
+        <Drawer.Root open onClose={() => {}} aria-label="Filters">
+          <Drawer.Body>Body copy</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      const panel = await waitForOpen('dialog');
+
+      expect(panel).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('renders an alertdialog described by its body', async () => {
+      renderWithProvider(
+        <Drawer.Root open onClose={() => {}} role="alertdialog" aria-label="Delete game">
+          <Drawer.Body>This can’t be undone.</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      const panel = await waitForOpen('alertdialog');
+
+      expect(panel).toHaveAccessibleDescription('This can’t be undone.');
+    });
+
+    it('describes a dialog with describeWithBody', async () => {
+      renderWithProvider(
+        <Drawer.Root open onClose={() => {}} aria-label="Filters" describeWithBody>
+          <Drawer.Body>Short message</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      const panel = await waitForOpen('dialog');
+
+      expect(panel).toHaveAccessibleDescription('Short message');
+    });
+
+    it('drops the alertdialog description when describeWithBody is false', async () => {
+      renderWithProvider(
+        <Drawer.Root
+          open
+          onClose={() => {}}
+          role="alertdialog"
+          aria-label="Delete game"
+          describeWithBody={false}
+        >
+          <Drawer.Body>This can’t be undone.</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      const panel = await waitForOpen('alertdialog');
+
+      expect(panel).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('omits the description when there is no body', async () => {
+      renderWithProvider(
+        <Drawer.Root open onClose={() => {}} role="alertdialog" aria-label="Delete game">
+          <Drawer.Footer>
+            <Button>Delete</Button>
+          </Drawer.Footer>
+        </Drawer.Root>
+      );
+
+      const panel = await waitForOpen('alertdialog');
+
+      expect(panel).not.toHaveAttribute('aria-describedby');
+    });
+  });
+
+  describe('close reasons', () => {
+    const renderOpen = (onClose = vi.fn()) => {
+      renderWithProvider(
+        <Drawer.Root open onClose={onClose} aria-label="Filters">
+          <Drawer.Body>Body copy</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      return onClose;
+    };
+
+    it('reports closeButton', async () => {
+      const user = userEvent.setup();
+      const onClose = renderOpen();
+
+      await user.click(screen.getByRole('button', { name: 'Close' }));
+
+      expect(onClose).toHaveBeenCalledWith('closeButton');
+    });
+
+    it('reports escapeKey', async () => {
+      const user = userEvent.setup();
+      const onClose = renderOpen();
+
+      await waitFor(() => expect(screen.getByRole('dialog')).toHaveFocus());
+      await user.keyboard('{Escape}');
+
+      expect(onClose).toHaveBeenCalledWith('escapeKey');
+    });
+
+    it('reports overlayPress', async () => {
+      const user = userEvent.setup();
+      const onClose = renderOpen();
+
+      await user.click(screen.getByTestId('drawer-overlay'));
+
+      expect(onClose).toHaveBeenCalledWith('overlayPress');
+    });
+
+    it('lets consumers ignore overlay presses', async () => {
+      const user = userEvent.setup();
+
+      const Harness = () => {
+        const [open, setOpen] = useState(true);
+
+        return (
+          <Drawer.Root
+            open={open}
+            onClose={(reason) => {
+              if (reason !== 'overlayPress') setOpen(false);
+            }}
+            aria-label="Filters"
+          >
+            <Drawer.Body>Unsaved input</Drawer.Body>
+          </Drawer.Root>
+        );
+      };
+
+      renderWithProvider(<Harness />);
+
+      await user.click(screen.getByTestId('drawer-overlay'));
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+      await expectClosed();
+    });
+  });
+
+  it('labels the close button with closeLabel', () => {
+    renderWithProvider(
+      <Drawer.Root open onClose={() => {}} aria-label="Filters" closeLabel="Cerrar">
+        <Drawer.Body>Body copy</Drawer.Body>
+      </Drawer.Root>
+    );
+
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
 });

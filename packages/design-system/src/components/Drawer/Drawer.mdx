@@ -43,6 +43,12 @@ For contextual, non-blocking content next to a control, use
   overlay presses call `onClose`; footer actions close it by setting `open` to `false`
 - Give `Drawer.Footer` an action that closes the drawer, such as "Done" or a primary action that
   applies and closes
+- `onClose` receives what triggered it: `'closeButton'`, `'escapeKey'` or `'overlayPress'`. Ignore
+  `'overlayPress'` while a form has unsaved input so a stray click outside doesn't discard it
+- Use `role="alertdialog"` for urgent interruptions that need a response; it's described by its
+  `Drawer.Body` automatically. Add `describeWithBody` to describe a regular drawer holding a short
+  message
+- Pass `closeLabel` to localize the close button's accessible name
 - Don't nest drawers
 
 <table>

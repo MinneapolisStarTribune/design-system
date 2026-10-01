@@ -140,9 +140,9 @@
     "web": false
   },
   {
-    "component": "Modal",
+    "component": "Dialog",
     "native": false,
-    "web": false
+    "web": true
   },
   {
     "component": "Drawer",

@@ -1,7 +1,7 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS } from './Drawer.constants';
+import { DRAWER_POSITIONS, DRAWER_ROLES } from './Drawer.constants';
 import type { DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
@@ -129,6 +129,30 @@ const meta = {
       description: 'Whether the top-right X icon button is rendered.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
+    role: {
+      control: 'inline-radio',
+      options: [...DRAWER_ROLES],
+      description:
+        'The ARIA role. Use `alertdialog` for urgent interruptions that need a response, like confirming a deletion.',
+      table: {
+        type: { summary: DRAWER_ROLES.join(' | ') },
+        defaultValue: { summary: "'dialog'" },
+      },
+    },
+    describeWithBody: {
+      control: 'boolean',
+      description:
+        'Whether the content describes it via `aria-describedby`. Keep it for short messages.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: "true for role='alertdialog', false otherwise" },
+      },
+    },
+    closeLabel: {
+      control: 'text',
+      description: 'Accessible label for the X icon button.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Close'" } },
+    },
     open: {
       control: false,
       description: 'Whether the drawer is open.',
@@ -137,8 +161,10 @@ const meta = {
     onClose: {
       action: 'onClose',
       description:
-        'Called when the drawer requests a close (close button, Escape or overlay press). Footer actions set `open` themselves.',
-      table: { type: { summary: '() => void' } },
+        'Called when the drawer requests a close, with its trigger (close button, Escape or overlay press). Footer actions set `open` themselves.',
+      table: {
+        type: { summary: "(reason: 'closeButton' | 'escapeKey' | 'overlayPress') => void" },
+      },
     },
     initialFocus: { control: false },
     portalRoot: { control: false, table: { disable: true } },
@@ -154,14 +180,16 @@ export const Configurable: Story = {
     open: false,
     onClose: () => {},
     showCloseButton: true,
+    role: 'dialog',
+    closeLabel: 'Close',
     children: null,
   },
   render: function Render({ onClose, ...args }) {
     const [open, setOpen] = useState(false);
 
-    const handleClose = () => {
+    const handleClose: DrawerProps['onClose'] = (reason) => {
       setOpen(false);
-      onClose();
+      onClose(reason);
     };
 
     return (

@@ -127,6 +127,46 @@ function App() {
 }
 ```
 
+## Dialog
+
+`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`.
+
+```tsx
+import { useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Delete game</Button>
+
+      <Dialog.Root open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Delete game?</Dialog.Title>
+        <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
+        <Dialog.Actions>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="brand" onClick={onDelete}>
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+```
+
+- The dialog is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response. Focus returns to the opening control on close.
+- Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title.
+- For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
+- `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
+- It's built on `Drawer` (a bottom drawer on phones), so it shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props.
+- The layout switch is pure CSS, so it doesn't wait for hydration.
+- Requires `components.css` (see [Quick Start](#quick-start)).
+
 ## Drawer
 
 `Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.
@@ -156,7 +196,8 @@ function FilterDrawer({ position }: Pick<DrawerProps, 'position'>) {
 }
 ```
 
-- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response.
+- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input).
+- `role="alertdialog"` marks urgent interruptions and describes the drawer with its `Drawer.Body`; `describeWithBody` does the same for a regular drawer. `closeLabel` localizes the close button.
 - Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title.
 - It renders into `document.body`. Pass `portalRoot` to render into another element instead.
 - Requires `components.css` (see [Quick Start](#quick-start)).
