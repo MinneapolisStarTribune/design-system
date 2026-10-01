@@ -1,0 +1,136 @@
+/* Floating panel -- entirely independent of Tooltip's own styles/structure. */
+.wrapper {
+  position: relative;
+  display: block;
+  /* Shrinks down to fit shorter content, but never below 250px or past Figma's 345px card width
+     (343px nominal + 2px: box-sizing: border-box below makes the 1px border consume content
+     width that Figma's stroke doesn't, since Figma strokes don't occupy auto-layout space by
+     default). .body/.description/.actions below are all width: 100%, so max-width alone is what
+     forces a wrap point for long content -- without it the panel has nothing stopping it from
+     shrink-wrapping to its longest unwrapped line instead.
+     The `calc(100vw - 2 * 24px)` term keeps a 24px margin on both sides of the viewport as it
+     narrows -- this element is `position: fixed` (see Coachmark.tsx's useFloating `strategy`), so
+     its own width/max-width resolve against the viewport, not its (portaled) DOM parent. Without
+     it, the card keeps rendering at its natural content width right up until the viewport is
+     already narrower than that -- shift/flip reposition the card to stay off the edge, but can't
+     shrink it, so it would render flush against the edge with no margin until it hits min-width.
+     24px must stay in sync with Coachmark.tsx's VIEWPORT_EDGE_PADDING, which keeps the card's
+     *position* (as opposed to its size, here) that same distance from the viewport edge. */
+  min-width: 250px;
+  max-width: min(345px, calc(100vw - 2 * 24px));
+  /* Without this, `width`/`max-width` set only the content box under the browser's default
+     content-box model, and padding is added on top -- .body's `width: 100%` would then resolve to
+     the full card width, not the intended content width, since padding wouldn't be subtracted
+     from it. Set explicitly rather than relying on a consuming app's own reset (e.g. Tailwind's
+     preflight) applying globally, since Storybook has no such reset. */
+  box-sizing: border-box;
+  /* Matches Figma: 24px sides, 16px top, 16px below the CTAs (see .bodyWithoutActions). */
+  padding: var(--spacing-16) var(--spacing-24);
+
+  border-radius: var(--radius-16);
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  background: var(--color-background-light-default);
+  /* Figma's shadow-xl. */
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
+  overflow: visible;
+
+  /* This panel is tabIndex={-1} (see Coachmark.tsx's FloatingFocusManager) -- it's never reachable
+     via Tab, only ever focused programmatically so a screen reader announces it on open. A sighted
+     keyboard user can't land here the normal way, so the browser's default focus ring would only
+     ever show up as an unexplained flash on open, not a real navigation cue. */
+  outline: none;
+}
+
+.arrow {
+  overflow: visible;
+}
+
+.badge {
+  position: absolute;
+  top: var(--spacing-24);
+  left: var(--spacing-16);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--color-background-brand);
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-8);
+  right: var(--spacing-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-icon-on-light-primary);
+}
+
+.closeButton:hover {
+  background: var(--color-background-light-gray-01);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* With no CTAs, Figma's body keeps its own 24px bottom padding (16px wrapper + 8px here). */
+.bodyWithoutActions {
+  padding-bottom: var(--spacing-8);
+}
+
+.bodyCentered {
+  align-items: center;
+  text-align: center;
+}
+
+.iconBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--spacing-48);
+  height: var(--spacing-48);
+  margin-bottom: var(--spacing-12);
+  border-radius: var(--radius-full);
+  // Fixed brand blue per Figma spec, not the theme's semantic brand color (--color-background-brand
+  // resolves to each site's own brand color -- green for Star Tribune, etc.) -- this badge stays
+  // the same blue regardless of which site's theme is active by default. A consuming app can still
+  // override just this badge (without affecting anything else that reads --color-background-brand)
+  // by setting --color-coachmark-icon-badge-background in its own global CSS.
+  background: var(--color-coachmark-icon-badge-background, var(--color-cobalt-blue-700));
+  color: var(--color-base-white);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text-on-light-primary);
+}
+
+.description {
+  margin: var(--spacing-4) 0 0;
+  color: var(--color-text-on-light-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-8);
+  width: 100%;
+  margin-top: var(--spacing-24);
+}
+
+.actionButton {
+  width: 100%;
+}
