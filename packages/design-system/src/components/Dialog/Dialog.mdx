@@ -108,7 +108,7 @@ const cancelRef = useRef<HTMLElement>(null);
     <Button ref={cancelRef} variant="ghost" onClick={() => setOpen(false)}>
       Cancel
     </Button>
-    <Button color="brand" onClick={deleteGame}>
+    <Button color="error" onClick={deleteGame}>
       Delete
     </Button>
   </Dialog.Actions>

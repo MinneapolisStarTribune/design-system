@@ -3,12 +3,10 @@
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { ModalRoot } from '@/components/Modal/ModalRoot';
 import type { ModalPosition } from '@/components/Modal/Modal.types';
-import type { Responsive } from '@/types/globalTypes';
+import type { ResponsiveDefault } from '@/types/globalTypes';
 import type { DialogProps } from './Dialog.types';
 
-// A bottom sheet on phones, centered from 768px up. Keep in sync with the actions media query in
-// Dialog.module.scss.
-const POSITION: Responsive<ModalPosition> = { small: 'bottom', medium: 'center' };
+const POSITION: ResponsiveDefault<ModalPosition> = { small: 'bottom', medium: 'center' };
 
 const NAMES = { component: 'Dialog', heading: 'Title' } as const;
 
@@ -28,7 +26,7 @@ export const DialogRoot: React.FC<DialogProps> = ({
   dataTestId = 'dialog',
   'aria-label': ariaLabel,
 }) => {
-  const position = useResponsiveValue(POSITION, POSITION);
+  const position = useResponsiveValue(undefined, POSITION);
 
   return (
     <ModalRoot
