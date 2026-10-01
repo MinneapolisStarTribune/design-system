@@ -5,7 +5,7 @@ import { DIALOG_ROLES } from './Dialog.constants';
 import type { DialogProps } from './Dialog.types';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
-import styles from './Dialog.stories.module.scss';
+import styles from '@/components/Modal/Modal.stories.module.scss';
 import classNames from 'classnames';
 
 const SPORTS = ['Baseball', 'Softball', 'Football', 'Boys Hockey', 'Girls Hockey'].map((label) => ({
@@ -33,7 +33,7 @@ const AddGameContent = ({ onClose }: { onClose: () => void }) => {
     <>
       <Dialog.Title>Add Game</Dialog.Title>
       <Dialog.Content>
-        <div className={styles.form}>
+        <div className={styles.stack}>
           <FormGroup>
             <FormGroup.Label>Sport</FormGroup.Label>
             <FormControl.Select
@@ -113,7 +113,7 @@ const ConfirmContent = ({
         <Button ref={cancelRef} variant="ghost" onClick={onClose}>
           Cancel
         </Button>
-        <Button color="brand" onClick={onClose}>
+        <Button color="error" onClick={onClose}>
           Delete
         </Button>
       </Dialog.Actions>
@@ -337,17 +337,6 @@ export const AllVariants: Story = {
                 </Button>
               </Dialog.Actions>
             </>
-          )}
-        </VariantFrame>
-        <VariantFrame
-          label='aria-label="Game details", no title'
-          ariaLabel="Game details"
-          initialOpen={initialOpen}
-        >
-          {() => (
-            <Dialog.Content>
-              Kickoff moved from 6pm. Buses leave the south lot at 5:15pm.
-            </Dialog.Content>
           )}
         </VariantFrame>
       </div>

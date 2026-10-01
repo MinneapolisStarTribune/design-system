@@ -22,6 +22,8 @@
     /* A leading secondary action (e.g. Cancel) sits at the start; the rest stay at the end. */
     > :first-child:not(:only-child) {
       margin-right: auto;
+      /* A leading ghost button gives up its padding so its label lines up with the content edge. */
+      margin-left: calc(-1 * var(--button-ghost-inset, 0px));
     }
   }
 }
