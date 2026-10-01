@@ -10,7 +10,10 @@ export const mockViewport = (initialWidth: number) => {
   let width = initialWidth;
 
   window.matchMedia = (query: string) => {
-    const minWidth = Number(/min-width:\s*(\d+)px/.exec(query)?.[1] ?? 0);
+    const match = /min-width:\s*(\d+)px/.exec(query);
+    // Leave other media features (e.g. prefers-reduced-motion) to the original implementation.
+    if (!match) return originalMatchMedia.call(window, query);
+    const minWidth = Number(match[1]);
 
     return {
       get matches() {
