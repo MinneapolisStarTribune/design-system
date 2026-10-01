@@ -26,3 +26,4 @@ export {
   useToast,
 } from '@/providers/SnackProvider/SnackProvider';
 export { getBrandFontPath, loadBrandFonts } from '@/styles/fonts';
+export { type Breakpoint, type Responsive } from '@/types/globalTypes';

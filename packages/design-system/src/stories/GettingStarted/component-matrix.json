@@ -140,9 +140,14 @@
     "web": false
   },
   {
-    "component": "Modal",
+    "component": "Dialog",
     "native": false,
     "web": false
+  },
+  {
+    "component": "Drawer",
+    "native": false,
+    "web": true
   },
   {
     "component": "SwiperCarousel",

@@ -373,6 +373,7 @@ interface StartribuneLightTheme {
   semanticArticleToolkitMaxWidthStandardInlineDesktop: number;
   semanticArticleToolkitMaxWidthStandardInlineMobile: number;
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
+  semanticHeadingFontFamily: string;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
   semanticInlineVideoHorizontalAspectRatio: string;
@@ -814,6 +815,7 @@ interface StartribuneDarkTheme {
   semanticArticleToolkitMaxWidthStandardInlineDesktop: number;
   semanticArticleToolkitMaxWidthStandardInlineMobile: number;
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
+  semanticHeadingFontFamily: string;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: string;
   semanticInlineVideoHorizontalAspectRatio: string;
@@ -1261,6 +1263,7 @@ interface VarsityLightTheme {
   semanticArticleToolkitMaxWidthStandardInlineDesktop: number;
   semanticArticleToolkitMaxWidthStandardInlineMobile: number;
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
+  semanticHeadingFontFamily: string;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: number;
   semanticInlineVideoHorizontalAspectRatio: string;
@@ -1708,6 +1711,7 @@ interface VarsityDarkTheme {
   semanticArticleToolkitMaxWidthStandardInlineDesktop: number;
   semanticArticleToolkitMaxWidthStandardInlineMobile: number;
   semanticArticleToolkitMaxWidthStandardInlineTablet: number;
+  semanticHeadingFontFamily: string;
   semanticInlineImageAspectRatio: string;
   semanticInlineImageBorderRadius: number;
   semanticInlineVideoHorizontalAspectRatio: string;

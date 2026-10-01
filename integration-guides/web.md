@@ -127,6 +127,57 @@ function App() {
 }
 ```
 
+## Drawer
+
+`Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.
+
+```tsx
+import { useState } from 'react';
+import { Button, Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/web';
+
+function FilterDrawer({ position }: Pick<DrawerProps, 'position'>) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Filter calendar</Button>
+
+      <Drawer.Root open={open} onClose={() => setOpen(false)} position={position}>
+        <Drawer.Heading>Filter Calendar</Drawer.Heading>
+        <Drawer.Body>{/* filters */}</Drawer.Body>
+        <Drawer.Footer>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Done
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
+```
+
+- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input).
+- `role="alertdialog"` marks urgent interruptions and describes the drawer with its `Drawer.Body`; `describeWithBody` does the same for a regular drawer. `closeLabel` localizes the close button.
+- Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title.
+- It renders into `document.body`. Pass `portalRoot` to render into another element instead.
+- Requires `components.css` (see [Quick Start](#quick-start)).
+
+### Responsive props
+
+`position` is a `Responsive<DrawerPosition>`: one edge (`'left' | 'right' | 'top' | 'bottom'`) for every screen size, or an object keyed by `Breakpoint` (`small`, `medium` 768px+, `large` 1160px+). Each key applies from that breakpoint up; sizes below the smallest key use the default, `{ small: 'bottom', medium: 'right' }`. An object needs at least one key.
+
+```tsx
+import type { Breakpoint, Responsive } from '@minneapolisstartribune/design-system/web';
+
+<Drawer.Root position="left" {...rest} />                          // every size
+<Drawer.Root position={{ small: 'bottom', large: 'left' }} {...rest} /> // bottom sheet until 1160px
+
+const columns: Responsive<number> = { small: 1, medium: 2 };
+const current: Breakpoint = 'large';
+```
+
+The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
 ## Using CSS Variables Directly
 
 All themes expose the same token names, so you can use them in CSS modules or inline styles:
