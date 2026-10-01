@@ -137,6 +137,29 @@ describe('Coachmark', () => {
     expect(onAction).toHaveBeenCalledTimes(1);
   });
 
+  it('does not call onAction when actionHref is set, since the link navigates on its own', async () => {
+    const user = userEvent.setup();
+    const onAction = vi.fn();
+
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Go somewhere"
+        actionHref="/somewhere"
+        onAction={onAction}
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    await user.click(screen.getByRole('link', { name: 'Go somewhere' }));
+
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
   it('renders secondaryContent below the action button', () => {
     renderWithProvider(
       <Coachmark

@@ -254,8 +254,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       alignment,
       ...analyticsOverride,
     });
-    onAction?.();
-  }, [track, title, ctaText, position, alignment, analyticsOverride, onAction]);
+    // `onAction` is documented as ignored when `actionHref` is set (see CoachmarkProps) -- a link
+    // CTA navigates on its own, so calling it here would fire an unexpected side effect alongside
+    // that navigation instead of in place of it.
+    if (!actionHref) {
+      onAction?.();
+    }
+  }, [track, title, ctaText, position, alignment, analyticsOverride, onAction, actionHref]);
 
   return (
     <>
