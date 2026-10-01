@@ -2,11 +2,11 @@
 
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { ModalRoot } from '@/components/Modal/ModalRoot';
-import type { Responsive } from '@/types/globalTypes';
+import type { ResponsiveDefault } from '@/types/globalTypes';
 import type { DrawerPosition, DrawerProps } from './Drawer.types';
 
 // A bottom sheet on phones, a right side panel from 768px up.
-const DEFAULT_POSITION: Responsive<DrawerPosition> = { small: 'bottom', medium: 'right' };
+const DEFAULT_POSITION: ResponsiveDefault<DrawerPosition> = { small: 'bottom', medium: 'right' };
 
 const NAMES = { component: 'Drawer', heading: 'Heading' } as const;
 

@@ -80,6 +80,12 @@ export type BreakpointMap<T> =
   | { small?: T; medium?: T; large: T };
 
 /**
+ * A responsive value that covers every breakpoint: a scalar, or a map that includes `small`
+ * (each key applies from that breakpoint up). Used for defaults, which must always resolve.
+ */
+export type ResponsiveDefault<T> = T | { small: T; medium?: T; large?: T };
+
+/**
  * Icon position shared across components (Button, Tooltip, etc.)
  */
 export type IconPosition = 'start' | 'end';

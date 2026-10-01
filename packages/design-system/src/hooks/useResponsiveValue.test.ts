@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it } from 'vitest';
 import { mockViewport } from '@/test-utils/viewport';
-import type { Responsive } from '@/types/globalTypes';
+import type { Responsive, ResponsiveDefault } from '@/types/globalTypes';
 import { resolveResponsive, useBreakpoint, useResponsiveValue } from './useResponsiveValue';
 
 describe('resolveResponsive', () => {
@@ -84,5 +84,10 @@ describe('useResponsiveValue', () => {
     );
 
     expect(result.current).toBe('right');
+  });
+
+  it('requires the default to cover the smallest breakpoint', () => {
+    expectTypeOf<{ medium: string }>().not.toExtend<ResponsiveDefault<string>>();
+    expectTypeOf<{ small: string; medium: string }>().toExtend<ResponsiveDefault<string>>();
   });
 });

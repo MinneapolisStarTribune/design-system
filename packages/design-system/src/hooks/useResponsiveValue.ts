@@ -6,6 +6,7 @@ import {
   type Breakpoint,
   type BreakpointMap,
   type Responsive,
+  type ResponsiveDefault,
 } from '@/types/globalTypes';
 
 // Min widths from tokens/primitives/breakpoint.json, largest first.
@@ -59,13 +60,14 @@ export const resolveResponsive = <T>(
 
 /**
  * Resolves a responsive prop at the current breakpoint. Breakpoints the prop doesn't cover use
- * `defaultValue`, which may itself be responsive.
+ * `defaultValue`, which may itself be responsive but must include `small` so every breakpoint
+ * resolves.
  */
 export const useResponsiveValue = <T>(
   value: Responsive<T> | undefined,
-  defaultValue: Responsive<T>
+  defaultValue: ResponsiveDefault<T>
 ): T => {
   const breakpoint = useBreakpoint();
 
-  return (resolveResponsive(value, breakpoint) ?? resolveResponsive(defaultValue, breakpoint)) as T;
+  return (resolveResponsive(value, breakpoint) ?? resolveResponsive(defaultValue, breakpoint))!;
 };
