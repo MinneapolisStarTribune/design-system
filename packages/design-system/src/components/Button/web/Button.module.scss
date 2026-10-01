@@ -40,18 +40,29 @@
   
   /* Size variants */
   &.small {
+    --button-padding-inline: var(--spacing-12);
     height: 32px;
-    padding: 0 var(--spacing-12);
+    padding: 0 var(--button-padding-inline);
   }
   
   &.medium {
+    --button-padding-inline: var(--spacing-16);
     height: 40px;
-    padding: 0 var(--spacing-16);
+    padding: 0 var(--button-padding-inline);
   }
   
   &.large {
+    --button-padding-inline: var(--spacing-24);
     height: 52px;
-    padding: 0 var(--spacing-24);
+    padding: 0 var(--button-padding-inline);
+  }
+
+  /*
+   * Ghost text buttons have no visible edge, so their label is what reads as the edge. Exposes the
+   * inline padding so a container (e.g. DialogActions) can pull the label into line with content.
+   */
+  &.ghost:not(.icon-only) {
+    --button-ghost-inset: var(--button-padding-inline);
   }
 
   /* Gap between icon and text when button has both */
@@ -200,6 +211,44 @@
     }
   }
   
+  /*
+   * Error colors - for destructive actions (e.g. Delete). No button-error-* tokens yet, so these
+   * build on the semantic error pair; filled inverts it so contrast holds in light and dark.
+   */
+  &.error {
+    &.filled {
+      background-color: var(--color-semantic-error-foreground);
+      color: var(--color-semantic-error-background);
+
+      &:hover:not(:disabled) {
+        background-color: color-mix(
+          in srgb,
+          var(--color-semantic-error-foreground) 85%,
+          var(--color-semantic-error-background)
+        );
+      }
+    }
+
+    &.outlined {
+      background-color: transparent;
+      color: var(--color-semantic-error-foreground);
+      border: 1px solid var(--color-semantic-error-foreground);
+
+      &:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--color-semantic-error-foreground) 12%, transparent);
+      }
+    }
+
+    &.ghost {
+      background-color: transparent;
+      color: var(--color-semantic-error-foreground);
+
+      &:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--color-semantic-error-foreground) 12%, transparent);
+      }
+    }
+  }
+
   /* Gradient border for brand-accent buttons (Varsity brand only) */
   /* 
    * Browsers do not support linear gradients for borders natively.
@@ -298,6 +347,9 @@
     --color-button-neutral-outlined-hover-border: var(--color-base-white);
     --color-button-neutral-outlined-hover-text: var(--color-base-white);
     --color-button-neutral-outlined-text: var(--color-base-white);
+    /* Error buttons build on the semantic error pair; use its dark-theme values */
+    --color-semantic-error-background: var(--color-red-950);
+    --color-semantic-error-foreground: var(--color-red-200);
   }
 
   &.surfaceDark.brand,

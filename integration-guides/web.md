@@ -127,6 +127,47 @@ function App() {
 }
 ```
 
+## Dialog
+
+`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`.
+
+```tsx
+import { useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Delete game</Button>
+
+      <Dialog.Root open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Delete game?</Dialog.Title>
+        <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
+        <Dialog.Actions>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="error" onClick={onDelete}>
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+```
+
+- The dialog is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response. Focus returns to the opening control on close.
+- Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title.
+- For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. Use `color="error"` on the destructive button. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
+- At 767px and below, `Dialog.Actions` stacks its actions full width, the usual pattern for confirmations. For forms and longer content, pass `stackOnMobile={false}` to keep them side by side. It has no effect from 768px up.
+- `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
+- It shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
+- The switch between sheet and centered dialog is read from the viewport on the client, like Drawer's `position`. During SSR it resolves the bottom sheet, then updates after hydration.
+- Requires `components.css` (see [Quick Start](#quick-start)).
+
 ## Drawer
 
 `Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.
@@ -192,7 +233,7 @@ All themes expose the same token names, so you can use them in CSS modules or in
 
 ## Typography text colors
 
-Typography components (headings, body copy, labels, quotes, etc.) accept a `color` prop typed as **`TextColor`**: short keys such as `brand-01`, `on-light-primary`, and `state-attention-on-dark` that resolve to `var(--color-text-*)`. This is **not** the same as **`Button`’s** `color` prop, which uses module variants `neutral`, `brand`, and `brand-accent` for button styles.
+Typography components (headings, body copy, labels, quotes, etc.) accept a `color` prop typed as **`TextColor`**: short keys such as `brand-01`, `on-light-primary`, and `state-attention-on-dark` that resolve to `var(--color-text-*)`. This is **not** the same as **`Button`’s** `color` prop, which uses module variants `neutral`, `brand`, `brand-accent`, and `error` (for destructive actions such as Delete) for button styles.
 
 ## Icons
 
@@ -228,7 +269,7 @@ Theme CSS exposes icon tokens such as `--color-icon-on-light-primary`, `--color-
 <SearchIcon color="brand-01" width={24} height={24} aria-hidden />
 ```
 
-Do not confuse this with **`Button`’s** `color` prop (`neutral` | `brand` | `brand-accent`).
+Do not confuse this with **`Button`’s** `color` prop (`neutral` | `brand` | `brand-accent` | `error`).
 
 **4. `className` or `style`** — Apply a class or inline style that sets `fill` (or `color` if the SVG uses `currentColor` for fill).
 

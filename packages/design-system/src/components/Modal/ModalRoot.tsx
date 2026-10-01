@@ -41,7 +41,7 @@ const CLOSE_REASONS: Partial<Record<OpenChangeReason, ModalCloseReason>> = {
 };
 
 /**
- * Internal base for `Drawer.Root` and other modal panels: the overlay, panel and close button, plus
+ * Internal base for `Drawer.Root` and `Dialog.Root`: the overlay, panel and close button, plus
  * focus trapping, scroll locking, dismissal, the accessible name and description, and the
  * enter/exit transition. Callers resolve `position` and own their public props and defaults.
  */

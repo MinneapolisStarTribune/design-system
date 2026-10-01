@@ -1,0 +1,79 @@
+/* Shared story styles for the Modal-based components (Dialog, Drawer). */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-24) var(--spacing-16);
+}
+
+.divider {
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--color-border-on-light-subtle-01);
+}
+
+.grid {
+  display: grid;
+  row-gap: var(--spacing-32);
+  /* Padding, not margin: a margin collapses past the themed story wrapper and shows the page behind it. */
+  padding: var(--spacing-32);
+  /*
+   * Open modals pad <body> by the scrollbar width to make up for a scrollbar they expect to hide.
+   * It stays here (see the <html> rule below), so pull the grid back over that padding. Floating UI
+   * sets the custom property on <body> only while the scroll lock is on.
+   */
+  margin-right: calc(-1 * var(--floating-ui-scrollbar-width, 0px));
+}
+
+.variant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  margin: 0;
+}
+
+.caption {
+  color: var(--color-text-on-light-secondary);
+  padding: var(--spacing-8) 0;
+}
+
+.frame {
+  position: relative;
+  height: 720px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  border-radius: var(--radius-16);
+  background: var(--color-background-light-gray-01);
+  /* Contains the modal's fixed-position overlay. */
+  transform: translateZ(0);
+  display: grid;
+  place-items: center;
+
+  /* Stack the modal's portal node in the button's cell so opening it doesn't add a row. */
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+/*
+ * Open modals lock page scroll with an inline `overflow: hidden` on <body>. Setting overflow on
+ * <html> stops body's value from propagating to the viewport, so the grid stays scrollable.
+ */
+:global(html):has(.grid) {
+  overflow: auto;
+}
+
+/*
+ * The scroll lock also pads <body> by the scrollbar width, and the scrollbar stays here. Paint
+ * <body> with the themed background so the padding blends in instead of showing the page behind.
+ */
+:global(body):has(.grid) {
+  background: var(--color-background-light-default);
+}

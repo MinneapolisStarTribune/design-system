@@ -5,7 +5,7 @@ import { DRAWER_POSITIONS, DRAWER_ROLES } from './Drawer.constants';
 import type { DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
-import styles from './Drawer.stories.module.scss';
+import styles from '@/components/Modal/Modal.stories.module.scss';
 import classNames from 'classnames';
 
 const GAME_TYPES = [
@@ -53,7 +53,7 @@ const FilterCalendarContent = ({ onClose }: { onClose: () => void }) => {
       <Drawer.Heading>Filter Calendar</Drawer.Heading>
 
       <Drawer.Body>
-        <div className={styles.filters}>
+        <div className={styles.stack}>
           <FormGroup>
             <FormGroup.Label>Game type</FormGroup.Label>
             <FormControl.CheckboxGroup
@@ -91,7 +91,9 @@ const FilterCalendarContent = ({ onClose }: { onClose: () => void }) => {
       </Drawer.Body>
 
       <Drawer.Footer>
-        <UtilityButton label="Clear All" onClick={clearAll} />
+        <Button variant="outlined" color="neutral" onClick={clearAll}>
+          Clear All
+        </Button>
         <Button color="brand" onClick={onClose}>
           {`Show ${countAthletes(selectedCount)} Athletes`}
         </Button>
