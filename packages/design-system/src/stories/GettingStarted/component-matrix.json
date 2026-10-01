@@ -85,6 +85,11 @@
     "web": true
   },
   {
+    "component": "Menu",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "Popover",
     "native": false,
     "web": true

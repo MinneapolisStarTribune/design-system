@@ -1,0 +1,82 @@
+/* Fixed neutrals, like Popover's text, so items read the same regardless of app theme. */
+
+/* Core Components defaults; `surfaceWidth`, `itemMinHeight` and `maxHeight` override them inline. */
+.menu {
+  --popover-min-width: 360px;
+  --popover-max-width: 360px;
+  /* Core Components' list height; longer menus scroll. */
+  --popover-max-height: 362px;
+}
+
+.container {
+  /* Popover's min/max width is the surface width, so the row inset must sit inside it. */
+  box-sizing: border-box;
+  /* Inset rows so their rounded hover fill sits inside the surface, as in the design. */
+  padding: var(--menu-container-padding, 0 var(--spacing-4));
+  /* Match the wrapper's rounded corners (minus its 1px border); auto also scrolls long menus. */
+  border-radius: var(--menu-container-border-radius, calc(var(--radius-16) - 1px));
+  overflow: var(--menu-container-overflow, auto);
+  /* Thin scrollbar from the design, so long lists don't lose row width to a classic bar. */
+  scrollbar-width: var(--menu-scrollbar-width, thin);
+  scrollbar-color: var(--menu-scrollbar-color, var(--color-neutral-200) transparent);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--menu-item-gap, var(--spacing-8));
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--menu-item-padding, var(--spacing-12));
+
+  border: var(--menu-item-border, none);
+  border-radius: var(--menu-item-border-radius, var(--radius-4));
+  background: var(--menu-item-background, transparent);
+  color: var(--menu-item-color, var(--color-neutral-950));
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--menu-item-hover-background, var(--color-neutral-100));
+  }
+
+  &:focus-visible {
+    outline: var(--menu-item-focus-outline, 2px solid var(--color-neutral-950));
+    outline-offset: var(--menu-item-focus-outline-offset, -2px);
+  }
+}
+
+.itemDisabled {
+  opacity: var(--menu-item-disabled-opacity, 0.4);
+  cursor: not-allowed;
+
+  &:hover {
+    background: var(--menu-item-disabled-hover-background, transparent);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  margin-inline-start: auto;
+}
+
+.divider {
+  position: relative;
+  height: var(--menu-divider-height, 1px);
+  /* The design draws the line over the row above, so it adds no height. */
+  margin-block-start: var(--menu-divider-offset, -1px);
+  flex-shrink: 0;
+  background: var(--menu-divider-color, var(--color-neutral-200));
+}
