@@ -8,7 +8,6 @@ import React, {
   useContext,
   useId,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import classNames from 'classnames';
@@ -40,7 +39,7 @@ import { PopoverDivider } from './PopoverDivider';
 import { PopoverHeading } from './PopoverHeading';
 import { PopoverProps } from './Popover.types';
 
-const ARROW_HEIGHT = 8;
+const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
 const GAP = 4;
 
 // Extracted as a constant so it's not recreated on every render.
@@ -57,18 +56,28 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   containerClassName,
   contentClassName,
   arrowClassName,
+  style: styleProp,
   open: openProp,
   onOpenChange: onOpenChangeProp,
   portalRoot: portalRootProp,
   'aria-label': ariaLabel,
+  anchorEl,
+  role = 'dialog',
+  hideArrow = false,
+  arrowStaticOffset,
+  arrowSize = DEFAULT_ARROW_SIZE,
+  arrowPadding = 0,
+  initialFocus,
   ...rest
 }) => {
   const [openState, setOpenState] = useState(false);
-  const arrowRef = useRef<SVGSVGElement>(null);
+  // State instead of a ref so `arrow()` receives the element, not a ref it could read during render.
+  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const headingId = useId();
 
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
+  const isAnchored = anchorEl !== undefined;
 
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
@@ -85,28 +94,36 @@ const PopoverRoot: React.FC<PopoverProps> = ({
 
   const middleware = useMemo(
     () => [
-      offset(ARROW_HEIGHT + GAP),
+      offset(hideArrow ? GAP : arrowSize.height + GAP),
       shift({ boundary: resolvedPortalRoot, padding: GAP }),
       flip({ boundary: resolvedPortalRoot, padding: GAP }),
-      // eslint-disable-next-line react-hooks/refs
-      arrow({ element: arrowRef }),
+      arrow({ element: arrowElement, padding: arrowPadding }),
     ],
-    [resolvedPortalRoot]
+    [resolvedPortalRoot, hideArrow, arrowSize.height, arrowPadding, arrowElement]
   );
 
-  const { refs, context, floatingStyles } = useFloating({
+  const {
+    refs: { setReference, setFloating },
+    context,
+    floatingStyles,
+  } = useFloating({
     placement,
     open,
     onOpenChange: handleOpenChange,
     whileElementsMounted: autoUpdate,
     middleware,
+    elements: isAnchored ? { reference: anchorEl } : undefined,
   });
 
-  const click = useClick(context, { enabled: !isDisabled });
+  const click = useClick(context, { enabled: !isDisabled && !isAnchored });
   const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
-  const role = useRole(context, { role: 'dialog' });
+  const roleInteraction = useRole(context, { role });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    click,
+    dismiss,
+    roleInteraction,
+  ]);
 
   const close = useCallback(() => {
     if (!isControlled) {
@@ -130,78 +147,86 @@ const PopoverRoot: React.FC<PopoverProps> = ({
     ? (trigger as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
     : null;
 
-  const mergedRef = useMergeRefs([refs.setReference, childElement?.ref ?? null]);
+  const mergedRef = useMergeRefs([setReference, childElement?.ref ?? null]);
 
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
 
   // Put ARIA attributes (aria-expanded, aria-haspopup) on the trigger when it's a single
   // element that allows them (e.g. button). Otherwise use a wrapper with role="button".
-  const triggerElement = childElement ? (
-    cloneElement(
-      childElement,
-      getReferenceProps({
-        ...childElement.props,
-        ref: mergedRef,
-        // Merge consumer styles only when present to avoid creating an extra object
-        // on every render when no custom style is provided
-        style: childElement.props.style
-          ? { ...childElement.props.style, ...triggerStyle }
-          : triggerStyle,
-      })
-    )
-  ) : (
-    <span
-      ref={refs.setReference}
-      role="button"
-      tabIndex={isDisabled ? -1 : 0}
-      style={triggerStyle}
-      {...getReferenceProps()}
-    >
-      {trigger}
-    </span>
-  );
+  const triggerElement =
+    !isAnchored &&
+    (childElement ? (
+      cloneElement(
+        childElement,
+        getReferenceProps({
+          ...childElement.props,
+          ref: mergedRef,
+          // Merge consumer styles only when present to avoid creating an extra object
+          // on every render when no custom style is provided
+          style: childElement.props.style
+            ? { ...childElement.props.style, ...triggerStyle }
+            : triggerStyle,
+        })
+      )
+    ) : (
+      <span
+        ref={setReference}
+        role="button"
+        tabIndex={isDisabled ? -1 : 0}
+        style={triggerStyle}
+        {...getReferenceProps()}
+      >
+        {trigger}
+      </span>
+    ));
 
   // Memoize context value to prevent unnecessary re-renders of all
   // context consumers when this component re-renders for unrelated reasons.
   const contextValue = useMemo(() => ({ close }), [close]);
 
-  return (
-    <PopoverPortalRootProvider>
-      <PopoverContext.Provider value={contextValue}>
-        {triggerElement}
-        {open && (
-          <FloatingPortal root={resolvedPortalRoot}>
-            <FloatingFocusManager context={context} modal={modal}>
-              <div
-                // eslint-disable-next-line react-hooks/refs
-                ref={refs.setFloating}
-                style={floatingStyles}
-                className={classNames(styles.wrapper, wrapperClassName)}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabel ? undefined : `popover-heading-${headingId}`}
-                {...getFloatingProps()}
-                {...rest}
-              >
+  const content = (
+    <PopoverContext.Provider value={contextValue}>
+      {triggerElement}
+      {open && (
+        <FloatingPortal root={resolvedPortalRoot}>
+          <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
+            <div
+              ref={setFloating}
+              style={{ ...floatingStyles, ...styleProp }}
+              className={classNames(styles.wrapper, wrapperClassName)}
+              aria-label={ariaLabel}
+              aria-labelledby={ariaLabel ? undefined : `popover-heading-${headingId}`}
+              {...getFloatingProps()}
+              {...rest}
+            >
+              {!hideArrow && (
                 <FloatingArrow
-                  ref={arrowRef}
+                  ref={setArrowElement}
                   context={context}
-                  height={ARROW_HEIGHT}
-                  width={16}
+                  height={arrowSize.height}
+                  width={arrowSize.width}
                   fill={arrowFill}
                   stroke={arrowStroke}
                   strokeWidth={1}
+                  staticOffset={arrowStaticOffset}
                   className={classNames(styles.arrow, arrowClassName)}
                 />
-                <div className={classNames(styles.container, containerClassName)}>
-                  <div className={classNames(styles.content, contentClassName)}>{children}</div>
-                </div>
+              )}
+              <div className={classNames(styles.container, containerClassName)}>
+                <div className={classNames(styles.content, contentClassName)}>{children}</div>
               </div>
-            </FloatingFocusManager>
-          </FloatingPortal>
-        )}
-      </PopoverContext.Provider>
-    </PopoverPortalRootProvider>
+            </div>
+          </FloatingFocusManager>
+        </FloatingPortal>
+      )}
+    </PopoverContext.Provider>
   );
+
+  // Anchored popovers have no trigger to wrap, so skip the portal-root wrapper div to avoid
+  // adding an element to the consumer's layout.
+  if (isAnchored) return content;
+
+  return <PopoverPortalRootProvider>{content}</PopoverPortalRootProvider>;
 };
 
 /* Compound API */
