@@ -5,6 +5,7 @@ import * as Dialog from './Dialog';
 import type { DialogProps } from './Dialog.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
+import { mockViewport } from '@/test-utils/viewport';
 
 type TestDialogProps = Omit<DialogProps, 'open' | 'onClose' | 'children'> & {
   children: ReactNode | ((close: () => void) => ReactNode);
@@ -87,6 +88,32 @@ describe('Dialog', () => {
       expect(dialog).toHaveAttribute('data-testid', 'dialog');
       expect(screen.getByTestId('dialog-overlay')).toBeInTheDocument();
       expect(screen.getByTestId('dialog-close-button')).toBeInTheDocument();
+    });
+
+    it('is a bottom sheet on phones and centered from 768px up', async () => {
+      const viewport = mockViewport(375);
+      const user = userEvent.setup();
+      // The resolved position is applied as a `position-*` class on the overlay.
+      const expectPosition = (position: string) =>
+        expect(screen.getByTestId('dialog-overlay').className).toMatch(
+          new RegExp(`(^|_|\\s)position-${position}(_|\\s|$)`)
+        );
+
+      renderWithProvider(
+        <TestDialog aria-label="Add game">
+          <Dialog.Content>Body copy</Dialog.Content>
+        </TestDialog>
+      );
+
+      await openDialog(user);
+
+      expectPosition('bottom');
+
+      viewport.resize(1024);
+
+      expectPosition('center');
+
+      viewport.restore();
     });
 
     it('passes className and style through to the panel', async () => {

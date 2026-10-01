@@ -1,22 +1,5 @@
-/*
- * Dialog renders a bottom `Drawer`, so phones get the drawer's sheet as is. From 768px up the panel
- * overrides the drawer's placement variables (set per position on the overlay; declaring them on
- * the panel wins over inheritance) and centers itself with auto margins in the overlay's flexbox.
- */
-@media (width >= 768px) {
-  .panel {
-    --drawer-panel-width: 560px;
-    --drawer-panel-max-width: calc(100% - 2 * var(--spacing-8));
-    --drawer-panel-max-height: calc(100% - 2 * var(--spacing-8));
-    --drawer-panel-radius: var(--radius-24);
-    --drawer-panel-hidden-transform: translateY(var(--spacing-16)) scale(0.98);
-
-    margin: auto;
-  }
-}
-
-/* Scoped under .panel to outrank the drawer footer's rules, whose stylesheet may load after this one. */
-.panel .actions {
+/* Doubled to outrank the shared footer's rules, whose stylesheet may load after this one. */
+.actions.actions {
   flex-direction: column;
   flex-wrap: nowrap;
   padding: var(--spacing-20) var(--spacing-16);
@@ -25,6 +8,7 @@
     width: 100%;
   }
 
+  /* Matches the switch to the centered position in DialogRoot.tsx. */
   @media (width >= 768px) {
     flex-direction: row;
     justify-content: flex-end;

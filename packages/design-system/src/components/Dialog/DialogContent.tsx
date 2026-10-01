@@ -1,7 +1,6 @@
 'use client';
 
-import * as Drawer from '@/components/Drawer/Drawer';
-import { useDialogContext } from './DialogContext';
+import { ModalBody } from '@/components/Modal/ModalBody';
 import type { DialogSectionProps } from './Dialog.types';
 
 /** Main content region; the only part of the dialog that scrolls. */
@@ -10,12 +9,10 @@ export const DialogContent: React.FC<DialogSectionProps> = ({
   className,
   dataTestId,
 }) => {
-  useDialogContext();
-
   return (
-    <Drawer.Body className={className} dataTestId={dataTestId}>
+    <ModalBody componentName="Dialog" className={className} dataTestId={dataTestId}>
       {children}
-    </Drawer.Body>
+    </ModalBody>
   );
 };
 

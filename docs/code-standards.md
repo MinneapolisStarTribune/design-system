@@ -150,6 +150,10 @@ export { type DrawerProps } from './Drawer/Drawer.types';
 
 Consumers write `<Drawer.Root>` / `<Drawer.Heading>`, and bundlers drop the parts they don't import.
 
+#### Shared internals stay private
+
+When public components share behavior, put it in an internal base and build each public component as a thin preset on top, rather than having one public component wrap another. `Drawer` and `Dialog` both build on `src/components/Modal/` (overlay, focus trap, dismissal, ARIA wiring, sections and their styles); each owns its public props, defaults and placement. `Modal` is not exported from `index.web.ts`.
+
 ### Export Example
 
 ```typescript

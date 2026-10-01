@@ -1,17 +1,17 @@
 .overlay {
-  /* Keep in sync with ENTER_DURATION / EXIT_DURATION in DrawerRoot.tsx. */
-  --drawer-enter-duration: 250ms;
-  --drawer-exit-duration: 200ms;
-  --drawer-slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
-  --drawer-close-size: 32px;
+  /* Keep in sync with ENTER_DURATION / EXIT_DURATION in ModalRoot.tsx. */
+  --modal-enter-duration: 250ms;
+  --modal-exit-duration: 200ms;
+  --modal-slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --modal-close-size: 32px;
 
   z-index: 1000;
   display: flex;
-  align-items: var(--drawer-align);
-  justify-content: var(--drawer-justify);
+  align-items: var(--modal-align);
+  justify-content: var(--modal-justify);
   background: var(--color-overlay-black);
   opacity: 0;
-  transition: opacity var(--drawer-enter-duration) ease;
+  transition: opacity var(--modal-enter-duration) ease;
 
   &[data-status='open'] {
     opacity: 1;
@@ -19,67 +19,85 @@
 
   &[data-status='close'] {
     opacity: 0;
-    transition-duration: var(--drawer-exit-duration);
+    transition-duration: var(--modal-exit-duration);
     pointer-events: none;
   }
 }
 
-/* The position class is resolved in JS from the responsive `position` prop. */
+/*
+ * Shared by Drawer and Dialog. The position class is resolved in JS (from Drawer's responsive
+ * `position` prop, or Dialog's bottom-sheet-to-center switch) and sets the panel variables below.
+ */
 .position-left,
 .position-right {
-  --drawer-align: stretch;
-  --drawer-panel-width: 408px;
-  --drawer-panel-max-width: 100%;
-  --drawer-panel-height: 100%;
-  --drawer-panel-max-height: none;
-  --drawer-panel-radius: 0;
-  --drawer-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
+  --modal-align: stretch;
+  --modal-panel-width: 408px;
+  --modal-panel-max-width: 100%;
+  --modal-panel-height: 100%;
+  --modal-panel-max-height: none;
+  --modal-panel-radius: 0;
+  --modal-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
 }
 
 .position-left {
-  --drawer-justify: flex-start;
-  --drawer-panel-border-left: 0;
-  --drawer-panel-border-right: 1px;
-  --drawer-panel-hidden-transform: translateX(-100%);
+  --modal-justify: flex-start;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 1px;
+  --modal-panel-hidden-transform: translateX(-100%);
 }
 
 .position-right {
-  --drawer-justify: flex-end;
-  --drawer-panel-border-left: 1px;
-  --drawer-panel-border-right: 0;
-  --drawer-panel-hidden-transform: translateX(100%);
+  --modal-justify: flex-end;
+  --modal-panel-border-left: 1px;
+  --modal-panel-border-right: 0;
+  --modal-panel-hidden-transform: translateX(100%);
 }
 
 .position-top,
 .position-bottom {
-  --drawer-justify: stretch;
-  --drawer-panel-width: 100%;
-  --drawer-panel-max-width: none;
-  --drawer-panel-height: auto;
+  --modal-justify: stretch;
+  --modal-panel-width: 100%;
+  --modal-panel-max-width: none;
+  --modal-panel-height: auto;
   /* Leave a strip of page visible beyond a tall sheet. */
-  --drawer-panel-max-height: calc(100% - var(--spacing-24));
-  --drawer-panel-shadow: none;
-  --drawer-panel-border-left: 0;
-  --drawer-panel-border-right: 0;
+  --modal-panel-max-height: calc(100% - var(--spacing-24));
+  --modal-panel-shadow: none;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 0;
 }
 
 .position-top {
-  --drawer-align: flex-start;
-  --drawer-panel-hidden-transform: translateY(-100%);
-  --drawer-panel-radius: 0 0 var(--radius-24) var(--radius-24);
+  --modal-align: flex-start;
+  --modal-panel-hidden-transform: translateY(-100%);
+  --modal-panel-radius: 0 0 var(--radius-24) var(--radius-24);
 }
 
 .position-bottom {
-  --drawer-align: flex-end;
-  --drawer-panel-hidden-transform: translateY(100%);
-  --drawer-panel-radius: var(--radius-24) var(--radius-24) 0 0;
+  --modal-align: flex-end;
+  --modal-panel-hidden-transform: translateY(100%);
+  --modal-panel-radius: var(--radius-24) var(--radius-24) 0 0;
+}
+
+/* A dialog centered in the viewport, with a strip of page visible on every side. */
+.position-center {
+  --modal-align: center;
+  --modal-justify: center;
+  --modal-panel-width: 560px;
+  --modal-panel-max-width: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-height: auto;
+  --modal-panel-max-height: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-radius: var(--radius-24);
+  --modal-panel-shadow: none;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 0;
+  --modal-panel-hidden-transform: translateY(var(--spacing-16)) scale(0.98);
 }
 
 /* Rounded corners are a phone sheet treatment; from 768px up every placement is square. */
 @media (width >= 768px) {
   .position-top,
   .position-bottom {
-    --drawer-panel-radius: 0;
+    --modal-panel-radius: 0;
   }
 }
 
@@ -88,27 +106,27 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: var(--drawer-panel-width);
-  max-width: var(--drawer-panel-max-width);
-  height: var(--drawer-panel-height);
-  max-height: var(--drawer-panel-max-height);
+  width: var(--modal-panel-width);
+  max-width: var(--modal-panel-max-width);
+  height: var(--modal-panel-height);
+  max-height: var(--modal-panel-max-height);
   overflow: hidden;
   border: 0 solid var(--color-border-on-light-subtle-01);
-  border-left-width: var(--drawer-panel-border-left);
-  border-right-width: var(--drawer-panel-border-right);
-  border-radius: var(--drawer-panel-radius);
-  box-shadow: var(--drawer-panel-shadow);
+  border-left-width: var(--modal-panel-border-left);
+  border-right-width: var(--modal-panel-border-right);
+  border-radius: var(--modal-panel-radius);
+  box-shadow: var(--modal-panel-shadow);
   background: var(--color-background-light-default);
   color: var(--color-text-on-light-primary);
-  transform: var(--drawer-panel-hidden-transform);
-  transition: transform var(--drawer-enter-duration) var(--drawer-slide-easing);
+  transform: var(--modal-panel-hidden-transform);
+  transition: transform var(--modal-enter-duration) var(--modal-slide-easing);
 
   &[data-status='open'] {
     transform: none;
   }
 
   &[data-status='close'] {
-    transition-duration: var(--drawer-exit-duration);
+    transition-duration: var(--modal-exit-duration);
   }
 
   &:focus {
@@ -126,8 +144,8 @@
   top: var(--spacing-20);
   right: var(--spacing-12);
   z-index: 1;
-  width: var(--drawer-close-size);
-  height: var(--drawer-close-size);
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
   flex-shrink: 0;
   border-radius: var(--radius-full) !important;
 
@@ -148,13 +166,13 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-20));
+  min-height: calc(var(--modal-close-size) + 2 * var(--spacing-20));
   margin: 0;
   padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
 
   @media (width >= 768px) {
-    min-height: calc(var(--drawer-close-size) + 2 * var(--spacing-24));
+    min-height: calc(var(--modal-close-size) + 2 * var(--spacing-24));
     padding: var(--spacing-24) var(--spacing-32);
   }
 }
@@ -167,19 +185,19 @@
 /* Keep the title clear of the absolutely positioned close button. */
 .withCloseButton {
   .heading {
-    padding-right: calc(var(--spacing-12) + var(--drawer-close-size) + var(--spacing-12));
+    padding-right: calc(var(--spacing-12) + var(--modal-close-size) + var(--spacing-12));
 
     @media (width >= 768px) {
-      padding-right: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-8));
+      padding-right: calc(var(--spacing-24) + var(--modal-close-size) + var(--spacing-8));
     }
   }
 
   /* Without a heading, push the first section below the close button. */
   > :first-child:not(.heading) {
-    padding-top: calc(var(--spacing-20) + var(--drawer-close-size) + var(--spacing-16));
+    padding-top: calc(var(--spacing-20) + var(--modal-close-size) + var(--spacing-16));
 
     @media (width >= 768px) {
-      padding-top: calc(var(--spacing-24) + var(--drawer-close-size) + var(--spacing-16));
+      padding-top: calc(var(--spacing-24) + var(--modal-close-size) + var(--spacing-16));
     }
   }
 }
@@ -297,7 +315,12 @@
   flex-wrap: wrap;
   gap: var(--spacing-16);
   flex-shrink: 0;
-  padding: var(--spacing-24) var(--spacing-32);
+  padding: var(--spacing-20) var(--spacing-16);
+
+
+  @media (width >= 768px) {
+    padding: var(--spacing-24) var(--spacing-32);
+  }
 
   > * {
     flex: 1 1 auto;

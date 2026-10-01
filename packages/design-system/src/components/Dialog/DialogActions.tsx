@@ -1,9 +1,8 @@
 'use client';
 
 import classNames from 'classnames';
-import * as Drawer from '@/components/Drawer/Drawer';
+import { ModalFooter } from '@/components/Modal/ModalFooter';
 import styles from './Dialog.module.scss';
-import { useDialogContext } from './DialogContext';
 import type { DialogSectionProps } from './Dialog.types';
 
 /**
@@ -15,12 +14,14 @@ export const DialogActions: React.FC<DialogSectionProps> = ({
   className,
   dataTestId,
 }) => {
-  useDialogContext();
-
   return (
-    <Drawer.Footer className={classNames(styles.actions, className)} dataTestId={dataTestId}>
+    <ModalFooter
+      componentName="Dialog"
+      className={classNames(styles.actions, className)}
+      dataTestId={dataTestId}
+    >
       {children}
-    </Drawer.Footer>
+    </ModalFooter>
   );
 };
 

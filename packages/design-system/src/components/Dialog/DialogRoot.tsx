@@ -1,24 +1,26 @@
 'use client';
 
-import classNames from 'classnames';
-import * as Drawer from '@/components/Drawer/Drawer';
-import styles from './Dialog.module.scss';
-import { DialogContext } from './DialogContext';
+import { useResponsiveValue } from '@/hooks/useResponsiveValue';
+import { ModalRoot } from '@/components/Modal/ModalRoot';
+import type { ModalPosition } from '@/components/Modal/Modal.types';
+import type { Responsive } from '@/types/globalTypes';
 import type { DialogProps } from './Dialog.types';
 
-/**
- * A bottom sheet on phones and a centered dialog from 768px up. Built on `Drawer.Root`, which owns
- * the overlay, focus trap, scroll lock, dismissal and transitions; Dialog.module.scss re-centers
- * the panel from 768px up.
- */
+// A bottom sheet on phones, centered from 768px up. Keep in sync with the actions media query in
+// Dialog.module.scss.
+const POSITION: Responsive<ModalPosition> = { small: 'bottom', medium: 'center' };
+
+const NAMES = { component: 'Dialog', heading: 'Title' } as const;
+
+/** A modal window: a bottom sheet on phones, centered from 768px up. Built on the internal `ModalRoot`. */
 export const DialogRoot: React.FC<DialogProps> = ({
   children,
   open,
   onClose,
   showCloseButton = true,
   role = 'dialog',
-  describeWithContent,
-  closeLabel,
+  describeWithContent = role === 'alertdialog',
+  closeLabel = 'Close',
   initialFocus,
   portalRoot,
   className,
@@ -26,24 +28,27 @@ export const DialogRoot: React.FC<DialogProps> = ({
   dataTestId = 'dialog',
   'aria-label': ariaLabel,
 }) => {
+  const position = useResponsiveValue(POSITION, POSITION);
+
   return (
-    <Drawer.Root
+    <ModalRoot
       open={open}
       onClose={onClose}
-      position="bottom"
+      position={position}
       showCloseButton={showCloseButton}
       role={role}
       describeWithBody={describeWithContent}
       closeLabel={closeLabel}
       initialFocus={initialFocus}
       portalRoot={portalRoot}
-      className={classNames(styles.panel, className)}
+      className={className}
       style={style}
       dataTestId={dataTestId}
       aria-label={ariaLabel}
+      names={NAMES}
     >
-      <DialogContext.Provider value>{children}</DialogContext.Provider>
-    </Drawer.Root>
+      {children}
+    </ModalRoot>
   );
 };
 

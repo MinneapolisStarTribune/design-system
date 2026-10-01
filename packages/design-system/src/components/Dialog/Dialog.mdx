@@ -9,9 +9,9 @@ Dialog is a modal window that interrupts the page to ask for a decision or a sho
 confirming a deletion, or filling in a small form like "Add Game". From 768px up it's a
 **centered dialog**; at 767px and below it rises from the bottom as a **sheet**.
 
-Dialog is built on [Drawer](/docs/layout-containers-drawer--docs): on phones it _is_ a bottom
-drawer, and on larger screens the same panel is centered. Focus trapping, scroll locking,
-dismissal and transitions behave the same in both.
+Dialog and [Drawer](/docs/layout-containers-drawer--docs) share one internal modal base, so
+focus trapping, scroll locking, dismissal, transitions and accessibility behave the same in both.
+On phones a dialog looks like a bottom drawer.
 
 **Web only.** It relies on portals and CSS media queries.
 
