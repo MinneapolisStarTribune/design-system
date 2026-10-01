@@ -25,8 +25,8 @@
 }
 
 /*
- * The position class is resolved in JS (from Drawer's responsive `position` prop) and sets the
- * panel variables below.
+ * Shared by Drawer and Dialog. The position class is resolved in JS (from Drawer's responsive
+ * `position` prop, or Dialog's bottom-sheet-to-center switch) and sets the panel variables below.
  */
 .position-left,
 .position-right {
@@ -76,6 +76,21 @@
   --modal-align: flex-end;
   --modal-panel-hidden-transform: translateY(100%);
   --modal-panel-radius: var(--radius-24) var(--radius-24) 0 0;
+}
+
+/* A dialog centered in the viewport, with a strip of page visible on every side. */
+.position-center {
+  --modal-align: center;
+  --modal-justify: center;
+  --modal-panel-width: 560px;
+  --modal-panel-max-width: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-height: auto;
+  --modal-panel-max-height: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-radius: var(--radius-24);
+  --modal-panel-shadow: none;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 0;
+  --modal-panel-hidden-transform: translateY(var(--spacing-16)) scale(0.98);
 }
 
 /* Rounded corners are a phone sheet treatment; from 768px up every placement is square. */

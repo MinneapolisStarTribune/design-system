@@ -1,0 +1,120 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as DialogStories from './Dialog.stories';
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+Dialog is a modal window that interrupts the page to ask for a decision or a short, focused task —
+confirming a deletion, or filling in a small form like "Add Game". From 768px up it's a
+**centered dialog**; at 767px and below it rises from the bottom as a **sheet**.
+
+Dialog and [Drawer](/docs/layout-containers-drawer--docs) share one internal modal base, so
+focus trapping, scroll locking, dismissal, transitions and accessibility behave the same in both.
+On phones a dialog looks like a bottom drawer.
+
+**Web only.** It relies on portals and CSS media queries.
+
+**Validated for Varsity only.** Using it on `startribune-web` may warrant some theming changes.
+
+## Anatomy
+
+1. **Overlay** — Dims the page, blocks interaction underneath, and locks page scroll.
+2. **Panel** — 560px wide with rounded corners, centered in the viewport. At 767px and below it's
+   a full-width bottom sheet with its top corners rounded.
+3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`.
+4. **Title** — Names the dialog.
+5. **Content** — Main content. The only region that scrolls; its edges fade while content sits
+   beyond them.
+6. **Actions (optional)** — From 768px up the actions sit at the end of the row, and with two or
+   more the first (e.g. "Cancel") moves to the start. At 767px and below they stack full width.
+
+When the content is supplementary rather than a decision — filters, details, settings — use
+[Drawer](/docs/layout-containers-drawer--docs) instead.
+
+## Usage
+
+- Give every dialog an accessible name: a `Dialog.Title`, or `aria-label` when there is no visible
+  title
+- Put the primary action **last** in `Dialog.Actions`, so it sits at the end of the row and last
+  in tab order
+- The dialog is always controlled: pass `open` and `onClose`. The X icon button, Escape and
+  overlay presses call `onClose`; actions close it by setting `open` to `false`
+- Focus returns to the control that opened the dialog when it closes
+- For destructive or urgent confirmations, set `role="alertdialog"` and point `initialFocus` at
+  the least destructive action (usually Cancel). An `alertdialog` is described by its
+  `Dialog.Content` automatically, so screen readers read the question along with the title
+- For a short message in a regular dialog, add `describeWithContent`. Leave it off for forms and
+  long content, which are noisy when read out as a description
+- `onClose` receives what triggered it: `'closeButton'`, `'escapeKey'` or `'overlayPress'`. Ignore
+  `'overlayPress'` while a form has unsaved input so a stray click outside doesn't discard it
+- Pass `closeLabel` to localize the close button's accessible name
+- Don't nest dialogs
+
+<table>
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>Dialog.Root</code></td>
+      <td>
+        Owns open state, focus trapping, scroll locking, dismissal and the enter/exit transition.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Dialog.Title</code></td>
+      <td>Title. Renders an <code>h2</code> and names the dialog via <code>aria-labelledby</code>.</td>
+    </tr>
+
+    <tr>
+      <td><code>Dialog.Content</code></td>
+      <td>Main content region. Scrolls on overflow.</td>
+    </tr>
+
+    <tr>
+      <td><code>Dialog.Actions</code></td>
+      <td>Action row pinned below the content.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Example
+
+```tsx
+const [open, setOpen] = useState(false);
+
+const cancelRef = useRef<HTMLElement>(null);
+
+<Button onClick={() => setOpen(true)}>Delete game</Button>
+
+<Dialog.Root
+  open={open}
+  onClose={() => setOpen(false)}
+  role="alertdialog"
+  initialFocus={cancelRef}
+>
+  <Dialog.Title>Delete game?</Dialog.Title>
+
+  <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
+
+  <Dialog.Actions>
+    <Button ref={cancelRef} variant="ghost" onClick={() => setOpen(false)}>
+      Cancel
+    </Button>
+    <Button color="brand" onClick={deleteGame}>
+      Delete
+    </Button>
+  </Dialog.Actions>
+</Dialog.Root>
+```
+
+<Primary />
+<Controls />
+<Stories />
