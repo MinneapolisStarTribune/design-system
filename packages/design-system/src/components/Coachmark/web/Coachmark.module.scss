@@ -8,16 +8,17 @@
      default). .body/.description/.actions below are all width: 100%, so max-width alone is what
      forces a wrap point for long content -- without it the panel has nothing stopping it from
      shrink-wrapping to its longest unwrapped line instead.
-     The `calc(100vw - 2 * 24px)` term keeps a 24px margin on both sides of the viewport as it
-     narrows -- this element is `position: fixed` (see Coachmark.tsx's useFloating `strategy`), so
-     its own width/max-width resolve against the viewport, not its (portaled) DOM parent. Without
-     it, the card keeps rendering at its natural content width right up until the viewport is
-     already narrower than that -- shift/flip reposition the card to stay off the edge, but can't
-     shrink it, so it would render flush against the edge with no margin until it hits min-width.
-     24px must stay in sync with Coachmark.tsx's VIEWPORT_EDGE_PADDING, which keeps the card's
-     *position* (as opposed to its size, here) that same distance from the viewport edge. */
+     The `calc(100vw - 2 * var(--spacing-24))` term keeps a 24px margin on both sides of the
+     viewport as it narrows -- this element is `position: fixed` (see Coachmark.tsx's useFloating
+     `strategy`), so its own width/max-width resolve against the viewport, not its (portaled) DOM
+     parent. Without it, the card keeps rendering at its natural content width right up until the
+     viewport is already narrower than that -- shift/flip reposition the card to stay off the
+     edge, but can't shrink it, so it would render flush against the edge with no margin until it
+     hits min-width. --spacing-24 must stay in sync with Coachmark.tsx's VIEWPORT_EDGE_PADDING,
+     which keeps the card's *position* (as opposed to its size, here) that same distance from the
+     viewport edge. */
   min-width: 250px;
-  max-width: min(345px, calc(100vw - 2 * 24px));
+  max-width: min(345px, calc(100vw - 2 * var(--spacing-24)));
   /* Without this, `width`/`max-width` set only the content box under the browser's default
      content-box model, and padding is added on top -- .body's `width: 100%` would then resolve to
      the full card width, not the intended content width, since padding wouldn't be subtracted

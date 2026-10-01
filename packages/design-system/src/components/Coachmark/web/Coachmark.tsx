@@ -136,6 +136,18 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   // when `open` next flips to false, so `coachmark_dismiss` can report *why* it closed.
   const dismissReasonRef = useRef<DismissReason>('other');
 
+  // Read by the tracking effect below instead of closing over title/position/alignment/
+  // analyticsOverride directly, so the effect's own deps can stay just [open, track] -- otherwise
+  // a parent re-render that passes a fresh `analytics={{...}}` object literal (a new identity on
+  // every render, regardless of its actual contents) would re-fire the effect, cleanup included,
+  // emitting a spurious dismiss immediately followed by another shown while the coachmark never
+  // actually closed. Written from its own effect (every render, no deps) rather than during render
+  // itself, which React disallows mutating a ref's `current` in.
+  const trackingPropsRef = useRef({ title, position, alignment, analyticsOverride });
+  useEffect(() => {
+    trackingPropsRef.current = { title, position, alignment, analyticsOverride };
+  });
+
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
       if (!nextOpen) {
@@ -181,15 +193,25 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   // /aria-controls to the reference -- invalid here since `children` is just a positioning anchor
   // (Piano opens the coachmark, not the trigger). Stripped from getReferenceProps' *output*
   // (not its input, and not called with no args) to keep its handler composition (e.g. a
-  // passed-in onClick alongside the `referencePress` dismiss handler) intact.
-  const stripReferenceRoleAria = <T extends Record<string, unknown>>(props: T) => {
-    const {
-      'aria-expanded': _ariaExpanded,
-      'aria-haspopup': _ariaHaspopup,
-      'aria-controls': _ariaControls,
-      ...rest
-    } = props;
-    return rest;
+  // passed-in onClick alongside the `referencePress` dismiss handler) intact. `originalProps` are
+  // the child's own props *before* merging with getReferenceProps -- any of the three it already
+  // declares (e.g. the child is itself a menu/disclosure trigger) are restored rather than
+  // stripped, so this only ever removes what floating-ui generated, never what the child supplied.
+  const REFERENCE_ROLE_ARIA = ['aria-expanded', 'aria-haspopup', 'aria-controls'] as const;
+
+  const stripAddedReferenceRoleAria = <T extends Record<string, unknown>>(
+    props: T,
+    originalProps: Record<string, unknown>
+  ): T => {
+    const result: Record<string, unknown> = { ...props };
+    REFERENCE_ROLE_ARIA.forEach((key) => {
+      if (key in originalProps) {
+        result[key] = originalProps[key];
+      } else {
+        delete result[key];
+      }
+    });
+    return result as T;
   };
 
   const childElement = isValidElement(children)
@@ -201,10 +223,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   const triggerElement = childElement ? (
     cloneElement(
       childElement,
-      stripReferenceRoleAria(getReferenceProps({ ...childElement.props, ref: mergedRef }))
+      stripAddedReferenceRoleAria(
+        getReferenceProps({ ...childElement.props, ref: mergedRef }),
+        childElement.props
+      )
     )
   ) : (
-    <span ref={refs.setReference} {...stripReferenceRoleAria(getReferenceProps())}>
+    <span ref={refs.setReference} {...stripAddedReferenceRoleAria(getReferenceProps(), {})}>
       {children}
     </span>
   );
@@ -221,6 +246,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   useEffect(() => {
     if (!open) return;
 
+    const { title, position, alignment, analyticsOverride } = trackingPropsRef.current;
     track({
       event: 'coachmark_shown',
       component: 'Coachmark',
@@ -231,6 +257,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     });
 
     return () => {
+      const { title, position, alignment, analyticsOverride } = trackingPropsRef.current;
       track({
         event: 'coachmark_dismiss',
         component: 'Coachmark',
@@ -242,7 +269,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       });
       dismissReasonRef.current = 'other';
     };
-  }, [open, title, position, alignment, analyticsOverride, track]);
+  }, [open, track]);
 
   const handleActionClick = useCallback(() => {
     track({
