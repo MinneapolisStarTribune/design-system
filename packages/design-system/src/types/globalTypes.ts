@@ -69,7 +69,15 @@ export type Breakpoint = (typeof BREAKPOINTS)[number];
  * A prop value for every screen size, or an object keyed by breakpoint. Each key applies from
  * that breakpoint up; sizes below the smallest key fall back to the component's default.
  */
-export type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
+export type Responsive<T> = T | BreakpointMap<T>;
+
+/**
+ * An object keyed by breakpoint with at least one key, so `{}` isn't a valid responsive value.
+ */
+export type BreakpointMap<T> =
+  | { small: T; medium?: T; large?: T }
+  | { small?: T; medium: T; large?: T }
+  | { small?: T; medium?: T; large: T };
 
 /**
  * Icon position shared across components (Button, Tooltip, etc.)

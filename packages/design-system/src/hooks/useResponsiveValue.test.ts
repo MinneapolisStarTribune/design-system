@@ -1,6 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { mockViewport } from '@/test-utils/viewport';
+import type { Responsive } from '@/types/globalTypes';
 import { resolveResponsive, useBreakpoint, useResponsiveValue } from './useResponsiveValue';
 
 describe('resolveResponsive', () => {
@@ -20,6 +21,10 @@ describe('resolveResponsive', () => {
   it('returns undefined below the smallest key', () => {
     expect(resolveResponsive({ medium: 'left' }, 'small')).toBeUndefined();
     expect(resolveResponsive(undefined, 'small')).toBeUndefined();
+  });
+
+  it('treats an empty map as having no keys', () => {
+    expect(resolveResponsive({} as Responsive<string>, 'large')).toBeUndefined();
   });
 });
 
@@ -69,5 +74,15 @@ describe('useResponsiveValue', () => {
     viewport.resize(800);
 
     expect(result.current).toBe('left');
+  });
+
+  it('falls back to the default for an empty map', () => {
+    viewport = mockViewport(800);
+
+    const { result } = renderHook(() =>
+      useResponsiveValue({} as Responsive<string>, { small: 'bottom', medium: 'right' })
+    );
+
+    expect(result.current).toBe('right');
   });
 });
