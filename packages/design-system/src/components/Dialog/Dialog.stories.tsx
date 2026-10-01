@@ -84,7 +84,7 @@ const AddGameContent = ({ onClose }: { onClose: () => void }) => {
           </FormGroup>
         </div>
       </Dialog.Content>
-      <Dialog.Actions>
+      <Dialog.Actions stackOnMobile={false}>
         <Button variant="ghost" onClick={onClose}>
           Cancel
         </Button>
@@ -227,7 +227,7 @@ const [open, setOpen] = useState(false);
       <FormControl.Select id="sport" options={SPORTS} value={sport} onChange={setSport} />
     </FormGroup>
   </Dialog.Content>
-  <Dialog.Actions>
+  <Dialog.Actions stackOnMobile={false}>
     <Button variant="ghost" onClick={() => setOpen(false)}>
       Cancel
     </Button>
@@ -300,7 +300,7 @@ export const AllVariants: Story = {
     layout: 'fullscreen',
     docs: {
       description: {
-        story: 'Main variants of the dialog component.',
+        story: 'All variants of the dialog component.',
       },
     },
   },
@@ -310,11 +310,14 @@ export const AllVariants: Story = {
 
     return (
       <div className={styles.grid}>
-        <VariantFrame label="Form with title, content and actions" initialOpen={initialOpen}>
+        <VariantFrame
+          label="Form with title, content and actions (stackOnMobile={false}: side by side on mobile)"
+          initialOpen={initialOpen}
+        >
           {(onClose) => <AddGameContent onClose={onClose} />}
         </VariantFrame>
         <VariantFrame
-          label='Confirmation (role="alertdialog", initialFocus on Cancel)'
+          label='Confirmation (role="alertdialog", initialFocus on Cancel, actions stacked on mobile)'
           role="alertdialog"
           initialFocus={cancelRef}
           initialOpen={initialOpen}

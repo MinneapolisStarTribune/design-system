@@ -1,11 +1,17 @@
-/* Doubled to outrank the shared footer's rules, whose stylesheet may load after this one. */
-.actions.actions {
-  flex-direction: column;
-  flex-wrap: nowrap;
+/* Scoped under .dialog to outrank the shared footer's rules, whose stylesheet may load after this one. */
+.dialog .actions {
   padding: var(--spacing-20) var(--spacing-16);
 
-  > * {
-    width: 100%;
+  /* `stackOnMobile`: full-width actions on phones. Without it, the shared footer's row applies. */
+  &.stacked {
+    @media (width < 768px) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      > * {
+        width: 100%;
+      }
+    }
   }
 
   /* Matches the switch to the centered position in DialogRoot.tsx. */

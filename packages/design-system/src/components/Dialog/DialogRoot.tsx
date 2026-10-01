@@ -1,9 +1,11 @@
 'use client';
 
+import classNames from 'classnames';
 import { useResponsiveValue } from '@/hooks/useResponsiveValue';
 import { ModalRoot } from '@/components/Modal/ModalRoot';
 import type { ModalPosition } from '@/components/Modal/Modal.types';
 import type { ResponsiveDefault } from '@/types/globalTypes';
+import styles from './Dialog.module.scss';
 import type { DialogProps } from './Dialog.types';
 
 const POSITION: ResponsiveDefault<ModalPosition> = { small: 'bottom', medium: 'center' };
@@ -39,7 +41,7 @@ export const DialogRoot: React.FC<DialogProps> = ({
       closeLabel={closeLabel}
       initialFocus={initialFocus}
       portalRoot={portalRoot}
-      className={className}
+      className={classNames(styles.dialog, className)}
       style={style}
       dataTestId={dataTestId}
       aria-label={ariaLabel}

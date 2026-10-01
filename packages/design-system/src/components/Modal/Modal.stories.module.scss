@@ -22,8 +22,8 @@
 .grid {
   display: grid;
   row-gap: var(--spacing-32);
-  margin: var(--spacing-16);
-  padding: var(--spacing-16);
+  /* Padding, not margin: a margin collapses past the themed story wrapper and shows the page behind it. */
+  padding: var(--spacing-32);
 }
 
 .variant {
@@ -62,4 +62,12 @@
  */
 :global(html):has(.grid) {
   overflow: auto;
+}
+
+/*
+ * The scroll lock also pads <body> by the scrollbar width, and the scrollbar stays here. Paint
+ * <body> with the themed background so the padding blends in instead of showing the page behind.
+ */
+:global(body):has(.grid) {
+  background: var(--color-background-light-default);
 }

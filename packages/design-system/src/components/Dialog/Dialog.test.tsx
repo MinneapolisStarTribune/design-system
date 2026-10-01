@@ -2,6 +2,7 @@ import { type ReactNode, useRef, useState } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as Dialog from './Dialog';
+import styles from './Dialog.module.scss';
 import type { DialogProps } from './Dialog.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
@@ -72,6 +73,38 @@ describe('Dialog', () => {
       expect(screen.getByRole('heading', { level: 2, name: 'Add Game' })).toBeInTheDocument();
       expect(screen.getByText('Are you sure?')).toBeInTheDocument();
       expect(screen.getByText('Yes')).toBeInTheDocument();
+    });
+
+    it('stacks the actions on mobile by default', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <TestDialog aria-label="Delete game">
+          <Dialog.Actions dataTestId="actions">
+            <Button>Delete</Button>
+          </Dialog.Actions>
+        </TestDialog>
+      );
+
+      await openDialog(user);
+
+      expect(screen.getByTestId('actions')).toHaveClass(styles.stacked);
+    });
+
+    it('keeps the actions side by side on mobile with stackOnMobile={false}', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <TestDialog aria-label="Add game">
+          <Dialog.Actions dataTestId="actions" stackOnMobile={false}>
+            <Button>Add Game</Button>
+          </Dialog.Actions>
+        </TestDialog>
+      );
+
+      await openDialog(user);
+
+      expect(screen.getByTestId('actions')).not.toHaveClass(styles.stacked);
     });
 
     it('defaults test ids to the dialog prefix', async () => {
