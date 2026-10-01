@@ -1,0 +1,27 @@
+/* Doubled to outrank the shared footer's rules, whose stylesheet may load after this one. */
+.actions.actions {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: var(--spacing-20) var(--spacing-16);
+
+  > * {
+    width: 100%;
+  }
+
+  /* Matches the switch to the centered position in DialogRoot.tsx. */
+  @media (width >= 768px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: var(--spacing-24) var(--spacing-32);
+
+    > * {
+      flex: 0 0 auto;
+      width: auto;
+    }
+
+    /* A leading secondary action (e.g. Cancel) sits at the start; the rest stay at the end. */
+    > :first-child:not(:only-child) {
+      margin-right: auto;
+    }
+  }
+}

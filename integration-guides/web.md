@@ -127,6 +127,46 @@ function App() {
 }
 ```
 
+## Dialog
+
+`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`.
+
+```tsx
+import { useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Delete game</Button>
+
+      <Dialog.Root open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Delete game?</Dialog.Title>
+        <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
+        <Dialog.Actions>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="brand" onClick={onDelete}>
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+```
+
+- The dialog is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response. Focus returns to the opening control on close.
+- Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title.
+- For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
+- `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
+- It shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
+- The switch between sheet and centered dialog is read from the viewport on the client, like Drawer's `position`. During SSR it resolves the bottom sheet, then updates after hydration.
+- Requires `components.css` (see [Quick Start](#quick-start)).
+
 ## Drawer
 
 `Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.

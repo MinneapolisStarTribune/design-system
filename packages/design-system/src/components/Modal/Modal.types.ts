@@ -7,9 +7,9 @@ export type ModalRole = (typeof MODAL_ROLES)[number];
 export type ModalCloseReason = (typeof MODAL_CLOSE_REASONS)[number];
 
 /** The public components built on the modal base, used in error and warning messages. */
-export type ModalComponentName = 'Drawer';
+export type ModalComponentName = 'Drawer' | 'Dialog';
 
-/** Props shared by the public components built on the modal base. Each redeclares the ones it documents differently. */
+/** Props shared by `Drawer.Root` and `Dialog.Root`. Each redeclares the ones it documents differently. */
 export interface ModalSharedProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
   children: ReactNode;
   /** Whether the panel is open. */
