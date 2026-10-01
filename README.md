@@ -112,9 +112,9 @@ See [Native Integration Guide](integration-guides/native.md) for more details.
 
 Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
 
-### Coachmark and PianoCoachmark (web)
+### Coachmark (web)
 
-`Coachmark` is a dismissible, externally-controlled callout for an unprompted single action. `PianoCoachmark` wraps it to be driven by Piano's `setResponseVariable` event, and is imported from a **separate entry point**, `@minneapolisstartribune/design-system/web/piano` — not the main `/web` entry — since it depends on the optional peer `@minneapolisstartribune/external-trigger`. See [Coachmark and PianoCoachmark](integration-guides/web.md#coachmark-and-pianocoachmark) in the web integration guide for setup and usage.
+A dismissible, externally-controlled callout for an unprompted single action. See [Coachmark](integration-guides/web.md#coachmark) in the web integration guide for setup and usage. For a Piano-driven variant, see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one.
 
 ## TypeScript Support
 

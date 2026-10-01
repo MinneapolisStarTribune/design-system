@@ -21,13 +21,6 @@ const WEB_ROLLUP_EXTERNAL = [
   /** Keep in sync with jsx-runtime — consumers' bundlers may resolve dev vs prod runtime by mode. */
   'react/jsx-dev-runtime',
   '@floating-ui/react',
-  /**
-   * Must stay external: it's a React Context provider. Bundling it here would give
-   * PianoCoachmark its own disconnected copy of ExternalTriggerContext instead of sharing the
-   * consuming app's own instance, silently breaking the trigger mechanism (the Provider and
-   * useExternalTriggerState/useTriggerExternal would never see the same Context).
-   */
-  '@minneapolisstartribune/external-trigger',
   'classnames',
   /^swiper(\/.*)?$/,
 ] as const;
@@ -53,7 +46,6 @@ export default defineConfig({
     dts({
       include: [
         path.resolve(__dirname, 'src/index.web.ts'),
-        path.resolve(__dirname, 'src/piano.web.ts'),
         path.resolve(__dirname, 'src/components'),
         path.resolve(__dirname, 'src/icons'),
         path.resolve(__dirname, 'src/providers'),
@@ -116,13 +108,7 @@ export default defineConfig({
     emptyOutDir: false,
     outDir: 'dist/web',
     lib: {
-      // Two separate entries, not one: piano.web.ts must resolve independently of index.web.ts
-      // so importing from the main entrypoint never pulls in PianoCoachmark's optional peer
-      // dependency (see components/index.web.ts).
-      entry: {
-        'index.web': path.resolve(__dirname, 'src/index.web.ts'),
-        'piano.web': path.resolve(__dirname, 'src/piano.web.ts'),
-      },
+      entry: path.resolve(__dirname, 'src/index.web.ts'),
       name: 'DesignSystem',
     },
     rollupOptions: {

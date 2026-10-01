@@ -17,12 +17,6 @@
       "import": "./dist/web/index.web.es.js",
       "default": "./dist/web/index.web.es.js"
     },
-    "./web/piano": {
-      "types": "./dist/web/piano.web.d.ts",
-      "require": "./dist/web/piano.web.cjs.js",
-      "import": "./dist/web/piano.web.es.js",
-      "default": "./dist/web/piano.web.es.js"
-    },
     "./web/components.css": "./dist/web/components.css",
     "./web/*": {
       "default": "./dist/web/*"
@@ -60,7 +54,6 @@
     "@floating-ui/react": "0.27.19",
     "@floating-ui/react-native": "0.10.9",
     "@jest/globals": "^30.2.0",
-    "@minneapolisstartribune/external-trigger": "^0.1.0",
     "@octokit/rest": "^22.0.1",
     "@react-native/babel-preset": "0.81.5",
     "@storybook/addon-a11y": "10.3.5",
@@ -131,7 +124,6 @@
   "peerDependencies": {
     "@floating-ui/react": "0.27.19",
     "@floating-ui/react-native": "0.10.9",
-    "@minneapolisstartribune/external-trigger": "*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-native": "^0.81.0",
@@ -143,9 +135,6 @@
       "optional": true
     },
     "@floating-ui/react-native": {
-      "optional": true
-    },
-    "@minneapolisstartribune/external-trigger": {
       "optional": true
     },
     "react-dom": {

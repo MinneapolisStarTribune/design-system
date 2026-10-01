@@ -7,11 +7,6 @@ export type {
 } from './Coachmark/Coachmark.types';
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
-// PianoCoachmark and friends are NOT re-exported here -- see piano.web.ts. They depend on the
-// optional peer @minneapolisstartribune/external-trigger, and re-exporting them from this main
-// barrel would force every consumer (even ones who never touch Piano) to resolve that dependency:
-// under CJS require() (no tree-shaking), loading this barrel synchronously loads every statically
-// re-exported module's own imports.
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
 export {

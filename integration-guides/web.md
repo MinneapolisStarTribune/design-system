@@ -12,16 +12,6 @@ yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
 
 You do not need `react-native` or `@floating-ui/react-native`.
 
-### PianoCoachmark's optional peer
-
-`PianoCoachmark` (see [Coachmark and PianoCoachmark](#coachmark-and-pianocoachmark) below) needs one more peer, installed only if you use it:
-
-```bash
-yarn add @minneapolisstartribune/external-trigger
-```
-
-Everything else in the package — including plain `Coachmark` — has no dependency on it. It's imported from a separate entry point (`@minneapolisstartribune/design-system/web/piano`) specifically so that importing anything from the main `/web` entry point never resolves this dependency, even if it isn't installed.
-
 ### Popover portal root (optional)
 
 By default, Popover content is rendered into `document.body`. That can cause issues when:
@@ -76,7 +66,7 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
-## Coachmark and PianoCoachmark
+## Coachmark
 
 `Coachmark` is a dismissible, pointed callout for an unprompted, single action (e.g. a CMS-driven prompt to create an account or favorite something) — anchored to `children`, always externally controlled via `open`/`onOpenChange` (it never opens itself on hover, focus, or click, unlike `Tooltip`).
 
@@ -102,53 +92,7 @@ function FavoriteButtonWithCoachmark() {
 
 Key props: `position` (`COACHMARK_POSITIONS` — which side of `children` it opens on, defaults to `'bottom-center'`), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref`, `secondaryContent`, and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
 
-### PianoCoachmark
-
-`PianoCoachmark` wraps `Coachmark` and drives it from Piano's `setResponseVariable` event instead of your own state, via `@minneapolisstartribune/external-trigger` (see [PianoCoachmark's optional peer](#pianocoachmarks-optional-peer) above). Import it from the separate `/web/piano` entry point, not the main one:
-
-```tsx
-// Once, near the root:
-import { ExternalTriggerProvider } from '@minneapolisstartribune/external-trigger';
-
-function App({ children }) {
-  return <ExternalTriggerProvider>{children}</ExternalTriggerProvider>;
-}
-```
-
-```tsx
-// In your Piano `setResponseVariable` listener:
-import { useTriggerExternal } from '@minneapolisstartribune/external-trigger';
-import {
-  parsePianoCoachmarkResponseVariables,
-  type PianoCoachmarkPayload,
-} from '@minneapolisstartribune/design-system/web/piano';
-
-const trigger = useTriggerExternal<PianoCoachmarkPayload>();
-
-// responseVariables comes from Piano's own event payload.
-const parsed = parsePianoCoachmarkResponseVariables(responseVariables);
-if (parsed) trigger(parsed.id, parsed.payload);
-```
-
-```tsx
-// At each anchor:
-import { PianoCoachmark, type PianoCtaActionRegistry } from '@minneapolisstartribune/design-system/web/piano';
-
-const ctaActions: PianoCtaActionRegistry = {
-  signup: {
-    onClick: ({ dismiss }) => {
-      dismiss();
-      // ...open your own signup flow
-    },
-  },
-};
-
-<PianoCoachmark id="newsletter" ctaActions={ctaActions}>
-  <Button label="Newsletters" onClick={() => {}} />
-</PianoCoachmark>;
-```
-
-`parsePianoCoachmarkResponseVariables` requires `id`/`title`/`description`/`ctaText`/`ctaType` all present in Piano's response variables — if any one is missing, it returns `null` and nothing triggers, silently (no error). `ctaActions` is a `ctaType` → `PianoCtaAction` registry your app supplies; each entry needs a primary action (`href` for a link, or `onClick` for a handler — not both) and can optionally supply `renderSecondary` for content below the button (e.g. a login link), shown when the payload's `showLogin` is `true`. Both `onClick` and `renderSecondary` receive `{ dismiss }` to close the coachmark, e.g. after handling the action.
+For a Piano-driven coachmark (triggered by Piano's `setResponseVariable` event instead of your own state), see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one, since design-system has no knowledge of or dependency on Piano.
 
 ## Available Themes
 

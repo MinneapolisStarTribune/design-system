@@ -186,7 +186,7 @@ Three events, each with the base payload (`title`, `position`, `alignment`) + an
 }
 ```
 
-**`PianoCoachmark`** automatically merges `piano_id` (the trigger `id`) and `cta_type` (the payload's `ctaType`) into every event, so Piano-triggered coachmarks are attributable to a campaign without the app passing anything itself.
+`@minneapolisstartribune/piano-coachmark` (a separate package) merges its own `piano_id`/`cta_type` fields into these same events via the `analytics` prop, so Piano-triggered coachmarks are attributable to a campaign without the app passing anything itself.
 
 ## Optional: Dev Warning
 
