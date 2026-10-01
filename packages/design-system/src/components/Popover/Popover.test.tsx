@@ -1,6 +1,7 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
+import { PopoverPortalRootProvider } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../test-utils/render';
 
@@ -29,6 +30,44 @@ describe('Popover', () => {
     await waitFor(() => {
       expect(screen.getByText('Popover Content')).toBeInTheDocument();
     });
+  });
+
+  it('uses an inherited portal root instead of its own descendant provider', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <PopoverPortalRootProvider>
+        <div data-testid="outer-popover-root">
+          <Popover trigger={<Button>Open</Button>}>
+            <Popover.Body>Popover Content</Popover.Body>
+          </Popover>
+        </div>
+      </PopoverPortalRootProvider>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const portal = (await screen.findByText('Popover Content')).closest(
+      '[data-floating-ui-portal]'
+    );
+    expect(portal?.parentElement).toBe(screen.getByTestId('outer-popover-root').parentElement);
+  });
+
+  it('portals to document.body, not its own trigger wrapper, without an inherited portal root', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const portal = (await screen.findByText('Popover Content')).closest(
+      '[data-floating-ui-portal]'
+    );
+    expect(portal?.parentElement).toBe(document.body);
   });
 
   it('renders close button when heading is present', async () => {
