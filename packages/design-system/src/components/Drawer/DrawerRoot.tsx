@@ -24,6 +24,13 @@ import type { DrawerPosition, DrawerProps } from './Drawer.types';
 // Keep in sync with the transition durations in Drawer.module.scss.
 const ENTER_DURATION = 250;
 const EXIT_DURATION = 200;
+// Matches the 1ms reduced-motion transitions, so the modal unmounts once the drawer is hidden.
+const REDUCED_MOTION_DURATION = 1;
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Overrides FloatingOverlay's inline `overflow: auto` so the off-screen panel doesn't add scroll.
 const OVERLAY_STYLE = { overflow: 'hidden' } as const;
@@ -75,7 +82,9 @@ export const DrawerRoot: React.FC<DrawerProps> = ({
   const { getFloatingProps } = useInteractions([dismiss, role]);
 
   const { isMounted, status } = useTransitionStatus(context, {
-    duration: { open: ENTER_DURATION, close: EXIT_DURATION },
+    duration: prefersReducedMotion()
+      ? REDUCED_MOTION_DURATION
+      : { open: ENTER_DURATION, close: EXIT_DURATION },
   });
 
   useEffect(() => {
