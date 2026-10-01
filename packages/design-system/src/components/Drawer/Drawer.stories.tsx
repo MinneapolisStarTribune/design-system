@@ -5,6 +5,7 @@ import { DRAWER_POSITIONS, type DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';
+import classNames from 'classnames';
 
 const GAME_TYPES = [
   { value: 'regular-season', title: 'Regular Season' },
@@ -222,7 +223,9 @@ const PositionFrame = ({
 
   return (
     <figure className={styles.variant}>
-      <figcaption className={styles.caption}>{label}</figcaption>
+      <figcaption className={classNames('typography-utility-text-regular-small', styles.caption)}>
+        {label}
+      </figcaption>
 
       <div ref={setPortalRoot} className={styles.frame}>
         <Button onClick={() => setOpen(true)}>Open</Button>
