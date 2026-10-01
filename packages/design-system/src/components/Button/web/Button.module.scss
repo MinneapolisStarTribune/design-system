@@ -347,6 +347,9 @@
     --color-button-neutral-outlined-hover-border: var(--color-base-white);
     --color-button-neutral-outlined-hover-text: var(--color-base-white);
     --color-button-neutral-outlined-text: var(--color-base-white);
+    /* Error buttons build on the semantic error pair; use its dark-theme values */
+    --color-semantic-error-background: var(--color-red-950);
+    --color-semantic-error-foreground: var(--color-red-200);
   }
 
   &.surfaceDark.brand,
