@@ -59,8 +59,8 @@
   --modal-panel-width: 100%;
   --modal-panel-max-width: none;
   --modal-panel-height: auto;
-  /* Leave a strip of page visible beyond a tall sheet. */
-  --modal-panel-max-height: calc(100% - var(--spacing-24));
+  /* Leave a strip of page visible beyond a tall sheet */
+  --modal-panel-max-height: calc(100% - var(--spacing-20));
   --modal-panel-shadow: none;
   --modal-panel-border-left: 0;
   --modal-panel-border-right: 0;
@@ -82,6 +82,7 @@
 @media (width >= 768px) {
   .position-top,
   .position-bottom {
+    --modal-panel-max-height: calc(100% - var(--spacing-24));
     --modal-panel-radius: 0;
   }
 }
