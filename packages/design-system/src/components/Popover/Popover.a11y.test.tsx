@@ -58,13 +58,7 @@ describe('Popover Accessibility', () => {
 
   it('has no violations with custom classNames', async () => {
     const { checkA11y } = await renderAndCheckA11y(
-      <Popover
-        trigger={<Button>Open</Button>}
-        wrapperClassName="custom-wrapper"
-        containerClassName="custom-container"
-        contentClassName="custom-content"
-        arrowClassName="custom-arrow"
-      >
+      <Popover trigger={<Button>Open</Button>} className="custom-popover">
         <Popover.Heading
           headerClassName="custom-header"
           titleClassName="custom-title"

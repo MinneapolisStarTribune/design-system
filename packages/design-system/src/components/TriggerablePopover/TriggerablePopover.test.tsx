@@ -36,6 +36,21 @@ describe('TriggerablePopover', () => {
     });
   });
 
+  it('names the dialog by its heading', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <TriggerablePopover trigger={<Button>Open</Button>}>
+        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+        <TriggerablePopover.Body>Content</TriggerablePopover.Body>
+      </TriggerablePopover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
+  });
+
   it('closes via the heading close button', async () => {
     const user = userEvent.setup();
 

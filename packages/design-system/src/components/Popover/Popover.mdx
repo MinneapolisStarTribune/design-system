@@ -12,7 +12,7 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 ## Anatomy
 
 1. **Container** — The outer surface that holds the popover content and handles positioning and elevation.
-2. **Close button** — Allows users to manually dismiss the popover.
+2. **Close button (optional)** — Allows users to manually dismiss the popover. Hide it with `showCloseButton={false}`.
 3. **Title (optional)** — Helps users understand the purpose of the popover.
 4. **Description** — Primary supporting text.
 5. **Header divider (optional)** — Separates header from content when needed.
@@ -25,9 +25,9 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 - Keep content concise and scannable
 - Use composition (`Popover.Heading`, `Popover.Body`, etc.) for layout control
 - Add a divider when separating header and content
-- Provide `aria-label` when no heading is present
+- Provide `aria-label` when no heading is present. With a heading, the heading names the popover and `aria-label` is ignored
 - Avoid overcrowding content — prefer simple, focused interactions
-- Use `containerClassName`, `contentClassName`, `wrapperClassName`, and related props for granular customization
+- Use `className` for the popover surface and the subcomponents' className props for their sections
 
 <table>
   <thead>
@@ -86,27 +86,9 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 
   <tbody>
     <tr>
-      <td><code>wrapperClassName</code></td>
-      <td>Popover wrapper</td>
-      <td>Custom classes for the floating wrapper element.</td>
-    </tr>
-
-    <tr>
-      <td><code>containerClassName</code></td>
-      <td>Popover container</td>
-      <td>Custom classes for the container element.</td>
-    </tr>
-
-    <tr>
-      <td><code>contentClassName</code></td>
-      <td>Popover content</td>
-      <td>Custom classes for the content wrapper.</td>
-    </tr>
-
-    <tr>
-      <td><code>arrowClassName</code></td>
-      <td>Popover arrow</td>
-      <td>Custom classes for the floating arrow.</td>
+      <td><code>className</code></td>
+      <td>Popover</td>
+      <td>Custom classes for the popover surface.</td>
     </tr>
 
     <tr>
@@ -148,14 +130,20 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
   </tbody>
 </table>
 
+## Heading options
+
+`Popover.Heading` also takes these props:
+
+- `eyebrow` — a small label above the title, such as a date.
+- `value` — content at the end of the title row, such as a total.
+- `showCloseButton` — shows the close button. Defaults to `true`.
+
+`eyebrow` and `value` are not part of the popover's accessible name. Only the title names it.
+
 ## Example
 
 ```tsx
-<Popover
-  trigger={<Button>Open</Button>}
-  placement="bottom"
-  containerClassName="custom-popover-container"
->
+<Popover trigger={<Button>Open</Button>} placement="bottom" className="custom-popover">
   <Popover.Heading headerClassName="gap-2" closeButtonClassName="rounded-full">
     Title
   </Popover.Heading>
