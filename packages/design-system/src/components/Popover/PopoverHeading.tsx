@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useLayoutEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
