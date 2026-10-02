@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Fragment, MouseEvent, ReactNode, useCallback, useState } from 'react';
+import { MouseEvent, ReactNode, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { Button, SectionHeading, UtilityBody } from '@/components/index.web';
+import { Button, UtilityBody } from '@/components/index.web';
 import {
   ArrowDiagonalIcon,
   CopyIcon,
@@ -374,71 +374,6 @@ const ItemsDemo = () => {
   );
 };
 
-const SUMMARY_GROUPS = [
-  [
-    { label: 'Desktop', value: '7,210' },
-    { label: 'Mobile', value: '5,270' },
-  ],
-  [
-    { label: 'New visitors', value: '8,904' },
-    { label: 'Returning visitors', value: '3,576' },
-  ],
-];
-
-const SummaryDemo = () => (
-  <MenuDemo
-    aria-label="Page views for the last 7 days"
-    className={styles.summaryMenu}
-    anchorOrigin={origin('center', 'left')}
-    transformOrigin={origin('center', 'right')}
-    renderAnchor={(anchorProps) => (
-      <Button variant="outlined" {...anchorProps}>
-        Page views
-      </Button>
-    )}
-  >
-    <div className={styles.summary}>
-      <div className={styles.summaryHeading}>
-        <UtilityBody size="xx-small" color="on-light-secondary" className={styles.summaryEyebrow}>
-          Last 7 days
-        </UtilityBody>
-        <SectionHeading importance={6} color="on-light-primary" className={styles.summaryTitle}>
-          <span>Page views</span>
-          <span>12,480</span>
-        </SectionHeading>
-      </div>
-
-      {SUMMARY_GROUPS.map((group) => (
-        <Fragment key={group[0].label}>
-          <Menu.Divider className={styles.summaryDivider} />
-          <dl className={styles.summaryList}>
-            {group.map(({ label, value }) => (
-              <div
-                key={label}
-                className={classNames(
-                  styles.summaryRow,
-                  'typography-utility-text-regular-small text-on-light-secondary'
-                )}
-              >
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </Fragment>
-      ))}
-
-      <Menu.Divider className={styles.summaryDivider} />
-      <Menu.Item href="https://varsity.startribune.com/" className={styles.summaryLink}>
-        <span className="typography-utility-text-medium-x-small">View Report</span>
-        <Menu.ItemIcon position="end">
-          <ArrowDiagonalIcon />
-        </Menu.ItemIcon>
-      </Menu.Item>
-    </div>
-  </MenuDemo>
-);
-
 export const AllVariants: Story = {
   args: {
     anchorEl: null,
@@ -534,14 +469,6 @@ export const AllVariants: Story = {
             </Menu.Item>
           ))}
         </MenuDemo>
-      </Section>
-
-      <Section
-        title="Summary"
-        description="Static content above a link item: a heading, label and value rows, and dividers. The link is the only menu item, so it gets focus when the menu opens."
-        contentClassName={styles.summaryContent}
-      >
-        <SummaryDemo />
       </Section>
 
       <Section
