@@ -243,82 +243,19 @@ describe('Popover', () => {
     });
   });
 
-  it('applies wrapperClassName', async () => {
+  it('applies className to the popover surface', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} wrapperClassName="custom-wrapper">
+      <Popover trigger={<Button>Open</Button>} className="custom-popover">
         <Popover.Body>Content</Popover.Body>
       </Popover>
     );
 
     await user.click(screen.getByText('Open'));
 
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const wrapper = content.closest('.custom-wrapper');
-
-      expect(wrapper).toHaveClass('custom-wrapper');
-    });
-  });
-
-  it('applies containerClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} containerClassName="custom-container">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const container = content.closest('.custom-container');
-
-      expect(container).toHaveClass('custom-container');
-    });
-  });
-
-  it('applies contentClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} contentClassName="custom-content">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const contentEl = content.closest('.custom-content');
-
-      expect(contentEl).toHaveClass('custom-content');
-    });
-  });
-
-  it('applies arrowClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} arrowClassName="custom-arrow">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const arrow = document.querySelector('svg.custom-arrow');
-
-      expect(arrow).toHaveClass('custom-arrow');
-    });
+    const surface = (await screen.findByText('Content')).closest('[role="dialog"]');
+    expect(surface).toHaveClass('custom-popover');
   });
 });
 

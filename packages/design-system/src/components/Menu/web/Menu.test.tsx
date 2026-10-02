@@ -25,8 +25,8 @@ const Harness = ({ onEdit, onDelete, onClose, children, ...menuProps }: HarnessP
         {...menuProps}
         anchorEl={anchorEl}
         open={anchorEl !== null}
-        onClose={() => {
-          onClose?.();
+        onClose={(reason) => {
+          onClose?.(reason);
           setAnchorEl(null);
         }}
       >
@@ -70,10 +70,10 @@ describe('Menu', () => {
     expect(screen.getByRole('separator')).toBeInTheDocument();
   });
 
-  it('keeps consumer styling hooks on each menu layer', async () => {
+  it('applies consumer classes to the surface, items, and dividers', async () => {
     const user = userEvent.setup();
     renderWithProvider(
-      <Harness wrapperClassName="custom-wrapper" containerClassName="custom-container">
+      <Harness className="custom-menu">
         <Menu.Item className="custom-item">Edit</Menu.Item>
         <Menu.Divider className="custom-divider" />
       </Harness>
@@ -81,8 +81,7 @@ describe('Menu', () => {
 
     const menu = await openMenu(user);
 
-    expect(menu).toHaveClass('custom-wrapper');
-    expect(menu.querySelector('.custom-container')).toBeInTheDocument();
+    expect(menu).toHaveClass('custom-menu');
     expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveClass('custom-item');
     expect(screen.getByRole('separator')).toHaveClass('custom-divider');
   });
@@ -107,32 +106,25 @@ describe('Menu', () => {
 
     expect(onEdit).toHaveBeenCalledTimes(1);
     expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledWith('itemSelect');
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
-  it('stays open when closeOnSelect is false', async () => {
+  it('stays open when an item sets closeOnSelect to false', async () => {
     const user = userEvent.setup();
-    const onEdit = vi.fn();
-    renderWithProvider(<Harness onEdit={onEdit} closeOnSelect={false} />);
-
-    await openMenu(user);
-    await user.click(screen.getByRole('menuitem', { name: 'Edit' }));
-
-    expect(onEdit).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole('menu')).toBeInTheDocument();
-  });
-
-  it('lets an item override closeOnSelect', async () => {
-    const user = userEvent.setup();
+    const onClick = vi.fn();
     renderWithProvider(
       <Harness>
-        <Menu.Item closeOnSelect={false}>Stay</Menu.Item>
+        <Menu.Item onClick={onClick} closeOnSelect={false}>
+          Stay
+        </Menu.Item>
       </Harness>
     );
 
     await openMenu(user);
     await user.click(screen.getByRole('menuitem', { name: 'Stay' }));
 
+    expect(onClick).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
@@ -192,6 +184,7 @@ describe('Menu', () => {
     await user.keyboard('{Escape}');
 
     expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledWith('escapeKey');
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
     await waitFor(() => expect(screen.getByRole('button', { name: 'Actions' })).toHaveFocus());
   });
@@ -204,7 +197,7 @@ describe('Menu', () => {
     await openMenu(user);
     await user.click(screen.getByRole('button', { name: 'Outside' }));
 
-    expect(onClose).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalledWith('outsidePress');
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
@@ -217,7 +210,7 @@ describe('Menu', () => {
     await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
     await user.tab();
 
-    await waitFor(() => expect(onClose).toHaveBeenCalled());
+    await waitFor(() => expect(onClose).toHaveBeenCalledWith('focusOut'));
   });
 
   it('renders a link item when href is set', async () => {
@@ -247,6 +240,72 @@ describe('Menu', () => {
     const menu = await openMenu(user);
 
     expect(menu.querySelector('svg.arrow')).toBeNull();
+  });
+
+  it('renders in a portal by default', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+
+    const menu = await openMenu(user);
+
+    expect(menu.closest('[data-floating-ui-portal]')).not.toBeNull();
+  });
+
+  it('renders into portalRoot when set', async () => {
+    const user = userEvent.setup();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    renderWithProvider(<Harness portalRoot={container} />);
+
+    const menu = await openMenu(user);
+
+    expect(container.contains(menu)).toBe(true);
+    container.remove();
+  });
+
+  it('locks page scroll while open and restores it on close', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+
+    await openMenu(user);
+    expect(document.body.style.overflow).toBe('hidden');
+
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('puts a default test id on the surface and passes test ids to every part', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(
+      <Harness>
+        <Menu.Item dataTestId="edit-item">
+          <Menu.ItemIcon dataTestId="edit-icon">
+            <svg />
+          </Menu.ItemIcon>
+          Edit
+        </Menu.Item>
+        <Menu.Divider dataTestId="divider" />
+        <Menu.Item href="/profile" dataTestId="profile-link">
+          Profile
+        </Menu.Item>
+      </Harness>
+    );
+
+    const menu = await openMenu(user);
+
+    expect(menu).toHaveAttribute('data-testid', 'menu');
+    expect(screen.getByTestId('edit-item')).toHaveAccessibleName('Edit');
+    expect(screen.getByTestId('edit-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
+    expect(screen.getByTestId('profile-link').tagName).toBe('A');
+  });
+
+  it('names each part with its namespace for React DevTools', () => {
+    expect(Menu.Root.displayName).toBe('Menu.Root');
+    expect(Menu.Item.displayName).toBe('Menu.Item');
+    expect(Menu.ItemIcon.displayName).toBe('Menu.ItemIcon');
+    expect(Menu.Divider.displayName).toBe('Menu.Divider');
   });
 
   it('exports its parts as a namespace', () => {

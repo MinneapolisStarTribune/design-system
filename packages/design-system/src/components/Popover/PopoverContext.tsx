@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { FloatingPortalRootContext } from './FloatingPortalRootContext';
 
 type PopoverContextValue = {
   close: () => void;
@@ -23,7 +24,7 @@ export const usePopoverContext = () => {
  * node instead of document.body. Prefer `PopoverPortalRootProvider` for most cases; use this
  * context directly only when you need to supply an existing HTMLElement (e.g. from a ref).
  */
-export const PopoverPortalRootContext = createContext<HTMLElement | null>(null);
+export const PopoverPortalRootContext = FloatingPortalRootContext;
 
 /**
  * For when you want more customization over where popover content renders.

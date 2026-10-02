@@ -7,7 +7,7 @@ import * as MenuStories from './Menu.stories';
 
 # Menu
 
-`Menu` shows a short list of actions or links next to the element that triggered it, for example an account menu, a table row's "more actions" button, or a bulk-actions button. It is built on `Popover` in anchored mode, so it has the same surface, pointer, and dismiss behavior. It closes when the user selects an item, clicks outside, or presses Escape or Tab.
+`Menu` shows a short list of actions or links next to the element that triggered it, for example an account menu, a table row's "more actions" button, or a bulk-actions button. It uses the shared internal surface that also powers `Popover`, so it has the same surface, pointer, and dismiss behavior. It closes when the user selects an item, clicks outside, or presses Escape or Tab.
 
 [Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-508)
 
@@ -108,7 +108,11 @@ import * as MenuStories from './Menu.stories';
         <code>onClose</code>
       </td>
       <td>Menu.Root</td>
-      <td>Called on Escape, Tab, a click outside, or when an item closes the menu.</td>
+      <td>
+        Called with what closed the menu: <code>{"'escapeKey'"}</code>,{' '}
+        <code>{"'outsidePress'"}</code>, <code>{"'focusOut'"}</code> (Tab), or{' '}
+        <code>{"'itemSelect'"}</code>.
+      </td>
     </tr>
 
     <tr>
@@ -121,31 +125,12 @@ import * as MenuStories from './Menu.stories';
 
     <tr>
       <td>
-        <code>anchorOrigin</code>
+        <code>anchorOrigin</code> / <code>transformOrigin</code>
       </td>
       <td>Menu.Root</td>
       <td>
-        The point on the anchor, as <code>{'{ vertical, horizontal }'}</code> (default: bottom /
-        left). See Positioning.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>transformOrigin</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>The point on the menu that attaches to the anchor (default: top / left).</td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>placement</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>
-        Sets the side and alignment directly, for example <code>{"'right-end'"}</code>. Overrides
-        the origins.
+        The point on the anchor and the point on the menu that meet (default: anchor bottom-left
+        to menu top-left). See Positioning.
       </td>
     </tr>
 
@@ -153,8 +138,8 @@ import * as MenuStories from './Menu.stories';
       <td>
         <code>closeOnSelect</code>
       </td>
-      <td>Menu.Root, Menu.Item</td>
-      <td>Whether selecting an item closes the menu (default: true). An item's value overrides the menu's.</td>
+      <td>Menu.Item</td>
+      <td>Whether selecting the item closes the menu (default: true).</td>
     </tr>
 
     <tr>
@@ -170,63 +155,10 @@ import * as MenuStories from './Menu.stories';
         <code>arrowOffset</code>
       </td>
       <td>Menu.Root</td>
-      <td>Pins the pointer along the menu edge. See Pointer.</td>
-    </tr>
-
-    <tr>
       <td>
-        <code>surfaceWidth</code>
+        <code>{"'start'"}</code>, <code>{"'center'"}</code>, or <code>{"'end'"}</code>. Pins the
+        pointer along the menu edge. See Pointer.
       </td>
-      <td>Menu.Root</td>
-      <td>Surface width. A number is in pixels; strings accept any CSS length (default: 360px).</td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>itemMinHeight</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>Minimum item-row height. A number is in pixels; strings accept any CSS length (default: 43px).</td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>maxHeight</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>Maximum list height. Longer menus scroll inside the surface (default: 362px).</td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>portalRoot</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>Element the menu portals into (defaults to document.body).</td>
-    </tr>
-
-    <tr>
-      <td><code>wrapperClassName</code></td>
-      <td>Menu.Root surface</td>
-      <td>Custom class for the outer floating surface.</td>
-    </tr>
-
-    <tr>
-      <td><code>containerClassName</code></td>
-      <td>Container</td>
-      <td>Custom class for the scrollable inner container that holds the menu items.</td>
-    </tr>
-
-    <tr>
-      <td><code>contentClassName</code></td>
-      <td>Content</td>
-      <td>Custom class for the popover content layer inside the container.</td>
-    </tr>
-
-    <tr>
-      <td><code>arrowClassName</code></td>
-      <td>Pointer</td>
-      <td>Custom class for the pointer arrow.</td>
     </tr>
 
     <tr>
@@ -270,8 +202,21 @@ import * as MenuStories from './Menu.stories';
       <td>
         <code>className</code>
       </td>
-      <td>Menu.Item, Menu.ItemIcon, Menu.Divider</td>
-      <td>Custom classes for the element.</td>
+      <td>Menu.Root, Menu.Item, Menu.ItemIcon, Menu.Divider</td>
+      <td>
+        Custom classes for the element. On <code>Menu.Root</code> it styles the menu surface; use it
+        to set the sizing variables below.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>dataTestId</code>
+      </td>
+      <td>Menu.Root, Menu.Item, Menu.ItemIcon, Menu.Divider</td>
+      <td>
+        Sets <code>data-testid</code> on the element (Menu.Root default: <code>{"'menu'"}</code>).
+      </td>
     </tr>
 
   </tbody>
@@ -279,9 +224,71 @@ import * as MenuStories from './Menu.stories';
 
 Other button or anchor attributes on `Menu.Item`, such as `aria-label` or `data-*`, are passed through.
 
+### Sizing
+
+Set these CSS variables on the class you pass to `Menu.Root`:
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Controls</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <code>--menu-width</code>
+      </td>
+      <td>360px</td>
+      <td>Surface width.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>--menu-max-height</code>
+      </td>
+      <td>362px</td>
+      <td>Maximum list height. Longer menus scroll inside the surface.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>--menu-item-min-height</code>
+      </td>
+      <td>43px</td>
+      <td>Minimum item-row height.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+```css
+.account-menu {
+  --menu-width: 315px;
+  --menu-item-min-height: 48px;
+}
+```
+
 ## Positioning
 
-`anchorOrigin` picks a point on the anchor, and `transformOrigin` picks the point on the menu that attaches to it. When the two points are on opposite edges, that pair decides the side. The menu's point on the other axis decides the alignment.
+`anchorOrigin` and `transformOrigin` work like MUI's: each is a `{ vertical, horizontal }` point, and the menu moves so its `transformOrigin` sits on the anchor's `anchorOrigin`.
+
+```tsx
+// Below the anchor, right edges aligned.
+<Menu.Root
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+/>
+```
+
+When the origins sit on opposite edges (anchor bottom and menu top, anchor right and menu left), the menu opens beside the anchor with the pointer. If that side runs out of room, it flips to the other side. Any other pair, such as top-left to top-left, puts the menu over the anchor. The pointer is then hidden. Instead of flipping, the menu slides up or down to stay on screen.
+
+While the menu is open, page scroll is locked, so the menu can't drift away from its anchor. Pressing outside the menu closes it; that press doesn't reach the element underneath.
+
+Common positions:
 
 <table>
   <thead>
@@ -299,46 +306,49 @@ Other button or anchor attributes on `Menu.Item`, such as `aria-label` or `data-
 
   <tbody>
     <tr>
-      <td>bottom / left</td>
-      <td>top / left</td>
+      <td>bottom left</td>
+      <td>top left</td>
       <td>Below, left edges aligned (default)</td>
       <td>Buttons, bulk actions</td>
     </tr>
 
     <tr>
-      <td>bottom / right</td>
-      <td>top / right</td>
+      <td>bottom right</td>
+      <td>top right</td>
       <td>Below, right edges aligned</td>
       <td>Table row "more actions"</td>
     </tr>
 
     <tr>
-      <td>top / center</td>
-      <td>bottom / center</td>
+      <td>top center</td>
+      <td>bottom center</td>
       <td>Above, centered</td>
       <td></td>
     </tr>
 
     <tr>
-      <td>bottom / right</td>
-      <td>bottom / left</td>
+      <td>bottom right</td>
+      <td>bottom left</td>
       <td>Right, bottom edges aligned</td>
       <td>Sidebar avatar (tablet)</td>
     </tr>
 
     <tr>
-      <td>top / right</td>
-      <td>bottom / right</td>
+      <td>top right</td>
+      <td>bottom right</td>
       <td>Above, right edges aligned</td>
       <td>Sidebar footer (desktop)</td>
     </tr>
 
+    <tr>
+      <td>top left</td>
+      <td>top left</td>
+      <td>Over the anchor, no pointer</td>
+      <td></td>
+    </tr>
+
   </tbody>
 </table>
-
-- If the origins would place the menu on top of its anchor, it opens below instead, because the pointer has to point at the anchor
-- When there isn't room on the chosen side, the menu flips to the opposite side and shifts to stay on screen
-- `placement` sets the side and alignment directly and ignores the origins
 
 ## Pointer
 
@@ -372,20 +382,10 @@ By default the pointer aims at the center of the anchor and stays at least 16px 
       <td>The middle of the edge.</td>
     </tr>
 
-    <tr>
-      <td>
-        A number or CSS length, for example <code>{'24'}</code> or <code>{"'35%'"}</code>
-      </td>
-      <td>
-        Exact distance, measured from the edge the menu is aligned to: the end edge for{' '}
-        <code>{'-end'}</code> placements, the start edge otherwise.
-      </td>
-    </tr>
-
   </tbody>
 </table>
 
-For example, `placement="top-end"` with `arrowOffset={23}` pins the pointer 23px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
+For example, opening above with right edges aligned (`anchorOrigin` top right, `transformOrigin` bottom right) and `arrowOffset="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
 
 ## Example
 
@@ -427,6 +427,8 @@ const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   </Menu.Item>
 </Menu.Root>
 ```
+
+The menu follows the app's light or dark theme. The surface, text, default icon color, dividers, and hover state all switch with it.
 
 Icons keep their own color. Pass a named color such as `brand-01`, which resolves per brand and theme (green for Star Tribune, blue for Varsity), or any CSS color through `style`.
 
@@ -492,7 +494,7 @@ Icons keep their own color. Pass a named color such as `brand-01`, which resolve
         <strong>Renders its trigger</strong>
       </td>
       <td>No, pass <code>anchorEl</code></td>
-      <td>Yes, or anchored mode</td>
+      <td>Yes</td>
       <td>Yes</td>
     </tr>
 

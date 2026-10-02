@@ -22,6 +22,10 @@
   --color-text-on-light-primary: var(--color-neutral-950);
   --color-text-on-light-secondary: var(--color-neutral-800);
   --color-text-on-light-tertiary: var(--color-neutral-700);
+  /* Icons use on-light-primary by default, so fix the icon tokens too. Tertiary is not fixed,
+     because its value is different for each brand. */
+  --color-icon-on-light-primary: var(--color-neutral-950);
+  --color-icon-on-light-secondary: var(--color-neutral-800);
 }
 
 .sb-dark .wrapper,

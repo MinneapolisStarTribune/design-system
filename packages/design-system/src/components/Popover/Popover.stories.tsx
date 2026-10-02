@@ -17,16 +17,7 @@ const meta = {
       control: 'select',
       options: ['top', 'right', 'bottom', 'left'],
     },
-    wrapperClassName: {
-      control: 'text',
-    },
-    containerClassName: {
-      control: 'text',
-    },
-    contentClassName: {
-      control: 'text',
-    },
-    arrowClassName: {
+    className: {
       control: 'text',
     },
   },
@@ -42,10 +33,7 @@ export const Configurable: Story = {
   args: {
     trigger: <Button>Open</Button>,
     placement: 'bottom',
-    containerClassName: undefined,
-    contentClassName: undefined,
-    wrapperClassName: undefined,
-    arrowClassName: undefined,
+    className: undefined,
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
@@ -62,7 +50,7 @@ export const Configurable: Story = {
 <Popover
   placement="bottom"
   trigger={<Button>Open</Button>}
-  containerClassName="custom-container"
+  className="custom-popover"
 >
   <Popover.Heading>Title</Popover.Heading>
 

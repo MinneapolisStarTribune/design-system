@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CSSProperties, MouseEvent, ReactNode, useState } from 'react';
+import { MouseEvent, ReactNode, useState } from 'react';
+import classNames from 'classnames';
 import { Button, UtilityBody } from '@/components/index.web';
 import {
   ArrowDiagonalIcon,
@@ -14,17 +15,16 @@ import {
   TrashIcon,
 } from '@/icons';
 import * as Menu from './Menu';
-import type { Position } from '@/types';
-import { getMenuPlacement } from '../getMenuPlacement';
-import type { MenuLabelProps, MenuProps, MenuOrigin } from '../Menu.types';
-import { MENU_HORIZONTAL_ORIGINS, MENU_VERTICAL_ORIGINS } from '../Menu.types';
+import styles from './Menu.stories.module.scss';
+import { MENU_ARROW_OFFSETS } from '../Menu.constants';
+import type { MenuLabelProps, MenuOrigin, MenuProps } from '../Menu.types';
 
 type DemoProps = Omit<MenuProps, 'anchorEl' | 'open' | 'onClose' | keyof MenuLabelProps> &
   MenuLabelProps & {
     renderAnchor: (props: { onClick: (event: MouseEvent<HTMLElement>) => void }) => ReactNode;
   };
 
-/** Owns the anchor state the way a consumer would. */
+/** Holds the anchor in state, the way a consumer would. */
 const MenuDemo = ({ renderAnchor, children, ...menuProps }: DemoProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -72,21 +72,6 @@ const AccountItems = () => (
   </>
 );
 
-// Storybook select controls need string options, so map "vertical-horizontal" labels to origins.
-const ORIGIN_MAPPING = Object.fromEntries(
-  MENU_VERTICAL_ORIGINS.flatMap((vertical) =>
-    MENU_HORIZONTAL_ORIGINS.map((horizontal) => [
-      `${vertical}-${horizontal}`,
-      { vertical, horizontal },
-    ])
-  )
-);
-const ORIGIN_CONTROL = {
-  control: 'select',
-  options: Object.keys(ORIGIN_MAPPING),
-  mapping: ORIGIN_MAPPING,
-} as const;
-
 const meta = {
   title: 'Feedback & Status/Menu',
   component: Menu.Root,
@@ -98,36 +83,15 @@ const meta = {
     open: { control: false },
     onClose: { control: false },
     children: { control: false },
-    anchorOrigin: ORIGIN_CONTROL,
-    transformOrigin: ORIGIN_CONTROL,
-    placement: {
-      control: 'select',
-      options: [
-        undefined,
-        'top-start',
-        'top',
-        'top-end',
-        'right-start',
-        'right',
-        'right-end',
-        'bottom-start',
-        'bottom',
-        'bottom-end',
-        'left-start',
-        'left',
-        'left-end',
-      ],
-      description: 'Overrides `anchorOrigin`/`transformOrigin` when set.',
-    },
-    closeOnSelect: { control: 'boolean' },
+    portalRoot: { control: false, table: { disable: true } },
+    anchorOrigin: { control: 'object' },
+    transformOrigin: { control: 'object' },
     hideArrow: { control: 'boolean' },
-    surfaceWidth: { control: 'number' },
-    itemMinHeight: { control: 'number' },
-    maxHeight: { control: 'number' },
     arrowOffset: {
       control: 'select',
-      options: [undefined, 'start', 'center', 'end', 60, '35%'],
-      description: 'Pins the pointer along its edge. Unset aims it at the anchor’s center.',
+      options: [undefined, ...MENU_ARROW_OFFSETS],
+      description:
+        'Sets a fixed arrow position. When not set, the arrow points at the anchor’s center.',
     },
   },
 } satisfies Meta<typeof Menu.Root>;
@@ -144,7 +108,8 @@ export const Configurable: Story = {
     open: false,
     children: null,
     'aria-label': 'Account',
-    closeOnSelect: true,
+    anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+    transformOrigin: { vertical: 'top', horizontal: 'left' },
     hideArrow: false,
   },
   render: ({
@@ -201,149 +166,72 @@ const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   },
 };
 
-const ALIGNMENTS = [
-  { horizontal: 'left', vertical: 'top' },
-  { horizontal: 'center', vertical: 'center' },
-  { horizontal: 'right', vertical: 'bottom' },
-] as const;
+type MenuOrigins = Pick<MenuProps, 'anchorOrigin' | 'transformOrigin'>;
 
-type PlacementCase = {
-  anchorOrigin: MenuOrigin;
-  transformOrigin: MenuOrigin;
-};
+const origin = (
+  vertical: MenuOrigin['vertical'],
+  horizontal: MenuOrigin['horizontal']
+): MenuOrigin => ({ vertical, horizontal });
 
-// Every side and alignment, built from the origin pairs that produce them.
-const PLACEMENT_GROUPS: Array<{ side: Position; title: string; cases: PlacementCase[] }> = [
-  {
-    side: 'bottom',
-    title: 'Below the anchor',
-    cases: ALIGNMENTS.map(({ horizontal }) => ({
-      anchorOrigin: { vertical: 'bottom', horizontal },
-      transformOrigin: { vertical: 'top', horizontal },
-    })),
-  },
-  {
-    side: 'top',
-    title: 'Above the anchor',
-    cases: ALIGNMENTS.map(({ horizontal }) => ({
-      anchorOrigin: { vertical: 'top', horizontal },
-      transformOrigin: { vertical: 'bottom', horizontal },
-    })),
-  },
-  {
-    side: 'right',
-    title: 'Right of the anchor',
-    cases: ALIGNMENTS.map(({ vertical }) => ({
-      anchorOrigin: { vertical, horizontal: 'right' },
-      transformOrigin: { vertical, horizontal: 'left' },
-    })),
-  },
-  {
-    side: 'left',
-    title: 'Left of the anchor',
-    cases: ALIGNMENTS.map(({ vertical }) => ({
-      anchorOrigin: { vertical, horizontal: 'left' },
-      transformOrigin: { vertical, horizontal: 'right' },
-    })),
-  },
-];
+// Opens to the right, so tall menus use the empty space next to the trigger.
+const OPEN_RIGHT = {
+  anchorOrigin: origin('top', 'right'),
+  transformOrigin: origin('top', 'left'),
+} satisfies MenuOrigins;
 
-// Pushes the anchor away from the side the menu opens on, so every menu fits in its cell.
-const ANCHOR_ALIGNMENT: Record<Position, CSSProperties> = {
-  bottom: { alignItems: 'flex-start', justifyContent: 'center' },
-  top: { alignItems: 'flex-end', justifyContent: 'center' },
-  right: { alignItems: 'center', justifyContent: 'flex-start' },
-  left: { alignItems: 'center', justifyContent: 'flex-end' },
-};
+/** `cell` moves the anchor away from the side the menu opens on, so the menu fits in its cell. */
+const POSITION_EXAMPLES = [
+  {
+    label: 'Below, left edges (default)',
+    cell: 'bottom',
+    anchorOrigin: origin('bottom', 'left'),
+    transformOrigin: origin('top', 'left'),
+  },
+  {
+    label: 'Above, centered',
+    cell: 'top',
+    anchorOrigin: origin('top', 'center'),
+    transformOrigin: origin('bottom', 'center'),
+  },
+  {
+    label: 'Right, bottom edges',
+    cell: 'right',
+    anchorOrigin: origin('bottom', 'right'),
+    transformOrigin: origin('bottom', 'left'),
+  },
+  {
+    label: 'Over the anchor',
+    cell: 'center',
+    anchorOrigin: origin('top', 'left'),
+    transformOrigin: origin('top', 'left'),
+  },
+  {
+    label: 'Centered on the anchor',
+    cell: 'center',
+    anchorOrigin: origin('center', 'center'),
+    transformOrigin: origin('center', 'center'),
+  },
+  {
+    label: 'hideArrow',
+    cell: 'bottom',
+    anchorOrigin: origin('bottom', 'center'),
+    transformOrigin: origin('top', 'center'),
+    hideArrow: true,
+  },
+] satisfies Array<
+  { label: string; cell: 'bottom' | 'top' | 'right' | 'center' } & MenuOrigins &
+    Pick<MenuProps, 'hideArrow'>
+>;
 
 const formatOrigin = ({ vertical, horizontal }: MenuOrigin) => `${vertical} ${horizontal}`;
 
-const CELL_STYLE = {
-  display: 'flex',
-  height: 166,
-  padding: 16,
-  border: '1px dashed var(--color-neutral-300)',
-  borderRadius: 8,
-} satisfies CSSProperties;
-
-const COMPARISON_MENU_CLASS = 'menu-story-comparison';
-const COMPARISON_MENU_WIDTH = 240;
-
-const ComparisonMenuStyles = () => (
-  <style>{`
-    .${COMPARISON_MENU_CLASS} {
-      --popover-min-width: ${COMPARISON_MENU_WIDTH}px;
-      --popover-max-width: ${COMPARISON_MENU_WIDTH}px;
-    }
-  `}</style>
-);
-
-const PlacementCell = ({
-  side,
-  anchorOrigin,
-  transformOrigin,
-}: PlacementCase & { side: Position }) => {
-  const resolvedPlacement = getMenuPlacement(anchorOrigin, transformOrigin);
-
-  return (
-    <figure style={{ margin: 0 }}>
-      <div style={{ ...CELL_STYLE, ...ANCHOR_ALIGNMENT[side] }}>
-        <MenuDemo
-          anchorOrigin={anchorOrigin}
-          transformOrigin={transformOrigin}
-          aria-label={`${resolvedPlacement} example`}
-          wrapperClassName={COMPARISON_MENU_CLASS}
-          renderAnchor={({ onClick }) => (
-            <Button size="small" onClick={onClick}>
-              {resolvedPlacement}
-            </Button>
-          )}
-        >
-          <Menu.Item onClick={() => undefined}>Item one</Menu.Item>
-          <Menu.Item onClick={() => undefined}>Item two</Menu.Item>
-        </MenuDemo>
-      </div>
-      <figcaption style={{ marginTop: 8, font: '12px/1.5 monospace' }}>
-        <div>anchorOrigin: {formatOrigin(anchorOrigin)}</div>
-        <div>transformOrigin: {formatOrigin(transformOrigin)}</div>
-      </figcaption>
-    </figure>
-  );
-};
-
-const ARROW_OFFSET_EXAMPLES = [
-  { label: 'Default (aims at anchor)', arrowOffset: undefined },
-  { label: "arrowOffset='start'", arrowOffset: 'start' },
-  { label: "arrowOffset='center'", arrowOffset: 'center' },
-  { label: "arrowOffset='end'", arrowOffset: 'end' },
-  { label: 'arrowOffset={60}', arrowOffset: 60 },
-  { label: 'hideArrow', hideArrow: true },
-] satisfies Array<{ label: string } & Pick<MenuProps, 'arrowOffset' | 'hideArrow'>>;
-
-const formatPointer = ({
-  arrowOffset,
-  hideArrow,
-}: Pick<MenuProps, 'arrowOffset' | 'hideArrow'>) => {
-  if (hideArrow) return 'hideArrow';
-  if (arrowOffset === undefined) return 'arrowOffset: not set';
-  return `arrowOffset: ${typeof arrowOffset === 'string' ? `'${arrowOffset}'` : arrowOffset}`;
-};
-
-// Below and centred, so the pointer options compare against the centred default.
-const POINTER_ORIGINS = {
-  anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
-  transformOrigin: { vertical: 'top', horizontal: 'center' },
-} satisfies Pick<PlacementCase, 'anchorOrigin' | 'transformOrigin'>;
-
-/** One pointer option, using the same button and menu as the placement examples. */
-const PointerCell = ({ label, ...pointerProps }: (typeof ARROW_OFFSET_EXAMPLES)[number]) => (
-  <figure style={{ margin: 0 }}>
-    <div style={{ ...CELL_STYLE, ...ANCHOR_ALIGNMENT.bottom }}>
+const PositionCell = ({ label, cell, ...menuProps }: (typeof POSITION_EXAMPLES)[number]) => (
+  <figure className={styles.figure}>
+    <div className={classNames(styles.cell, styles[`cell-${cell}`])}>
       <MenuDemo
-        {...pointerProps}
-        {...POINTER_ORIGINS}
+        {...menuProps}
         aria-label={label}
-        wrapperClassName={COMPARISON_MENU_CLASS}
+        className={styles.comparisonMenu}
         renderAnchor={({ onClick }) => (
           <Button size="small" onClick={onClick}>
             {label}
@@ -354,89 +242,33 @@ const PointerCell = ({ label, ...pointerProps }: (typeof ARROW_OFFSET_EXAMPLES)[
         <Menu.Item onClick={() => undefined}>Item two</Menu.Item>
       </MenuDemo>
     </div>
-    <figcaption style={{ marginTop: 8, font: '12px/1.5 monospace' }}>
-      <div>anchorOrigin: {formatOrigin(POINTER_ORIGINS.anchorOrigin)}</div>
-      <div>transformOrigin: {formatOrigin(POINTER_ORIGINS.transformOrigin)}</div>
-      <div>{formatPointer(pointerProps)}</div>
+    <figcaption className={styles.caption}>
+      <div>{`anchorOrigin: ${formatOrigin(menuProps.anchorOrigin)}`}</div>
+      <div>{`transformOrigin: ${formatOrigin(menuProps.transformOrigin)}`}</div>
     </figcaption>
   </figure>
-);
-
-const PLACEMENT_GRID_STYLE = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
-  gap: 16,
-} satisfies CSSProperties;
-
-/** Every side and alignment, then the pointer options on a centred placement. */
-const PlacementGallery = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-    <ComparisonMenuStyles />
-    {PLACEMENT_GROUPS.map(({ side, title, cases }) => (
-      <section key={side}>
-        <UtilityBody weight="semibold" style={{ margin: '0 0 8px' }}>
-          {title}
-        </UtilityBody>
-        <div style={PLACEMENT_GRID_STYLE}>
-          {cases.map((placementCase) => (
-            <PlacementCell
-              key={getMenuPlacement(placementCase.anchorOrigin, placementCase.transformOrigin)}
-              side={side}
-              {...placementCase}
-            />
-          ))}
-        </div>
-      </section>
-    ))}
-    <section>
-      <UtilityBody weight="semibold" style={{ margin: '0 0 8px' }}>
-        Pointer position
-      </UtilityBody>
-      <div style={PLACEMENT_GRID_STYLE}>
-        {ARROW_OFFSET_EXAMPLES.map((example) => (
-          <PointerCell key={example.label} {...example} />
-        ))}
-      </div>
-    </section>
-  </div>
 );
 
 type SectionProps = {
   title: string;
   description: ReactNode;
   children: ReactNode;
-  /** Reserves room for the open menu so it doesn't cover the next section. */
-  contentStyle?: CSSProperties;
+  /** Leaves room for the open menu, so it doesn't cover the next section. */
+  contentClassName?: string;
 };
 
-/** A titled block in the All variants story, with a one-line explanation of what it shows. */
-const Section = ({ title, description, children, contentStyle }: SectionProps) => (
-  <section style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-    <UtilityBody size="large" weight="semibold" style={{ margin: 0 }}>
+/** One section of the All variants story: a title, a short description, and the examples. */
+const Section = ({ title, description, children, contentClassName }: SectionProps) => (
+  <section className={styles.section}>
+    <UtilityBody size="large" weight="semibold" className={styles.sectionTitle}>
       {title}
     </UtilityBody>
-    <UtilityBody size="small" style={{ margin: 0, maxWidth: 640 }}>
+    <UtilityBody size="small" className={styles.sectionDescription}>
       {description}
     </UtilityBody>
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'flex-start',
-        gap: 16,
-        ...contentStyle,
-      }}
-    >
-      {children}
-    </div>
+    <div className={classNames(styles.sectionContent, contentClassName)}>{children}</div>
   </section>
 );
-
-// Opens beside the trigger so tall menus use the empty space to the right.
-const OPEN_RIGHT = {
-  anchorOrigin: { vertical: 'top', horizontal: 'right' },
-  transformOrigin: { vertical: 'top', horizontal: 'left' },
-} satisfies Pick<MenuProps, 'anchorOrigin' | 'transformOrigin'>;
 
 const RowActionItems = () => (
   <>
@@ -455,12 +287,12 @@ const RowActionItems = () => (
   </>
 );
 
-/** Every item variation in one menu. The counter shows the item that keeps the menu open. */
+/** One menu with every item type. The counter goes up each time the item that stays open is selected. */
 const ItemsDemo = () => {
   const [notes, setNotes] = useState(0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div className={styles.itemsDemo}>
       <MenuDemo
         {...OPEN_RIGHT}
         aria-label="Item variations"
@@ -516,7 +348,7 @@ const ItemsDemo = () => {
           A long label that needs more than one line to show all of its text
         </Menu.Item>
       </MenuDemo>
-      <span style={{ font: '12px/1.4 monospace' }}>Notes added: {notes}</span>
+      <span className={styles.counter}>Notes added: {notes}</span>
     </div>
   );
 };
@@ -533,18 +365,17 @@ export const AllVariants: Story = {
   },
   parameters: { layout: 'padded' },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 40, padding: 24 }}>
+    <div className={styles.page}>
       <Section
         title="Account menu"
-        description="The Coaches Portal sidebar avatar menu. It opens to the right with bottom edges aligned (right-end)."
-        contentStyle={{ minHeight: 160, alignItems: 'flex-end', paddingBottom: 8 }}
+        description="A menu of account links and actions, opened from a profile or avatar button."
+        contentClassName={styles.accountContent}
       >
         <MenuDemo
           aria-label="Account"
-          surfaceWidth={315}
-          itemMinHeight={48}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          className={styles.accountMenu}
+          anchorOrigin={origin('bottom', 'right')}
+          transformOrigin={origin('bottom', 'left')}
           renderAnchor={({ onClick }) => <Button onClick={onClick}>Account</Button>}
         >
           <AccountItems />
@@ -553,28 +384,16 @@ export const AllVariants: Story = {
 
       <Section
         title="Row actions"
-        description="The Coaches Portal icon-only trigger at the end of a table row. The menu opens below with right edges aligned."
-        contentStyle={{ minHeight: 165 }}
+        description="Actions for one item in a list or table, opened from an icon button."
+        contentClassName={styles.rowActionsContent}
       >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: '100%',
-            maxWidth: 480,
-            padding: '8px 16px',
-            border: '1px solid var(--color-neutral-300)',
-            borderRadius: 8,
-          }}
-        >
+        <div className={styles.tableRow}>
           <UtilityBody size="small">Table row</UtilityBody>
           <MenuDemo
             aria-label="Row actions"
-            surfaceWidth={214}
-            itemMinHeight={48}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            className={styles.rowActionsMenu}
+            anchorOrigin={origin('bottom', 'right')}
+            transformOrigin={origin('top', 'right')}
             renderAnchor={({ onClick }) => (
               <Button
                 variant="ghost"
@@ -593,20 +412,19 @@ export const AllVariants: Story = {
         title="Menu items"
         description={
           <>
-            Text only, start icon, colored icon, link with an end icon, an item with{' '}
-            <code>closeOnSelect={'{false}'}</code>, a disabled item, a divider, and a label that
-            wraps.
+            The item types: text, icons, links, disabled items, dividers, and items that keep the
+            menu open (<code>closeOnSelect={'{false}'}</code>).
           </>
         }
-        contentStyle={{ minHeight: 360 }}
+        contentClassName={styles.itemsContent}
       >
         <ItemsDemo />
       </Section>
 
       <Section
         title="Long lists"
-        description="The Core Components long-list pattern: menus taller than 362px scroll inside the rounded surface."
-        contentStyle={{ minHeight: 505 }}
+        description="Long menus scroll inside the surface."
+        contentClassName={styles.longListContent}
       >
         <MenuDemo
           {...OPEN_RIGHT}
@@ -626,11 +444,18 @@ export const AllVariants: Story = {
       </Section>
 
       <Section
-        title="Placements"
-        description="Every side and alignment, then the pointer options. Each placement button is labelled with the placement its origins resolve to. By default the pointer aims at the anchor's center; arrowOffset pins it along the edge and hideArrow removes it."
+        title="Positioning"
+        description={
+          <>
+            <code>anchorOrigin</code> and <code>transformOrigin</code> set where the menu opens
+            relative to its anchor.
+          </>
+        }
       >
-        <div style={{ width: '100%' }}>
-          <PlacementGallery />
+        <div className={styles.grid}>
+          {POSITION_EXAMPLES.map((example) => (
+            <PositionCell key={example.label} {...example} />
+          ))}
         </div>
       </Section>
     </div>

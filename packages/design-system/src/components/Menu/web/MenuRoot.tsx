@@ -1,26 +1,24 @@
 'use client';
 
-import { CSSProperties, KeyboardEvent, useCallback, useContext, useMemo, useRef } from 'react';
+import React, { KeyboardEvent, useCallback, useContext, useMemo, useRef } from 'react';
 import classNames from 'classnames';
-import { FloatingSurface } from '../../Popover/FloatingSurface';
-import { PopoverPortalRootContext } from '../../Popover/PopoverContext';
-import {
-  getMenuPlacement,
-  MENU_ARROW_CORNER_INSET,
-  MENU_ARROW_SIZE,
-  resolveMenuArrowOffset,
-} from '../getMenuPlacement';
+import type { OpenChangeReason } from '@floating-ui/react';
+import { FloatingPortalRootContext } from '../../Popover/FloatingPortalRootContext';
+import { FLOATING_GAP, FloatingSurface } from '../../Popover/FloatingSurface';
+import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from '../menuArrow';
 import { MenuContext } from '../MenuContext';
-import { MenuProps } from '../Menu.types';
+import {
+  DEFAULT_ANCHOR_ORIGIN,
+  DEFAULT_TRANSFORM_ORIGIN,
+  getMenuOriginPosition,
+} from '../menuOrigin';
+import { MenuCloseReason, MenuProps } from '../Menu.types';
 import styles from './Menu.module.scss';
 
 const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
 
 const getEnabledItems = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR));
-
-const toCssLength = (value: number | string | undefined) =>
-  typeof value === 'number' ? `${value}px` : value;
 
 const getNextIndex = (key: string, current: number, count: number) => {
   switch (key) {
@@ -37,40 +35,40 @@ const getNextIndex = (key: string, current: number, count: number) => {
   }
 };
 
-export const MenuRoot = ({
+// `useDismiss` reports Escape and outside presses. The focus manager reports focus that leaves the
+// menu. Nothing else closes an anchored menu.
+const toCloseReason = (reason: OpenChangeReason | undefined): MenuCloseReason => {
+  if (reason === 'escape-key') return 'escapeKey';
+  if (reason === 'focus-out') return 'focusOut';
+  return 'outsidePress';
+};
+
+export const MenuRoot: React.FC<MenuProps> = ({
   anchorEl,
   open,
   onClose,
   anchorOrigin,
   transformOrigin,
-  placement,
-  closeOnSelect = true,
   hideArrow,
   arrowOffset,
-  surfaceWidth,
-  itemMinHeight,
-  maxHeight,
+  className,
   portalRoot,
   id,
-  style,
+  dataTestId = 'menu',
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
-  wrapperClassName,
-  containerClassName,
-  contentClassName,
-  arrowClassName,
   children,
-}: MenuProps) => {
+}) => {
   const initialFocusRef = useRef<HTMLElement | null>(null);
 
-  // Items are all tabIndex -1, so point the focus manager at the first enabled one.
+  // All items have tabIndex -1, so tell the focus manager to focus the first enabled item.
   const listRef = useCallback((node: HTMLDivElement | null) => {
     initialFocusRef.current = node ? (getEnabledItems(node)[0] ?? null) : null;
   }, []);
 
   const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (!nextOpen) onClose?.();
+    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
+      if (!nextOpen) onClose?.(toCloseReason(reason));
     },
     [onClose]
   );
@@ -86,16 +84,25 @@ export const MenuRoot = ({
     items[next].focus();
   };
 
-  const portalRootFromContext = useContext(PopoverPortalRootContext);
-  const close = useCallback(() => onClose?.(), [onClose]);
-  const resolvedPlacement = placement ?? getMenuPlacement(anchorOrigin, transformOrigin);
-  const contextValue = useMemo(() => ({ closeOnSelect, close }), [closeOnSelect, close]);
-  const surfaceStyle = {
-    '--popover-min-width': toCssLength(surfaceWidth),
-    '--popover-max-width': toCssLength(surfaceWidth),
-    '--popover-max-height': toCssLength(maxHeight),
-    '--menu-item-min-height': toCssLength(itemMinHeight),
-  } as CSSProperties;
+  const portalRootFromContext = useContext(FloatingPortalRootContext);
+  const closeFromItem = useCallback(() => onClose?.('itemSelect'), [onClose]);
+  const contextValue = useMemo(() => ({ closeFromItem }), [closeFromItem]);
+
+  const { vertical: anchorVertical, horizontal: anchorHorizontal } =
+    anchorOrigin ?? DEFAULT_ANCHOR_ORIGIN;
+  const { vertical: transformVertical, horizontal: transformHorizontal } =
+    transformOrigin ?? DEFAULT_TRANSFORM_ORIGIN;
+  const gap = (hideArrow ? 0 : MENU_ARROW_SIZE.height) + FLOATING_GAP;
+  // Depends on the origin fields, not the objects, so inline origin objects don't rebuild the middleware on each render.
+  const { placement, coversAnchor, offset } = useMemo(
+    () =>
+      getMenuOriginPosition(
+        { vertical: anchorVertical, horizontal: anchorHorizontal },
+        { vertical: transformVertical, horizontal: transformHorizontal },
+        gap
+      ),
+    [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
+  );
 
   return (
     <FloatingSurface
@@ -103,24 +110,26 @@ export const MenuRoot = ({
       open={open}
       onOpenChange={handleOpenChange}
       interactionRole="menu"
-      placement={resolvedPlacement}
-      hideArrow={hideArrow}
-      arrowStaticOffset={resolveMenuArrowOffset(arrowOffset, resolvedPlacement)}
+      placement={placement}
+      offset={offset}
+      shiftCrossAxis={coversAnchor}
+      lockScroll
+      hideArrow={hideArrow || coversAnchor}
+      arrowStaticOffset={resolveMenuArrowOffset(arrowOffset, placement)}
       arrowSize={MENU_ARROW_SIZE}
       arrowPadding={MENU_ARROW_CORNER_INSET}
-      style={{ ...surfaceStyle, ...style }}
       initialFocus={initialFocusRef}
       portalRoot={portalRoot ?? portalRootFromContext}
       id={id}
+      data-testid={dataTestId}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
-      wrapperClassName={classNames(styles.menu, wrapperClassName)}
-      containerClassName={classNames(styles.container, containerClassName)}
-      contentClassName={contentClassName}
-      arrowClassName={arrowClassName}
+      wrapperClassName={classNames(styles.menu, className)}
+      containerClassName={styles.container}
+      arrowClassName={styles.arrow}
     >
       <MenuContext.Provider value={contextValue}>
-        {/* Keyboard events bubble up from the focused menuitem; the div itself is not interactive. */}
+        {/* Keyboard events bubble up from the focused item. The div itself is not interactive. */}
         <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
           {children}
         </div>
@@ -128,3 +137,5 @@ export const MenuRoot = ({
     </FloatingSurface>
   );
 };
+
+MenuRoot.displayName = 'Menu.Root';

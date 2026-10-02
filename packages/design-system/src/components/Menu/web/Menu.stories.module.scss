@@ -1,0 +1,130 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-40);
+  padding: var(--spacing-24);
+}
+
+/* A section of the All variants story. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.sectionTitle {
+  margin: 0;
+}
+
+.sectionDescription {
+  margin: 0;
+  max-width: 640px;
+}
+
+.sectionContent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-16);
+}
+
+/* Leaves room for each open menu, so it doesn't cover the next section. */
+.accountContent {
+  min-height: 160px;
+  align-items: flex-end;
+  padding-bottom: var(--spacing-8);
+}
+
+.rowActionsContent {
+  min-height: 165px;
+}
+
+.itemsContent {
+  min-height: 360px;
+}
+
+.longListContent {
+  min-height: 380px;
+}
+
+.tableRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  padding: var(--spacing-8) var(--spacing-16);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-8);
+}
+
+.itemsDemo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.counter {
+  font: 12px/1.4 monospace;
+}
+
+.grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  gap: var(--spacing-16);
+}
+
+.figure {
+  margin: 0;
+}
+
+.caption {
+  margin-top: var(--spacing-8);
+  font: 12px/1.5 monospace;
+}
+
+.cell {
+  display: flex;
+  height: 166px;
+  padding: var(--spacing-16);
+  border: 1px dashed var(--color-neutral-300);
+  border-radius: var(--radius-8);
+}
+
+/* Moves the anchor away from the side the menu opens on, so the menu fits in its cell. */
+.cell-bottom {
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.cell-top {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.cell-right {
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cell-center {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Narrower than the 360px default, so each menu fits in its cell. */
+.comparisonMenu {
+  --menu-width: 240px;
+}
+
+/* Custom sizes: narrower than the 360px default, with taller rows. */
+.accountMenu {
+  --menu-width: 315px;
+  --menu-item-min-height: 48px;
+}
+
+.rowActionsMenu {
+  --menu-width: 214px;
+  --menu-item-min-height: 48px;
+}

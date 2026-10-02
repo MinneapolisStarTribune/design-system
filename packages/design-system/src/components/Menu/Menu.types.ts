@@ -1,47 +1,56 @@
 import type { ComponentProps, HTMLAttributes, ReactNode } from 'react';
-import type { IconPosition, Position } from '@/types';
+import type { BaseProps, IconPosition, Position } from '@/types';
+import type {
+  MENU_ARROW_OFFSETS,
+  MENU_CLOSE_REASONS,
+  MENU_HORIZONTAL_ORIGINS,
+  MENU_VERTICAL_ORIGINS,
+} from './Menu.constants';
 
+/** The Floating UI placement that the origins map to. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
 
-export const MENU_VERTICAL_ORIGINS = ['top', 'center', 'bottom'] as const;
-export const MENU_HORIZONTAL_ORIGINS = ['left', 'center', 'right'] as const;
-
-/** A point on the anchor or the menu, used to derive where the menu sits. */
+/** A point on the anchor or the menu. */
 export type MenuOrigin = {
   vertical: (typeof MENU_VERTICAL_ORIGINS)[number];
   horizontal: (typeof MENU_HORIZONTAL_ORIGINS)[number];
 };
 
-/** Position of the pointer along the relevant menu edge. CSS lengths and percentages are accepted. */
-export type MenuArrowOffset = 'start' | 'center' | 'end' | string | number | null;
+/** Arrow position along the menu edge that faces the anchor. */
+export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
 
-export type MenuBaseProps = {
+export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
+
+// TODO: After #439 (Drawer) merges, let `anchorOrigin`, `transformOrigin` and `arrowOffset` accept
+// `Responsive<T>`, and resolve them with `useResponsiveValue`.
+export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
-  /** Called when the menu asks to close: dismiss gestures, keys, or item selection. */
-  onClose?: () => void;
-  /** Point on the anchor the menu attaches to. Defaults to `{ vertical: 'bottom', horizontal: 'left' }`. */
+  /** Called when the menu requests to close. Receives the reason. */
+  onClose?: (reason: MenuCloseReason) => void;
+  /**
+   * Point on the anchor that the menu attaches to.
+   * @default { vertical: 'bottom', horizontal: 'left' }
+   */
   anchorOrigin?: MenuOrigin;
-  /** Point on the menu that attaches to `anchorOrigin`. Defaults to `{ vertical: 'top', horizontal: 'left' }`. */
+  /**
+   * Point on the menu that attaches to `anchorOrigin`. If the origins put the menu over the anchor,
+   * the menu hides the arrow.
+   * @default { vertical: 'top', horizontal: 'left' }
+   */
   transformOrigin?: MenuOrigin;
-  /** Overrides `anchorOrigin`/`transformOrigin` with a side and alignment such as 'right-end'. */
-  placement?: MenuPlacement;
-  /** Whether selecting an item closes the menu. Items can override this. Defaults to true. */
-  closeOnSelect?: boolean;
-  /** Hides the pointer arrow. Defaults to false. */
+  /**
+   * Hides the arrow.
+   * @default false
+   */
   hideArrow?: boolean;
   /**
-   * Pins the pointer along the menu edge that faces the anchor. Unset or null aims it at the
-   * anchor's center. 'start', 'center' and 'end' keep 16px clear of the rounded corners; a number
-   * or CSS length is measured from the edge the menu is aligned to.
+   * Sets a fixed arrow position along the menu edge that faces the anchor. The arrow stays 16px
+   * from the rounded corners. When not set, the arrow points at the center of the anchor.
    */
   arrowOffset?: MenuArrowOffset;
-  /** Surface width. A number is in pixels; strings accept any CSS length. Defaults to Core Components' 360px. */
-  surfaceWidth?: number | string;
-  /** Minimum item-row height. A number is in pixels; strings accept any CSS length. Defaults to Core Components' 43px. */
-  itemMinHeight?: number | string;
-  /** Maximum list height before it scrolls. A number is in pixels; strings accept any CSS length. Defaults to Core Components' 362px. */
-  maxHeight?: number | string;
+  /** Class for the menu surface. Use it to set `--menu-width`, `--menu-max-height` and `--menu-item-min-height`. */
+  className?: string;
 };
 
 /** A menu needs an accessible name: exactly one of `aria-label` or `aria-labelledby`. */
@@ -51,20 +60,20 @@ export type MenuLabelProps =
 
 export type MenuProps = MenuBaseProps &
   MenuLabelProps &
-  Pick<HTMLAttributes<HTMLDivElement>, 'id' | 'style'> & {
+  Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
+    /** When set, the menu renders into this element instead of `document.body` (e.g. for Storybook). */
     portalRoot?: HTMLElement | null;
-    wrapperClassName?: string;
-    containerClassName?: string;
-    contentClassName?: string;
-    arrowClassName?: string;
-    /** Element the menu is positioned against. Called on Escape, outside click, or focus leaving. */
+    /** Element the menu is positioned against. */
     anchorEl: Element | null;
   };
 
-type MenuItemBaseProps = {
+type MenuItemBaseProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
   disabled?: boolean;
-  /** Overrides the menu's `closeOnSelect` for this item. */
+  /**
+   * Whether selecting this item closes the menu.
+   * @default true
+   */
   closeOnSelect?: boolean;
 };
 
@@ -76,13 +85,16 @@ export type MenuItemLinkProps = MenuItemBaseProps &
 
 export type MenuItemProps = MenuItemButtonProps | MenuItemLinkProps;
 
-export type MenuItemIconProps = {
+export type MenuItemIconProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
-  /** Which side of the label the icon sits on. Defaults to 'start'. */
+  /**
+   * Which side of the label the icon sits on.
+   * @default 'start'
+   */
   position?: IconPosition;
   className?: string;
 };
 
-export type MenuDividerProps = {
+export type MenuDividerProps = Pick<BaseProps, 'dataTestId'> & {
   className?: string;
 };

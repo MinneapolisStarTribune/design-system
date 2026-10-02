@@ -1,24 +1,47 @@
-/* Fixed neutrals, like Popover's text, so items read the same regardless of app theme. */
+/* Colors use semantic tokens, so the menu follows the app theme. */
 
-/* Core Components defaults; `surfaceWidth`, `itemMinHeight` and `maxHeight` override them inline. */
+/* Core Components sizes. To change them, set --menu-* on the menu's className, not --popover-*. */
 .menu {
-  --popover-min-width: 360px;
-  --popover-max-width: 360px;
-  /* Core Components' list height; longer menus scroll. */
-  --popover-max-height: 362px;
+  --popover-min-width: var(--menu-width, 360px);
+  --popover-max-width: var(--menu-width, 360px);
+  --popover-max-height: var(--menu-max-height, 362px);
+
+  /* Popover's wrapper fixes these to light values. `inherit` gets the theme values back. */
+  --color-text-on-light-primary: inherit;
+  --color-text-on-light-secondary: inherit;
+  --color-text-on-light-tertiary: inherit;
+  --color-icon-on-light-primary: inherit;
+  --color-icon-on-light-secondary: inherit;
+
+  /* Popover's [data-theme='dark'] rules read the -dark variants. */
+  --popover-background: var(--color-background-light-default);
+  --popover-background-dark: var(--color-background-light-default);
+  --popover-border-color-dark: var(--color-border-on-light-subtle-01);
+  --popover-arrow-fill: var(--color-background-light-default);
+  --popover-arrow-fill-dark: var(--color-background-light-default);
+}
+
+/* FloatingArrow draws two paths with stroke attributes. The first path is the border. The second
+   path hides the seam with the fill color. These rules override both strokes with theme colors. */
+.arrow > path:first-of-type {
+  stroke: var(--color-border-on-light-subtle-01);
+}
+
+.arrow > path:last-of-type {
+  stroke: var(--color-background-light-default);
 }
 
 .container {
-  /* Popover's min/max width is the surface width, so the row inset must sit inside it. */
+  /* Popover's min and max width set the surface width, so the padding must stay inside it. */
   box-sizing: border-box;
-  /* Inset rows so their rounded hover fill sits inside the surface, as in the design. */
+  /* Padding keeps the rounded hover fill of each row inside the surface, as in the design. */
   padding: var(--menu-container-padding, 0 var(--spacing-4));
-  /* Match the wrapper's rounded corners (minus its 1px border); auto also scrolls long menus. */
+  /* Matches the wrapper's rounded corners, minus its 1px border. `auto` lets long menus scroll. */
   border-radius: var(--menu-container-border-radius, calc(var(--radius-16) - 1px));
   overflow: var(--menu-container-overflow, auto);
-  /* Thin scrollbar from the design, so long lists don't lose row width to a classic bar. */
+  /* Thin scrollbar from the design. A full-width scrollbar takes too much row width. */
   scrollbar-width: var(--menu-scrollbar-width, thin);
-  scrollbar-color: var(--menu-scrollbar-color, var(--color-neutral-200) transparent);
+  scrollbar-color: var(--menu-scrollbar-color, var(--color-border-on-light-subtle-01) transparent);
 }
 
 .list {
@@ -38,18 +61,18 @@
   border: var(--menu-item-border, none);
   border-radius: var(--menu-item-border-radius, var(--radius-4));
   background: var(--menu-item-background, transparent);
-  color: var(--menu-item-color, var(--color-neutral-950));
+  color: var(--menu-item-color, var(--color-text-on-light-primary));
   text-align: start;
   text-decoration: none;
   cursor: pointer;
 
   &:hover,
   &:focus-visible {
-    background: var(--menu-item-hover-background, var(--color-neutral-100));
+    background: var(--menu-item-hover-background, var(--color-select-hover));
   }
 
   &:focus-visible {
-    outline: var(--menu-item-focus-outline, 2px solid var(--color-neutral-950));
+    outline: var(--menu-item-focus-outline, 2px solid var(--color-border-on-light-strong-02));
     outline-offset: var(--menu-item-focus-outline-offset, -2px);
   }
 }
@@ -75,8 +98,8 @@
 .divider {
   position: relative;
   height: var(--menu-divider-height, 1px);
-  /* The design draws the line over the row above, so it adds no height. */
+  /* The line overlaps the row above, as in the design, so it adds no height. */
   margin-block-start: var(--menu-divider-offset, -1px);
   flex-shrink: 0;
-  background: var(--menu-divider-color, var(--color-neutral-200));
+  background: var(--menu-divider-color, var(--color-border-on-light-subtle-01));
 }

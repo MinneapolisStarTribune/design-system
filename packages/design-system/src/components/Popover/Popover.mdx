@@ -27,7 +27,7 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 - Add a divider when separating header and content
 - Provide `aria-label` when no heading is present
 - Avoid overcrowding content — prefer simple, focused interactions
-- Use `containerClassName`, `contentClassName`, `wrapperClassName`, and related props for granular customization
+- Use `className` for the popover surface and the subcomponents' className props for their sections
 
 <table>
   <thead>
@@ -86,27 +86,9 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 
   <tbody>
     <tr>
-      <td><code>wrapperClassName</code></td>
-      <td>Popover wrapper</td>
-      <td>Custom classes for the floating wrapper element.</td>
-    </tr>
-
-    <tr>
-      <td><code>containerClassName</code></td>
-      <td>Popover container</td>
-      <td>Custom classes for the container element.</td>
-    </tr>
-
-    <tr>
-      <td><code>contentClassName</code></td>
-      <td>Popover content</td>
-      <td>Custom classes for the content wrapper.</td>
-    </tr>
-
-    <tr>
-      <td><code>arrowClassName</code></td>
-      <td>Popover arrow</td>
-      <td>Custom classes for the floating arrow.</td>
+      <td><code>className</code></td>
+      <td>Popover</td>
+      <td>Custom classes for the popover surface.</td>
     </tr>
 
     <tr>
@@ -151,11 +133,7 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 ## Example
 
 ```tsx
-<Popover
-  trigger={<Button>Open</Button>}
-  placement="bottom"
-  containerClassName="custom-popover-container"
->
+<Popover trigger={<Button>Open</Button>} placement="bottom" className="custom-popover">
   <Popover.Heading headerClassName="gap-2" closeButtonClassName="rounded-full">
     Title
   </Popover.Heading>

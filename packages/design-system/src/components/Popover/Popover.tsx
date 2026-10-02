@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { PopoverBody } from './PopoverBody';
 import {
   PopoverContext,
@@ -22,8 +22,11 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   open: openProp,
   onOpenChange: onOpenChangeProp,
   portalRoot: portalRootProp,
-  ...surfaceProps
-}) => {
+  className,
+  id,
+  style,
+  'aria-label': ariaLabel,
+}: PopoverProps) => {
   const [openState, setOpenState] = useState(false);
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
@@ -51,7 +54,6 @@ const PopoverRoot: React.FC<PopoverProps> = ({
     <PopoverPortalRootProvider>
       <PopoverContext.Provider value={contextValue}>
         <FloatingSurface
-          {...surfaceProps}
           trigger={trigger}
           open={open}
           onOpenChange={handleOpenChange}
@@ -59,6 +61,10 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           isDisabled={isDisabled}
           modal={modal}
           portalRoot={resolvedPortalRoot}
+          wrapperClassName={className}
+          id={id}
+          style={style}
+          aria-label={ariaLabel}
         >
           {children}
         </FloatingSurface>

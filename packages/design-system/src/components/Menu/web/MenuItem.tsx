@@ -1,14 +1,14 @@
 'use client';
 
-import { MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import classNames from 'classnames';
 import { useMenuContext } from '../MenuContext';
 import { MenuItemProps } from '../Menu.types';
 import styles from './Menu.module.scss';
 
-export const MenuItem = (props: MenuItemProps) => {
-  const { close, closeOnSelect: menuCloseOnSelect } = useMenuContext();
-  const shouldClose = props.closeOnSelect ?? menuCloseOnSelect;
+export const MenuItem: React.FC<MenuItemProps> = (props) => {
+  const { closeFromItem } = useMenuContext();
+  const shouldClose = props.closeOnSelect ?? true;
 
   const itemClassName = classNames(
     styles.item,
@@ -22,15 +22,23 @@ export const MenuItem = (props: MenuItemProps) => {
       event.preventDefault();
       return;
     }
-    if (shouldClose) close();
+    if (shouldClose) closeFromItem();
   };
 
   if (props.href !== undefined) {
-    const { children, disabled, closeOnSelect: _closeOnSelect, onClick, ...rest } = props;
+    const {
+      children,
+      disabled,
+      closeOnSelect: _closeOnSelect,
+      onClick,
+      dataTestId,
+      ...rest
+    } = props;
 
     return (
       <a
         {...rest}
+        data-testid={dataTestId}
         role="menuitem"
         tabIndex={-1}
         aria-disabled={disabled || undefined}
@@ -45,11 +53,12 @@ export const MenuItem = (props: MenuItemProps) => {
     );
   }
 
-  const { children, disabled, closeOnSelect: _closeOnSelect, onClick, ...rest } = props;
+  const { children, disabled, closeOnSelect: _closeOnSelect, onClick, dataTestId, ...rest } = props;
 
   return (
     <button
       {...rest}
+      data-testid={dataTestId}
       type="button"
       role="menuitem"
       tabIndex={-1}
@@ -64,3 +73,5 @@ export const MenuItem = (props: MenuItemProps) => {
     </button>
   );
 };
+
+MenuItem.displayName = 'Menu.Item';

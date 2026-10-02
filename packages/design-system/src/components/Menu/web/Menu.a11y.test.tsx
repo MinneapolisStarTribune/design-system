@@ -26,8 +26,8 @@ describe('Menu Accessibility', () => {
       </DesignSystemProvider>
     );
 
-    // The menu portals into document.body, outside the render container. Scope axe to it so
-    // floating-ui's hidden focus guards and page-level landmark rules are not counted.
+    // The menu renders into document.body, outside the render container. Run axe on the menu only,
+    // so the check skips Floating UI's hidden focus guards and the page-level landmark rules.
     const menu = await screen.findByRole('menu');
     const results = await axe(menu, { rules: { region: { enabled: false } } });
     expect(results).toHaveNoViolations();
