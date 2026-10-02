@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useId, useMemo, useState } from 'react';
 import { PopoverBody } from './PopoverBody';
 import {
   PopoverContext,
@@ -28,6 +28,8 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   'aria-label': ariaLabel,
 }: PopoverProps) => {
   const [openState, setOpenState] = useState(false);
+  const headingId = useId();
+  const [hasHeading, setHasHeading] = useState(false);
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
@@ -46,8 +48,8 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   // Memoize context value to prevent unnecessary re-renders of all
   // context consumers when this component re-renders for unrelated reasons.
   const contextValue = useMemo(
-    () => ({ close: () => handleOpenChange(false) }),
-    [handleOpenChange]
+    () => ({ close: () => handleOpenChange(false), headingId, setHasHeading }),
+    [handleOpenChange, headingId]
   );
 
   return (
@@ -65,6 +67,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           id={id}
           style={style}
           aria-label={ariaLabel}
+          aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
         >
           {children}
         </FloatingSurface>

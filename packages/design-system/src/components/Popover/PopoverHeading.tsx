@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
@@ -15,13 +15,21 @@ export const PopoverHeading: React.FC<{
   titleClassName?: string;
   closeButtonClassName?: string;
 }> = ({ children, headerClassName, titleClassName, closeButtonClassName }) => {
-  const { close } = usePopoverContext();
+  const { close, headingId, setHasHeading } = usePopoverContext();
+
+  useLayoutEffect(() => {
+    setHasHeading(true);
+    return () => setHasHeading(false);
+  }, [setHasHeading]);
+
   const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
     <div className={classNames(styles.header, typographyClassName, headerClassName)}>
-      <div className={classNames({ [styles.title]: hasTitle }, titleClassName)}>{children}</div>
+      <div id={headingId} className={classNames({ [styles.title]: hasTitle }, titleClassName)}>
+        {children}
+      </div>
 
       <Button
         variant="ghost"

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
 import { PopoverPortalRootProvider } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 describe('Popover', () => {
   it('renders with trigger element', () => {
@@ -68,6 +68,52 @@ describe('Popover', () => {
       '[data-floating-ui-portal]'
     );
     expect(portal?.parentElement).toBe(document.body);
+  });
+
+  it('names the dialog by its heading', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
+  });
+
+  it('uses aria-label instead of the heading when both are provided', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Options' });
+    expect(dialog).not.toHaveAttribute('aria-labelledby');
+  });
+
+  it('merges the style prop with the positioning styles', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} style={{ zIndex: 5 }}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const surface = await screen.findByRole('dialog');
+    expect(surface).toHaveStyle({ zIndex: 5, position: 'absolute', left: 0, top: 0 });
   });
 
   it('renders close button when heading is present', async () => {

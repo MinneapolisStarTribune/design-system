@@ -9,6 +9,7 @@ import React, {
   useId,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import classNames from 'classnames';
 import {
@@ -67,6 +68,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const headingId = useId();
+  const [hasHeading, setHasHeading] = useState(false);
 
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
@@ -154,7 +156,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
     </span>
   );
 
-  const contextValue = useMemo(() => ({ close }), [close]);
+  const contextValue = useMemo(() => ({ close, headingId, setHasHeading }), [close, headingId]);
 
   return (
     <PopoverPortalRootProvider>
@@ -170,7 +172,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
                 style={open ? floatingStyles : { ...floatingStyles, display: 'none' }}
                 className={classNames(styles.wrapper, wrapperClassName)}
                 aria-label={ariaLabel}
-                aria-labelledby={ariaLabel ? undefined : `popover-heading-${headingId}`}
+                aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
                 {...getFloatingProps()}
                 {...rest}
               >

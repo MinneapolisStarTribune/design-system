@@ -5,6 +5,9 @@ import { FloatingPortalRootContext } from './FloatingPortalRootContext';
 
 type PopoverContextValue = {
   close: () => void;
+  /** ID for the heading title. The surface is labelled by it only while a heading is mounted. */
+  headingId: string;
+  setHasHeading: (hasHeading: boolean) => void;
 };
 
 export const PopoverContext = createContext<PopoverContextValue | null>(null);
