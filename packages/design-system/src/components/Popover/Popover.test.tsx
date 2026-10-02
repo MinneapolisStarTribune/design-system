@@ -85,7 +85,22 @@ describe('Popover', () => {
     expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
   });
 
-  it('uses aria-label instead of the heading when both are provided', async () => {
+  it('uses aria-label when there is no heading', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Options' });
+    expect(dialog).not.toHaveAttribute('aria-labelledby');
+  });
+
+  it('uses the heading instead of aria-label when both are provided', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -97,8 +112,8 @@ describe('Popover', () => {
 
     await user.click(screen.getByText('Open'));
 
-    const dialog = await screen.findByRole('dialog', { name: 'Options' });
-    expect(dialog).not.toHaveAttribute('aria-labelledby');
+    const dialog = await screen.findByRole('dialog', { name: 'Title' });
+    expect(dialog).not.toHaveAttribute('aria-label');
   });
 
   it('merges the style prop with the positioning styles', async () => {
@@ -342,6 +357,40 @@ describe('Popover.Body', () => {
 });
 
 describe('Popover.Heading', () => {
+  it('hides the close button when showCloseButton is false', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading showCloseButton={false}>Title</Popover.Heading>
+        <Popover.Body>Body</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await screen.findByRole('dialog');
+    expect(screen.queryByLabelText('Close popover')).toBeNull();
+  });
+
+  it('renders eyebrow and value outside the accessible name', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading eyebrow="Saturday, April 4" value="308">
+          Boys Volleyball
+        </Popover.Heading>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Boys Volleyball' });
+    expect(dialog).toHaveTextContent('Saturday, April 4');
+    expect(dialog).toHaveTextContent('308');
+  });
+
   it('renders children and close button', async () => {
     const user = userEvent.setup();
 

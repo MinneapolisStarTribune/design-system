@@ -26,6 +26,9 @@ export type PopoverProps = {
   onOpenChange?: (open: boolean) => void;
   /** When set, the popover content portals into this element instead of document.body (e.g. for Storybook). */
   portalRoot?: HTMLElement | null;
-  /** Accessible label for the popover dialog. Provide this when no PopoverHeading is rendered. */
+  /**
+   * Accessible label for the popover dialog. Used only when there is no `Popover.Heading`. With a
+   * heading, the heading names the dialog instead.
+   */
   'aria-label'?: string;
 } & Pick<HTMLAttributes<HTMLDivElement>, 'id' | 'style'>;

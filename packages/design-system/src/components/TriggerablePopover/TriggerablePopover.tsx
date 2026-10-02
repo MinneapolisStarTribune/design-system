@@ -171,8 +171,8 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
                 data-state={open ? 'open' : 'closed'}
                 style={open ? floatingStyles : { ...floatingStyles, display: 'none' }}
                 className={classNames(styles.wrapper, wrapperClassName)}
-                aria-label={ariaLabel}
-                aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
+                aria-label={hasHeading ? undefined : ariaLabel}
+                aria-labelledby={hasHeading ? headingId : undefined}
                 {...getFloatingProps()}
                 {...rest}
               >

@@ -73,6 +73,35 @@
   padding-top: var(--spacing-8);
 }
 
+/* Without the close button, align the title row with the body's right padding. */
+.headerWithoutClose {
+  padding-right: var(--spacing-16);
+}
+
+.headingText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--color-neutral-800);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.value {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 /* Close button */
 .closeButton {
   align-self: flex-start !important;

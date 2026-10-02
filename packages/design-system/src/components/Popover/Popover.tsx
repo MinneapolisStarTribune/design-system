@@ -65,8 +65,8 @@ const PopoverRoot: React.FC<PopoverProps> = ({
           wrapperClassName={className}
           id={id}
           style={style}
-          aria-label={ariaLabel}
-          aria-labelledby={!ariaLabel && hasHeading ? headingId : undefined}
+          aria-label={hasHeading ? undefined : ariaLabel}
+          aria-labelledby={hasHeading ? headingId : undefined}
         >
           {children}
         </FloatingSurface>
