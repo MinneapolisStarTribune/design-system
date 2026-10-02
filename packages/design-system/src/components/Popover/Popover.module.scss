@@ -4,7 +4,7 @@
 
   border-radius: var(--radius-16);
   border: 1px solid var(--color-border-on-light-subtle-01);
-  background: var(--color-base-white);
+  background: var(--popover-background, var(--color-base-white));
 
   box-shadow:
     0 12px 16px -4px rgba(10, 10, 10, 0.08),
@@ -20,12 +20,16 @@
   --color-text-on-light-primary: var(--color-neutral-950);
   --color-text-on-light-secondary: var(--color-neutral-800);
   --color-text-on-light-tertiary: var(--color-neutral-700);
+  /* Icons use on-light-primary by default, so fix the icon tokens too. Tertiary is not fixed,
+     because its value is different for each brand. */
+  --color-icon-on-light-primary: var(--color-neutral-950);
+  --color-icon-on-light-secondary: var(--color-neutral-800);
 }
 
 .sb-dark .wrapper,
 [data-theme='dark'] .wrapper {
-  border-color: var(--color-border-on-dark-subtle-01);
-  background: var(--color-background-dark-gray-01);
+  border-color: var(--popover-border-color-dark, var(--color-border-on-dark-subtle-01));
+  background: var(--popover-background-dark, var(--color-background-dark-gray-01));
 
   box-shadow:
     0 12px 16px -4px rgba(0, 0, 0, 0.25),
@@ -34,9 +38,9 @@
 
 /* Root */
 .container {
-  min-width: 240px;
-  max-width: 320px;
-  max-height: 500px;
+  min-width: var(--popover-min-width, 240px);
+  max-width: var(--popover-max-width, 320px);
+  max-height: var(--popover-max-height, 500px);
 
   background: transparent;
   border: none;
@@ -65,8 +69,37 @@
   color: var(--color-neutral-950) !important;
 }
 
-.title{
+.title {
   padding-top: var(--spacing-8);
+}
+
+/* Without the close button, align the title row with the body's right padding. */
+.headerWithoutClose {
+  padding-right: var(--spacing-16);
+}
+
+.headingText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--color-neutral-800);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.value {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Close button */
@@ -140,13 +173,13 @@
 .arrow {
   position: absolute;
 
-  fill: var(--color-base-white);
+  fill: var(--popover-arrow-fill, var(--color-base-white));
   stroke: var(--color-border-on-light-subtle-01);
   stroke-width: 1;
 }
 
 .sb-dark .arrow,
 [data-theme='dark'] .arrow {
-  fill: var(--color-background-dark-gray-01);
+  fill: var(--popover-arrow-fill-dark, var(--color-background-dark-gray-01));
   stroke: var(--color-border-on-dark-subtle-01);
 }
