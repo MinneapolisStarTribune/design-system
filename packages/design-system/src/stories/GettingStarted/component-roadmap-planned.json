@@ -17,6 +17,7 @@
   { "category": "Forms", "name": "Select", "platform": ["web", "native"] },
   { "category": "Forms", "name": "MultiSelect", "platform": ["web"] },
   { "category": "Forms", "name": "Switch", "platform": ["web", "native"] },
+  { "category": "Status & Feedback", "name": "Menu", "platform": ["web"] },
   { "category": "Status & Feedback", "name": "Popover", "platform": ["web", "native"] },
   { "category": "Status & Feedback", "name": "ToolTip", "platform": ["web", "native"] },
   { "category": "Status & Feedback", "name": "Skeleton", "platform": ["web", "native"] },

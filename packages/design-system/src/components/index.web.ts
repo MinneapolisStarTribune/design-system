@@ -118,6 +118,8 @@ export {
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
+export type { MenuProps } from './Menu/Menu.types';
+export * as Menu from './Menu/web/Menu';
 export * as Popover from './Popover/Popover';
 export type { PopoverProps } from './Popover/Popover.types';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
