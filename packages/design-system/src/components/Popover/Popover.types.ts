@@ -18,23 +18,17 @@ export type PopoverProps = {
    * Defaults to false.
    */
   modal?: boolean;
-
-  /**
-   * @deprecated Use contentClassName instead.
-   * Kept for backwards compatibility.
-   */
+  /** Applied to the popover surface. */
   className?: string;
-
-  wrapperClassName?: string;
-  containerClassName?: string;
-  contentClassName?: string;
-  arrowClassName?: string;
   /** Controlled open state. If omitted, the component manages open state internally. */
   open?: boolean;
   /** Called when the popover requests an open/close transition. Required when `open` is provided. */
   onOpenChange?: (open: boolean) => void;
   /** When set, the popover content portals into this element instead of document.body (e.g. for Storybook). */
   portalRoot?: HTMLElement | null;
-  /** Accessible label for the popover dialog. Provide this when no PopoverHeading is rendered. */
+  /**
+   * Accessible label for the popover dialog. Used only when there is no `Popover.Heading`. With a
+   * heading, the heading names the dialog instead.
+   */
   'aria-label'?: string;
-} & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label'>;
+} & Pick<HTMLAttributes<HTMLDivElement>, 'id' | 'style'>;

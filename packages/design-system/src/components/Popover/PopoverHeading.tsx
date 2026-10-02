@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useLayoutEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
@@ -7,6 +9,15 @@ import { CloseIcon } from '@/icons';
 
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
+  /** Small label above the title, such as a date. It is not part of the popover's accessible name. */
+  eyebrow?: React.ReactNode;
+  /** Content at the end of the title row, such as a total. It is not part of the accessible name. */
+  value?: React.ReactNode;
+  /**
+   * Shows the close button.
+   * @default true
+   */
+  showCloseButton?: boolean;
   /**
    * Heading container classes.
    * Kept as headerClassName for backwards compatibility.
@@ -14,24 +25,64 @@ export const PopoverHeading: React.FC<{
   headerClassName?: string;
   titleClassName?: string;
   closeButtonClassName?: string;
-}> = ({ children, headerClassName, titleClassName, closeButtonClassName }) => {
-  const { close } = usePopoverContext();
+}> = ({
+  children,
+  eyebrow,
+  value,
+  showCloseButton = true,
+  headerClassName,
+  titleClassName,
+  closeButtonClassName,
+}) => {
+  const { close, headingId, setHasHeading } = usePopoverContext();
+
+  useLayoutEffect(() => {
+    setHasHeading(true);
+    return () => setHasHeading(false);
+  }, [setHasHeading]);
+
   const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
-    <div className={classNames(styles.header, typographyClassName, headerClassName)}>
-      <div className={classNames({ [styles.title]: hasTitle }, titleClassName)}>{children}</div>
+    <div
+      className={classNames(
+        styles.header,
+        { [styles.headerWithoutClose]: !showCloseButton },
+        typographyClassName,
+        headerClassName
+      )}
+    >
+      <div className={classNames(styles.headingText, { [styles.title]: hasTitle || eyebrow })}>
+        {eyebrow && (
+          <div
+            className={classNames(
+              styles.eyebrow,
+              'typography-utility-text-regular-xx-small text-on-light-secondary'
+            )}
+          >
+            {eyebrow}
+          </div>
+        )}
+        <div className={styles.titleRow}>
+          <div id={headingId} className={titleClassName}>
+            {children}
+          </div>
+          {value != null && <div className={styles.value}>{value}</div>}
+        </div>
+      </div>
 
-      <Button
-        variant="ghost"
-        size="small"
-        icon={<CloseIcon />}
-        surface="light"
-        aria-label="Close popover"
-        className={classNames(styles.closeButton, closeButtonClassName)}
-        onClick={close}
-      />
+      {showCloseButton && (
+        <Button
+          variant="ghost"
+          size="small"
+          icon={<CloseIcon />}
+          surface="light"
+          aria-label="Close popover"
+          className={classNames(styles.closeButton, closeButtonClassName)}
+          onClick={close}
+        />
+      )}
     </div>
   );
 };
