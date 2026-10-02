@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MouseEvent, ReactNode, useState } from 'react';
+import { Fragment, MouseEvent, ReactNode, useCallback, useState } from 'react';
 import classNames from 'classnames';
-import { userEvent, within } from 'storybook/test';
-import { Button, UtilityBody } from '@/components/index.web';
+import { Button, SectionHeading, UtilityBody } from '@/components/index.web';
 import {
   ArrowDiagonalIcon,
   CopyIcon,
   EditIcon,
+  HelpIcon,
   LinkIcon,
   LogOutIcon,
-  LogoVarsityIcon,
   MenuVerticalIcon,
   PlusIcon,
   SettingsIcon,
+  LogoVarsityIcon,
   TrashIcon,
 } from '@/icons';
 import * as Menu from './Menu';
@@ -21,6 +21,7 @@ import { MENU_ARROW_OFFSETS } from '../Menu.constants';
 import type { MenuLabelProps, MenuOrigin, MenuProps } from '../Menu.types';
 
 type AnchorProps = {
+  ref: (element: HTMLElement | null) => void;
   onClick: (event: MouseEvent<HTMLElement>) => void;
   'aria-haspopup': 'menu';
   'aria-expanded': boolean;
@@ -29,15 +30,27 @@ type AnchorProps = {
 type DemoProps = Omit<MenuProps, 'anchorEl' | 'open' | 'onClose' | keyof MenuLabelProps> &
   MenuLabelProps & {
     renderAnchor: (anchorProps: AnchorProps) => ReactNode;
+    /** Open the menu after the anchor mounts. Do not simulate a click. */
+    initialOpen?: boolean;
   };
 
-/** Holds the anchor in state, the way a consumer would. */
-const MenuDemo = ({ renderAnchor, children, ...menuProps }: DemoProps) => {
+const MenuDemo = ({ renderAnchor, initialOpen = false, children, ...menuProps }: DemoProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // React calls ref callbacks after later renders. Without this guard, the menu opens again after it closes.
+  const [needsInitialOpen, setNeedsInitialOpen] = useState(initialOpen);
+  const anchorRef = useCallback(
+    (element: HTMLElement | null) => {
+      if (!needsInitialOpen || !element) return;
+      setNeedsInitialOpen(false);
+      setAnchorEl(element);
+    },
+    [needsInitialOpen]
+  );
 
   return (
     <>
       {renderAnchor({
+        ref: anchorRef,
         onClick: (event) => setAnchorEl(anchorEl ? null : event.currentTarget),
         'aria-haspopup': 'menu',
         'aria-expanded': anchorEl !== null,
@@ -58,9 +71,9 @@ const AccountItems = () => (
   <>
     <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noreferrer">
       <Menu.ItemIcon>
-        <LogoVarsityIcon size="large" />
+        <HelpIcon size="large" />
       </Menu.ItemIcon>
-      Strib Varsity
+      Help Center
       <Menu.ItemIcon position="end">
         <ArrowDiagonalIcon />
       </Menu.ItemIcon>
@@ -108,9 +121,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Playground
- */
 export const Configurable: Story = {
   args: {
     anchorEl: null,
@@ -162,8 +172,8 @@ const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   aria-label="Account"
 >
   <Menu.Item href="https://varsity.startribune.com/" target="_blank">
-    <Menu.ItemIcon><LogoVarsityIcon size="large" /></Menu.ItemIcon>
-    Strib Varsity
+    <Menu.ItemIcon><HelpIcon size="large" /></Menu.ItemIcon>
+    Help Center
     <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
   </Menu.Item>
   <Menu.Divider />
@@ -189,13 +199,11 @@ const origin = (
   horizontal: MenuOrigin['horizontal']
 ): MenuOrigin => ({ vertical, horizontal });
 
-// Opens to the right, so tall menus use the empty space next to the trigger.
 const OPEN_RIGHT = {
   anchorOrigin: origin('top', 'right'),
   transformOrigin: origin('top', 'left'),
 } satisfies MenuOrigins;
 
-/** `cell` moves the anchor away from the side the menu opens on, so the menu fits in its cell. */
 const POSITION_EXAMPLES = [
   {
     label: 'Below, left edges (default)',
@@ -269,11 +277,9 @@ type SectionProps = {
   title: string;
   description: ReactNode;
   children: ReactNode;
-  /** Leaves room for the open menu, so it doesn't cover the next section. */
   contentClassName?: string;
 };
 
-/** One section of the All variants story: a title, a short description, and the examples. */
 const Section = ({ title, description, children, contentClassName }: SectionProps) => (
   <section className={styles.section}>
     <UtilityBody size="large" weight="semibold" className={styles.sectionTitle}>
@@ -303,7 +309,6 @@ const RowActionItems = () => (
   </>
 );
 
-/** One menu with every item type. The counter goes up each time the item that stays open is selected. */
 const ItemsDemo = () => {
   const [notes, setNotes] = useState(0);
 
@@ -369,9 +374,71 @@ const ItemsDemo = () => {
   );
 };
 
-/**
- * All variants
- */
+const SUMMARY_GROUPS = [
+  [
+    { label: 'Desktop', value: '7,210' },
+    { label: 'Mobile', value: '5,270' },
+  ],
+  [
+    { label: 'New visitors', value: '8,904' },
+    { label: 'Returning visitors', value: '3,576' },
+  ],
+];
+
+const SummaryDemo = () => (
+  <MenuDemo
+    aria-label="Page views for the last 7 days"
+    className={styles.summaryMenu}
+    anchorOrigin={origin('center', 'left')}
+    transformOrigin={origin('center', 'right')}
+    renderAnchor={(anchorProps) => (
+      <Button variant="outlined" {...anchorProps}>
+        Page views
+      </Button>
+    )}
+  >
+    <div className={styles.summary}>
+      <div className={styles.summaryHeading}>
+        <UtilityBody size="xx-small" color="on-light-secondary" className={styles.summaryEyebrow}>
+          Last 7 days
+        </UtilityBody>
+        <SectionHeading importance={6} color="on-light-primary" className={styles.summaryTitle}>
+          <span>Page views</span>
+          <span>12,480</span>
+        </SectionHeading>
+      </div>
+
+      {SUMMARY_GROUPS.map((group) => (
+        <Fragment key={group[0].label}>
+          <Menu.Divider className={styles.summaryDivider} />
+          <dl className={styles.summaryList}>
+            {group.map(({ label, value }) => (
+              <div
+                key={label}
+                className={classNames(
+                  styles.summaryRow,
+                  'typography-utility-text-regular-small text-on-light-secondary'
+                )}
+              >
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Fragment>
+      ))}
+
+      <Menu.Divider className={styles.summaryDivider} />
+      <Menu.Item href="https://varsity.startribune.com/" className={styles.summaryLink}>
+        <span className="typography-utility-text-medium-x-small">View Report</span>
+        <Menu.ItemIcon position="end">
+          <ArrowDiagonalIcon />
+        </Menu.ItemIcon>
+      </Menu.Item>
+    </div>
+  </MenuDemo>
+);
+
 export const AllVariants: Story = {
   args: {
     anchorEl: null,
@@ -380,15 +447,16 @@ export const AllVariants: Story = {
     children: null,
     'aria-label': 'Account',
   },
-  parameters: { layout: 'padded' },
-  // Opens the item menu so the Chromatic snapshot captures an open surface. Only one menu can be
-  // open at a time, and this one shows every item type.
-  play: async ({ canvasElement }) => {
-    // findByRole waits for the theme wrapper to finish loading and render the story.
-    const anchor = await within(canvasElement).findByRole('button', { name: 'Open items' });
-    await userEvent.click(anchor);
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        story:
+          'The account menu starts open in the story canvas (and in Chromatic snapshots); on this docs page it starts closed so it does not take focus or lock scrolling. Only one menu can be open at a time.',
+      },
+    },
   },
-  render: () => (
+  render: (_args, { viewMode }) => (
     <div className={styles.page}>
       <Section
         title="Account menu"
@@ -396,6 +464,7 @@ export const AllVariants: Story = {
         contentClassName={styles.accountContent}
       >
         <MenuDemo
+          initialOpen={viewMode !== 'docs'}
           aria-label="Account"
           className={styles.accountMenu}
           anchorOrigin={origin('bottom', 'right')}
@@ -452,7 +521,7 @@ export const AllVariants: Story = {
       >
         <MenuDemo
           {...OPEN_RIGHT}
-          aria-label="Teams"
+          aria-label="Options"
           renderAnchor={(anchorProps) => (
             <Button variant="outlined" {...anchorProps}>
               Open 20 items
@@ -465,6 +534,14 @@ export const AllVariants: Story = {
             </Menu.Item>
           ))}
         </MenuDemo>
+      </Section>
+
+      <Section
+        title="Summary"
+        description="Static content above a link item: a heading, label and value rows, and dividers. The link is the only menu item, so it gets focus when the menu opens."
+        contentClassName={styles.summaryContent}
+      >
+        <SummaryDemo />
       </Section>
 
       <Section

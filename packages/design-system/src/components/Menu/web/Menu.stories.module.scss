@@ -5,7 +5,6 @@
   padding: var(--spacing-24);
 }
 
-/* A section of the All variants story. */
 .section {
   display: flex;
   flex-direction: column;
@@ -28,7 +27,6 @@
   gap: var(--spacing-16);
 }
 
-/* Leaves room for each open menu, so it doesn't cover the next section. */
 .accountContent {
   min-height: 160px;
   align-items: flex-end;
@@ -92,7 +90,6 @@
   border-radius: var(--radius-8);
 }
 
-/* Moves the anchor away from the side the menu opens on, so the menu fits in its cell. */
 .cell-bottom {
   align-items: flex-start;
   justify-content: center;
@@ -113,12 +110,10 @@
   justify-content: center;
 }
 
-/* Narrower than the 360px default, so each menu fits in its cell. */
 .comparisonMenu {
   --menu-width: 240px;
 }
 
-/* Custom sizes: narrower than the 360px default, with taller rows. */
 .accountMenu {
   --menu-width: 315px;
   --menu-item-min-height: 48px;
@@ -127,4 +122,79 @@
 .rowActionsMenu {
   --menu-width: 214px;
   --menu-item-min-height: 48px;
+}
+
+.summaryMenu {
+  --menu-width: 246px;
+  --menu-item-min-height: 0;
+}
+
+.summaryContent {
+  min-height: 300px;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 480px;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding: var(--spacing-16) var(--spacing-12);
+}
+
+.summaryHeading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.summaryEyebrow {
+  margin: 0;
+}
+
+.summaryTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+  margin: 0;
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  margin: 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.summaryRow dd {
+  margin: 0;
+}
+
+.summaryDivider {
+  margin: 0;
+}
+
+.summaryMenu .summaryLink {
+  align-self: flex-start;
+  width: auto;
+  padding: 0;
+  gap: var(--spacing-2);
+
+  &:hover,
+  &:focus-visible {
+    background: transparent;
+    text-decoration: underline;
+  }
+
+  /* The item has no padding. Move the focus ring away from its text. */
+  &:focus-visible {
+    outline-offset: var(--spacing-2);
+  }
 }

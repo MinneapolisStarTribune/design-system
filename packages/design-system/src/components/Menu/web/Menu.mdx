@@ -277,7 +277,6 @@ Set these CSS variables on the class you pass to `Menu.Root`:
 `anchorOrigin` and `transformOrigin` work like MUI's: each is a `{ vertical, horizontal }` point, and the menu moves so its `transformOrigin` sits on the anchor's `anchorOrigin`.
 
 ```tsx
-// Below the anchor, right edges aligned.
 <Menu.Root
   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -421,8 +420,8 @@ const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   )}
   <Menu.Divider />
   <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noopener noreferrer">
-    <Menu.ItemIcon><LogoVarsityIcon color="brand-01" /></Menu.ItemIcon>
-    Strib Varsity
+    <Menu.ItemIcon><HelpIcon color="brand-01" /></Menu.ItemIcon>
+    Help Center
     <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
   </Menu.Item>
 </Menu.Root>
