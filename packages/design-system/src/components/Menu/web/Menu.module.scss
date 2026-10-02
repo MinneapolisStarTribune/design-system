@@ -1,0 +1,101 @@
+/* Set menu sizes with `--menu-*` on the menu class. Do not set `--popover-*`. */
+.menu {
+  --popover-min-width: var(--menu-width, 360px);
+  --popover-max-width: var(--menu-width, 360px);
+  --popover-max-height: var(--menu-max-height, 362px);
+
+  /* Popover fixes these to light values. `inherit` restores the theme values. */
+  --color-text-on-light-primary: inherit;
+  --color-text-on-light-secondary: inherit;
+  --color-text-on-light-tertiary: inherit;
+  --color-icon-on-light-primary: inherit;
+  --color-icon-on-light-secondary: inherit;
+
+  /* Popover reads the `-dark` variants in dark themes. */
+  --popover-background: var(--color-background-light-default);
+  --popover-background-dark: var(--color-background-light-default);
+  --popover-border-color-dark: var(--color-border-on-light-subtle-01);
+  --popover-arrow-fill: var(--color-background-light-default);
+  --popover-arrow-fill-dark: var(--color-background-light-default);
+}
+
+/* FloatingArrow draws two paths with stroke attributes. The first path is the border. The second
+   path hides the seam with the fill color. These rules override both strokes with theme colors. */
+.arrow > path:first-of-type {
+  stroke: var(--color-border-on-light-subtle-01);
+}
+
+.arrow > path:last-of-type {
+  stroke: var(--color-background-light-default);
+}
+
+.container {
+  /* Popover sets the surface width. Include padding in that width. */
+  box-sizing: border-box;
+  padding: 0 var(--spacing-4);
+  /* Match the wrapper radius minus its border. */
+  border-radius: calc(var(--radius-16) - 1px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--spacing-12);
+
+  border: none;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-select-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--spacing-2) solid var(--color-border-on-light-strong-02);
+    outline-offset: calc(-1 * var(--spacing-2));
+  }
+}
+
+.itemDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  margin-inline-start: auto;
+}
+
+.divider {
+  position: relative;
+  height: 1px;
+  /* Overlap the preceding row so the divider adds no height. */
+  margin-block-start: -1px;
+  flex-shrink: 0;
+  background: var(--color-border-on-light-subtle-01);
+}

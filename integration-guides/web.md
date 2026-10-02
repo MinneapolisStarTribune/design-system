@@ -46,6 +46,39 @@ function SidebarWithPopover() {
 
 Most apps only need **Option 1**.
 
+`Menu` uses the same portal root, so a `PopoverPortalRootProvider` also applies to menus under it.
+
+### Menu
+
+`Menu` is controlled. Keep the anchor element in state, open the menu when it is set, and clear it in `onClose`. `onClose` is required and receives the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`).
+
+```tsx
+import { useState } from 'react';
+import { Button, Menu } from '@minneapolisstartribune/design-system/web';
+
+function AccountMenu() {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  return (
+    <>
+      <Button onClick={(event) => setAnchorEl(event.currentTarget)}>Account</Button>
+      <Menu.Root
+        anchorEl={anchorEl}
+        open={anchorEl !== null}
+        onClose={() => setAnchorEl(null)}
+        aria-label="Account"
+      >
+        <Menu.Item href="/profile">Manage Profile</Menu.Item>
+        <Menu.Divider />
+        <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+      </Menu.Root>
+    </>
+  );
+}
+```
+
+Position the menu with `anchorOrigin` and `transformOrigin` (default: below the anchor, left edges aligned). Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+
 ## Quick Start
 
 Import component styles, then a theme CSS file (typography classes + CSS variables in one file), then wrap your app with `DesignSystemProvider`:
