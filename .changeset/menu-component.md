@@ -1,7 +1,11 @@
 ---
-'@minneapolisstartribune/design-system': minor
+'@minneapolisstartribune/design-system': major
 ---
 
-Add `Menu` for web, with `Menu.Item`, `Menu.ItemIcon`, and `Menu.Divider`. The menu opens against an `anchorEl` and is positioned with MUI-style `anchorOrigin`/`transformOrigin`; `arrowOffset` and `hideArrow` control the pointer. `onClose` receives a reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`), and every part takes a `dataTestId`. It supports link items, disabled items, per-item `closeOnSelect`, and arrow-key navigation, and locks page scroll while open. Defaults match Core Components (360px surface, 43px rows, 362px max height); `--menu-width`, `--menu-item-min-height`, and `--menu-max-height` override them through `className`.
+Add web `Menu`, with `Menu.Item`, `Menu.ItemIcon`, and `Menu.Divider`. The menu opens against an `anchorEl`, supports MUI-style origins, pointer controls, link and disabled items, item-closing behavior, and arrow-key navigation. Its `onClose` callback receives `escapeKey`, `outsidePress`, `focusOut`, or `itemSelect`.
 
-`Popover` fix: a `style` prop is now merged with the positioning styles instead of replacing them, so passing `style` no longer breaks placement.
+**Breaking:** Simplify `Popover` styling props. Replace `wrapperClassName`, `containerClassName`, `contentClassName`, and `arrowClassName` with `className` on the popover surface. Only `id` and `style` remain supported HTML div attributes. Custom `style` is now merged with positioning styles, so it no longer breaks placement.
+
+No in-repository consumers use the removed Popover styling props.
+
+`Popover` and `TriggerablePopover` fix: when no `aria-label` is passed, the dialog is now named by `Popover.Heading`. Before, `aria-labelledby` pointed to an ID that no element had.
