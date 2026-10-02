@@ -3,7 +3,6 @@
 import { createContext, useContext } from 'react';
 
 type MenuContextValue = {
-  /** Items call this to close the menu after a selection. */
   closeFromItem: () => void;
 };
 

@@ -3,7 +3,6 @@
 import { createContext } from 'react';
 
 /**
- * Portal root for the components built on `FloatingSurface`. This context is internal. Consumers
- * set it through `PopoverPortalRootContext` or `PopoverPortalRootProvider`, which use this context.
+ * Internal portal root for components that use `FloatingSurface`.
  */
 export const FloatingPortalRootContext = createContext<HTMLElement | null>(null);

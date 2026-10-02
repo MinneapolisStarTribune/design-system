@@ -7,7 +7,7 @@ import type {
   MENU_VERTICAL_ORIGINS,
 } from './Menu.constants';
 
-/** The Floating UI placement that the origins map to. */
+/** Floating UI placement for the origins. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
 
 /** A point on the anchor or the menu. */
@@ -21,12 +21,11 @@ export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
 
 export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
 
-// TODO: After #439 (Drawer) merges, let `anchorOrigin`, `transformOrigin` and `arrowOffset` accept
-// `Responsive<T>`, and resolve them with `useResponsiveValue`.
+// TODO: After Drawer #439 merges, accept `Responsive<T>` for the origin and arrow-offset props.
 export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
-  /** Called when the menu requests to close. Receives the reason. */
+  /** Called when the menu requests to close. Receives a reason. */
   onClose: (reason: MenuCloseReason) => void;
   /**
    * Point on the anchor that the menu attaches to.
@@ -34,8 +33,8 @@ export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
    */
   anchorOrigin?: MenuOrigin;
   /**
-   * Point on the menu that attaches to `anchorOrigin`. If the origins put the menu over the anchor,
-   * the menu hides the arrow.
+   * Point on the menu that attaches to `anchorOrigin`.
+   * The menu hides the arrow when the origins place it over the anchor.
    * @default { vertical: 'top', horizontal: 'left' }
    */
   transformOrigin?: MenuOrigin;
@@ -45,15 +44,15 @@ export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
    */
   hideArrow?: boolean;
   /**
-   * Sets a fixed arrow position along the menu edge that faces the anchor. The arrow stays 16px
-   * from the rounded corners. When not set, the arrow points at the center of the anchor.
+   * Sets a fixed arrow position on the menu edge that faces the anchor.
+   * The arrow stays 16px from the rounded corners. By default, it points to the anchor center.
    */
   arrowOffset?: MenuArrowOffset;
-  /** Class for the menu surface. Use it to set `--menu-width`, `--menu-max-height` and `--menu-item-min-height`. */
+  /** Classes for the menu surface. */
   className?: string;
 };
 
-/** A menu needs an accessible name: exactly one of `aria-label` or `aria-labelledby`. */
+/** A menu needs exactly one accessible name. */
 export type MenuLabelProps =
   | { 'aria-label': string; 'aria-labelledby'?: never }
   | { 'aria-label'?: never; 'aria-labelledby': string };
@@ -61,9 +60,8 @@ export type MenuLabelProps =
 export type MenuProps = MenuBaseProps &
   MenuLabelProps &
   Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
-    /** When set, the menu renders into this element instead of `document.body` (e.g. for Storybook). */
+    /** Renders the menu in this element instead of `document.body` (e.g. for Storybook). */
     portalRoot?: HTMLElement | null;
-    /** Element the menu is positioned against. */
     anchorEl: Element | null;
   };
 

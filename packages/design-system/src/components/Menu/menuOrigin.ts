@@ -10,15 +10,14 @@ const VERTICAL_ALIGNMENT = { top: '-start', center: '', bottom: '-end' } as cons
 
 export type MenuOriginPosition = {
   placement: MenuPlacement;
-  /** True when the origins put the menu over the anchor. Then no edge is available for the arrow. */
+  /** True when the origins place the menu over the anchor. The menu then has no arrow edge. */
   coversAnchor: boolean;
   offset: OffsetOptions;
 };
 
 /**
- * Origins on opposite edges set the side. For example, anchor bottom and menu top means "below".
- * The menu's origin on the other axis sets the alignment. All other pairs put the menu over the
- * anchor.
+ * Opposite origins set the menu side. The other origin axis sets alignment.
+ * All other origin pairs place the menu over the anchor.
  */
 const getOriginPlacement = (
   anchorOrigin: MenuOrigin,
@@ -50,7 +49,6 @@ const getOriginPlacement = (
   return { placement: below, coversAnchor: true };
 };
 
-/** Position of the menu's near edge on the cross axis, relative to the anchor's near edge. */
 const getAlignedStart = (placement: Placement, anchorLength: number, menuLength: number) => {
   if (placement.endsWith('-start')) return 0;
   if (placement.endsWith('-end')) return anchorLength - menuLength;
@@ -58,12 +56,11 @@ const getAlignedStart = (placement: Placement, anchorLength: number, menuLength:
 };
 
 /**
- * Converts MUI-style origins to a Floating UI placement and an offset. The offset moves the menu
- * from the placement's position to the exact point where the two origins meet.
+ * Converts MUI-style origins to a Floating UI placement and offset.
+ * The offset aligns the two origins.
  *
- * When the menu is beside the anchor, the main axis gets only `gap`. This lets `flip` move the menu
- * to the opposite side. When the menu covers the anchor, the offset moves both axes, and `flip` has
- * no effect.
+ * Menus beside the anchor use only `gap` on the main axis, so `flip` can move them.
+ * Menus over the anchor use both axes. `flip` has no effect.
  */
 export const getMenuOriginPosition = (
   anchorOrigin: MenuOrigin,
@@ -73,7 +70,7 @@ export const getMenuOriginPosition = (
   const { placement, coversAnchor } = getOriginPlacement(anchorOrigin, transformOrigin);
 
   const offset: OffsetOptions = ({ rects: { reference, floating }, placement: current }) => {
-    // Position of the menu's top-left corner, relative to the anchor's top-left corner, when the origins meet.
+    // Position the menu relative to the anchor when the origins meet.
     const targetX =
       FRACTION[anchorOrigin.horizontal] * reference.width -
       FRACTION[transformOrigin.horizontal] * floating.width;

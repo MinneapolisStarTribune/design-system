@@ -1,19 +1,17 @@
-/* Colors use semantic tokens, so the menu follows the app theme. */
-
-/* Core Components sizes. To change them, set --menu-* on the menu's className, not --popover-*. */
+/* Set menu sizes with `--menu-*` on the menu class. Do not set `--popover-*`. */
 .menu {
   --popover-min-width: var(--menu-width, 360px);
   --popover-max-width: var(--menu-width, 360px);
   --popover-max-height: var(--menu-max-height, 362px);
 
-  /* Popover's wrapper fixes these to light values. `inherit` gets the theme values back. */
+  /* Popover fixes these to light values. `inherit` restores the theme values. */
   --color-text-on-light-primary: inherit;
   --color-text-on-light-secondary: inherit;
   --color-text-on-light-tertiary: inherit;
   --color-icon-on-light-primary: inherit;
   --color-icon-on-light-secondary: inherit;
 
-  /* Popover's [data-theme='dark'] rules read the -dark variants. */
+  /* Popover reads the `-dark` variants in dark themes. */
   --popover-background: var(--color-background-light-default);
   --popover-background-dark: var(--color-background-light-default);
   --popover-border-color-dark: var(--color-border-on-light-subtle-01);
@@ -32,14 +30,12 @@
 }
 
 .container {
-  /* Popover's min and max width set the surface width, so the padding must stay inside it. */
+  /* Popover sets the surface width. Include padding in that width. */
   box-sizing: border-box;
-  /* Padding keeps the rounded hover fill of each row inside the surface, as in the design. */
   padding: 0 var(--spacing-4);
-  /* Matches the wrapper's rounded corners, minus its 1px border. `auto` lets long menus scroll. */
+  /* Match the wrapper radius minus its border. */
   border-radius: calc(var(--radius-16) - 1px);
   overflow: auto;
-  /* Thin scrollbar from the design. A full-width scrollbar takes too much row width. */
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
 }
@@ -98,7 +94,7 @@
 .divider {
   position: relative;
   height: 1px;
-  /* The line overlaps the row above, as in the design, so it adds no height. */
+  /* Overlap the preceding row so the divider adds no height. */
   margin-block-start: -1px;
   flex-shrink: 0;
   background: var(--color-border-on-light-subtle-01);

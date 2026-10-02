@@ -35,8 +35,7 @@ const getNextIndex = (key: string, current: number, count: number) => {
   }
 };
 
-// `useDismiss` reports Escape and outside presses. The focus manager reports focus that leaves the
-// menu. Nothing else closes an anchored menu.
+// Map Floating UI close reasons to Menu close reasons.
 const toCloseReason = (reason: OpenChangeReason | undefined): MenuCloseReason => {
   if (reason === 'escape-key') return 'escapeKey';
   if (reason === 'focus-out') return 'focusOut';
@@ -61,7 +60,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
 }) => {
   const initialFocusRef = useRef<HTMLElement | null>(null);
 
-  // All items have tabIndex -1, so tell the focus manager to focus the first enabled item.
+  // All items have tabIndex -1. Set the first enabled item as the initial focus target.
   const listRef = useCallback((node: HTMLDivElement | null) => {
     initialFocusRef.current = node ? (getEnabledItems(node)[0] ?? null) : null;
   }, []);
@@ -93,7 +92,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const { vertical: transformVertical, horizontal: transformHorizontal } =
     transformOrigin ?? DEFAULT_TRANSFORM_ORIGIN;
   const gap = (hideArrow ? 0 : MENU_ARROW_SIZE.height) + FLOATING_GAP;
-  // Depends on the origin fields, not the objects, so inline origin objects don't rebuild the middleware on each render.
+  // Depend on origin fields so inline objects do not rebuild the middleware.
   const { placement, coversAnchor, offset } = useMemo(
     () =>
       getMenuOriginPosition(
@@ -129,7 +128,6 @@ export const MenuRoot: React.FC<MenuProps> = ({
       arrowClassName={styles.arrow}
     >
       <MenuContext.Provider value={contextValue}>
-        {/* Keyboard events bubble up from the focused item. The div itself is not interactive. */}
         <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
           {children}
         </div>

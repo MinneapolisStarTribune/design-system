@@ -33,8 +33,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
-  // Resolve this before installing our own provider. This preserves Popover's historical portal
-  // destination: its own provider is for descendant popovers, not for this surface.
+  // Resolve this before adding the nested provider. The nested provider is only for child popovers.
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
   const handleOpenChange = useCallback(

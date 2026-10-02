@@ -7,12 +7,10 @@ describe('resolveMenuArrowOffset', () => {
   });
 
   it.each([
-    // For start-aligned and centered placements, FloatingArrow measures from the start edge.
     ['start', 'bottom-start', '16px'],
     ['end', 'bottom-start', 'calc(100% - 28px)'],
     ['start', 'right', '16px'],
     ['end', 'right', 'calc(100% - 28px)'],
-    // For end-aligned placements, FloatingArrow measures from the end edge.
     ['start', 'bottom-end', 'calc(100% - 28px)'],
     ['end', 'bottom-end', '16px'],
     ['center', 'bottom-start', 'calc(50% - 6px)'],

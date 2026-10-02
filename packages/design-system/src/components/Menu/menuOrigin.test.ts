@@ -12,7 +12,6 @@ const origin = (vertical: MenuOrigin['vertical'], horizontal: MenuOrigin['horizo
   horizontal,
 });
 
-/** Runs the offset function the way Floating UI's `offset` middleware would. */
 const resolveOffset = (
   anchorOrigin: MenuOrigin,
   transformOrigin: MenuOrigin,
@@ -24,7 +23,6 @@ const resolveOffset = (
     rects: { reference, floating },
     placement: placement ?? position.placement,
   };
-  // The offset function reads only `rects` and `placement`.
   return { ...position, value: position.offset(state as MiddlewareState) };
 };
 
@@ -45,12 +43,10 @@ describe('getMenuOriginPosition', () => {
   });
 
   it('shifts along the cross axis when the origins differ on it', () => {
-    // The menu's left edge aligns with the anchor's right edge, below the anchor.
     expect(resolveOffset(origin('bottom', 'right'), origin('top', 'left')).value).toEqual({
       mainAxis: GAP,
       crossAxis: 100,
     });
-    // The menu is centered on the anchor's left edge.
     expect(resolveOffset(origin('bottom', 'left'), origin('top', 'center')).value).toEqual({
       mainAxis: GAP,
       crossAxis: -50,
@@ -64,7 +60,6 @@ describe('getMenuOriginPosition', () => {
   });
 
   it('places the menu over the anchor without a gap when the origins overlap', () => {
-    // MUI's "open over the anchor" case: the two top-left corners meet.
     const { placement, coversAnchor, value } = resolveOffset(
       origin('top', 'left'),
       origin('top', 'left')
@@ -83,7 +78,6 @@ describe('getMenuOriginPosition', () => {
 
     expect(placement).toBe('bottom');
     expect(coversAnchor).toBe(true);
-    // The menu moves up by half the anchor height plus half the menu height. 'bottom' already centers it horizontally.
     expect(value).toEqual({ mainAxis: -80, crossAxis: 0 });
   });
 
@@ -91,7 +85,6 @@ describe('getMenuOriginPosition', () => {
     const below = resolveOffset(origin('top', 'left'), origin('top', 'left')).value;
     const above = resolveOffset(origin('top', 'left'), origin('top', 'left'), 'top-start').value;
 
-    // bottom-start starts at y = 40 and top-start starts at y = -120. Both offsets move the menu to y = 0.
     expect(below).toEqual({ mainAxis: -40, crossAxis: 0 });
     expect(above).toEqual({ mainAxis: -120, crossAxis: 0 });
   });
