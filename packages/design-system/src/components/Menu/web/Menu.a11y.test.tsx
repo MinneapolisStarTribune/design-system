@@ -12,7 +12,7 @@ describe('Menu Accessibility', () => {
 
     render(
       <DesignSystemProvider brand="startribune" forceColorScheme="light">
-        <Menu.Root anchorEl={anchor} open aria-label="Account">
+        <Menu.Root anchorEl={anchor} open onClose={vi.fn()} aria-label="Account">
           <Menu.Item href="https://varsity.startribune.com/">
             Strib Varsity
             <Menu.ItemIcon position="end">
@@ -43,7 +43,7 @@ describe('Menu Accessibility', () => {
 
     render(
       <DesignSystemProvider brand="startribune" forceColorScheme="light">
-        <Menu.Root anchorEl={anchor} open aria-labelledby="menu-anchor">
+        <Menu.Root anchorEl={anchor} open onClose={vi.fn()} aria-labelledby="menu-anchor">
           <Menu.Item>Manage Profile</Menu.Item>
         </Menu.Root>
       </DesignSystemProvider>
@@ -60,7 +60,7 @@ describe('Menu Accessibility', () => {
   it('only sets aria-labelledby when it is supplied', async () => {
     render(
       <DesignSystemProvider brand="startribune" forceColorScheme="light">
-        <Menu.Root anchorEl={document.body} open aria-label="Account">
+        <Menu.Root anchorEl={document.body} open onClose={vi.fn()} aria-label="Account">
           <Menu.Item>Manage Profile</Menu.Item>
         </Menu.Root>
       </DesignSystemProvider>
@@ -80,7 +80,13 @@ describe('Menu Accessibility', () => {
     );
     const doublyLabeled = (
       // @ts-expect-error aria-label and aria-labelledby are mutually exclusive
-      <Menu.Root anchorEl={anchor} open aria-label="Account" aria-labelledby="menu-anchor">
+      <Menu.Root
+        anchorEl={anchor}
+        open
+        onClose={vi.fn()}
+        aria-label="Account"
+        aria-labelledby="menu-anchor"
+      >
         <Menu.Item>Manage Profile</Menu.Item>
       </Menu.Root>
     );

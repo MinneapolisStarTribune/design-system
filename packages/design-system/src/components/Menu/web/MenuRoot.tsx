@@ -3,8 +3,8 @@
 import React, { KeyboardEvent, useCallback, useContext, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import type { OpenChangeReason } from '@floating-ui/react';
-import { FloatingPortalRootContext } from '../../Popover/FloatingPortalRootContext';
-import { FLOATING_GAP, FloatingSurface } from '../../Popover/FloatingSurface';
+import { FloatingPortalRootContext } from '@/components/Popover/FloatingPortalRootContext';
+import { FLOATING_GAP, FloatingSurface } from '@/components/Popover/FloatingSurface';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from '../menuArrow';
 import { MenuContext } from '../MenuContext';
 import {
@@ -68,7 +68,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
-      if (!nextOpen) onClose?.(toCloseReason(reason));
+      if (!nextOpen) onClose(toCloseReason(reason));
     },
     [onClose]
   );
@@ -85,7 +85,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   };
 
   const portalRootFromContext = useContext(FloatingPortalRootContext);
-  const closeFromItem = useCallback(() => onClose?.('itemSelect'), [onClose]);
+  const closeFromItem = useCallback(() => onClose('itemSelect'), [onClose]);
   const contextValue = useMemo(() => ({ closeFromItem }), [closeFromItem]);
 
   const { vertical: anchorVertical, horizontal: anchorHorizontal } =

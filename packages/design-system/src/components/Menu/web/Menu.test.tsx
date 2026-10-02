@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import { renderWithProvider } from '../../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 import * as Menu from './Menu';
 import type { MenuLabelProps, MenuProps } from '../Menu.types';
 

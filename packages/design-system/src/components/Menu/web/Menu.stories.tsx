@@ -106,6 +106,7 @@ export const Configurable: Story = {
   args: {
     anchorEl: null,
     open: false,
+    onClose: () => undefined,
     children: null,
     'aria-label': 'Account',
     anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
@@ -360,6 +361,7 @@ export const AllVariants: Story = {
   args: {
     anchorEl: null,
     open: false,
+    onClose: () => undefined,
     children: null,
     'aria-label': 'Account',
   },

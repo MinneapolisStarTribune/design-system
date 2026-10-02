@@ -27,7 +27,7 @@ export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
   /** Called when the menu requests to close. Receives the reason. */
-  onClose?: (reason: MenuCloseReason) => void;
+  onClose: (reason: MenuCloseReason) => void;
   /**
    * Point on the anchor that the menu attaches to.
    * @default { vertical: 'bottom', horizontal: 'left' }
