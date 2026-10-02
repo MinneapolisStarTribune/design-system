@@ -1,8 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
+import { PopoverPortalRootProvider } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 describe('Popover', () => {
   it('renders with trigger element', () => {
@@ -29,6 +30,105 @@ describe('Popover', () => {
     await waitFor(() => {
       expect(screen.getByText('Popover Content')).toBeInTheDocument();
     });
+  });
+
+  it('uses an inherited portal root instead of its own descendant provider', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <PopoverPortalRootProvider>
+        <div data-testid="outer-popover-root">
+          <Popover trigger={<Button>Open</Button>}>
+            <Popover.Body>Popover Content</Popover.Body>
+          </Popover>
+        </div>
+      </PopoverPortalRootProvider>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const portal = (await screen.findByText('Popover Content')).closest(
+      '[data-floating-ui-portal]'
+    );
+    expect(portal?.parentElement).toBe(screen.getByTestId('outer-popover-root').parentElement);
+  });
+
+  it('portals to document.body, not its own trigger wrapper, without an inherited portal root', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const portal = (await screen.findByText('Popover Content')).closest(
+      '[data-floating-ui-portal]'
+    );
+    expect(portal?.parentElement).toBe(document.body);
+  });
+
+  it('names the dialog by its heading', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
+  });
+
+  it('uses aria-label when there is no heading', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Options' });
+    expect(dialog).not.toHaveAttribute('aria-labelledby');
+  });
+
+  it('uses the heading instead of aria-label when both are provided', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+        <Popover.Heading>Title</Popover.Heading>
+        <Popover.Body>Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Title' });
+    expect(dialog).not.toHaveAttribute('aria-label');
+  });
+
+  it('merges the style prop with the positioning styles', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} style={{ zIndex: 5 }}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const surface = await screen.findByRole('dialog');
+    expect(surface).toHaveStyle({ zIndex: 5, position: 'absolute', left: 0, top: 0 });
   });
 
   it('renders close button when heading is present', async () => {
@@ -204,82 +304,19 @@ describe('Popover', () => {
     });
   });
 
-  it('applies wrapperClassName', async () => {
+  it('applies className to the popover surface', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} wrapperClassName="custom-wrapper">
+      <Popover trigger={<Button>Open</Button>} className="custom-popover">
         <Popover.Body>Content</Popover.Body>
       </Popover>
     );
 
     await user.click(screen.getByText('Open'));
 
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const wrapper = content.closest('.custom-wrapper');
-
-      expect(wrapper).toHaveClass('custom-wrapper');
-    });
-  });
-
-  it('applies containerClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} containerClassName="custom-container">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const container = content.closest('.custom-container');
-
-      expect(container).toHaveClass('custom-container');
-    });
-  });
-
-  it('applies contentClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} contentClassName="custom-content">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const content = screen.getByText('Content');
-
-      const contentEl = content.closest('.custom-content');
-
-      expect(contentEl).toHaveClass('custom-content');
-    });
-  });
-
-  it('applies arrowClassName', async () => {
-    const user = userEvent.setup();
-
-    renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} arrowClassName="custom-arrow">
-        <Popover.Body>Content</Popover.Body>
-      </Popover>
-    );
-
-    await user.click(screen.getByText('Open'));
-
-    await waitFor(() => {
-      const arrow = document.querySelector('svg.custom-arrow');
-
-      expect(arrow).toHaveClass('custom-arrow');
-    });
+    const surface = (await screen.findByText('Content')).closest('[role="dialog"]');
+    expect(surface).toHaveClass('custom-popover');
   });
 });
 
@@ -320,6 +357,40 @@ describe('Popover.Body', () => {
 });
 
 describe('Popover.Heading', () => {
+  it('hides the close button when showCloseButton is false', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading showCloseButton={false}>Title</Popover.Heading>
+        <Popover.Body>Body</Popover.Body>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    await screen.findByRole('dialog');
+    expect(screen.queryByLabelText('Close popover')).toBeNull();
+  });
+
+  it('renders eyebrow and value outside the accessible name', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>}>
+        <Popover.Heading eyebrow="Saturday, April 4" value="308">
+          Boys Volleyball
+        </Popover.Heading>
+      </Popover>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Boys Volleyball' });
+    expect(dialog).toHaveTextContent('Saturday, April 4');
+    expect(dialog).toHaveTextContent('308');
+  });
+
   it('renders children and close button', async () => {
     const user = userEvent.setup();
 
