@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MouseEvent, ReactNode, useState } from 'react';
 import classNames from 'classnames';
+import { userEvent, within } from 'storybook/test';
 import { Button, UtilityBody } from '@/components/index.web';
 import {
   ArrowDiagonalIcon,
@@ -19,9 +20,15 @@ import styles from './Menu.stories.module.scss';
 import { MENU_ARROW_OFFSETS } from '../Menu.constants';
 import type { MenuLabelProps, MenuOrigin, MenuProps } from '../Menu.types';
 
+type AnchorProps = {
+  onClick: (event: MouseEvent<HTMLElement>) => void;
+  'aria-haspopup': 'menu';
+  'aria-expanded': boolean;
+};
+
 type DemoProps = Omit<MenuProps, 'anchorEl' | 'open' | 'onClose' | keyof MenuLabelProps> &
   MenuLabelProps & {
-    renderAnchor: (props: { onClick: (event: MouseEvent<HTMLElement>) => void }) => ReactNode;
+    renderAnchor: (anchorProps: AnchorProps) => ReactNode;
   };
 
 /** Holds the anchor in state, the way a consumer would. */
@@ -32,6 +39,8 @@ const MenuDemo = ({ renderAnchor, children, ...menuProps }: DemoProps) => {
     <>
       {renderAnchor({
         onClick: (event) => setAnchorEl(anchorEl ? null : event.currentTarget),
+        'aria-haspopup': 'menu',
+        'aria-expanded': anchorEl !== null,
       })}
       <Menu.Root
         {...menuProps}
@@ -125,7 +134,7 @@ export const Configurable: Story = {
     <MenuDemo
       {...args}
       aria-label="Account"
-      renderAnchor={({ onClick }) => <Button onClick={onClick}>Open menu</Button>}
+      renderAnchor={(anchorProps) => <Button {...anchorProps}>Open menu</Button>}
     >
       <AccountItems />
     </MenuDemo>
@@ -136,7 +145,13 @@ export const Configurable: Story = {
         code: `
 const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-<Button onClick={(event) => setAnchorEl(event.currentTarget)}>Open menu</Button>
+<Button
+  aria-haspopup="menu"
+  aria-expanded={anchorEl !== null}
+  onClick={(event) => setAnchorEl(event.currentTarget)}
+>
+  Open menu
+</Button>
 
 <Menu.Root
   anchorEl={anchorEl}
@@ -233,8 +248,8 @@ const PositionCell = ({ label, cell, ...menuProps }: (typeof POSITION_EXAMPLES)[
         {...menuProps}
         aria-label={label}
         className={styles.comparisonMenu}
-        renderAnchor={({ onClick }) => (
-          <Button size="small" onClick={onClick}>
+        renderAnchor={(anchorProps) => (
+          <Button size="small" {...anchorProps}>
             {label}
           </Button>
         )}
@@ -297,8 +312,8 @@ const ItemsDemo = () => {
       <MenuDemo
         {...OPEN_RIGHT}
         aria-label="Item variations"
-        renderAnchor={({ onClick }) => (
-          <Button variant="outlined" onClick={onClick}>
+        renderAnchor={(anchorProps) => (
+          <Button variant="outlined" {...anchorProps}>
             Open items
           </Button>
         )}
@@ -366,6 +381,13 @@ export const AllVariants: Story = {
     'aria-label': 'Account',
   },
   parameters: { layout: 'padded' },
+  // Opens the item menu so the Chromatic snapshot captures an open surface. Only one menu can be
+  // open at a time, and this one shows every item type.
+  play: async ({ canvasElement }) => {
+    // findByRole waits for the theme wrapper to finish loading and render the story.
+    const anchor = await within(canvasElement).findByRole('button', { name: 'Open items' });
+    await userEvent.click(anchor);
+  },
   render: () => (
     <div className={styles.page}>
       <Section
@@ -378,7 +400,7 @@ export const AllVariants: Story = {
           className={styles.accountMenu}
           anchorOrigin={origin('bottom', 'right')}
           transformOrigin={origin('bottom', 'left')}
-          renderAnchor={({ onClick }) => <Button onClick={onClick}>Account</Button>}
+          renderAnchor={(anchorProps) => <Button {...anchorProps}>Account</Button>}
         >
           <AccountItems />
         </MenuDemo>
@@ -396,12 +418,12 @@ export const AllVariants: Story = {
             className={styles.rowActionsMenu}
             anchorOrigin={origin('bottom', 'right')}
             transformOrigin={origin('top', 'right')}
-            renderAnchor={({ onClick }) => (
+            renderAnchor={(anchorProps) => (
               <Button
                 variant="ghost"
                 icon={<MenuVerticalIcon />}
                 aria-label="Row actions"
-                onClick={onClick}
+                {...anchorProps}
               />
             )}
           >
@@ -431,8 +453,8 @@ export const AllVariants: Story = {
         <MenuDemo
           {...OPEN_RIGHT}
           aria-label="Teams"
-          renderAnchor={({ onClick }) => (
-            <Button variant="outlined" onClick={onClick}>
+          renderAnchor={(anchorProps) => (
+            <Button variant="outlined" {...anchorProps}>
               Open 20 items
             </Button>
           )}
