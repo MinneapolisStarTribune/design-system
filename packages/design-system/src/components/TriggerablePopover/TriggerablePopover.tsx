@@ -2,12 +2,12 @@
 
 import { useCallback, useContext, useId, useMemo, useState } from 'react';
 import { useExternalTrigger } from '@/hooks/useExternalTrigger';
-import { FloatingSurface } from '../Popover/FloatingSurface';
-import { PopoverBody } from '../Popover/PopoverBody';
-import { PopoverContext, PopoverPortalRootContext } from '../Popover/PopoverContext';
-import { PopoverDescription } from '../Popover/PopoverDescription';
-import { PopoverDivider } from '../Popover/PopoverDivider';
-import { PopoverHeading } from '../Popover/PopoverHeading';
+import { FloatingSurface } from '@/components/Popover/FloatingSurface';
+import { PopoverBody } from '@/components/Popover/PopoverBody';
+import { PopoverContext, PopoverPortalRootContext } from '@/components/Popover/PopoverContext';
+import { PopoverDescription } from '@/components/Popover/PopoverDescription';
+import { PopoverDivider } from '@/components/Popover/PopoverDivider';
+import { PopoverHeading } from '@/components/Popover/PopoverHeading';
 import { TriggerablePopoverProps } from './TriggerablePopover.types';
 
 const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({

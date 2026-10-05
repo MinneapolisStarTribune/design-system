@@ -1,7 +1,9 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { Position } from '@/types';
+import { POSITIONS } from '@/types';
 
-export type Placement = Position;
+export const POPOVER_PLACEMENTS = POSITIONS;
+
+export type Placement = (typeof POPOVER_PLACEMENTS)[number];
 
 export type PopoverProps = {
   trigger: ReactNode;

@@ -1,29 +1,82 @@
+import { ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
-import { Button, Link, UtilityBody } from '@/components/index.web';
+import { POPOVER_PLACEMENTS, Placement } from './Popover.types';
+import { Button } from '@/components/Button/web/Button';
+import { Link } from '@/components/Link/web/Link';
+import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import { ArrowDiagonalIcon, CameraIcon } from '@/icons';
-import { ReactNode, useState } from 'react';
+import styles from './Popover.stories.module.scss';
+
+/** Core Components names pointers by the side the arrow is on, which is opposite `placement`. */
+const POINTERS = [
+  { pointer: 'Left', placement: 'right' },
+  { pointer: 'Top', placement: 'bottom' },
+  { pointer: 'Right', placement: 'left' },
+  { pointer: 'Bottom', placement: 'top' },
+] satisfies readonly { pointer: string; placement: Placement }[];
+
+const DETAILS = [
+  { label: 'Label', value: 'value' },
+  { label: 'Label', value: 'value' },
+];
 
 const meta = {
   title: 'Feedback & Status/Popover',
   component: Popover,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Small surface that opens from a trigger with a title, description, or custom content. Docs: `Popover.mdx`.',
+      },
+    },
   },
   argTypes: {
-    trigger: { control: false },
-    children: { control: false },
+    trigger: {
+      control: false,
+      description: 'Element that opens the popover. A single element gets the ARIA attributes.',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    children: {
+      control: false,
+      description:
+        'Popover content, built from `Popover.Heading`, `Description`, `Divider` and `Body`.',
+      table: { type: { summary: 'ReactNode' } },
+    },
     placement: {
       control: 'select',
-      options: ['top', 'right', 'bottom', 'left'],
+      options: [...POPOVER_PLACEMENTS],
+      description: 'Side of the trigger the popover opens on.',
+      table: {
+        type: { summary: 'top | right | bottom | left' },
+        defaultValue: { summary: 'bottom' },
+      },
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: 'Stops the trigger from opening the popover.',
+      table: { type: { summary: 'boolean' } },
+    },
+    modal: {
+      control: 'boolean',
+      description: 'Traps focus inside the popover. Use for action-heavy content.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
     },
     className: {
       control: 'text',
+      description: 'Classes for the popover surface.',
+      table: { type: { summary: 'string' } },
     },
   },
 } satisfies Meta<typeof Popover>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 /**
@@ -33,7 +86,6 @@ export const Configurable: Story = {
   args: {
     trigger: <Button>Open</Button>,
     placement: 'bottom',
-    className: undefined,
     children: (
       <>
         <Popover.Heading>Title</Popover.Heading>
@@ -47,11 +99,7 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-<Popover
-  placement="bottom"
-  trigger={<Button>Open</Button>}
-  className="custom-popover"
->
+<Popover placement="bottom" trigger={<Button>Open</Button>}>
   <Popover.Heading>Title</Popover.Heading>
 
   <Popover.Description>
@@ -74,7 +122,6 @@ const ControlledExample = () => {
       trigger={<Button>{open ? 'Close' : 'Open'}</Button>}
     >
       <Popover.Heading>Title</Popover.Heading>
-
       <Popover.Description>Description</Popover.Description>
     </Popover>
   );
@@ -82,17 +129,11 @@ const ControlledExample = () => {
 
 /** A titled group in All variants, matching the Core Components Popover page. */
 const Group = ({ title, children }: { title: string; children: ReactNode }) => (
-  <section>
-    <h2 style={{ marginBottom: 24 }}>{title}</h2>
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: 40,
-      }}
-    >
-      {children}
-    </div>
+  <section className={styles.group}>
+    <UtilityLabel size="large" weight="semibold">
+      {title}
+    </UtilityLabel>
+    <div className={styles.groupGrid}>{children}</div>
   </section>
 );
 
@@ -105,36 +146,48 @@ const Example = ({
   description?: string;
   children: ReactNode;
 }) => (
-  <div>
-    <h3 style={{ marginBottom: 8 }}>{title}</h3>
+  <div className={styles.example}>
+    <UtilityLabel size="medium" weight="semibold">
+      {title}
+    </UtilityLabel>
     {description && (
-      <UtilityBody size="x-small" style={{ margin: '0 0 24px' }}>
+      <UtilityBody size="x-small" className={styles.exampleDescription}>
         {description}
       </UtilityBody>
     )}
-    <div style={{ marginTop: description ? 0 : 24 }}>{children}</div>
+    <div className={styles.exampleContent}>{children}</div>
   </div>
 );
 
-/** Core Components names pointers by the side the arrow is on, which is opposite `placement`. */
-const POINTERS = [
-  { pointer: 'Left', placement: 'right' },
-  { pointer: 'Top', placement: 'bottom' },
-  { pointer: 'Right', placement: 'left' },
-  { pointer: 'Bottom', placement: 'top' },
-] as const;
-
-/**
- * All variants
- */
 export const AllVariants: Story = {
-  args: {
-    trigger: <Button />,
-    children: null,
-  },
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Each group matches a section of the Core Components Popover page: content variants, pointer positions, then heading options and trigger types.',
+      },
+      source: {
+        code: `
+<Popover trigger={<Button>Open</Button>} placement="bottom">
+  <Popover.Heading>Title</Popover.Heading>
 
+  <Popover.Description>Description</Popover.Description>
+
+  <Popover.Divider />
+
+  <Popover.Body>
+    <UtilityBody>Body Content</UtilityBody>
+  </Popover.Body>
+</Popover>
+        `,
+      },
+    },
+  },
+  args: { trigger: <Button />, children: null },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 80, padding: 80 }}>
+    <div className={styles.page}>
       <Group title="Variants">
         <Example title="Text only" description="A popover with only a description.">
           <Popover trigger={<Button>Open</Button>}>
@@ -147,7 +200,6 @@ export const AllVariants: Story = {
         <Example title="With title" description="A short title above the description.">
           <Popover trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
-
             <Popover.Description>Description</Popover.Description>
           </Popover>
         </Example>
@@ -158,24 +210,13 @@ export const AllVariants: Story = {
         >
           <Popover trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
-
             <Popover.Body>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 'var(--spacing-12)',
-                  paddingTop: 'var(--spacing-12)',
-                }}
-              >
-                <UtilityBody size="x-small" style={{ margin: 0 }}>
-                  Body Content
-                </UtilityBody>
+              <div className={styles.customContent}>
+                <UtilityBody size="x-small">Body Content</UtilityBody>
                 <Link
                   size="small"
                   href="https://varsity.startribune.com/"
-                  icon={<ArrowDiagonalIcon />}
+                  icon={<ArrowDiagonalIcon size="x-small" />}
                 >
                   View link
                 </Link>
@@ -190,11 +231,9 @@ export const AllVariants: Story = {
         >
           <Popover trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
-
             <Popover.Divider />
-
             <Popover.Body>
-              {Array.from({ length: 20 }).map((_, i) => (
+              {Array.from({ length: 20 }, (_, i) => (
                 <UtilityBody key={i}>Item {i + 1}</UtilityBody>
               ))}
             </Popover.Body>
@@ -205,10 +244,9 @@ export const AllVariants: Story = {
       <Group title="Pointer">
         {POINTERS.map(({ pointer, placement }) => (
           <Example key={pointer} title={pointer} description={`placement="${placement}"`}>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: '120px 0' }}>
+            <div className={styles.pointerFrame}>
               <Popover placement={placement} trigger={<Button>Open</Button>}>
                 <Popover.Heading>Title</Popover.Heading>
-
                 <Popover.Description>Description</Popover.Description>
               </Popover>
             </div>
@@ -230,30 +268,21 @@ export const AllVariants: Story = {
             <Popover.Heading eyebrow="Eyebrow" value="value" showCloseButton={false}>
               Title
             </Popover.Heading>
-
             <Popover.Divider />
-
             <Popover.Body>
-              <dl
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 'var(--spacing-8)',
-                  margin: 0,
-                  paddingTop: 'var(--spacing-12)',
-                }}
-              >
-                {[
-                  { label: 'Label', value: 'value' },
-                  { label: 'Label', value: 'value' },
-                ].map(({ label, value }, index) => (
-                  <div
-                    key={index}
-                    className="typography-utility-text-regular-small text-on-light-secondary"
-                    style={{ display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <dt>{label}</dt>
-                    <dd style={{ margin: 0 }}>{value}</dd>
+              <dl className={styles.details}>
+                {DETAILS.map(({ label, value }, index) => (
+                  <div key={index} className={styles.detailRow}>
+                    <dt>
+                      <UtilityBody size="small" color="on-light-secondary">
+                        {label}
+                      </UtilityBody>
+                    </dt>
+                    <dd>
+                      <UtilityBody size="small" color="on-light-secondary">
+                        {value}
+                      </UtilityBody>
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -267,7 +296,6 @@ export const AllVariants: Story = {
             trigger={<Button variant="ghost" icon={<CameraIcon />} aria-label="Photo details" />}
           >
             <Popover.Heading>Title</Popover.Heading>
-
             <Popover.Description>Description</Popover.Description>
           </Popover>
         </Example>
@@ -278,31 +306,4 @@ export const AllVariants: Story = {
       </Group>
     </div>
   ),
-
-  parameters: {
-    layout: 'fullscreen',
-    controls: { disable: true },
-    docs: {
-      source: {
-        code: `
-<Popover
-  trigger={<Button>Open</Button>}
-  placement="bottom"
->
-  <Popover.Heading>Title</Popover.Heading>
-
-  <Popover.Description>
-    Description
-  </Popover.Description>
-
-  <Popover.Divider />
-
-  <Popover.Body>
-    <UtilityBody>Body Content</UtilityBody>
-  </Popover.Body>
-</Popover>
-        `,
-      },
-    },
-  },
 };

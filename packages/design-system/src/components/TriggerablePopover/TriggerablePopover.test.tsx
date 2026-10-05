@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 import { TriggerablePopover } from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
-import { renderWithProvider } from '../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 const triggerExternally = (id: string) =>
   act(() => {

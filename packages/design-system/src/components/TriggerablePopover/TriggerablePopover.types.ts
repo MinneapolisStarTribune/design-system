@@ -1,5 +1,5 @@
 import type { UseExternalTriggerOptions } from '@/hooks/useExternalTrigger';
-import type { PopoverProps } from '../Popover/Popover.types';
+import type { PopoverProps } from '@/components/Popover/Popover.types';
 
 export type TriggerablePopoverProps = PopoverProps & {
   /**

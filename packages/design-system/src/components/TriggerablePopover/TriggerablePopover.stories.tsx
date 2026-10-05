@@ -1,30 +1,77 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TriggerablePopover } from './TriggerablePopover';
-import { Button, UtilityBody } from '@/components/index.web';
+import { Button } from '@/components/Button/web/Button';
+import { UtilityBody } from '@/components/Typography/Utility';
+import { POPOVER_PLACEMENTS } from '@/components/Popover/Popover.types';
 
 const meta = {
   title: 'Feedback & Status/TriggerablePopover',
   component: TriggerablePopover,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A `Popover` that an outside script can open, close, and inject content into by `triggerId`. Docs: `TriggerablePopover.mdx`.',
+      },
+    },
   },
   argTypes: {
-    trigger: { control: false },
-    children: { control: false },
+    trigger: {
+      control: false,
+      description: 'Element that opens the popover. A single element gets the ARIA attributes.',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    children: {
+      control: false,
+      description:
+        'Popover content, built from `TriggerablePopover.Heading`, `Description`, `Divider` and `Body`. Not rendered while opened by `triggerId`.',
+      table: { type: { summary: 'ReactNode' } },
+    },
     placement: {
       control: 'select',
-      options: ['top', 'right', 'bottom', 'left'],
+      options: [...POPOVER_PLACEMENTS],
+      description: 'Side of the trigger the popover opens on.',
+      table: {
+        type: { summary: 'top | right | bottom | left' },
+        defaultValue: { summary: 'bottom' },
+      },
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: 'Stops the trigger from opening the popover.',
+      table: { type: { summary: 'boolean' } },
+    },
+    modal: {
+      control: 'boolean',
+      description: 'Traps focus inside the popover. Use for action-heavy content.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    triggerId: {
+      control: 'text',
+      description: 'ID an outside script uses to open or close this popover.',
+      table: { type: { summary: 'string' } },
+    },
+    enableInjectionSlot: {
+      control: 'boolean',
+      description: 'Reserves a `${triggerId}-injection-slot` node for injected content.',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
     },
   },
 } satisfies Meta<typeof TriggerablePopover>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
-/**
- * Playground — behaves exactly like `Popover` when no `triggerId` is set.
- */
+/** Without a `triggerId`, this behaves like `Popover`. See Popover's stories for all variants. */
 export const Configurable: Story = {
   args: {
     trigger: <Button>Open</Button>,
@@ -33,141 +80,25 @@ export const Configurable: Story = {
       <>
         <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
         <TriggerablePopover.Description>
-          Without a `triggerId`, this is identical to a plain Popover.
+          This is a popover. Use the Controls panel to change the pointer position.
         </TriggerablePopover.Description>
       </>
     ),
   },
-};
-
-const AllVariantsDemo = () => (
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 80,
-      padding: 80,
-      width: '100%',
-    }}
-  >
-    <div>
-      <h3 style={{ marginBottom: 24 }}>Description only</h3>
-
-      <TriggerablePopover trigger={<Button>Open</Button>}>
-        <TriggerablePopover.Heading>
-          <TriggerablePopover.Description>
-            This is a triggerable popover, opened when the button is clicked.
-          </TriggerablePopover.Description>
-        </TriggerablePopover.Heading>
-      </TriggerablePopover>
-    </div>
-
-    <div>
-      <h3 style={{ marginBottom: 24 }}>With title</h3>
-
-      <TriggerablePopover trigger={<Button>Open</Button>}>
-        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
-        <TriggerablePopover.Description>
-          This is a triggerable popover, opened when the button is clicked.
-        </TriggerablePopover.Description>
-      </TriggerablePopover>
-    </div>
-
-    <div>
-      <h3 style={{ marginBottom: 24 }}>Custom content</h3>
-
-      <TriggerablePopover trigger={<Button>Open</Button>} placement="bottom">
-        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
-        <TriggerablePopover.Body>
-          <UtilityBody size="small">Option 1</UtilityBody>
-          <UtilityBody size="small">Option 2</UtilityBody>
-          <UtilityBody size="small">Option 3</UtilityBody>
-          <UtilityBody size="small">Option 4</UtilityBody>
-          <UtilityBody size="small">Option 5</UtilityBody>
-        </TriggerablePopover.Body>
-      </TriggerablePopover>
-    </div>
-
-    <div>
-      <h3 style={{ marginBottom: 24 }}>With divider</h3>
-
-      <TriggerablePopover trigger={<Button>Open</Button>} placement="bottom">
-        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
-        <TriggerablePopover.Divider />
-        <TriggerablePopover.Body>
-          <UtilityBody>Sample content popover body</UtilityBody>
-        </TriggerablePopover.Body>
-      </TriggerablePopover>
-    </div>
-
-    <div>
-      <h3 style={{ marginBottom: 24 }}>Scrollable body</h3>
-
-      <TriggerablePopover trigger={<Button>Open</Button>}>
-        <TriggerablePopover.Heading>Scrollable content</TriggerablePopover.Heading>
-        <TriggerablePopover.Description>This list is scrollable</TriggerablePopover.Description>
-        <TriggerablePopover.Divider />
-        <TriggerablePopover.Body>
-          {Array.from({ length: 20 }).map((_, i) => (
-            <UtilityBody key={i}>Item {i + 1}</UtilityBody>
-          ))}
-        </TriggerablePopover.Body>
-      </TriggerablePopover>
-    </div>
-
-    <div>
-      <h3 style={{ marginBottom: 24 }}>All placements</h3>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 120,
-          padding: 80,
-          placeItems: 'center',
-        }}
-      >
-        <TriggerablePopover placement="top" trigger={<Button>Top</Button>}>
-          <TriggerablePopover.Heading>Top</TriggerablePopover.Heading>
-          <TriggerablePopover.Body>
-            <UtilityBody>Arrow on top</UtilityBody>
-          </TriggerablePopover.Body>
-        </TriggerablePopover>
-
-        <TriggerablePopover placement="right" trigger={<Button>Right</Button>}>
-          <TriggerablePopover.Heading>Right</TriggerablePopover.Heading>
-          <TriggerablePopover.Body>
-            <UtilityBody>Arrow on right</UtilityBody>
-          </TriggerablePopover.Body>
-        </TriggerablePopover>
-
-        <TriggerablePopover placement="left" trigger={<Button>Left</Button>}>
-          <TriggerablePopover.Heading>Left</TriggerablePopover.Heading>
-          <TriggerablePopover.Body>
-            <UtilityBody>Arrow on left</UtilityBody>
-          </TriggerablePopover.Body>
-        </TriggerablePopover>
-
-        <TriggerablePopover placement="bottom" trigger={<Button>Bottom</Button>}>
-          <TriggerablePopover.Heading>Bottom</TriggerablePopover.Heading>
-          <TriggerablePopover.Body>
-            <UtilityBody>Arrow on bottom</UtilityBody>
-          </TriggerablePopover.Body>
-        </TriggerablePopover>
-      </div>
-    </div>
-  </div>
-);
-
-export const AllVariants: Story = {
-  args: {
-    trigger: <Button />,
-    children: null,
-  },
-  render: () => <AllVariantsDemo />,
   parameters: {
-    layout: 'fullscreen',
-    controls: { disable: true },
+    docs: {
+      source: {
+        code: `
+<TriggerablePopover placement="bottom" trigger={<Button>Open</Button>}>
+  <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+
+  <TriggerablePopover.Description>
+    This is a popover. Use the Controls panel to change the pointer position.
+  </TriggerablePopover.Description>
+</TriggerablePopover>
+        `,
+      },
+    },
   },
 };
 
@@ -240,7 +171,7 @@ const ExternalTriggerDemo = () => {
  * shows the app's own content when opened by a click, but defers to whatever's injected into
  * the slot when opened externally via `window.openTooltip`/`window.closeTooltip`.
  */
-export const ExternalTrigger: Story = {
+export const AllVariants: Story = {
   args: {
     trigger: <Button />,
     children: null,
