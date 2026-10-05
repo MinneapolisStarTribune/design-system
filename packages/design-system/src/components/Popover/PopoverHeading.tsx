@@ -41,7 +41,7 @@ export const PopoverHeading: React.FC<{
     return () => setHasHeading(false);
   }, [setHasHeading]);
 
-  const typographyClassName = 'typography-utility-section-h6 text-on-light-primary';
+  const typographyClassName = 'typography-utility-section-h6';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
 
   return (
@@ -55,12 +55,7 @@ export const PopoverHeading: React.FC<{
     >
       <div className={classNames(styles.headingText, { [styles.title]: hasTitle || eyebrow })}>
         {eyebrow && (
-          <div
-            className={classNames(
-              styles.eyebrow,
-              'typography-utility-text-regular-xx-small text-on-light-secondary'
-            )}
-          >
+          <div className={classNames(styles.eyebrow, 'typography-utility-text-regular-xx-small')}>
             {eyebrow}
           </div>
         )}
