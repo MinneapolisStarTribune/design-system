@@ -111,7 +111,6 @@ export const FloatingSurface = ({
 }: TriggerSurfaceProps | AnchoredSurfaceProps) => {
   // Use state so `arrow()` receives the element without reading a ref during render.
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
-  // Callers resolve the portal root from their prop and PopoverPortalRootContext.
   const resolvedPortalRoot = portalRoot ?? undefined;
   const isAnchored = anchorEl !== undefined;
   const middleware = useMemo(

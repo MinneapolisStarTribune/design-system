@@ -1,7 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
-import { PopoverPortalRootProvider } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 
@@ -32,25 +31,21 @@ describe('Popover', () => {
     });
   });
 
-  it('uses a portal root from an ancestor PopoverPortalRootProvider', async () => {
+  it('renders into portalRoot when set', async () => {
     const user = userEvent.setup();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
 
     renderWithProvider(
-      <PopoverPortalRootProvider>
-        <div data-testid="outer-popover-root">
-          <Popover trigger={<Button>Open</Button>}>
-            <Popover.Body>Popover Content</Popover.Body>
-          </Popover>
-        </div>
-      </PopoverPortalRootProvider>
+      <Popover trigger={<Button>Open</Button>} portalRoot={container}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
     );
 
     await user.click(screen.getByText('Open'));
 
-    const portal = (await screen.findByText('Popover Content')).closest(
-      '[data-floating-ui-portal]'
-    );
-    expect(portal?.parentElement).toBe(screen.getByTestId('outer-popover-root').parentElement);
+    expect(container.contains(await screen.findByText('Popover Content'))).toBe(true);
+    container.remove();
   });
 
   it('renders the trigger without a wrapper element', () => {

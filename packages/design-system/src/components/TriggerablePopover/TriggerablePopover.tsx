@@ -1,10 +1,10 @@
 'use client';
 
-import { useCallback, useContext, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { useExternalTrigger } from '@/hooks/useExternalTrigger';
 import { FloatingSurface } from '@/components/Popover/FloatingSurface';
 import { PopoverBody } from '@/components/Popover/PopoverBody';
-import { PopoverContext, PopoverPortalRootContext } from '@/components/Popover/PopoverContext';
+import { PopoverContext } from '@/components/Popover/PopoverContext';
 import { PopoverDescription } from '@/components/Popover/PopoverDescription';
 import { PopoverDivider } from '@/components/Popover/PopoverDivider';
 import { PopoverHeading } from '@/components/Popover/PopoverHeading';
@@ -20,7 +20,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   modal = false,
   open: openProp,
   onOpenChange: onOpenChangeProp,
-  portalRoot: portalRootProp,
+  portalRoot,
   className,
   id,
   style,
@@ -29,10 +29,6 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
 }) => {
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
-  // Inherit a portal root from an ancestor PopoverPortalRootProvider. Popovers don't wrap themselves
-  // in one, so the trigger renders without an extra div (valid inside <p>, flex and grid layouts).
-  const portalRootFromContext = useContext(PopoverPortalRootContext);
-  const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
 
   const { open, handleOpenChange, isExternallyTriggered, forceMount, injectionSlotProps } =
     useExternalTrigger(triggerId, openProp, onOpenChangeProp, {
@@ -63,7 +59,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
         isDisabled={isDisabled}
         modal={modal}
         keepMounted={forceMount}
-        portalRoot={resolvedPortalRoot}
+        portalRoot={portalRoot}
         wrapperClassName={className}
         id={id}
         style={style}

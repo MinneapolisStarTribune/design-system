@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useContext, useId, useMemo, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import { PopoverBody } from './PopoverBody';
-import { PopoverContext, PopoverPortalRootContext } from './PopoverContext';
+import { PopoverContext } from './PopoverContext';
 import { PopoverDescription } from './PopoverDescription';
 import { PopoverDivider } from './PopoverDivider';
 import { FloatingSurface } from './FloatingSurface';
@@ -17,7 +17,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   modal = false,
   open: openProp,
   onOpenChange: onOpenChangeProp,
-  portalRoot: portalRootProp,
+  portalRoot,
   className,
   id,
   style,
@@ -29,10 +29,6 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
-  // Inherit a portal root from an ancestor PopoverPortalRootProvider. Popovers don't wrap themselves
-  // in one, so the trigger renders without an extra div (valid inside <p>, flex and grid layouts).
-  const portalRootFromContext = useContext(PopoverPortalRootContext);
-  const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {
       if (isDisabled && nextOpen) return;
@@ -57,7 +53,7 @@ const PopoverRoot: React.FC<PopoverProps> = ({
         placement={placement}
         isDisabled={isDisabled}
         modal={modal}
-        portalRoot={resolvedPortalRoot}
+        portalRoot={portalRoot}
         wrapperClassName={className}
         id={id}
         style={style}
