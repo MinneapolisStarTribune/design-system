@@ -8,7 +8,7 @@ export type {
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export * as Dialog from './Dialog/Dialog';
-export { type DialogProps } from './Dialog/Dialog.types';
+export { type DialogCloseReason, type DialogProps, type DialogRole } from './Dialog/Dialog.types';
 export * as Drawer from './Drawer/Drawer';
 export {
   type DrawerCloseReason,

@@ -14,41 +14,24 @@ const NAMES = { component: 'Dialog', heading: 'Title' } as const;
 
 /** A modal window: a bottom sheet on phones, centered from 768px up. Built on the internal `ModalRoot`. */
 export const DialogRoot: React.FC<DialogProps> = ({
-  children,
-  open,
-  onClose,
-  showCloseButton = true,
   role = 'dialog',
   describeWithContent = role === 'alertdialog',
-  closeLabel = 'Close',
-  initialFocus,
-  portalRoot,
   className,
-  style,
   dataTestId = 'dialog',
-  'aria-label': ariaLabel,
+  ...rest
 }) => {
   const position = useResponsiveValue(undefined, POSITION);
 
   return (
     <ModalRoot
-      open={open}
-      onClose={onClose}
-      position={position}
-      showCloseButton={showCloseButton}
+      {...rest}
       role={role}
       describeWithBody={describeWithContent}
-      closeLabel={closeLabel}
-      initialFocus={initialFocus}
-      portalRoot={portalRoot}
+      position={position}
       className={classNames(styles.dialog, className)}
-      style={style}
       dataTestId={dataTestId}
-      aria-label={ariaLabel}
       names={NAMES}
-    >
-      {children}
-    </ModalRoot>
+    />
   );
 };
 

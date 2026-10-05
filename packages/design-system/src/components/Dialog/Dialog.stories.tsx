@@ -1,9 +1,9 @@
 import { type ReactNode, type Ref, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Dialog from './Dialog';
-import { DIALOG_ROLES } from './Dialog.constants';
 import type { DialogProps } from './Dialog.types';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
+import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
 import styles from '@/components/Modal/Modal.stories.module.scss';
 import classNames from 'classnames';
@@ -142,11 +142,11 @@ const meta = {
     },
     role: {
       control: 'inline-radio',
-      options: [...DIALOG_ROLES],
+      options: [...MODAL_ROLES],
       description:
         'The ARIA role. Use `alertdialog` for urgent interruptions that need a response, like confirming a deletion.',
       table: {
-        type: { summary: DIALOG_ROLES.join(' | ') },
+        type: { summary: MODAL_ROLES.join(' | ') },
         defaultValue: { summary: "'dialog'" },
       },
     },
