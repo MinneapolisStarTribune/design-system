@@ -12,42 +12,23 @@ const NAMES = { component: 'Drawer', heading: 'Heading' } as const;
 
 /** A modal panel attached to a viewport edge. Built on the internal `ModalRoot`. */
 export const DrawerRoot: React.FC<DrawerProps> = ({
-  children,
-  open,
-  onClose,
   position,
-  showCloseButton = true,
   role = 'dialog',
   describeWithBody = role === 'alertdialog',
-  closeLabel = 'Close',
-  initialFocus,
-  portalRoot,
-  className,
-  style,
   dataTestId = 'drawer',
-  'aria-label': ariaLabel,
+  ...rest
 }) => {
   const resolvedPosition = useResponsiveValue(position, DEFAULT_POSITION);
 
   return (
     <ModalRoot
-      open={open}
-      onClose={onClose}
-      position={resolvedPosition}
-      showCloseButton={showCloseButton}
+      {...rest}
       role={role}
       describeWithBody={describeWithBody}
-      closeLabel={closeLabel}
-      initialFocus={initialFocus}
-      portalRoot={portalRoot}
-      className={className}
-      style={style}
+      position={resolvedPosition}
       dataTestId={dataTestId}
-      aria-label={ariaLabel}
       names={NAMES}
-    >
-      {children}
-    </ModalRoot>
+    />
   );
 };
 

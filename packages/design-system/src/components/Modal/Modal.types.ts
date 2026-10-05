@@ -49,6 +49,7 @@ export interface ModalSharedProps extends BaseProps, Pick<AccessibilityProps, 'a
 export interface ModalRootProps extends ModalSharedProps {
   /** Resolved placement for the current viewport. */
   position: ModalPosition;
+  role: ModalRole;
   /** Whether the body section describes the panel via `aria-describedby`. */
   describeWithBody: boolean;
   /** Names the public component in dev warnings, e.g. `{ component: 'Drawer', heading: 'Heading' }`. */

@@ -51,7 +51,7 @@ export const ModalRoot: React.FC<ModalRootProps> = ({
   onClose,
   position,
   showCloseButton = true,
-  role = 'dialog',
+  role,
   describeWithBody,
   closeLabel = 'Close',
   initialFocus,
