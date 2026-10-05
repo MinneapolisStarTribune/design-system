@@ -181,7 +181,7 @@ export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvid
 
 ### Write Native CSS in `.module.scss` Files
 
-Web component styles live in `ComponentName.module.scss` but the contents should be **mostly native CSS**, not Sass. Reach for Sass only when native CSS genuinely can't do the job.
+Web component styles live in `ComponentName.module.scss` but the contents should be **mostly native CSS**, not Sass. Reach for Sass only when native CSS genuinely can't do the job. Stick to camel case for class names.
 
 ---
 
