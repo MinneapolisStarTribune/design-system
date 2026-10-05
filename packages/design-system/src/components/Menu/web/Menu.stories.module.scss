@@ -1,57 +1,56 @@
+/*
+ * `&` blocks must stay siblings under `.group`, `.example`, and `.positionFrame` so Sass emits
+ * `.groupGrid`, `.exampleContent`, … matching `styles.groupGrid`, `styles.exampleContent`, etc.
+ */
+
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-40);
-  padding: var(--spacing-24);
+  gap: var(--spacing-80, 5rem);
+  padding: var(--spacing-80, 5rem);
+  /* Story text inherits this, so it follows the theme. */
+  color: var(--color-text-on-light-primary);
 }
 
-.section {
+.group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  gap: var(--spacing-24, 1.5rem);
+
+  &Grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+    gap: var(--spacing-40, 2.5rem);
+  }
 }
 
-.sectionTitle {
-  margin: 0;
-}
-
-.sectionDescription {
-  margin: 0;
-  max-width: 640px;
-}
-
-.sectionContent {
+.example {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--spacing-16);
+  flex-direction: column;
+  gap: var(--spacing-8, 0.5rem);
+
+  &Description {
+    margin: 0;
+  }
+
+  &Content {
+    margin-top: var(--spacing-16, 1rem);
+  }
 }
 
-.accountContent {
-  min-height: 160px;
+/* Room for the initially open account menu, which opens upward from the trigger. */
+.accountFrame {
+  display: flex;
   align-items: flex-end;
-  padding-bottom: var(--spacing-8);
-}
-
-.rowActionsContent {
-  min-height: 165px;
-}
-
-.itemsContent {
-  min-height: 360px;
-}
-
-.longListContent {
-  min-height: 380px;
+  min-height: 160px;
 }
 
 .tableRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   max-width: 480px;
-  padding: var(--spacing-8) var(--spacing-16);
+  padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-8);
 }
@@ -59,58 +58,40 @@
 .itemsDemo {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
+  align-items: flex-start;
+  gap: var(--spacing-8, 0.5rem);
 }
 
-.counter {
-  font: 12px/1.4 monospace;
-}
-
-.grid {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
-  gap: var(--spacing-16);
-}
-
-.figure {
-  margin: 0;
-}
-
-.caption {
-  margin-top: var(--spacing-8);
-  font: 12px/1.5 monospace;
-}
-
-.cell {
+/* Aligns the trigger so the menu has room on the side it opens. */
+.positionFrame {
   display: flex;
   height: 166px;
-  padding: var(--spacing-16);
+  padding: var(--spacing-16, 1rem);
   border: 1px dashed var(--color-neutral-300);
   border-radius: var(--radius-8);
+
+  &-bottom {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &-top {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  &-right {
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &-center {
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.cell-bottom {
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.cell-top {
-  align-items: flex-end;
-  justify-content: center;
-}
-
-.cell-right {
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.cell-center {
-  align-items: center;
-  justify-content: center;
-}
-
-.comparisonMenu {
+.positionMenu {
   --menu-width: 240px;
 }
 

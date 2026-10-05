@@ -3,10 +3,13 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { renderWithProvider } from '@/test-utils/render';
+import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
-import type { MenuLabelProps, MenuProps } from '../Menu.types';
+import type { MenuAnchorProps, MenuCloseReason, MenuLabelProps, MenuProps } from '../Menu.types';
 
-type HarnessProps = Partial<Omit<MenuProps, 'anchorEl' | 'open' | keyof MenuLabelProps>> & {
+type HarnessProps = Partial<
+  Omit<MenuProps, keyof MenuAnchorProps | 'open' | keyof MenuLabelProps>
+> & {
   onEdit?: () => void;
   onDelete?: () => void;
 };
@@ -239,7 +242,28 @@ describe('Menu', () => {
 
     const menu = await openMenu(user);
 
-    expect(menu.querySelector('svg.arrow')).toBeNull();
+    expect(menu.querySelector(':scope > svg')).toBeNull();
+  });
+
+  it('resolves responsive origins at the current breakpoint', async () => {
+    const viewport = mockViewport(375);
+    const user = userEvent.setup();
+    // Top-left to top-left covers the anchor and hides the arrow. Bottom-left opens below it.
+    renderWithProvider(
+      <Harness
+        anchorOrigin={{
+          small: { vertical: 'top', horizontal: 'left' },
+          large: { vertical: 'bottom', horizontal: 'left' },
+        }}
+      />
+    );
+
+    const menu = await openMenu(user);
+    expect(menu.querySelector(':scope > svg')).toBeNull();
+
+    viewport.resize(1160);
+    await waitFor(() => expect(menu.querySelector(':scope > svg')).not.toBeNull());
+    viewport.restore();
   });
 
   it('renders in a portal by default', async () => {
@@ -299,6 +323,73 @@ describe('Menu', () => {
     expect(screen.getByTestId('edit-icon')).toBeInTheDocument();
     expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
     expect(screen.getByTestId('profile-link').tagName).toBe('A');
+  });
+
+  describe('with a trigger', () => {
+    const TriggerHarness = ({ onClose }: { onClose?: (reason: MenuCloseReason) => void }) => {
+      const [open, setOpen] = useState(false);
+
+      return (
+        <>
+          <Menu.Root
+            trigger={<button type="button">Account</button>}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={(reason) => {
+              onClose?.(reason);
+              setOpen(false);
+            }}
+            aria-label="Account menu"
+          >
+            <Menu.Item>Profile</Menu.Item>
+          </Menu.Root>
+          <button type="button">Outside</button>
+        </>
+      );
+    };
+
+    it('renders the trigger with menu button attributes', async () => {
+      const user = userEvent.setup();
+      renderWithProvider(<TriggerHarness />);
+      const trigger = screen.getByRole('button', { name: 'Account' });
+
+      expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+      await user.click(trigger);
+      const menu = await screen.findByRole('menu', { name: 'Account menu' });
+
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(trigger).toHaveAttribute('aria-controls', menu.id);
+    });
+
+    it('closes with triggerClick when the trigger is clicked again', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      renderWithProvider(<TriggerHarness onClose={onClose} />);
+      const trigger = screen.getByRole('button', { name: 'Account' });
+
+      await user.click(trigger);
+      await screen.findByRole('menu', { name: 'Account menu' });
+      await user.click(trigger);
+
+      expect(onClose).toHaveBeenCalledWith('triggerClick');
+      await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+    });
+
+    it('closes on Escape and returns focus to the trigger', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      renderWithProvider(<TriggerHarness onClose={onClose} />);
+      const trigger = screen.getByRole('button', { name: 'Account' });
+
+      await user.click(trigger);
+      await screen.findByRole('menu', { name: 'Account menu' });
+      await user.keyboard('{Escape}');
+
+      expect(onClose).toHaveBeenCalledWith('escapeKey');
+      await waitFor(() => expect(trigger).toHaveFocus());
+    });
   });
 
   it('names each part with its namespace for React DevTools', () => {

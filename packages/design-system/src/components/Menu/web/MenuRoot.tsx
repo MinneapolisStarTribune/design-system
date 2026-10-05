@@ -4,6 +4,7 @@ import React, { KeyboardEvent, useCallback, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import type { OpenChangeReason } from '@floating-ui/react';
 import { FLOATING_GAP, FloatingSurface } from '@/components/Popover/FloatingSurface';
+import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from '../menuArrow';
 import { MenuContext } from '../MenuContext';
 import {
@@ -38,12 +39,15 @@ const getNextIndex = (key: string, current: number, count: number) => {
 const toCloseReason = (reason: OpenChangeReason | undefined): MenuCloseReason => {
   if (reason === 'escape-key') return 'escapeKey';
   if (reason === 'focus-out') return 'focusOut';
+  if (reason === 'click') return 'triggerClick';
   return 'outsidePress';
 };
 
 export const MenuRoot: React.FC<MenuProps> = ({
+  trigger,
   anchorEl,
   open,
+  onOpen,
   onClose,
   anchorOrigin,
   transformOrigin,
@@ -66,9 +70,10 @@ export const MenuRoot: React.FC<MenuProps> = ({
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
-      if (!nextOpen) onClose(toCloseReason(reason));
+      if (nextOpen) onOpen?.();
+      else onClose(toCloseReason(reason));
     },
-    [onClose]
+    [onOpen, onClose]
   );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -85,10 +90,11 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const closeFromItem = useCallback(() => onClose('itemSelect'), [onClose]);
   const contextValue = useMemo(() => ({ closeFromItem }), [closeFromItem]);
 
+  const breakpoint = useBreakpoint();
   const { vertical: anchorVertical, horizontal: anchorHorizontal } =
-    anchorOrigin ?? DEFAULT_ANCHOR_ORIGIN;
+    resolveResponsive(anchorOrigin, breakpoint) ?? DEFAULT_ANCHOR_ORIGIN;
   const { vertical: transformVertical, horizontal: transformHorizontal } =
-    transformOrigin ?? DEFAULT_TRANSFORM_ORIGIN;
+    resolveResponsive(transformOrigin, breakpoint) ?? DEFAULT_TRANSFORM_ORIGIN;
   const gap = (hideArrow ? 0 : MENU_ARROW_SIZE.height) + FLOATING_GAP;
   // Depend on origin fields so inline objects do not rebuild the middleware.
   const { placement, coversAnchor, offset } = useMemo(
@@ -101,9 +107,11 @@ export const MenuRoot: React.FC<MenuProps> = ({
     [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
   );
 
+  const anchorProps = trigger ? { trigger } : { anchorEl: anchorEl ?? null };
+
   return (
     <FloatingSurface
-      anchorEl={anchorEl}
+      {...anchorProps}
       open={open}
       onOpenChange={handleOpenChange}
       interactionRole="menu"
@@ -112,7 +120,10 @@ export const MenuRoot: React.FC<MenuProps> = ({
       shiftCrossAxis={coversAnchor}
       lockScroll
       hideArrow={hideArrow || coversAnchor}
-      arrowStaticOffset={resolveMenuArrowOffset(arrowOffset, placement)}
+      arrowStaticOffset={resolveMenuArrowOffset(
+        resolveResponsive(arrowOffset, breakpoint),
+        placement
+      )}
       arrowSize={MENU_ARROW_SIZE}
       arrowPadding={MENU_ARROW_CORNER_INSET}
       initialFocus={initialFocusRef}
@@ -123,7 +134,6 @@ export const MenuRoot: React.FC<MenuProps> = ({
       aria-labelledby={ariaLabelledBy}
       wrapperClassName={classNames(styles.menu, className)}
       containerClassName={styles.container}
-      arrowClassName={styles.arrow}
     >
       <MenuContext.Provider value={contextValue}>
         <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>

@@ -1,5 +1,6 @@
-import type { ComponentProps, HTMLAttributes, ReactNode } from 'react';
+import type { ComponentProps, HTMLAttributes, ReactElement, ReactNode } from 'react';
 import type { BaseProps, IconPosition, Position } from '@/types';
+import type { Responsive } from '@/types/globalTypes';
 import type {
   MENU_ARROW_OFFSETS,
   MENU_CLOSE_REASONS,
@@ -21,23 +22,22 @@ export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
 
 export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
 
-// TODO: After Drawer #439 merges, accept `Responsive<T>` for the origin and arrow-offset props.
 export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
   /** Called when the menu requests to close. Receives a reason. */
   onClose: (reason: MenuCloseReason) => void;
   /**
-   * Point on the anchor that the menu attaches to.
+   * Point on the anchor that the menu attaches to. Accepts a value per breakpoint.
    * @default { vertical: 'bottom', horizontal: 'left' }
    */
-  anchorOrigin?: MenuOrigin;
+  anchorOrigin?: Responsive<MenuOrigin>;
   /**
-   * Point on the menu that attaches to `anchorOrigin`.
+   * Point on the menu that attaches to `anchorOrigin`. Accepts a value per breakpoint.
    * The menu hides the arrow when the origins place it over the anchor.
    * @default { vertical: 'top', horizontal: 'left' }
    */
-  transformOrigin?: MenuOrigin;
+  transformOrigin?: Responsive<MenuOrigin>;
   /**
    * Hides the arrow.
    * @default false
@@ -46,8 +46,9 @@ export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
   /**
    * Sets a fixed arrow position on the menu edge that faces the anchor.
    * The arrow stays 16px from the rounded corners. By default, it points to the anchor center.
+   * Accepts a value per breakpoint. Breakpoints without a value use the default.
    */
-  arrowOffset?: MenuArrowOffset;
+  arrowOffset?: Responsive<MenuArrowOffset>;
   /** Classes for the menu surface. */
   className?: string;
 };
@@ -57,12 +58,31 @@ export type MenuLabelProps =
   | { 'aria-label': string; 'aria-labelledby'?: never }
   | { 'aria-label'?: never; 'aria-labelledby': string };
 
+/** Menu renders and wires a `trigger`, or attaches to an `anchorEl` the consumer renders. */
+export type MenuAnchorProps =
+  | {
+      /**
+       * Element that toggles the menu. It must be a single element that accepts a ref. The menu
+       * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
+       */
+      trigger: ReactElement;
+      /** Called when the trigger requests to open the menu. */
+      onOpen: () => void;
+      anchorEl?: never;
+    }
+  | {
+      /** The element the menu is positioned against. */
+      anchorEl: Element | null;
+      trigger?: never;
+      onOpen?: never;
+    };
+
 export type MenuProps = MenuBaseProps &
   MenuLabelProps &
+  MenuAnchorProps &
   Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
     /** Renders the menu in this element instead of `document.body` (e.g. for Storybook). */
     portalRoot?: HTMLElement | null;
-    anchorEl: Element | null;
   };
 
 type MenuItemBaseProps = Pick<BaseProps, 'dataTestId'> & {

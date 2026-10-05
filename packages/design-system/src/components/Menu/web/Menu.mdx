@@ -28,7 +28,8 @@ import * as MenuStories from './Menu.stories';
 - Keep labels short and start them with a verb, for example "Edit" or "Pause Account"
 - Group related items and separate the groups with `Menu.Divider`
 - To show items only in some states, render them conditionally (`{status === 'active' && <Menu.Item />}`). Use `disabled` only when the user should see that the action exists
-- Menu doesn't render its trigger. Keep the trigger element in state and pass it as `anchorEl`
+- Pass `trigger` and the menu renders it, toggles on click, and sets `aria-haspopup`, `aria-expanded`, and `aria-controls`. The trigger must be a single element that accepts a ref
+- Pass `anchorEl` instead when you manage the anchor yourself, for example to open the menu from a table row. Keep the element in state and set the trigger's ARIA attributes yourself
 
 <table>
   <thead>
@@ -43,7 +44,7 @@ import * as MenuStories from './Menu.stories';
       <td>
         <code>Menu.Root</code>
       </td>
-      <td>Positions the menu against <code>anchorEl</code>, and handles dismiss, focus, and arrow-key navigation.</td>
+      <td>Renders <code>trigger</code> or positions against <code>anchorEl</code>, and handles dismiss, focus, and arrow-key navigation.</td>
     </tr>
 
     <tr>
@@ -92,7 +93,18 @@ import * as MenuStories from './Menu.stories';
         <code>anchorEl</code>
       </td>
       <td>Menu.Root</td>
-      <td>Required. The element the menu is positioned against.</td>
+      <td>The element the menu is positioned against. Pass this or <code>trigger</code>.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>trigger</code> / <code>onOpen</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>
+        The element that toggles the menu, and the callback for when it asks to open. Pass these
+        or <code>anchorEl</code>.
+      </td>
     </tr>
 
     <tr>
@@ -110,8 +122,8 @@ import * as MenuStories from './Menu.stories';
       <td>Menu.Root</td>
       <td>
         Called with what closed the menu: <code>{"'escapeKey'"}</code>,{' '}
-        <code>{"'outsidePress'"}</code>, <code>{"'focusOut'"}</code> (Tab), or{' '}
-        <code>{"'itemSelect'"}</code>.
+        <code>{"'outsidePress'"}</code>, <code>{"'focusOut'"}</code> (Tab),{' '}
+        <code>{"'itemSelect'"}</code>, or <code>{"'triggerClick'"}</code>.
       </td>
     </tr>
 
@@ -130,7 +142,7 @@ import * as MenuStories from './Menu.stories';
       <td>Menu.Root</td>
       <td>
         The point on the anchor and the point on the menu that meet (default: anchor bottom-left
-        to menu top-left). See Positioning.
+        to menu top-left). Accept a value per breakpoint. See Positioning.
       </td>
     </tr>
 
@@ -157,7 +169,7 @@ import * as MenuStories from './Menu.stories';
       <td>Menu.Root</td>
       <td>
         <code>{"'start'"}</code>, <code>{"'center'"}</code>, or <code>{"'end'"}</code>. Pins the
-        pointer along the menu edge. See Pointer.
+        pointer along the menu edge. Accepts a value per breakpoint. See Pointer.
       </td>
     </tr>
 
@@ -349,6 +361,24 @@ Common positions:
   </tbody>
 </table>
 
+### Responsive
+
+`anchorOrigin`, `transformOrigin`, and `arrowOffset` also take an object keyed by breakpoint. Each key applies from that breakpoint up. Breakpoints below the smallest key use the default.
+
+```tsx
+<Menu.Root
+  anchorOrigin={{
+    small: { vertical: 'center', horizontal: 'right' },
+    large: { vertical: 'top', horizontal: 'center' },
+  }}
+  transformOrigin={{
+    small: { vertical: 'center', horizontal: 'left' },
+    large: { vertical: 'bottom', horizontal: 'center' },
+  }}
+  arrowOffset={{ large: 'end' }}
+/>
+```
+
 ## Pointer
 
 By default the pointer aims at the center of the anchor and stays at least 16px from the menu's rounded corners. Use `arrowOffset` only when a design needs the pointer in a fixed position:
@@ -387,6 +417,25 @@ By default the pointer aims at the center of the anchor and stays at least 16px 
 For example, opening above with right edges aligned (`anchorOrigin` top right, `transformOrigin` bottom right) and `arrowOffset="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
 
 ## Example
+
+With `trigger`, the menu renders the button and sets its ARIA attributes:
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Menu.Root
+  trigger={<Button aria-label="Account" icon={<AvatarIcon />} variant="ghost" />}
+  open={open}
+  onOpen={() => setOpen(true)}
+  onClose={() => setOpen(false)}
+  aria-label="Account"
+>
+  <Menu.Item onClick={onProfile}>Profile</Menu.Item>
+  <Menu.Item href="/logout">Sign out</Menu.Item>
+</Menu.Root>
+```
+
+With `anchorEl`, you keep the anchor in state and wire the trigger yourself:
 
 ```tsx
 const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -492,7 +541,7 @@ Icons keep their own color. Pass a named color such as `brand-01`, which resolve
       <td>
         <strong>Renders its trigger</strong>
       </td>
-      <td>No, pass <code>anchorEl</code></td>
+      <td>Yes, with <code>trigger</code></td>
       <td>Yes</td>
       <td>Yes</td>
     </tr>
