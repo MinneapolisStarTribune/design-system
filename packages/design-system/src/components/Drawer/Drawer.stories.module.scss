@@ -1,0 +1,56 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.divider {
+  width: 100%;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--color-border-on-light-subtle-01);
+}
+
+.grid {
+  display: grid;
+  row-gap: var(--spacing-32);
+  margin: var(--spacing-16);
+}
+
+.variant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  margin: 0;
+}
+
+.caption {
+  color: var(--color-text-on-light-secondary);
+  padding: var(--spacing-8) 0;
+}
+
+.frame {
+  position: relative;
+  height: 560px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-on-light-subtle-01);
+  border-radius: var(--radius-16);
+  background: var(--color-background-light-gray-01);
+  /* Contains the drawer's fixed-position overlay. */
+  transform: translateZ(0);
+  display: grid;
+  place-items: center;
+
+  /* Stack the drawer's portal node in the button's cell so opening it doesn't add a row. */
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+/*
+ * Open drawers lock page scroll with an inline `overflow: hidden` on <body>. Setting overflow on
+ * <html> stops body's value from propagating to the viewport, so the grid stays scrollable.
+ */
+:global(html):has(.grid) {
+  overflow: auto;
+}

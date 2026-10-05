@@ -9,6 +9,7 @@ This document serves as a living reference for code standards and conventions us
 - [File Naming Conventions](#file-naming-conventions)
 - [Export Patterns](#export-patterns)
 - [Brand Validation](#brand-validation)
+- [Web Styling Standards](#web-styling-standards)
 - [Storybook Standards](#storybook-standards)
 - [Testing Standards](#testing-standards)
 - [Path Aliases](#path-aliases)
@@ -99,11 +100,11 @@ Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 
 **Explicit fields on some native-only interfaces** (e.g. editorial headings) are not accidental duplication:
 
-| Field | Why it appears on native |
-| --- | --- |
-| **`color`** | Web inherits semantic color via `ColorVariantProps`; native types often define a minimal interface instead of the same `extends`, so `color?: TextColor` is listed explicitly for parity. |
-| **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`. |
-| **`style`** | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`. |
+| Field            | Why it appears on native                                                                                                                                                                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`color`**      | Web inherits semantic color via `ColorVariantProps`; native types often define a minimal interface instead of the same `extends`, so `color?: TextColor` is listed explicitly for parity. |
+| **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`.                                                                                        |
+| **`style`**      | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`.                                                                                                    |
 
 See the module comment on `packages/design-system/src/types/native-base-props.ts` for the full pattern.
 
@@ -133,6 +134,26 @@ type ButtonColor = ButtonProps['color'];
 type NewsHeadingImportance = NewsHeadingProps['importance'];
 ```
 
+#### Compound components: keep them tree-shakeable
+
+Don't attach sub-components as static properties (`Drawer.Heading = DrawerHeading`) — a static property keeps every part in the bundle even when unused. Instead, export the parts from a namespace module, with the main component as `Root`, and re-export it with `export * as`:
+
+```typescript
+// Drawer/Drawer.tsx
+export { DrawerRoot as Root } from './DrawerRoot';
+export { DrawerHeading as Heading } from './DrawerHeading';
+
+// src/components/index.web.ts
+export * as Drawer from './Drawer/Drawer';
+export { type DrawerProps } from './Drawer/Drawer.types';
+```
+
+Consumers write `<Drawer.Root>` / `<Drawer.Heading>`, and bundlers drop the parts they don't import.
+
+#### Shared internals stay private
+
+When public components share behavior, put it in an internal base and build each public component as a thin preset on top, rather than having one public component wrap another. `Drawer` builds on `src/components/Modal/` (overlay, focus trap, dismissal, ARIA wiring, sections and their styles) and owns its public props, defaults and placement; future modal components should do the same. `Modal` is not exported from `index.web.ts`.
+
 ### Export Example
 
 ```typescript
@@ -153,6 +174,14 @@ export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvid
 ### Component Registration
 
 - **All components must be registered** in `src/types/component-names.ts`
+
+---
+
+## Web Styling Standards
+
+### Write Native CSS in `.module.scss` Files
+
+Web component styles live in `ComponentName.module.scss` but the contents should be **mostly native CSS**, not Sass. Reach for Sass only when native CSS genuinely can't do the job. Stick to camel case for class names.
 
 ---
 
@@ -265,11 +294,10 @@ export const MyComponent: React.FC<MyComponentProps> = ({ variant, children }) =
   return <Text style={styles[variant]}>{children}</Text>;
 };
 
-const createStyles = (theme) =>
-  ({
-    primary: { ...theme.typographyArticleQuoteSmall },
-    secondary: { ...theme.typographyArticleQuoteLarge },
-  });
+const createStyles = (theme) => ({
+  primary: { ...theme.typographyArticleQuoteSmall },
+  secondary: { ...theme.typographyArticleQuoteLarge },
+});
 ```
 
 This pattern:
@@ -280,8 +308,10 @@ This pattern:
 - **Infers the theme type** so token names are autocompleted and typo-checked
 
 Use only these two native style hooks:
+
 - `useNativeStyles`
 - `useNativeStylesWithDefaults`
+
 ---
 
 ## Testing Standards
@@ -328,7 +358,6 @@ import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 ```
 
 Avoid inline `vi.mock()` token stubs for native token modules in test files.
-
 
 ### Test Wrappers
 

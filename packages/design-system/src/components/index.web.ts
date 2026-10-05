@@ -7,6 +7,13 @@ export type {
 } from './Coachmark/Coachmark.types';
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
+export * as Drawer from './Drawer/Drawer';
+export {
+  type DrawerCloseReason,
+  type DrawerPosition,
+  type DrawerProps,
+  type DrawerRole,
+} from './Drawer/Drawer.types';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
 export {
