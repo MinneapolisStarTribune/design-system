@@ -1,9 +1,10 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
-import { DRAWER_POSITIONS, DRAWER_ROLES } from './Drawer.constants';
+import { DRAWER_POSITIONS } from './Drawer.constants';
 import type { DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
+import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
 import styles from './Drawer.stories.module.scss';
 import classNames from 'classnames';
@@ -131,11 +132,11 @@ const meta = {
     },
     role: {
       control: 'inline-radio',
-      options: [...DRAWER_ROLES],
+      options: [...MODAL_ROLES],
       description:
         'The ARIA role. Use `alertdialog` for urgent interruptions that need a response, like confirming a deletion.',
       table: {
-        type: { summary: DRAWER_ROLES.join(' | ') },
+        type: { summary: MODAL_ROLES.join(' | ') },
         defaultValue: { summary: "'dialog'" },
       },
     },
