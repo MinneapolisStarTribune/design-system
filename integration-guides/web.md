@@ -66,6 +66,34 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
+## Coachmark
+
+`Coachmark` is a dismissible, pointed callout for an unprompted, single action (e.g. a CMS-driven prompt to create an account or favorite something) — anchored to `children`, always externally controlled via `open`/`onOpenChange` (it never opens itself on hover, focus, or click, unlike `Tooltip`).
+
+```tsx
+import { useState } from 'react';
+import { Coachmark, Button } from '@minneapolisstartribune/design-system/web';
+
+function FavoriteButtonWithCoachmark() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Coachmark
+      open={open}
+      onOpenChange={setOpen}
+      title="Added to favorites"
+      description="You'll now see updates for this team in your feed."
+    >
+      <Button label="Favorite" onClick={() => {}} />
+    </Coachmark>
+  );
+}
+```
+
+Key props: `position` (`COACHMARK_POSITIONS` — which side of `children` it opens on, defaults to `'bottom-center'`), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref`, `secondaryContent`, and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
+
+For a Piano-driven coachmark (triggered by Piano's `setResponseVariable` event instead of your own state), see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one, since design-system has no knowledge of or dependency on Piano.
+
 ## Available Themes
 
 | Brand        | Light                   | Dark                   |

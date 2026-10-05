@@ -154,6 +154,40 @@ On blur (when user leaves the field):
 
 **Per-input custom data:** Pass the `analytics` prop (e.g. `form_field`, `module_name`).
 
+### Coachmark
+
+Three events, each with the base payload (`title`, `position`, `alignment`) + any `analytics` prop:
+
+```json
+// Fired once when it opens
+{
+  "component": "Coachmark",
+  "event": "coachmark_shown",
+  "title": "Never miss a story",
+  "position": "bottom-center",
+  "alignment": "center"
+}
+
+// Fired once when it closes -- dismiss_reason is one of "close_button", "trigger_press",
+// "outside_press", "escape_key", or "other" (e.g. closed by the CTA action itself)
+{
+  "component": "Coachmark",
+  "event": "coachmark_dismiss",
+  "title": "Never miss a story",
+  "dismiss_reason": "close_button"
+}
+
+// Fired when the CTA button is clicked, in addition to Button's own generic button_click
+{
+  "component": "Coachmark",
+  "event": "coachmark_cta_click",
+  "title": "Never miss a story",
+  "cta_text": "Create Free Account"
+}
+```
+
+`@minneapolisstartribune/piano-coachmark` (a separate package) merges its own `piano_id`/`cta_type` fields into these same events via the `analytics` prop, so Piano-triggered coachmarks are attributable to a campaign without the app passing anything itself.
+
 ## Optional: Dev Warning
 
 Set `warnWhenUnhandled={true}` in development to see console warnings when components emit events but no handler is provided. Helps catch missing AnalyticsProvider during migration.
