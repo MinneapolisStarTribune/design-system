@@ -26,7 +26,7 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
-import type { ComponentProps, HTMLAttributes } from 'react';
+import type { ComponentProps, CSSProperties, HTMLAttributes } from 'react';
 import type { OffsetOptions, OpenChangeReason, Placement, UseRoleProps } from '@floating-ui/react';
 import styles from './Popover.module.scss';
 
@@ -104,6 +104,7 @@ export const FloatingSurface = ({
   containerClassName,
   contentClassName,
   arrowClassName,
+  id,
   style: styleProp,
   'aria-label': ariaLabel,
   ...rest
@@ -165,7 +166,9 @@ export const FloatingSurface = ({
     ? 'var(--color-border-on-dark-subtle-01)'
     : 'var(--color-border-on-light-subtle-01)';
   const childElement = isValidElement(trigger)
-    ? (trigger as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
+    ? (trigger as ReactElement<{ style?: CSSProperties; [key: string]: unknown }> & {
+        ref?: React.Ref<unknown>;
+      })
     : null;
   const mergedRef = useMergeRefs([setReference, childElement?.ref ?? null]);
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
@@ -178,9 +181,8 @@ export const FloatingSurface = ({
         getReferenceProps({
           ...childElement.props,
           ref: mergedRef,
-          style: childElement.props.style
-            ? { ...childElement.props.style, ...triggerStyle }
-            : triggerStyle,
+          // Element triggers keep their own display, and their own style wins over the cursor.
+          style: { cursor: isDisabled ? 'default' : 'pointer', ...childElement.props.style },
         })
       )
     ) : (
@@ -209,6 +211,9 @@ export const FloatingSurface = ({
         aria-label={ariaLabel}
         {...getFloatingProps()}
         {...rest}
+        // Spread only a set `id`. An undefined `id` would remove the generated ID that the
+        // trigger's `aria-controls` uses.
+        {...(id !== undefined && { id })}
       >
         {!hideArrow && (
           <FloatingArrow

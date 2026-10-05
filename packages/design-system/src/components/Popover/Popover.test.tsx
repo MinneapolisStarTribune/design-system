@@ -147,6 +147,51 @@ describe('Popover', () => {
     expect(surface).toHaveStyle({ zIndex: 5, position: 'absolute', left: 0, top: 0 });
   });
 
+  it('points the trigger aria-controls to the dialog', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    await user.click(trigger);
+
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog.id).not.toBe('');
+    expect(trigger).toHaveAttribute('aria-controls', dialog.id);
+  });
+
+  it('uses the id prop for the dialog and aria-controls', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover trigger={<Button>Open</Button>} aria-label="Options" id="custom-popover">
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    await user.click(trigger);
+
+    expect(await screen.findByRole('dialog')).toHaveAttribute('id', 'custom-popover');
+    expect(trigger).toHaveAttribute('aria-controls', 'custom-popover');
+  });
+
+  it('does not override the trigger display', () => {
+    renderWithProvider(
+      <Popover trigger={<Button style={{ cursor: 'help' }}>Open</Button>}>
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    expect(trigger.style.display).toBe('');
+    expect(trigger.style.cursor).toBe('help');
+  });
+
   it('renders close button when heading is present', async () => {
     const user = userEvent.setup();
 

@@ -15,3 +15,5 @@ Coaches Portal uses the removed `wrapperClassName`, `containerClassName`, and `c
 `Popover` and `TriggerablePopover` fix: the dialog is now named by `Popover.Heading` when one is rendered, and by `aria-label` only when there is no heading. Before, `aria-labelledby` pointed to an ID that no element had.
 
 `Popover.Heading` adds `eyebrow` (a label above the title), `value` (content at the end of the title row) and `showCloseButton` (defaults to `true`).
+
+`Popover` and `TriggerablePopover` fix: the trigger's `aria-controls` now points to the dialog. Before, the dialog had no `id` unless one was passed. The popover also no longer sets an inline `display` on an element trigger, so a `Button` trigger keeps its own layout.
