@@ -147,6 +147,9 @@ export function useExternalTrigger(
 
   const injectionSlotId = id && enableInjectionSlot ? `${id}-injection-slot` : undefined;
   const injectionSlotRef = useRef<HTMLDivElement | null>(null);
+  // The slot mounts after the open render when the shell isn't force-mounted (the portal renders
+  // its children a pass later), so the reveal effect re-runs when the slot appears.
+  const [injectionSlot, setInjectionSlot] = useState<HTMLDivElement | null>(null);
   const closeNotifyGraceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -254,7 +257,7 @@ export function useExternalTrigger(
    * `ResizeObserver` isn't available.
    */
   useEffect(() => {
-    if (!revealCycleKey) return;
+    if (!revealCycleKey || !injectionSlot) return;
 
     const hasInjectedContent = () => {
       const target = document.getElementById(revealCycleKey);
@@ -290,7 +293,7 @@ export function useExternalTrigger(
       observer.disconnect();
       if (settleTimeout !== null) clearTimeout(settleTimeout);
     };
-  }, [revealCycleKey, slotSettleDebounceMs]);
+  }, [revealCycleKey, injectionSlot, slotSettleDebounceMs]);
 
   /**
    * The external script replaces/detaches the node it targets, so that node can't be one React
@@ -305,12 +308,14 @@ export function useExternalTrigger(
         slot.id = injectionSlotId;
         container.appendChild(slot);
         injectionSlotRef.current = slot;
+        setInjectionSlot(slot);
         return;
       }
 
       const slot = injectionSlotRef.current;
       if (slot?.parentNode) slot.parentNode.removeChild(slot);
       injectionSlotRef.current = null;
+      setInjectionSlot(null);
     },
     [injectionSlotId]
   );

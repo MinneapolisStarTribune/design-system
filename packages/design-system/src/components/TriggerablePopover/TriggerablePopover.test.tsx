@@ -1,6 +1,6 @@
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TriggerablePopover } from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
@@ -252,6 +252,51 @@ describe('TriggerablePopover', () => {
       await waitFor(() => {
         expect(document.querySelector('[data-state]')).toHaveAttribute('data-state', 'open');
       });
+    });
+
+    it('reveals injected content on an external open after a click open and close', async () => {
+      // jsdom has no ResizeObserver, so the hook would poll instead. Use the browser path.
+      class ResizeObserverStub {
+        constructor(private callback: ResizeObserverCallback) {}
+        observe() {
+          this.callback([], this as unknown as ResizeObserver);
+        }
+        disconnect() {}
+        unobserve() {}
+      }
+      vi.stubGlobal('ResizeObserver', ResizeObserverStub);
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <TriggerablePopover
+          triggerId="share-top"
+          enableInjectionSlot
+          trigger={<Button>Open</Button>}
+        >
+          <TriggerablePopover.Body>App content</TriggerablePopover.Body>
+        </TriggerablePopover>
+      );
+
+      await user.click(screen.getByText('Open'));
+      await waitFor(() => screen.getByText('App content'));
+      await user.keyboard('{Escape}');
+      await waitFor(() => expect(screen.queryByText('App content')).not.toBeInTheDocument());
+
+      triggerExternally('share-top');
+      const slot = await waitFor(() => {
+        const element = document.getElementById('share-top-injection-slot');
+        expect(element).not.toBeNull();
+        return element!;
+      });
+      slot.appendChild(document.createElement('iframe'));
+
+      await waitFor(() =>
+        expect(
+          document.querySelector<HTMLElement>('[data-testid="external-trigger-injection-slot"]')
+            ?.style.visibility
+        ).toBe('')
+      );
+      vi.unstubAllGlobals();
     });
   });
 });
