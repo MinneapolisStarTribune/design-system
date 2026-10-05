@@ -14,7 +14,7 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover`, `Menu`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame
@@ -41,38 +41,36 @@ function SidebarWithPopover() {
 
 Pass `portalRoot` to each overlay that needs it. There is no provider that sets it for a whole subtree.
 
-`Menu` uses the same portal root, so a `PopoverPortalRootProvider` also applies to menus under it.
-
 ### Menu
 
-`Menu` is controlled. Keep the anchor element in state, open the menu when it is set, and clear it in `onClose`. `onClose` is required and receives the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`).
+`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` with the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`, `triggerClick`).
 
 ```tsx
 import { useState } from 'react';
 import { Button, Menu } from '@minneapolisstartribune/design-system/web';
 
 function AccountMenu() {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <Button onClick={(event) => setAnchorEl(event.currentTarget)}>Account</Button>
-      <Menu.Root
-        anchorEl={anchorEl}
-        open={anchorEl !== null}
-        onClose={() => setAnchorEl(null)}
-        aria-label="Account"
-      >
-        <Menu.Item href="/profile">Manage Profile</Menu.Item>
-        <Menu.Divider />
-        <Menu.Item onClick={logOut}>Log Out</Menu.Item>
-      </Menu.Root>
-    </>
+    <Menu.Root
+      trigger={<Button>Account</Button>}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      aria-label="Account"
+    >
+      <Menu.Item href="/profile">Manage Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+    </Menu.Root>
   );
 }
 ```
 
-Position the menu with `anchorOrigin` and `transformOrigin` (default: below the anchor, left edges aligned). Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+When the menu can't render its trigger (for example, one menu shared by several anchors), pass `anchorEl` instead of `trigger` and `onOpen`, and add `aria-haspopup="menu"` and `aria-expanded` to your anchor yourself.
+
+Position the menu with `anchorOrigin` and `transformOrigin` (default: below the anchor, left edges aligned). Both, and `arrowOffset`, accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## Quick Start
 
