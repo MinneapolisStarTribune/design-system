@@ -2,11 +2,7 @@
 
 import { useCallback, useContext, useId, useMemo, useState } from 'react';
 import { PopoverBody } from './PopoverBody';
-import {
-  PopoverContext,
-  PopoverPortalRootContext,
-  PopoverPortalRootProvider,
-} from './PopoverContext';
+import { PopoverContext, PopoverPortalRootContext } from './PopoverContext';
 import { PopoverDescription } from './PopoverDescription';
 import { PopoverDivider } from './PopoverDivider';
 import { FloatingSurface } from './FloatingSurface';
@@ -33,7 +29,8 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
-  // Resolve this before adding the nested provider. The nested provider is only for child popovers.
+  // Inherit a portal root from an ancestor PopoverPortalRootProvider. Popovers don't wrap themselves
+  // in one, so the trigger renders without an extra div (valid inside <p>, flex and grid layouts).
   const portalRootFromContext = useContext(PopoverPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
   const handleOpenChange = useCallback(
@@ -52,26 +49,24 @@ const PopoverRoot: React.FC<PopoverProps> = ({
   );
 
   return (
-    <PopoverPortalRootProvider>
-      <PopoverContext.Provider value={contextValue}>
-        <FloatingSurface
-          trigger={trigger}
-          open={open}
-          onOpenChange={handleOpenChange}
-          placement={placement}
-          isDisabled={isDisabled}
-          modal={modal}
-          portalRoot={resolvedPortalRoot}
-          wrapperClassName={className}
-          id={id}
-          style={style}
-          aria-label={hasHeading ? undefined : ariaLabel}
-          aria-labelledby={hasHeading ? headingId : undefined}
-        >
-          {children}
-        </FloatingSurface>
-      </PopoverContext.Provider>
-    </PopoverPortalRootProvider>
+    <PopoverContext.Provider value={contextValue}>
+      <FloatingSurface
+        trigger={trigger}
+        open={open}
+        onOpenChange={handleOpenChange}
+        placement={placement}
+        isDisabled={isDisabled}
+        modal={modal}
+        portalRoot={resolvedPortalRoot}
+        wrapperClassName={className}
+        id={id}
+        style={style}
+        aria-label={hasHeading ? undefined : ariaLabel}
+        aria-labelledby={hasHeading ? headingId : undefined}
+      >
+        {children}
+      </FloatingSurface>
+    </PopoverContext.Provider>
   );
 };
 

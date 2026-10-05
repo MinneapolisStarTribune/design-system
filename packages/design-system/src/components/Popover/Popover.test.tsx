@@ -32,7 +32,7 @@ describe('Popover', () => {
     });
   });
 
-  it('uses an inherited portal root instead of its own descendant provider', async () => {
+  it('uses a portal root from an ancestor PopoverPortalRootProvider', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
@@ -53,7 +53,23 @@ describe('Popover', () => {
     expect(portal?.parentElement).toBe(screen.getByTestId('outer-popover-root').parentElement);
   });
 
-  it('portals to document.body, not its own trigger wrapper, without an inherited portal root', async () => {
+  it('renders the trigger without a wrapper element', () => {
+    renderWithProvider(
+      <p data-testid="paragraph">
+        Text{' '}
+        <Popover trigger={<Button>Open</Button>}>
+          <Popover.Body>Popover Content</Popover.Body>
+        </Popover>{' '}
+        more text
+      </p>
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' }).parentElement).toBe(
+      screen.getByTestId('paragraph')
+    );
+  });
+
+  it('portals to document.body, without an inherited portal root', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(

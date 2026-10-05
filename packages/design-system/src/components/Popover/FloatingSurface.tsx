@@ -54,6 +54,8 @@ type FloatingSurfaceBaseProps = {
    * A transparent overlay closes the surface and blocks the press below it.
    */
   lockScroll?: boolean;
+  /** Keeps the surface in the DOM, hidden, while closed. */
+  keepMounted?: boolean;
   isDisabled?: boolean;
   modal?: boolean;
   portalRoot?: HTMLElement | null;
@@ -88,6 +90,7 @@ export const FloatingSurface = ({
   offset: offsetOptions,
   shiftCrossAxis = false,
   lockScroll = false,
+  keepMounted = false,
   isDisabled,
   modal = false,
   portalRoot,
@@ -107,7 +110,7 @@ export const FloatingSurface = ({
 }: TriggerSurfaceProps | AnchoredSurfaceProps) => {
   // Use state so `arrow()` receives the element without reading a ref during render.
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
-  // Callers resolve the portal root. Reading context here would use Popover's nested provider.
+  // Callers resolve the portal root from their prop and PopoverPortalRootContext.
   const resolvedPortalRoot = portalRoot ?? undefined;
   const isAnchored = anchorEl !== undefined;
   const middleware = useMemo(
@@ -192,10 +195,16 @@ export const FloatingSurface = ({
       </span>
     ));
   const surface = (
-    <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
+    <FloatingFocusManager
+      context={context}
+      modal={modal}
+      initialFocus={initialFocus}
+      disabled={!open}
+    >
       <div
         ref={setFloating}
-        style={{ ...floatingStyles, ...styleProp }}
+        data-state={open ? 'open' : 'closed'}
+        style={open ? { ...floatingStyles, ...styleProp } : { ...floatingStyles, display: 'none' }}
         className={classNames(styles.wrapper, wrapperClassName)}
         aria-label={ariaLabel}
         {...getFloatingProps()}
@@ -220,9 +229,9 @@ export const FloatingSurface = ({
       </div>
     </FloatingFocusManager>
   );
-  const floatingElement = open && (
+  const floatingElement = (open || keepMounted) && (
     <FloatingPortal root={resolvedPortalRoot}>
-      {lockScroll ? <FloatingOverlay lockScroll>{surface}</FloatingOverlay> : surface}
+      {lockScroll && open ? <FloatingOverlay lockScroll>{surface}</FloatingOverlay> : surface}
     </FloatingPortal>
   );
   return (
