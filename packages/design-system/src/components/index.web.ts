@@ -1,5 +1,12 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
+export type {
+  CoachmarkAlignment,
+  CoachmarkPosition,
+  CoachmarkProps,
+} from './Coachmark/Coachmark.types';
+export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
+export { Coachmark } from './Coachmark/web/Coachmark';
 export * as Drawer from './Drawer/Drawer';
 export { type DrawerProps } from './Drawer/Drawer.types';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';

@@ -112,6 +112,10 @@ See [Native Integration Guide](integration-guides/native.md) for more details.
 
 Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
 
+### Coachmark (web)
+
+A dismissible, externally-controlled callout for an unprompted single action. See [Coachmark](integration-guides/web.md#coachmark) in the web integration guide for setup and usage. For a Piano-driven variant, see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.

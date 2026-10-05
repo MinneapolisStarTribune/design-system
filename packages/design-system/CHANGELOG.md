@@ -1,5 +1,15 @@
 # @minneapolisstartribune/design-system
 
+## 2.2.0
+
+### Minor Changes
+
+- [#438](https://github.com/MinneapolisStarTribune/design-system/pull/438) [`a6fa1b0`](https://github.com/MinneapolisStarTribune/design-system/commit/a6fa1b0fc2c0d557577c73b78c5dbc30fc514f5f) Thanks [@willogura](https://github.com/willogura)! - Adds a `Coachmark` component — a dismissible, externally-controlled callout for an unprompted single action. Vendor-specific coachmark integrations (e.g. Piano) live outside this package; see `@minneapolisstartribune/piano-coachmark`.
+
+### Patch Changes
+
+- [#433](https://github.com/MinneapolisStarTribune/design-system/pull/433) [`37f21b3`](https://github.com/MinneapolisStarTribune/design-system/commit/37f21b3d78686d334f789f127f8039c751e3463b) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Fix web Select so Enter highlights the selected option, or the first option when no value matches, on opening. Scroll the dropdown into view with nearest alignment when opened, and keep the active option visible when reopening a long list.
+
 ## 2.1.0
 
 ### Minor Changes
