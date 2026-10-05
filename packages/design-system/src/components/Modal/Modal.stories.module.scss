@@ -69,11 +69,3 @@
 :global(html):has(.grid) {
   overflow: auto;
 }
-
-/*
- * The scroll lock also pads <body> by the scrollbar width, and the scrollbar stays here. Paint
- * <body> with the themed background so the padding blends in instead of showing the page behind.
- */
-:global(body):has(.grid) {
-  background: var(--color-background-light-default);
-}
