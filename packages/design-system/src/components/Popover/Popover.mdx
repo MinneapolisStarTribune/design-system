@@ -140,6 +140,10 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
 
 `eyebrow` and `value` are not part of the popover's accessible name. Only the title names it.
 
+## Portal container
+
+The popover renders into `document.body`. Pass `portalRoot` to render it into another element, such as a sidebar or a Storybook frame. Set it on each popover that needs it, the same way as `Drawer`.
+
 ## Example
 
 ```tsx

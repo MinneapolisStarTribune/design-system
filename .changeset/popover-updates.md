@@ -8,9 +8,14 @@
 
 **Breaking:** Remove `PopoverPortalRootProvider` and `PopoverPortalRootContext`. Pass `portalRoot` to each `Popover` or `TriggerablePopover` that needs a different container, the same way `Drawer` does.
 
-Varsity Web uses `Popover` for article sharing and gifting. It does not use the removed styling props.
-Star Tribune Web does not use the design-system `Popover`.
-Coaches Portal uses the removed `wrapperClassName`, `containerClassName`, and `contentClassName` props for its sidebar season filter.
+**Consumer impact** (checked against each repo's `main`):
+
+- **Coaches Portal** (`apps/web`, on 2.1.0): needs changes. `Sidebar.tsx` has two `Popover`s that use the removed styling props. The season filter uses `wrapperClassName`, `containerClassName`, and `contentClassName`. The account menu uses all four, including `arrowClassName`. Move the styles to `className`, or replace the account menu with the new `Menu` (VAR-1267). It does not use `PopoverPortalRootProvider` or `PopoverPortalRootContext`.
+- **Varsity Web** (on 1.14.0): no code changes. `GiftButton` and `ShareButton` use `Popover` with `placement`, `onOpenChange`, `aria-label`, and `Popover.Heading`, `Description`, and `Body`. They do not use the removed props or the provider. Their `<span>` trigger now gets the click handler and ARIA attributes directly instead of an extra wrapper `div`, and each dialog is now named by its heading.
+- **Star Tribune Web** (on 1.17.0): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider. Its popovers use Radix.
+- **The Brief** (on ^1.12.1): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider.
+
+Varsity Web and Coaches Portal force the light color scheme, so the dark mode fix below does not change how they look.
 
 `Popover` and `TriggerablePopover` fix: they no longer wrap their trigger in an extra `div`. The `div` caused hydration errors inside `<p>` and broke inline, flex and grid layouts.
 

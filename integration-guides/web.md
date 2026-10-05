@@ -12,39 +12,34 @@ yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
 
 You do not need `react-native` or `@floating-ui/react-native`.
 
-### Popover portal root (optional)
+### Overlay portal root (optional)
 
-By default, Popover content is rendered into `document.body`. That can cause issues when:
+By default, `Popover`, `TriggerablePopover`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
-- Popovers live inside a **modal** or **sidebar** and should be clipped or stacked with that container
-- You use **Storybook** and want popover content to stay within the story frame
+- The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
+- You use **Storybook** and want the overlay to stay within the story frame
 - You need a **custom container** for styling or layout (e.g. a dedicated overlay layer)
 
-**Option 1: `PopoverPortalRootProvider`** — Wrap the part of the tree where Popovers should render. The provider creates a wrapper `div` and uses it as the portal target for any Popover under it.
+Keep the element in state with a ref callback, so the overlay re-renders once the element exists:
 
 ```tsx
-import {
-  Popover,
-  PopoverPortalRootProvider,
-  Button,
-} from '@minneapolisstartribune/design-system/web';
+import { useState } from 'react';
+import { Popover, Button } from '@minneapolisstartribune/design-system/web';
 
 function SidebarWithPopover() {
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+
   return (
-    <aside className="my-sidebar" style={{ overflow: 'hidden' }}>
-      <PopoverPortalRootProvider>
-        <Popover trigger={<Button label="Menu" onClick={() => {}} />} aria-label="Options">
-          <p>This content renders inside the sidebar, not document.body.</p>
-        </Popover>
-      </PopoverPortalRootProvider>
+    <aside ref={setPortalRoot} className="my-sidebar" style={{ overflow: 'hidden' }}>
+      <Popover trigger={<Button>Options</Button>} portalRoot={portalRoot} aria-label="Options">
+        <p>This content renders inside the sidebar, not document.body.</p>
+      </Popover>
     </aside>
   );
 }
 ```
 
-**Option 2: `PopoverPortalRootContext`** — For advanced cases where you already have an `HTMLElement` (e.g. a ref to a modal container), you can provide it via context instead of using the provider. You’d create your own wrapper that uses `PopoverPortalRootContext.Provider` with `value={yourElement}`.
-
-Most apps only need **Option 1**.
+Pass `portalRoot` to each overlay that needs it. There is no provider that sets it for a whole subtree.
 
 ## Quick Start
 
