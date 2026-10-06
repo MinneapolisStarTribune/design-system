@@ -134,10 +134,10 @@ export const MenuRoot: React.FC<MenuProps> = ({
       initialFocus={initialFocusRef}
       portalRoot={portalRoot}
       id={id}
-      data-testid={dataTestId}
+      dataTestId={dataTestId}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
-      wrapperClassName={classNames(styles.menu, className)}
+      className={classNames(styles.menu, className)}
       containerClassName={styles.container}
     >
       <MenuContext.Provider value={contextValue}>
