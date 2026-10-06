@@ -1,0 +1,149 @@
+/*
+ * Selected items reuse the filled Button tokens of the same color, so they follow the active brand
+ * (`html[data-ds-brand]`) and color scheme without ToggleGroup-specific tokens.
+ */
+.root {
+  --toggle-group-divider: var(--color-border-on-light-subtle-01);
+
+  display: inline-flex;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &.brand {
+    --toggle-group-selected-background: var(--color-button-brand-filled-background);
+    --toggle-group-selected-hover-background: var(--color-button-brand-filled-hover-background);
+    --toggle-group-selected-text: var(--color-button-brand-filled-text);
+  }
+
+  &.neutral {
+    --toggle-group-selected-background: var(--color-button-neutral-filled-background);
+    --toggle-group-selected-hover-background: var(--color-button-neutral-filled-hover-background);
+    --toggle-group-selected-text: var(--color-button-neutral-filled-text);
+  }
+
+  &.fullWidth {
+    display: flex;
+    width: 100%;
+
+    .item {
+      flex: 1 1 0;
+      min-width: max-content;
+    }
+  }
+}
+
+/*
+ * Segmented: items joined in one bordered container. The container is filled with the divider
+ * color and items sit 1px apart, so the dividers are just the gaps showing through.
+ */
+.segmented {
+  gap: 1px;
+  border: 1px solid var(--toggle-group-divider);
+  border-radius: var(--radius-12);
+  background-color: var(--toggle-group-divider);
+  /* Clip items to the rounded corners; scroll sideways when the items don't fit (e.g. phones) */
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    height: 40px;
+    padding: 0 var(--spacing-16);
+  }
+
+  .item.iconOnly {
+    width: 40px;
+    padding: 0;
+  }
+}
+
+.item {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--color-background-light-default);
+  color: var(--color-text-on-light-secondary);
+  /* Public: color for secondary content in an item (e.g. fine print), following the selected state */
+  --toggle-group-item-secondary-text: var(--color-text-on-light-tertiary);
+
+  /* Items control their own text color; beat the global `[class*="typography-"]` color rule */
+  [class*='typography-'] {
+    color: inherit;
+  }
+
+  &:hover:not(.selected, .disabled) {
+    background-color: var(--color-button-neutral-ghost-hover-background);
+  }
+
+  /* Inset ring: the container clips anything drawn outside the item */
+  &:has(.input:focus-visible) {
+    box-shadow:
+      inset 0 0 0 2px var(--color-border-state-focus),
+      inset 0 0 0 4px var(--color-background-light-default);
+  }
+
+  &.selected {
+    background-color: var(--toggle-group-selected-background);
+    color: var(--toggle-group-selected-text);
+    /* The selected text color, knocked back toward the fill */
+    --toggle-group-item-secondary-text: color-mix(
+      in srgb,
+      var(--toggle-group-selected-text) 85%,
+      var(--toggle-group-selected-background)
+    );
+
+    &:hover:not(.disabled) {
+      background-color: var(--toggle-group-selected-hover-background);
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+
+    .content {
+      opacity: 0.4;
+    }
+  }
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Lay out mixed content (text plus inline elements) on one baseline */
+.content {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-6);
+  pointer-events: none;
+
+  /*
+   * Icons from `@/icons` set an inline `color: var(--color-icon-on-light-primary)` by default.
+   * Pointing that token at the item's text color lets them follow the selected state, without
+   * overriding an icon given an explicit `color`.
+   */
+  --color-icon-on-light-primary: currentColor;
+
+  > svg {
+    flex-shrink: 0;
+    align-self: center;
+  }
+}

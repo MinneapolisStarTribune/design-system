@@ -125,6 +125,19 @@ export {
   type SkeletonProps,
   type SkeletonVariant,
 } from './Skeleton/web/Skeleton';
+export * as ToggleGroup from './ToggleGroup/ToggleGroup';
+export {
+  TOGGLE_GROUP_COLORS,
+  TOGGLE_GROUP_TYPES,
+  TOGGLE_GROUP_VARIANTS,
+  type ToggleGroupColor,
+  type ToggleGroupItemProps,
+  type ToggleGroupMultipleProps,
+  type ToggleGroupProps,
+  type ToggleGroupSingleProps,
+  type ToggleGroupType,
+  type ToggleGroupVariant,
+} from './ToggleGroup/ToggleGroup.types';
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
