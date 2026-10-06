@@ -6,20 +6,17 @@ import styles from './Popover.module.scss';
 import { usePopoverContext } from './PopoverContext';
 import { Button } from '@/components/Button/web/Button';
 import { CloseIcon } from '@/icons';
+import type { PopoverHeadingProps } from './Popover.types';
 
-export const PopoverHeading: React.FC<{
-  children: React.ReactNode;
-  /** Small label above the title, such as a date. It is not part of the popover's accessible name. */
-  eyebrow?: string | number;
-  /** Content at the end of the title row, such as a total. It is not part of the accessible name. */
-  value?: React.ReactNode;
-  /**
-   * Shows the close button.
-   * @default true
-   */
-  showCloseButton?: boolean;
-  className?: string;
-}> = ({ children, eyebrow, value, showCloseButton = true, className }) => {
+/** Title row with an optional eyebrow, value and close button. Names the popover dialog. */
+export const PopoverHeading: React.FC<PopoverHeadingProps> = ({
+  children,
+  eyebrow,
+  value,
+  showCloseButton = true,
+  className,
+  dataTestId,
+}) => {
   const { close, headingId, setHasHeading } = usePopoverContext();
 
   useLayoutEffect(() => {
@@ -27,7 +24,6 @@ export const PopoverHeading: React.FC<{
     return () => setHasHeading(false);
   }, [setHasHeading]);
 
-  const typographyClassName = 'typography-utility-section-h6';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
   const hasEyebrow = eyebrow != null;
 
@@ -36,9 +32,10 @@ export const PopoverHeading: React.FC<{
       className={classNames(
         styles.header,
         { [styles.headerWithoutClose]: !showCloseButton },
-        typographyClassName,
+        'typography-utility-section-h6',
         className
       )}
+      data-testid={dataTestId}
     >
       <div className={classNames(styles.headingText, { [styles.title]: hasTitle || hasEyebrow })}>
         {hasEyebrow && (
@@ -60,6 +57,7 @@ export const PopoverHeading: React.FC<{
           surface="light"
           aria-label="Close popover"
           className={styles.closeButton}
+          dataTestId={dataTestId && `${dataTestId}-close-button`}
           onClick={close}
         />
       )}

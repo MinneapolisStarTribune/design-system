@@ -1,9 +1,30 @@
 import { act, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { type ComponentProps, type ReactNode } from 'react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as TriggerablePopover from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
+
+type TriggerablePopoverRootProps = Omit<
+  ComponentProps<typeof TriggerablePopover.Root>,
+  'children' | 'trigger'
+>;
+
+const renderTriggerablePopover = (children: ReactNode, props: TriggerablePopoverRootProps = {}) =>
+  renderWithProvider(
+    <TriggerablePopover.Root trigger={<Button>Open</Button>} {...props}>
+      {children}
+    </TriggerablePopover.Root>
+  );
+
+const openPopover = (user: UserEvent) => user.click(screen.getByRole('button', { name: 'Open' }));
+
+const externalTriggerProps = {
+  enableInjectionSlot: true,
+  trigger: <Button>Open</Button>,
+  triggerId: 'share-top',
+} satisfies TriggerablePopoverRootProps & { trigger: ReactNode };
 
 const triggerExternally = (id: string) =>
   act(() => {
@@ -23,13 +44,9 @@ describe('TriggerablePopover', () => {
   it('opens via trigger click and renders children, same as a normal popover', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
-        <TriggerablePopover.Body>Popover Content</TriggerablePopover.Body>
-      </TriggerablePopover.Root>
-    );
+    renderTriggerablePopover(<TriggerablePopover.Body>Popover Content</TriggerablePopover.Body>);
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     await waitFor(() => {
       expect(screen.getByText('Popover Content')).toBeInTheDocument();
@@ -39,14 +56,14 @@ describe('TriggerablePopover', () => {
   it('names the dialog by its heading', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
+    renderTriggerablePopover(
+      <>
         <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
         <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover.Root>
+      </>
     );
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
   });
@@ -54,29 +71,23 @@ describe('TriggerablePopover', () => {
   it('closes via the heading close button', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
+    renderTriggerablePopover(
+      <>
         <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
         <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover.Root>
+      </>
     );
 
-    await user.click(screen.getByText('Open'));
-    await waitFor(() => screen.getByText('Content'));
+    await openPopover(user);
+    await screen.findByText('Content');
 
     await user.click(screen.getByLabelText('Close popover'));
 
-    await waitFor(() => {
-      expect(screen.queryByText('Content')).toBeNull();
-    });
+    await waitFor(() => expect(screen.queryByText('Content')).not.toBeInTheDocument());
   });
 
   it('without a triggerId, is unaffected by window.openTooltip calls for any id', async () => {
-    renderWithProvider(
-      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
-        <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover.Root>
-    );
+    renderTriggerablePopover(<TriggerablePopover.Body>Content</TriggerablePopover.Body>);
 
     expect(() => triggerExternally('anything')).not.toThrow();
     expect(screen.queryByText('Content')).not.toBeInTheDocument();
@@ -85,11 +96,7 @@ describe('TriggerablePopover', () => {
   describe('external triggering', () => {
     it('opens when window.openTooltip(triggerId) is called, without a trigger click', async () => {
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
@@ -106,11 +113,7 @@ describe('TriggerablePopover', () => {
 
     it('closes when window.closeTooltip(triggerId) is called', async () => {
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
@@ -131,11 +134,7 @@ describe('TriggerablePopover', () => {
 
     it('does not render children while externally triggered, only the injection slot', async () => {
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
@@ -154,29 +153,18 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
 
-      await user.click(screen.getByText('Open'));
-
-      await waitFor(() => {
-        expect(screen.getByText('App content')).toBeInTheDocument();
-      });
+      await openPopover(user);
+      expect(await screen.findByText('App content')).toBeInTheDocument();
     });
 
     it('mounts the injection slot in the DOM before the first open, so an external script can find it early', () => {
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
@@ -191,18 +179,14 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
 
-      await user.click(screen.getByText('Open'));
-      await waitFor(() => screen.getByText('Content'));
-      await user.click(screen.getByText('Open'));
+      await openPopover(user);
+      await screen.findByText('Content');
+      await openPopover(user);
       await waitFor(() => {
         expect(screen.queryByText('Content')).not.toBeInTheDocument();
       });
@@ -268,17 +252,13 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover.Root
-          triggerId="share-top"
-          enableInjectionSlot
-          trigger={<Button>Open</Button>}
-        >
+        <TriggerablePopover.Root {...externalTriggerProps}>
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
         </TriggerablePopover.Root>
       );
 
-      await user.click(screen.getByText('Open'));
-      await waitFor(() => screen.getByText('App content'));
+      await openPopover(user);
+      await screen.findByText('App content');
       await user.keyboard('{Escape}');
       await waitFor(() => expect(screen.queryByText('App content')).not.toBeInTheDocument());
 

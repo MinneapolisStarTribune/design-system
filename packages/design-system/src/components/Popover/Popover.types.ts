@@ -1,5 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import { POSITIONS } from '@/types';
+import type { BaseProps } from '@/types/globalTypes';
 
 export const POPOVER_PLACEMENTS = POSITIONS;
 
@@ -33,4 +34,31 @@ export type PopoverProps = {
    * heading, the heading names the dialog instead.
    */
   'aria-label'?: string;
-} & Pick<HTMLAttributes<HTMLDivElement>, 'id' | 'style'>;
+} & Pick<HTMLAttributes<HTMLDivElement>, 'id' | 'style'> &
+  Pick<BaseProps, 'dataTestId'>;
+
+/** Props shared by the popover sections. */
+export interface PopoverSectionProps extends Pick<BaseProps, 'className' | 'dataTestId'> {
+  children: ReactNode;
+}
+
+export interface PopoverHeadingProps extends PopoverSectionProps {
+  /** Small label above the title, such as a date. It is not part of the popover's accessible name. */
+  eyebrow?: string | number;
+  /** Content at the end of the title row, such as a total. It is not part of the accessible name. */
+  value?: ReactNode;
+  /**
+   * Shows the close button.
+   * @default true
+   */
+  showCloseButton?: boolean;
+}
+
+export interface PopoverBodyProps extends PopoverSectionProps {
+  scrollable?: boolean;
+}
+
+export interface PopoverDividerProps extends Pick<BaseProps, 'className' | 'dataTestId'> {
+  /** @default true */
+  fullBleed?: boolean;
+}

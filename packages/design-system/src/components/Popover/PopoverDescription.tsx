@@ -1,15 +1,25 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
+import type { PopoverSectionProps } from './Popover.types';
 
-export const PopoverDescription: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => {
-  const typographyClassName = 'typography-utility-text-regular-x-small';
-
+/** Supporting text below the heading. */
+export const PopoverDescription: React.FC<PopoverSectionProps> = ({
+  children,
+  className,
+  dataTestId,
+}) => {
   return (
-    <div className={classNames(styles.description, typographyClassName, className)}>{children}</div>
+    <div
+      className={classNames(
+        styles.description,
+        'typography-utility-text-regular-x-small',
+        className
+      )}
+      data-testid={dataTestId}
+    >
+      {children}
+    </div>
   );
 };
 

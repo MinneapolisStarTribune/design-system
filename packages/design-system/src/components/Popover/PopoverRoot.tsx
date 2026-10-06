@@ -18,7 +18,8 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   id,
   style,
   'aria-label': ariaLabel,
-}: PopoverProps) => {
+  dataTestId,
+}) => {
   const [openState, setOpenState] = useState(false);
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
@@ -50,9 +51,10 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
         isDisabled={isDisabled}
         modal={modal}
         portalRoot={portalRoot}
-        wrapperClassName={className}
+        className={className}
         id={id}
         style={style}
+        dataTestId={dataTestId}
         aria-label={hasHeading ? undefined : ariaLabel}
         aria-labelledby={hasHeading ? headingId : undefined}
       >

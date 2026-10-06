@@ -1,17 +1,24 @@
 import { screen, waitFor, within } from '@testing-library/react';
-import { createRef } from 'react';
-import userEvent from '@testing-library/user-event';
+import { type ComponentProps, createRef, type ReactNode } from 'react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import * as Popover from './Popover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 
+type PopoverRootProps = Omit<ComponentProps<typeof Popover.Root>, 'children' | 'trigger'>;
+
+const renderPopover = (children: ReactNode, props: PopoverRootProps = {}) =>
+  renderWithProvider(
+    <Popover.Root trigger={<Button>Open</Button>} {...props}>
+      {children}
+    </Popover.Root>
+  );
+
+const openPopover = (user: UserEvent) => user.click(screen.getByRole('button', { name: 'Open' }));
+
 describe('Popover', () => {
   it('renders with trigger element', () => {
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>}>
-        <Popover.Body>Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Content</Popover.Body>);
 
     expect(screen.getByText('Open')).toBeInTheDocument();
   });
@@ -19,13 +26,9 @@ describe('Popover', () => {
   it('opens popover when trigger is clicked', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>}>
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>);
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     await waitFor(() => {
       expect(screen.getByText('Popover Content')).toBeInTheDocument();
@@ -37,13 +40,9 @@ describe('Popover', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} portalRoot={container}>
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>, { portalRoot: container });
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     expect(container.contains(await screen.findByText('Popover Content'))).toBe(true);
     container.remove();
@@ -68,13 +67,9 @@ describe('Popover', () => {
   it('portals to document.body, without an inherited portal root', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>}>
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>);
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     const portal = (await screen.findByText('Popover Content')).closest(
       '[data-floating-ui-portal]'
@@ -85,14 +80,14 @@ describe('Popover', () => {
   it('names the dialog by its heading', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>}>
+    renderPopover(
+      <>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover.Root>
+      </>
     );
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     expect(await screen.findByRole('dialog', { name: 'Title' })).toBeInTheDocument();
   });
@@ -100,13 +95,9 @@ describe('Popover', () => {
   it('uses aria-label when there is no heading', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
-        <Popover.Body>Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Content</Popover.Body>, { 'aria-label': 'Options' });
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     const dialog = await screen.findByRole('dialog', { name: 'Options' });
     expect(dialog).not.toHaveAttribute('aria-labelledby');
@@ -115,29 +106,39 @@ describe('Popover', () => {
   it('uses the heading instead of aria-label when both are provided', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
+    renderPopover(
+      <>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover.Root>
+      </>,
+      { 'aria-label': 'Options' }
     );
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     const dialog = await screen.findByRole('dialog', { name: 'Title' });
     expect(dialog).not.toHaveAttribute('aria-label');
   });
 
+  it('applies dataTestId to the dialog', async () => {
+    const user = userEvent.setup();
+
+    renderPopover(<Popover.Body>Content</Popover.Body>, {
+      'aria-label': 'Options',
+      dataTestId: 'options-popover',
+    });
+
+    await openPopover(user);
+
+    expect(await screen.findByTestId('options-popover')).toHaveAttribute('role', 'dialog');
+  });
+
   it('merges the style prop with the positioning styles', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} style={{ zIndex: 5 }}>
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>, { style: { zIndex: 5 } });
 
-    await user.click(screen.getByText('Open'));
+    await openPopover(user);
 
     const surface = await screen.findByRole('dialog');
     expect(surface).toHaveStyle({ zIndex: 5, position: 'absolute', left: 0, top: 0 });
@@ -146,11 +147,7 @@ describe('Popover', () => {
   it('points the trigger aria-controls to the dialog', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>, { 'aria-label': 'Options' });
 
     const trigger = screen.getByRole('button', { name: 'Open' });
     await user.click(trigger);
@@ -179,20 +176,73 @@ describe('Popover', () => {
     consoleError.mockRestore();
   });
 
-  it('uses the id prop for the dialog and aria-controls', async () => {
+  it('sets test ids on the sections and the close button', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options" id="custom-popover">
-        <Popover.Body>Popover Content</Popover.Body>
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Heading dataTestId="heading">Title</Popover.Heading>
+        <Popover.Description dataTestId="description">Description</Popover.Description>
+        <Popover.Divider dataTestId="divider" />
+        <Popover.Body dataTestId="body">Body</Popover.Body>
       </Popover.Root>
     );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(await screen.findByTestId('heading')).toHaveTextContent('Title');
+    expect(screen.getByTestId('heading-close-button')).toHaveAccessibleName('Close popover');
+    expect(screen.getByTestId('description')).toHaveTextContent('Description');
+    expect(screen.getByTestId('divider')).toBeInTheDocument();
+    expect(screen.getByTestId('body')).toHaveTextContent('Body');
+  });
+
+  it('uses the id prop for the dialog and aria-controls', async () => {
+    const user = userEvent.setup();
+
+    renderPopover(<Popover.Body>Popover Content</Popover.Body>, {
+      'aria-label': 'Options',
+      id: 'custom-popover',
+    });
 
     const trigger = screen.getByRole('button', { name: 'Open' });
     await user.click(trigger);
 
     expect(await screen.findByRole('dialog')).toHaveAttribute('id', 'custom-popover');
     expect(trigger).toHaveAttribute('aria-controls', 'custom-popover');
+  });
+
+  it.each([
+    ['element', <Button key="element">Open</Button>],
+    ['text', 'Open'],
+  ])('never points a %s trigger aria-controls to the generated id', async (_, trigger) => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover.Root trigger={trigger} aria-label="Options" id="custom-popover">
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    const triggerElement = screen.getByRole('button', { name: 'Open' });
+    // Each record keeps the value before its change, so intermediate values are not lost.
+    const previousValues: (string | null)[] = [];
+    const observer = new MutationObserver((records) =>
+      records.forEach((record) => previousValues.push(record.oldValue))
+    );
+    observer.observe(triggerElement, {
+      attributeFilter: ['aria-controls'],
+      attributeOldValue: true,
+    });
+
+    await user.click(triggerElement);
+    await screen.findByRole('dialog');
+    observer.disconnect();
+
+    expect([...previousValues, triggerElement.getAttribute('aria-controls')]).toEqual([
+      null,
+      'custom-popover',
+    ]);
   });
 
   it('does not override the trigger display', () => {
@@ -247,15 +297,9 @@ describe('Popover', () => {
   it('does not open when isDisabled is true', async () => {
     const user = userEvent.setup();
 
-    renderWithProvider(
-      <Popover.Root trigger={<Button>Open</Button>} isDisabled>
-        <Popover.Body>Content</Popover.Body>
-      </Popover.Root>
-    );
+    renderPopover(<Popover.Body>Content</Popover.Body>, { isDisabled: true });
 
-    await user.click(screen.getByText('Open'));
-
-    await new Promise((r) => setTimeout(r, 100));
+    await openPopover(user);
 
     expect(screen.queryByText('Content')).not.toBeInTheDocument();
   });

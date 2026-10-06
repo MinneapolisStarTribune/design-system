@@ -1,13 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
+import type { PopoverDividerProps } from './Popover.types';
 
-export const PopoverDivider: React.FC<{
-  fullBleed?: boolean;
-  className?: string;
-}> = ({ fullBleed = true, className }) => {
+/** Horizontal rule between sections. */
+export const PopoverDivider: React.FC<PopoverDividerProps> = ({
+  fullBleed = true,
+  className,
+  dataTestId,
+}) => {
   return (
-    <div className={classNames(styles.divider, fullBleed && styles.dividerFullBleed, className)} />
+    <div
+      className={classNames(styles.divider, fullBleed && styles.dividerFullBleed, className)}
+      data-testid={dataTestId}
+    />
   );
 };
 

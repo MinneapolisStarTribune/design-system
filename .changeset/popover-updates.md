@@ -2,33 +2,63 @@
 '@minneapolisstartribune/design-system': major
 ---
 
-**Breaking:** `Popover` and `TriggerablePopover` are now namespaces, like `Drawer` and `Menu`. Replace `<Popover>` with `<Popover.Root>` and `<TriggerablePopover>` with `<TriggerablePopover.Root>`. The sections stay the same (`Popover.Heading`, `Popover.Description`, `Popover.Body`, `Popover.Divider`, and the same on `TriggerablePopover`). The import doesn't change.
+## Breaking changes
 
-**Breaking:** Simplify `Popover` styling props. Replace `wrapperClassName`, `containerClassName`, `contentClassName`, and `arrowClassName` with `className` on the popover surface. Only `id` and `style` remain supported HTML div attributes. Custom `style` is now merged with positioning styles, so it no longer breaks placement.
+### Namespace API
 
-**Breaking:** `TriggerablePopover` now shares `Popover`'s surface and props. Replace `wrapperClassName`, `containerClassName`, `contentClassName`, and `arrowClassName` with `className`. Only `id` and `style` remain supported HTML div attributes, and `style` is merged with positioning styles.
+`Popover` and `TriggerablePopover` now follow the `Drawer` and `Menu` namespace pattern:
 
-**Breaking:** Popover sub-components take `className` instead of named class props. `Popover.Heading` replaces `headerClassName` with `className` and removes `titleClassName` and `closeButtonClassName`. `Popover.Description`, `Popover.Body`, and `Popover.Divider` replace `descriptionClassName`, `bodyClassName`, and `dividerClassName` with `className`.
+```tsx
+// Before
+<Popover />
+<TriggerablePopover />
 
-**Breaking:** Remove `PopoverPortalRootProvider` and `PopoverPortalRootContext`. Pass `portalRoot` to each `Popover` or `TriggerablePopover` that needs a different container, the same way `Drawer` does.
+// After
+<Popover.Root />
+<TriggerablePopover.Root />
+```
 
-**Consumer impact** (checked against each repo's `main`):
+Imports and section names do not change: use `Popover.Heading`, `Popover.Description`,
+`Popover.Body`, and `Popover.Divider` (and the corresponding `TriggerablePopover` sections).
 
-- **Coaches Portal** (`apps/web`, on 2.1.0): needs changes. `Sidebar.tsx` has two `Popover`s: rename both to `Popover.Root`. Both also use the removed styling props. The season filter uses `wrapperClassName`, `containerClassName`, and `contentClassName`. The account menu uses all four, including `arrowClassName`. Move the styles to `className`, or replace the account menu with the new `Menu` (VAR-1267). It does not use `PopoverPortalRootProvider` or `PopoverPortalRootContext`.
-- **Varsity Web** (on 1.14.0): needs the rename only. `GiftButton` and `ShareButton` render `<Popover>`: change it to `<Popover.Root>`. They use `placement`, `onOpenChange`, `aria-label`, and `Popover.Heading`, `Description`, and `Body`, with no removed props, section class props, or provider. Their `<span>` trigger now gets the click handler and ARIA attributes directly instead of an extra wrapper `div`, and each dialog is now named by its heading.
-- **Star Tribune Web** (on 1.17.0): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider. Its popovers use Radix.
-- **The Brief** (on ^1.12.1): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider.
+### Styling API
 
-Varsity Web and Coaches Portal force the light color scheme, so the dark mode fix below does not change how they look.
+- On `Popover` and `TriggerablePopover`, replace `wrapperClassName`, `containerClassName`,
+  `contentClassName`, and `arrowClassName` with surface `className`.
+- On sections, replace named class props with `className`:
+  - `Popover.Heading`: replace `headerClassName`; `titleClassName` and `closeButtonClassName`
+    are removed.
+  - `Popover.Description`, `Popover.Body`, and `Popover.Divider`: replace their named class prop.
+- Only `id` and `style` remain supported HTML div attributes. Use `dataTestId` instead of
+  `data-testid`, as with `Drawer`. Custom `style` is merged with positioning styles, so it no
+  longer breaks placement.
+- Sections also accept `dataTestId`. `Popover.Heading` sets `${dataTestId}-close-button` on its
+  close button.
 
-`Popover` and `TriggerablePopover` fix: they no longer wrap their trigger in an extra `div`. The `div` caused hydration errors inside `<p>` and broke inline, flex and grid layouts.
+### Portal API
 
-`Popover` and `TriggerablePopover` fix: the dialog is now named by `Popover.Heading` when one is rendered, and by `aria-label` only when there is no heading. Before, `aria-labelledby` pointed to an ID that no element had.
+`PopoverPortalRootProvider` and `PopoverPortalRootContext` are removed. Pass `portalRoot` to
+each `Popover` or `TriggerablePopover` that needs a custom container, as with `Drawer`.
 
-`Popover.Heading` adds `eyebrow` (a label above the title), `value` (content at the end of the title row) and `showCloseButton` (defaults to `true`).
+## Consumer impact
 
-`Popover` and `TriggerablePopover` fix: the trigger's `aria-controls` now points to the dialog. Before, the dialog had no `id` unless one was passed. The popover also no longer sets an inline `display` on an element trigger, so a `Button` trigger keeps its own layout.
+- **Coaches Portal** (`apps/web`, 2.1.0): update both `Sidebar.tsx` popovers to
+  `Popover.Root` and replace removed styling props with `className`. The account menu can
+  alternatively move to `Menu` (VAR-1267). It does not use the removed portal API.
+- **Varsity Web** (1.14.0): in `GiftButton` and `ShareButton`, rename `<Popover>` to
+  `<Popover.Root>`. No removed props or portal API are used.
+- **Star Tribune Web** (1.17.0) and **The Brief** (^1.12.1): no action required.
 
-`Popover` and `TriggerablePopover` fix: the popover follows the app theme, like `Modal` and `Coachmark`. It uses the semantic surface, text and border tokens instead of pinning light values, so in dark mode it has a dark surface with light text. Before, the close button was white on a white surface. Set `--popover-background`, `--popover-arrow-fill` and `--popover-arrow-stroke` to customize the surface.
+Coaches Portal and Varsity Web force a light color scheme, so the dark-mode improvement below
+does not change their appearance.
 
-`TriggerablePopover` fix: content injected after an external open now shows when the popover was opened by a click first. Before, the injection slot stayed hidden.
+## Improvements
+
+- `Popover` and `TriggerablePopover` no longer add a trigger wrapper `div`, avoiding hydration
+  errors inside `<p>` and preserving inline, flex, and grid layouts.
+- Dialogs use `Popover.Heading` as their accessible name when present, otherwise `aria-label`.
+- Triggers now point `aria-controls` at the dialog, and element triggers keep their own display.
+- `Popover.Heading` adds `eyebrow`, `value`, and `showCloseButton` (default: `true`).
+- Popovers now follow the app theme. Customize the surface with `--popover-background`,
+  `--popover-arrow-fill`, and `--popover-arrow-stroke`.
+- `TriggerablePopover` now reveals externally injected content after a click-open and close.

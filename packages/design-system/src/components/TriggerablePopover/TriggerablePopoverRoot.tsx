@@ -21,6 +21,7 @@ export const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   id,
   style,
   'aria-label': ariaLabel,
+  dataTestId,
   externalTriggerOptions,
 }) => {
   const headingId = useId();
@@ -56,9 +57,10 @@ export const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
         modal={modal}
         keepMounted={forceMount}
         portalRoot={portalRoot}
-        wrapperClassName={className}
+        className={className}
         id={id}
         style={style}
+        dataTestId={dataTestId}
         aria-label={hasHeading ? undefined : ariaLabel}
         aria-labelledby={hasHeading ? headingId : undefined}
       >
