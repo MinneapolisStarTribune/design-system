@@ -106,6 +106,10 @@ export const MenuRoot: React.FC<MenuProps> = ({
       ),
     [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
   );
+  const offsetDeps = useMemo(
+    () => [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap],
+    [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
+  );
 
   const anchorProps = trigger ? { trigger } : { anchorEl: anchorEl ?? null };
 
@@ -117,6 +121,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
       interactionRole="menu"
       placement={placement}
       offset={offset}
+      offsetDeps={offsetDeps}
       shiftCrossAxis={coversAnchor}
       lockScroll
       hideArrow={hideArrow || coversAnchor}

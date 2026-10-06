@@ -6,6 +6,30 @@ import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
 import type { MenuAnchorProps, MenuCloseReason, MenuLabelProps, MenuProps } from '../Menu.types';
+import type * as MenuOrigin from '../menuOrigin';
+
+// Records the anchor origin of each offset function Floating UI runs. The wrappers share one
+// source, as the real offset functions do, which Floating UI compares as equal.
+const offsetCalls = vi.hoisted((): string[] => []);
+vi.mock('../menuOrigin', async (importOriginal) => {
+  const actual = await importOriginal<typeof MenuOrigin>();
+  return {
+    ...actual,
+    getMenuOriginPosition: (...args: Parameters<typeof actual.getMenuOriginPosition>) => {
+      const position = actual.getMenuOriginPosition(...args);
+      const { vertical, horizontal } = args[0];
+      const offset = position.offset;
+      if (typeof offset !== 'function') return position;
+      return {
+        ...position,
+        offset: (state: Parameters<typeof offset>[0]) => {
+          offsetCalls.push(`${vertical} ${horizontal}`);
+          return offset(state);
+        },
+      };
+    },
+  };
+});
 
 type HarnessProps = Partial<
   Omit<MenuProps, keyof MenuAnchorProps | 'open' | keyof MenuLabelProps>
@@ -264,6 +288,25 @@ describe('Menu', () => {
     viewport.resize(1160);
     await waitFor(() => expect(menu.querySelector(':scope > svg')).not.toBeNull());
     viewport.restore();
+  });
+
+  it('positions with the new origins when they change while open', async () => {
+    const user = userEvent.setup();
+    const above = {
+      anchorOrigin: { vertical: 'top', horizontal: 'center' },
+      transformOrigin: { vertical: 'bottom', horizontal: 'center' },
+    } as const;
+    const beside = {
+      anchorOrigin: { vertical: 'center', horizontal: 'right' },
+      transformOrigin: { vertical: 'center', horizontal: 'left' },
+    } as const;
+    const { rerender } = renderWithProvider(<Harness {...above} />);
+
+    await openMenu(user);
+    await waitFor(() => expect(offsetCalls.at(-1)).toBe('top center'));
+    rerender(<Harness {...beside} />);
+
+    await waitFor(() => expect(offsetCalls.at(-1)).toBe('center right'));
   });
 
   it('renders in a portal by default', async () => {
