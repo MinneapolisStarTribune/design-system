@@ -163,7 +163,7 @@
   min-height: 0;
 }
 
-.heading {
+.panel .heading {
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -171,16 +171,10 @@
   margin: 0;
   padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
-
   @media (width >= 768px) {
     min-height: calc(var(--modal-close-size) + 2 * var(--spacing-24));
     padding: var(--spacing-24) var(--spacing-32);
   }
-}
-
-/* Scoped under .panel to outrank the typography class, whose stylesheet may load after this one. */
-.panel .heading {
-  font-family: var(--semantic-heading-font-family);
 }
 
 /* Keep the title clear of the absolutely positioned close button. */

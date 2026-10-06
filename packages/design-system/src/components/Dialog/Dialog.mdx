@@ -73,7 +73,12 @@ When the content is supplementary rather than a decision — filters, details, s
 
     <tr>
       <td><code>Dialog.Title</code></td>
-      <td>Title. Renders an <code>h2</code> and names the dialog via <code>aria-labelledby</code>.</td>
+      <td>
+        Title. Renders an <code>h2</code> by default and names the dialog via
+        <code>aria-labelledby</code>. Set <code>as</code> to another heading level, or to
+        <code>div</code> when the content isn't a single heading (e.g. a logo plus a title). Its
+        whole text becomes the accessible name, so keep subtitles and badges outside it.
+      </td>
     </tr>
 
     <tr>

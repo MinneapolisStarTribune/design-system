@@ -229,6 +229,21 @@ describe('Dialog', () => {
       expect(dialog).toHaveAccessibleName('Add Game');
     });
 
+    it('renders the title at another heading level and still names the dialog', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <TestDialog>
+          <Dialog.Title as="h3">Add Game</Dialog.Title>
+        </TestDialog>
+      );
+
+      const dialog = await openDialog(user);
+
+      expect(screen.getByRole('heading', { level: 3, name: 'Add Game' })).toBeInTheDocument();
+      expect(dialog).toHaveAccessibleName('Add Game');
+    });
+
     it('falls back to aria-label when there is no title', async () => {
       const user = userEvent.setup();
 

@@ -1,5 +1,6 @@
 import type {
   ModalCloseReason,
+  ModalHeadingProps,
   ModalRole,
   ModalSectionProps,
   ModalSharedProps,
@@ -27,6 +28,7 @@ export interface DialogProps extends ModalSharedProps {
 }
 
 export type DialogSectionProps = ModalSectionProps;
+export type DialogTitleProps = ModalHeadingProps;
 
 export interface DialogActionsProps extends DialogSectionProps {
   /**
