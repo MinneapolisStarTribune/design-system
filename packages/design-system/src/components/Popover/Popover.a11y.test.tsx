@@ -1,22 +1,22 @@
 import { describe, it } from 'vitest';
 import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
 import { Button, UtilityBody } from '@/components/index.web';
-import { Popover } from './Popover';
+import * as Popover from './Popover';
 
 describe('Popover Accessibility', () => {
   it('has no violations for basic popover', async () => {
     await expectNoA11yViolations(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
 
         <Popover.Description>This is a popover description.</Popover.Description>
-      </Popover>
+      </Popover.Root>
     );
   });
 
   it('has no violations with body content', async () => {
     await expectNoA11yViolations(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
 
         <Popover.Body>
@@ -24,13 +24,13 @@ describe('Popover Accessibility', () => {
           <UtilityBody>Option 2</UtilityBody>
           <UtilityBody>Option 3</UtilityBody>
         </Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
   });
 
   it('has no violations with divider', async () => {
     const { checkA11y } = await renderAndCheckA11y(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
 
         <Popover.Divider />
@@ -38,7 +38,7 @@ describe('Popover Accessibility', () => {
         <Popover.Body>
           <UtilityBody>Popover body content</UtilityBody>
         </Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await checkA11y();
@@ -46,11 +46,11 @@ describe('Popover Accessibility', () => {
 
   it('has no violations without heading using aria-label', async () => {
     const { checkA11y } = await renderAndCheckA11y(
-      <Popover trigger={<Button>Open</Button>} aria-label="Popover information">
+      <Popover.Root trigger={<Button>Open</Button>} aria-label="Popover information">
         <Popover.Body>
           <UtilityBody>Content without heading</UtilityBody>
         </Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await checkA11y();
@@ -58,25 +58,17 @@ describe('Popover Accessibility', () => {
 
   it('has no violations with custom classNames', async () => {
     const { checkA11y } = await renderAndCheckA11y(
-      <Popover trigger={<Button>Open</Button>} className="custom-popover">
-        <Popover.Heading
-          headerClassName="custom-header"
-          titleClassName="custom-title"
-          closeButtonClassName="custom-close-button"
-        >
-          Title
-        </Popover.Heading>
+      <Popover.Root trigger={<Button>Open</Button>} className="custom-popover">
+        <Popover.Heading className="custom-header">Title</Popover.Heading>
 
-        <Popover.Description descriptionClassName="custom-description">
-          Description
-        </Popover.Description>
+        <Popover.Description className="custom-description">Description</Popover.Description>
 
-        <Popover.Divider dividerClassName="custom-divider" />
+        <Popover.Divider className="custom-divider" />
 
-        <Popover.Body bodyClassName="custom-body">
+        <Popover.Body className="custom-body">
           <UtilityBody>Body content</UtilityBody>
         </Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await checkA11y();

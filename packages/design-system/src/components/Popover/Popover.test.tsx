@@ -1,15 +1,15 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Popover } from './Popover';
+import * as Popover from './Popover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 
 describe('Popover', () => {
   it('renders with trigger element', () => {
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     expect(screen.getByText('Open')).toBeInTheDocument();
@@ -19,9 +19,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -37,9 +37,9 @@ describe('Popover', () => {
     document.body.appendChild(container);
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} portalRoot={container}>
+      <Popover.Root trigger={<Button>Open</Button>} portalRoot={container}>
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -52,9 +52,9 @@ describe('Popover', () => {
     renderWithProvider(
       <p data-testid="paragraph">
         Text{' '}
-        <Popover trigger={<Button>Open</Button>}>
+        <Popover.Root trigger={<Button>Open</Button>}>
           <Popover.Body>Popover Content</Popover.Body>
-        </Popover>{' '}
+        </Popover.Root>{' '}
         more text
       </p>
     );
@@ -68,9 +68,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -85,10 +85,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -100,9 +100,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -115,10 +115,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -131,9 +131,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} style={{ zIndex: 5 }}>
+      <Popover.Root trigger={<Button>Open</Button>} style={{ zIndex: 5 }}>
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -146,9 +146,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} aria-label="Options">
+      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options">
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     const trigger = screen.getByRole('button', { name: 'Open' });
@@ -163,9 +163,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} aria-label="Options" id="custom-popover">
+      <Popover.Root trigger={<Button>Open</Button>} aria-label="Options" id="custom-popover">
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     const trigger = screen.getByRole('button', { name: 'Open' });
@@ -177,9 +177,9 @@ describe('Popover', () => {
 
   it('does not override the trigger display', () => {
     renderWithProvider(
-      <Popover trigger={<Button style={{ cursor: 'help' }}>Open</Button>}>
+      <Popover.Root trigger={<Button style={{ cursor: 'help' }}>Open</Button>}>
         <Popover.Body>Popover Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     const trigger = screen.getByRole('button', { name: 'Open' });
@@ -191,10 +191,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -208,10 +208,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -228,9 +228,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} isDisabled>
+      <Popover.Root trigger={<Button>Open</Button>} isDisabled>
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -244,10 +244,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Heading</Popover.Heading>
         <Popover.Body>Body</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -262,11 +262,11 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
         <Popover.Divider />
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -281,10 +281,10 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Divider fullBleed />
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -301,9 +301,9 @@ describe('Popover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <Popover trigger={<Button>Open</Button>} placement={placement}>
+        <Popover.Root trigger={<Button>Open</Button>} placement={placement}>
           <Popover.Body>{placement} content</Popover.Body>
-        </Popover>
+        </Popover.Root>
       );
 
       await user.click(screen.getByRole('button', { name: 'Open' }));
@@ -318,7 +318,7 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover
+      <Popover.Root
         trigger={
           <button>
             <span>Complex</span>
@@ -327,7 +327,7 @@ describe('Popover', () => {
         }
       >
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByRole('button'));
@@ -341,9 +341,9 @@ describe('Popover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>} className="custom-popover">
+      <Popover.Root trigger={<Button>Open</Button>} className="custom-popover">
         <Popover.Body>Content</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -358,11 +358,11 @@ describe('Popover.Body', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Body>
           <div data-testid="body">Body</div>
         </Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -372,13 +372,13 @@ describe('Popover.Body', () => {
     });
   });
 
-  it('applies bodyClassName', async () => {
+  it('applies className to the body', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
-        <Popover.Body bodyClassName="custom-body">Body</Popover.Body>
-      </Popover>
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Body className="custom-body">Body</Popover.Body>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -394,10 +394,10 @@ describe('Popover.Heading', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading showCloseButton={false}>Title</Popover.Heading>
         <Popover.Body>Body</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -410,11 +410,11 @@ describe('Popover.Heading', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading eyebrow="Saturday, April 4" value="308">
           Boys Volleyball
         </Popover.Heading>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -428,13 +428,13 @@ describe('Popover.Heading', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
+      <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>
           <span data-testid="heading">Heading</span>
         </Popover.Heading>
 
         <Popover.Body>Body</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -445,43 +445,33 @@ describe('Popover.Heading', () => {
     });
   });
 
-  it('applies heading classNames', async () => {
+  it('applies className to the heading', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
-        <Popover.Heading
-          headerClassName="custom-header"
-          titleClassName="custom-title"
-          closeButtonClassName="custom-close-button"
-        >
-          Heading
-        </Popover.Heading>
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Heading className="custom-header">Heading</Popover.Heading>
 
         <Popover.Body>Body</Popover.Body>
-      </Popover>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
 
     await waitFor(() => {
       expect(document.querySelector('.custom-header')).toBeInTheDocument();
-      expect(document.querySelector('.custom-title')).toBeInTheDocument();
-      expect(document.querySelector('.custom-close-button')).toBeInTheDocument();
     });
   });
 });
 
 describe('Popover.Description', () => {
-  it('applies descriptionClassName', async () => {
+  it('applies className to the description', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
-        <Popover.Description descriptionClassName="custom-description">
-          Description
-        </Popover.Description>
-      </Popover>
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Description className="custom-description">Description</Popover.Description>
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -493,13 +483,13 @@ describe('Popover.Description', () => {
 });
 
 describe('Popover.Divider', () => {
-  it('applies dividerClassName', async () => {
+  it('applies className to the divider', async () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <Popover trigger={<Button>Open</Button>}>
-        <Popover.Divider dividerClassName="custom-divider" />
-      </Popover>
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Divider className="custom-divider" />
+      </Popover.Root>
     );
 
     await user.click(screen.getByText('Open'));

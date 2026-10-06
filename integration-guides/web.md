@@ -31,9 +31,9 @@ function SidebarWithPopover() {
 
   return (
     <aside ref={setPortalRoot} className="my-sidebar" style={{ overflow: 'hidden' }}>
-      <Popover trigger={<Button>Options</Button>} portalRoot={portalRoot} aria-label="Options">
+      <Popover.Root trigger={<Button>Options</Button>} portalRoot={portalRoot} aria-label="Options">
         <p>This content renders inside the sidebar, not document.body.</p>
-      </Popover>
+      </Popover.Root>
     </aside>
   );
 }

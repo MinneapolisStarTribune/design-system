@@ -23,7 +23,8 @@ None of this requires the external script to know anything about React. It only 
 ## Integrating a vendor campaign tool (e.g. Piano Composer)
 
 If the vendor tool lets you author an HTML template for what gets injected (Piano Composer does), that template needs to:
-- Post `{ event: 'triggerTooltip', tooltipId }` to the parent window on load, so *your own bridge script* (configured in the vendor's dashboard, not in this codebase) can call `window.openTooltip(tooltipId)`.
+
+- Post `{ event: 'triggerTooltip', tooltipId }` to the parent window on load, so _your own bridge script_ (configured in the vendor's dashboard, not in this codebase) can call `window.openTooltip(tooltipId)`.
 - Post `{ event: 'closeTooltip', tooltipId }` from its own dismiss control, for the same bridge script to call `window.closeTooltip(tooltipId)`.
 - Listen for `{ event: 'requestClose' }` from the host page and treat it as a dismissal, so the vendor's own frequency-capping/analytics still register the close even when the user didn't use the template's own dismiss button.
 

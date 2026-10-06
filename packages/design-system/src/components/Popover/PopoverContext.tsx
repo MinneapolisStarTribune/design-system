@@ -15,7 +15,9 @@ export const usePopoverContext = () => {
   const ctx = useContext(PopoverContext);
 
   if (!ctx) {
-    throw new Error('Popover components must be used within <Popover>');
+    throw new Error(
+      'Popover components must be used within <Popover.Root> or <TriggerablePopover.Root>'
+    );
   }
 
   return ctx;

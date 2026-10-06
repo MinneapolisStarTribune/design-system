@@ -2,16 +2,20 @@
 '@minneapolisstartribune/design-system': major
 ---
 
+**Breaking:** `Popover` and `TriggerablePopover` are now namespaces, like `Drawer` and `Menu`. Replace `<Popover>` with `<Popover.Root>` and `<TriggerablePopover>` with `<TriggerablePopover.Root>`. The sections stay the same (`Popover.Heading`, `Popover.Description`, `Popover.Body`, `Popover.Divider`, and the same on `TriggerablePopover`). The import doesn't change.
+
 **Breaking:** Simplify `Popover` styling props. Replace `wrapperClassName`, `containerClassName`, `contentClassName`, and `arrowClassName` with `className` on the popover surface. Only `id` and `style` remain supported HTML div attributes. Custom `style` is now merged with positioning styles, so it no longer breaks placement.
 
 **Breaking:** `TriggerablePopover` now shares `Popover`'s surface and props. Replace `wrapperClassName`, `containerClassName`, `contentClassName`, and `arrowClassName` with `className`. Only `id` and `style` remain supported HTML div attributes, and `style` is merged with positioning styles.
+
+**Breaking:** Popover sub-components take `className` instead of named class props. `Popover.Heading` replaces `headerClassName` with `className` and removes `titleClassName` and `closeButtonClassName`. `Popover.Description`, `Popover.Body`, and `Popover.Divider` replace `descriptionClassName`, `bodyClassName`, and `dividerClassName` with `className`.
 
 **Breaking:** Remove `PopoverPortalRootProvider` and `PopoverPortalRootContext`. Pass `portalRoot` to each `Popover` or `TriggerablePopover` that needs a different container, the same way `Drawer` does.
 
 **Consumer impact** (checked against each repo's `main`):
 
-- **Coaches Portal** (`apps/web`, on 2.1.0): needs changes. `Sidebar.tsx` has two `Popover`s that use the removed styling props. The season filter uses `wrapperClassName`, `containerClassName`, and `contentClassName`. The account menu uses all four, including `arrowClassName`. Move the styles to `className`, or replace the account menu with the new `Menu` (VAR-1267). It does not use `PopoverPortalRootProvider` or `PopoverPortalRootContext`.
-- **Varsity Web** (on 1.14.0): no code changes. `GiftButton` and `ShareButton` use `Popover` with `placement`, `onOpenChange`, `aria-label`, and `Popover.Heading`, `Description`, and `Body`. They do not use the removed props or the provider. Their `<span>` trigger now gets the click handler and ARIA attributes directly instead of an extra wrapper `div`, and each dialog is now named by its heading.
+- **Coaches Portal** (`apps/web`, on 2.1.0): needs changes. `Sidebar.tsx` has two `Popover`s: rename both to `Popover.Root`. Both also use the removed styling props. The season filter uses `wrapperClassName`, `containerClassName`, and `contentClassName`. The account menu uses all four, including `arrowClassName`. Move the styles to `className`, or replace the account menu with the new `Menu` (VAR-1267). It does not use `PopoverPortalRootProvider` or `PopoverPortalRootContext`.
+- **Varsity Web** (on 1.14.0): needs the rename only. `GiftButton` and `ShareButton` render `<Popover>`: change it to `<Popover.Root>`. They use `placement`, `onOpenChange`, `aria-label`, and `Popover.Heading`, `Description`, and `Body`, with no removed props, section class props, or provider. Their `<span>` trigger now gets the click handler and ARIA attributes directly instead of an extra wrapper `div`, and each dialog is now named by its heading.
 - **Star Tribune Web** (on 1.17.0): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider. Its popovers use Radix.
 - **The Brief** (on ^1.12.1): no impact. It does not import `Popover`, `TriggerablePopover`, or the provider.
 

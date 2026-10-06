@@ -4,13 +4,13 @@ import styles from './Popover.module.scss';
 
 export const PopoverDescription: React.FC<{
   children: React.ReactNode;
-  descriptionClassName?: string;
-}> = ({ children, descriptionClassName }) => {
+  className?: string;
+}> = ({ children, className }) => {
   const typographyClassName = 'typography-utility-text-regular-x-small';
 
   return (
-    <div className={classNames(styles.description, typographyClassName, descriptionClassName)}>
-      {children}
-    </div>
+    <div className={classNames(styles.description, typographyClassName, className)}>{children}</div>
   );
 };
+
+PopoverDescription.displayName = 'Popover.Description';

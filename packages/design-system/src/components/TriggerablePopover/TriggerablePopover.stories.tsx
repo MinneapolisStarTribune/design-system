@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TriggerablePopover } from './TriggerablePopover';
+import * as TriggerablePopover from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityBody } from '@/components/Typography/Utility';
 import { POPOVER_PLACEMENTS } from '@/components/Popover/Popover.types';
 
 const meta = {
   title: 'Feedback & Status/TriggerablePopover',
-  component: TriggerablePopover,
+  component: TriggerablePopover.Root,
   parameters: {
     layout: 'centered',
     docs: {
@@ -65,7 +65,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof TriggerablePopover>;
+} satisfies Meta<typeof TriggerablePopover.Root>;
 
 export default meta;
 
@@ -89,13 +89,13 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-<TriggerablePopover placement="bottom" trigger={<Button>Open</Button>}>
+<TriggerablePopover.Root placement="bottom" trigger={<Button>Open</Button>}>
   <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
 
   <TriggerablePopover.Description>
     This is a popover. Use the Controls panel to change the pointer position.
   </TriggerablePopover.Description>
-</TriggerablePopover>
+</TriggerablePopover.Root>
         `,
       },
     },
@@ -127,7 +127,7 @@ const ExternalTriggerDemo = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 8 }}>
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId={triggerId}
           enableInjectionSlot
           trigger={<Button>Open (click)</Button>}
@@ -136,7 +136,7 @@ const ExternalTriggerDemo = () => {
           <TriggerablePopover.Body>
             <UtilityBody>Shown when opened by clicking the trigger.</UtilityBody>
           </TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
 
         <Button
           variant="outlined"

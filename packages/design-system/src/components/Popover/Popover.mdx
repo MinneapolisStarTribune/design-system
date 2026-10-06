@@ -87,44 +87,32 @@ Popovers provide lightweight, focused surfaces for quick actions or supplemental
   <tbody>
     <tr>
       <td><code>className</code></td>
-      <td>Popover</td>
+      <td>Popover.Root</td>
       <td>Custom classes for the popover surface.</td>
     </tr>
 
     <tr>
-      <td><code>headerClassName</code></td>
+      <td><code>className</code></td>
       <td>Popover.Heading</td>
       <td>Custom classes for the heading container.</td>
     </tr>
 
     <tr>
-      <td><code>titleClassName</code></td>
-      <td>Popover.Heading</td>
-      <td>Custom classes for the title element.</td>
-    </tr>
-
-    <tr>
-      <td><code>closeButtonClassName</code></td>
-      <td>Popover.Heading</td>
-      <td>Custom classes for the close button.</td>
-    </tr>
-
-    <tr>
-      <td><code>bodyClassName</code></td>
-      <td>Popover.Body</td>
-      <td>Custom classes for the body section.</td>
-    </tr>
-
-    <tr>
-      <td><code>descriptionClassName</code></td>
+      <td><code>className</code></td>
       <td>Popover.Description</td>
-      <td>Custom classes for the description section.</td>
+      <td>Custom classes for the description.</td>
     </tr>
 
     <tr>
-      <td><code>dividerClassName</code></td>
+      <td><code>className</code></td>
       <td>Popover.Divider</td>
       <td>Custom classes for the divider.</td>
+    </tr>
+
+    <tr>
+      <td><code>className</code></td>
+      <td>Popover.Body</td>
+      <td>Custom classes for the body section.</td>
     </tr>
 
   </tbody>
@@ -147,20 +135,18 @@ The popover renders into `document.body`. Pass `portalRoot` to render it into an
 ## Example
 
 ```tsx
-<Popover trigger={<Button>Open</Button>} placement="bottom" className="custom-popover">
-  <Popover.Heading headerClassName="gap-2" closeButtonClassName="rounded-full">
-    Title
-  </Popover.Heading>
+<Popover.Root trigger={<Button>Open</Button>} placement="bottom" className="custom-popover">
+  <Popover.Heading className="gap-2">Title</Popover.Heading>
 
   <Popover.Description>Sample description</Popover.Description>
 
   <Popover.Divider />
 
-  <Popover.Body bodyClassName="custom-popover-body">
+  <Popover.Body className="custom-popover-body">
     {' '}
     <UtilityBody>Content</UtilityBody>
   </Popover.Body>
-</Popover>
+</Popover.Root>
 ```
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}

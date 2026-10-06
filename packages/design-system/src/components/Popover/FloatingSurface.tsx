@@ -68,8 +68,6 @@ type FloatingSurfaceBaseProps = {
   initialFocus?: ComponentProps<typeof FloatingFocusManager>['initialFocus'];
   wrapperClassName?: string;
   containerClassName?: string;
-  contentClassName?: string;
-  arrowClassName?: string;
   'aria-label'?: string;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label' | 'children'>;
 
@@ -102,8 +100,6 @@ export const FloatingSurface = ({
   initialFocus,
   wrapperClassName,
   containerClassName,
-  contentClassName,
-  arrowClassName,
   id,
   style: styleProp,
   'aria-label': ariaLabel,
@@ -212,11 +208,11 @@ export const FloatingSurface = ({
             width={arrowSize.width}
             strokeWidth={1}
             staticOffset={arrowStaticOffset}
-            className={classNames(styles.arrow, arrowClassName)}
+            className={styles.arrow}
           />
         )}
         <div className={classNames(styles.container, containerClassName)}>
-          <div className={classNames(styles.content, contentClassName)}>{children}</div>
+          <div className={styles.content}>{children}</div>
         </div>
       </div>
     </FloatingFocusManager>

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Popover } from './Popover';
+import * as Popover from './Popover';
 import { POPOVER_PLACEMENTS, Placement } from './Popover.types';
 import { Button } from '@/components/Button/web/Button';
 import { Link } from '@/components/Link/web/Link';
@@ -23,7 +23,7 @@ const DETAILS = [
 
 const meta = {
   title: 'Feedback & Status/Popover',
-  component: Popover,
+  component: Popover.Root,
   parameters: {
     layout: 'centered',
     docs: {
@@ -73,7 +73,7 @@ const meta = {
       table: { type: { summary: 'string' } },
     },
   },
-} satisfies Meta<typeof Popover>;
+} satisfies Meta<typeof Popover.Root>;
 
 export default meta;
 
@@ -99,13 +99,13 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-<Popover placement="bottom" trigger={<Button>Open</Button>}>
+<Popover.Root placement="bottom" trigger={<Button>Open</Button>}>
   <Popover.Heading>Title</Popover.Heading>
 
   <Popover.Description>
     This is a popover. Use the Controls panel to change the pointer position.
   </Popover.Description>
-</Popover>
+</Popover.Root>
         `,
       },
     },
@@ -116,14 +116,14 @@ const ControlledExample = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <Popover
+    <Popover.Root
       open={open}
       onOpenChange={setOpen}
       trigger={<Button>{open ? 'Close' : 'Open'}</Button>}
     >
       <Popover.Heading>Title</Popover.Heading>
       <Popover.Description>Description</Popover.Description>
-    </Popover>
+    </Popover.Root>
   );
 };
 
@@ -170,7 +170,7 @@ export const AllVariants: Story = {
       },
       source: {
         code: `
-<Popover trigger={<Button>Open</Button>} placement="bottom">
+<Popover.Root trigger={<Button>Open</Button>} placement="bottom">
   <Popover.Heading>Title</Popover.Heading>
 
   <Popover.Description>Description</Popover.Description>
@@ -180,7 +180,7 @@ export const AllVariants: Story = {
   <Popover.Body>
     <UtilityBody>Body Content</UtilityBody>
   </Popover.Body>
-</Popover>
+</Popover.Root>
         `,
       },
     },
@@ -190,25 +190,25 @@ export const AllVariants: Story = {
     <div className={styles.page}>
       <Group title="Variants">
         <Example title="Text only" description="A popover with only a description.">
-          <Popover trigger={<Button>Open</Button>}>
+          <Popover.Root trigger={<Button>Open</Button>}>
             <Popover.Heading>
               <Popover.Description>Description</Popover.Description>
             </Popover.Heading>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example title="With title" description="A short title above the description.">
-          <Popover trigger={<Button>Open</Button>}>
+          <Popover.Root trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
             <Popover.Description>Description</Popover.Description>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example
           title="With custom content"
           description="Other components in the body, such as text and a link."
         >
-          <Popover trigger={<Button>Open</Button>}>
+          <Popover.Root trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
             <Popover.Body>
               <div className={styles.customContent}>
@@ -222,14 +222,14 @@ export const AllVariants: Story = {
                 </Link>
               </div>
             </Popover.Body>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example
           title="Scrollable content"
           description="Long content scrolls. The header and divider stay in place."
         >
-          <Popover trigger={<Button>Open</Button>}>
+          <Popover.Root trigger={<Button>Open</Button>}>
             <Popover.Heading>Title</Popover.Heading>
             <Popover.Divider />
             <Popover.Body>
@@ -237,7 +237,7 @@ export const AllVariants: Story = {
                 <UtilityBody key={i}>Item {i + 1}</UtilityBody>
               ))}
             </Popover.Body>
-          </Popover>
+          </Popover.Root>
         </Example>
       </Group>
 
@@ -245,10 +245,10 @@ export const AllVariants: Story = {
         {POINTERS.map(({ pointer, placement }) => (
           <Example key={pointer} title={pointer} description={`placement="${placement}"`}>
             <div className={styles.pointerFrame}>
-              <Popover placement={placement} trigger={<Button>Open</Button>}>
+              <Popover.Root placement={placement} trigger={<Button>Open</Button>}>
                 <Popover.Heading>Title</Popover.Heading>
                 <Popover.Description>Description</Popover.Description>
-              </Popover>
+              </Popover.Root>
             </div>
           </Example>
         ))}
@@ -256,15 +256,15 @@ export const AllVariants: Story = {
 
       <Group title="Additional examples">
         <Example title="Without close button">
-          <Popover placement="top" trigger={<Button>Open</Button>}>
+          <Popover.Root placement="top" trigger={<Button>Open</Button>}>
             <Popover.Heading showCloseButton={false}>
               <Popover.Description>Description</Popover.Description>
             </Popover.Heading>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example title="With eyebrow and value">
-          <Popover trigger={<Button>Open</Button>}>
+          <Popover.Root trigger={<Button>Open</Button>}>
             <Popover.Heading eyebrow="Eyebrow" value="value" showCloseButton={false}>
               Title
             </Popover.Heading>
@@ -287,17 +287,17 @@ export const AllVariants: Story = {
                 ))}
               </dl>
             </Popover.Body>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example title="Icon button trigger">
-          <Popover
+          <Popover.Root
             placement="top"
             trigger={<Button variant="ghost" icon={<CameraIcon />} aria-label="Photo details" />}
           >
             <Popover.Heading>Title</Popover.Heading>
             <Popover.Description>Description</Popover.Description>
-          </Popover>
+          </Popover.Root>
         </Example>
 
         <Example title="Externally controlled" description="Open state comes from the parent.">

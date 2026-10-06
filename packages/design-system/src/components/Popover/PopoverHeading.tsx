@@ -18,22 +18,8 @@ export const PopoverHeading: React.FC<{
    * @default true
    */
   showCloseButton?: boolean;
-  /**
-   * Heading container classes.
-   * Kept as headerClassName for backwards compatibility.
-   */
-  headerClassName?: string;
-  titleClassName?: string;
-  closeButtonClassName?: string;
-}> = ({
-  children,
-  eyebrow,
-  value,
-  showCloseButton = true,
-  headerClassName,
-  titleClassName,
-  closeButtonClassName,
-}) => {
+  className?: string;
+}> = ({ children, eyebrow, value, showCloseButton = true, className }) => {
   const { close, headingId, setHasHeading } = usePopoverContext();
 
   useLayoutEffect(() => {
@@ -50,7 +36,7 @@ export const PopoverHeading: React.FC<{
         styles.header,
         { [styles.headerWithoutClose]: !showCloseButton },
         typographyClassName,
-        headerClassName
+        className
       )}
     >
       <div className={classNames(styles.headingText, { [styles.title]: hasTitle || eyebrow })}>
@@ -60,9 +46,7 @@ export const PopoverHeading: React.FC<{
           </div>
         )}
         <div className={styles.titleRow}>
-          <div id={headingId} className={titleClassName}>
-            {children}
-          </div>
+          <div id={headingId}>{children}</div>
           {value != null && <div className={styles.value}>{value}</div>}
         </div>
       </div>
@@ -74,10 +58,12 @@ export const PopoverHeading: React.FC<{
           icon={<CloseIcon />}
           surface="light"
           aria-label="Close popover"
-          className={classNames(styles.closeButton, closeButtonClassName)}
+          className={styles.closeButton}
           onClick={close}
         />
       )}
     </div>
   );
 };
+
+PopoverHeading.displayName = 'Popover.Heading';

@@ -1,7 +1,7 @@
 import { act, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { TriggerablePopover } from './TriggerablePopover';
+import * as TriggerablePopover from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 
@@ -24,9 +24,9 @@ describe('TriggerablePopover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <TriggerablePopover trigger={<Button>Open</Button>}>
+      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
         <TriggerablePopover.Body>Popover Content</TriggerablePopover.Body>
-      </TriggerablePopover>
+      </TriggerablePopover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -40,10 +40,10 @@ describe('TriggerablePopover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <TriggerablePopover trigger={<Button>Open</Button>}>
+      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
         <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
         <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover>
+      </TriggerablePopover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -55,10 +55,10 @@ describe('TriggerablePopover', () => {
     const user = userEvent.setup();
 
     renderWithProvider(
-      <TriggerablePopover trigger={<Button>Open</Button>}>
+      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
         <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
         <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover>
+      </TriggerablePopover.Root>
     );
 
     await user.click(screen.getByText('Open'));
@@ -73,9 +73,9 @@ describe('TriggerablePopover', () => {
 
   it('without a triggerId, is unaffected by window.openTooltip calls for any id', async () => {
     renderWithProvider(
-      <TriggerablePopover trigger={<Button>Open</Button>}>
+      <TriggerablePopover.Root trigger={<Button>Open</Button>}>
         <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-      </TriggerablePopover>
+      </TriggerablePopover.Root>
     );
 
     expect(() => triggerExternally('anything')).not.toThrow();
@@ -85,13 +85,13 @@ describe('TriggerablePopover', () => {
   describe('external triggering', () => {
     it('opens when window.openTooltip(triggerId) is called, without a trigger click', async () => {
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       const getWrapper = () => document.querySelector('[data-state]');
@@ -106,13 +106,13 @@ describe('TriggerablePopover', () => {
 
     it('closes when window.closeTooltip(triggerId) is called', async () => {
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       const getWrapper = () => document.querySelector('[data-state]');
@@ -131,13 +131,13 @@ describe('TriggerablePopover', () => {
 
     it('does not render children while externally triggered, only the injection slot', async () => {
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       triggerExternally('share-top');
@@ -154,13 +154,13 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       await user.click(screen.getByText('Open'));
@@ -172,13 +172,13 @@ describe('TriggerablePopover', () => {
 
     it('mounts the injection slot in the DOM before the first open, so an external script can find it early', () => {
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       // Force-mounted but closed: present in the DOM, hidden via display:none.
@@ -191,13 +191,13 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       await user.click(screen.getByText('Open'));
@@ -219,7 +219,7 @@ describe('TriggerablePopover', () => {
       };
 
       const popover = (
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="gift-top"
           enableInjectionSlot
           open={open}
@@ -227,7 +227,7 @@ describe('TriggerablePopover', () => {
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       const { rerender } = renderWithProvider(popover);
@@ -238,7 +238,7 @@ describe('TriggerablePopover', () => {
       expect(open).toBe(true);
 
       rerender(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="gift-top"
           enableInjectionSlot
           open={open}
@@ -246,7 +246,7 @@ describe('TriggerablePopover', () => {
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>Content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       await waitFor(() => {
@@ -268,13 +268,13 @@ describe('TriggerablePopover', () => {
       const user = userEvent.setup();
 
       renderWithProvider(
-        <TriggerablePopover
+        <TriggerablePopover.Root
           triggerId="share-top"
           enableInjectionSlot
           trigger={<Button>Open</Button>}
         >
           <TriggerablePopover.Body>App content</TriggerablePopover.Body>
-        </TriggerablePopover>
+        </TriggerablePopover.Root>
       );
 
       await user.click(screen.getByText('Open'));
