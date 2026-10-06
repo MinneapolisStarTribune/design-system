@@ -188,7 +188,7 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 ```
 
 - The dialog is always controlled. The X icon button, Escape and overlay presses call `onClose`; set `open` to `false` in response. Focus returns to the opening control on close.
-- Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title.
+- Give it an accessible name: a `Dialog.Title`, or `aria-label` when there's no visible title. `Dialog.Title` renders an `h2`; pass `as` (`'h1' | 'h2' | 'h3' | 'h4' | 'div'`) to match the page's heading outline, or `as="div"` to wrap more than a heading, like a logo plus a title. Its whole text becomes the accessible name, so give decorative images an empty `alt` and keep subtitles and badges outside it.
 - For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. Use `color="error"` on the destructive button. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
 - At 767px and below, `Dialog.Actions` stacks its actions full width, the usual pattern for confirmations. For forms and longer content, pass `stackOnMobile={false}` to keep them side by side. It has no effect from 768px up.
 - `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
@@ -227,7 +227,7 @@ function FilterDrawer({ position }: Pick<DrawerProps, 'position'>) {
 
 - The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input).
 - `role="alertdialog"` marks urgent interruptions and describes the drawer with its `Drawer.Body`; `describeWithBody` does the same for a regular drawer. `closeLabel` localizes the close button.
-- Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title.
+- Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title. `Drawer.Heading` takes the same `as` prop as `Dialog.Title`.
 - It renders into `document.body`. Pass `portalRoot` to render into another element instead.
 - Requires `components.css` (see [Quick Start](#quick-start)).
 

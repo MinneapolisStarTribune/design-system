@@ -171,6 +171,7 @@
   margin: 0;
   padding: var(--spacing-20) var(--spacing-16);
   color: var(--color-text-on-light-primary);
+
   @media (width >= 768px) {
     min-height: calc(var(--modal-close-size) + 2 * var(--spacing-24));
     padding: var(--spacing-24) var(--spacing-32);

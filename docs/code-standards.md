@@ -145,7 +145,7 @@ export { DrawerHeading as Heading } from './DrawerHeading';
 
 // src/components/index.web.ts
 export * as Drawer from './Drawer/Drawer';
-export { type DrawerProps } from './Drawer/Drawer.types';
+export { type DrawerHeadingProps, type DrawerProps } from './Drawer/Drawer.types';
 ```
 
 Consumers write `<Drawer.Root>` / `<Drawer.Heading>`, and bundlers drop the parts they don't import.
