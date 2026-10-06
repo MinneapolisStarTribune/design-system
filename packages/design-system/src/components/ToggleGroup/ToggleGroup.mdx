@@ -108,11 +108,9 @@ accessible name, so write it to make sense read aloud.
 ### Icons
 
 Put icons from `@/icons` in the children, like text. They take the item's text color, so they read
-on the selected fill too. Use the default size (20px) on their own and `size="small"` (16px) beside a
-label.
+on the selected fill too. The item sizes them to match its text, so leave off `size`.
 
-An icon-only item has no text, so give it an `aria-label`; an item with a single icon child and
-`aria-label` is laid out square. In development, an item with neither text nor `aria-label` logs a
+An icon-only item has no text, so give it an `aria-label`. In development, an item with neither text nor `aria-label` logs a
 warning.
 
 ```tsx
@@ -121,7 +119,7 @@ warning.
     <MenuStackedIcon />
   </ToggleGroup.Item>
   <ToggleGroup.Item value="calendar">
-    <CalendarIcon size="small" />
+    <CalendarIcon />
     Calendar
   </ToggleGroup.Item>
 </ToggleGroup.Root>

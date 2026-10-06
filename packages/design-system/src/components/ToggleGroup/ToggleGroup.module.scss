@@ -33,11 +33,6 @@
     padding: 0 var(--spacing-16);
   }
 
-  .item.iconOnly {
-    width: 40px;
-    padding: 0;
-  }
-
   &.fullWidth {
     display: flex;
     width: 100%;
@@ -130,8 +125,14 @@
    */
   --color-icon-on-light-primary: currentColor;
 
+  /*
+   * Icons are sized from the item's text (16px) rather than their `size` prop, so callers don't
+   * need `size="small"`. The icon wrapper sets an inline width and height, hence `!important`.
+   */
   > svg {
     flex-shrink: 0;
     align-self: center;
+    width: 1em !important;
+    height: 1em !important;
   }
 }

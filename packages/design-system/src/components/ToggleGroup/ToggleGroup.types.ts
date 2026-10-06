@@ -8,13 +8,6 @@ interface ToggleGroupBaseProps extends BaseProps {
   /** `ToggleGroup.Item` children. */
   children: ReactNode;
   /**
-   * Accessible name for the group. It isn't shown, so use `aria-labelledby` instead when a
-   * visible heading already labels the group.
-   */
-  label?: string;
-  /** Id of a visible element that labels the group. Takes precedence over `label`. */
-  'aria-labelledby'?: string;
-  /**
    * Shared input `name`, so the selection is submitted with a surrounding form.
    * @default a generated id
    */
@@ -25,7 +18,23 @@ interface ToggleGroupBaseProps extends BaseProps {
   disabled?: boolean;
 }
 
-export interface ToggleGroupSingleProps<T extends string = string> extends ToggleGroupBaseProps {
+/** Every group needs an accessible name: `label`, `aria-labelledby`, or both. */
+type ToggleGroupLabelProps =
+  | {
+      /**
+       * Accessible name for the group. It isn't shown, so use `aria-labelledby` instead when a
+       * visible heading already labels the group.
+       */
+      label: string;
+      /** Id of a visible element that labels the group. Takes precedence over `label`. */
+      'aria-labelledby'?: string;
+    }
+  | {
+      label?: string;
+      'aria-labelledby': string;
+    };
+
+interface ToggleGroupSingleOwnProps<T extends string> extends ToggleGroupBaseProps {
   /**
    * `single` (the default) keeps exactly one item selected and behaves as a radio group.
    * `multiple` lets any number of items be selected and behaves as a group of checkboxes.
@@ -36,12 +45,18 @@ export interface ToggleGroupSingleProps<T extends string = string> extends Toggl
   onChange: (value: T) => void;
 }
 
-export interface ToggleGroupMultipleProps<T extends string = string> extends ToggleGroupBaseProps {
+interface ToggleGroupMultipleOwnProps<T extends string> extends ToggleGroupBaseProps {
   type: 'multiple';
   /** Values of the selected items. */
   value: T[];
   onChange: (value: T[]) => void;
 }
+
+export type ToggleGroupSingleProps<T extends string = string> = ToggleGroupSingleOwnProps<T> &
+  ToggleGroupLabelProps;
+
+export type ToggleGroupMultipleProps<T extends string = string> = ToggleGroupMultipleOwnProps<T> &
+  ToggleGroupLabelProps;
 
 export type ToggleGroupProps<T extends string = string> =
   | ToggleGroupSingleProps<T>
@@ -58,8 +73,7 @@ export interface ToggleGroupItemProps extends BaseProps {
    */
   children: ReactNode;
   /**
-   * Accessible name. Required when the content is only an icon (e.g. "List view"); an item with a
-   * single icon child and `aria-label` is laid out square.
+   * Accessible name. Required when the content is only an icon (e.g. "List view").
    */
   'aria-label'?: string;
   /** Disables this item only. */

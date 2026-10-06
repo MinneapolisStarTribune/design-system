@@ -154,7 +154,7 @@ describe('ToggleGroup', () => {
   });
 
   describe('icons', () => {
-    it('names icon-only items with aria-label and lays them out square', () => {
+    it('names icon-only items with aria-label', () => {
       render(
         <ToggleGroup.Root label="View" value="list" onChange={() => {}}>
           <ToggleGroup.Item value="list" aria-label="List view">
@@ -168,21 +168,19 @@ describe('ToggleGroup', () => {
 
       expect(screen.getByRole('radio', { name: 'List view' })).toBeChecked();
       expect(screen.getByRole('radio', { name: 'Calendar view' })).not.toBeChecked();
-      expect(screen.getByTestId('toggle-group-item-list')).toHaveClass(styles.iconOnly);
     });
 
     it('keeps the label as the name when an icon sits beside it', () => {
       render(
         <ToggleGroup.Root label="View" value="list" onChange={() => {}}>
           <ToggleGroup.Item value="list">
-            <MenuStackedIcon size="small" />
+            <MenuStackedIcon />
             List
           </ToggleGroup.Item>
         </ToggleGroup.Root>
       );
 
       expect(screen.getByRole('radio', { name: 'List' })).toBeInTheDocument();
-      expect(screen.getByTestId('toggle-group-item-list')).not.toHaveClass(styles.iconOnly);
     });
 
     it('warns when an item has no text and no aria-label', () => {

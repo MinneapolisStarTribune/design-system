@@ -150,7 +150,7 @@ export const Configurable: Story = {
       return (
         <ToggleGroup.Root
           type="multiple"
-          label={label}
+          label={label ?? 'Filter games'}
           name={name}
           fullWidth={fullWidth}
           disabled={disabled}
@@ -167,7 +167,7 @@ export const Configurable: Story = {
 
     return (
       <ToggleGroup.Root
-        label={label}
+        label={label ?? 'Filter games'}
         name={name}
         fullWidth={fullWidth}
         disabled={disabled}
@@ -237,10 +237,10 @@ const MultipleExample = ({
 /**
  * Every content type and state, for Chromatic visual
  * regression across brand and theme modes. Icons go in the children, like text, and take the
- * item's text color; icon-only items need `aria-label` and are laid out square.
+ * item's text color; icon-only items need `aria-label`.
  */
 export const AllVariants: Story = {
-  args: { value: 'all', onChange: () => {}, children: null },
+  args: { label: 'Filter games', value: 'all', onChange: () => {}, children: null },
   parameters: {
     chromatic: { modes: allModes },
     controls: { disable: true },
@@ -290,7 +290,7 @@ export const AllVariants: Story = {
           <SingleExample label="Sport" initialValue="hockey">
             {SPORTS.map(({ value, label, Icon }) => (
               <ToggleGroup.Item key={value} value={value}>
-                <Icon size="small" />
+                <Icon />
                 {label}
               </ToggleGroup.Item>
             ))}

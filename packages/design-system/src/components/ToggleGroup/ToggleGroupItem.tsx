@@ -1,6 +1,6 @@
 'use client';
 
-import { isValidElement, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import styles from './ToggleGroup.module.scss';
 import type { ToggleGroupItemProps } from './ToggleGroup.types';
@@ -24,9 +24,6 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
   const contentRef = useRef<HTMLSpanElement>(null);
   const selected = group.isSelected(value);
   const disabled = group.disabled || disabledProp;
-  // Icon-only items have no text, so they need `aria-label`; that plus a lone element child is the
-  // signal to lay the item out square. `isValidElement` is false for arrays, so it implies one child.
-  const isIconOnly = !!ariaLabel && isValidElement(children);
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') return;
@@ -44,7 +41,7 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
     <label
       className={classNames(
         styles.item,
-        { [styles.selected]: selected, [styles.disabled]: disabled, [styles.iconOnly]: isIconOnly },
+        { [styles.selected]: selected, [styles.disabled]: disabled },
         className
       )}
       style={style}
