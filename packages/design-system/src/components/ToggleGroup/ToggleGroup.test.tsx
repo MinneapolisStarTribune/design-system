@@ -204,15 +204,15 @@ describe('ToggleGroup', () => {
     });
   });
 
-  it('applies color, variant and fullWidth classes to the root', () => {
+  it('applies the fullWidth class to the root', () => {
     render(
-      <ToggleGroup.Root label="View" value="day" onChange={() => {}} color="neutral" fullWidth>
+      <ToggleGroup.Root label="View" value="day" onChange={() => {}} fullWidth>
         <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
       </ToggleGroup.Root>
     );
 
     const root = screen.getByTestId('toggle-group');
-    expect(root).toHaveClass(styles.root, styles.segmented, styles.neutral, styles.fullWidth);
+    expect(root).toHaveClass(styles.root, styles.fullWidth);
   });
 
   it('prefers aria-labelledby over label', () => {
@@ -234,9 +234,10 @@ describe('ToggleGroup', () => {
   });
 
   it('throws when an item is rendered outside a root', () => {
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ToggleGroup.Item value="day">Day</ToggleGroup.Item>)).toThrow(
       'ToggleGroup.Item must be rendered inside ToggleGroup.Root'
     );
+    error.mockRestore();
   });
 });

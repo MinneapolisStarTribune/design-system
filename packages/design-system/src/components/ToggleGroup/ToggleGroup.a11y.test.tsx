@@ -27,9 +27,9 @@ describe('ToggleGroup Accessibility', () => {
     );
   });
 
-  it('has no violations with the neutral color and a disabled item', async () => {
+  it('has no violations with a disabled item', async () => {
     await expectNoA11yViolations(
-      <ToggleGroup.Root label="Filter games" value="past" onChange={() => {}} color="neutral">
+      <ToggleGroup.Root label="Filter games" value="past" onChange={() => {}}>
         <ToggleGroup.Item value="all">All Games</ToggleGroup.Item>
         <ToggleGroup.Item value="past">Past</ToggleGroup.Item>
         <ToggleGroup.Item value="upcoming" disabled>

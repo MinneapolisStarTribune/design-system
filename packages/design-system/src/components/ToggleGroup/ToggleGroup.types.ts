@@ -1,10 +1,6 @@
 import type { ReactNode } from 'react';
 import type { BaseProps } from '@/types/globalTypes';
 
-export const TOGGLE_GROUP_COLORS = ['brand', 'neutral'] as const;
-export type ToggleGroupColor = (typeof TOGGLE_GROUP_COLORS)[number];
-export const TOGGLE_GROUP_VARIANTS = ['segmented'] as const;
-export type ToggleGroupVariant = (typeof TOGGLE_GROUP_VARIANTS)[number];
 export const TOGGLE_GROUP_TYPES = ['single', 'multiple'] as const;
 export type ToggleGroupType = (typeof TOGGLE_GROUP_TYPES)[number];
 
@@ -23,16 +19,6 @@ interface ToggleGroupBaseProps extends BaseProps {
    * @default a generated id
    */
   name?: string;
-  /**
-   * Fill of the selected items. Matches the `filled` Button of the same color.
-   * @default 'brand'
-   */
-  color?: ToggleGroupColor;
-  /**
-   * Visual style. Only `segmented` exists today: items joined in one bordered container.
-   * @default 'segmented'
-   */
-  variant?: ToggleGroupVariant;
   /** Stretch to the container width, splitting it evenly between items. */
   fullWidth?: boolean;
   /** Disables every item in the group. */

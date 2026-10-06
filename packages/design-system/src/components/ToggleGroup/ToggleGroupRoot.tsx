@@ -10,14 +10,14 @@ import { ToggleGroupContext, type ToggleGroupContextValue } from './ToggleGroupC
  * Group of joined toggles. `type="single"` (default) keeps exactly one item selected, like a
  * radio group; `type="multiple"` lets any number be selected, like checkboxes.
  */
-export function ToggleGroupRoot<T extends string = string>(props: ToggleGroupProps<T>) {
+export function ToggleGroupRoot<T extends string = string>(
+  props: ToggleGroupProps<T>
+): React.ReactElement {
   const {
     children,
     label,
     'aria-labelledby': ariaLabelledBy,
     name: nameProp,
-    color = 'brand',
-    variant = 'segmented',
     fullWidth = false,
     disabled = false,
     className,
@@ -55,13 +55,7 @@ export function ToggleGroupRoot<T extends string = string>(props: ToggleGroupPro
       aria-label={ariaLabelledBy ? undefined : label}
       aria-labelledby={ariaLabelledBy}
       aria-disabled={disabled || undefined}
-      className={classNames(
-        styles.root,
-        styles[variant],
-        styles[color],
-        { [styles.fullWidth]: fullWidth },
-        className
-      )}
+      className={classNames(styles.root, { [styles.fullWidth]: fullWidth }, className)}
       style={style}
       data-testid={dataTestId}
     >

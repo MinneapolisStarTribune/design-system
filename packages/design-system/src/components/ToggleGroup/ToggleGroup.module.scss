@@ -1,43 +1,21 @@
 /*
- * Selected items reuse the filled Button tokens of the same color, so they follow the active brand
+ * Selected items reuse the brand filled Button tokens, so they follow the active brand
  * (`html[data-ds-brand]`) and color scheme without ToggleGroup-specific tokens.
  */
 .root {
   --toggle-group-divider: var(--color-border-on-light-subtle-01);
+  --toggle-group-selected-background: var(--color-button-brand-filled-background);
+  --toggle-group-selected-hover-background: var(--color-button-brand-filled-hover-background);
+  --toggle-group-selected-text: var(--color-button-brand-filled-text);
 
   display: inline-flex;
   max-width: 100%;
   box-sizing: border-box;
   font-family: inherit;
-
-  &.brand {
-    --toggle-group-selected-background: var(--color-button-brand-filled-background);
-    --toggle-group-selected-hover-background: var(--color-button-brand-filled-hover-background);
-    --toggle-group-selected-text: var(--color-button-brand-filled-text);
-  }
-
-  &.neutral {
-    --toggle-group-selected-background: var(--color-button-neutral-filled-background);
-    --toggle-group-selected-hover-background: var(--color-button-neutral-filled-hover-background);
-    --toggle-group-selected-text: var(--color-button-neutral-filled-text);
-  }
-
-  &.fullWidth {
-    display: flex;
-    width: 100%;
-
-    .item {
-      flex: 1 1 0;
-      min-width: max-content;
-    }
-  }
-}
-
-/*
- * Segmented: items joined in one bordered container. The container is filled with the divider
- * color and items sit 1px apart, so the dividers are just the gaps showing through.
- */
-.segmented {
+  /*
+   * Items are joined in one bordered container. The container is filled with the divider color
+   * and items sit 1px apart, so the dividers are just the gaps showing through.
+   */
   gap: 1px;
   border: 1px solid var(--toggle-group-divider);
   border-radius: var(--radius-12);
@@ -58,6 +36,16 @@
   .item.iconOnly {
     width: 40px;
     padding: 0;
+  }
+
+  &.fullWidth {
+    display: flex;
+    width: 100%;
+
+    .item {
+      flex: 1 1 0;
+      min-width: max-content;
+    }
   }
 }
 

@@ -1,14 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as ToggleGroup from './ToggleGroup';
-import {
-  TOGGLE_GROUP_COLORS,
-  TOGGLE_GROUP_TYPES,
-  TOGGLE_GROUP_VARIANTS,
-  type ToggleGroupMultipleProps,
-  type ToggleGroupProps,
-  type ToggleGroupSingleProps,
-} from './ToggleGroup.types';
+import { TOGGLE_GROUP_TYPES } from './ToggleGroup.types';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import {
   CalendarIcon,
@@ -38,7 +31,7 @@ const LEVELS = [
   { value: 'freshman', label: 'Freshman' },
 ];
 
-const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+const SectionLabel = ({ children }: { children: ReactNode }) => (
   <div style={{ marginBottom: 8 }}>
     <UtilityLabel size="small" weight="semibold">
       {children}
@@ -65,7 +58,7 @@ const ALERT_CHANNELS = [
   { value: 'sms', label: 'Text message', Icon: DeviceMobileIcon },
 ];
 
-const FinePrint = ({ children }: { children: React.ReactNode }) => (
+const FinePrint = ({ children }: { children: ReactNode }) => (
   <span className={storyStyles.finePrint}>{children}</span>
 );
 
@@ -73,6 +66,13 @@ const GameFilterItems = () =>
   GAME_FILTERS.map(({ value, label, count }) => (
     <ToggleGroup.Item key={value} value={value}>
       {label} <FinePrint>({count})</FinePrint>
+    </ToggleGroup.Item>
+  ));
+
+const LevelItems = () =>
+  LEVELS.map(({ value, label }) => (
+    <ToggleGroup.Item key={value} value={value}>
+      {label}
     </ToggleGroup.Item>
   ));
 
@@ -99,24 +99,6 @@ const meta = {
         defaultValue: { summary: "'single'" },
       },
     },
-    color: {
-      control: 'inline-radio',
-      options: [...TOGGLE_GROUP_COLORS],
-      description: 'Fill of the selected items. Matches the `filled` Button of the same color.',
-      table: {
-        type: { summary: TOGGLE_GROUP_COLORS.join(' | ') },
-        defaultValue: { summary: "'brand'" },
-      },
-    },
-    variant: {
-      control: 'inline-radio',
-      options: [...TOGGLE_GROUP_VARIANTS],
-      description: 'Visual style.',
-      table: {
-        type: { summary: TOGGLE_GROUP_VARIANTS.join(' | ') },
-        defaultValue: { summary: "'segmented'" },
-      },
-    },
     label: {
       control: 'text',
       description: 'Accessible name for the group (not shown).',
@@ -132,6 +114,11 @@ const meta = {
       description: 'Disables every item.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
+    name: {
+      control: 'text',
+      description: 'Shared input `name`, so the selection is submitted with a surrounding form.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: 'a generated id' } },
+    },
     value: { control: false },
     onChange: { action: 'onChange' },
   },
@@ -140,28 +127,54 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * Every prop except `value` (the story owns the selection so clicks respond). Switch `type` to
+ * `multiple` to see the checkbox behavior; it swaps in the level filters.
+ */
 export const Configurable: Story = {
-  argTypes: { type: { control: false } },
   args: {
+    type: 'single',
     label: 'Filter games',
     value: 'all',
-    color: 'brand',
-    variant: 'segmented',
     fullWidth: false,
     disabled: false,
     onChange: () => {},
     children: null,
   },
-  render: function ConfigurableRender({ onChange, ...args }) {
-    const [value, setValue] = useState<string>('all');
+  render: function ConfigurableRender({ type, label, name, fullWidth, disabled, onChange }) {
+    const [single, setSingle] = useState('all');
+    const [multiple, setMultiple] = useState<string[]>(['varsity']);
+    const reportChange = onChange as (value: string | string[]) => void;
+
+    if (type === 'multiple') {
+      return (
+        <ToggleGroup.Root
+          type="multiple"
+          label={label}
+          name={name}
+          fullWidth={fullWidth}
+          disabled={disabled}
+          value={multiple}
+          onChange={(next) => {
+            setMultiple(next);
+            reportChange(next);
+          }}
+        >
+          <LevelItems />
+        </ToggleGroup.Root>
+      );
+    }
 
     return (
       <ToggleGroup.Root
-        {...(args as Omit<ToggleGroupProps, 'type' | 'value' | 'onChange'>)}
-        value={value}
-        onChange={(next: string) => {
-          setValue(next);
-          (onChange as (value: string) => void)(next);
+        label={label}
+        name={name}
+        fullWidth={fullWidth}
+        disabled={disabled}
+        value={single}
+        onChange={(next) => {
+          setSingle(next);
+          reportChange(next);
         }}
       >
         <GameFilterItems />
@@ -170,117 +183,61 @@ export const Configurable: Story = {
   },
 };
 
-export const Multiple: Story = {
-  args: {
-    type: 'multiple',
-    label: 'Levels',
-    value: ['varsity'],
-    onChange: () => {},
-    children: null,
-  },
-  render: function MultipleRender({ onChange, ...args }) {
-    const [value, setValue] = useState<string[]>(['varsity']);
-
-    useEffect(() => {
-      if (Array.isArray(args.value)) setValue(args.value);
-    }, [args.value]);
-
-    return (
-      <ToggleGroup.Root
-        {...(args as Omit<ToggleGroupProps, 'type' | 'value' | 'onChange'>)}
-        type="multiple"
-        value={value}
-        onChange={(next: string[]) => {
-          setValue(next);
-          (onChange as (value: string[]) => void)(next);
-        }}
-      >
-        {LEVELS.map(({ value: levelValue, label }) => (
-          <ToggleGroup.Item key={levelValue} value={levelValue}>
-            {label}
-          </ToggleGroup.Item>
-        ))}
-      </ToggleGroup.Root>
-    );
-  },
-};
+interface ExampleProps {
+  label: string;
+  fullWidth?: boolean;
+  disabled?: boolean;
+  children: ReactNode;
+}
 
 /** A single-select group that owns its selection, so every example responds to clicks. */
 const SingleExample = ({
   initialValue,
-  ...props
-}: Omit<ToggleGroupSingleProps, 'type' | 'value' | 'onChange'> & { initialValue: string }) => {
+  label,
+  fullWidth,
+  disabled,
+  children,
+}: ExampleProps & { initialValue: string }) => {
   const [value, setValue] = useState(initialValue);
-  return <ToggleGroup.Root {...props} value={value} onChange={setValue} />;
+  return (
+    <ToggleGroup.Root
+      label={label}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      value={value}
+      onChange={setValue}
+    >
+      {children}
+    </ToggleGroup.Root>
+  );
 };
 
 const MultipleExample = ({
   initialValue,
-  ...props
-}: Omit<ToggleGroupMultipleProps, 'type' | 'value' | 'onChange'> & { initialValue: string[] }) => {
+  label,
+  fullWidth,
+  disabled,
+  children,
+}: ExampleProps & { initialValue: string[] }) => {
   const [value, setValue] = useState(initialValue);
-  return <ToggleGroup.Root {...props} type="multiple" value={value} onChange={setValue} />;
+  return (
+    <ToggleGroup.Root
+      type="multiple"
+      label={label}
+      fullWidth={fullWidth}
+      disabled={disabled}
+      value={value}
+      onChange={setValue}
+    >
+      {children}
+    </ToggleGroup.Root>
+  );
 };
 
 /**
- * Icons from `@/icons` go in the children, like text. They take the item's text color, so they
- * read on the selected fill too. Icon-only items need `aria-label`, and are laid out square.
- */
-export const IconOnly: Story = {
-  args: { value: 'list', onChange: () => {}, children: null },
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <div style={{ display: 'grid', gap: '2rem' }}>
-      <div>
-        <SectionLabel>View switcher</SectionLabel>
-        <SingleExample label="View" initialValue="list">
-          {VIEWS.map(({ value, label, Icon }) => (
-            <ToggleGroup.Item key={value} value={value} aria-label={label}>
-              <Icon />
-            </ToggleGroup.Item>
-          ))}
-        </SingleExample>
-      </div>
-
-      <div>
-        <SectionLabel>Sport (neutral)</SectionLabel>
-        <SingleExample label="Sport" color="neutral" initialValue="hockey">
-          {SPORTS.map(({ value, label, Icon }) => (
-            <ToggleGroup.Item key={value} value={value} aria-label={label}>
-              <Icon />
-            </ToggleGroup.Item>
-          ))}
-        </SingleExample>
-      </div>
-
-      <div>
-        <SectionLabel>Alert channels (multiple)</SectionLabel>
-        <MultipleExample label="Alert channels" initialValue={['push']}>
-          {ALERT_CHANNELS.map(({ value, label, Icon }) => (
-            <ToggleGroup.Item key={value} value={value} aria-label={label}>
-              <Icon />
-            </ToggleGroup.Item>
-          ))}
-        </MultipleExample>
-      </div>
-
-      <div>
-        <SectionLabel>Icon and label</SectionLabel>
-        <SingleExample label="View" initialValue="calendar">
-          {VIEWS.map(({ value, label, Icon }) => (
-            <ToggleGroup.Item key={value} value={value}>
-              <Icon size="small" />
-              {label.replace(' view', '')}
-            </ToggleGroup.Item>
-          ))}
-        </SingleExample>
-      </div>
-    </div>
-  ),
-};
-
-/**
- * Every color and state, for Chromatic visual regression across brand and theme modes.
+ * Every content type and state, for Chromatic visual
+ * regression across brand and theme modes. Icons go in the children, like text, and take the
+ * item's text color; icon-only items need `aria-label` and are laid out square.
  */
 export const AllVariants: Story = {
   args: { value: 'all', onChange: () => {}, children: null },
@@ -290,79 +247,84 @@ export const AllVariants: Story = {
     layout: 'padded',
   },
   render: () => (
-    <div style={{ display: 'grid', gap: '2rem', maxWidth: 560 }}>
-      <div>
-        <SectionLabel>Brand</SectionLabel>
-        <SingleExample label="Filter games" initialValue="all">
-          <GameFilterItems />
-        </SingleExample>
-      </div>
+    <div style={{ display: 'grid', gap: '3rem', maxWidth: 560 }}>
+      <div style={{ display: 'grid', gap: '2rem' }}>
+        <div>
+          <SectionLabel>Single</SectionLabel>
+          <SingleExample label="Filter games" initialValue="all">
+            <GameFilterItems />
+          </SingleExample>
+        </div>
 
-      <div>
-        <SectionLabel>Neutral</SectionLabel>
-        <SingleExample label="Filter games" color="neutral" initialValue="past">
-          <GameFilterItems />
-        </SingleExample>
-      </div>
+        <div>
+          <SectionLabel>Multiple</SectionLabel>
+          <MultipleExample label="Levels" initialValue={['varsity', 'jv']}>
+            <LevelItems />
+          </MultipleExample>
+        </div>
 
-      <div>
-        <SectionLabel>Text only</SectionLabel>
-        <SingleExample label="Range" initialValue="day">
-          <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
-          <ToggleGroup.Item value="week">Week</ToggleGroup.Item>
-          <ToggleGroup.Item value="month">Month</ToggleGroup.Item>
-        </SingleExample>
-      </div>
+        <div>
+          <SectionLabel>Icon only</SectionLabel>
+          <SingleExample label="View" initialValue="list">
+            {VIEWS.map(({ value, label, Icon }) => (
+              <ToggleGroup.Item key={value} value={value} aria-label={label}>
+                <Icon />
+              </ToggleGroup.Item>
+            ))}
+          </SingleExample>
+        </div>
 
-      <div>
-        <SectionLabel>Full width</SectionLabel>
-        <SingleExample label="Filter games" initialValue="all" fullWidth>
-          <GameFilterItems />
-        </SingleExample>
-      </div>
+        <div>
+          <SectionLabel>Icon only, multiple</SectionLabel>
+          <MultipleExample label="Alert channels" initialValue={['push']}>
+            {ALERT_CHANNELS.map(({ value, label, Icon }) => (
+              <ToggleGroup.Item key={value} value={value} aria-label={label}>
+                <Icon />
+              </ToggleGroup.Item>
+            ))}
+          </MultipleExample>
+        </div>
 
-      <div>
-        <SectionLabel>Multiple</SectionLabel>
-        <MultipleExample label="Levels" initialValue={['varsity', 'jv']}>
-          {LEVELS.map(({ value, label }) => (
-            <ToggleGroup.Item key={value} value={value}>
-              {label}
+        <div>
+          <SectionLabel>Icon and label</SectionLabel>
+          <SingleExample label="Sport" initialValue="hockey">
+            {SPORTS.map(({ value, label, Icon }) => (
+              <ToggleGroup.Item key={value} value={value}>
+                <Icon size="small" />
+                {label}
+              </ToggleGroup.Item>
+            ))}
+          </SingleExample>
+        </div>
+
+        <div>
+          <SectionLabel>Full width</SectionLabel>
+          <SingleExample label="Filter games" initialValue="all" fullWidth>
+            <GameFilterItems />
+          </SingleExample>
+        </div>
+
+        <div>
+          <SectionLabel>Disabled item</SectionLabel>
+          <SingleExample label="Filter games" initialValue="all">
+            <ToggleGroup.Item value="all">
+              All Games <FinePrint>(48)</FinePrint>
             </ToggleGroup.Item>
-          ))}
-        </MultipleExample>
-      </div>
-
-      <div>
-        <SectionLabel>Icon only</SectionLabel>
-        <SingleExample label="View" initialValue="calendar">
-          {VIEWS.map(({ value, label, Icon }) => (
-            <ToggleGroup.Item key={value} value={value} aria-label={label}>
-              <Icon />
+            <ToggleGroup.Item value="past">
+              Past <FinePrint>(30)</FinePrint>
             </ToggleGroup.Item>
-          ))}
-        </SingleExample>
-      </div>
+            <ToggleGroup.Item value="upcoming" disabled>
+              Upcoming <FinePrint>(0)</FinePrint>
+            </ToggleGroup.Item>
+          </SingleExample>
+        </div>
 
-      <div>
-        <SectionLabel>Disabled item</SectionLabel>
-        <SingleExample label="Filter games" initialValue="all">
-          <ToggleGroup.Item value="all">
-            All Games <FinePrint>(48)</FinePrint>
-          </ToggleGroup.Item>
-          <ToggleGroup.Item value="past">
-            Past <FinePrint>(30)</FinePrint>
-          </ToggleGroup.Item>
-          <ToggleGroup.Item value="upcoming" disabled>
-            Upcoming <FinePrint>(0)</FinePrint>
-          </ToggleGroup.Item>
-        </SingleExample>
-      </div>
-
-      <div>
-        <SectionLabel>Disabled group</SectionLabel>
-        <SingleExample label="Filter games" initialValue="all" disabled>
-          <GameFilterItems />
-        </SingleExample>
+        <div>
+          <SectionLabel>Disabled group</SectionLabel>
+          <SingleExample label="Filter games" initialValue="all" disabled>
+            <GameFilterItems />
+          </SingleExample>
+        </div>
       </div>
     </div>
   ),

@@ -8,15 +8,14 @@ import * as ToggleGroupStories from './ToggleGroup.stories';
 # ToggleGroup
 
 ToggleGroup is a set of joined toggles for switching between options in place, such as filtering a
-schedule to **All Games**, **Past** or **Upcoming**. In Figma it's the **segmented control**; in
-code that's `variant="segmented"`, the default and currently the only variant.
+schedule to **All Games**, **Past** or **Upcoming**. In Figma it's the **segmented control**.
 
 - **`type="single"`** (default): exactly one item is selected. It behaves as a radio group.
 - **`type="multiple"`**: any number of items can be selected, including none. It behaves as a group
   of checkboxes.
 
-Selected items use the same fill as the `filled` [Button](/docs/actions-button--docs) of the
-chosen `color`, so they follow the active brand and color scheme.
+Selected items use the same fill as the brand `filled` [Button](/docs/actions-button--docs), so they
+follow the active brand and color scheme. The color isn't configurable.
 
 **Web only.**
 
@@ -25,7 +24,7 @@ chosen `color`, so they follow the active brand and color scheme.
 1. **Container**: a rounded, bordered row. 1px dividers separate the items.
 2. **Item**: a label, an icon plus a label, or an icon alone. A label can include inline secondary
    content, such as a result count.
-3. **Selected item**: filled with the brand (default) or neutral fill.
+3. **Selected item**: filled with the brand fill.
 
 ## Usage
 
@@ -53,7 +52,7 @@ chosen `color`, so they follow the active brand and color scheme.
       <td><code>ToggleGroup.Root</code></td>
       <td>
         Owns the selection (<code>type</code>, <code>value</code>, <code>onChange</code>), the
-        accessible name, <code>color</code>, <code>variant</code> and <code>fullWidth</code>.
+        accessible name and <code>fullWidth</code>.
       </td>
     </tr>
 
