@@ -145,6 +145,17 @@ import { Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/
 </Drawer.Root>;
 ```
 
+`Popover` and `TriggerablePopover` follow the same pattern (web only). When upgrading, replace `<Popover>` with `<Popover.Root>` and `<TriggerablePopover>` with `<TriggerablePopover.Root>`. The sections stay the same:
+
+```tsx
+import { Popover, type PopoverProps } from '@minneapolisstartribune/design-system/web';
+
+<Popover.Root trigger={<Button>Options</Button>}>
+  <Popover.Heading>Options</Popover.Heading>
+  <Popover.Body>{/* content */}</Popover.Body>
+</Popover.Root>;
+```
+
 ### Importing Types
 
 You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.

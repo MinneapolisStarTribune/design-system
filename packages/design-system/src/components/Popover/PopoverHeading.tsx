@@ -10,7 +10,7 @@ import { CloseIcon } from '@/icons';
 export const PopoverHeading: React.FC<{
   children: React.ReactNode;
   /** Small label above the title, such as a date. It is not part of the popover's accessible name. */
-  eyebrow?: React.ReactNode;
+  eyebrow?: string | number;
   /** Content at the end of the title row, such as a total. It is not part of the accessible name. */
   value?: React.ReactNode;
   /**
@@ -29,6 +29,7 @@ export const PopoverHeading: React.FC<{
 
   const typographyClassName = 'typography-utility-section-h6';
   const hasTitle = typeof children === 'string' || typeof children === 'number';
+  const hasEyebrow = eyebrow != null;
 
   return (
     <div
@@ -39,8 +40,8 @@ export const PopoverHeading: React.FC<{
         className
       )}
     >
-      <div className={classNames(styles.headingText, { [styles.title]: hasTitle || eyebrow })}>
-        {eyebrow && (
+      <div className={classNames(styles.headingText, { [styles.title]: hasTitle || hasEyebrow })}>
+        {hasEyebrow && (
           <div className={classNames(styles.eyebrow, 'typography-utility-text-regular-xx-small')}>
             {eyebrow}
           </div>

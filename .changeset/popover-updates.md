@@ -29,6 +29,6 @@ Varsity Web and Coaches Portal force the light color scheme, so the dark mode fi
 
 `Popover` and `TriggerablePopover` fix: the trigger's `aria-controls` now points to the dialog. Before, the dialog had no `id` unless one was passed. The popover also no longer sets an inline `display` on an element trigger, so a `Button` trigger keeps its own layout.
 
-`Popover` and `TriggerablePopover` fix: the popover follows the app theme, like `Modal` and `Coachmark`. It uses the semantic surface, text and border tokens instead of pinning light values, so in dark mode it has a dark surface with light text. Before, the close button was white on a white surface. The `--popover-background-dark`, `--popover-border-color-dark` and `--popover-arrow-fill-dark` overrides are removed. Set `--popover-background`, `--popover-arrow-fill` and `--popover-arrow-stroke` to customize the surface.
+`Popover` and `TriggerablePopover` fix: the popover follows the app theme, like `Modal` and `Coachmark`. It uses the semantic surface, text and border tokens instead of pinning light values, so in dark mode it has a dark surface with light text. Before, the close button was white on a white surface. Set `--popover-background`, `--popover-arrow-fill` and `--popover-arrow-stroke` to customize the surface.
 
 `TriggerablePopover` fix: content injected after an external open now shows when the popover was opened by a click first. Before, the injection slot stayed hidden.

@@ -1,13 +1,6 @@
 'use client';
 
-import React, {
-  cloneElement,
-  isValidElement,
-  ReactElement,
-  ReactNode,
-  useMemo,
-  useState,
-} from 'react';
+import { cloneElement, isValidElement, ReactNode, Ref, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
   arrow,
@@ -70,6 +63,8 @@ type FloatingSurfaceBaseProps = {
   containerClassName?: string;
   'aria-label'?: string;
 } & Omit<HTMLAttributes<HTMLDivElement>, 'aria-label' | 'children'>;
+
+type TriggerElementProps = { style?: CSSProperties; ref?: Ref<unknown>; [key: string]: unknown };
 
 type TriggerSurfaceProps = FloatingSurfaceBaseProps & { trigger: ReactNode; anchorEl?: never };
 type AnchoredSurfaceProps = FloatingSurfaceBaseProps & {
@@ -150,12 +145,9 @@ export const FloatingSurface = ({
     dismiss,
     roleInteraction,
   ]);
-  const childElement = isValidElement(trigger)
-    ? (trigger as ReactElement<{ style?: CSSProperties; [key: string]: unknown }> & {
-        ref?: React.Ref<unknown>;
-      })
-    : null;
-  const mergedRef = useMergeRefs([setReference, childElement?.ref ?? null]);
+  const childElement = isValidElement<TriggerElementProps>(trigger) ? trigger : null;
+  // React 19 passes `ref` as a prop. Reading `element.ref` logs a deprecation warning.
+  const mergedRef = useMergeRefs([setReference, childElement?.props.ref ?? null]);
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
   // Add ARIA attributes to a single trigger element. Otherwise, use a button-role wrapper.
   const triggerElement =

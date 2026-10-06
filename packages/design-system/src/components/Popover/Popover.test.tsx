@@ -1,4 +1,5 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import { createRef } from 'react';
 import userEvent from '@testing-library/user-event';
 import * as Popover from './Popover';
 import { Button } from '@/components/Button/web/Button';
@@ -157,6 +158,25 @@ describe('Popover', () => {
     const dialog = await screen.findByRole('dialog');
     expect(dialog.id).not.toBe('');
     expect(trigger).toHaveAttribute('aria-controls', dialog.id);
+  });
+
+  it('keeps the trigger ref without a React 19 element.ref warning', async () => {
+    const user = userEvent.setup();
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const triggerRef = createRef<HTMLButtonElement>();
+
+    renderWithProvider(
+      <Popover.Root trigger={<Button ref={triggerRef}>Open</Button>} aria-label="Options">
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(triggerRef.current).toBe(screen.getByRole('button', { name: 'Open' }));
+    expect(consoleError).not.toHaveBeenCalledWith(expect.stringContaining('element.ref'));
+    consoleError.mockRestore();
   });
 
   it('uses the id prop for the dialog and aria-controls', async () => {
@@ -422,6 +442,21 @@ describe('Popover.Heading', () => {
     const dialog = await screen.findByRole('dialog', { name: 'Boys Volleyball' });
     expect(dialog).toHaveTextContent('Saturday, April 4');
     expect(dialog).toHaveTextContent('308');
+  });
+
+  it('renders a numeric zero eyebrow', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover.Root trigger={<Button>Open</Button>}>
+        <Popover.Heading eyebrow={0}>Boys Volleyball</Popover.Heading>
+      </Popover.Root>
+    );
+
+    await user.click(screen.getByText('Open'));
+
+    const dialog = await screen.findByRole('dialog', { name: 'Boys Volleyball' });
+    expect(within(dialog).getByText('0').className).toMatch(/eyebrow/);
   });
 
   it('renders children and close button', async () => {
