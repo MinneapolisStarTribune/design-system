@@ -47,6 +47,20 @@ const ARROW_HEIGHT = 6;
 // narrower than that, instead of shrinking early enough to leave this same margin on both sides.
 const VIEWPORT_EDGE_PADDING = 24;
 
+// A separate, smaller margin than VIEWPORT_EDGE_PADDING -- that one also sizes the card itself
+// (see above), so reusing it for how close alignmentShift/shift may actually position the card
+// toward the viewport edge was overly conservative: a corner-anchored trigger (e.g. the nav's
+// favorites icon) would make the card sit dead-center instead of hugging the edge near it, per
+// Figma. Used by both alignmentShift and shift (the latter re-clamps whatever alignmentShift
+// computed using its own padding, on the axis it actually checks -- see isSidePosition below --
+// so both need this smaller value or shift silently overrides alignmentShift's result).
+const EDGE_HUGGING_PADDING = 8;
+
+// Keeps the arrow from sliding into the card's own rounded corner when alignmentShift's 40%
+// budget still isn't enough to keep the card fully alongside its trigger -- per Figma, the arrow
+// stays at least this far from the card's edge rather than going flush to it.
+const ARROW_EDGE_PADDING = 16;
+
 /** Why the coachmark closed, reported on its `coachmark_dismiss` tracking event. */
 type DismissReason = 'close_button' | 'trigger_press' | 'outside_press' | 'escape_key' | 'other';
 
@@ -116,18 +130,21 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       }),
       // Shifts 'top/bottom-left/right' back into view along the alignment axis, up to 40% of the
       // card's width, before flipping alignment. No-op for centered/side positions.
-      alignmentShift({ boundary: resolvedPortalRoot ?? undefined, padding: VIEWPORT_EDGE_PADDING }),
+      alignmentShift({
+        boundary: resolvedPortalRoot ?? undefined,
+        padding: EDGE_HUGGING_PADDING,
+      }),
       // Vertical is always disabled here -- a coachmark must keep tracking its trigger even off
       // -screen, not get pinned near the viewport edge. Horizontal is a fallback safety net for
       // whatever alignmentShift didn't fully resolve.
       shift({
         boundary: resolvedPortalRoot ?? undefined,
-        padding: VIEWPORT_EDGE_PADDING,
+        padding: EDGE_HUGGING_PADDING,
         mainAxis: !isSidePosition,
         crossAxis: isSidePosition,
       }),
       // eslint-disable-next-line react-hooks/refs
-      arrow({ element: arrowRef }),
+      arrow({ element: arrowRef, padding: ARROW_EDGE_PADDING }),
     ],
     [resolvedPortalRoot, isSidePosition]
   );
