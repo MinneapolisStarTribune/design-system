@@ -1,15 +1,21 @@
 import type { ReactNode, RefObject } from 'react';
 import type { AccessibilityProps, BaseProps } from '@/types/globalTypes';
-import type { MODAL_CLOSE_REASONS, MODAL_POSITIONS, MODAL_ROLES } from './Modal.constants';
+import type {
+  MODAL_CLOSE_REASONS,
+  MODAL_HEADING_ELEMENTS,
+  MODAL_POSITIONS,
+  MODAL_ROLES,
+} from './Modal.constants';
 
 export type ModalPosition = (typeof MODAL_POSITIONS)[number];
 export type ModalRole = (typeof MODAL_ROLES)[number];
 export type ModalCloseReason = (typeof MODAL_CLOSE_REASONS)[number];
+export type ModalHeadingElement = (typeof MODAL_HEADING_ELEMENTS)[number];
 
 /** The public components built on the modal base, used in error and warning messages. */
-export type ModalComponentName = 'Drawer';
+export type ModalComponentName = 'Drawer' | 'Dialog';
 
-/** Props shared by the public components built on the modal base. Each redeclares the ones it documents differently. */
+/** Props shared by `Drawer.Root` and `Dialog.Root`. Each redeclares the ones it documents differently. */
 export interface ModalSharedProps extends BaseProps, Pick<AccessibilityProps, 'aria-label'> {
   children: ReactNode;
   /** Whether the panel is open. */
@@ -61,7 +67,20 @@ export interface ModalSectionProps extends Pick<BaseProps, 'className' | 'dataTe
   children: ReactNode;
 }
 
+export interface ModalHeadingProps extends ModalSectionProps {
+  /**
+   * The element to render. Use `div` when the content isn't a single heading, e.g. a logo plus
+   * a title. The element still names the panel via `aria-labelledby`, so keep its text to the
+   * title: decorative images need empty `alt`, and subtitles or badges belong outside it.
+   * @default 'h2'
+   */
+  as?: ModalHeadingElement;
+}
+
 export interface ModalSectionBaseProps extends ModalSectionProps {
   /** The public component the section belongs to, for the "used outside Root" error. */
   componentName: ModalComponentName;
 }
+
+export type ModalHeadingBaseProps = ModalHeadingProps &
+  Pick<ModalSectionBaseProps, 'componentName'>;

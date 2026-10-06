@@ -235,6 +235,25 @@ describe('Drawer', () => {
       expect(drawer).toHaveAccessibleName('Filter calendar');
     });
 
+    it('renders the heading as another element and still names the drawer', async () => {
+      const user = userEvent.setup();
+
+      renderWithProvider(
+        <TestDrawer>
+          <Drawer.Heading as="div" dataTestId="heading">
+            <img src="logo.png" alt="" />
+            <h3>Filter calendar</h3>
+          </Drawer.Heading>
+        </TestDrawer>
+      );
+
+      const drawer = await openDrawer(user);
+
+      expect(screen.getByTestId('heading').tagName).toBe('DIV');
+      expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument();
+      expect(drawer).toHaveAccessibleName('Filter calendar');
+    });
+
     it('falls back to aria-label when there is no heading', async () => {
       const user = userEvent.setup();
 

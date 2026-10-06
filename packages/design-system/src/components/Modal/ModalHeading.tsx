@@ -4,10 +4,11 @@ import { useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './Modal.module.scss';
 import { useModalContext } from './ModalContext';
-import type { ModalSectionBaseProps } from './Modal.types';
+import type { ModalHeadingBaseProps } from './Modal.types';
 
-/** Title. Renders an `h2` and names the panel via `aria-labelledby`. */
-export const ModalHeading: React.FC<ModalSectionBaseProps> = ({
+/** Title. Renders an `h2` by default and names the panel via `aria-labelledby`. */
+export const ModalHeading: React.FC<ModalHeadingBaseProps> = ({
+  as: Component = 'h2',
   children,
   className,
   dataTestId,
@@ -22,13 +23,13 @@ export const ModalHeading: React.FC<ModalSectionBaseProps> = ({
   }, [setHasHeading]);
 
   return (
-    <h2
+    <Component
       id={headingId}
       className={classNames('typography-utility-section-h3', styles.heading, className)}
       data-testid={dataTestId}
     >
       {children}
-    </h2>
+    </Component>
   );
 };
 

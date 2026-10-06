@@ -134,7 +134,7 @@ This means each component is exported alongside its main Props type. For example
 - `NewsHeading` and `NewsHeadingProps`
 - `Icon` and `IconProps`
 
-Compound components are exported as a namespace with a single Props type for their root. For example, `Drawer` exposes `Drawer.Root`, `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`, and `DrawerProps` types `Drawer.Root` (web only):
+Compound components are exported as a namespace, with a Props type for their root and for any part that adds props of its own. For example, `Drawer` exposes `Drawer.Root`, `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`; `DrawerProps` types `Drawer.Root` and `DrawerHeadingProps` types `Drawer.Heading` (web only):
 
 ```tsx
 import { Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/web';
