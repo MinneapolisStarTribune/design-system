@@ -1,5 +1,17 @@
 # @minneapolisstartribune/design-system
 
+## 2.3.0
+
+### Minor Changes
+
+- [#439](https://github.com/MinneapolisStarTribune/design-system/pull/439) [`67c7cc8`](https://github.com/MinneapolisStarTribune/design-system/commit/67c7cc8a4eac7d1a77193e3fe1260a8f37e2c56a) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `Drawer` (web): a modal panel attached to the side of the screen. Compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`. Supports a responsive `position`, `role="alertdialog"`, describing the panel by its body (`describeWithBody`), a `closeLabel` for the close button, and an `onClose(reason)` that reports `'closeButton' | 'escapeKey' | 'overlayPress'`.
+  `Drawer.Heading` renders an `h2` by default; pass `as` (`'h1' | 'h2' | 'h3' | 'h4' | 'div'`) to change the heading level, or `div` for content that isn't a single heading. Its props are exported as `DrawerHeadingProps`.
+
+- [#441](https://github.com/MinneapolisStarTribune/design-system/pull/441) [`d8e010d`](https://github.com/MinneapolisStarTribune/design-system/commit/d8e010de770b3bdba368f4ebf9450ab6b2f3778e) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `Dialog` (web): a modal window that's centered on larger screens and rises from the bottom as a sheet on phones.
+  Also adds `error` color option for Button (web and native) in order to allow for delete/destructive confirmation buttons, a common pattern on confirmation dialogs.
+  `Dialog.Actions` stacks its actions full width on phones by default; pass `stackOnMobile={false}` to keep them side by side for longer content like forms.
+  `Dialog.Title` renders an `h2` by default; pass `as` (`'h1' | 'h2' | 'h3' | 'h4' | 'div'`) to change the heading level, or `div` for content that isn't a single heading, like a logo plus a title. Its props are exported as `DialogTitleProps`.
+
 ## 2.2.0
 
 ### Minor Changes
