@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as TriggerablePopover from './TriggerablePopover';
 import { Button } from '@/components/Button/web/Button';
@@ -71,44 +71,17 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/** Without a `triggerId`, this behaves like `Popover`. See Popover's stories for all variants. */
-export const Configurable: Story = {
-  args: {
-    trigger: <Button>Open</Button>,
-    placement: 'bottom',
-    children: (
-      <>
-        <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
-        <TriggerablePopover.Description>
-          This is a popover. Use the Controls panel to change the pointer position.
-        </TriggerablePopover.Description>
-      </>
-    ),
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: `
-<TriggerablePopover.Root placement="bottom" trigger={<Button>Open</Button>}>
-  <TriggerablePopover.Heading>Title</TriggerablePopover.Heading>
+type ExternalTriggerDemoProps = Omit<ComponentProps<typeof TriggerablePopover.Root>, 'children'>;
 
-  <TriggerablePopover.Description>
-    This is a popover. Use the Controls panel to change the pointer position.
-  </TriggerablePopover.Description>
-</TriggerablePopover.Root>
-        `,
-      },
-    },
-  },
-};
+const callExternal = (name: 'openTooltip' | 'closeTooltip', id: string) =>
+  (window as unknown as Record<string, (id: string) => void>)[name](id);
 
-const ExternalTriggerDemo = () => {
+const ExternalTriggerDemo = ({ triggerId, ...props }: ExternalTriggerDemoProps) => {
   const [log, setLog] = useState<string[]>([]);
-  const triggerId = 'storybook-demo-tooltip';
 
   useEffect(() => {
-    // Simulates the vendor's iframe finding the injection slot and dropping its own markup in —
-    // exactly what a real Piano Composer template does, minus the sandboxed iframe itself.
+    if (!triggerId) return;
+    // Simulates a vendor script (e.g. Piano Composer) finding the injection slot and adding its own markup.
     const observer = new MutationObserver(() => {
       const slot = document.getElementById(`${triggerId}-injection-slot`);
       if (slot && slot.childNodes.length === 0) {
@@ -122,16 +95,12 @@ const ExternalTriggerDemo = () => {
     });
     observer.observe(document.body, { childList: true, subtree: true });
     return () => observer.disconnect();
-  }, []);
+  }, [triggerId]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', gap: 8 }}>
-        <TriggerablePopover.Root
-          triggerId={triggerId}
-          enableInjectionSlot
-          trigger={<Button>Open (click)</Button>}
-        >
+        <TriggerablePopover.Root {...props} triggerId={triggerId}>
           <TriggerablePopover.Heading>App content</TriggerablePopover.Heading>
           <TriggerablePopover.Body>
             <UtilityBody>Shown when opened by clicking the trigger.</UtilityBody>
@@ -140,9 +109,11 @@ const ExternalTriggerDemo = () => {
 
         <Button
           variant="outlined"
+          isDisabled={!triggerId}
           onClick={() => {
+            if (!triggerId) return;
             setLog((l) => [...l, 'window.openTooltip called']);
-            (window as unknown as Record<string, (id: string) => void>).openTooltip(triggerId);
+            callExternal('openTooltip', triggerId);
           }}
         >
           Simulate external trigger
@@ -150,9 +121,11 @@ const ExternalTriggerDemo = () => {
 
         <Button
           variant="outlined"
+          isDisabled={!triggerId}
           onClick={() => {
+            if (!triggerId) return;
             setLog((l) => [...l, 'window.closeTooltip called']);
-            (window as unknown as Record<string, (id: string) => void>).closeTooltip(triggerId);
+            callExternal('closeTooltip', triggerId);
           }}
         >
           Simulate external close
@@ -167,17 +140,45 @@ const ExternalTriggerDemo = () => {
 };
 
 /**
- * Demonstrates the mechanism a vendor integration (e.g. Piano) relies on: the same popover
- * shows the app's own content when opened by a click, but defers to whatever's injected into
- * the slot when opened externally via `window.openTooltip`/`window.closeTooltip`.
+ * Click the trigger to show the app's own content, or use the simulate buttons to open it the way a
+ * vendor integration (e.g. Piano) does via `window.openTooltip`/`window.closeTooltip`. When opened
+ * externally, the popover shows whatever is injected into the slot instead of its children.
  */
-export const AllVariants: Story = {
+export const Configurable: Story = {
   args: {
-    trigger: <Button />,
+    trigger: <Button>Open (click)</Button>,
+    placement: 'bottom',
+    triggerId: 'storybook-demo-tooltip',
+    enableInjectionSlot: true,
     children: null,
   },
-  render: () => <ExternalTriggerDemo />,
+  render: ({ children: _children, ...args }) => <ExternalTriggerDemo {...args} />,
   parameters: {
-    controls: { disable: true },
+    docs: {
+      source: {
+        // Built from args so the snippet follows the Controls panel.
+        transform: (_code: string, { args }: { args: Story['args'] }) => {
+          const props = [
+            args?.placement && `placement="${args.placement}"`,
+            args?.isDisabled && 'isDisabled',
+            args?.modal && 'modal',
+            args?.triggerId && `triggerId="${args.triggerId}"`,
+            args?.enableInjectionSlot && 'enableInjectionSlot',
+            'trigger={<Button>Open (click)</Button>}',
+          ].filter(Boolean);
+
+          return `<TriggerablePopover.Root ${props.join(' ')}>
+  <TriggerablePopover.Heading>App content</TriggerablePopover.Heading>
+  <TriggerablePopover.Body>
+    <UtilityBody>Shown when opened by clicking the trigger.</UtilityBody>
+  </TriggerablePopover.Body>
+</TriggerablePopover.Root>
+
+// Elsewhere, e.g. a vendor script:
+window.openTooltip('${args?.triggerId ?? ''}');
+window.closeTooltip('${args?.triggerId ?? ''}');`;
+        },
+      },
+    },
   },
 };
