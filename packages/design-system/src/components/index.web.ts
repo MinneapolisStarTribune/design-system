@@ -115,9 +115,8 @@ export {
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
-export { Popover } from './Popover/Popover';
+export * as Popover from './Popover/Popover';
 export type { PopoverProps } from './Popover/Popover.types';
-export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
 export {
@@ -129,8 +128,6 @@ export {
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
-export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
-export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,
