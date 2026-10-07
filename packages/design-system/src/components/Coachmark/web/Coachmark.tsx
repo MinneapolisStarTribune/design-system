@@ -95,6 +95,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   portalRoot: portalRootProp,
   zIndex = 9999,
   analytics: analyticsOverride,
+  trackReferenceMovement = false,
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const coachmarkId = useId();
@@ -175,6 +176,21 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     [onOpenChange]
   );
 
+  // Event-based (the autoUpdate default) recomputes position on scroll/resize events, which is
+  // plenty for a reference that's otherwise stationary (e.g. a sticky header icon) but can
+  // visibly lag behind one that's continuously moving (e.g. a table row scrolling with the page)
+  // -- browsers can throttle/coalesce scroll event dispatch during a fast or flung scroll.
+  // animationFrame polls on every frame instead, trading a continuous rAF loop while open for
+  // position that never falls behind.
+  const whileElementsMounted = useCallback(
+    (
+      referenceEl: Parameters<typeof autoUpdate>[0],
+      floatingEl: Parameters<typeof autoUpdate>[1],
+      update: Parameters<typeof autoUpdate>[2]
+    ) => autoUpdate(referenceEl, floatingEl, update, { animationFrame: trackReferenceMovement }),
+    [trackReferenceMovement]
+  );
+
   const { refs, context, floatingStyles } = useFloating({
     // 'fixed' (not 'absolute') avoids a jerky trail behind a sticky/fixed trigger: 'absolute'
     // positions in document coordinates, which keep changing under a stuck trigger and so need
@@ -183,7 +199,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     placement: PLACEMENT[position],
     open,
     onOpenChange: handleOpenChange,
-    whileElementsMounted: autoUpdate,
+    whileElementsMounted,
     middleware,
   });
 

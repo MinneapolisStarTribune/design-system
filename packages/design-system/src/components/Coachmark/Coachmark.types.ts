@@ -97,6 +97,16 @@ export type CoachmarkProps = {
   /** Portal target for the floating panel. Defaults to document.body. */
   portalRoot?: HTMLElement | null;
 
+  /**
+   * Repositions on every animation frame instead of only on scroll/resize events. Defaults to
+   * false. Turn on when `children` scrolls within the page (e.g. a table row) rather than staying
+   * fixed on screen (e.g. a sticky header icon) -- event-based repositioning has to recompute and
+   * reapply position via JS on each scroll event, which can visibly lag behind a reference that's
+   * continuously moving, where per-frame polling does not. Costs a continuous requestAnimationFrame
+   * loop while open, so leave off for a reference that doesn't move.
+   */
+  trackReferenceMovement?: boolean;
+
   /** z-index override for the floating panel. */
   zIndex?: number;
 
