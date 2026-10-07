@@ -698,6 +698,29 @@ describe('Coachmark', () => {
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
   });
 
+  it('exposes the actual resolved side as data-placement, not just the requested position', async () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        position="top-center"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    // jsdom has no real layout, so flip() never actually has a reason to override this -- this
+    // only confirms the attribute mirrors whatever floating-ui resolved `position` to, which a
+    // consumer's CSS can react to (e.g. varsity-web's sub-nav z-index) even when that differs
+    // from the requested position because there wasn't room.
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', 'top')
+    );
+  });
+
   it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
     renderWithProvider(
       <Coachmark

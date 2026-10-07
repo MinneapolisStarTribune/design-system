@@ -331,6 +331,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               style={{ ...floatingStyles, zIndex }}
               className={styles.wrapper}
               id={`coachmark-${coachmarkId}`}
+              // The requested `position` prop (e.g. "bottom-center") is only a starting point --
+              // flip() may resolve it to the opposite side if there isn't room. Exposing the
+              // *actual* resolved side lets a consuming app's CSS react to which one actually
+              // happened (e.g. varsity-web renders this under its sticky sub-nav when the card
+              // opens downward, but above it when flip reverses that).
+              data-placement={context.placement}
               aria-labelledby={titleId}
               aria-describedby={descriptionId}
               {...getFloatingProps()}
