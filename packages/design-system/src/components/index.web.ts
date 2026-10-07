@@ -7,6 +7,7 @@ export type {
 } from './Coachmark/Coachmark.types';
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
+export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
 export * as Drawer from './Drawer/Drawer';
 export {
   type DrawerCloseReason,
