@@ -38,6 +38,11 @@ Imports and section names do not change: use `Popover.Heading`, `Popover.Descrip
 `PopoverPortalRootProvider` and `PopoverPortalRootContext` are removed. Pass `portalRoot` to
 each `Popover` that needs a custom container, as with `Drawer`.
 
+### Removed APIs
+
+`TriggerablePopover`, `useExternalTrigger`, `installExternalTriggerGlobals`, and their types
+are removed. No known consumer uses them.
+
 ## Consumer impact
 
 - **Coaches Portal** (`apps/web`, 2.1.0): update both `Sidebar.tsx` popovers to
