@@ -5,8 +5,9 @@ import type { KeyboardEvent } from 'react';
 import classNames from 'classnames';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { ChevronLeftIcon, ChevronRightIcon } from '@/icons';
-import styles from './StaticDatePicker.module.scss';
-import type { CalendarDate, StaticDatePickerProps } from '../StaticDatePicker.types';
+import styles from './DatePickerCalendar.module.scss';
+import type { BaseProps } from '@/types/globalTypes';
+import type { CalendarDate, DatePickerCalendarOptions } from '../DatePicker.types';
 import {
   addDays,
   addMonths,
@@ -48,27 +49,31 @@ const isInMonth = (date: CalendarDate, yearMonth: YearMonth) =>
 
 const formatMonth = ({ year, month }: YearMonth) => `${MONTH_NAMES[month]} ${year}`;
 
+export interface DatePickerCalendarProps extends DatePickerCalendarOptions, BaseProps {
+  value: CalendarDate | null;
+  onChange: (value: CalendarDate) => void;
+  label: string;
+  /** Focus the selected day (or today) on mount, e.g. when opened in a popover. */
+  autoFocus?: boolean;
+}
+
 /**
- * Month-view calendar that's always shown, with no text input or popover. Values are timezone-free
- * `YYYY-MM-DD` strings.
+ * Month-view calendar grid. Internal: `DatePicker` and `FormControl.DatePicker` own the value and
+ * any popover around it.
  */
-export const StaticDatePicker: React.FC<StaticDatePickerProps> = ({
-  value: valueProp,
-  defaultValue = null,
+export const DatePickerCalendar: React.FC<DatePickerCalendarProps> = ({
+  value,
   onChange,
+  autoFocus = false,
   min,
   max,
   minMessage,
   maxMessage,
-  label = 'Choose a date',
+  label,
   className,
   style,
-  dataTestId = 'static-date-picker',
+  dataTestId = 'date-picker',
 }) => {
-  const isControlled = valueProp !== undefined;
-  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
-  const value = isControlled ? valueProp : uncontrolledValue;
-
   // `YYYY-MM-DD` strings sort chronologically, so plain comparison works.
   const clampDate = (date: CalendarDate) =>
     min && date < min ? min : max && date > max ? max : date;
@@ -90,11 +95,15 @@ export const StaticDatePicker: React.FC<StaticDatePickerProps> = ({
   }
 
   const gridRef = useRef<HTMLTableElement>(null);
-  const shouldMoveFocus = useRef(false);
+  // Starts true with `autoFocus`, so the effect's first run focuses the tab stop on mount.
+  const shouldMoveFocus = useRef(autoFocus);
   useEffect(() => {
     if (!shouldMoveFocus.current) return;
     shouldMoveFocus.current = false;
-    gridRef.current?.querySelector<HTMLButtonElement>(`[data-date="${focusedDate}"]`)?.focus();
+    // No scrolling: on mount, a popover may not be positioned yet.
+    gridRef.current
+      ?.querySelector<HTMLButtonElement>(`[data-date="${focusedDate}"]`)
+      ?.focus({ preventScroll: true });
   }, [focusedDate]);
 
   const headingId = useId();
@@ -109,8 +118,7 @@ export const StaticDatePicker: React.FC<StaticDatePickerProps> = ({
 
   const select = (date: CalendarDate) => {
     setFocusedDate(date);
-    if (!isControlled) setUncontrolledValue(date);
-    onChange?.(date);
+    onChange(date);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTableElement>) => {

@@ -1,0 +1,63 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as DatePickerStories from './DatePicker.stories';
+
+<Meta of={DatePickerStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# FormControl.DatePicker
+
+A date field: a [TextInput](/docs/forms-formcontrol-textinput--docs) for typing a date, with a
+calendar button that opens the [DatePicker](/docs/forms-datepicker--docs) calendar in a popover.
+Picking a day fills the field and closes the popover.
+
+For a calendar that's always shown, or one opened from your own trigger (e.g. a Button), use
+[DatePicker](/docs/forms-datepicker--docs).
+
+**Web only.**
+
+## Usage
+
+```tsx
+function GameDateField() {
+  const [date, setDate] = useState<CalendarDate | null>(null);
+
+  return (
+    <FormGroup>
+      <FormGroup.Label>Game date</FormGroup.Label>
+      <FormControl.DatePicker value={date} onChange={setDate} name="gameDate" />
+    </FormGroup>
+  );
+}
+```
+
+- **Controlled:** pass `value` (`null` for empty) and `onChange`. **Uncontrolled:** pass
+  `defaultValue`
+- Values are timezone-free `YYYY-MM-DD` strings, like `DatePicker`'s
+- `onChange` fires when a day is picked, or when typed text is committed (on blur or Enter).
+  Clearing the field fires it with `null`
+- Typing accepts `M/D/YYYY` (with `/`, `-` or `.`), `YYYY-MM-DD` and `November 30, 2026` (or
+  `Nov 30 2026`). Once committed, the field shows the date as `November 30, 2026`. Text that isn't a real date (e.g. `02/30/2026`) shows the error state and doesn't
+  call `onChange`
+- `min`, `max`, `minMessage` and `maxMessage` pass through to the calendar. Typed dates outside
+  `min`/`max` show the error state
+- `name` submits the value with a form as `YYYY-MM-DD`
+- `size`, `isDisabled`, `isError` and `placeholderText` work as on TextInput
+
+## Accessibility
+
+- Inside `FormGroup`, the field is labeled by `FormGroup.Label`. Outside it, pass `aria-label` or
+  `aria-labelledby`
+- The calendar button is announced as "Choose date" (with the selected date, if any) and opens a
+  dialog with focus on the selected day (or today). Focus stays in the dialog until it closes:
+  picking a day, Escape (a single press, even while an arrow's tooltip is showing) or clicking
+  outside, after which focus returns to the button
+- In the calendar, see [DatePicker](/docs/forms-datepicker--docs) for keyboard support
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />

@@ -64,14 +64,7 @@
   background: transparent;
   color: var(--color-text-on-light-tertiary);
   cursor: pointer;
-  /* TriggerablePopover forces `display: inline-block` inline, so center the icon without relying
-   * on flex, and keep it off the text baseline. */
   line-height: 0;
-
-  svg {
-    display: block;
-    margin: auto;
-  }
 
   &:hover:not(:disabled) {
     color: var(--color-text-on-light-secondary);
@@ -87,14 +80,4 @@
     cursor: not-allowed;
     color: var(--color-text-state-disabled-on-light);
   }
-}
-
-/*
- * Popover's container is sized and padded for text (240–320px wide, no right padding). Figma sizes
- * the calendar to its 224px grid with 12px padding all round.
- */
-.popoverContainer {
-  min-width: 0;
-  max-width: none;
-  padding: var(--spacing-12);
 }

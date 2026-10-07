@@ -2,16 +2,8 @@
  * Popover's container is sized and padded for text (240–320px wide, no right padding). Figma sizes
  * the calendar to its 224px grid with 12px padding all round.
  */
-.popoverContainer {
+.container {
   min-width: 0;
   max-width: none;
   padding: var(--spacing-12);
-}
-
-/*
- * TriggerablePopover sets `display: inline-block` inline on its trigger, which stacks a Button's
- * icon above its label. Restore Button's flex layout.
- */
-.trigger {
-  display: inline-flex !important;
 }

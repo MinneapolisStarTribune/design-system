@@ -1,4 +1,4 @@
-import type { CalendarDate } from './StaticDatePicker.types';
+import type { CalendarDate } from './DatePicker.types';
 
 /*
  * Calendar math on plain year/month/day numbers. `Date` is only used through its UTC methods, which

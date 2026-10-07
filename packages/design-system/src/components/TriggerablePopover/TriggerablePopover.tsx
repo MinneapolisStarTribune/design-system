@@ -45,6 +45,10 @@ const GAP = 4;
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
+// A trigger element keeps its own `display` (e.g. a Button's inline-flex, which inline-block would
+// break by stacking its icon above its label); only the fallback wrapper span needs inline-block.
+const DISABLED_ELEMENT_TRIGGER_STYLE = { cursor: 'default' } as const;
+const ENABLED_ELEMENT_TRIGGER_STYLE = { cursor: 'pointer' } as const;
 
 const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   trigger,
@@ -54,6 +58,7 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   placement = 'bottom',
   isDisabled,
   modal = false,
+  initialFocus,
   wrapperClassName,
   containerClassName,
   contentClassName,
@@ -130,6 +135,9 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
   const mergedRef = useMergeRefs([refs.setReference, childElement?.ref ?? null]);
 
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
+  const elementTriggerStyle = isDisabled
+    ? DISABLED_ELEMENT_TRIGGER_STYLE
+    : ENABLED_ELEMENT_TRIGGER_STYLE;
 
   const triggerElement = childElement ? (
     cloneElement(
@@ -138,8 +146,8 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
         ...childElement.props,
         ref: mergedRef,
         style: childElement.props.style
-          ? { ...childElement.props.style, ...triggerStyle }
-          : triggerStyle,
+          ? { ...childElement.props.style, ...elementTriggerStyle }
+          : elementTriggerStyle,
       })
     )
   ) : (
@@ -162,7 +170,12 @@ const TriggerablePopoverRoot: React.FC<TriggerablePopoverProps> = ({
         {triggerElement}
         {(open || forceMount) && (
           <FloatingPortal root={resolvedPortalRoot}>
-            <FloatingFocusManager context={context} modal={modal} disabled={!open}>
+            <FloatingFocusManager
+              context={context}
+              modal={modal}
+              disabled={!open}
+              initialFocus={initialFocus}
+            >
               <div
                 // eslint-disable-next-line react-hooks/refs
                 ref={refs.setFloating}

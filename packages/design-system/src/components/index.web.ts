@@ -8,7 +8,7 @@ export type {
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
-export { DATE_PICKER_SIZES, type DatePickerProps } from './DatePicker/DatePicker.types';
+export type { CalendarDate, DatePickerProps } from './DatePicker/DatePicker.types';
 export { DatePicker } from './DatePicker/web/DatePicker';
 export * as Dialog from './Dialog/Dialog';
 export {
@@ -63,6 +63,10 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
+export {
+  FORM_CONTROL_DATE_PICKER_SIZES,
+  type FormControlDatePickerProps,
+} from './FormControl/DatePicker/DatePicker.types';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export type {
   MultiSelectOption,
@@ -128,11 +132,6 @@ export {
   type SkeletonProps,
   type SkeletonVariant,
 } from './Skeleton/web/Skeleton';
-export type {
-  CalendarDate,
-  StaticDatePickerProps,
-} from './StaticDatePicker/StaticDatePicker.types';
-export { StaticDatePicker } from './StaticDatePicker/web/StaticDatePicker';
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';

@@ -11,6 +11,7 @@ import { RadioGroup } from './RadioGroup/web/RadioGroup';
 import { Select } from './Select/web/Select';
 import { MultiSelect } from './MultiSelect/web/MultiSelect';
 import { Switch } from './Switch/web/Switch';
+import { FormControlDatePicker } from './DatePicker/web/DatePicker';
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
@@ -38,6 +39,8 @@ export const FormControl: React.FC<FormControlProps> & {
   MultiSelect: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Switch: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  DatePicker: React.ComponentType<any>;
   // Add any new form control subcomponents here
 } = () => {
   if (typeof console !== 'undefined' && console.error) {
@@ -59,4 +62,5 @@ FormControl.RadioGroup = RadioGroup;
 FormControl.Select = Select;
 FormControl.MultiSelect = MultiSelect;
 FormControl.Switch = Switch;
+FormControl.DatePicker = FormControlDatePicker;
 // Add any new form control subcomponents here

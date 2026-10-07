@@ -1,3 +1,4 @@
+import type React from 'react';
 import { HTMLAttributes, ReactNode } from 'react';
 import type { Position } from '@/types';
 import type { UseExternalTriggerOptions } from '@/hooks/useExternalTrigger';
@@ -28,6 +29,11 @@ export type TriggerablePopoverProps = {
   isDisabled?: boolean;
   /** Whether to trap focus inside the popover (modal behavior). Default: `false`. */
   modal?: boolean;
+  /**
+   * What to focus when the popover opens: the index of a tabbable element inside it, or a ref.
+   * Pass `-1` when the content focuses something itself. Default: `0` (the first tabbable element).
+   */
+  initialFocus?: number | React.MutableRefObject<HTMLElement | null>;
   wrapperClassName?: string;
   containerClassName?: string;
   contentClassName?: string;

@@ -3,8 +3,8 @@
  * selected day reuses the brand filled Button tokens, so it follows the active brand and color scheme.
  */
 .root {
-  --static-date-picker-cell-size: 32px;
-  --static-date-picker-row-gap: var(--spacing-8);
+  --date-picker-cell-size: 32px;
+  --date-picker-row-gap: var(--spacing-8);
 
   display: inline-flex;
   flex-direction: column;
@@ -65,8 +65,8 @@
 /* Rows sit 8px apart (including header to first week) with no extra space outside the grid. */
 .grid {
   border-collapse: separate;
-  border-spacing: 0 var(--static-date-picker-row-gap);
-  margin: calc(-1 * var(--static-date-picker-row-gap)) 0;
+  border-spacing: 0 var(--date-picker-row-gap);
+  margin: calc(-1 * var(--date-picker-row-gap)) 0;
 }
 
 .cell {
@@ -75,8 +75,8 @@
 }
 
 .weekday {
-  width: var(--static-date-picker-cell-size);
-  height: var(--static-date-picker-cell-size);
+  width: var(--date-picker-cell-size);
+  height: var(--date-picker-cell-size);
   padding: 0;
 
   /* Beat global `[class*="typography-"] { color: primary }` */
@@ -89,8 +89,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--static-date-picker-cell-size);
-  height: var(--static-date-picker-cell-size);
+  width: var(--date-picker-cell-size);
+  height: var(--date-picker-cell-size);
   box-sizing: border-box;
   margin: 0;
   padding: 0;
