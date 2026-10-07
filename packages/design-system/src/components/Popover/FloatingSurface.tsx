@@ -114,6 +114,7 @@ export const FloatingSurface = ({
   const childElement = isValidElement<TriggerElementProps>(trigger) ? trigger : null;
   const mergedRef = useMergeRefs([setReference, childElement?.props.ref ?? null]);
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
+
   // Add ARIA attributes to a single trigger element. Otherwise, use a button-role wrapper.
   const triggerElement = childElement ? (
     cloneElement(
@@ -136,6 +137,7 @@ export const FloatingSurface = ({
       {trigger}
     </span>
   );
+
   const floatingElement = (open || keepMounted) && (
     <FloatingPortal root={resolvedPortalRoot}>
       <FloatingFocusManager context={context} modal={modal} disabled={!open}>
@@ -166,6 +168,7 @@ export const FloatingSurface = ({
       </FloatingFocusManager>
     </FloatingPortal>
   );
+
   return (
     <>
       {triggerElement}
