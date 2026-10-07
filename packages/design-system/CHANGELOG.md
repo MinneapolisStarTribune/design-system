@@ -1,5 +1,19 @@
 # @minneapolisstartribune/design-system
 
+## 2.4.0
+
+### Minor Changes
+
+- [#447](https://github.com/MinneapolisStarTribune/design-system/pull/447) [`49866ab`](https://github.com/MinneapolisStarTribune/design-system/commit/49866ab851d33592002272258e9227a3d67a6f7b) Thanks [@willogura](https://github.com/willogura)! - Export `useCoachmarkPortalRoot` (web) alongside `Coachmark`: creates/reuses a dedicated, viewport-pinned DOM node to use as `Coachmark`'s `portalRoot` prop, so a consuming app's CSS can target one particular coachmark instance (e.g. to give it a different z-index than the rest) via that root's id. Also fixes the `flip`/`shift` boundary issue a bare, zero-height portal node would otherwise cause.
+
+  Moved here from an app that had its own copy of this logic, since any consumer of `Coachmark` with a custom `portalRoot` needs the same safeguards.
+
+### Patch Changes
+
+- [#447](https://github.com/MinneapolisStarTribune/design-system/pull/447) [`6092246`](https://github.com/MinneapolisStarTribune/design-system/commit/6092246500e014b746508e8222dba60e8e606984) Thanks [@willogura](https://github.com/willogura)! - Fix `Coachmark` sitting dead-center instead of hugging the viewport edge near a corner-anchored trigger (e.g. a `top-right`/`bottom-right` coachmark on a nav icon), and its arrow sliding into the card's own rounded corner instead of staying inset from it.
+
+  `shift()` ran after the custom `alignmentShift` middleware and re-clamped the card's position using its own (larger) edge padding, silently overriding whatever edge-hugging position `alignmentShift` had computed. Both now share the same smaller padding. The `arrow()` middleware also now keeps a minimum distance from the card's edge instead of being allowed to slide flush into it.
+
 ## 2.3.0
 
 ### Minor Changes
