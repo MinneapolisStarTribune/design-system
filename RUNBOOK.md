@@ -3,12 +3,12 @@ title: "design-system runbook"
 service: design-system
 repo: MinneapolisStarTribune/design-system
 criticality: P2
-team: UX-designers
-alert-channel: TBD
+team: Loons
+alert-channel: "TBD: which channel the release-notify.yml Slack webhook (SLACK_SHARED_UI_LIBRARY_WEBHOOK) posts to"
 aws-account: N/A
 region: N/A
 deploy-target: "GitHub Packages (@minneapolisstartribune/design-system); Storybook on Vercel"
-owner: UX-designers
+owner: Loons
 status: active
 last-reviewed: 2026-09-29
 ---
@@ -24,8 +24,8 @@ Day-to-day release mechanics: [docs/release-runbook.md](docs/release-runbook.md)
 
 - **What it does:** Publishes `@minneapolisstartribune/design-system` (React web + React Native components and tokens) to GitHub Packages, and the released Storybook to Vercel.
 - **Criticality:** P2. A bad publish breaks consumer installs and builds. Already-deployed apps keep running until they install the bad version.
-- **Team:** UX-designers
-- **Alert channel:** TBD. Until that channel exists, post consumer impact in `#product-engineers`.
+- **Team:** Loons (engineering owner per SW-214). UX designers are consulted on component and token changes; they are not the on-call escalation.
+- **Alert channel:** TBD. `release-notify.yml` posts release announcements through the `SLACK_SHARED_UI_LIBRARY_WEBHOOK` secret (Engineering Changelog app); the workflow does not name the target channel. Until an incident channel is confirmed, post consumer impact in `#product-engineers`.
 - **Links:** [Repo](https://github.com/MinneapolisStarTribune/design-system) · [Release runbook](docs/release-runbook.md) · [Releases](https://github.com/MinneapolisStarTribune/design-system/releases) · [Production Storybook](https://design-system.startribune.com) · [Stage Storybook](https://stage-design-system.startribune.com) · [Vercel project](https://vercel.com/startribune-team-one/design-system)
 
 ### Access prerequisites
@@ -37,6 +37,7 @@ Publish and Storybook deploys run in GitHub Actions. Do not copy tokens into thi
 - **ZPA:** N/A
 - **SSM tunnel:** N/A
 - **Keeper:** N/A
+- **GitHub Packages (consumers):** installing the package needs a PAT with `read:packages`; setup is in [accessing-private-resources.md](https://github.com/MinneapolisStarTribune/engineering-handbook/blob/main/on-call-support/accessing-private-resources.md).
 - **GitHub:** write access to merge to `main`. Publish auth is the `GH_PUBLISH_TOKEN` Actions secret. The version PR and tags are pushed by the bypass GitHub App (`GH_BYPASS_APP_ID` / `GH_BYPASS_APP_SECRET`).
 - **Vercel:** team `startribune-team-one`, project `design-system`. Production Storybook is not a git deploy of `main`.
 
@@ -85,7 +86,7 @@ Handbook: [Changesets flow](https://github.com/MinneapolisStarTribune/engineerin
      Bad publish: @minneapolisstartribune/design-system@<bad>
      Last good: @minneapolisstartribune/design-system@<good>
      Pin the exact version (no ^ or ~) and reinstall:
-       yarn add @minneapolisstartribune/design-system@<good>
+       yarn add --exact @minneapolisstartribune/design-system@<good>
      Do not upgrade until the patch release is announced.
      ```
 
@@ -104,63 +105,28 @@ This library has no `monitoring-and-observability` monitor manifest and no produ
 
 ## 6. Common failure modes
 
-Generalized from [docs/release-runbook.md](docs/release-runbook.md#troubleshooting). Full command detail for the rare older-version hotfix stays in that doc.
+Only the failures an on-call responder acts on are here. Release-mechanics recovery (tag or GitHub Release missing, cancelled publish run, Slack post missing, Storybook deploy or version dropdown, version PR conflict, wrong changeset) is in [docs/release-runbook.md → Troubleshooting](docs/release-runbook.md#troubleshooting).
 
-### Publish failed before the registry
+### Bad version published
 
-- **Symptoms:** `release.yml` is red. The version is not on GitHub Packages and there is no new tag.
-- **Diagnosis:** open the failed job. Typical stops are `release:verify`, the build, or npm auth (`GH_PUBLISH_TOKEN`).
-- **Mitigation:** fix the cause, then re-run [Release](https://github.com/MinneapolisStarTribune/design-system/actions/workflows/release.yml) via workflow dispatch on `main`. `changeset publish` skips versions already on the registry, so a re-run will not double-publish.
-- **Escalate if:** two re-runs fail, or the failure is expired publish credentials.
+- **Symptoms:** consumer installs, typechecks, or builds fail after a bump, or a consumer deployed the new version and the UI is broken. The version is on GitHub Packages.
+- **Diagnosis:** compare the consumer's installed version with [Releases](https://github.com/MinneapolisStarTribune/design-system/releases). Unpublish is not available; the version PR merge was the last gate.
+- **Mitigation:** post the consumer pin from §4 first (`yarn add --exact @minneapolisstartribune/design-system@<good>`), then fix forward with a `patch` changeset and merge the new **chore: version packages** PR. Do not republish `<bad>`.
+- **Escalate if:** a consumer has already shipped the bad version to production (P0 path in §3).
 
-### Publish succeeded but the tag or GitHub Release is missing
+### Breaking change shipped as a minor or patch
 
-- **Symptoms:** the version is on the registry; the tag and/or Release is absent. Slack will not fire without a Release.
-- **Diagnosis:** compare the registry version with [tags](https://github.com/MinneapolisStarTribune/design-system/tags) and [Releases](https://github.com/MinneapolisStarTribune/design-system/releases). A workflow re-run will not recreate them: Changesets sees the version already published and exits green.
-- **Mitigation:** from a checkout of that `main` commit, `yarn changeset tag && git push --tags`. Then `gh release create '@minneapolisstartribune/design-system@X.Y.Z'` using that version's `CHANGELOG.md` entry as the notes.
-- **Escalate if:** the tag push is rejected by rulesets.
+- **Symptoms:** consumers on `^` or `~` ranges pick the version up on their next install and fail to typecheck or render. Exact pins are unaffected.
+- **Diagnosis:** read the Release changelog and diff for removed or renamed exports, prop changes, or token renames that should have been a `major`.
+- **Mitigation:** same pin and fix-forward path as above. The patch restores the old API (preferred); if the break is intentional, re-ship it as a `major` with a migration note in the changeset. Say in the pin thread which range shapes are affected.
+- **Escalate if:** more than one consumer is already broken, or the fix cannot be a straight restore of the old API.
 
-### Version PR merged, but nothing was published and no tag exists
+### Publish workflow failed
 
-- **Symptoms:** **chore: version packages** is merged; registry and tags are unchanged.
-- **Diagnosis:** check whether that `release.yml` run was cancelled or never started (`queue: max`). If newer changesets landed on `main` after it, a dispatch re-run only updates the version PR.
-- **Mitigation:** if nothing package-changing landed since, dispatch `release.yml`. Otherwise let the next release absorb it, or from that merge commit run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as in the previous scenario.
-- **Escalate if:** `yarn release` would publish a commit that is not the one you checked out.
-
-### Release announcement failed
-
-- **Symptoms:** the GitHub Release exists; the shared UI library Slack post did not.
-- **Diagnosis:** open the `release-notify.yml` run for that Release.
-- **Mitigation:** dispatch `release-notify.yml` with the release tag (`@minneapolisstartribune/design-system@X.Y.Z`). Do not re-run the old run: it uses the workflow file from that run, so a fix to the workflow is not picked up. It only posts to Slack.
-- **Escalate if:** the webhook secret is missing or revoked.
-
-### Storybook production deploy failed, or a version is missing from the dropdown
-
-- **Symptoms:** the package published, but [design-system.startribune.com](https://design-system.startribune.com) is unchanged or the toolbar dropdown lacks the version.
-- **Diagnosis:** open `storybook-versioned-deploy.yml` for that Release. Production Storybook does not deploy on merge to `main`.
-- **Mitigation:** dispatch `storybook-versioned-deploy.yml` with the release tag (`@minneapolisstartribune/design-system@X.Y.Z` or `vX.Y.Z`). The dropdown updates on the following `sync-versions-from-vercel.yml` run; dispatch that workflow if you are not waiting for the schedule.
-- **Escalate if:** Vercel production still serves the previous Storybook after a green versioned deploy.
-
-### Version PR has a conflict
-
-- **Symptoms:** **chore: version packages** cannot merge.
-- **Diagnosis:** the bot force-updates its branch on every push to `main`. A conflict that survives the next merge to `main` is stuck.
-- **Mitigation:** close the PR. The bot recreates it. Do not hand-edit version numbers on that branch.
-- **Escalate if:** the recreated PR is absent after a later push to `main`.
-
-### Changeset was wrong
-
-- **Symptoms:** bump type or changelog summary is wrong, and the version PR is still open.
-- **Diagnosis:** the pending entry is a file in `.changeset/` and the version PR diff.
-- **Mitigation:** edit or delete that file in a normal PR before the version PR merges. If the bad version is already published, treat it as a one-way door and fix forward.
-- **Escalate if:** an accidental `major` has already been published. Post the pin immediately.
-
-### Publishing is a one-way door
-
-- **Symptoms:** a version you do not want is already on GitHub Packages.
-- **Diagnosis:** the version PR merge was the last gate. Unpublish is not available.
-- **Mitigation:** consumer pin, then a patch release (§4). Do not try to republish the same version.
-- **Escalate if:** consumers have already shipped the bad version to production.
+- **Symptoms:** `release.yml`, `release-notify.yml`, or `storybook-versioned-deploy.yml` is red. Nothing bad reached consumers (P2).
+- **Diagnosis:** open the failed run, then check whether the version is already on the registry (`yarn npm info @minneapolisstartribune/design-system --fields version`). That decides whether a dispatch re-run is enough or whether the tag and Release have to be recreated by hand.
+- **Mitigation:** follow the matching entry in [docs/release-runbook.md → Troubleshooting](docs/release-runbook.md#troubleshooting). `changeset publish` skips versions already on the registry, so a dispatch re-run of `release.yml` never double-publishes.
+- **Escalate if:** two re-runs fail, or the cause is expired or revoked credentials (`GH_PUBLISH_TOKEN`, Slack webhook).
 
 ## 7. Useful commands
 
@@ -171,8 +137,9 @@ gh release list --repo MinneapolisStarTribune/design-system --limit 10
 # What the registry currently serves
 yarn npm info @minneapolisstartribune/design-system --fields version
 
-# Consumer pin (run in the consumer repo)
-yarn add @minneapolisstartribune/design-system@<last-good>
+# Consumer pin (run in the consumer repo).
+# Yarn 4 saves a caret range unless --exact is set.
+yarn add --exact @minneapolisstartribune/design-system@<last-good>
 
 # Changeset on a fix PR
 yarn changeset
@@ -184,10 +151,10 @@ git push --tags
 
 ## 8. Communication & escalation
 
-- **Status updates:** post the pin text from §4 in `#product-engineers` as soon as a bad version is on the registry. Repeat in the alert channel when `alert-channel` is no longer TBD. Update that thread when the patch Release exists. For an active P0, also follow [incident-response.md](https://github.com/MinneapolisStarTribune/engineering-handbook/blob/main/on-call-support/incident-response.md) (`#victorops`, 15–30 min).
-- **Next page:** UX-designers. TBD: named on-call rotation for this library.
-- **Incident tickets:** Datadog incident for an actual P0. TBD: Jira project for UX-designers.
-- **Escalate after:** 15 minutes when a published version is already breaking production consumers; otherwise stay on the 1-hour mitigation (pin guidance posted and patch PR opened).
+- **Status updates:** post the pin text from §4 in `#product-engineers` as soon as a bad version is on the registry. Repeat in the alert channel when `alert-channel` is no longer TBD. Update that thread when the patch Release exists. For an active P0, open the incident in `#victorops` and follow [incident-response.md](https://github.com/MinneapolisStarTribune/engineering-handbook/blob/main/on-call-support/incident-response.md).
+- **Next page:** Loons. UX designers are consulted, not paged. TBD: named on-call rotation for this library.
+- **Incident tickets:** Datadog incident for an actual P0. TBD: Jira project for Loons library incidents.
+- **Escalate after:** 15 min for P0, 30 min for P1, without progress.
 - **After resolution:** postmortem from [postmortem-template.md](https://github.com/MinneapolisStarTribune/engineering-handbook/blob/main/on-call-support/postmortem-template.md) for any P0/P1.
 
 ### Downstream blast radius
@@ -200,6 +167,7 @@ Confirmed consumers:
 - `varsity-web`
 - `the-brief`
 - `startribune-mobile-app`
+- `coaches-portal` (`apps/web`, exact pin `2.1.0`)
 - `product-ux-experimentation`
 - `agentic-sdlc-test` (`apps/mn101-web`)
 
