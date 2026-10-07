@@ -1,0 +1,130 @@
+/*
+ * No card chrome (border, shadow) so it can sit inline or inside a Popover, which supplies it. The
+ * selected day reuses the brand filled Button tokens, so it follows the active brand and color scheme.
+ */
+.root {
+  --static-date-picker-cell-size: 32px;
+  --static-date-picker-row-gap: var(--spacing-8);
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  box-sizing: border-box;
+  font-family: inherit;
+  color: var(--color-text-on-light-primary);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heading {
+  flex: 1;
+  text-align: center;
+  /* Figma: 20px line height, so the title lines up with the 28px arrow buttons */
+  line-height: 20px;
+}
+
+.navButton {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-6);
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  cursor: pointer;
+
+  svg {
+    display: block;
+  }
+
+  &:hover:not([aria-disabled='true']) {
+    background-color: var(--color-background-light-gray-01);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 1px;
+  }
+
+  &[aria-disabled='true'] {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+/* Rows sit 8px apart (including header to first week) with no extra space outside the grid. */
+.grid {
+  border-collapse: separate;
+  border-spacing: 0 var(--static-date-picker-row-gap);
+  margin: calc(-1 * var(--static-date-picker-row-gap)) 0;
+}
+
+.cell {
+  padding: 0;
+  text-align: center;
+}
+
+.weekday {
+  width: var(--static-date-picker-cell-size);
+  height: var(--static-date-picker-cell-size);
+  padding: 0;
+
+  /* Beat global `[class*="typography-"] { color: primary }` */
+  .root & {
+    color: var(--color-text-on-light-tertiary);
+  }
+}
+
+.day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--static-date-picker-cell-size);
+  height: var(--static-date-picker-cell-size);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+}
+
+button.day {
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-background-light-gray-01);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 1px;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.root .selected,
+.root .selected:hover {
+  background-color: var(--color-button-brand-filled-background);
+  color: var(--color-button-brand-filled-text);
+}
+
+/* Figma: neighboring-month and out-of-range days use the disabled text color at 50% opacity */
+.root .unavailable {
+  color: var(--color-text-state-disabled-on-light);
+  opacity: 0.5;
+}

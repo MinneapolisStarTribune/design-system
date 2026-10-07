@@ -1,0 +1,100 @@
+/*
+ * Same layout as PasswordInput: the calendar button sits over the input's trailing padding, at
+ * `top: 50%` of the root, so the root must be exactly the input's height:
+ * - flex, not inline-block, or TextInput (inline-flex) leaves descender space under it
+ * - `height: fit-content` so a grid or flex parent can't stretch it taller than the input
+ */
+.root {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: fit-content;
+}
+
+.input {
+  width: 100%;
+
+  &.small {
+    padding-right: calc(var(--spacing-8) + 24px);
+  }
+
+  &.medium {
+    padding-right: calc(var(--spacing-12) + 28px);
+  }
+
+  &.large {
+    padding-right: calc(var(--spacing-16) + 32px);
+  }
+}
+
+.trailing {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  line-height: 0;
+
+  &.small {
+    right: var(--spacing-8);
+    --date-picker-toggle-size: 24px;
+  }
+
+  &.medium {
+    right: var(--spacing-12);
+    --date-picker-toggle-size: 28px;
+  }
+
+  &.large {
+    right: var(--spacing-16);
+    --date-picker-toggle-size: 32px;
+  }
+}
+
+.toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--date-picker-toggle-size);
+  height: var(--date-picker-toggle-size);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-on-light-tertiary);
+  cursor: pointer;
+  /* TriggerablePopover forces `display: inline-block` inline, so center the icon without relying
+   * on flex, and keep it off the text baseline. */
+  line-height: 0;
+
+  svg {
+    display: block;
+    margin: auto;
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--color-text-on-light-secondary);
+    background-color: var(--color-background-light-gray-01);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 1px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--color-text-state-disabled-on-light);
+  }
+}
+
+/*
+ * Popover's container is sized and padded for text (240–320px wide, no right padding). Figma sizes
+ * the calendar to its 224px grid with 12px padding all round.
+ */
+.popoverContainer {
+  min-width: 0;
+  max-width: none;
+  padding: var(--spacing-12);
+}

@@ -1,0 +1,106 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as StaticDatePickerStories from './StaticDatePicker.stories';
+
+<Meta of={StaticDatePickerStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# StaticDatePicker
+
+A month-view calendar that's always shown. Pick a day by clicking it; move between months (and
+across years) with the previous/next arrows. There's no text input: the calendar itself is the
+control, so drop it inline or inside a [Popover](/docs/feedback-status-popover--docs) opened from any trigger.
+
+**Web only.**
+
+For a text field that opens this calendar in a popover, use
+[DatePicker](/docs/forms-formcontrol-datepicker--docs).
+
+## Usage
+
+```tsx
+function GameDatePicker() {
+  const [date, setDate] = useState<CalendarDate | null>('2026-03-10');
+
+  return <StaticDatePicker value={date} onChange={setDate} label="Choose a game date" />;
+}
+```
+
+- **Controlled:** pass `value` (`null` for no selection) and `onChange`
+- **Uncontrolled:** pass `defaultValue` (or nothing) and optionally `onChange`
+- Opens on the selected date's month, or the current month when nothing is selected
+- Use `min` / `max` to limit the calendar, e.g. to a season. Days outside them are disabled, and
+  the arrows stop at their months. The stopped arrow is dimmed and shows a tooltip explaining why;
+  set the text with `minMessage` / `maxMessage`, e.g. "No games to display before November 2025"
+- Weeks start on Sunday. Days from the neighboring months pad out the first and last weeks; they're
+  dimmed and not selectable
+
+### In a popover from your own trigger
+
+Wrap it in a `TriggerablePopover` and close the popover in `onChange`. See the **In Popover**
+story below.
+
+```tsx
+function GameDateButton() {
+  const [date, setDate] = useState<CalendarDate>('2026-03-10');
+  const [open, setOpen] = useState(false);
+
+  return (
+    <TriggerablePopover
+      open={open}
+      onOpenChange={setOpen}
+      aria-label="Choose a game date"
+      trigger={<Button variant="outlined">{date}</Button>}
+    >
+      <StaticDatePicker
+        value={date}
+        onChange={(next) => {
+          setDate(next);
+          setOpen(false);
+        }}
+      />
+    </TriggerablePopover>
+  );
+}
+```
+
+Popover's content area is padded for text and capped at 320px, so pass a `containerClassName`
+that removes the cap and pads 12px on every side, to match the design.
+
+### Dates are `YYYY-MM-DD` strings, not `Date` objects
+
+Values are calendar dates like `'2026-03-10'`, with no time or timezone. A `Date` is an instant, so
+the day it falls on depends on where it's viewed: `new Date('2026-03-10')` is March 9 in Minnesota.
+Strings are the same day on the server and in every browser, and they compare with `===`.
+
+If you have a `Date`, read the date from its local fields:
+
+```ts
+const toCalendarDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` as CalendarDate;
+```
+
+## Not supported yet
+
+- Picking a month or year from a list (only the previous/next arrows)
+- Disabling individual days (other than through `min` / `max`)
+- Date ranges
+- Localized month and weekday names, or a Monday week start
+
+## Accessibility
+
+- The calendar is a labeled group containing a grid; the month heading is announced when it changes
+- At `min` / `max` the arrow is `aria-disabled` rather than `disabled`, so it stays focusable and
+  its tooltip can be reached by keyboard and hover
+- The grid is one Tab stop. Arrow keys move a day or week, crossing into the next or previous month;
+  Page Up / Page Down move a month. Enter or Space selects
+- Each day is announced with its full date, e.g. "Tuesday, March 10, 2026". Today is marked with
+  `aria-current="date"`
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />
