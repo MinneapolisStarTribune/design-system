@@ -8,6 +8,7 @@ import type { ButtonColor, ButtonSize, ButtonVariant, IconOnlyButtonSize } from 
  * - neutral + filled -> 'button-filled'
  * - brand + outlined -> 'button-brand-outlined'
  * - brand-accent + ghost -> 'button-brand-accent-ghost'
+ * - error + filled -> 'button-error-filled'
  */
 export function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant): string {
   if (color === 'neutral') {
@@ -15,6 +16,9 @@ export function getButtonTokenPrefix(color: ButtonColor, variant: ButtonVariant)
   }
   if (color === 'brand') {
     return `button-brand-${variant}`;
+  }
+  if (color === 'error') {
+    return `button-error-${variant}`;
   }
   return `button-brand-accent-${variant}`;
 }
