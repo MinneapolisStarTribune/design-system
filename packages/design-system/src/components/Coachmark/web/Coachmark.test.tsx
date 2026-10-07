@@ -698,6 +698,27 @@ describe('Coachmark', () => {
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
   });
 
+  it('exposes the actual resolved side as data-placement, not just the requested position', async () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        position="top-center"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    // jsdom has no real layout, so this only confirms the attribute mirrors the resolved
+    // `position`, not an actual flip() override.
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', 'top')
+    );
+  });
+
   it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
     renderWithProvider(
       <Coachmark
