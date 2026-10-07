@@ -25,9 +25,7 @@ describe('useCoachmarkPortalRoot', () => {
   });
 
   it('re-applies styles to a stale node left over from an older version of this function', () => {
-    // Mirrors a node created before position/pointer-events were added to this function (e.g. one
-    // still sitting in the DOM across a dev server hot reload, since plain DOM nodes like this
-    // aren't part of React's tree and so aren't touched by Fast Refresh).
+    // Mirrors a stale node from an older version (e.g. surviving a dev-server hot reload).
     const stale = document.createElement('div');
     stale.id = ID;
     document.body.appendChild(stale);

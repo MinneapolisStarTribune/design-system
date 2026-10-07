@@ -1,7 +1,6 @@
 import { vi } from 'vitest';
 
-// A no-op stub middleware -- only the call *arguments* matter for this test, not the positioning
-// math itself (jsdom has no real layout, so every element's rect is zero regardless).
+// A no-op stub -- only call *arguments* matter here, not real positioning (jsdom has no layout).
 const { shiftSpy, arrowSpy, alignmentShiftSpy } = vi.hoisted(() => {
   const stubMiddleware = (name: string) => (options: Record<string, unknown>) => ({
     name,
@@ -54,14 +53,11 @@ describe("Coachmark's edge-hugging padding", () => {
       .padding;
     const arrowPadding = (arrowSpy.mock.calls[0][0] as { padding: number }).padding;
 
-    // shift runs *after* alignmentShift and re-clamps the card's position using its own padding --
-    // if it were larger than alignmentShift's, it would silently override whatever edge-hugging
-    // position alignmentShift computed, undoing it. This is exactly the regression this guards:
-    // shift previously reused the larger VIEWPORT_EDGE_PADDING meant for sizing the card itself.
+    // shift runs after alignmentShift and re-clamps using its own padding -- if larger, it'd
+    // silently override alignmentShift's edge-hugging result (the regression this guards against).
     expect(shiftPadding).toBe(alignmentShiftPadding);
 
-    // The arrow's own corner-avoidance padding is a separate, independent concern -- it just needs
-    // to exist (previously it was unset/0, letting the arrow slide flush into the card's corner).
+    // Just needs to exist -- previously unset, letting the arrow slide flush into the corner.
     expect(arrowPadding).toBeGreaterThan(0);
   });
 });

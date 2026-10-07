@@ -22,10 +22,8 @@
 export function useCoachmarkPortalRoot(id: string): HTMLElement | null {
   if (typeof document === 'undefined') return null;
 
-  // Styles are (re-)applied unconditionally, even when reusing an existing node -- otherwise a
-  // node created by an older version of this function (e.g. still sitting in the DOM across a dev
-  // server's hot reload, since plain DOM nodes like this aren't part of React's tree and so aren't
-  // touched by Fast Refresh) would keep whatever styling it was originally created with forever.
+  // Re-applied even when reusing an existing node, since a stale one from an older version (e.g.
+  // surviving a dev-server hot reload) would otherwise keep its original styling forever.
   const el = document.getElementById(id) ?? document.createElement('div');
   el.id = id;
   el.style.position = 'fixed';

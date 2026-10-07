@@ -40,27 +40,18 @@ import styles from './Coachmark.module.scss';
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
-// How wide the card itself is allowed to render (via Coachmark.module.scss's
-// `max-width: min(345px, calc(100vw - 2 * 24px))`, which must stay in sync with this value) --
-// without that CSS half, the card keeps rendering at its content's natural width right up until
-// the viewport is already narrower than that, instead of shrinking early enough to leave this same
-// margin on both sides. Also flip()'s own padding below: how much clearance it requires before
-// flipping sides entirely. Not how close the card's final *position* may get to the viewport edge
-// once placed -- that's the separate, smaller EDGE_HUGGING_PADDING below.
+// Sizes the card (must stay in sync with Coachmark.module.scss's max-width) and sets flip()'s
+// required clearance before it flips sides -- not the card's final position once placed, which
+// uses the smaller EDGE_HUGGING_PADDING below.
 const VIEWPORT_EDGE_PADDING = 24;
 
-// A separate, smaller margin than VIEWPORT_EDGE_PADDING -- that one also sizes the card itself
-// (see above), so reusing it for how close alignmentShift/shift may actually position the card
-// toward the viewport edge was overly conservative: a corner-anchored trigger (e.g. the nav's
-// favorites icon) would make the card sit dead-center instead of hugging the edge near it, per
-// Figma. Used by both alignmentShift and shift (the latter re-clamps whatever alignmentShift
-// computed using its own padding, on the axis it actually checks -- see isSidePosition below --
-// so both need this smaller value or shift silently overrides alignmentShift's result).
+// Smaller than VIEWPORT_EDGE_PADDING so a corner-anchored trigger (e.g. a nav icon) hugs the edge
+// instead of sitting dead-center. Used by both alignmentShift and shift -- shift re-clamps
+// whatever alignmentShift computed, so both need the same value or it silently overrides it.
 const EDGE_HUGGING_PADDING = 8;
 
-// Keeps the arrow from sliding into the card's own rounded corner when alignmentShift's 40%
-// budget still isn't enough to keep the card fully alongside its trigger -- per Figma, the arrow
-// stays at least this far from the card's edge rather than going flush to it.
+// Keeps the arrow from sliding into the card's rounded corner when alignmentShift's budget isn't
+// enough to keep the card fully alongside its trigger.
 const ARROW_EDGE_PADDING = 16;
 
 /** Why the coachmark closed, reported on its `coachmark_dismiss` tracking event. */
@@ -333,11 +324,8 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               style={{ ...floatingStyles, zIndex }}
               className={styles.wrapper}
               id={`coachmark-${coachmarkId}`}
-              // The requested `position` prop (e.g. "bottom-center") is only a starting point --
-              // flip() may resolve it to the opposite side if there isn't room. Exposing the
-              // *actual* resolved side lets a consuming app's CSS react to which one actually
-              // happened (e.g. varsity-web renders this under its sticky sub-nav when the card
-              // opens downward, but above it when flip reverses that).
+              // flip() may resolve the opposite side from the requested `position` prop -- expose
+              // which one actually happened so a consuming app's CSS can react to it.
               data-placement={context.placement}
               aria-labelledby={titleId}
               aria-describedby={descriptionId}

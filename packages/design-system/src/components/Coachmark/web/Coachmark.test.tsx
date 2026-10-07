@@ -712,10 +712,8 @@ describe('Coachmark', () => {
       </Coachmark>
     );
 
-    // jsdom has no real layout, so flip() never actually has a reason to override this -- this
-    // only confirms the attribute mirrors whatever floating-ui resolved `position` to, which a
-    // consumer's CSS can react to (e.g. varsity-web's sub-nav z-index) even when that differs
-    // from the requested position because there wasn't room.
+    // jsdom has no real layout, so this only confirms the attribute mirrors the resolved
+    // `position`, not an actual flip() override.
     await waitFor(() =>
       expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', 'top')
     );
