@@ -18,6 +18,7 @@ export function ToggleGroupRoot<T extends string = string>(
     label,
     'aria-labelledby': ariaLabelledBy,
     name: nameProp,
+    size = 'medium',
     fullWidth = false,
     disabled = false,
     className,
@@ -55,7 +56,12 @@ export function ToggleGroupRoot<T extends string = string>(
       aria-label={ariaLabelledBy ? undefined : label}
       aria-labelledby={ariaLabelledBy}
       aria-disabled={disabled || undefined}
-      className={classNames(styles.root, { [styles.fullWidth]: fullWidth }, className)}
+      className={classNames(
+        styles.root,
+        styles[size],
+        { [styles.fullWidth]: fullWidth },
+        className
+      )}
       style={style}
       data-testid={dataTestId}
     >

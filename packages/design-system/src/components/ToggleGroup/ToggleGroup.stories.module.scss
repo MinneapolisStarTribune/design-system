@@ -1,6 +1,7 @@
-/* Storybook-only: an example of secondary content inside a ToggleGroup item */
-.finePrint {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--toggle-group-item-secondary-text);
+.toggleGroupContainer {
+  max-width: 450px;
+}
+
+.sectionLabel {
+  margin: var(--spacing-16) 0;
 }

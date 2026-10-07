@@ -17,13 +17,15 @@ schedule to **All Games**, **Past** or **Upcoming**. In Figma it's the **segment
 Selected items use the same fill as the brand `filled` [Button](/docs/actions-button--docs), so they
 follow the active brand and color scheme. The color isn't configurable.
 
+**Validated for Varsity only.** Using it on startribune-web may warrant some theming changes. Additionally, styling for sizes and icon-only views in particular may change.
+
 **Web only.**
 
 ## Anatomy
 
 1. **Container**: a rounded, bordered row. 1px dividers separate the items.
-2. **Item**: a label, an icon plus a label, or an icon alone. A label can include inline secondary
-   content, such as a result count.
+2. **Item**: a label, an icon plus a label, or an icon alone. A label can be followed by
+   secondary text (`ToggleGroup.Detail`), such as a result count.
 3. **Selected item**: filled with the brand fill.
 
 ## Usage
@@ -34,10 +36,9 @@ follow the active brand and color scheme. The color isn't configurable.
   sideways rather than wrapping
 - Give every group an accessible name: `label`, or `aria-labelledby` pointing at a visible heading
 - Always controlled: pass `value` and `onChange`. With `type="multiple"`, `value` is an array
+- Use `size` (`small`, `medium` or `large`, default `medium`) to match the height and padding of
+  the [Button](/docs/actions-button--docs) sizes around it
 - Use `fullWidth` to fill the container and split it evenly, e.g. in a narrow card or panel
-- For choices inside a form with longer labels or descriptions, use
-  [RadioGroup](/docs/forms-formcontrol-radiogroup--docs) or
-  [CheckboxGroup](/docs/forms-formcontrol-checkboxgroup--docs) instead
 
 <table>
   <thead>
@@ -52,7 +53,7 @@ follow the active brand and color scheme. The color isn't configurable.
       <td><code>ToggleGroup.Root</code></td>
       <td>
         Owns the selection (<code>type</code>, <code>value</code>, <code>onChange</code>), the
-        accessible name and <code>fullWidth</code>.
+        accessible name, <code>size</code> and <code>fullWidth</code>.
       </td>
     </tr>
 
@@ -61,6 +62,14 @@ follow the active brand and color scheme. The color isn't configurable.
       <td>
         One option. Takes a <code>value</code>, its content as children (text, icons or
         both), and <code>disabled</code>. Icon-only items need <code>aria-label</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ToggleGroup.Detail</code></td>
+      <td>
+        Secondary text inside an item, such as a result count. Smaller than the label, and
+        dimmed to suit the selected fill.
       </td>
     </tr>
 
@@ -74,36 +83,18 @@ function GameFilter() {
   return (
     <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
       <ToggleGroup.Item value="all">
-        All Games <span className={styles.finePrint}>(48)</span>
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
       </ToggleGroup.Item>
       <ToggleGroup.Item value="past">
-        Past <span className={styles.finePrint}>(30)</span>
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
       </ToggleGroup.Item>
       <ToggleGroup.Item value="upcoming">
-        Upcoming <span className={styles.finePrint}>(18)</span>
+        Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
       </ToggleGroup.Item>
     </ToggleGroup.Root>
   );
 }
 ```
-
-### Secondary content
-
-Item content is laid out on one baseline with a 6px gap, in the item's label typography. Style any
-secondary content yourself, and color it with `--toggle-group-item-secondary-text`: it's the
-tertiary text color on unselected items and a softened version of the selected text color on
-selected ones, so it stays readable on either fill.
-
-```scss
-.finePrint {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--toggle-group-item-secondary-text);
-}
-```
-
-Keep it short and inline (a count, a version, a qualifier). Everything in the item becomes its
-accessible name, so write it to make sense read aloud.
 
 ### Icons
 

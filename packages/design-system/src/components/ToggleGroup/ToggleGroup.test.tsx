@@ -27,10 +27,10 @@ const SingleGroup = ({
       }}
     >
       <ToggleGroup.Item value="all">
-        All Games <span>(48)</span>
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
       </ToggleGroup.Item>
       <ToggleGroup.Item value="past">
-        Past <span>(30)</span>
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
       </ToggleGroup.Item>
       <ToggleGroup.Item value="upcoming" disabled>
         Upcoming
@@ -200,6 +200,35 @@ describe('ToggleGroup', () => {
       expect(warn.mock.calls[0][0]).toContain('Item "list" has no text');
       warn.mockRestore();
     });
+  });
+
+  it('renders Detail as secondary text included in the item name', () => {
+    render(<SingleGroup />);
+
+    expect(screen.getByText('(48)')).toHaveClass(styles.detail);
+    expect(screen.getByRole('radio', { name: 'Past (30)' })).toBeInTheDocument();
+  });
+
+  it('applies the medium size class by default', () => {
+    render(
+      <ToggleGroup.Root label="View" value="day" onChange={() => {}}>
+        <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
+      </ToggleGroup.Root>
+    );
+
+    expect(screen.getByTestId('toggle-group')).toHaveClass(styles.medium);
+  });
+
+  it('applies the size class to the root', () => {
+    render(
+      <ToggleGroup.Root label="View" value="day" onChange={() => {}} size="large">
+        <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
+      </ToggleGroup.Root>
+    );
+
+    const root = screen.getByTestId('toggle-group');
+    expect(root).toHaveClass(styles.large);
+    expect(root).not.toHaveClass(styles.medium);
   });
 
   it('applies the fullWidth class to the root', () => {

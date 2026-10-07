@@ -3,6 +3,8 @@ import type { BaseProps } from '@/types/globalTypes';
 
 export const TOGGLE_GROUP_TYPES = ['single', 'multiple'] as const;
 export type ToggleGroupType = (typeof TOGGLE_GROUP_TYPES)[number];
+export const TOGGLE_GROUP_SIZES = ['small', 'medium', 'large'] as const;
+export type ToggleGroupSize = (typeof TOGGLE_GROUP_SIZES)[number];
 
 interface ToggleGroupBaseProps extends BaseProps {
   /** `ToggleGroup.Item` children. */
@@ -12,6 +14,11 @@ interface ToggleGroupBaseProps extends BaseProps {
    * @default a generated id
    */
   name?: string;
+  /**
+   * Item height and padding, matching `Button` sizes: `small` 32px, `medium` 40px, `large` 52px.
+   * @default 'medium'
+   */
+  size?: ToggleGroupSize;
   /** Stretch to the container width, splitting it evenly between items. */
   fullWidth?: boolean;
   /** Disables every item in the group. */
@@ -66,10 +73,9 @@ export interface ToggleGroupItemProps extends BaseProps {
   /** Value reported to the group's `onChange`. Unique within the group. */
   value: string;
   /**
-   * Item content: text, an icon from `@/icons`, or a mix, such as an icon plus a label or a label
-   * plus secondary fine print. Icons take the item's text color. Text becomes the item's accessible
-   * name; secondary content can use the `--toggle-group-item-secondary-text` color, which follows
-   * the selected state.
+   * Item content: text, an icon from `@/icons`, or a mix, such as an icon plus a label, or a label
+   * plus `ToggleGroup.Detail`. Icons take the item's text color. Text becomes the item's accessible
+   * name.
    */
   children: ReactNode;
   /**
@@ -78,4 +84,9 @@ export interface ToggleGroupItemProps extends BaseProps {
   'aria-label'?: string;
   /** Disables this item only. */
   disabled?: boolean;
+}
+
+export interface ToggleGroupDetailProps extends BaseProps {
+  /** Secondary text shown beside an item's label, such as a result count. */
+  children: ReactNode;
 }

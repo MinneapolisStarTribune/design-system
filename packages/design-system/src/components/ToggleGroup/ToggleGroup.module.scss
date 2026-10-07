@@ -28,9 +28,33 @@
     display: none;
   }
 
-  .item {
+  /* Sizes match Button's height and inline padding */
+  &.small .item {
+    height: 32px;
+    padding: 0 var(--spacing-12);
+  }
+
+  &.medium .item {
     height: 40px;
     padding: 0 var(--spacing-16);
+  }
+
+  &.large .item {
+    height: 52px;
+    padding: 0 var(--spacing-24);
+  }
+
+  .item {
+    /* Match the container's inner curve so the inset focus ring follows the rounded ends */
+    &:first-child {
+      border-start-start-radius: calc(var(--radius-12) - 1px);
+      border-end-start-radius: calc(var(--radius-12) - 1px);
+    }
+
+    &:last-child {
+      border-start-end-radius: calc(var(--radius-12) - 1px);
+      border-end-end-radius: calc(var(--radius-12) - 1px);
+    }
   }
 
   &.fullWidth {
@@ -55,8 +79,6 @@
   cursor: pointer;
   background-color: var(--color-background-light-default);
   color: var(--color-text-on-light-secondary);
-  /* Public: color for secondary content in an item (e.g. fine print), following the selected state */
-  --toggle-group-item-secondary-text: var(--color-text-on-light-tertiary);
 
   /* Items control their own text color; beat the global `[class*="typography-"]` color rule */
   [class*='typography-'] {
@@ -77,15 +99,18 @@
   &.selected {
     background-color: var(--toggle-group-selected-background);
     color: var(--toggle-group-selected-text);
-    /* The selected text color, knocked back toward the fill */
-    --toggle-group-item-secondary-text: color-mix(
-      in srgb,
-      var(--toggle-group-selected-text) 85%,
-      var(--toggle-group-selected-background)
-    );
 
     &:hover:not(.disabled) {
       background-color: var(--toggle-group-selected-hover-background);
+    }
+
+    /* The selected text color, knocked back toward the fill */
+    .detail {
+      color: color-mix(
+        in srgb,
+        var(--toggle-group-selected-text) 85%,
+        var(--toggle-group-selected-background)
+      );
     }
   }
 
