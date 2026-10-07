@@ -36,8 +36,6 @@ type FloatingSurfaceProps = {
   open: boolean;
   onOpenChange: (open: boolean, event?: Event, reason?: OpenChangeReason) => void;
   placement: Placement;
-  /** Keeps the surface in the DOM, hidden, while closed. */
-  keepMounted?: boolean;
   isDisabled?: boolean;
   modal?: boolean;
   portalRoot?: HTMLElement | null;
@@ -58,7 +56,6 @@ export const FloatingSurface = ({
   open,
   onOpenChange,
   placement,
-  keepMounted = false,
   isDisabled,
   modal = false,
   portalRoot,
@@ -138,15 +135,12 @@ export const FloatingSurface = ({
     </span>
   );
 
-  const floatingElement = (open || keepMounted) && (
+  const floatingElement = open && (
     <FloatingPortal root={resolvedPortalRoot}>
-      <FloatingFocusManager context={context} modal={modal} disabled={!open}>
+      <FloatingFocusManager context={context} modal={modal}>
         <div
           ref={setFloating}
-          data-state={open ? 'open' : 'closed'}
-          style={
-            open ? { ...floatingStyles, ...styleProp } : { ...floatingStyles, display: 'none' }
-          }
+          style={{ ...floatingStyles, ...styleProp }}
           className={classNames(styles.wrapper, className)}
           data-testid={dataTestId}
           aria-label={ariaLabel}

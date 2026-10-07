@@ -14,7 +14,7 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover`, `TriggerablePopover`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame

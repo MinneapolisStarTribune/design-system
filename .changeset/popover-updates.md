@@ -6,25 +6,23 @@
 
 ### Namespace API
 
-`Popover` and `TriggerablePopover` now follow the `Drawer` and `Menu` namespace pattern:
+`Popover` now follows the `Drawer` and `Menu` namespace pattern:
 
 ```tsx
 // Before
 <Popover />
-<TriggerablePopover />
 
 // After
 <Popover.Root />
-<TriggerablePopover.Root />
 ```
 
 Imports and section names do not change: use `Popover.Heading`, `Popover.Description`,
-`Popover.Body`, and `Popover.Divider` (and the corresponding `TriggerablePopover` sections).
+`Popover.Body`, and `Popover.Divider`.
 
 ### Styling API
 
-- On `Popover` and `TriggerablePopover`, replace `wrapperClassName`, `containerClassName`,
-  `contentClassName`, and `arrowClassName` with surface `className`.
+- On `Popover`, replace `wrapperClassName`, `containerClassName`, `contentClassName`, and
+  `arrowClassName` with surface `className`.
 - On sections, replace named class props with `className`:
   - `Popover.Heading`: replace `headerClassName`; `titleClassName` and `closeButtonClassName`
     are removed.
@@ -38,7 +36,7 @@ Imports and section names do not change: use `Popover.Heading`, `Popover.Descrip
 ### Portal API
 
 `PopoverPortalRootProvider` and `PopoverPortalRootContext` are removed. Pass `portalRoot` to
-each `Popover` or `TriggerablePopover` that needs a custom container, as with `Drawer`.
+each `Popover` that needs a custom container, as with `Drawer`.
 
 ## Consumer impact
 
@@ -54,11 +52,10 @@ does not change their appearance.
 
 ## Improvements
 
-- `Popover` and `TriggerablePopover` no longer add a trigger wrapper `div`, avoiding hydration
-  errors inside `<p>` and preserving inline, flex, and grid layouts.
+- `Popover` no longer adds a trigger wrapper `div`, avoiding hydration errors inside `<p>` and
+  preserving inline, flex, and grid layouts.
 - Dialogs use `Popover.Heading` as their accessible name when present, otherwise `aria-label`.
 - Triggers now point `aria-controls` at the dialog, and element triggers keep their own display.
 - `Popover.Heading` adds `eyebrow`, `value`, and `showCloseButton` (default: `true`).
 - Popovers now follow the app theme. Customize the surface with `--popover-background`,
   `--popover-arrow-fill`, and `--popover-arrow-stroke`.
-- `TriggerablePopover` now reveals externally injected content after a click-open and close.
