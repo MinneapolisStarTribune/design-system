@@ -1,5 +1,6 @@
 import type {
   ModalCloseReason,
+  ModalHeadingProps,
   ModalRole,
   ModalSectionProps,
   ModalSharedProps,
@@ -37,3 +38,4 @@ export interface DrawerProps extends ModalSharedProps {
 }
 
 export type DrawerSectionProps = ModalSectionProps;
+export type DrawerHeadingProps = ModalHeadingProps;

@@ -2,7 +2,7 @@ import type { MouseEventHandler, ReactElement, ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { BaseProps } from '@/types/globalTypes';
 
-export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent'] as const;
+export const BUTTON_COLORS = ['neutral', 'brand', 'brand-accent', 'error'] as const;
 export type ButtonColor = (typeof BUTTON_COLORS)[number];
 export const BUTTON_VARIANTS = ['filled', 'outlined', 'ghost'] as const;
 export type ButtonVariant = (typeof BUTTON_VARIANTS)[number];
