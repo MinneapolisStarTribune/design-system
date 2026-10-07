@@ -127,12 +127,14 @@ export {
 } from './Skeleton/web/Skeleton';
 export * as ToggleGroup from './ToggleGroup/ToggleGroup';
 export {
+  TOGGLE_GROUP_SIZES,
   TOGGLE_GROUP_TYPES,
   type ToggleGroupDetailProps,
   type ToggleGroupItemProps,
   type ToggleGroupMultipleProps,
   type ToggleGroupProps,
   type ToggleGroupSingleProps,
+  type ToggleGroupSize,
   type ToggleGroupType,
 } from './ToggleGroup/ToggleGroup.types';
 export { Tooltip } from './Tooltip/Tooltip';

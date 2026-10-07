@@ -68,3 +68,5 @@ export function ToggleGroupRoot<T extends string = string>(
     </div>
   );
 }
+
+ToggleGroupRoot.displayName = 'ToggleGroup.Root';

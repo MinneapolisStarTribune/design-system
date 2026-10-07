@@ -20,3 +20,5 @@ export const ToggleGroupDetail: React.FC<ToggleGroupDetailProps> = ({
     {children}
   </span>
 );
+
+ToggleGroupDetail.displayName = 'ToggleGroupDetail';

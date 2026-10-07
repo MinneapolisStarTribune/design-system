@@ -66,3 +66,5 @@ export const ToggleGroupItem: React.FC<ToggleGroupItemProps> = ({
     </label>
   );
 };
+
+ToggleGroupItem.displayName = 'ToggleGroupItem';
