@@ -27,7 +27,7 @@ vi.mock('./alignmentShiftMiddleware', () => ({ alignmentShift: alignmentShiftSpy
 import { screen } from '@testing-library/react';
 import { Coachmark } from './Coachmark';
 import { Button } from '@/components/Button/web/Button';
-import { renderWithProvider } from '../../../test-utils/render';
+import { renderWithProvider } from '@/test-utils/render';
 
 describe("Coachmark's edge-hugging padding", () => {
   it("gives shift the same (smaller) edge padding as alignmentShift, not the card's own larger sizing margin", () => {

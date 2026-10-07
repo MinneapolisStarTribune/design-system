@@ -40,11 +40,13 @@ import styles from './Coachmark.module.scss';
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
-// How close the card's position is allowed to get to the viewport edge, and (via
-// Coachmark.module.scss's `max-width: min(345px, calc(100vw - 2 * 24px))`, which must stay in
-// sync with this value) how wide the card itself is allowed to render -- without that CSS half,
-// the card keeps rendering at its content's natural width right up until the viewport is already
-// narrower than that, instead of shrinking early enough to leave this same margin on both sides.
+// How wide the card itself is allowed to render (via Coachmark.module.scss's
+// `max-width: min(345px, calc(100vw - 2 * 24px))`, which must stay in sync with this value) --
+// without that CSS half, the card keeps rendering at its content's natural width right up until
+// the viewport is already narrower than that, instead of shrinking early enough to leave this same
+// margin on both sides. Also flip()'s own padding below: how much clearance it requires before
+// flipping sides entirely. Not how close the card's final *position* may get to the viewport edge
+// once placed -- that's the separate, smaller EDGE_HUGGING_PADDING below.
 const VIEWPORT_EDGE_PADDING = 24;
 
 // A separate, smaller margin than VIEWPORT_EDGE_PADDING -- that one also sizes the card itself
