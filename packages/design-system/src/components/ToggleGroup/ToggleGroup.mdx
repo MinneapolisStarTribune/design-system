@@ -1,0 +1,138 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as ToggleGroupStories from './ToggleGroup.stories';
+
+<Meta of={ToggleGroupStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# ToggleGroup
+
+ToggleGroup is a set of joined toggles for switching between options in place, such as filtering a
+schedule to **All Games**, **Past** or **Upcoming**. In Figma it's the **segmented control**.
+
+- **`type="single"`** (default): exactly one item is selected. It behaves as a radio group.
+- **`type="multiple"`**: any number of items can be selected, including none. It behaves as a group
+  of checkboxes.
+
+Selected items use the same fill as the brand `filled` [Button](/docs/actions-button--docs), so they
+follow the active brand and color scheme. The color isn't configurable.
+
+**Validated for Varsity only.** Using it on startribune-web may warrant some theming changes. Additionally, styling for sizes and icon-only views in particular may change.
+
+**Web only.**
+
+## Anatomy
+
+1. **Container**: a rounded, bordered row. 1px dividers separate the items.
+2. **Item**: a label, an icon plus a label, or an icon alone. A label can be followed by
+   secondary text (`ToggleGroup.Detail`), such as a result count.
+3. **Selected item**: filled with the brand fill.
+
+## Usage
+
+- Use it to switch between a few short, related options (two to five) that change what's shown in
+  place. For navigating between pages or content panels, use tabs or links
+- Keep labels short (one or two words) so the group fits on one line. On narrow screens it scrolls
+  sideways rather than wrapping
+- Give every group an accessible name: `label`, or `aria-labelledby` pointing at a visible heading
+- Always controlled: pass `value` and `onChange`. With `type="multiple"`, `value` is an array
+- Use `size` (`small`, `medium` or `large`, default `medium`) to match the height and padding of
+  the [Button](/docs/actions-button--docs) sizes around it
+- Use `fullWidth` to fill the container and split it evenly, e.g. in a narrow card or panel
+
+<table>
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>ToggleGroup.Root</code></td>
+      <td>
+        Owns the selection (<code>type</code>, <code>value</code>, <code>onChange</code>), the
+        accessible name, <code>size</code> and <code>fullWidth</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ToggleGroup.Item</code></td>
+      <td>
+        One option. Takes a <code>value</code>, its content as children (text, icons or
+        both), and <code>disabled</code>. Icon-only items need <code>aria-label</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>ToggleGroup.Detail</code></td>
+      <td>
+        Secondary text inside an item, such as a result count. Smaller than the label, and
+        dimmed to suit the selected fill.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+```tsx
+function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="past">
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">
+        Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+```
+
+### Icons
+
+Put icons from `@/icons` in the children, like text. They take the item's text color, so they read
+on the selected fill too. The item sizes them to match its text, so leave off `size`.
+
+An icon-only item has no text, so give it an `aria-label`. In development, an item with neither text nor `aria-label` logs a
+warning.
+
+```tsx
+<ToggleGroup.Root label="View" value={view} onChange={setView}>
+  <ToggleGroup.Item value="list" aria-label="List view">
+    <MenuStackedIcon />
+  </ToggleGroup.Item>
+  <ToggleGroup.Item value="calendar">
+    <CalendarIcon />
+    Calendar
+  </ToggleGroup.Item>
+</ToggleGroup.Root>
+```
+
+Use icon-only items only when the icons are familiar in context (view modes, sports). Otherwise
+add a label.
+
+## Accessibility
+
+Each item is a native radio (`single`) or checkbox (`multiple`) input under a styled label, so the
+browser provides the keyboard and screen reader behavior:
+
+- **`single`**: the group is one Tab stop; arrow keys move the selection between items
+- **`multiple`**: every item is a Tab stop; Space toggles it
+- Items are announced with all of their content, e.g. "All Games (48), radio button, checked, 1
+  of 3"
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+<Primary />
+<Controls />
+<Stories />

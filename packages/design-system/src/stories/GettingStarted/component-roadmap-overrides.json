@@ -23,5 +23,9 @@
     "native": true,
     "web": true
   },
+  "ToggleGroup": {
+    "native": false,
+    "web": true
+  },
   "_comment": "Manual platform overrides. Keys must match \"name\" in component-roadmap-planned.json. Override wins over barrel auto-detection."
 }
