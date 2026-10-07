@@ -249,7 +249,7 @@ The breakpoint is read from the viewport on the client. During SSR the drawer re
 
 ## ToggleGroup
 
-`ToggleGroup` is a web-only set of joined toggles (the Figma **segmented control**). It's exported as a namespace: compose `ToggleGroup.Root` with `ToggleGroup.Item`. `ToggleGroupProps` types `ToggleGroup.Root` and `ToggleGroupItemProps` types `ToggleGroup.Item`.
+`ToggleGroup` is a web-only set of joined toggles (the Figma **segmented control**). It's exported as a namespace: compose `ToggleGroup.Root` with `ToggleGroup.Item`. `ToggleGroupProps` types `ToggleGroup.Root`, `ToggleGroupItemProps` types `ToggleGroup.Item`, and `ToggleGroupDetailProps` types `ToggleGroup.Detail`.
 
 ```tsx
 import { useState } from 'react';
@@ -270,7 +270,8 @@ function GameFilter() {
 
 - It's always controlled. `type="single"` (default) keeps exactly one item selected and renders native radios; `type="multiple"` renders checkboxes and takes `value` as an array.
 - Give the group an accessible name: `label`, or `aria-labelledby` pointing at a visible heading. Icon-only items need `aria-label`; in development an item with no text and no `aria-label` logs a warning.
-- Selected items use the brand filled Button fill; the color isn't configurable. Color secondary item content (e.g. a count) with the `--toggle-group-item-secondary-text` CSS variable, which follows the selected state.
+- Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
+- `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth`, `name` (for form submission), and `disabled` on the group or a single item.
 
 ## Using CSS Variables Directly
