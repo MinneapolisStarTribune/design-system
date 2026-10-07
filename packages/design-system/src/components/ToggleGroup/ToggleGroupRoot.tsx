@@ -17,7 +17,6 @@ export function ToggleGroupRoot<T extends string = string>(
     children,
     label,
     'aria-labelledby': ariaLabelledBy,
-    name: nameProp,
     size = 'medium',
     fullWidth = false,
     disabled = false,
@@ -26,8 +25,8 @@ export function ToggleGroupRoot<T extends string = string>(
     dataTestId = 'toggle-group',
   } = props;
 
-  const generatedName = useId();
-  const name = nameProp ?? generatedName;
+  // Shared input name groups the radios natively (one Tab stop, arrow keys, single selection).
+  const name = useId();
   const isMultiple = props.type === 'multiple';
 
   const context: ToggleGroupContextValue = {

@@ -10,11 +10,6 @@ interface ToggleGroupBaseProps extends BaseProps {
   /** `ToggleGroup.Item` children. */
   children: ReactNode;
   /**
-   * Shared input `name`, so the selection is submitted with a surrounding form.
-   * @default a generated id
-   */
-  name?: string;
-  /**
    * Item height and padding, matching `Button` sizes: `small` 32px, `medium` 40px, `large` 52px.
    * @default 'medium'
    */

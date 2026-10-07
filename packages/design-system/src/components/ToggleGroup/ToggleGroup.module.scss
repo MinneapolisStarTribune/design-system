@@ -153,6 +153,8 @@
   /*
    * Icons are sized from the item's text (16px) rather than their `size` prop, so callers don't
    * need `size="small"`. The icon wrapper sets an inline width and height, hence `!important`.
+   * NOTE: We will want the icon component to not add width/height by default - but we
+   * are doing this to avoid breaking changes for now.
    */
   > svg {
     flex-shrink: 0;

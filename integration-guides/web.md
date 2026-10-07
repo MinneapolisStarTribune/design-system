@@ -272,7 +272,7 @@ function GameFilter() {
 - Give the group an accessible name: `label`, or `aria-labelledby` pointing at a visible heading. Icon-only items need `aria-label`; in development an item with no text and no `aria-label` logs a warning.
 - Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
-- Also supports `fullWidth`, `name` (for form submission), and `disabled` on the group or a single item.
+- Also supports `fullWidth` and `disabled` on the group or a single item.
 
 ## Using CSS Variables Directly
 

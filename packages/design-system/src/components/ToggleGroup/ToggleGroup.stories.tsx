@@ -115,11 +115,6 @@ const meta = {
       description: 'Disables every item.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
-    name: {
-      control: 'text',
-      description: 'Shared input `name`, so the selection is submitted with a surrounding form.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: 'a generated id' } },
-    },
     value: { control: false },
     onChange: { action: 'onChange' },
   },
@@ -143,7 +138,7 @@ export const Configurable: Story = {
     onChange: () => {},
     children: null,
   },
-  render: function ConfigurableRender({ type, label, name, size, fullWidth, disabled, onChange }) {
+  render: function ConfigurableRender({ type, label, size, fullWidth, disabled, onChange }) {
     const [single, setSingle] = useState('all');
     const [multiple, setMultiple] = useState<string[]>(['varsity']);
     const reportChange = onChange as (value: string | string[]) => void;
@@ -153,7 +148,6 @@ export const Configurable: Story = {
         <ToggleGroup.Root
           type="multiple"
           label={label ?? 'Filter games'}
-          name={name}
           size={size}
           fullWidth={fullWidth}
           disabled={disabled}
@@ -171,7 +165,6 @@ export const Configurable: Story = {
     return (
       <ToggleGroup.Root
         label={label ?? 'Filter games'}
-        name={name}
         size={size}
         fullWidth={fullWidth}
         disabled={disabled}
