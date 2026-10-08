@@ -96,6 +96,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   zIndex = 9999,
   analytics: analyticsOverride,
   trackReferenceMovement = false,
+  impressionTrackingId,
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const coachmarkId = useId();
@@ -347,6 +348,13 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               aria-describedby={descriptionId}
               {...getFloatingProps()}
             >
+              {impressionTrackingId && (
+                <div
+                  id={impressionTrackingId}
+                  aria-hidden="true"
+                  style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+                />
+              )}
               {badgeText && (
                 <span className={styles.badge}>
                   <UtilityLabel size="small" weight="semibold" capitalize color="on-dark-primary">

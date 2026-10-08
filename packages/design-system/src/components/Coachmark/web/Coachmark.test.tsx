@@ -719,6 +719,46 @@ describe('Coachmark', () => {
     );
   });
 
+  it('renders an inert tracking element covering the panel when impressionTrackingId is set', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        impressionTrackingId="piano-coachmark-tracker"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    const tracker = document.getElementById('piano-coachmark-tracker');
+    expect(tracker).toBeInTheDocument();
+    expect(tracker).toHaveAttribute('aria-hidden', 'true');
+    expect(tracker?.style.position).toBe('absolute');
+    expect(tracker?.style.inset).toBe('0');
+    expect(tracker?.style.pointerEvents).toBe('none');
+    // Inside the panel itself, not somewhere else on the page -- it needs to move/resize with it.
+    expect(screen.getByRole('dialog').contains(tracker)).toBe(true);
+  });
+
+  it('renders no tracking element when impressionTrackingId is omitted', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(document.getElementById('piano-coachmark-tracker')).not.toBeInTheDocument();
+  });
+
   it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
     renderWithProvider(
       <Coachmark

@@ -107,6 +107,16 @@ export type CoachmarkProps = {
    */
   trackReferenceMovement?: boolean;
 
+  /**
+   * Renders an empty, inert tracking element (id set to this value) inside the floating panel
+   * itself, sized/positioned to exactly cover it. For a third party (e.g. Piano) that tracks
+   * impressions by watching whether *its own* element intersects the viewport, rather than
+   * anything this component exposes directly -- that element needs to actually move and resize
+   * with the panel to reflect this coachmark's real on-screen visibility, not just exist
+   * somewhere else on the page. Omit if nothing needs to observe that.
+   */
+  impressionTrackingId?: string;
+
   /** z-index override for the floating panel. */
   zIndex?: number;
 
