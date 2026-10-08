@@ -15,8 +15,8 @@
      viewport is already narrower than that -- shift/flip reposition the card to stay off the
      edge, but can't shrink it, so it would render flush against the edge with no margin until it
      hits min-width. --spacing-24 must stay in sync with Coachmark.tsx's VIEWPORT_EDGE_PADDING,
-     which keeps the card's *position* (as opposed to its size, here) that same distance from the
-     viewport edge. */
+     which sizes the card the same way -- its final *position* uses the smaller
+     EDGE_HUGGING_PADDING instead (see Coachmark.tsx). */
   min-width: 250px;
   max-width: min(345px, calc(100vw - 2 * var(--spacing-24)));
   /* Without this, `width`/`max-width` set only the content box under the browser's default

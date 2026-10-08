@@ -40,12 +40,19 @@ import styles from './Coachmark.module.scss';
 const ARROW_WIDTH = 12;
 const ARROW_HEIGHT = 6;
 
-// How close the card's position is allowed to get to the viewport edge, and (via
-// Coachmark.module.scss's `max-width: min(345px, calc(100vw - 2 * 24px))`, which must stay in
-// sync with this value) how wide the card itself is allowed to render -- without that CSS half,
-// the card keeps rendering at its content's natural width right up until the viewport is already
-// narrower than that, instead of shrinking early enough to leave this same margin on both sides.
+// Sizes the card (must stay in sync with Coachmark.module.scss's max-width) and sets flip()'s
+// required clearance before it flips sides -- not the card's final position once placed, which
+// uses the smaller EDGE_HUGGING_PADDING below.
 const VIEWPORT_EDGE_PADDING = 24;
+
+// Smaller than VIEWPORT_EDGE_PADDING so a corner-anchored trigger (e.g. a nav icon) hugs the edge
+// instead of sitting dead-center. Used by both alignmentShift and shift -- shift re-clamps
+// whatever alignmentShift computed, so both need the same value or it silently overrides it.
+const EDGE_HUGGING_PADDING = 8;
+
+// Keeps the arrow from sliding into the card's rounded corner when alignmentShift's budget isn't
+// enough to keep the card fully alongside its trigger.
+const ARROW_EDGE_PADDING = 16;
 
 /** Why the coachmark closed, reported on its `coachmark_dismiss` tracking event. */
 type DismissReason = 'close_button' | 'trigger_press' | 'outside_press' | 'escape_key' | 'other';
@@ -116,18 +123,21 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
       }),
       // Shifts 'top/bottom-left/right' back into view along the alignment axis, up to 40% of the
       // card's width, before flipping alignment. No-op for centered/side positions.
-      alignmentShift({ boundary: resolvedPortalRoot ?? undefined, padding: VIEWPORT_EDGE_PADDING }),
+      alignmentShift({
+        boundary: resolvedPortalRoot ?? undefined,
+        padding: EDGE_HUGGING_PADDING,
+      }),
       // Vertical is always disabled here -- a coachmark must keep tracking its trigger even off
       // -screen, not get pinned near the viewport edge. Horizontal is a fallback safety net for
       // whatever alignmentShift didn't fully resolve.
       shift({
         boundary: resolvedPortalRoot ?? undefined,
-        padding: VIEWPORT_EDGE_PADDING,
+        padding: EDGE_HUGGING_PADDING,
         mainAxis: !isSidePosition,
         crossAxis: isSidePosition,
       }),
       // eslint-disable-next-line react-hooks/refs
-      arrow({ element: arrowRef }),
+      arrow({ element: arrowRef, padding: ARROW_EDGE_PADDING }),
     ],
     [resolvedPortalRoot, isSidePosition]
   );
@@ -314,6 +324,9 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               style={{ ...floatingStyles, zIndex }}
               className={styles.wrapper}
               id={`coachmark-${coachmarkId}`}
+              // flip() may resolve the opposite side from the requested `position` prop -- expose
+              // which one actually happened so a consuming app's CSS can react to it.
+              data-placement={context.placement}
               aria-labelledby={titleId}
               aria-describedby={descriptionId}
               {...getFloatingProps()}
