@@ -68,7 +68,7 @@ export interface ToggleGroupItemProps extends BaseProps {
   /** Value reported to the group's `onChange`. Unique within the group. */
   value: string;
   /**
-   * Item content: text, an icon from `@/icons`, or a mix, such as an icon plus a label, or a label
+   * Item content: text, an icon from this design system, or a mix, such as an icon plus a label, or a label
    * plus `ToggleGroup.Detail`. Icons take the item's text color. Text becomes the item's accessible
    * name.
    */

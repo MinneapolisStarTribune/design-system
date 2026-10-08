@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as ToggleGroupStories from './ToggleGroup.stories';
 
 <Meta of={ToggleGroupStories} />
@@ -98,7 +98,7 @@ function GameFilter() {
 
 ### Icons
 
-Put icons from `@/icons` in the children, like text. They take the item's text color, so they read
+Put icons from this design system in the children, like text. They take the item's text color, so they read
 on the selected fill too. The item sizes them to match its text, so leave off `size`.
 
 An icon-only item has no text, so give it an `aria-label`. In development, an item with neither text nor `aria-label` logs a
@@ -133,6 +133,44 @@ browser provides the keyboard and screen reader behavior:
 
 ---
 
-<Primary />
-<Controls />
-<Stories />
+## Configurable
+
+<Canvas of={ToggleGroupStories.Configurable} />
+
+<Controls of={ToggleGroupStories.Configurable} />
+
+## Single
+
+<Canvas of={ToggleGroupStories.Single} />
+
+## Multiple
+
+<Canvas of={ToggleGroupStories.Multiple} />
+
+## Icon Only
+
+<Canvas of={ToggleGroupStories.IconOnly} />
+
+## Icon Only, Multiple
+
+<Canvas of={ToggleGroupStories.IconOnlyMultiple} />
+
+## Icon and Label
+
+<Canvas of={ToggleGroupStories.IconAndLabel} />
+
+## Sizes
+
+<Canvas of={ToggleGroupStories.Sizes} />
+
+## Full Width
+
+<Canvas of={ToggleGroupStories.FullWidth} />
+
+## Disabled Item
+
+<Canvas of={ToggleGroupStories.DisabledItem} />
+
+## Disabled Group
+
+<Canvas of={ToggleGroupStories.DisabledGroup} />

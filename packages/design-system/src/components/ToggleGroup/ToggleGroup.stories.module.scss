@@ -5,3 +5,9 @@
 .sectionLabel {
   margin: var(--spacing-16) 0;
 }
+
+.toggleGroupSizeContainer {
+  display: grid;
+  gap: var(--spacing-16);
+  justify-items: start;
+}
