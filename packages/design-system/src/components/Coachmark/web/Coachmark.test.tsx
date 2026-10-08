@@ -739,6 +739,11 @@ describe('Coachmark', () => {
     expect(tracker?.style.position).toBe('absolute');
     expect(tracker?.style.inset).toBe('0');
     expect(tracker?.style.pointerEvents).toBe('none');
+    // .wrapper is overflow: visible with rounded corners -- without clipping to match, a third
+    // party's content rendered in here (not under this component's control) can poke out past
+    // the rounded corners (e.g. a white, square iframe background).
+    expect(tracker?.style.overflow).toBe('hidden');
+    expect(tracker?.style.borderRadius).toBe('inherit');
     // Inside the panel itself, not somewhere else on the page -- it needs to move/resize with it.
     expect(screen.getByRole('dialog').contains(tracker)).toBe(true);
   });

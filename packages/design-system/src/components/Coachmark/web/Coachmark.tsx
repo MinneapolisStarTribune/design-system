@@ -352,7 +352,19 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                 <div
                   id={impressionTrackingId}
                   aria-hidden="true"
-                  style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+                  // .wrapper is `overflow: visible` (the arrow/shadow need to extend past its own
+                  // edge) with rounded corners, so whatever a third party renders into this --
+                  // not under this component's control -- isn't automatically clipped to match
+                  // and can poke out past the rounded corners (e.g. a white, square iframe
+                  // background). `overflow: hidden` + inheriting .wrapper's own radius clips it
+                  // to the same rounded shape without affecting the rest of the panel.
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    overflow: 'hidden',
+                    borderRadius: 'inherit',
+                    pointerEvents: 'none',
+                  }}
                 />
               )}
               {badgeText && (
