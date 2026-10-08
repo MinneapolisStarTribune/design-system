@@ -20,6 +20,11 @@
     "web": true
   },
   {
+    "component": "ToggleGroup",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "FormGroup.Label",
     "native": true,
     "web": true
