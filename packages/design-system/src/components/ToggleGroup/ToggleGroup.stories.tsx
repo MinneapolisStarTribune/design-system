@@ -142,20 +142,27 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-const [filter, setFilter] = useState('all');
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
-  <ToggleGroup.Item value="all">
-    All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="past">
-    Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="upcoming">
-    Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-        `,
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="past">
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">
+        Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`,
       },
     },
   },
@@ -349,156 +356,261 @@ const renderDisabledGroup = () => (
 );
 
 export const Single: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-const [filter, setFilter] = useState('all');
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
-  <ToggleGroup.Item value="all">
-    All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="past">
-    Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="upcoming">
-    Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="past">
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">
+        Upcoming <ToggleGroup.Detail>(18)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderSingle,
 };
 
 export const Multiple: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-const [levels, setLevels] = useState(['varsity', 'jv']);
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root type="multiple" label="Levels" value={levels} onChange={setLevels}>
-  <ToggleGroup.Item value="varsity">Varsity</ToggleGroup.Item>
-  <ToggleGroup.Item value="jv">JV</ToggleGroup.Item>
-  <ToggleGroup.Item value="sophomore">Sophomore</ToggleGroup.Item>
-  <ToggleGroup.Item value="freshman">Freshman</ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+export function LevelFilter() {
+  const [levels, setLevels] = useState(['varsity', 'jv']);
+
+  return (
+    <ToggleGroup.Root type="multiple" label="Levels" value={levels} onChange={setLevels}>
+      <ToggleGroup.Item value="varsity">Varsity</ToggleGroup.Item>
+      <ToggleGroup.Item value="jv">JV</ToggleGroup.Item>
+      <ToggleGroup.Item value="sophomore">Sophomore</ToggleGroup.Item>
+      <ToggleGroup.Item value="freshman">Freshman</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderMultiple,
 };
 
 export const IconOnly: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-const [view, setView] = useState('list');
+import { useState } from 'react';
+import {
+  CalendarIcon,
+  ChartIcon,
+  MenuStackedIcon,
+  ToggleGroup,
+} from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root label="View" value={view} onChange={setView}>
-  <ToggleGroup.Item value="list" aria-label="List view">
-    <MenuStackedIcon />
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="calendar" aria-label="Calendar view">
-    <CalendarIcon />
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="chart" aria-label="Chart view">
-    <ChartIcon />
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+export function ViewSwitcher() {
+  const [view, setView] = useState('list');
+
+  return (
+    <ToggleGroup.Root label="View" value={view} onChange={setView}>
+      <ToggleGroup.Item value="list" aria-label="List view">
+        <MenuStackedIcon />
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="calendar" aria-label="Calendar view">
+        <CalendarIcon />
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="chart" aria-label="Chart view">
+        <ChartIcon />
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderIconOnly,
 };
 
 export const IconOnlyMultiple: Story = {
   name: 'Icon Only, Multiple',
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-const [channels, setChannels] = useState(['push']);
+import { useState } from 'react';
+import {
+  DeviceMobileIcon,
+  MailIcon,
+  NotificationIcon,
+  ToggleGroup,
+} from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root type="multiple" label="Alert channels" value={channels} onChange={setChannels}>
-  <ToggleGroup.Item value="push" aria-label="Push notifications">
-    <NotificationIcon />
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="email" aria-label="Email">
-    <MailIcon />
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="sms" aria-label="Text message">
-    <DeviceMobileIcon />
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+export function AlertChannels() {
+  const [channels, setChannels] = useState(['push']);
+
+  return (
+    <ToggleGroup.Root
+      type="multiple"
+      label="Alert channels"
+      value={channels}
+      onChange={setChannels}
+    >
+      <ToggleGroup.Item value="push" aria-label="Push notifications">
+        <NotificationIcon />
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="email" aria-label="Email">
+        <MailIcon />
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="sms" aria-label="Text message">
+        <DeviceMobileIcon />
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderIconOnlyMultiple,
 };
 
 export const IconAndLabel: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-const [sport, setSport] = useState('hockey');
+import { useState } from 'react';
+import {
+  SportsBasketballIcon,
+  SportsFootballIcon,
+  SportsHockeyIcon,
+  ToggleGroup,
+} from '@minneapolisstartribune/design-system/web';
 
-<ToggleGroup.Root label="Sport" value={sport} onChange={setSport}>
-  <ToggleGroup.Item value="football">
-    <SportsFootballIcon />
-    Football
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="basketball">
-    <SportsBasketballIcon />
-    Basketball
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="hockey">
-    <SportsHockeyIcon />
-    Hockey
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+export function SportPicker() {
+  const [sport, setSport] = useState('hockey');
+
+  return (
+    <ToggleGroup.Root label="Sport" value={sport} onChange={setSport}>
+      <ToggleGroup.Item value="football">
+        <SportsFootballIcon />
+        Football
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="basketball">
+        <SportsBasketballIcon />
+        Basketball
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="hockey">
+        <SportsHockeyIcon />
+        Hockey
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderIconAndLabel,
 };
 
 export const Sizes: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-${TOGGLE_GROUP_SIZES.map(
-  (
-    size
-  ) => `<ToggleGroup.Root size="${size}" label="Filter games" value={filter} onChange={setFilter}>
-  {/* items */}
-</ToggleGroup.Root>`
-).join('\n\n')}
-  `),
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    // size: 'small' | 'medium' (default) | 'large'
+    <ToggleGroup.Root size="small" label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">All Games</ToggleGroup.Item>
+      <ToggleGroup.Item value="past">Past</ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">Upcoming</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderSizes,
 };
 
 export const FullWidth: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: {
     ...exampleParameters(`
-<ToggleGroup.Root fullWidth label="Filter games" value={filter} onChange={setFilter}>
-  {/* items */}
-</ToggleGroup.Root>
-    `),
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    // Stretches to fill its container, splitting the width evenly
+    <ToggleGroup.Root fullWidth label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">All Games</ToggleGroup.Item>
+      <ToggleGroup.Item value="past">Past</ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">Upcoming</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
     layout: 'padded',
   },
   render: renderFullWidth,
 };
 
 export const DisabledItem: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-<ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
-  <ToggleGroup.Item value="all">
-    All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="past">
-    Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-  <ToggleGroup.Item value="upcoming" disabled>
-    Upcoming <ToggleGroup.Detail>(0)</ToggleGroup.Detail>
-  </ToggleGroup.Item>
-</ToggleGroup.Root>
-  `),
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">
+        All Games <ToggleGroup.Detail>(48)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="past">
+        Past <ToggleGroup.Detail>(30)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming" disabled>
+        Upcoming <ToggleGroup.Detail>(0)</ToggleGroup.Detail>
+      </ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderDisabledItem,
 };
 
 export const DisabledGroup: Story = {
+  tags: ['!dev'],
   args: EXAMPLE_ARGS,
   parameters: exampleParameters(`
-<ToggleGroup.Root disabled label="Filter games" value={filter} onChange={setFilter}>
-  {/* items */}
-</ToggleGroup.Root>
-  `),
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+export function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    // Disables every item
+    <ToggleGroup.Root disabled label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">All Games</ToggleGroup.Item>
+      <ToggleGroup.Item value="past">Past</ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">Upcoming</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+`),
   render: renderDisabledGroup,
 };
 

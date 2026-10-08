@@ -10,9 +10,11 @@ export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
 export * as Dialog from './Dialog/Dialog';
 export {
+  type DialogActionsProps,
   type DialogCloseReason,
   type DialogProps,
   type DialogRole,
+  type DialogSectionProps,
   type DialogTitleProps,
 } from './Dialog/Dialog.types';
 export * as Drawer from './Drawer/Drawer';
@@ -22,6 +24,7 @@ export {
   type DrawerPosition,
   type DrawerProps,
   type DrawerRole,
+  type DrawerSectionProps,
 } from './Drawer/Drawer.types';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
@@ -127,7 +130,6 @@ export {
 } from './Skeleton/web/Skeleton';
 export * as ToggleGroup from './ToggleGroup/ToggleGroup';
 export {
-  TOGGLE_GROUP_SIZES,
   TOGGLE_GROUP_TYPES,
   type ToggleGroupDetailProps,
   type ToggleGroupItemProps,

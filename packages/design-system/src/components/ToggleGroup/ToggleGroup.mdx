@@ -77,7 +77,10 @@ follow the active brand and color scheme. The color isn't configurable.
 </table>
 
 ```tsx
-function GameFilter() {
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+export function GameFilter() {
   const [filter, setFilter] = useState('all');
 
   return (
