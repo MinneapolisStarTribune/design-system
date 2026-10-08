@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ComponentProps } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -258,6 +258,74 @@ describe('Menu', () => {
 
     expect(link.tagName).toBe('A');
     expect(link).toHaveAttribute('href', 'https://varsity.startribune.com/');
+  });
+
+  describe('with a router link as the item', () => {
+    const navigate = vi.fn();
+
+    // Mirrors next/link: runs onClick, then navigates on the client unless the click was prevented.
+    const MockNextLink = ({
+      href,
+      prefetch,
+      onClick,
+      ...rest
+    }: ComponentProps<'a'> & { href: string; prefetch?: boolean }) => (
+      <a
+        {...rest}
+        href={href}
+        data-prefetch={String(prefetch)}
+        onClick={(event) => {
+          onClick?.(event);
+          if (event.defaultPrevented) return;
+          event.preventDefault();
+          navigate(href);
+        }}
+      />
+    );
+
+    beforeEach(() => navigate.mockClear());
+
+    it('renders the link with menuitem semantics and navigates, then closes', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      renderWithProvider(
+        <Harness onClose={onClose}>
+          <Menu.Item as={MockNextLink} href="/profile" prefetch={false}>
+            Profile
+          </Menu.Item>
+        </Harness>
+      );
+
+      await openMenu(user);
+      const link = screen.getByRole('menuitem', { name: 'Profile' });
+      expect(link.tagName).toBe('A');
+      expect(link).toHaveAttribute('href', '/profile');
+      expect(link).toHaveAttribute('data-prefetch', 'false');
+      await waitFor(() => expect(link).toHaveFocus());
+
+      await user.click(link);
+
+      expect(navigate).toHaveBeenCalledWith('/profile');
+      expect(onClose).toHaveBeenCalledWith('itemSelect');
+    });
+
+    it('does not navigate when disabled', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+      renderWithProvider(
+        <Harness onClose={onClose}>
+          <Menu.Item as={MockNextLink} href="/profile" disabled>
+            Profile
+          </Menu.Item>
+        </Harness>
+      );
+
+      await openMenu(user);
+      await user.click(screen.getByRole('menuitem', { name: 'Profile' }));
+
+      expect(navigate).not.toHaveBeenCalled();
+      expect(onClose).not.toHaveBeenCalled();
+    });
   });
 
   it('hides the arrow when hideArrow is set', async () => {

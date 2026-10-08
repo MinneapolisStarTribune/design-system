@@ -1,4 +1,5 @@
-import type { ComponentProps, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { ComponentProps, ElementType, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
 import type {
@@ -97,7 +98,15 @@ export type MenuItemButtonProps = MenuItemBaseProps &
   Omit<ComponentProps<'button'>, keyof MenuItemBaseProps | 'type' | 'role'> & { href?: undefined };
 
 export type MenuItemLinkProps = MenuItemBaseProps &
-  Omit<ComponentProps<'a'>, keyof MenuItemBaseProps | 'role'> & { href: string };
+  ButtonRouterLinkProps &
+  Omit<ComponentProps<'a'>, keyof MenuItemBaseProps | keyof ButtonRouterLinkProps | 'role'> & {
+    href: string;
+    /**
+     * Link component to render, such as `Link` from `next/link`. It must forward props to its `<a>`.
+     * @default 'a'
+     */
+    as?: ElementType;
+  };
 
 export type MenuItemProps = MenuItemButtonProps | MenuItemLinkProps;
 

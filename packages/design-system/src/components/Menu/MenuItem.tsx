@@ -6,7 +6,7 @@ import styles from './Menu.module.scss';
 import { useMenuContext } from './MenuContext';
 import type { MenuItemProps } from './Menu.types';
 
-/** A menu row. Renders an `a` when `href` is set, otherwise a `button`. */
+/** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
 export const MenuItem: React.FC<MenuItemProps> = (props) => {
   const { closeFromItem } = useMenuContext();
   const { disabled, closeOnSelect = true } = props;
@@ -35,6 +35,7 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
 
   if (props.href !== undefined) {
     const {
+      as: LinkComponent = 'a',
       children,
       disabled: _disabled,
       closeOnSelect: _closeOnSelect,
@@ -44,9 +45,13 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
     } = props;
 
     return (
-      <a {...rest} {...itemProps} onClick={(event) => select(event, onClick)}>
+      <LinkComponent
+        {...rest}
+        {...itemProps}
+        onClick={(event: MouseEvent<HTMLAnchorElement>) => select(event, onClick)}
+      >
         {children}
-      </a>
+      </LinkComponent>
     );
   }
 

@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useState } from 'react';
+import { ComponentProps, ReactElement, ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
@@ -136,6 +136,17 @@ const AnchorElDemo = (position: ExamplePosition) => {
   );
 };
 
+/**
+ * Stand-in for `next/link` so Storybook doesn't depend on `next`.
+ * In your app: `import NextLink from 'next/link'` and pass `as={NextLink}`.
+ */
+const StoryMockNextLink = ({
+  prefetch,
+  ...rest
+}: ComponentProps<'a'> & { href: string; prefetch?: boolean }) => (
+  <a {...rest} data-prefetch={prefetch === undefined ? undefined : String(prefetch)} />
+);
+
 const AccountItems = () => (
   <>
     <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noreferrer">
@@ -148,7 +159,7 @@ const AccountItems = () => (
       </Menu.ItemIcon>
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item onClick={() => undefined}>
+    <Menu.Item as={StoryMockNextLink} href="#profile" prefetch={false}>
       <Menu.ItemIcon>
         <SettingsIcon size="large" />
       </Menu.ItemIcon>
@@ -285,7 +296,9 @@ const EXAMPLES = {
         </MenuDemo>
       </div>
     ),
-    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+    code: (positionProps) => `import NextLink from 'next/link';
+
+${OPEN_STATE_CODE}<Menu.Root
   trigger={<Button>Account</Button>}
 ${OPEN_STATE_PROPS}
 ${positionProps}  aria-label="Account"
@@ -296,7 +309,7 @@ ${positionProps}  aria-label="Account"
     <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
   </Menu.Item>
   <Menu.Divider />
-  <Menu.Item onClick={openProfile}>
+  <Menu.Item as={NextLink} href="/profile" prefetch={false}>
     <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
     Manage Profile
   </Menu.Item>
