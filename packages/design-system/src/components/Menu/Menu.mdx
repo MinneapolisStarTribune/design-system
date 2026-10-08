@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as MenuStories from './Menu.stories';
 
 <Meta of={MenuStories} />
@@ -7,18 +7,18 @@ import * as MenuStories from './Menu.stories';
 
 # Menu
 
-`Menu` shows a short list of actions or links next to the element that triggered it, for example an account menu, a table row's "more actions" button, or a bulk-actions button. It uses the shared internal surface that also powers `Popover`, so it has the same surface, pointer, and dismiss behavior. It closes when the user selects an item, clicks outside, or presses Escape or Tab.
+`Menu` shows a short list of actions or links next to the element that triggered it, for example an account menu, a table row's "more actions" button, or a bulk-actions button. It uses the shared internal surface that also powers `Popover`, so it has the same surface, pointer, and dismiss behavior.
 
 [Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-508)
 
 ## Anatomy
 
-1. **Container** — the rounded popover surface that holds the items.
-2. **Pointer** — the arrow that points at the anchor. It can be pinned or hidden.
-3. **Item** — one row. It renders a `<button>`, or an `<a>` when `href` is set.
-4. **Start icon (optional)** — shown before the label.
-5. **End icon (optional)** — pushed to the right, for example an external-link arrow.
-6. **Divider (optional)** — separates groups of items.
+1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` or positions against `anchorEl`, and handles dismiss, focus, and arrow-key navigation.
+2. **Pointer**: the arrow that points at the anchor. It can be pinned or hidden.
+3. **Item** (`Menu.Item`): one row. It renders a `<button>`, or an `<a>` when `href` is set.
+4. **Start icon (optional)** (`Menu.ItemIcon`): shown before the label.
+5. **End icon (optional)** (`Menu.ItemIcon position="end"`): pushed to the right, for example an external-link arrow.
+6. **Divider (optional)** (`Menu.Divider`): separates groups of items.
 
 ## Usage
 
@@ -30,51 +30,6 @@ import * as MenuStories from './Menu.stories';
 - To show items only in some states, render them conditionally (`{status === 'active' && <Menu.Item />}`). Use `disabled` only when the user should see that the action exists
 - Pass `trigger` and the menu renders it, toggles on click, and sets `aria-haspopup`, `aria-expanded`, and `aria-controls`. The trigger must be a single element that accepts a ref
 - Pass `anchorEl` instead when you manage the anchor yourself, for example to open the menu from a table row. Keep the element in state and set the trigger's ARIA attributes yourself
-
-<table>
-  <thead>
-    <tr>
-      <th>Piece</th>
-      <th>Role</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <code>Menu.Root</code>
-      </td>
-      <td>Renders <code>trigger</code> or positions against <code>anchorEl</code>, and handles dismiss, focus, and arrow-key navigation.</td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>Menu.Item</code>
-      </td>
-      <td>
-        One action or link. Calls <code>onClick</code>, then closes the menu unless{' '}
-        <code>closeOnSelect</code> is false.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>Menu.ItemIcon</code>
-      </td>
-      <td>
-        Decorative icon slot. <code>{'position="end"'}</code> puts the icon after the label.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <code>Menu.Divider</code>
-      </td>
-      <td>Separator between groups of items.</td>
-    </tr>
-
-  </tbody>
-</table>
 
 ## Customization Props
 
@@ -102,8 +57,8 @@ import * as MenuStories from './Menu.stories';
       </td>
       <td>Menu.Root</td>
       <td>
-        The element that toggles the menu, and the callback for when it asks to open. Pass these
-        or <code>anchorEl</code>.
+        The element that toggles the menu, and its open callback. Pass these or{' '}
+        <code>anchorEl</code>.
       </td>
     </tr>
 
@@ -132,7 +87,7 @@ import * as MenuStories from './Menu.stories';
         <code>aria-label</code> / <code>aria-labelledby</code>
       </td>
       <td>Menu.Root</td>
-      <td>The menu's accessible name. Always provide one.</td>
+      <td>The menu's accessible name.</td>
     </tr>
 
     <tr>
@@ -284,6 +239,12 @@ Set these CSS variables on the class you pass to `Menu.Root`:
 }
 ```
 
+### Theme and icon color
+
+The menu follows the app's light or dark theme. The surface, text, default icon color, dividers, and hover state all switch with it.
+
+Icons keep their own color. Pass a named color such as `brand-01`, which resolves per brand and theme (green for Star Tribune, blue for Varsity), or any CSS color through `style`.
+
 ## Positioning
 
 `anchorOrigin` and `transformOrigin` work like MUI's: each is a `{ vertical, horizontal }` point, and the menu moves so its `transformOrigin` sits on the anchor's `anchorOrigin`.
@@ -416,70 +377,6 @@ By default the pointer aims at the center of the anchor and stays at least 16px 
 
 For example, opening above with right edges aligned (`anchorOrigin` top right, `transformOrigin` bottom right) and `arrowOffset="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
 
-## Example
-
-With `trigger`, the menu renders the button and sets its ARIA attributes:
-
-```tsx
-const [open, setOpen] = useState(false);
-
-<Menu.Root
-  trigger={<Button aria-label="Account" icon={<AvatarIcon />} variant="ghost" />}
-  open={open}
-  onOpen={() => setOpen(true)}
-  onClose={() => setOpen(false)}
-  aria-label="Account"
->
-  <Menu.Item onClick={onProfile}>Profile</Menu.Item>
-  <Menu.Item href="/logout">Sign out</Menu.Item>
-</Menu.Root>
-```
-
-With `anchorEl`, you keep the anchor in state and wire the trigger yourself:
-
-```tsx
-const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-<Button
-  aria-label="Row actions"
-  aria-haspopup="menu"
-  aria-expanded={anchorEl !== null}
-  icon={<MenuVerticalIcon />}
-  variant="ghost"
-  onClick={(event) => setAnchorEl(event.currentTarget)}
-/>
-
-<Menu.Root
-  anchorEl={anchorEl}
-  open={anchorEl !== null}
-  onClose={() => setAnchorEl(null)}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-  aria-label="Row actions"
->
-  <Menu.Item onClick={onEdit}>
-    <Menu.ItemIcon><EditIcon /></Menu.ItemIcon>
-    Edit
-  </Menu.Item>
-  {status === 'active' && (
-    <Menu.Item onClick={onPause}>
-      <Menu.ItemIcon><PauseIcon /></Menu.ItemIcon>
-      Pause Account
-    </Menu.Item>
-  )}
-  <Menu.Divider />
-  <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noopener noreferrer">
-    <Menu.ItemIcon><HelpIcon color="brand-01" /></Menu.ItemIcon>
-    Help Center
-    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
-  </Menu.Item>
-</Menu.Root>
-```
-
-The menu follows the app's light or dark theme. The surface, text, default icon color, dividers, and hover state all switch with it.
-
-Icons keep their own color. Pass a named color such as `brand-01`, which resolves per brand and theme (green for Star Tribune, blue for Varsity), or any CSS color through `style`.
-
 ## Accessibility
 
 ### Keyboard Navigation
@@ -495,62 +392,15 @@ Icons keep their own color. Pass a named color such as `brand-01`, which resolve
 - The menu uses the `menu` ARIA role, and each item uses `menuitem`
 - Give the menu an `aria-label` or `aria-labelledby`
 - Icons are decorative and hidden from screen readers, so the label has to make sense on its own
-- Add `aria-haspopup="menu"` and `aria-expanded` to your trigger. Menu doesn't render the trigger, so it can't add them for you
-
-## Comparison with Popover and Select
-
-<table>
-  <thead>
-    <tr>
-      <th>Feature</th>
-      <th>Menu</th>
-      <th>Popover</th>
-      <th>Select</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <strong>Content</strong>
-      </td>
-      <td>A list of actions or links</td>
-      <td>Any content: text, headings, forms</td>
-      <td>A list of options</td>
-    </tr>
-
-    <tr>
-      <td>
-        <strong>Result of choosing</strong>
-      </td>
-      <td>Runs an action or follows a link</td>
-      <td>Not applicable</td>
-      <td>Sets a form value</td>
-    </tr>
-
-    <tr>
-      <td>
-        <strong>Arrow-key navigation</strong>
-      </td>
-      <td>Yes</td>
-      <td>No</td>
-      <td>Yes</td>
-    </tr>
-
-    <tr>
-      <td>
-        <strong>Renders its trigger</strong>
-      </td>
-      <td>Yes, with <code>trigger</code></td>
-      <td>Yes</td>
-      <td>Yes</td>
-    </tr>
-
-  </tbody>
-</table>
+- With `anchorEl`, add `aria-haspopup="menu"` and `aria-expanded` to your trigger yourself. With `trigger`, Menu sets them for you
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
-<Primary />
-<Controls />
-<Stories />
+---
+
+## Configurable
+
+Pick an example with the `example` control. The position controls apply to it, and **Show code** follows your changes.
+
+<Canvas of={MenuStories.Configurable} />
+<Controls of={MenuStories.Configurable} />

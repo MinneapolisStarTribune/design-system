@@ -104,8 +104,13 @@ const MenuDemo = ({ initialOpen = false, ...menuProps }: DemoProps) => {
   );
 };
 
+type ExamplePosition = Pick<
+  MenuProps,
+  'anchorOrigin' | 'transformOrigin' | 'hideArrow' | 'arrowOffset'
+>;
+
 /** For an anchor the menu doesn't render, such as one shared by several menus. */
-const AnchorElDemo = () => {
+const AnchorElDemo = (position: ExamplePosition) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   return (
@@ -119,6 +124,7 @@ const AnchorElDemo = () => {
         Open with anchorEl
       </Button>
       <Menu.Root
+        {...position}
         anchorEl={anchorEl}
         open={anchorEl !== null}
         onClose={() => setAnchorEl(null)}
@@ -174,13 +180,13 @@ const RowActionItems = () => (
   </>
 );
 
-const ItemsDemo = () => {
+const ItemsDemo = (position: ExamplePosition) => {
   const [notes, setNotes] = useState(0);
 
   return (
     <div className={styles.itemsDemo}>
       <MenuDemo
-        {...OPEN_RIGHT}
+        {...position}
         aria-label="Item variations"
         trigger={<Button variant="outlined">Open items</Button>}
       >
@@ -235,8 +241,227 @@ const ItemsDemo = () => {
   );
 };
 
+type MenuExample = {
+  label: string;
+  anchorOrigin?: MenuOrigin;
+  transformOrigin?: MenuOrigin;
+  render: (position: ExamplePosition) => ReactElement;
+  /** Builds the docs snippet from the formatted position props. */
+  code: (positionProps: string) => string;
+};
+
+const OPEN_STATE_CODE = `const [open, setOpen] = useState(false);
+
+`;
+
+const OPEN_STATE_PROPS = `  open={open}
+  onOpen={() => setOpen(true)}
+  onClose={() => setOpen(false)}`;
+
+const ROW_ACTION_ITEMS_CODE = `  <Menu.Item onClick={onEdit}>
+    <Menu.ItemIcon><EditIcon size="large" /></Menu.ItemIcon>
+    Edit
+  </Menu.Item>
+  <Menu.Item onClick={onDelete}>
+    <Menu.ItemIcon><TrashIcon size="large" /></Menu.ItemIcon>
+    Delete
+  </Menu.Item>`;
+
+/** Examples for the Configurable story. Each keeps its own position unless a control overrides it. */
+const EXAMPLES = {
+  account: {
+    label: 'Account menu',
+    anchorOrigin: origin('bottom', 'right'),
+    transformOrigin: origin('bottom', 'left'),
+    render: (position) => (
+      <div className={styles.accountFrame}>
+        <MenuDemo
+          {...position}
+          aria-label="Account"
+          className={styles.accountMenu}
+          trigger={<Button>Account</Button>}
+        >
+          <AccountItems />
+        </MenuDemo>
+      </div>
+    ),
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button>Account</Button>}
+${OPEN_STATE_PROPS}
+${positionProps}  aria-label="Account"
+>
+  <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noreferrer">
+    <Menu.ItemIcon><HelpIcon size="large" /></Menu.ItemIcon>
+    Help Center
+    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
+  </Menu.Item>
+  <Menu.Divider />
+  <Menu.Item onClick={openProfile}>
+    <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
+    Manage Profile
+  </Menu.Item>
+  <Menu.Item onClick={logOut}>
+    <Menu.ItemIcon><LogOutIcon size="large" /></Menu.ItemIcon>
+    Log Out
+  </Menu.Item>
+</Menu.Root>`,
+  },
+  rowActions: {
+    label: 'Row actions',
+    anchorOrigin: origin('bottom', 'right'),
+    transformOrigin: origin('top', 'right'),
+    render: (position) => (
+      <div className={styles.tableRow}>
+        <UtilityBody size="small">Table row</UtilityBody>
+        <MenuDemo
+          {...position}
+          aria-label="Row actions"
+          className={styles.rowActionsMenu}
+          trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Row actions" />}
+        >
+          <RowActionItems />
+        </MenuDemo>
+      </div>
+    ),
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Row actions" />}
+${OPEN_STATE_PROPS}
+${positionProps}  aria-label="Row actions"
+>
+${ROW_ACTION_ITEMS_CODE}
+</Menu.Root>`,
+  },
+  items: {
+    label: 'Menu items',
+    ...OPEN_RIGHT,
+    render: (position) => <ItemsDemo {...position} />,
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="outlined">Open items</Button>}
+${OPEN_STATE_PROPS}
+${positionProps}  aria-label="Item variations"
+>
+  <Menu.Item onClick={onSelect}>Text only</Menu.Item>
+  <Menu.Item onClick={onSelect}>
+    <Menu.ItemIcon><CopyIcon /></Menu.ItemIcon>
+    Start icon
+  </Menu.Item>
+  <Menu.Item onClick={onSelect}>
+    <Menu.ItemIcon><LogoVarsityIcon size="large" color="brand-01" /></Menu.ItemIcon>
+    Colored icon (brand-01)
+  </Menu.Item>
+  <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noopener noreferrer">
+    <Menu.ItemIcon><LinkIcon /></Menu.ItemIcon>
+    Link with end icon
+    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
+  </Menu.Item>
+  <Menu.Item onClick={addNote} closeOnSelect={false}>
+    <Menu.ItemIcon><PlusIcon /></Menu.ItemIcon>
+    Add note (stays open)
+  </Menu.Item>
+  <Menu.Item disabled onClick={onSelect}>
+    <Menu.ItemIcon><TrashIcon /></Menu.ItemIcon>
+    Disabled
+  </Menu.Item>
+  <Menu.Divider />
+  <Menu.Item onClick={onSelect}>
+    <Menu.ItemIcon><EditIcon /></Menu.ItemIcon>
+    A long label that needs more than one line to show all of its text
+  </Menu.Item>
+</Menu.Root>`,
+  },
+  longList: {
+    label: 'Long list',
+    ...OPEN_RIGHT,
+    render: (position) => (
+      <MenuDemo
+        {...position}
+        aria-label="Options"
+        trigger={<Button variant="outlined">Open 20 items</Button>}
+      >
+        {Array.from({ length: 20 }, (_, index) => (
+          <Menu.Item key={index} onClick={() => undefined}>
+            Option {index + 1}
+          </Menu.Item>
+        ))}
+      </MenuDemo>
+    ),
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="outlined">Open 20 items</Button>}
+${OPEN_STATE_PROPS}
+${positionProps}  aria-label="Options"
+>
+  {options.map((option) => (
+    <Menu.Item key={option.id} onClick={() => onSelect(option)}>
+      {option.label}
+    </Menu.Item>
+  ))}
+</Menu.Root>`,
+  },
+  anchorElement: {
+    label: 'Anchor element',
+    render: (position) => <AnchorElDemo {...position} />,
+    code: (positionProps) => `const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+<Button
+  variant="outlined"
+  aria-haspopup="menu"
+  aria-expanded={anchorEl !== null}
+  onClick={(event) => setAnchorEl(event.currentTarget)}
+>
+  Open with anchorEl
+</Button>
+
+<Menu.Root
+  anchorEl={anchorEl}
+  open={anchorEl !== null}
+  onClose={() => setAnchorEl(null)}
+${positionProps}  aria-label="Anchor element example"
+>
+${ROW_ACTION_ITEMS_CODE}
+</Menu.Root>`,
+  },
+} satisfies Record<string, MenuExample>;
+
+type ExampleKey = keyof typeof EXAMPLES;
+
+const EXAMPLE_KEYS = Object.keys(EXAMPLES).filter((key): key is ExampleKey => key in EXAMPLES);
+
+const isExampleKey = (value: unknown): value is ExampleKey =>
+  typeof value === 'string' && value in EXAMPLES;
+
+/** Control values win; otherwise each example keeps its own origins. */
+const resolvePosition = (
+  example: MenuExample,
+  { anchorOrigin, transformOrigin, hideArrow, arrowOffset }: ExamplePosition
+): ExamplePosition => ({
+  anchorOrigin: anchorOrigin ?? example.anchorOrigin,
+  transformOrigin: transformOrigin ?? example.transformOrigin,
+  hideArrow,
+  arrowOffset,
+});
+
+const formatValue = (value: unknown) =>
+  typeof value === 'string'
+    ? `"${value}"`
+    : `{${JSON.stringify(value)
+        .replace(/"([^"]+)":/g, ' $1: ')
+        .replace(/"/g, "'")
+        .replace(/}/g, ' }')}}`;
+
+/** One prop per line, each ending in a newline, for the docs snippet. */
+const formatPositionProps = (position: ExamplePosition) =>
+  Object.entries(position)
+    .filter(([, value]) => value !== undefined && value !== false)
+    .map(([name, value]) => (value === true ? `  ${name}\n` : `  ${name}=${formatValue(value)}\n`))
+    .join('');
+
+const getExampleCode = (key: ExampleKey, position: ExamplePosition) => {
+  const example: MenuExample = EXAMPLES[key];
+  return example.code(formatPositionProps(resolvePosition(example, position)));
+};
+
 const meta = {
-  title: 'Feedback & Status/Menu',
+  title: 'Actions/Menu',
   component: Menu.Root,
   parameters: {
     layout: 'centered',
@@ -321,64 +546,36 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-/**
- * Playground
- */
-export const Configurable: Story = {
-  args: {
-    anchorOrigin: origin('bottom', 'left'),
-    transformOrigin: origin('top', 'left'),
-    hideArrow: false,
+type ExampleArgs = ExamplePosition & { example: ExampleKey };
+
+const POSITION_CONTROLS = ['anchorOrigin', 'transformOrigin', 'hideArrow', 'arrowOffset'];
+
+/** Playground. The `example` control picks which menu it shows. */
+export const Configurable: StoryObj<ExampleArgs> = {
+  args: { example: 'account' },
+  argTypes: {
+    example: {
+      control: {
+        type: 'select',
+        labels: Object.fromEntries(EXAMPLE_KEYS.map((key) => [key, EXAMPLES[key].label])),
+      },
+      options: EXAMPLE_KEYS,
+      description: 'Which example to show. Docs only.',
+    },
   },
-  render: ({ anchorOrigin, transformOrigin, hideArrow, arrowOffset, className }) => (
-    <MenuDemo
-      trigger={<Button>Open menu</Button>}
-      aria-label="Account"
-      anchorOrigin={anchorOrigin}
-      transformOrigin={transformOrigin}
-      hideArrow={hideArrow}
-      arrowOffset={arrowOffset}
-      className={className}
-    >
-      <AccountItems />
-    </MenuDemo>
-  ),
   parameters: {
+    chromatic: { disable: true },
+    controls: { include: ['example', ...POSITION_CONTROLS] },
     docs: {
       source: {
-        code: `
-const [open, setOpen] = useState(false);
-
-<Menu.Root
-  trigger={<Button>Open menu</Button>}
-  open={open}
-  onOpen={() => setOpen(true)}
-  onClose={() => setOpen(false)}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-  transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-  aria-label="Account"
->
-  <Menu.Item href="https://varsity.startribune.com/" target="_blank">
-    <Menu.ItemIcon><HelpIcon size="large" /></Menu.ItemIcon>
-    Help Center
-    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
-  </Menu.Item>
-
-  <Menu.Divider />
-
-  <Menu.Item onClick={openProfile}>
-    <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
-    Manage Profile
-  </Menu.Item>
-
-  <Menu.Item onClick={logOut}>
-    <Menu.ItemIcon><LogOutIcon size="large" /></Menu.ItemIcon>
-    Log Out
-  </Menu.Item>
-</Menu.Root>
-        `,
+        transform: (_code: string, { args }: { args: Partial<ExampleArgs> }) =>
+          isExampleKey(args.example) ? getExampleCode(args.example, args) : _code,
       },
     },
+  },
+  render: ({ example, ...position }) => {
+    const selected: MenuExample = EXAMPLES[example];
+    return selected.render(resolvePosition(selected, position));
   },
 };
 
@@ -414,38 +611,13 @@ const Example = ({
   </div>
 );
 
+/** Every example on one page for Chromatic. Only the account menu starts open, since open menus lock scroll. */
 export const AllVariants: Story = {
   parameters: {
     layout: 'fullscreen',
     controls: { disable: true },
-    docs: {
-      description: {
-        story:
-          'The account menu starts open in the story canvas (and in Chromatic snapshots); on this docs page it starts closed so it does not take focus or lock scrolling. Only one menu can be open at a time.',
-      },
-      source: {
-        code: `
-<Menu.Root
-  trigger={<Button>Account</Button>}
-  open={open}
-  onOpen={() => setOpen(true)}
-  onClose={() => setOpen(false)}
-  aria-label="Account"
->
-  <Menu.Item onClick={openProfile}>
-    <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
-    Manage Profile
-  </Menu.Item>
-
-  <Menu.Divider />
-
-  <Menu.Item onClick={logOut}>Log Out</Menu.Item>
-</Menu.Root>
-        `,
-      },
-    },
   },
-  render: (_args, { viewMode }) => (
+  render: () => (
     <div className={styles.page}>
       <Group title="Examples">
         <Example
@@ -454,7 +626,7 @@ export const AllVariants: Story = {
         >
           <div className={styles.accountFrame}>
             <MenuDemo
-              initialOpen={viewMode !== 'docs'}
+              initialOpen
               aria-label="Account"
               className={styles.accountMenu}
               anchorOrigin={origin('bottom', 'right')}
@@ -497,7 +669,7 @@ export const AllVariants: Story = {
             </>
           }
         >
-          <ItemsDemo />
+          <ItemsDemo {...OPEN_RIGHT} />
         </Example>
 
         <Example title="Long lists" description="Long menus scroll inside the surface.">
