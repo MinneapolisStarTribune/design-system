@@ -5,7 +5,8 @@
   --popover-max-height: var(--menu-max-height, 362px);
 }
 
-.container {
+/* Scoped under `.menu` so it beats Popover's `.container` padding whatever the CSS load order. */
+.menu .container {
   /* Popover sets the surface width. Include padding in that width. */
   box-sizing: border-box;
   padding: 0 var(--spacing-4);
