@@ -1,8 +1,8 @@
-import React from 'react';
 import classNames from 'classnames';
-import { MenuItemIconProps } from '../Menu.types';
 import styles from './Menu.module.scss';
+import type { MenuItemIconProps } from './Menu.types';
 
+/** Decorative icon inside a `Menu.Item`, hidden from screen readers. */
 export const MenuItemIcon: React.FC<MenuItemIconProps> = ({
   children,
   position = 'start',

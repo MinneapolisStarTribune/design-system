@@ -1,8 +1,8 @@
-import React from 'react';
 import classNames from 'classnames';
-import { MenuDividerProps } from '../Menu.types';
 import styles from './Menu.module.scss';
+import type { MenuDividerProps } from './Menu.types';
 
+/** Separator between groups of items. Overlaps the row above, so it adds no height. */
 export const MenuDivider: React.FC<MenuDividerProps> = ({ className, dataTestId }) => (
   <div
     role="separator"

@@ -5,13 +5,13 @@ import { vi } from 'vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
-import type { MenuAnchorProps, MenuCloseReason, MenuLabelProps, MenuProps } from '../Menu.types';
-import type * as MenuOrigin from '../menuOrigin';
+import type { MenuAnchorProps, MenuCloseReason, MenuLabelProps, MenuProps } from './Menu.types';
+import type * as MenuOrigin from './menuOrigin';
 
 // Records the anchor origin of each offset function Floating UI runs. The wrappers share one
 // source, as the real offset functions do, which Floating UI compares as equal.
 const offsetCalls = vi.hoisted((): string[] => []);
-vi.mock('../menuOrigin', async (importOriginal) => {
+vi.mock('./menuOrigin', async (importOriginal) => {
   const actual = await importOriginal<typeof MenuOrigin>();
   return {
     ...actual,

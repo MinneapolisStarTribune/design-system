@@ -22,7 +22,7 @@ export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
 
 export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
 
-export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
+export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
   /** Called when the menu requests to close. Receives a reason. */
@@ -49,8 +49,6 @@ export type MenuBaseProps = Pick<BaseProps, 'dataTestId'> & {
    * Accepts a value per breakpoint. Breakpoints without a value use the default.
    */
   arrowOffset?: Responsive<MenuArrowOffset>;
-  /** Classes for the menu surface. */
-  className?: string;
 };
 
 /** A menu needs exactly one accessible name. */
@@ -103,16 +101,13 @@ export type MenuItemLinkProps = MenuItemBaseProps &
 
 export type MenuItemProps = MenuItemButtonProps | MenuItemLinkProps;
 
-export type MenuItemIconProps = Pick<BaseProps, 'dataTestId'> & {
+export type MenuItemIconProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
   /**
    * Which side of the label the icon sits on.
    * @default 'start'
    */
   position?: IconPosition;
-  className?: string;
 };
 
-export type MenuDividerProps = Pick<BaseProps, 'dataTestId'> & {
-  className?: string;
-};
+export type MenuDividerProps = Pick<BaseProps, 'className' | 'dataTestId'>;

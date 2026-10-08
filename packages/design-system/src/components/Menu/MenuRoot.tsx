@@ -1,19 +1,19 @@
 'use client';
 
-import React, { KeyboardEvent, useCallback, useMemo, useRef } from 'react';
+import { type KeyboardEvent, useCallback, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import type { OpenChangeReason } from '@floating-ui/react';
 import { FLOATING_GAP, FloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
-import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from '../menuArrow';
-import { MenuContext } from '../MenuContext';
+import styles from './Menu.module.scss';
+import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
+import { MenuContext } from './MenuContext';
 import {
   DEFAULT_ANCHOR_ORIGIN,
   DEFAULT_TRANSFORM_ORIGIN,
   getMenuOriginPosition,
-} from '../menuOrigin';
-import { MenuCloseReason, MenuProps } from '../Menu.types';
-import styles from './Menu.module.scss';
+} from './menuOrigin';
+import type { MenuCloseReason, MenuProps } from './Menu.types';
 
 const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
 
@@ -35,14 +35,14 @@ const getNextIndex = (key: string, current: number, count: number) => {
   }
 };
 
-// Map Floating UI close reasons to Menu close reasons.
-const toCloseReason = (reason: OpenChangeReason | undefined): MenuCloseReason => {
-  if (reason === 'escape-key') return 'escapeKey';
-  if (reason === 'focus-out') return 'focusOut';
-  if (reason === 'click') return 'triggerClick';
-  return 'outsidePress';
+// Any other Floating UI reason is an outside press.
+const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
+  'escape-key': 'escapeKey',
+  'focus-out': 'focusOut',
+  click: 'triggerClick',
 };
 
+/** A list of actions or links attached to a trigger or an anchor element. */
 export const MenuRoot: React.FC<MenuProps> = ({
   trigger,
   anchorEl,
@@ -71,7 +71,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
       if (nextOpen) onOpen?.();
-      else onClose(toCloseReason(reason));
+      else onClose((reason && CLOSE_REASONS[reason]) ?? 'outsidePress');
     },
     [onOpen, onClose]
   );
@@ -87,8 +87,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
     items[next].focus();
   };
 
-  const closeFromItem = useCallback(() => onClose('itemSelect'), [onClose]);
-  const contextValue = useMemo(() => ({ closeFromItem }), [closeFromItem]);
+  const contextValue = useMemo(() => ({ closeFromItem: () => onClose('itemSelect') }), [onClose]);
 
   const breakpoint = useBreakpoint();
   const { vertical: anchorVertical, horizontal: anchorHorizontal } =
@@ -97,17 +96,15 @@ export const MenuRoot: React.FC<MenuProps> = ({
     resolveResponsive(transformOrigin, breakpoint) ?? DEFAULT_TRANSFORM_ORIGIN;
   const gap = (hideArrow ? 0 : MENU_ARROW_SIZE.height) + FLOATING_GAP;
   // Depend on origin fields so inline objects do not rebuild the middleware.
-  const { placement, coversAnchor, offset } = useMemo(
-    () =>
-      getMenuOriginPosition(
+  const { placement, coversAnchor, offset, offsetDeps } = useMemo(
+    () => ({
+      ...getMenuOriginPosition(
         { vertical: anchorVertical, horizontal: anchorHorizontal },
         { vertical: transformVertical, horizontal: transformHorizontal },
         gap
       ),
-    [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
-  );
-  const offsetDeps = useMemo(
-    () => [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap],
+      offsetDeps: [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap],
+    }),
     [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
   );
 

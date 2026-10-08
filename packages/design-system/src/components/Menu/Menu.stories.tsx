@@ -2,8 +2,8 @@ import { ReactElement, ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
-import { MENU_ARROW_OFFSETS } from '../Menu.constants';
-import type { MenuAnchorProps, MenuLabelProps, MenuOrigin, MenuProps } from '../Menu.types';
+import { MENU_ARROW_OFFSETS } from './Menu.constants';
+import type { MenuAnchorProps, MenuLabelProps, MenuOrigin, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import {
