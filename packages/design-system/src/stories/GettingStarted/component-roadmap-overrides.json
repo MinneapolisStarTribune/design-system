@@ -23,11 +23,11 @@
     "native": true,
     "web": true
   },
-  "ToggleGroup": {
+  "Menu": {
     "native": false,
     "web": true
   },
-  "Menu": {
+  "ToggleGroup": {
     "native": false,
     "web": true
   },
