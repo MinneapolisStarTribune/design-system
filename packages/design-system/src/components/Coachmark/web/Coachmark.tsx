@@ -352,6 +352,12 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                 <div
                   id={impressionTrackingId}
                   aria-hidden="true"
+                  // `aria-hidden`/`pointerEvents: none` alone don't stop a focusable descendant
+                  // from still being reachable by keyboard -- since a third party can inject
+                  // arbitrary content here (e.g. an iframe), `inert` is what actually keeps the
+                  // whole injected subtree out of the tab order, not just hidden from screen
+                  // readers and clicks.
+                  inert
                   // .wrapper is `overflow: visible` (the arrow/shadow need to extend past its own
                   // edge) with rounded corners, so whatever a third party renders into this --
                   // not under this component's control -- isn't automatically clipped to match
@@ -364,6 +370,14 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
                     overflow: 'hidden',
                     borderRadius: 'inherit',
                     pointerEvents: 'none',
+                    // A positioned element with no z-index still paints above normal in-flow
+                    // content (title/description/CTA below), regardless of DOM order -- so
+                    // third-party content injected here (e.g. an opaque iframe) would otherwise
+                    // visually cover the panel's real content despite pointer events passing
+                    // through. `.wrapper` has its own non-auto `zIndex`, making it a stacking
+                    // context -- -1 here stays above its plain background but below everything
+                    // else inside it.
+                    zIndex: -1,
                   }}
                 />
               )}

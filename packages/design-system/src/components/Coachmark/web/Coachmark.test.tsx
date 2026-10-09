@@ -736,6 +736,12 @@ describe('Coachmark', () => {
     const tracker = document.getElementById('piano-coachmark-tracker');
     expect(tracker).toBeInTheDocument();
     expect(tracker).toHaveAttribute('aria-hidden', 'true');
+    // `aria-hidden`/`pointerEvents: none` alone don't stop a focusable descendant (e.g. a
+    // third-party iframe injected here) from still being reachable by keyboard -- `inert` is
+    // what actually keeps the whole injected subtree out of the tab order. Checked via the
+    // attribute, not the `.inert` IDL property -- jsdom sets the former but doesn't reflect the
+    // latter (confirmed directly against jsdom; a real browser reflects both).
+    expect(tracker).toHaveAttribute('inert');
     expect(tracker?.style.position).toBe('absolute');
     expect(tracker?.style.inset).toBe('0');
     expect(tracker?.style.pointerEvents).toBe('none');
@@ -744,6 +750,10 @@ describe('Coachmark', () => {
     // the rounded corners (e.g. a white, square iframe background).
     expect(tracker?.style.overflow).toBe('hidden');
     expect(tracker?.style.borderRadius).toBe('inherit');
+    // A positioned element with no z-index still paints above normal in-flow content
+    // (title/description/CTA) regardless of DOM order -- -1 keeps it below the panel's real
+    // content while staying above .wrapper's own plain background.
+    expect(tracker?.style.zIndex).toBe('-1');
     // Inside the panel itself, not somewhere else on the page -- it needs to move/resize with it.
     expect(screen.getByRole('dialog').contains(tracker)).toBe(true);
   });
