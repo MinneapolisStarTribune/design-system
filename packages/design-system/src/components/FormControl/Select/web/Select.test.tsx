@@ -17,6 +17,25 @@ describe('Select', () => {
     expect(getByRole('combobox')).toBeInTheDocument();
   });
 
+  it('puts no undefined class on the container when a value is selected', () => {
+    const { getByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} value="ca" />
+    );
+
+    expect(getByRole('combobox')).not.toHaveClass('undefined');
+  });
+
+  it('uses 16px option text at every size', async () => {
+    const user = userEvent.setup();
+    const { getByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} size="small" />
+    );
+
+    await user.click(within(getByRole('combobox')).getByRole('button'));
+
+    expect(getByRole('listbox')).toHaveClass('typography-utility-text-regular-medium');
+  });
+
   it('opens dropdown on click', async () => {
     const user = userEvent.setup();
 

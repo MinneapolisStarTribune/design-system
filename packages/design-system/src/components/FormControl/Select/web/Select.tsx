@@ -60,12 +60,6 @@ export const Select: React.FC<SelectProps> = ({
     'typography-utility-text-regular-large': size === 'large',
   });
 
-  const optionTypographyClass = classNames({
-    'typography-utility-text-regular-small': size === 'small',
-    'typography-utility-text-regular-medium': size === 'medium',
-    'typography-utility-text-regular-large': size === 'large',
-  });
-
   const placeholderTypographyClass = classNames({
     'typography-utility-text-italic-small': size === 'small',
     'typography-utility-text-italic-medium': size === 'medium',
@@ -176,7 +170,6 @@ export const Select: React.FC<SelectProps> = ({
       [styles.isDisabled]: isDisabled,
       [styles.isError]: hasError,
       [styles.isOpen]: isOpen,
-      [styles.isFilled]: isFilled,
     },
     className
   );
@@ -236,7 +229,7 @@ export const Select: React.FC<SelectProps> = ({
           ref={listboxRef}
           id={listboxId}
           role="listbox"
-          className={classNames(styles.selectDropdown, optionTypographyClass)}
+          className={classNames(styles.selectDropdown, 'typography-utility-text-regular-medium')}
         >
           {safeOptions.map((option, index) => {
             const isSelected = option.value === value;

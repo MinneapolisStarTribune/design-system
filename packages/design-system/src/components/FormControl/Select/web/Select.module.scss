@@ -1,7 +1,7 @@
 .selectContainer {
   position: relative;
   width: 100%;
-  border: 1px solid var(--color-border-on-dark-strong-01);
+  border: 1px solid var(--color-border-on-light-subtle-02);
   border-radius: var(--radius-8);
   background: var(--color-background-light-default);
   transition:
@@ -40,7 +40,7 @@
   }
 
   &.isError {
-    border-color: var(--color-red-600);
+    border-color: var(--color-border-state-attention-on-light);
   }
 
   &.isDisabled {
@@ -77,6 +77,7 @@
 }
 
 .selectContainer.sizeLarge .selectTrigger {
+  gap: var(--spacing-12);
   padding: 0 var(--spacing-8) 0 var(--spacing-16);
 }
 
@@ -120,13 +121,13 @@
   top: calc(100% + var(--spacing-8));
   left: 0;
   width: 100%;
-  padding: var(--spacing-4);
+  padding: 0 var(--spacing-4);
   margin: 0;
   list-style: none;
-  border-radius: var(--radius-8);
+  border-radius: var(--radius-16);
   z-index: 20;
 
-  max-height: 280px;
+  max-height: 362px;
   overflow-y: auto;
 
   background: var(--color-select-background);
@@ -145,7 +146,7 @@
 .selectOption {
   display: flex;
   align-items: center;
-  padding: var(--spacing-12) var(--spacing-16);
+  padding: var(--spacing-12);
   border-radius: var(--radius-4);
 
   cursor: pointer;
@@ -178,7 +179,7 @@
 /* ---------- Scrollbar ---------- */
 
 .selectDropdown::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 .selectDropdown::-webkit-scrollbar-track {
