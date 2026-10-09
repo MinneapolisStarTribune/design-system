@@ -112,6 +112,10 @@ See [Native Integration Guide](integration-guides/native.md) for more details.
 
 Browse all components interactively in [Storybook](https://design-system.startribune.com).
 
+### Coachmark (web)
+
+A dismissible, externally-controlled callout for an unprompted single action. See [Coachmark](integration-guides/web.md#coachmark) in the web integration guide for setup and usage. For a Piano-driven variant, see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.
@@ -129,6 +133,17 @@ This means each component is exported alongside its main Props type. For example
 - `Button` and `ButtonProps`
 - `NewsHeading` and `NewsHeadingProps`
 - `Icon` and `IconProps`
+
+Compound components are exported as a namespace, with a Props type for their root and for any part that adds props of its own. For example, `Drawer` exposes `Drawer.Root`, `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`; `DrawerProps` types `Drawer.Root` and `DrawerHeadingProps` types `Drawer.Heading` (web only):
+
+```tsx
+import { Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/web';
+
+<Drawer.Root open={open} onClose={() => setOpen(false)}>
+  <Drawer.Heading>Filter Calendar</Drawer.Heading>
+  <Drawer.Body>{/* content */}</Drawer.Body>
+</Drawer.Root>;
+```
 
 ### Importing Types
 
@@ -217,6 +232,26 @@ interface CustomButtonProps extends ButtonProps {
   customProp?: string;
 }
 ```
+
+### Responsive Props
+
+Some props accept a value per breakpoint, typed as `Responsive<T>`. Pass a single value for every screen size, or an object keyed by `Breakpoint` (`'small' | 'medium' | 'large'`; `medium` is 768px+, `large` is 1160px+). Each key applies from that breakpoint up, sizes below the smallest key use the component's default, and the object needs at least one key.
+
+```typescript
+import type {
+  Breakpoint,
+  DrawerProps,
+  Responsive,
+} from '@minneapolisstartribune/design-system/web';
+
+const position: DrawerProps['position'] = { small: 'bottom', large: 'left' };
+
+// Type your own breakpoint-aware values
+const columns: Responsive<number> = { small: 1, medium: 2 };
+const current: Breakpoint = 'medium';
+```
+
+Breakpoint-driven values resolve on the client, so server-rendered markup uses the `small` value until hydration.
 
 ## Versioning
 

@@ -1,0 +1,171 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as DrawerStories from './Drawer.stories';
+
+<Meta of={DrawerStories} />
+
+# Drawer
+
+Drawer is a modal panel attached to an edge of the viewport. Use it for supplementary work that
+belongs next to the page rather than in the middle of it — filtering a list, reviewing details, or
+editing settings for what's on screen. It slides in from the **left** or **right** as a
+full-height panel, or drops from the **top** or rises from the **bottom** as a sheet.
+
+By default a drawer is a side panel on the right on desktop and a
+bottom sheet on phones.
+
+**Web only.** It relies on portals and CSS media queries.
+
+**Validated for Varsity only.** Using it on `startribune-web` may warrant some theming changes.
+
+## Anatomy
+
+1. **Overlay** — Dims the page, blocks interaction underneath, and locks page scroll.
+2. **Panel** — The surface: full height on the left or right edge, or a sheet on the top or
+   bottom edge. At 767px and below, the top and bottom sheets round the corners on their open
+   edge; every other placement is square.
+3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`.
+4. **Heading** — Names the drawer
+5. **Body** — Main content. The only region that scrolls; its top edge fades out once content has
+   scrolled above it, and its bottom edge fades out while more content sits below the fold.
+6. **Footer (optional)** — Actions on one row, each sized to its label and sharing the leftover
+   space. Labels never wrap; if the actions don't fit side by side, they stack.
+
+For contextual, non-blocking content next to a control, use
+[Popover](/docs/feedback-status-popover--docs) instead.
+
+## Usage
+
+- Give every drawer an accessible name: a `Drawer.Heading`, or `aria-label` when there is no
+  visible title
+- Put the primary action **last** in `Drawer.Footer`, so it sits at the end of the row and last in
+  tab order
+- The drawer is always controlled: pass `open` and `onClose`. The X icon button, Escape and
+  overlay presses call `onClose`; footer actions close it by setting `open` to `false`
+- Give `Drawer.Footer` an action that closes the drawer, such as "Done" or a primary action that
+  applies and closes
+- `onClose` receives what triggered it: `'closeButton'`, `'escapeKey'` or `'overlayPress'`. Ignore
+  `'overlayPress'` while a form has unsaved input so a stray click outside doesn't discard it
+- Use `role="alertdialog"` for urgent interruptions that need a response; it's described by its
+  `Drawer.Body` automatically. Add `describeWithBody` to describe a regular drawer holding a short
+  message
+- Pass `closeLabel` to localize the close button's accessible name
+- Don't nest drawers
+
+<table>
+  <thead>
+    <tr>
+      <th>Piece</th>
+      <th>Role</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>Drawer.Root</code></td>
+      <td>
+        Owns placement, open state, focus trapping, scroll locking, dismissal and the enter/exit
+        transition.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Drawer.Heading</code></td>
+      <td>
+        Title. Renders an <code>h2</code> by default and names the drawer via
+        <code>aria-labelledby</code>. Set <code>as</code> to another heading level, or to
+        <code>div</code> when the content isn't a single heading (e.g. a logo plus a title). Its
+        whole text becomes the accessible name, so keep subtitles and badges outside it.
+      </td>
+    </tr>
+
+    <tr>
+      <td><code>Drawer.Body</code></td>
+      <td>Main content region. Scrolls on overflow.</td>
+    </tr>
+
+    <tr>
+      <td><code>Drawer.Footer</code></td>
+      <td>Action row pinned below the body.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Example
+
+```tsx
+import { useState } from 'react';
+import { Button, Drawer, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+const GAME_TYPES = [
+  { value: 'regular-season', title: 'Regular Season' },
+  { value: 'tournament', title: 'Tournament' },
+];
+
+export function FilterCalendarDrawer() {
+  const [open, setOpen] = useState(false);
+  const [gameTypes, setGameTypes] = useState<string[]>([]);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Filter calendar</Button>
+
+      {/* No position: a bottom sheet on phones, a right panel from 768px up */}
+      <Drawer.Root open={open} onClose={() => setOpen(false)}>
+        <Drawer.Heading>Filter Calendar</Drawer.Heading>
+        <Drawer.Body>
+          <FormGroup>
+            <FormGroup.Label>Game type</FormGroup.Label>
+            <FormControl.CheckboxGroup
+              value={gameTypes}
+              onChange={setGameTypes}
+              options={GAME_TYPES}
+              color="brand"
+            />
+          </FormGroup>
+        </Drawer.Body>
+        <Drawer.Footer>
+          <Button variant="outlined" color="neutral" onClick={() => setGameTypes([])}>
+            Clear All
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Show Results
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
+```
+
+## Configurable
+
+<Canvas of={DrawerStories.Configurable} />
+
+<Controls of={DrawerStories.Configurable} />
+
+## Positions
+
+Without `position`, a drawer is a bottom sheet on phones and a right panel from 768px up. Pass one edge to use it at every size, or an object keyed by breakpoint.
+
+Each example opens in its own frame. On this page they start closed, so their focus traps don't take over the page; use **Open**.
+
+### Default
+
+<Canvas of={DrawerStories.DefaultPosition} />
+
+### Top
+
+<Canvas of={DrawerStories.Top} />
+
+### Left
+
+<Canvas of={DrawerStories.Left} />
+
+### Bottom
+
+<Canvas of={DrawerStories.Bottom} />
+
+### Right
+
+<Canvas of={DrawerStories.Right} />

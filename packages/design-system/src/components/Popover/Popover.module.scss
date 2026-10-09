@@ -4,39 +4,21 @@
 
   border-radius: var(--radius-16);
   border: 1px solid var(--color-border-on-light-subtle-01);
-  background: var(--color-base-white);
+  background: var(--popover-background, var(--color-background-light-default));
+  color: var(--color-text-on-light-primary);
 
   box-shadow:
     0 12px 16px -4px rgba(10, 10, 10, 0.08),
     0 2px 6px -2px rgba(10, 10, 10, 0.03);
 
   overflow: visible;
-
-  /* Pin the semantic on-light text tokens to their light-theme values, unconditionally (not
-     just under a dark-mode selector): these tokens flip to light colors under [data-theme='dark']
-     at :root, but every popover variant (heading, description, and any body content rendered via
-     UtilityBody etc.) should keep light-mode text regardless of app theme. In light mode these
-     already match the default, so this is a no-op there. */
-  --color-text-on-light-primary: var(--color-neutral-950);
-  --color-text-on-light-secondary: var(--color-neutral-800);
-  --color-text-on-light-tertiary: var(--color-neutral-700);
-}
-
-.sb-dark .wrapper,
-[data-theme='dark'] .wrapper {
-  border-color: var(--color-border-on-dark-subtle-01);
-  background: var(--color-background-dark-gray-01);
-
-  box-shadow:
-    0 12px 16px -4px rgba(0, 0, 0, 0.25),
-    0 2px 6px -2px rgba(0, 0, 0, 0.18);
 }
 
 /* Root */
 .container {
-  min-width: 240px;
-  max-width: 320px;
-  max-height: 500px;
+  min-width: var(--popover-min-width, 240px);
+  max-width: var(--popover-max-width, 320px);
+  max-height: var(--popover-max-height, 500px);
 
   background: transparent;
   border: none;
@@ -59,14 +41,40 @@
   justify-content: space-between;
 
   padding-right: var(--spacing-8);
-
-  /* Fixed (non-theme-swapped) neutral so the popover text stays dark even in dark mode,
-     unlike the semantic on-light/on-dark text tokens which flip per theme. */
-  color: var(--color-neutral-950) !important;
 }
 
-.title{
+.title {
   padding-top: var(--spacing-8);
+}
+
+/* Without the close button, align the title row with the body's right padding. */
+.headerWithoutClose {
+  padding-right: var(--spacing-16);
+}
+
+.headingText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  min-width: 0;
+}
+
+.eyebrow {
+  /* `!important` beats the global `[class*='typography-']` color, which loads later. */
+  color: var(--color-text-on-light-secondary) !important;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.value {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Close button */
@@ -83,9 +91,8 @@
 .description {
   max-width: 192px;
   margin-top: var(--spacing-8);
-
-  /* Fixed (non-theme-swapped) neutral, see .header for why. */
-  color: var(--color-neutral-800) !important;
+  /* `!important` beats the global `[class*='typography-']` color, which loads later. */
+  color: var(--color-text-on-light-secondary) !important;
 }
 
 /* Divider */
@@ -94,11 +101,6 @@
   background: var(--color-border-on-light-subtle-01);
 
   margin: var(--spacing-12) 0 0 calc(-1 * var(--spacing-16));
-}
-
-.sb-dark .divider,
-[data-theme='dark'] .divider {
-  background: var(--color-border-on-dark-subtle-01);
 }
 
 /* Body */
@@ -110,7 +112,7 @@
 
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+  scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
 }
 
 /* WebKit scrollbar */
@@ -123,12 +125,12 @@
 }
 
 .body::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: var(--color-border-on-light-subtle-01);
   border-radius: var(--radius-full);
 }
 
 .body::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-border-on-light-strong-02);
 }
 
 /* Text-only mode */
@@ -136,17 +138,18 @@
   padding: var(--spacing-16);
 }
 
-/* Arrow (critical for seamless look) */
+/* Arrow (critical for seamless look). FloatingArrow draws a border path, then a fill path whose
+   stroke hides the seam with the surface. */
 .arrow {
   position: absolute;
-
-  fill: var(--color-base-white);
-  stroke: var(--color-border-on-light-subtle-01);
-  stroke-width: 1;
+  fill: var(--popover-arrow-fill, var(--color-background-light-default));
 }
 
-.sb-dark .arrow,
-[data-theme='dark'] .arrow {
-  fill: var(--color-background-dark-gray-01);
-  stroke: var(--color-border-on-dark-subtle-01);
+.arrow > path:first-of-type {
+  stroke: var(--popover-arrow-stroke, var(--color-border-on-light-subtle-01));
 }
+
+.arrow > path:last-of-type {
+  stroke: var(--popover-arrow-fill, var(--color-background-light-default));
+}
+

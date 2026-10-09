@@ -1,12 +1,6 @@
 // Web entrypoint for consuming apps. Import from '@minneapolisstartribune/design-system/web'.
 // This file is sorted alphabetically
 export * from '@/components/index.web';
-export {
-  installExternalTriggerGlobals,
-  useExternalTrigger,
-  type UseExternalTriggerOptions,
-  type UseExternalTriggerResult,
-} from '@/hooks/useExternalTrigger';
 export * from '@/icons';
 export { AnalyticsProvider } from '@/providers/AnalyticsProvider';
 export {
@@ -26,3 +20,4 @@ export {
   useToast,
 } from '@/providers/SnackProvider/SnackProvider';
 export { getBrandFontPath, loadBrandFonts } from '@/styles/fonts';
+export { type Breakpoint, type Responsive } from '@/types/globalTypes';

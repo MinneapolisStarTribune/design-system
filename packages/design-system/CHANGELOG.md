@@ -1,5 +1,41 @@
 # @minneapolisstartribune/design-system
 
+## 2.4.0
+
+### Minor Changes
+
+- [#447](https://github.com/MinneapolisStarTribune/design-system/pull/447) [`49866ab`](https://github.com/MinneapolisStarTribune/design-system/commit/49866ab851d33592002272258e9227a3d67a6f7b) Thanks [@willogura](https://github.com/willogura)! - Export `useCoachmarkPortalRoot` (web) alongside `Coachmark`: creates/reuses a dedicated, viewport-pinned DOM node to use as `Coachmark`'s `portalRoot` prop, so a consuming app's CSS can target one particular coachmark instance (e.g. to give it a different z-index than the rest) via that root's id. Also fixes the `flip`/`shift` boundary issue a bare, zero-height portal node would otherwise cause.
+
+  Moved here from an app that had its own copy of this logic, since any consumer of `Coachmark` with a custom `portalRoot` needs the same safeguards.
+
+### Patch Changes
+
+- [#447](https://github.com/MinneapolisStarTribune/design-system/pull/447) [`6092246`](https://github.com/MinneapolisStarTribune/design-system/commit/6092246500e014b746508e8222dba60e8e606984) Thanks [@willogura](https://github.com/willogura)! - Fix `Coachmark` sitting dead-center instead of hugging the viewport edge near a corner-anchored trigger (e.g. a `top-right`/`bottom-right` coachmark on a nav icon), and its arrow sliding into the card's own rounded corner instead of staying inset from it.
+
+  `shift()` ran after the custom `alignmentShift` middleware and re-clamped the card's position using its own (larger) edge padding, silently overriding whatever edge-hugging position `alignmentShift` had computed. Both now share the same smaller padding. The `arrow()` middleware also now keeps a minimum distance from the card's edge instead of being allowed to slide flush into it.
+
+## 2.3.0
+
+### Minor Changes
+
+- [#439](https://github.com/MinneapolisStarTribune/design-system/pull/439) [`67c7cc8`](https://github.com/MinneapolisStarTribune/design-system/commit/67c7cc8a4eac7d1a77193e3fe1260a8f37e2c56a) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `Drawer` (web): a modal panel attached to the side of the screen. Compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`. Supports a responsive `position`, `role="alertdialog"`, describing the panel by its body (`describeWithBody`), a `closeLabel` for the close button, and an `onClose(reason)` that reports `'closeButton' | 'escapeKey' | 'overlayPress'`.
+  `Drawer.Heading` renders an `h2` by default; pass `as` (`'h1' | 'h2' | 'h3' | 'h4' | 'div'`) to change the heading level, or `div` for content that isn't a single heading. Its props are exported as `DrawerHeadingProps`.
+
+- [#441](https://github.com/MinneapolisStarTribune/design-system/pull/441) [`d8e010d`](https://github.com/MinneapolisStarTribune/design-system/commit/d8e010de770b3bdba368f4ebf9450ab6b2f3778e) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `Dialog` (web): a modal window that's centered on larger screens and rises from the bottom as a sheet on phones.
+  Also adds `error` color option for Button (web and native) in order to allow for delete/destructive confirmation buttons, a common pattern on confirmation dialogs.
+  `Dialog.Actions` stacks its actions full width on phones by default; pass `stackOnMobile={false}` to keep them side by side for longer content like forms.
+  `Dialog.Title` renders an `h2` by default; pass `as` (`'h1' | 'h2' | 'h3' | 'h4' | 'div'`) to change the heading level, or `div` for content that isn't a single heading, like a logo plus a title. Its props are exported as `DialogTitleProps`.
+
+## 2.2.0
+
+### Minor Changes
+
+- [#438](https://github.com/MinneapolisStarTribune/design-system/pull/438) [`a6fa1b0`](https://github.com/MinneapolisStarTribune/design-system/commit/a6fa1b0fc2c0d557577c73b78c5dbc30fc514f5f) Thanks [@willogura](https://github.com/willogura)! - Adds a `Coachmark` component — a dismissible, externally-controlled callout for an unprompted single action. Vendor-specific coachmark integrations (e.g. Piano) live outside this package; see `@minneapolisstartribune/piano-coachmark`.
+
+### Patch Changes
+
+- [#433](https://github.com/MinneapolisStarTribune/design-system/pull/433) [`37f21b3`](https://github.com/MinneapolisStarTribune/design-system/commit/37f21b3d78686d334f789f127f8039c751e3463b) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Fix web Select so Enter highlights the selected option, or the first option when no value matches, on opening. Scroll the dropdown into view with nearest alignment when opened, and keep the active option visible when reopening a long list.
+
 ## 2.1.0
 
 ### Minor Changes

@@ -20,6 +20,11 @@
     "web": true
   },
   {
+    "component": "ToggleGroup",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "FormGroup.Label",
     "native": true,
     "web": true
@@ -140,9 +145,14 @@
     "web": false
   },
   {
-    "component": "Modal",
+    "component": "Dialog",
     "native": false,
-    "web": false
+    "web": true
+  },
+  {
+    "component": "Drawer",
+    "native": false,
+    "web": true
   },
   {
     "component": "SwiperCarousel",
