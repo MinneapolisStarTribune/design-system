@@ -4,6 +4,7 @@
   { "category": "Actions", "name": "ButtonGroup", "platform": ["web", "native"] },
   { "category": "Actions", "name": "UtilityButton", "platform": ["web", "native"] },
   { "category": "Actions", "name": "ToggleGroup", "platform": ["web"] },
+  { "category": "Actions", "name": "Menu", "platform": ["web"] },
   { "category": "Forms", "name": "FormGroup.Label", "platform": ["web", "native"] },
   { "category": "Forms", "name": "FormGroup.Caption", "platform": ["web", "native"] },
   { "category": "Forms", "name": "FormGroup.Description", "platform": ["web", "native"] },

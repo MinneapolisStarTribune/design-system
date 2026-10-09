@@ -1,0 +1,420 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as MenuStories from './Menu.stories';
+
+<Meta of={MenuStories} />
+
+{/* ========== DESIGNER-EDITABLE SECTION START ========== */}
+
+# Menu
+
+`Menu` shows a short list of actions or links next to the element that triggered it, for example an account menu, a table row's "more actions" button, or a bulk-actions button. It uses the shared internal surface that also powers `Popover`, so it has the same surface, pointer, and dismiss behavior.
+
+[Figma Comps](https://www.figma.com/design/f8DSKwKjG4MsSqmA59v1um/Core-Components?node-id=66-508)
+
+## Anatomy
+
+1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` or positions against `anchorEl`, and handles dismiss, focus, and arrow-key navigation.
+2. **Pointer**: the arrow that points at the anchor. It can be pinned or hidden.
+3. **Item** (`Menu.Item`): one row. It renders a `<button>`, or an `<a>` when `href` is set.
+4. **Start icon (optional)** (`Menu.ItemIcon`): shown before the label.
+5. **End icon (optional)** (`Menu.ItemIcon position="end"`): pushed to the right, for example an external-link arrow.
+6. **Divider (optional)** (`Menu.Divider`): separates groups of items.
+
+## Usage
+
+- Use a menu for a handful of actions or links tied to one element
+- Don't use a menu to pick a form value; use `Select`
+- Don't use a menu for rich content such as text, forms, or headings; use `Popover`
+- Keep labels short and start them with a verb, for example "Edit" or "Pause Account"
+- Group related items and separate the groups with `Menu.Divider`
+- To show items only in some states, render them conditionally (`{status === 'active' && <Menu.Item />}`). Use `disabled` only when the user should see that the action exists
+- Pass `trigger` and the menu renders it, toggles on click, and sets `aria-haspopup`, `aria-expanded`, and `aria-controls`. The trigger must be a single element that accepts a ref
+- Pass `anchorEl` instead when you manage the anchor yourself, for example to open the menu from a table row. Keep the element in state and set the trigger's ARIA attributes yourself
+
+## Customization Props
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Applies To</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <code>anchorEl</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>The element the menu is positioned against. Pass this or <code>trigger</code>.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>trigger</code> / <code>onOpen</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>
+        The element that toggles the menu, and its open callback. Pass these or{' '}
+        <code>anchorEl</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>open</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>Required. Whether the menu is shown.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>onClose</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>
+        Called with what closed the menu: <code>{"'escapeKey'"}</code>,{' '}
+        <code>{"'outsidePress'"}</code>, <code>{"'focusOut'"}</code> (Tab),{' '}
+        <code>{"'itemSelect'"}</code>, or <code>{"'triggerClick'"}</code>.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>aria-label</code> / <code>aria-labelledby</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>The menu's accessible name.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>anchorOrigin</code> / <code>transformOrigin</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>
+        The point on the anchor and the point on the menu that meet (default: anchor bottom-left
+        to menu top-left). Accept a value per breakpoint. See Positioning.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>closeOnSelect</code>
+      </td>
+      <td>Menu.Item</td>
+      <td>Whether selecting the item closes the menu (default: true).</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>hideArrow</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>Removes the pointer (default: false).</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>arrowOffset</code>
+      </td>
+      <td>Menu.Root</td>
+      <td>
+        <code>{"'start'"}</code>, <code>{"'center'"}</code>, or <code>{"'end'"}</code>. Pins the
+        pointer along the menu edge. Accepts a value per breakpoint. See Pointer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>onClick</code>
+      </td>
+      <td>Menu.Item</td>
+      <td>Runs when the item is selected.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>href</code>
+      </td>
+      <td>Menu.Item</td>
+      <td>
+        Renders the item as a link. <code>target</code> and <code>rel</code> are passed through.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>as</code>
+      </td>
+      <td>Menu.Item</td>
+      <td>
+        The link component to render when <code>href</code> is set, for example <code>Link</code>{' '}
+        from <code>next/link</code> for client-side navigation. Its props, such as{' '}
+        <code>prefetch</code>, are passed through (default: <code>a</code>).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>disabled</code>
+      </td>
+      <td>Menu.Item</td>
+      <td>Fades the item. It can't be selected, and the arrow keys skip it (default: false).</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>position</code>
+      </td>
+      <td>Menu.ItemIcon</td>
+      <td>
+        <code>{"'start'"}</code> (default) or <code>{"'end'"}</code>. End icons sit after the
+        label, aligned right.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>className</code>
+      </td>
+      <td>Menu.Root, Menu.Item, Menu.ItemIcon, Menu.Divider</td>
+      <td>
+        Custom classes for the element. On <code>Menu.Root</code> it styles the menu surface; use it
+        to set the sizing variables below.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>dataTestId</code>
+      </td>
+      <td>Menu.Root, Menu.Item, Menu.ItemIcon, Menu.Divider</td>
+      <td>
+        Sets <code>data-testid</code> on the element (Menu.Root default: <code>{"'menu'"}</code>).
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+Other button or anchor attributes on `Menu.Item`, such as `aria-label` or `data-*`, are passed through.
+
+### Sizing
+
+Set these CSS variables on the class you pass to `Menu.Root`. A width class on `className`, such as
+Tailwind `w-80`, also sets the surface width when it outranks the menu styles, for example when
+design-system CSS sits in a lower cascade layer than utilities.
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Controls</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <code>--menu-width</code>
+      </td>
+      <td>360px</td>
+      <td>Surface width.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>--menu-max-height</code>
+      </td>
+      <td>362px</td>
+      <td>Maximum list height. Longer menus scroll inside the surface.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>--menu-item-min-height</code>
+      </td>
+      <td>43px</td>
+      <td>Minimum item-row height.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+```css
+.account-menu {
+  --menu-width: 315px;
+  --menu-item-min-height: 48px;
+}
+```
+
+### Theme and icon color
+
+The menu follows the app's light or dark theme. The surface, text, default icon color, dividers, and hover state all switch with it.
+
+Icons keep their own color. Pass a named color such as `brand-01`, which resolves per brand and theme (green for Star Tribune, blue for Varsity), or any CSS color through `style`.
+
+## Positioning
+
+`anchorOrigin` and `transformOrigin` work like MUI's: each is a `{ vertical, horizontal }` point, and the menu moves so its `transformOrigin` sits on the anchor's `anchorOrigin`.
+
+```tsx
+<Menu.Root
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+/>
+```
+
+When the origins sit on opposite edges (anchor bottom and menu top, anchor right and menu left), the menu opens beside the anchor with the pointer. If that side runs out of room, it flips to the other side. Any other pair, such as top-left to top-left, puts the menu over the anchor. The pointer is then hidden. Instead of flipping, the menu slides up or down to stay on screen.
+
+While the menu is open, page scroll is locked, so the menu can't drift away from its anchor. Pressing outside the menu closes it; that press doesn't reach the element underneath.
+
+Common positions:
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        <code>anchorOrigin</code>
+      </th>
+      <th>
+        <code>transformOrigin</code>
+      </th>
+      <th>Result</th>
+      <th>Typical use</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>bottom left</td>
+      <td>top left</td>
+      <td>Below, left edges aligned (default)</td>
+      <td>Buttons, bulk actions</td>
+    </tr>
+
+    <tr>
+      <td>bottom right</td>
+      <td>top right</td>
+      <td>Below, right edges aligned</td>
+      <td>Table row "more actions"</td>
+    </tr>
+
+    <tr>
+      <td>top center</td>
+      <td>bottom center</td>
+      <td>Above, centered</td>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td>bottom right</td>
+      <td>bottom left</td>
+      <td>Right, bottom edges aligned</td>
+      <td>Sidebar avatar (tablet)</td>
+    </tr>
+
+    <tr>
+      <td>top right</td>
+      <td>bottom right</td>
+      <td>Above, right edges aligned</td>
+      <td>Sidebar footer (desktop)</td>
+    </tr>
+
+    <tr>
+      <td>top left</td>
+      <td>top left</td>
+      <td>Over the anchor, no pointer</td>
+      <td></td>
+    </tr>
+
+  </tbody>
+</table>
+
+### Responsive
+
+`anchorOrigin`, `transformOrigin`, and `arrowOffset` also take an object keyed by breakpoint. Each key applies from that breakpoint up. Breakpoints below the smallest key use the default.
+
+```tsx
+<Menu.Root
+  anchorOrigin={{
+    small: { vertical: 'center', horizontal: 'right' },
+    large: { vertical: 'top', horizontal: 'center' },
+  }}
+  transformOrigin={{
+    small: { vertical: 'center', horizontal: 'left' },
+    large: { vertical: 'bottom', horizontal: 'center' },
+  }}
+  arrowOffset={{ large: 'end' }}
+/>
+```
+
+## Pointer
+
+By default the pointer aims at the center of the anchor and stays at least 16px from the menu's rounded corners. Use `arrowOffset` only when a design needs the pointer in a fixed position:
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Pointer position</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>(not set)</td>
+      <td>Aims at the anchor's center.</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>{"'start'"}</code> / <code>{"'end'"}</code>
+      </td>
+      <td>16px from the menu's start or end edge (left or right; top or bottom for side menus).</td>
+    </tr>
+
+    <tr>
+      <td>
+        <code>{"'center'"}</code>
+      </td>
+      <td>The middle of the edge.</td>
+    </tr>
+
+  </tbody>
+</table>
+
+For example, opening above with right edges aligned (`anchorOrigin` top right, `transformOrigin` bottom right) and `arrowOffset="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
+
+## Accessibility
+
+### Keyboard Navigation
+
+- The first enabled item receives focus when the menu opens
+- **Arrow Down / Arrow Up** move between items and wrap around. Disabled items are skipped
+- **Home / End** jump to the first or last item
+- **Enter** selects the focused item. **Space** also selects button items; links follow the browser's default
+- **Escape**, **Tab**, or a click outside closes the menu, and focus returns to the anchor
+
+### Screen Readers
+
+- The menu uses the `menu` ARIA role, and each item uses `menuitem`
+- Give the menu an `aria-label` or `aria-labelledby`
+- Icons are decorative and hidden from screen readers, so the label has to make sense on its own
+- With `anchorEl`, add `aria-haspopup="menu"` and `aria-expanded` to your trigger yourself. With `trigger`, Menu sets them for you
+
+{/* ========== DESIGNER-EDITABLE SECTION END ========== */}
+
+---
+
+## Configurable
+
+Pick an example with the `example` control. The position controls apply to it, and **Show code** follows your changes.
+
+<Canvas of={MenuStories.Configurable} />
+<Controls of={MenuStories.Configurable} />
