@@ -2,21 +2,10 @@ import type { ComponentProps, ElementType, HTMLAttributes, ReactElement, ReactNo
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
-import type {
-  MENU_ARROW_OFFSETS,
-  MENU_CLOSE_REASONS,
-  MENU_HORIZONTAL_ORIGINS,
-  MENU_VERTICAL_ORIGINS,
-} from './Menu.constants';
+import type { MENU_ARROW_OFFSETS, MENU_CLOSE_REASONS } from './Menu.constants';
 
-/** Floating UI placement for the origins. */
+/** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
-
-/** A point on the anchor or the menu. */
-export type MenuOrigin = {
-  vertical: (typeof MENU_VERTICAL_ORIGINS)[number];
-  horizontal: (typeof MENU_HORIZONTAL_ORIGINS)[number];
-};
 
 /** Arrow position along the menu edge that faces the anchor. */
 export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
@@ -29,16 +18,10 @@ export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   /** Called when the menu requests to close. Receives a reason. */
   onClose: (reason: MenuCloseReason) => void;
   /**
-   * Point on the anchor that the menu attaches to. Accepts a value per breakpoint.
-   * @default { vertical: 'bottom', horizontal: 'left' }
+   * Where the menu opens relative to the anchor. Accepts a value per breakpoint.
+   * @default 'bottom-start'
    */
-  anchorOrigin?: Responsive<MenuOrigin>;
-  /**
-   * Point on the menu that attaches to `anchorOrigin`. Accepts a value per breakpoint.
-   * The menu hides the arrow when the origins place it over the anchor.
-   * @default { vertical: 'top', horizontal: 'left' }
-   */
-  transformOrigin?: Responsive<MenuOrigin>;
+  placement?: Responsive<MenuPlacement>;
   /**
    * Hides the arrow.
    * @default false

@@ -3,16 +3,11 @@
 import { type KeyboardEvent, useCallback, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import type { OpenChangeReason } from '@floating-ui/react';
-import { FLOATING_GAP, FloatingSurface } from '@/components/Popover/FloatingSurface';
+import { FloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
 import { MenuContext } from './MenuContext';
-import {
-  DEFAULT_ANCHOR_ORIGIN,
-  DEFAULT_TRANSFORM_ORIGIN,
-  getMenuOriginPosition,
-} from './menuOrigin';
 import type { MenuCloseReason, MenuProps } from './Menu.types';
 
 const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
@@ -49,8 +44,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   open,
   onOpen,
   onClose,
-  anchorOrigin,
-  transformOrigin,
+  placement: placementProp,
   hideArrow,
   arrowOffset,
   className,
@@ -90,23 +84,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const contextValue = useMemo(() => ({ closeFromItem: () => onClose('itemSelect') }), [onClose]);
 
   const breakpoint = useBreakpoint();
-  const { vertical: anchorVertical, horizontal: anchorHorizontal } =
-    resolveResponsive(anchorOrigin, breakpoint) ?? DEFAULT_ANCHOR_ORIGIN;
-  const { vertical: transformVertical, horizontal: transformHorizontal } =
-    resolveResponsive(transformOrigin, breakpoint) ?? DEFAULT_TRANSFORM_ORIGIN;
-  const gap = (hideArrow ? 0 : MENU_ARROW_SIZE.height) + FLOATING_GAP;
-  // Depend on origin fields so inline objects do not rebuild the middleware.
-  const { placement, coversAnchor, offset, offsetDeps } = useMemo(
-    () => ({
-      ...getMenuOriginPosition(
-        { vertical: anchorVertical, horizontal: anchorHorizontal },
-        { vertical: transformVertical, horizontal: transformHorizontal },
-        gap
-      ),
-      offsetDeps: [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap],
-    }),
-    [anchorVertical, anchorHorizontal, transformVertical, transformHorizontal, gap]
-  );
+  const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
 
   const anchorProps = trigger ? { trigger } : { anchorEl: anchorEl ?? null };
 
@@ -117,11 +95,8 @@ export const MenuRoot: React.FC<MenuProps> = ({
       onOpenChange={handleOpenChange}
       interactionRole="menu"
       placement={placement}
-      offset={offset}
-      offsetDeps={offsetDeps}
-      shiftCrossAxis={coversAnchor}
       lockScroll
-      hideArrow={hideArrow || coversAnchor}
+      hideArrow={hideArrow}
       arrowStaticOffset={resolveMenuArrowOffset(
         resolveResponsive(arrowOffset, breakpoint),
         placement

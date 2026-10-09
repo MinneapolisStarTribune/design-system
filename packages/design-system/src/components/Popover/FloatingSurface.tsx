@@ -20,12 +20,12 @@ import {
   useRole,
 } from '@floating-ui/react';
 import type { ComponentProps, CSSProperties } from 'react';
-import type { OffsetOptions, OpenChangeReason, Placement, UseRoleProps } from '@floating-ui/react';
+import type { OpenChangeReason, Placement, UseRoleProps } from '@floating-ui/react';
 import styles from './Popover.module.scss';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
 /** Space between the anchor and the surface, added to the arrow height. */
-export const FLOATING_GAP = 4;
+const FLOATING_GAP = 4;
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
@@ -35,18 +35,6 @@ type FloatingSurfaceBaseProps = {
   open: boolean;
   onOpenChange: (open: boolean, event?: Event, reason?: OpenChangeReason) => void;
   placement: Placement;
-  /** Replaces the default offset. The default uses `FLOATING_GAP` after the arrow. */
-  offset?: OffsetOptions;
-  /**
-   * Values a function `offset` reads from its closure. Floating UI treats functions with the same
-   * source as equal, so it keeps the first function until one of these values changes.
-   */
-  offsetDeps?: readonly unknown[];
-  /**
-   * Moves the surface on the cross axis to keep it on screen.
-   * Use this when the surface covers its anchor because `flip` has no effect.
-   */
-  shiftCrossAxis?: boolean;
   /**
    * Stops page scroll while the surface is open.
    * A transparent overlay closes the surface and blocks the press below it.
@@ -89,9 +77,6 @@ export const FloatingSurface = ({
   open,
   onOpenChange,
   placement,
-  offset: offsetOptions,
-  offsetDeps,
-  shiftCrossAxis = false,
   lockScroll = false,
   isDisabled,
   modal = false,
@@ -116,28 +101,12 @@ export const FloatingSurface = ({
   const isAnchored = anchorEl !== undefined;
   const middleware = useMemo(
     () => [
-      offset(
-        offsetOptions ?? (hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
-        offsetDeps
-      ),
-      shift({
-        boundary: resolvedPortalRoot,
-        padding: FLOATING_GAP,
-        crossAxis: shiftCrossAxis,
-      }),
+      offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
+      shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
       flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
       arrow({ element: arrowElement, padding: arrowPadding }),
     ],
-    [
-      offsetOptions,
-      offsetDeps,
-      shiftCrossAxis,
-      resolvedPortalRoot,
-      hideArrow,
-      arrowSize.height,
-      arrowPadding,
-      arrowElement,
-    ]
+    [resolvedPortalRoot, hideArrow, arrowSize.height, arrowPadding, arrowElement]
   );
   const {
     refs: { setReference, setFloating },

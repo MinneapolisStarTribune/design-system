@@ -123,7 +123,7 @@ export type {
   MenuArrowOffset,
   MenuCloseReason,
   MenuItemProps,
-  MenuOrigin,
+  MenuPlacement,
   MenuProps,
 } from './Menu/Menu.types';
 export * as Popover from './Popover/Popover';

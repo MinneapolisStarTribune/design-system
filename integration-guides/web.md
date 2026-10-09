@@ -70,7 +70,7 @@ function AccountMenu() {
 
 When the menu can't render its trigger (for example, one menu shared by several anchors), pass `anchorEl` instead of `trigger` and `onOpen`, and add `aria-haspopup="menu"` and `aria-expanded` to your anchor yourself.
 
-Position the menu with `anchorOrigin` and `transformOrigin` (default: below the anchor, left edges aligned). Both, and `arrowOffset`, accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## Quick Start
 

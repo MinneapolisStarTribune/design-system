@@ -2,8 +2,8 @@ import { ComponentProps, ReactElement, ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
-import { MENU_ARROW_OFFSETS } from './Menu.constants';
-import type { MenuAnchorProps, MenuLabelProps, MenuOrigin, MenuProps } from './Menu.types';
+import { MENU_ARROW_OFFSETS, MENU_PLACEMENTS } from './Menu.constants';
+import type { MenuAnchorProps, MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import {
@@ -21,62 +21,19 @@ import {
 } from '@/icons';
 import styles from './Menu.stories.module.scss';
 
-const origin = (
-  vertical: MenuOrigin['vertical'],
-  horizontal: MenuOrigin['horizontal']
-): MenuOrigin => ({ vertical, horizontal });
-
-const formatOrigin = ({ vertical, horizontal }: MenuOrigin) => `${vertical} ${horizontal}`;
-
-const OPEN_RIGHT = {
-  anchorOrigin: origin('top', 'right'),
-  transformOrigin: origin('top', 'left'),
-};
+const OPEN_RIGHT = { placement: 'right-start' } as const;
 
 /** `frame` aligns the trigger in its cell so the menu has room on the side it opens. */
 const POSITIONS = [
-  {
-    label: 'Below, left edges (default)',
-    frame: 'bottom',
-    anchorOrigin: origin('bottom', 'left'),
-    transformOrigin: origin('top', 'left'),
-  },
-  {
-    label: 'Above, centered',
-    frame: 'top',
-    anchorOrigin: origin('top', 'center'),
-    transformOrigin: origin('bottom', 'center'),
-  },
-  {
-    label: 'Right, bottom edges',
-    frame: 'right',
-    anchorOrigin: origin('bottom', 'right'),
-    transformOrigin: origin('bottom', 'left'),
-  },
-  {
-    label: 'Over the anchor',
-    frame: 'center',
-    anchorOrigin: origin('top', 'left'),
-    transformOrigin: origin('top', 'left'),
-  },
-  {
-    label: 'Centered on the anchor',
-    frame: 'center',
-    anchorOrigin: origin('center', 'center'),
-    transformOrigin: origin('center', 'center'),
-  },
-  {
-    label: 'hideArrow',
-    frame: 'bottom',
-    anchorOrigin: origin('bottom', 'center'),
-    transformOrigin: origin('top', 'center'),
-    hideArrow: true,
-  },
+  { label: 'Below, left edges (default)', frame: 'bottom', placement: 'bottom-start' },
+  { label: 'Above, centered', frame: 'top', placement: 'top' },
+  { label: 'Right, bottom edges', frame: 'right', placement: 'right-end' },
+  { label: 'Left, top edges', frame: 'left', placement: 'left-start' },
+  { label: 'hideArrow', frame: 'bottom', placement: 'bottom', hideArrow: true },
 ] satisfies {
   label: string;
-  frame: 'bottom' | 'top' | 'right' | 'center';
-  anchorOrigin: MenuOrigin;
-  transformOrigin: MenuOrigin;
+  frame: 'bottom' | 'top' | 'right' | 'left';
+  placement: MenuPlacement;
   hideArrow?: boolean;
 }[];
 
@@ -104,10 +61,7 @@ const MenuDemo = ({ initialOpen = false, ...menuProps }: DemoProps) => {
   );
 };
 
-type ExamplePosition = Pick<
-  MenuProps,
-  'anchorOrigin' | 'transformOrigin' | 'hideArrow' | 'arrowOffset'
->;
+type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowOffset'>;
 
 /** For an anchor the menu doesn't render, such as one shared by several menus. */
 const AnchorElDemo = (position: ExamplePosition) => {
@@ -254,8 +208,7 @@ const ItemsDemo = (position: ExamplePosition) => {
 
 type MenuExample = {
   label: string;
-  anchorOrigin?: MenuOrigin;
-  transformOrigin?: MenuOrigin;
+  placement?: MenuPlacement;
   render: (position: ExamplePosition) => ReactElement;
   /** Builds the docs snippet from the formatted position props. */
   code: (positionProps: string) => string;
@@ -282,8 +235,7 @@ const ROW_ACTION_ITEMS_CODE = `  <Menu.Item onClick={onEdit}>
 const EXAMPLES = {
   account: {
     label: 'Account menu',
-    anchorOrigin: origin('bottom', 'right'),
-    transformOrigin: origin('bottom', 'left'),
+    placement: 'right-end',
     render: (position) => (
       <div className={styles.accountFrame}>
         <MenuDemo
@@ -321,8 +273,7 @@ ${positionProps}  aria-label="Account"
   },
   rowActions: {
     label: 'Row actions',
-    anchorOrigin: origin('bottom', 'right'),
-    transformOrigin: origin('top', 'right'),
+    placement: 'bottom-end',
     render: (position) => (
       <div className={styles.tableRow}>
         <UtilityBody size="small">Table row</UtilityBody>
@@ -442,13 +393,12 @@ const EXAMPLE_KEYS = Object.keys(EXAMPLES).filter((key): key is ExampleKey => ke
 const isExampleKey = (value: unknown): value is ExampleKey =>
   typeof value === 'string' && value in EXAMPLES;
 
-/** Control values win; otherwise each example keeps its own origins. */
+/** Control values win; otherwise each example keeps its own placement. */
 const resolvePosition = (
   example: MenuExample,
-  { anchorOrigin, transformOrigin, hideArrow, arrowOffset }: ExamplePosition
+  { placement, hideArrow, arrowOffset }: ExamplePosition
 ): ExamplePosition => ({
-  anchorOrigin: anchorOrigin ?? example.anchorOrigin,
-  transformOrigin: transformOrigin ?? example.transformOrigin,
+  placement: placement ?? example.placement,
   hideArrow,
   arrowOffset,
 });
@@ -518,20 +468,13 @@ const meta = {
       description: 'Menu content, built from `Menu.Item`, `Menu.ItemIcon` and `Menu.Divider`.',
       table: { type: { summary: 'ReactNode' } },
     },
-    anchorOrigin: {
-      control: 'object',
-      description: 'Point on the anchor that the menu attaches to.',
+    placement: {
+      control: 'select',
+      options: [undefined, ...MENU_PLACEMENTS],
+      description: 'Where the menu opens relative to the anchor.',
       table: {
-        type: { summary: 'Responsive<{ vertical, horizontal }>' },
-        defaultValue: { summary: "{ vertical: 'bottom', horizontal: 'left' }" },
-      },
-    },
-    transformOrigin: {
-      control: 'object',
-      description: 'Point on the menu that attaches to `anchorOrigin`.',
-      table: {
-        type: { summary: 'Responsive<{ vertical, horizontal }>' },
-        defaultValue: { summary: "{ vertical: 'top', horizontal: 'left' }" },
+        type: { summary: 'Responsive<MenuPlacement>' },
+        defaultValue: { summary: 'bottom-start' },
       },
     },
     hideArrow: {
@@ -561,7 +504,7 @@ type Story = StoryObj<typeof meta>;
 
 type ExampleArgs = ExamplePosition & { example: ExampleKey };
 
-const POSITION_CONTROLS = ['anchorOrigin', 'transformOrigin', 'hideArrow', 'arrowOffset'];
+const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowOffset'];
 
 /** Playground. The `example` control picks which menu it shows. */
 export const Configurable: StoryObj<ExampleArgs> = {
@@ -642,8 +585,7 @@ export const AllVariants: Story = {
               initialOpen
               aria-label="Account"
               className={styles.accountMenu}
-              anchorOrigin={origin('bottom', 'right')}
-              transformOrigin={origin('bottom', 'left')}
+              placement="right-end"
               trigger={<Button>Account</Button>}
             >
               <AccountItems />
@@ -660,8 +602,7 @@ export const AllVariants: Story = {
             <MenuDemo
               aria-label="Row actions"
               className={styles.rowActionsMenu}
-              anchorOrigin={origin('bottom', 'right')}
-              transformOrigin={origin('top', 'right')}
+              placement="bottom-end"
               trigger={
                 <Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Row actions" />
               }
@@ -702,17 +643,7 @@ export const AllVariants: Story = {
 
       <Group title="Positioning">
         {POSITIONS.map(({ label, frame, ...menuProps }) => (
-          <Example
-            key={label}
-            title={label}
-            description={
-              <>
-                anchorOrigin: {formatOrigin(menuProps.anchorOrigin)}
-                <br />
-                transformOrigin: {formatOrigin(menuProps.transformOrigin)}
-              </>
-            }
-          >
+          <Example key={label} title={label} description={`placement="${menuProps.placement}"`}>
             <div className={classNames(styles.positionFrame, styles[`positionFrame-${frame}`])}>
               <MenuDemo
                 {...menuProps}

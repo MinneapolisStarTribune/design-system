@@ -6,30 +6,6 @@ import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
 import type { MenuAnchorProps, MenuCloseReason, MenuLabelProps, MenuProps } from './Menu.types';
-import type * as MenuOrigin from './menuOrigin';
-
-// Records the anchor origin of each offset function Floating UI runs. The wrappers share one
-// source, as the real offset functions do, which Floating UI compares as equal.
-const offsetCalls = vi.hoisted((): string[] => []);
-vi.mock('./menuOrigin', async (importOriginal) => {
-  const actual = await importOriginal<typeof MenuOrigin>();
-  return {
-    ...actual,
-    getMenuOriginPosition: (...args: Parameters<typeof actual.getMenuOriginPosition>) => {
-      const position = actual.getMenuOriginPosition(...args);
-      const { vertical, horizontal } = args[0];
-      const offset = position.offset;
-      if (typeof offset !== 'function') return position;
-      return {
-        ...position,
-        offset: (state: Parameters<typeof offset>[0]) => {
-          offsetCalls.push(`${vertical} ${horizontal}`);
-          return offset(state);
-        },
-      };
-    },
-  };
-});
 
 type HarnessProps = Partial<
   Omit<MenuProps, keyof MenuAnchorProps | 'open' | keyof MenuLabelProps>
@@ -337,44 +313,28 @@ describe('Menu', () => {
     expect(menu.querySelector(':scope > svg')).toBeNull();
   });
 
-  it('resolves responsive origins at the current breakpoint', async () => {
-    const viewport = mockViewport(375);
+  it('opens on the side set by placement', async () => {
     const user = userEvent.setup();
-    // Top-left to top-left covers the anchor and hides the arrow. Bottom-left opens below it.
-    renderWithProvider(
-      <Harness
-        anchorOrigin={{
-          small: { vertical: 'top', horizontal: 'left' },
-          large: { vertical: 'bottom', horizontal: 'left' },
-        }}
-      />
-    );
+    renderWithProvider(<Harness placement="top-end" />);
 
     const menu = await openMenu(user);
-    expect(menu.querySelector(':scope > svg')).toBeNull();
 
-    viewport.resize(1160);
-    await waitFor(() => expect(menu.querySelector(':scope > svg')).not.toBeNull());
-    viewport.restore();
+    // FloatingArrow pins itself to the menu edge that faces the anchor.
+    expect(menu.querySelector<SVGElement>(':scope > svg')?.style.top).toBe('100%');
   });
 
-  it('positions with the new origins when they change while open', async () => {
+  it('resolves a responsive placement at the current breakpoint', async () => {
+    const viewport = mockViewport(375);
     const user = userEvent.setup();
-    const above = {
-      anchorOrigin: { vertical: 'top', horizontal: 'center' },
-      transformOrigin: { vertical: 'bottom', horizontal: 'center' },
-    } as const;
-    const beside = {
-      anchorOrigin: { vertical: 'center', horizontal: 'right' },
-      transformOrigin: { vertical: 'center', horizontal: 'left' },
-    } as const;
-    const { rerender } = renderWithProvider(<Harness {...above} />);
+    renderWithProvider(<Harness placement={{ small: 'top', large: 'bottom' }} />);
 
-    await openMenu(user);
-    await waitFor(() => expect(offsetCalls.at(-1)).toBe('top center'));
-    rerender(<Harness {...beside} />);
+    const menu = await openMenu(user);
+    const arrow = () => menu.querySelector<SVGElement>(':scope > svg');
+    expect(arrow()?.style.top).toBe('100%');
 
-    await waitFor(() => expect(offsetCalls.at(-1)).toBe('center right'));
+    viewport.resize(1160);
+    await waitFor(() => expect(arrow()?.style.bottom).toBe('100%'));
+    viewport.restore();
   });
 
   it('renders in a portal by default', async () => {
