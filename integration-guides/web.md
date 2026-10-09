@@ -152,7 +152,7 @@ function App() {
 
 ## Dialog
 
-`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`.
+`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`, `DialogTitleProps` types `Dialog.Title`, `DialogSectionProps` types `Dialog.Content`, and `DialogActionsProps` types `Dialog.Actions`.
 
 ```tsx
 import { useState } from 'react';
@@ -193,7 +193,7 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 
 ## Drawer
 
-`Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.
+`Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`, `DrawerHeadingProps` types `Drawer.Heading`, and `DrawerSectionProps` types `Drawer.Body` and `Drawer.Footer`.
 
 ```tsx
 import { useState } from 'react';

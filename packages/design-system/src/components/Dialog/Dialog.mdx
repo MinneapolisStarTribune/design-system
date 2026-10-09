@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as DialogStories from './Dialog.stories';
 
 <Meta of={DialogStories} />
@@ -97,33 +97,67 @@ When the content is supplementary rather than a decision — filters, details, s
 ## Example
 
 ```tsx
-const [open, setOpen] = useState(false);
+import { useRef, useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
 
-const cancelRef = useRef<HTMLElement>(null);
+export function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+  const cancelRef = useRef<HTMLButtonElement>(null);
 
-<Button onClick={() => setOpen(true)}>Delete game</Button>
+  return (
+    <>
+      <Button color="error" onClick={() => setOpen(true)}>
+        Delete game
+      </Button>
 
-<Dialog.Root
-  open={open}
-  onClose={() => setOpen(false)}
-  role="alertdialog"
-  initialFocus={cancelRef}
->
-  <Dialog.Title>Delete game?</Dialog.Title>
-
-  <Dialog.Content>Are you sure you want to delete?</Dialog.Content>
-
-  <Dialog.Actions>
-    <Button ref={cancelRef} variant="ghost" onClick={() => setOpen(false)}>
-      Cancel
-    </Button>
-    <Button color="error" onClick={deleteGame}>
-      Delete
-    </Button>
-  </Dialog.Actions>
-</Dialog.Root>
+      <Dialog.Root
+        role="alertdialog"
+        initialFocus={cancelRef}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Dialog.Title>Delete game?</Dialog.Title>
+        <Dialog.Content>
+          Are you sure you want to delete this game? This can’t be undone.
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button ref={cancelRef} variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="error"
+            onClick={() => {
+              onDelete();
+              setOpen(false);
+            }}
+          >
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
 ```
 
-<Primary />
-<Controls />
-<Stories />
+## Configurable
+
+<Canvas of={DialogStories.Configurable} />
+
+<Controls of={DialogStories.Configurable} />
+
+## Variants
+
+Each example opens in its own frame. On this page they start closed, so their focus traps don't take over the page; use **Open**.
+
+### Form
+
+<Canvas of={DialogStories.Form} />
+
+### Confirmation
+
+<Canvas of={DialogStories.Confirmation} />
+
+### No Close Button
+
+<Canvas of={DialogStories.NoCloseButton} />

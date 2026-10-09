@@ -215,28 +215,54 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-const [open, setOpen] = useState(false);
+import { useState } from 'react';
+import { Button, Dialog, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
 
-<Button onClick={() => setOpen(true)}>Add game</Button>
+const SPORTS = [
+  { value: 'baseball', label: 'Baseball' },
+  { value: 'football', label: 'Football' },
+  { value: 'hockey', label: 'Hockey' },
+];
 
-<Dialog.Root open={open} onClose={() => setOpen(false)}>
-  <Dialog.Title>Add Game</Dialog.Title>
-  <Dialog.Content>
-    <FormGroup>
-      <FormGroup.Label>Sport</FormGroup.Label>
-      <FormControl.Select id="sport" options={SPORTS} value={sport} onChange={setSport} />
-    </FormGroup>
-  </Dialog.Content>
-  <Dialog.Actions stackOnMobile={false}>
-    <Button variant="ghost" onClick={() => setOpen(false)}>
-      Cancel
-    </Button>
-    <Button color="brand" onClick={addGame}>
-      Add Game
-    </Button>
-  </Dialog.Actions>
-</Dialog.Root>
-        `,
+export function AddGameDialog() {
+  const [open, setOpen] = useState(false);
+  const [sport, setSport] = useState<string>();
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Add game</Button>
+
+      <Dialog.Root open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Add Game</Dialog.Title>
+        <Dialog.Content>
+          <FormGroup>
+            <FormGroup.Label>Sport</FormGroup.Label>
+            <FormControl.Select
+              id="sport"
+              options={SPORTS}
+              value={sport}
+              onChange={setSport}
+              placeholderText="Select sport..."
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormGroup.Label>Location</FormGroup.Label>
+            <FormControl.TextInput placeholderText="e.g. East High School" />
+          </FormGroup>
+        </Dialog.Content>
+        <Dialog.Actions stackOnMobile={false}>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Add Game
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+`,
       },
     },
   },
@@ -288,59 +314,224 @@ const VariantFrame = ({
   );
 };
 
+// Owns the Cancel ref so the confirmation can move initial focus to it.
+const ConfirmFrame = ({ initialOpen }: { initialOpen: boolean }) => {
+  const cancelRef = useRef<HTMLElement>(null);
+
+  return (
+    <VariantFrame
+      label='Confirmation (role="alertdialog", initialFocus on Cancel, actions stacked on mobile)'
+      role="alertdialog"
+      initialFocus={cancelRef}
+      initialOpen={initialOpen}
+    >
+      {(onClose) => <ConfirmContent onClose={onClose} cancelRef={cancelRef} />}
+    </VariantFrame>
+  );
+};
+
+// Each variant below is its own story with hand-written source for the docs page. AllVariants
+// reuses the same frames for Chromatic, so the variant stories skip snapshots. Dialogs start open
+// in the story canvas and closed on the docs page, so their focus traps don't take over it.
+const EXAMPLE_ARGS = { open: false, onClose: () => {}, children: null };
+
+const exampleParameters = (code: string) => ({
+  chromatic: { disable: true },
+  controls: { disable: true },
+  layout: 'fullscreen',
+  docs: { source: { code } },
+});
+
+const renderFormFrame = (initialOpen: boolean) => (
+  <VariantFrame
+    label="Form with title, content and actions (stackOnMobile={false}: side by side on mobile)"
+    initialOpen={initialOpen}
+  >
+    {(onClose) => <AddGameContent onClose={onClose} />}
+  </VariantFrame>
+);
+
+const renderNoCloseButtonFrame = (initialOpen: boolean) => (
+  <VariantFrame
+    label="showCloseButton={false}, single action"
+    showCloseButton={false}
+    initialOpen={initialOpen}
+  >
+    {(onClose) => (
+      <>
+        <Dialog.Title>Game added</Dialog.Title>
+        <Dialog.Content>It’s on the schedule for both teams.</Dialog.Content>
+        <Dialog.Actions>
+          <Button color="brand" onClick={onClose}>
+            Done
+          </Button>
+        </Dialog.Actions>
+      </>
+    )}
+  </VariantFrame>
+);
+
+export const Form: Story = {
+  tags: ['!dev'],
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { useState } from 'react';
+import { Button, Dialog, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+const SPORTS = [
+  { value: 'baseball', label: 'Baseball' },
+  { value: 'football', label: 'Football' },
+  { value: 'hockey', label: 'Hockey' },
+];
+
+export function AddGameDialog() {
+  const [open, setOpen] = useState(false);
+  const [sport, setSport] = useState<string>();
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Add game</Button>
+
+      <Dialog.Root open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Add Game</Dialog.Title>
+        <Dialog.Content>
+          <FormGroup>
+            <FormGroup.Label>Sport</FormGroup.Label>
+            <FormControl.Select
+              id="sport"
+              options={SPORTS}
+              value={sport}
+              onChange={setSport}
+              placeholderText="Select sport..."
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormGroup.Label>Location</FormGroup.Label>
+            <FormControl.TextInput placeholderText="e.g. East High School" />
+          </FormGroup>
+        </Dialog.Content>
+        <Dialog.Actions stackOnMobile={false}>
+          <Button variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Add Game
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>{renderFormFrame(viewMode !== 'docs')}</div>
+  ),
+};
+
+export const Confirmation: Story = {
+  tags: ['!dev'],
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { useRef, useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+export function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
+  const [open, setOpen] = useState(false);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <>
+      <Button color="error" onClick={() => setOpen(true)}>
+        Delete game
+      </Button>
+
+      <Dialog.Root
+        role="alertdialog"
+        initialFocus={cancelRef}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Dialog.Title>Delete game?</Dialog.Title>
+        <Dialog.Content>
+          Are you sure you want to delete this game? This can’t be undone.
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button ref={cancelRef} variant="ghost" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="error"
+            onClick={() => {
+              onDelete();
+              setOpen(false);
+            }}
+          >
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>
+      <ConfirmFrame initialOpen={viewMode !== 'docs'} />
+    </div>
+  ),
+};
+
+export const NoCloseButton: Story = {
+  tags: ['!dev'],
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { useState } from 'react';
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+export function GameAddedDialog() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Save game</Button>
+
+      <Dialog.Root showCloseButton={false} open={open} onClose={() => setOpen(false)}>
+        <Dialog.Title>Game added</Dialog.Title>
+        <Dialog.Content>It’s on the schedule for both teams.</Dialog.Content>
+        <Dialog.Actions>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Done
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>{renderNoCloseButtonFrame(viewMode !== 'docs')}</div>
+  ),
+};
+
+/**
+ * Every variant in one canvas, for Chromatic visual regression across brand and theme modes.
+ * Not shown on the docs page; each variant has its own section there.
+ */
 export const AllVariants: Story = {
-  args: {
-    open: false,
-    onClose: () => {},
-    children: null,
-  },
+  args: EXAMPLE_ARGS,
   parameters: {
     chromatic: { modes: allModes },
     controls: { disable: true },
     layout: 'fullscreen',
-    docs: {
-      description: {
-        story: 'All variants of the dialog component.',
-      },
-    },
   },
-  render: function Render(_args, { viewMode }) {
+  render: (_args, { viewMode }) => {
     const initialOpen = viewMode !== 'docs';
-    const cancelRef = useRef<HTMLElement>(null);
 
     return (
       <div className={styles.grid}>
-        <VariantFrame
-          label="Form with title, content and actions (stackOnMobile={false}: side by side on mobile)"
-          initialOpen={initialOpen}
-        >
-          {(onClose) => <AddGameContent onClose={onClose} />}
-        </VariantFrame>
-        <VariantFrame
-          label='Confirmation (role="alertdialog", initialFocus on Cancel, actions stacked on mobile)'
-          role="alertdialog"
-          initialFocus={cancelRef}
-          initialOpen={initialOpen}
-        >
-          {(onClose) => <ConfirmContent onClose={onClose} cancelRef={cancelRef} />}
-        </VariantFrame>
-        <VariantFrame
-          label="showCloseButton={false}, single action"
-          showCloseButton={false}
-          initialOpen={initialOpen}
-        >
-          {(onClose) => (
-            <>
-              <Dialog.Title>Game added</Dialog.Title>
-              <Dialog.Content>It’s on the schedule for both teams.</Dialog.Content>
-              <Dialog.Actions>
-                <Button color="brand" onClick={onClose}>
-                  Done
-                </Button>
-              </Dialog.Actions>
-            </>
-          )}
-        </VariantFrame>
+        {renderFormFrame(initialOpen)}
+        <ConfirmFrame initialOpen={initialOpen} />
+        {renderNoCloseButtonFrame(initialOpen)}
       </div>
     );
   },
