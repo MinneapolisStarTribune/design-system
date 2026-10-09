@@ -1,4 +1,4 @@
-import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
 import * as DrawerStories from './Drawer.stories';
 
 <Meta of={DrawerStories} />
@@ -94,26 +94,78 @@ For contextual, non-blocking content next to a control, use
 ## Example
 
 ```tsx
-const [open, setOpen] = useState(false);
+import { useState } from 'react';
+import { Button, Drawer, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
 
-<Button onClick={() => setOpen(true)}>Filter calendar</Button>
+const GAME_TYPES = [
+  { value: 'regular-season', title: 'Regular Season' },
+  { value: 'tournament', title: 'Tournament' },
+];
 
-<Drawer.Root open={open} onClose={() => setOpen(false)}>
-  <Drawer.Heading>Filter Calendar</Drawer.Heading>
+export function FilterCalendarDrawer() {
+  const [open, setOpen] = useState(false);
+  const [gameTypes, setGameTypes] = useState<string[]>([]);
 
-  <Drawer.Body>{/* filter groups */}</Drawer.Body>
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-  <Drawer.Footer>
-    <Button variant="outlined" onClick={clearAll}>
-      Clear All
-    </Button>
-    <Button color="brand" onClick={() => setOpen(false)}>
-      Show {count} Athletes
-    </Button>
-  </Drawer.Footer>
-</Drawer.Root>
+      {/* No position: a bottom sheet on phones, a right panel from 768px up */}
+      <Drawer.Root open={open} onClose={() => setOpen(false)}>
+        <Drawer.Heading>Filter Calendar</Drawer.Heading>
+        <Drawer.Body>
+          <FormGroup>
+            <FormGroup.Label>Game type</FormGroup.Label>
+            <FormControl.CheckboxGroup
+              value={gameTypes}
+              onChange={setGameTypes}
+              options={GAME_TYPES}
+              color="brand"
+            />
+          </FormGroup>
+        </Drawer.Body>
+        <Drawer.Footer>
+          <Button variant="outlined" color="neutral" onClick={() => setGameTypes([])}>
+            Clear All
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Show Results
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
 ```
 
-<Primary />
-<Controls />
-<Stories />
+## Configurable
+
+<Canvas of={DrawerStories.Configurable} />
+
+<Controls of={DrawerStories.Configurable} />
+
+## Positions
+
+Without `position`, a drawer is a bottom sheet on phones and a right panel from 768px up. Pass one edge to use it at every size, or an object keyed by breakpoint.
+
+Each example opens in its own frame. On this page they start closed, so their focus traps don't take over the page; use **Open**.
+
+### Default
+
+<Canvas of={DrawerStories.DefaultPosition} />
+
+### Top
+
+<Canvas of={DrawerStories.Top} />
+
+### Left
+
+<Canvas of={DrawerStories.Left} />
+
+### Bottom
+
+<Canvas of={DrawerStories.Bottom} />
+
+### Right
+
+<Canvas of={DrawerStories.Right} />

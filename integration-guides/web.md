@@ -12,39 +12,34 @@ yarn add react@19.0.0 react-dom@19.0.0 @floating-ui/react@0.27.19
 
 You do not need `react-native` or `@floating-ui/react-native`.
 
-### Popover portal root (optional)
+### Overlay portal root (optional)
 
-By default, Popover content is rendered into `document.body`. That can cause issues when:
+By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
-- Popovers live inside a **modal** or **sidebar** and should be clipped or stacked with that container
-- You use **Storybook** and want popover content to stay within the story frame
+- The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
+- You use **Storybook** and want the overlay to stay within the story frame
 - You need a **custom container** for styling or layout (e.g. a dedicated overlay layer)
 
-**Option 1: `PopoverPortalRootProvider`** — Wrap the part of the tree where Popovers should render. The provider creates a wrapper `div` and uses it as the portal target for any Popover under it.
+Keep the element in state with a ref callback, so the overlay re-renders once the element exists:
 
 ```tsx
-import {
-  Popover,
-  PopoverPortalRootProvider,
-  Button,
-} from '@minneapolisstartribune/design-system/web';
+import { useState } from 'react';
+import { Popover, Button } from '@minneapolisstartribune/design-system/web';
 
 function SidebarWithPopover() {
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+
   return (
-    <aside className="my-sidebar" style={{ overflow: 'hidden' }}>
-      <PopoverPortalRootProvider>
-        <Popover trigger={<Button label="Menu" onClick={() => {}} />} aria-label="Options">
-          <p>This content renders inside the sidebar, not document.body.</p>
-        </Popover>
-      </PopoverPortalRootProvider>
+    <aside ref={setPortalRoot} className="my-sidebar" style={{ overflow: 'hidden' }}>
+      <Popover.Root trigger={<Button>Options</Button>} portalRoot={portalRoot} aria-label="Options">
+        <p>This content renders inside the sidebar, not document.body.</p>
+      </Popover.Root>
     </aside>
   );
 }
 ```
 
-**Option 2: `PopoverPortalRootContext`** — For advanced cases where you already have an `HTMLElement` (e.g. a ref to a modal container), you can provide it via context instead of using the provider. You’d create your own wrapper that uses `PopoverPortalRootContext.Provider` with `value={yourElement}`.
-
-Most apps only need **Option 1**.
+Pass `portalRoot` to each overlay that needs it. There is no provider that sets it for a whole subtree.
 
 ## Quick Start
 
@@ -157,7 +152,7 @@ function App() {
 
 ## Dialog
 
-`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`.
+`Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`, `DialogTitleProps` types `Dialog.Title`, `DialogSectionProps` types `Dialog.Content`, and `DialogActionsProps` types `Dialog.Actions`.
 
 ```tsx
 import { useState } from 'react';
@@ -198,7 +193,7 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 
 ## Drawer
 
-`Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`.
+`Drawer` is a web-only modal panel attached to a viewport edge. It's exported as a namespace: compose `Drawer.Root` with `Drawer.Heading`, `Drawer.Body` and an optional `Drawer.Footer`. `DrawerProps` types `Drawer.Root`, `DrawerHeadingProps` types `Drawer.Heading`, and `DrawerSectionProps` types `Drawer.Body` and `Drawer.Footer`.
 
 ```tsx
 import { useState } from 'react';
@@ -246,6 +241,33 @@ const current: Breakpoint = 'large';
 ```
 
 The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
+## ToggleGroup
+
+`ToggleGroup` is a web-only set of joined toggles (the Figma **segmented control**). It's exported as a namespace: compose `ToggleGroup.Root` with `ToggleGroup.Item`. `ToggleGroupProps` types `ToggleGroup.Root`, `ToggleGroupItemProps` types `ToggleGroup.Item`, and `ToggleGroupDetailProps` types `ToggleGroup.Detail`.
+
+```tsx
+import { useState } from 'react';
+import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+function GameFilter() {
+  const [filter, setFilter] = useState('all');
+
+  return (
+    <ToggleGroup.Root label="Filter games" value={filter} onChange={setFilter}>
+      <ToggleGroup.Item value="all">All Games</ToggleGroup.Item>
+      <ToggleGroup.Item value="past">Past</ToggleGroup.Item>
+      <ToggleGroup.Item value="upcoming">Upcoming</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  );
+}
+```
+
+- It's always controlled. `type="single"` (default) keeps exactly one item selected and renders native radios; `type="multiple"` renders checkboxes and takes `value` as an array.
+- Give the group an accessible name: `label`, or `aria-labelledby` pointing at a visible heading. Icon-only items need `aria-label`; in development an item with no text and no `aria-label` logs a warning.
+- Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
+- `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
+- Also supports `fullWidth` and `disabled` on the group or a single item.
 
 ## Using CSS Variables Directly
 

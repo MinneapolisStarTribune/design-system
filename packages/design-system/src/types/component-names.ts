@@ -12,6 +12,8 @@ export const COMPONENT_NAMES = [
   'ArticleBodyText',
   'ArticleQuote',
   'DangerousCodeBlock',
+  'Dialog',
+  'Drawer',
   'EditorialSponsoredText',
   'EditorialText',
   'EnhancedCodeBlock',
@@ -32,6 +34,7 @@ export const COMPONENT_NAMES = [
   'SectionHeading',
   'SocialEmbeds',
   'SponsoredHeading',
+  'ToggleGroup',
   'UtilityBody',
   'UtilityLabel',
 ] as const;
