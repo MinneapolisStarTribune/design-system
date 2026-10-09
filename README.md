@@ -280,6 +280,16 @@ yarn add @minneapolisstartribune/design-system@latest
 - **[Release Checklist](integration-guides/release-checklist.md)** - Required pre-release checks for web, native, and multi-brand safety
 - **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 
+## Using with AI Agents
+
+The integration guides are published as an [agent skill](https://skills.sh/), so coding agents (Claude Code, Cursor, Copilot, etc.) know how to set up and use this package. From your app's repository, run:
+
+```bash
+npx skills add MinneapolisStarTribune/design-system --skill design-system
+```
+
+This copies the guides into your project's agent skills directory. Run `npx skills update` after upgrading the design system to pull the latest guides. Installing requires GitHub access to the MinneapolisStarTribune organization.
+
 ## Still Having Issues?
 
 - Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples

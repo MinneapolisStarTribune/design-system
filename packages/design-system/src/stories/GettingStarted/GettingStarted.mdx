@@ -40,6 +40,19 @@ Each component Docs page typically includes:
 Refer to your existing integration guides (analytics, theming, etc.) for
 environment-specific setup and wiring.
 
+## Using with AI agents
+
+The integration guides are also available as an agent skill, so coding agents
+(Claude Code, Cursor, Copilot, etc.) know how to set up and use the design
+system. From your app's repository, run:
+
+```bash
+npx skills add MinneapolisStarTribune/design-system --skill design-system
+```
+
+Run `npx skills update` after upgrading the design system to pull the latest
+guides.
+
 ## Who this is for
 
 - **Designers**: To define and evolve component guidelines, usage patterns, and
