@@ -62,6 +62,7 @@ type FloatingSurfaceBaseProps = {
 };
 
 type TriggerSurfaceProps = FloatingSurfaceBaseProps & { trigger: ReactNode; anchorEl?: never };
+// Unused by Popover and Menu. Kept for a surface that positions against an element it doesn't render.
 type AnchoredSurfaceProps = FloatingSurfaceBaseProps & {
   anchorEl: Element | null;
   trigger?: never;
