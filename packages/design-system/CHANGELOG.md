@@ -1,5 +1,86 @@
 # @minneapolisstartribune/design-system
 
+## 3.0.0
+
+### Major Changes
+
+- [#442](https://github.com/MinneapolisStarTribune/design-system/pull/442) [`19b920f`](https://github.com/MinneapolisStarTribune/design-system/commit/19b920fc71e2d658b66a71ae346c24fbf193d60d) Thanks [@quynhngandao](https://github.com/quynhngandao)! - ## Breaking changes
+
+  ### Namespace API
+
+  `Popover` now follows the `Drawer` and `Menu` namespace pattern:
+
+  ```tsx
+  // Before
+  <Popover />
+
+  // After
+  <Popover.Root />
+  ```
+
+  Imports and section names do not change: use `Popover.Heading`, `Popover.Description`,
+  `Popover.Body`, and `Popover.Divider`.
+
+  ### Styling API
+  - On `Popover`, replace `wrapperClassName`, `containerClassName`, `contentClassName`, and
+    `arrowClassName` with surface `className`.
+  - On sections, replace named class props with `className`:
+    - `Popover.Heading`: replace `headerClassName`; `titleClassName` and `closeButtonClassName`
+      are removed.
+    - `Popover.Description`, `Popover.Body`, and `Popover.Divider`: replace their named class prop.
+  - Only `id` and `style` remain supported HTML div attributes. Use `dataTestId` instead of
+    `data-testid`, as with `Drawer`. Custom `style` is merged with positioning styles, so it no
+    longer breaks placement.
+  - Sections also accept `dataTestId`. `Popover.Heading` sets `${dataTestId}-close-button` on its
+    close button.
+
+  ### Portal API
+
+  `PopoverPortalRootProvider` and `PopoverPortalRootContext` are removed. Pass `portalRoot` to
+  each `Popover` that needs a custom container, as with `Drawer`.
+
+  ### Removed APIs
+
+  `TriggerablePopover`, `useExternalTrigger`, `installExternalTriggerGlobals`, and their types
+  are removed. No known consumer uses them.
+
+  ## Consumer impact
+  - **Coaches Portal** (`apps/web`, 2.1.0): update both `Sidebar.tsx` popovers to
+    `Popover.Root` and replace removed styling props with `className`. The account menu can
+    alternatively move to `Menu` (VAR-1267). It does not use the removed portal API.
+  - **Varsity Web** (1.14.0): in `GiftButton` and `ShareButton`, rename `<Popover>` to
+    `<Popover.Root>`. No removed props or portal API are used.
+  - **Star Tribune Web** (1.17.0) and **The Brief** (^1.12.1): no action required.
+
+  Coaches Portal and Varsity Web force a light color scheme, so the dark-mode improvement below
+  does not change their appearance.
+
+  ## Improvements
+  - `Popover` no longer adds a trigger wrapper `div`, avoiding hydration errors inside `<p>` and
+    preserving inline, flex, and grid layouts.
+  - Dialogs use `Popover.Heading` as their accessible name when present, otherwise `aria-label`.
+  - Triggers now point `aria-controls` at the dialog, and element triggers keep their own display.
+  - `Popover.Heading` adds `eyebrow`, `value`, and `showCloseButton` (default: `true`).
+  - Popovers now follow the app theme. Customize the surface with `--popover-background`,
+    `--popover-arrow-fill`, and `--popover-arrow-stroke`.
+
+### Minor Changes
+
+- [#450](https://github.com/MinneapolisStarTribune/design-system/pull/450) [`4089cec`](https://github.com/MinneapolisStarTribune/design-system/commit/4089cec919bde15fe686054fce876dd2e6eeb3f1) Thanks [@willogura](https://github.com/willogura)! - Add `Coachmark`'s `impressionTrackingId` prop (web): renders an empty, inert element with that id inside the floating panel itself, sized and positioned to exactly cover it.
+
+  For a third party (e.g. Piano) that tracks impressions by watching whether _its own_ element intersects the viewport, rather than anything this component exposes directly. That element needs to actually move and resize with the panel to reflect the coachmark's real on-screen visibility -- a tracking element placed anywhere else on the page (e.g. appended to `document.body`) can't accurately reflect that.
+
+  Given a local `zIndex: -1`, so whatever a third party injects there (e.g. an iframe) stays visually behind the panel's own title/description/CTA instead of covering them -- a positioned element with no z-index of its own otherwise paints above normal in-flow content regardless of DOM order. Also carries the HTML `inert` attribute, not just `aria-hidden`, so injected focusable content (e.g. that same iframe) can't still be reached by keyboard even though it's hidden from screen readers and click-through.
+
+- [#450](https://github.com/MinneapolisStarTribune/design-system/pull/450) [`f8e3ef7`](https://github.com/MinneapolisStarTribune/design-system/commit/f8e3ef7f6f296fe53dc41f6c7e8a8e5472669ec7) Thanks [@willogura](https://github.com/willogura)! - Add `Coachmark`'s `trackReferenceMovement` prop (web): repositions on every animation frame instead of only on scroll/resize events. Defaults to false (unchanged behavior). Turn on when `children` scrolls within the page (e.g. a table row) rather than staying fixed on screen (e.g. a sticky header icon) -- event-based repositioning can visibly lag behind a reference that's continuously moving, since browsers can throttle/coalesce scroll event dispatch during a fast or flung scroll.
+
+- [#448](https://github.com/MinneapolisStarTribune/design-system/pull/448) [`1ce30d2`](https://github.com/MinneapolisStarTribune/design-system/commit/1ce30d294b4868a7dc335306183669bb60a7fd33) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `ToggleGroup` (web): a set of joined toggles, shown in Figma as the segmented control. Compose `ToggleGroup.Root` with `ToggleGroup.Item`.
+  `type="single"` (default) keeps exactly one item selected and behaves as a radio group; `type="multiple"` lets any number be selected and behaves as a group of checkboxes, with `value` as an array.
+
+### Patch Changes
+
+- [#454](https://github.com/MinneapolisStarTribune/design-system/pull/454) [`021b920`](https://github.com/MinneapolisStarTribune/design-system/commit/021b920c4de2e02d8de6c6b309b69596676a79cc) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Update `Dialog`, `Drawer` and `ToggleGroup` type exports.
+
 ## 2.4.0
 
 ### Minor Changes
