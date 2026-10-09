@@ -122,6 +122,8 @@ export * as Menu from './Menu/Menu';
 export type {
   MenuArrowOffset,
   MenuCloseReason,
+  MenuDividerProps,
+  MenuItemIconProps,
   MenuItemProps,
   MenuPlacement,
   MenuProps,
