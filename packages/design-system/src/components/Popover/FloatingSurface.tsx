@@ -49,7 +49,7 @@ type FloatingSurfaceBaseProps = {
   shiftCrossAxis?: boolean;
   /**
    * Stops page scroll while the surface is open.
-   * A transparent overlay closes the surface and blocks the press below it.
+   * The overlay lets presses through so the trigger can still toggle the surface.
    */
   lockScroll?: boolean;
   isDisabled?: boolean;
@@ -201,7 +201,7 @@ export const FloatingSurface = ({
     <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
       <div
         ref={setFloating}
-        style={{ ...floatingStyles, ...styleProp }}
+        style={{ ...floatingStyles, pointerEvents: 'auto', ...styleProp }}
         className={classNames(styles.wrapper, className)}
         data-testid={dataTestId}
         aria-label={ariaLabel}
@@ -227,7 +227,13 @@ export const FloatingSurface = ({
   );
   const floatingElement = open && (
     <FloatingPortal root={resolvedPortalRoot}>
-      {lockScroll ? <FloatingOverlay lockScroll>{surface}</FloatingOverlay> : surface}
+      {lockScroll ? (
+        <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
+          {surface}
+        </FloatingOverlay>
+      ) : (
+        surface
+      )}
     </FloatingPortal>
   );
   return (

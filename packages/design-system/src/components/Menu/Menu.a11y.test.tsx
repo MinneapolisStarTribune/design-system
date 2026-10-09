@@ -73,7 +73,7 @@ describe('Menu Accessibility', () => {
     const anchor = document.body;
     const unlabeled = (
       // @ts-expect-error a menu needs aria-label or aria-labelledby
-      <Menu.Root anchorEl={anchor} open>
+      <Menu.Root anchorEl={anchor} open onClose={vi.fn()}>
         <Menu.Item>Manage Profile</Menu.Item>
       </Menu.Root>
     );
