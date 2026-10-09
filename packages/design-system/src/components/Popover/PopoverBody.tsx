@@ -3,12 +3,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import styles from './Popover.module.scss';
+import type { PopoverBodyProps } from './Popover.types';
 
-export const PopoverBody: React.FC<{
-  children: React.ReactNode;
-  scrollable?: boolean;
-  bodyClassName?: string;
-}> = ({ children, scrollable, bodyClassName }) => {
+/** Main content. Scrolls when it is taller than the popover. */
+export const PopoverBody: React.FC<PopoverBodyProps> = ({
+  children,
+  scrollable,
+  className,
+  dataTestId,
+}) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const rafId = useRef<number | null>(null);
   const [atTop, setAtTop] = useState(true);
@@ -56,10 +59,13 @@ export const PopoverBody: React.FC<{
         {
           [styles.bodyAtTop]: atTop,
         },
-        bodyClassName
+        className
       )}
+      data-testid={dataTestId}
     >
       {children}
     </div>
   );
 };
+
+PopoverBody.displayName = 'Popover.Body';

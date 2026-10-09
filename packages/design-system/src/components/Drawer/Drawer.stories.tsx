@@ -2,7 +2,7 @@ import { type ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Drawer from './Drawer';
 import { DRAWER_POSITIONS } from './Drawer.constants';
-import type { DrawerProps } from './Drawer.types';
+import type { DrawerPosition, DrawerProps } from './Drawer.types';
 import { Button, FormControl, FormGroup, UtilityButton } from '@/components/index.web';
 import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
@@ -209,28 +209,49 @@ export const Configurable: Story = {
     docs: {
       source: {
         code: `
-const [open, setOpen] = useState(false);
+import { useState } from 'react';
+import { Button, Drawer, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
 
-<Button onClick={() => setOpen(true)}>Filter calendar</Button>
+const GAME_TYPES = [
+  { value: 'regular-season', title: 'Regular Season' },
+  { value: 'tournament', title: 'Tournament' },
+];
 
-<Drawer.Root open={open} onClose={() => setOpen(false)}>
-  <Drawer.Heading>Filter Calendar</Drawer.Heading>
+export function FilterCalendarDrawer() {
+  const [open, setOpen] = useState(false);
+  const [gameTypes, setGameTypes] = useState<string[]>([]);
 
-  <Drawer.Body>
-    <FormGroup>
-      <FormGroup.Label>Game type</FormGroup.Label>
-      <FormControl.CheckboxGroup value={gameTypes} onChange={setGameTypes} options={GAME_TYPES} />
-    </FormGroup>
-  </Drawer.Body>
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Filter calendar</Button>
 
-  <Drawer.Footer>
-    <UtilityButton label="Clear All" onClick={clearAll} />
-    <Button color="brand" onClick={() => setOpen(false)}>
-      Show {count} Athletes
-    </Button>
-  </Drawer.Footer>
-</Drawer.Root>
-        `,
+      {/* No position: a bottom sheet on phones, a right panel from 768px up */}
+      <Drawer.Root open={open} onClose={() => setOpen(false)}>
+        <Drawer.Heading>Filter Calendar</Drawer.Heading>
+        <Drawer.Body>
+          <FormGroup>
+            <FormGroup.Label>Game type</FormGroup.Label>
+            <FormControl.CheckboxGroup
+              value={gameTypes}
+              onChange={setGameTypes}
+              options={GAME_TYPES}
+              color="brand"
+            />
+          </FormGroup>
+        </Drawer.Body>
+        <Drawer.Footer>
+          <Button variant="outlined" color="neutral" onClick={() => setGameTypes([])}>
+            Clear All
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Show Results
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
+`,
       },
     },
   },
@@ -293,45 +314,165 @@ const ShortContent = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
+// Each placement below is its own story with hand-written source for the docs page. AllVariants
+// reuses the same frames for Chromatic, so the placement stories skip snapshots. Drawers start
+// open in the story canvas and closed on the docs page, so their focus traps don't take over it.
+const EXAMPLE_ARGS = { open: false, onClose: () => {}, children: null };
+
+const exampleParameters = (code: string) => ({
+  chromatic: { disable: true },
+  controls: { disable: true },
+  layout: 'fullscreen',
+  docs: { source: { code } },
+});
+
+const renderDefaultFrame = (initialOpen: boolean) => (
+  <PositionFrame
+    label="Default (position={{ small: 'bottom', medium: 'right' }})"
+    initialOpen={initialOpen}
+  >
+    {(onClose) => <FilterCalendarContent onClose={onClose} />}
+  </PositionFrame>
+);
+
+const renderPositionFrame = (position: DrawerPosition, initialOpen: boolean) => (
+  <PositionFrame
+    key={position}
+    position={position}
+    label={`position="${position}"`}
+    initialOpen={initialOpen}
+  >
+    {(onClose) => <ShortContent onClose={onClose} />}
+  </PositionFrame>
+);
+
+export const DefaultPosition: Story = {
+  tags: ['!dev'],
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { useState } from 'react';
+import { Button, Drawer, FormControl, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+const GAME_TYPES = [
+  { value: 'regular-season', title: 'Regular Season' },
+  { value: 'tournament', title: 'Tournament' },
+];
+
+export function FilterCalendarDrawer() {
+  const [open, setOpen] = useState(false);
+  const [gameTypes, setGameTypes] = useState<string[]>([]);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Filter calendar</Button>
+
+      {/* No position: a bottom sheet on phones, a right panel from 768px up */}
+      <Drawer.Root open={open} onClose={() => setOpen(false)}>
+        <Drawer.Heading>Filter Calendar</Drawer.Heading>
+        <Drawer.Body>
+          <FormGroup>
+            <FormGroup.Label>Game type</FormGroup.Label>
+            <FormControl.CheckboxGroup
+              value={gameTypes}
+              onChange={setGameTypes}
+              options={GAME_TYPES}
+              color="brand"
+            />
+          </FormGroup>
+        </Drawer.Body>
+        <Drawer.Footer>
+          <Button variant="outlined" color="neutral" onClick={() => setGameTypes([])}>
+            Clear All
+          </Button>
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Show Results
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
+
+// Pick an edge per breakpoint: small, medium (768px+), large (1160px+)
+export function ResponsiveDrawer() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open</Button>
+
+      <Drawer.Root
+        position={{ small: 'bottom', large: 'left' }}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Drawer.Heading>Game details</Drawer.Heading>
+        <Drawer.Body>Kickoff moved from 6pm.</Drawer.Body>
+      </Drawer.Root>
+    </>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>{renderDefaultFrame(viewMode !== 'docs')}</div>
+  ),
+};
+
+const positionStory = (position: DrawerPosition): Story => ({
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { useState } from 'react';
+import { Button, Drawer, UtilityButton } from '@minneapolisstartribune/design-system/web';
+
+export function GameDetailsDrawer() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Game details</Button>
+
+      <Drawer.Root position="${position}" open={open} onClose={() => setOpen(false)}>
+        <Drawer.Heading>Game details</Drawer.Heading>
+        <Drawer.Body>Kickoff moved from 6pm. Buses leave the south lot at 5:15pm.</Drawer.Body>
+        <Drawer.Footer>
+          <UtilityButton label="Dismiss" onClick={() => setOpen(false)} />
+          <Button color="brand" onClick={() => setOpen(false)}>
+            Add to calendar
+          </Button>
+        </Drawer.Footer>
+      </Drawer.Root>
+    </>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>{renderPositionFrame(position, viewMode !== 'docs')}</div>
+  ),
+});
+
+export const Top: Story = { ...positionStory('top'), tags: ['!dev'] };
+export const Left: Story = { ...positionStory('left'), tags: ['!dev'] };
+export const Bottom: Story = { ...positionStory('bottom'), tags: ['!dev'] };
+export const Right: Story = { ...positionStory('right'), tags: ['!dev'] };
+
+/**
+ * Every placement in one canvas, for Chromatic visual regression across brand and theme modes.
+ * Not shown on the docs page; each placement has its own section there.
+ */
 export const AllVariants: Story = {
-  args: {
-    open: false,
-    onClose: () => {},
-    children: null,
-  },
+  args: EXAMPLE_ARGS,
   parameters: {
     chromatic: { modes: allModes },
     controls: { disable: true },
     layout: 'fullscreen',
-    docs: {
-      description: {
-        story:
-          "The default placement (`position={{ small: 'bottom', medium: 'right' }}`), then each position passed as a single value, which applies at every size, each in its own frame. The default frame switches from a right panel to a bottom sheet below 768px. Drawers start open in the story canvas (and in Chromatic snapshots); on this docs page they start closed so their focus traps don't take over the page — use Open.",
-      },
-    },
   },
   render: (_args, { viewMode }) => {
     const initialOpen = viewMode !== 'docs';
 
     return (
       <div className={styles.grid}>
-        <PositionFrame
-          label="Default (position={{ small: 'bottom', medium: 'right' }})"
-          initialOpen={initialOpen}
-        >
-          {(onClose) => <FilterCalendarContent onClose={onClose} />}
-        </PositionFrame>
-
-        {DRAWER_POSITIONS.map((position) => (
-          <PositionFrame
-            key={position}
-            position={position}
-            label={`position="${position}"`}
-            initialOpen={initialOpen}
-          >
-            {(onClose) => <ShortContent onClose={onClose} />}
-          </PositionFrame>
-        ))}
+        {renderDefaultFrame(initialOpen)}
+        {DRAWER_POSITIONS.map((position) => renderPositionFrame(position, initialOpen))}
       </div>
     );
   },
