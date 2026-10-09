@@ -719,6 +719,61 @@ describe('Coachmark', () => {
     );
   });
 
+  it('renders an inert tracking element covering the panel when impressionTrackingId is set', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+        impressionTrackingId="piano-coachmark-tracker"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    const tracker = document.getElementById('piano-coachmark-tracker');
+    expect(tracker).toBeInTheDocument();
+    expect(tracker).toHaveAttribute('aria-hidden', 'true');
+    // `aria-hidden`/`pointerEvents: none` alone don't stop a focusable descendant (e.g. a
+    // third-party iframe injected here) from still being reachable by keyboard -- `inert` is
+    // what actually keeps the whole injected subtree out of the tab order. Checked via the
+    // attribute, not the `.inert` IDL property -- jsdom sets the former but doesn't reflect the
+    // latter (confirmed directly against jsdom; a real browser reflects both).
+    expect(tracker).toHaveAttribute('inert');
+    expect(tracker?.style.position).toBe('absolute');
+    expect(tracker?.style.inset).toBe('0');
+    expect(tracker?.style.pointerEvents).toBe('none');
+    // .wrapper is overflow: visible with rounded corners -- without clipping to match, a third
+    // party's content rendered in here (not under this component's control) can poke out past
+    // the rounded corners (e.g. a white, square iframe background).
+    expect(tracker?.style.overflow).toBe('hidden');
+    expect(tracker?.style.borderRadius).toBe('inherit');
+    // A positioned element with no z-index still paints above normal in-flow content
+    // (title/description/CTA) regardless of DOM order -- -1 keeps it below the panel's real
+    // content while staying above .wrapper's own plain background.
+    expect(tracker?.style.zIndex).toBe('-1');
+    // Inside the panel itself, not somewhere else on the page -- it needs to move/resize with it.
+    expect(screen.getByRole('dialog').contains(tracker)).toBe(true);
+  });
+
+  it('renders no tracking element when impressionTrackingId is omitted', () => {
+    renderWithProvider(
+      <Coachmark
+        open
+        onOpenChange={vi.fn()}
+        title="Title"
+        description="Description"
+        ctaText="Do it"
+      >
+        <Button>Trigger</Button>
+      </Coachmark>
+    );
+
+    expect(document.getElementById('piano-coachmark-tracker')).not.toBeInTheDocument();
+  });
+
   it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
     renderWithProvider(
       <Coachmark

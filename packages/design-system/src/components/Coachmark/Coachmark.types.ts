@@ -97,6 +97,26 @@ export type CoachmarkProps = {
   /** Portal target for the floating panel. Defaults to document.body. */
   portalRoot?: HTMLElement | null;
 
+  /**
+   * Repositions on every animation frame instead of only on scroll/resize events. Defaults to
+   * false. Turn on when `children` scrolls within the page (e.g. a table row) rather than staying
+   * fixed on screen (e.g. a sticky header icon) -- event-based repositioning has to recompute and
+   * reapply position via JS on each scroll event, which can visibly lag behind a reference that's
+   * continuously moving, where per-frame polling does not. Costs a continuous requestAnimationFrame
+   * loop while open, so leave off for a reference that doesn't move.
+   */
+  trackReferenceMovement?: boolean;
+
+  /**
+   * Renders an empty, inert tracking element (id set to this value) inside the floating panel
+   * itself, sized/positioned to exactly cover it. For a third party (e.g. Piano) that tracks
+   * impressions by watching whether *its own* element intersects the viewport, rather than
+   * anything this component exposes directly -- that element needs to actually move and resize
+   * with the panel to reflect this coachmark's real on-screen visibility, not just exist
+   * somewhere else on the page. Omit if nothing needs to observe that.
+   */
+  impressionTrackingId?: string;
+
   /** z-index override for the floating panel. */
   zIndex?: number;
 

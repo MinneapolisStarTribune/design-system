@@ -87,6 +87,11 @@ function FavoriteButtonWithCoachmark() {
 
 Key props: `position` (`COACHMARK_POSITIONS` — which side of `children` it opens on, defaults to `'bottom-center'`), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref`, `secondaryContent`, and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
 
+Two more props cover less common cases:
+
+- `trackReferenceMovement` (defaults to `false`) — repositions on every animation frame instead of only on scroll/resize. Turn this on only when `children` itself scrolls within the page (e.g. a table row), not just when the page around it scrolls — a reference that's continuously moving under normal event-based repositioning can visibly lag behind it. It costs a continuous `requestAnimationFrame` loop for as long as the coachmark is open, so leave it off for a reference that stays fixed on screen (e.g. a sticky header icon).
+- `impressionTrackingId` — renders an empty, inert element with this id inside the floating panel, sized/positioned to exactly cover it, for a third party (e.g. Piano) that tracks impressions by watching whether _its own_ injected element intersects the viewport. Omit it unless something external actually needs to observe the coachmark's real on-screen visibility this way.
+
 For a Piano-driven coachmark (triggered by Piano's `setResponseVariable` event instead of your own state), see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one, since design-system has no knowledge of or dependency on Piano.
 
 ## Available Themes

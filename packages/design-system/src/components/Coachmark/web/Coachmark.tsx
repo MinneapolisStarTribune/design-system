@@ -95,6 +95,8 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   portalRoot: portalRootProp,
   zIndex = 9999,
   analytics: analyticsOverride,
+  trackReferenceMovement = false,
+  impressionTrackingId,
 }) => {
   const arrowRef = useRef<SVGSVGElement>(null);
   const coachmarkId = useId();
@@ -175,6 +177,21 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     [onOpenChange]
   );
 
+  // Event-based (the autoUpdate default) recomputes position on scroll/resize events, which is
+  // plenty for a reference that's otherwise stationary (e.g. a sticky header icon) but can
+  // visibly lag behind one that's continuously moving (e.g. a table row scrolling with the page)
+  // -- browsers can throttle/coalesce scroll event dispatch during a fast or flung scroll.
+  // animationFrame polls on every frame instead, trading a continuous rAF loop while open for
+  // position that never falls behind.
+  const whileElementsMounted = useCallback(
+    (
+      referenceEl: Parameters<typeof autoUpdate>[0],
+      floatingEl: Parameters<typeof autoUpdate>[1],
+      update: Parameters<typeof autoUpdate>[2]
+    ) => autoUpdate(referenceEl, floatingEl, update, { animationFrame: trackReferenceMovement }),
+    [trackReferenceMovement]
+  );
+
   const { refs, context, floatingStyles } = useFloating({
     // 'fixed' (not 'absolute') avoids a jerky trail behind a sticky/fixed trigger: 'absolute'
     // positions in document coordinates, which keep changing under a stuck trigger and so need
@@ -183,7 +200,7 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
     placement: PLACEMENT[position],
     open,
     onOpenChange: handleOpenChange,
-    whileElementsMounted: autoUpdate,
+    whileElementsMounted,
     middleware,
   });
 
@@ -331,6 +348,39 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
               aria-describedby={descriptionId}
               {...getFloatingProps()}
             >
+              {impressionTrackingId && (
+                <div
+                  id={impressionTrackingId}
+                  aria-hidden="true"
+                  // `aria-hidden`/`pointerEvents: none` alone don't stop a focusable descendant
+                  // from still being reachable by keyboard -- since a third party can inject
+                  // arbitrary content here (e.g. an iframe), `inert` is what actually keeps the
+                  // whole injected subtree out of the tab order, not just hidden from screen
+                  // readers and clicks.
+                  inert
+                  // .wrapper is `overflow: visible` (the arrow/shadow need to extend past its own
+                  // edge) with rounded corners, so whatever a third party renders into this --
+                  // not under this component's control -- isn't automatically clipped to match
+                  // and can poke out past the rounded corners (e.g. a white, square iframe
+                  // background). `overflow: hidden` + inheriting .wrapper's own radius clips it
+                  // to the same rounded shape without affecting the rest of the panel.
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    overflow: 'hidden',
+                    borderRadius: 'inherit',
+                    pointerEvents: 'none',
+                    // A positioned element with no z-index still paints above normal in-flow
+                    // content (title/description/CTA below), regardless of DOM order -- so
+                    // third-party content injected here (e.g. an opaque iframe) would otherwise
+                    // visually cover the panel's real content despite pointer events passing
+                    // through. `.wrapper` has its own non-auto `zIndex`, making it a stacking
+                    // context -- -1 here stays above its plain background but below everything
+                    // else inside it.
+                    zIndex: -1,
+                  }}
+                />
+              )}
               {badgeText && (
                 <span className={styles.badge}>
                   <UtilityLabel size="small" weight="semibold" capitalize color="on-dark-primary">
