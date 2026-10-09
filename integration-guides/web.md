@@ -41,37 +41,6 @@ function SidebarWithPopover() {
 
 Pass `portalRoot` to each overlay that needs it. There is no provider that sets it for a whole subtree.
 
-### Menu
-
-`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` with the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`, `triggerClick`).
-
-```tsx
-import { useState } from 'react';
-import { Button, Menu } from '@minneapolisstartribune/design-system/web';
-
-function AccountMenu() {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Menu.Root
-      trigger={<Button>Account</Button>}
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      aria-label="Account"
-    >
-      <Menu.Item href="/profile">Manage Profile</Menu.Item>
-      <Menu.Divider />
-      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
-    </Menu.Root>
-  );
-}
-```
-
-When the menu can't render its trigger (for example, one menu shared by several anchors), pass `anchorEl` instead of `trigger` and `onOpen`, and add `aria-haspopup="menu"` and `aria-expanded` to your anchor yourself.
-
-Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
-
 ## Quick Start
 
 Import component styles, then a theme CSS file (typography classes + CSS variables in one file), then wrap your app with `DesignSystemProvider`:
@@ -277,6 +246,37 @@ const current: Breakpoint = 'large';
 ```
 
 The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
+## Menu
+
+`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` with the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`, `triggerClick`).
+
+```tsx
+import { useState } from 'react';
+import { Button, Menu } from '@minneapolisstartribune/design-system/web';
+
+function AccountMenu() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Menu.Root
+      trigger={<Button>Account</Button>}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      aria-label="Account"
+    >
+      <Menu.Item href="/profile">Manage Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+    </Menu.Root>
+  );
+}
+```
+
+When the menu can't render its trigger (for example, one menu shared by several anchors), pass `anchorEl` instead of `trigger` and `onOpen`, and add `aria-haspopup="menu"` and `aria-expanded` to your anchor yourself.
+
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## ToggleGroup
 
