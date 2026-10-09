@@ -1,0 +1,80 @@
+/* Set menu sizes with `--menu-*` or a width class on the menu. */
+.menu {
+  width: var(--menu-width, 360px);
+}
+
+/* Scoped under `.menu` so it beats Popover's `.container` sizing whatever the CSS load order. */
+.menu .container {
+  /* Fill the surface width, padding included. */
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: var(--menu-max-height, 362px);
+  padding: 0 var(--spacing-4);
+  /* Match the wrapper radius minus its border. */
+  border-radius: calc(var(--radius-16) - 1px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--spacing-12);
+
+  border: none;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-select-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--spacing-2) solid var(--color-border-on-light-strong-02);
+    outline-offset: calc(-1 * var(--spacing-2));
+  }
+}
+
+.itemDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  margin-inline-start: auto;
+}
+
+.divider {
+  position: relative;
+  height: 1px;
+  /* Overlap the preceding row so the divider adds no height. */
+  margin-block-start: -1px;
+  flex-shrink: 0;
+  background: var(--color-border-on-light-subtle-01);
+}

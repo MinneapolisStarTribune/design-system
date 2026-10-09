@@ -14,7 +14,7 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover`, `Menu`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame
@@ -246,6 +246,35 @@ const current: Breakpoint = 'large';
 ```
 
 The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
+## Menu
+
+`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` with the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`, `triggerClick`).
+
+```tsx
+import { useState } from 'react';
+import { Button, Menu } from '@minneapolisstartribune/design-system/web';
+
+function AccountMenu() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Menu.Root
+      trigger={<Button>Account</Button>}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      aria-label="Account"
+    >
+      <Menu.Item href="/profile">Manage Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+    </Menu.Root>
+  );
+}
+```
+
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## ToggleGroup
 
