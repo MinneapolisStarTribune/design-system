@@ -40,29 +40,16 @@ export type MenuLabelProps =
   | { 'aria-label': string; 'aria-labelledby'?: never }
   | { 'aria-label'?: never; 'aria-labelledby': string };
 
-/** Menu renders and wires a `trigger`, or attaches to an `anchorEl` the consumer renders. */
-export type MenuAnchorProps =
-  | {
-      /**
-       * Element that toggles the menu. It must be a single element that accepts a ref. The menu
-       * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
-       */
-      trigger: ReactElement;
-      /** Called when the trigger requests to open the menu. */
-      onOpen: () => void;
-      anchorEl?: never;
-    }
-  | {
-      /** The element the menu is positioned against. */
-      anchorEl: Element | null;
-      trigger?: never;
-      onOpen?: never;
-    };
-
 export type MenuProps = MenuBaseProps &
   MenuLabelProps &
-  MenuAnchorProps &
   Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
+    /**
+     * Element that toggles the menu. It must be a single element that accepts a ref. The menu
+     * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
+     */
+    trigger: ReactElement;
+    /** Called when the trigger requests to open the menu. */
+    onOpen: () => void;
     /** Renders the menu in this element instead of `document.body` (e.g. for Storybook). */
     portalRoot?: HTMLElement | null;
   };

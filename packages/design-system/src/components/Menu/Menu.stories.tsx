@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
 import { MENU_ARROW_OFFSETS, MENU_PLACEMENTS } from './Menu.constants';
-import type { MenuAnchorProps, MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
+import type { MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import {
@@ -37,12 +37,8 @@ const POSITIONS = [
   hideArrow?: boolean;
 }[];
 
-type DemoProps = Omit<
-  MenuProps,
-  keyof MenuAnchorProps | 'open' | 'onClose' | keyof MenuLabelProps
-> &
+type DemoProps = Omit<MenuProps, 'open' | 'onOpen' | 'onClose' | keyof MenuLabelProps> &
   MenuLabelProps & {
-    trigger: ReactElement;
     /** Starts open without a click, e.g. for Chromatic snapshots. */
     initialOpen?: boolean;
   };
@@ -62,33 +58,6 @@ const MenuDemo = ({ initialOpen = false, ...menuProps }: DemoProps) => {
 };
 
 type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowOffset'>;
-
-/** For an anchor the menu doesn't render, such as one shared by several menus. */
-const AnchorElDemo = (position: ExamplePosition) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  return (
-    <>
-      <Button
-        variant="outlined"
-        aria-haspopup="menu"
-        aria-expanded={anchorEl !== null}
-        onClick={(event) => setAnchorEl(event.currentTarget)}
-      >
-        Open with anchorEl
-      </Button>
-      <Menu.Root
-        {...position}
-        anchorEl={anchorEl}
-        open={anchorEl !== null}
-        onClose={() => setAnchorEl(null)}
-        aria-label="Anchor element example"
-      >
-        <RowActionItems />
-      </Menu.Root>
-    </>
-  );
-};
 
 /**
  * Stand-in for `next/link` so Storybook doesn't depend on `next`.
@@ -361,29 +330,6 @@ ${positionProps}  aria-label="Options"
   ))}
 </Menu.Root>`,
   },
-  anchorElement: {
-    label: 'Anchor element',
-    render: (position) => <AnchorElDemo {...position} />,
-    code: (positionProps) => `const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-<Button
-  variant="outlined"
-  aria-haspopup="menu"
-  aria-expanded={anchorEl !== null}
-  onClick={(event) => setAnchorEl(event.currentTarget)}
->
-  Open with anchorEl
-</Button>
-
-<Menu.Root
-  anchorEl={anchorEl}
-  open={anchorEl !== null}
-  onClose={() => setAnchorEl(null)}
-${positionProps}  aria-label="Anchor element example"
->
-${ROW_ACTION_ITEMS_CODE}
-</Menu.Root>`,
-  },
 } satisfies Record<string, MenuExample>;
 
 type ExampleKey = keyof typeof EXAMPLES;
@@ -430,8 +376,7 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'List of actions or links that opens from a trigger or an anchor element. Docs: `Menu.mdx`.',
+        component: 'List of actions or links that opens from a trigger. Docs: `Menu.mdx`.',
       },
     },
   },
@@ -450,12 +395,6 @@ const meta = {
       description:
         'Element that opens the menu. Menu adds the click handler, ref, and ARIA attributes.',
       table: { type: { summary: 'ReactElement' } },
-    },
-    anchorEl: {
-      control: false,
-      description:
-        'Element the menu attaches to, when the consumer renders it. Use instead of `trigger`.',
-      table: { type: { summary: 'Element | null' } },
     },
     open: { control: false, table: { type: { summary: 'boolean' } } },
     onOpen: { control: false, table: { type: { summary: '() => void' } } },
@@ -657,15 +596,6 @@ export const AllVariants: Story = {
             </div>
           </Example>
         ))}
-      </Group>
-
-      <Group title="Additional examples">
-        <Example
-          title="Anchor element"
-          description="Pass anchorEl when the consumer renders the anchor and opens the menu."
-        >
-          <AnchorElDemo />
-        </Example>
       </Group>
     </div>
   ),

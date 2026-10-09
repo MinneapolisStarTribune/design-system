@@ -37,10 +37,9 @@ const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
   click: 'triggerClick',
 };
 
-/** A list of actions or links attached to a trigger or an anchor element. */
+/** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
   trigger,
-  anchorEl,
   open,
   onOpen,
   onClose,
@@ -64,7 +63,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
-      if (nextOpen) onOpen?.();
+      if (nextOpen) onOpen();
       else onClose((reason && CLOSE_REASONS[reason]) ?? 'outsidePress');
     },
     [onOpen, onClose]
@@ -86,11 +85,9 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const breakpoint = useBreakpoint();
   const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
 
-  const anchorProps = trigger ? { trigger } : { anchorEl: anchorEl ?? null };
-
   return (
     <FloatingSurface
-      {...anchorProps}
+      trigger={trigger}
       open={open}
       onOpenChange={handleOpenChange}
       interactionRole="menu"

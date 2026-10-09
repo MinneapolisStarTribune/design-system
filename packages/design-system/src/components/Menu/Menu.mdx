@@ -13,7 +13,7 @@ import * as MenuStories from './Menu.stories';
 
 ## Anatomy
 
-1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` or positions against `anchorEl`, and handles dismiss, focus, and arrow-key navigation.
+1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` and handles dismiss, focus, and arrow-key navigation.
 2. **Pointer**: the arrow that points at the anchor. It can be pinned or hidden.
 3. **Item** (`Menu.Item`): one row. It renders a `<button>`, or an `<a>` when `href` is set.
 4. **Start icon (optional)** (`Menu.ItemIcon`): shown before the label.
@@ -29,7 +29,6 @@ import * as MenuStories from './Menu.stories';
 - Group related items and separate the groups with `Menu.Divider`
 - To show items only in some states, render them conditionally (`{status === 'active' && <Menu.Item />}`). Use `disabled` only when the user should see that the action exists
 - Pass `trigger` and the menu renders it, toggles on click, and sets `aria-haspopup`, `aria-expanded`, and `aria-controls`. The trigger must be a single element that accepts a ref
-- Pass `anchorEl` instead when you manage the anchor yourself, for example to open the menu from a table row. Keep the element in state and set the trigger's ARIA attributes yourself
 
 ## Customization Props
 
@@ -45,21 +44,10 @@ import * as MenuStories from './Menu.stories';
   <tbody>
     <tr>
       <td>
-        <code>anchorEl</code>
-      </td>
-      <td>Menu.Root</td>
-      <td>The element the menu is positioned against. Pass this or <code>trigger</code>.</td>
-    </tr>
-
-    <tr>
-      <td>
         <code>trigger</code> / <code>onOpen</code>
       </td>
       <td>Menu.Root</td>
-      <td>
-        The element that toggles the menu, and its open callback. Pass these or{' '}
-        <code>anchorEl</code>.
-      </td>
+      <td>Required. The element that toggles the menu, and its open callback.</td>
     </tr>
 
     <tr>
@@ -388,7 +376,7 @@ For example, `placement="top-end"` with `arrowOffset="end"` pins the pointer 16p
 - The menu uses the `menu` ARIA role, and each item uses `menuitem`
 - Give the menu an `aria-label` or `aria-labelledby`
 - Icons are decorative and hidden from screen readers, so the label has to make sense on its own
-- With `anchorEl`, add `aria-haspopup="menu"` and `aria-expanded` to your trigger yourself. With `trigger`, Menu sets them for you
+- Menu sets `aria-haspopup`, `aria-expanded`, and `aria-controls` on the trigger
 
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
