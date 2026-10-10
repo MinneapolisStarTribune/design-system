@@ -1,7 +1,7 @@
 import { useState, type ComponentProps } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { onTestFinished, vi } from 'vitest';
 import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
@@ -90,6 +90,34 @@ describe('Menu', () => {
   it('focuses the first enabled item on open', async () => {
     const user = userEvent.setup();
     renderWithProvider(<Harness />);
+
+    await openMenu(user);
+
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+  });
+
+  it.each([
+    ['Down Arrow', '{ArrowDown}', 'Edit'],
+    ['Up Arrow', '{ArrowUp}', 'Delete'],
+  ])('opens from the trigger with %s and focuses %s', async (_, key, itemName) => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+
+    screen.getByRole('button', { name: 'Actions' }).focus();
+    await user.keyboard(key);
+
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: itemName })).toHaveFocus());
+  });
+
+  it('focuses the first item on a click open after an Up Arrow open', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+
+    screen.getByRole('button', { name: 'Actions' }).focus();
+    await user.keyboard('{ArrowUp}');
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus());
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
 
     await openMenu(user);
 
@@ -323,6 +351,7 @@ describe('Menu', () => {
 
   it('resolves a responsive placement at the current breakpoint', async () => {
     const viewport = mockViewport(375);
+    onTestFinished(viewport.restore);
     const user = userEvent.setup();
     renderWithProvider(<Harness placement={{ small: 'top', large: 'bottom' }} />);
 
@@ -332,7 +361,6 @@ describe('Menu', () => {
 
     viewport.resize(1160);
     await waitFor(() => expect(arrow()?.style.bottom).toBe('100%'));
-    viewport.restore();
   });
 
   it('renders in a portal by default', async () => {
@@ -348,12 +376,12 @@ describe('Menu', () => {
     const user = userEvent.setup();
     const container = document.createElement('div');
     document.body.appendChild(container);
+    onTestFinished(() => container.remove());
     renderWithProvider(<Harness portalRoot={container} />);
 
     const menu = await openMenu(user);
 
     expect(container.contains(menu)).toBe(true);
-    container.remove();
   });
 
   it('locks page scroll while open and restores it on close', async () => {
@@ -406,6 +434,40 @@ describe('Menu', () => {
 
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(trigger).toHaveAttribute('aria-controls', menu.id);
+  });
+
+  const divTrigger = (
+    <div role="button" tabIndex={0}>
+      Actions
+    </div>
+  );
+  const buttonTrigger = <button type="button">Actions</button>;
+
+  it.each([
+    ['div role="button"', divTrigger, 'Enter', '{Enter}'],
+    ['div role="button"', divTrigger, 'Space', ' '],
+    ['native button', buttonTrigger, 'Enter', '{Enter}'],
+    ['native button', buttonTrigger, 'Space', ' '],
+  ])('opens once from a %s trigger with %s', async (_, trigger, _keyName, key) => {
+    const user = userEvent.setup();
+    const onOpen = vi.fn();
+
+    renderWithProvider(
+      <Menu.Root
+        aria-label="Row actions"
+        trigger={trigger}
+        open={false}
+        onOpen={onOpen}
+        onClose={vi.fn()}
+      >
+        <Menu.Item>Edit</Menu.Item>
+      </Menu.Root>
+    );
+
+    screen.getByRole('button', { name: 'Actions' }).focus();
+    await user.keyboard(key);
+
+    expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
   it('closes with triggerClick when the trigger is clicked again', async () => {

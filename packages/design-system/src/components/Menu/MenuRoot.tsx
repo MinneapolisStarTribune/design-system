@@ -11,10 +11,14 @@ import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from
 import { MenuContext } from './MenuContext';
 import type { MenuCloseReason, MenuProps } from './Menu.types';
 
+const POPUP_ROLE = 'menu';
 const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
 
+// Skips items hidden with CSS, such as per-breakpoint items. jsdom has no `checkVisibility`.
 const getEnabledItems = (container: HTMLElement) =>
-  Array.from(container.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR));
+  Array.from(container.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR)).filter(
+    (item) => item.checkVisibility?.() ?? true
+  );
 
 const getNextIndex = (key: string, current: number, count: number) => {
   switch (key) {
@@ -48,28 +52,30 @@ export const MenuRoot: React.FC<MenuProps> = ({
   onOpen,
   onClose,
   placement: placementProp,
-  hideArrow,
   arrowOffset,
   className,
-  portalRoot,
   dataTestId = 'menu',
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledBy,
   children,
+  ...rest
 }) => {
   const initialFocusRef = useRef<HTMLElement | null>(null);
+  const focusLastOnOpenRef = useRef(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
   const surfaceId = useId();
 
-  // All items have tabIndex -1. Set the first enabled item as the initial focus target.
+  // All items have tabIndex -1. Set the first enabled item, or the last after Up Arrow, as the initial focus target.
   const listRef = useCallback((node: HTMLDivElement | null) => {
-    initialFocusRef.current = node ? (getEnabledItems(node)[0] ?? null) : null;
+    const items = node ? getEnabledItems(node) : [];
+    initialFocusRef.current =
+      (focusLastOnOpenRef.current ? items[items.length - 1] : items[0]) ?? null;
   }, []);
 
   const handleOpenChange = useCallback(
-    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
-      if (nextOpen) onOpen();
-      else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
+    (nextOpen: boolean, event?: Event, reason?: OpenChangeReason) => {
+      if (nextOpen) {
+        focusLastOnOpenRef.current = event instanceof KeyboardEvent && event.key === 'ArrowUp';
+        onOpen();
+      } else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
     },
     [onOpen, onClose]
   );
@@ -96,19 +102,19 @@ export const MenuRoot: React.FC<MenuProps> = ({
         trigger={trigger}
         open={open}
         onOpenChange={handleOpenChange}
-        popupRole="menu"
+        popupRole={POPUP_ROLE}
         surfaceId={surfaceId}
         onElementChange={setAnchorElement}
       />
       <FloatingSurface
+        {...rest}
         anchor={anchorElement}
         open={open}
         onOpenChange={handleOpenChange}
-        role="menu"
+        role={POPUP_ROLE}
         id={surfaceId}
         placement={placement}
         lockScroll
-        hideArrow={hideArrow}
         arrowStaticOffset={resolveMenuArrowOffset(
           resolveResponsive(arrowOffset, breakpoint),
           placement
@@ -116,10 +122,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
         arrowSize={MENU_ARROW_SIZE}
         arrowPadding={MENU_ARROW_CORNER_INSET}
         initialFocus={initialFocusRef}
-        portalRoot={portalRoot}
         dataTestId={dataTestId}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
         className={classNames(styles.menu, className)}
         containerClassName={styles.container}
       >
