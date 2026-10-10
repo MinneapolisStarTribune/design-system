@@ -245,6 +245,28 @@ describe('Popover', () => {
     ]);
   });
 
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('toggles a text trigger with %s', async (_, key) => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover.Root trigger="Open" aria-label="Options">
+        <Popover.Body>Popover Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    trigger.focus();
+    await user.keyboard(key);
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+
+    trigger.focus();
+    await user.keyboard(key);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
   it('does not override the trigger display', () => {
     renderWithProvider(
       <Popover.Root trigger={<Button style={{ cursor: 'help' }}>Open</Button>}>

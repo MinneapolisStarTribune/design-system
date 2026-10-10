@@ -1,9 +1,10 @@
 'use client';
 
-import { type KeyboardEvent, useCallback, useMemo, useRef } from 'react';
+import { type KeyboardEvent, useCallback, useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import type { OpenChangeReason } from '@floating-ui/react';
 import { FloatingSurface } from '@/components/Popover/FloatingSurface';
+import { FloatingTrigger } from '@/components/Popover/FloatingTrigger';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
@@ -30,12 +31,15 @@ const getNextIndex = (key: string, current: number, count: number) => {
   }
 };
 
-// Any other Floating UI reason is an outside press.
+// The reasons FloatingTrigger, useDismiss, and FloatingFocusManager send with this setup.
 const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
   'escape-key': 'escapeKey',
   'focus-out': 'focusOut',
+  'outside-press': 'outsidePress',
   click: 'triggerClick',
 };
+// For a reason not listed above, the menu still closes and reports this.
+const FALLBACK_CLOSE_REASON: MenuCloseReason = 'outsidePress';
 
 /** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
@@ -48,13 +52,14 @@ export const MenuRoot: React.FC<MenuProps> = ({
   arrowOffset,
   className,
   portalRoot,
-  id,
   dataTestId = 'menu',
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
   children,
 }) => {
   const initialFocusRef = useRef<HTMLElement | null>(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const surfaceId = useId();
 
   // All items have tabIndex -1. Set the first enabled item as the initial focus target.
   const listRef = useCallback((node: HTMLDivElement | null) => {
@@ -64,7 +69,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
       if (nextOpen) onOpen();
-      else onClose((reason && CLOSE_REASONS[reason]) ?? 'outsidePress');
+      else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
     },
     [onOpen, onClose]
   );
@@ -86,35 +91,45 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
 
   return (
-    <FloatingSurface
-      trigger={trigger}
-      open={open}
-      onOpenChange={handleOpenChange}
-      interactionRole="menu"
-      placement={placement}
-      lockScroll
-      hideArrow={hideArrow}
-      arrowStaticOffset={resolveMenuArrowOffset(
-        resolveResponsive(arrowOffset, breakpoint),
-        placement
-      )}
-      arrowSize={MENU_ARROW_SIZE}
-      arrowPadding={MENU_ARROW_CORNER_INSET}
-      initialFocus={initialFocusRef}
-      portalRoot={portalRoot}
-      id={id}
-      dataTestId={dataTestId}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledBy}
-      className={classNames(styles.menu, className)}
-      containerClassName={styles.container}
-    >
-      <MenuContext.Provider value={contextValue}>
-        <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
-          {children}
-        </div>
-      </MenuContext.Provider>
-    </FloatingSurface>
+    <>
+      <FloatingTrigger
+        trigger={trigger}
+        open={open}
+        onOpenChange={handleOpenChange}
+        popupRole="menu"
+        surfaceId={surfaceId}
+        onElementChange={setAnchorElement}
+      />
+      <FloatingSurface
+        anchor={anchorElement}
+        open={open}
+        onOpenChange={handleOpenChange}
+        role="menu"
+        id={surfaceId}
+        placement={placement}
+        lockScroll
+        hideArrow={hideArrow}
+        arrowStaticOffset={resolveMenuArrowOffset(
+          resolveResponsive(arrowOffset, breakpoint),
+          placement
+        )}
+        arrowSize={MENU_ARROW_SIZE}
+        arrowPadding={MENU_ARROW_CORNER_INSET}
+        initialFocus={initialFocusRef}
+        portalRoot={portalRoot}
+        dataTestId={dataTestId}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        className={classNames(styles.menu, className)}
+        containerClassName={styles.container}
+      >
+        <MenuContext.Provider value={contextValue}>
+          <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
+            {children}
+          </div>
+        </MenuContext.Provider>
+      </FloatingSurface>
+    </>
   );
 };
 

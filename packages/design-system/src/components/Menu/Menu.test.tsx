@@ -416,6 +416,8 @@ describe('Menu', () => {
     await openMenu(user);
     await user.click(screen.getByRole('button', { name: 'Actions' }));
 
+    // The trigger closes it, and the surface doesn't also report an outside press.
+    expect(onClose).toHaveBeenCalledTimes(1);
     expect(onClose).toHaveBeenCalledWith('triggerClick');
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });

@@ -3,6 +3,7 @@
 import { useCallback, useId, useMemo, useState } from 'react';
 import { PopoverContext } from './PopoverContext';
 import { FloatingSurface } from './FloatingSurface';
+import { FloatingTrigger } from './FloatingTrigger';
 import { PopoverProps } from './Popover.types';
 
 export const PopoverRoot: React.FC<PopoverProps> = ({
@@ -21,6 +22,9 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   dataTestId,
 }) => {
   const [openState, setOpenState] = useState(false);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const generatedId = useId();
+  const surfaceId = id ?? generatedId;
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
   // Support controlled and uncontrolled modes
@@ -43,16 +47,25 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
 
   return (
     <PopoverContext.Provider value={contextValue}>
-      <FloatingSurface
+      <FloatingTrigger
         trigger={trigger}
         open={open}
         onOpenChange={handleOpenChange}
-        placement={placement}
+        popupRole="dialog"
+        surfaceId={surfaceId}
+        onElementChange={setAnchorElement}
         isDisabled={isDisabled}
+      />
+      <FloatingSurface
+        anchor={anchorElement}
+        open={open}
+        onOpenChange={handleOpenChange}
+        placement={placement}
+        role="dialog"
+        id={surfaceId}
         modal={modal}
         portalRoot={portalRoot}
         className={className}
-        id={id}
         style={style}
         dataTestId={dataTestId}
         aria-label={hasHeading ? undefined : ariaLabel}

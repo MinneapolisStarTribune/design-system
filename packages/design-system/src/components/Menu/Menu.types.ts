@@ -1,4 +1,4 @@
-import type { ComponentProps, ElementType, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { ComponentProps, ElementType, ReactElement, ReactNode } from 'react';
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
@@ -41,8 +41,7 @@ export type MenuLabelProps =
   | { 'aria-label'?: never; 'aria-labelledby': string };
 
 export type MenuProps = MenuBaseProps &
-  MenuLabelProps &
-  Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
+  MenuLabelProps & {
     /**
      * Element that toggles the menu. It must be a single element that accepts a ref. The menu
      * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
