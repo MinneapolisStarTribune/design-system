@@ -245,26 +245,42 @@ describe('Popover', () => {
     ]);
   });
 
-  it.each([
-    ['Enter', '{Enter}'],
-    ['Space', ' '],
-  ])('toggles a text trigger with %s', async (_, key) => {
-    const user = userEvent.setup();
+  const keyboardTriggers: [string, ReactNode][] = [
+    ['text', 'Open'],
+    [
+      'div role="button"',
+      <div key="div-trigger" role="button" tabIndex={0}>
+        Open
+      </div>,
+    ],
+    ['native button', <Button key="native-button">Open</Button>],
+  ];
 
-    renderWithProvider(
-      <Popover.Root trigger="Open" aria-label="Options">
-        <Popover.Body>Popover Content</Popover.Body>
-      </Popover.Root>
-    );
+  describe.each(keyboardTriggers)('with a %s trigger', (_, trigger) => {
+    it.each([
+      ['Enter', '{Enter}'],
+      ['Space', ' '],
+    ])('toggles once per %s press', async (_, key) => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
 
-    const trigger = screen.getByRole('button', { name: 'Open' });
-    trigger.focus();
-    await user.keyboard(key);
-    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+      renderWithProvider(
+        <Popover.Root trigger={trigger} aria-label="Options" onOpenChange={onOpenChange}>
+          <Popover.Body>Popover Content</Popover.Body>
+        </Popover.Root>
+      );
 
-    trigger.focus();
-    await user.keyboard(key);
-    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      const triggerElement = screen.getByRole('button', { name: 'Open' });
+      triggerElement.focus();
+      await user.keyboard(key);
+      expect(await screen.findByRole('dialog')).toBeInTheDocument();
+      expect(onOpenChange).toHaveBeenCalledTimes(1);
+
+      triggerElement.focus();
+      await user.keyboard(key);
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      expect(onOpenChange).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('does not override the trigger display', () => {
@@ -324,6 +340,29 @@ describe('Popover', () => {
     await openPopover(user);
 
     expect(screen.queryByText('Content')).not.toBeInTheDocument();
+  });
+
+  it.each<[string, ReactNode]>([
+    ['an element', <Button key="open">Open</Button>],
+    ['a text', 'Open'],
+  ])('marks %s trigger aria-disabled when isDisabled is true', (_, trigger) => {
+    renderWithProvider(
+      <Popover.Root trigger={trigger} isDisabled>
+        <Popover.Body>Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('does not open on Down Arrow, which only menu triggers handle', async () => {
+    const user = userEvent.setup();
+
+    renderPopover(<Popover.Body>Content</Popover.Body>);
+    screen.getByRole('button', { name: 'Open' }).focus();
+    await user.keyboard('{ArrowDown}');
+
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 
   it('renders with heading and body', async () => {

@@ -6,20 +6,18 @@ import { FloatingSurface } from './FloatingSurface';
 import { FloatingTrigger } from './FloatingTrigger';
 import { PopoverProps } from './Popover.types';
 
+const POPUP_ROLE = 'dialog';
+
 export const PopoverRoot: React.FC<PopoverProps> = ({
   trigger,
   children,
   placement = 'bottom',
   isDisabled,
-  modal = false,
   open: openProp,
   onOpenChange: onOpenChangeProp,
-  portalRoot,
-  className,
   id,
-  style,
   'aria-label': ariaLabel,
-  dataTestId,
+  ...rest
 }) => {
   const [openState, setOpenState] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
@@ -44,6 +42,8 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
     () => ({ close: () => handleOpenChange(false), headingId, setHasHeading }),
     [handleOpenChange, headingId]
   );
+  // A heading names the dialog when present. Otherwise `aria-label` does.
+  const labelProps = hasHeading ? { 'aria-labelledby': headingId } : { 'aria-label': ariaLabel };
 
   return (
     <PopoverContext.Provider value={contextValue}>
@@ -51,25 +51,20 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
         trigger={trigger}
         open={open}
         onOpenChange={handleOpenChange}
-        popupRole="dialog"
+        popupRole={POPUP_ROLE}
         surfaceId={surfaceId}
         onElementChange={setAnchorElement}
         isDisabled={isDisabled}
       />
       <FloatingSurface
+        {...rest}
+        {...labelProps}
         anchor={anchorElement}
         open={open}
         onOpenChange={handleOpenChange}
         placement={placement}
-        role="dialog"
+        role={POPUP_ROLE}
         id={surfaceId}
-        modal={modal}
-        portalRoot={portalRoot}
-        className={className}
-        style={style}
-        dataTestId={dataTestId}
-        aria-label={hasHeading ? undefined : ariaLabel}
-        aria-labelledby={hasHeading ? headingId : undefined}
       >
         {children}
       </FloatingSurface>

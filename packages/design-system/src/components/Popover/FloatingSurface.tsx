@@ -12,6 +12,7 @@ import {
   flip,
   offset,
   shift,
+  size,
   useDismiss,
   useFloating,
   useInteractions,
@@ -90,8 +91,25 @@ export const FloatingSurface = ({
   const middleware = useMemo(
     () => [
       offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
+      // A side placement that fits neither side falls back to below or above the anchor.
+      flip({
+        boundary: resolvedPortalRoot,
+        padding: FLOATING_GAP,
+        fallbackAxisSideDirection: 'end',
+      }),
       shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
-      flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
+      // Expose the space left on the chosen side so surface styles can shrink to fit narrow screens.
+      size({
+        boundary: resolvedPortalRoot,
+        padding: FLOATING_GAP,
+        apply({ availableWidth, availableHeight, elements }) {
+          elements.floating.style.setProperty('--floating-available-width', `${availableWidth}px`);
+          elements.floating.style.setProperty(
+            '--floating-available-height',
+            `${availableHeight}px`
+          );
+        },
+      }),
       arrow({ element: arrowElement, padding: arrowPadding }),
     ],
     [resolvedPortalRoot, hideArrow, arrowSize.height, arrowPadding, arrowElement]
