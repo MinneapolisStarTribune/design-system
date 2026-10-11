@@ -36,7 +36,8 @@ const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
   'outside-press': 'outsidePress',
   click: 'triggerClick',
 };
-// For a reason not listed above, the menu still closes and reports this.
+// Unreachable with the hooks above. Satisfies the type if a future hook or Floating UI version
+// sends another reason; the menu still closes.
 const FALLBACK_CLOSE_REASON: MenuCloseReason = 'outsidePress';
 
 /** A list of actions or links attached to a trigger. */
@@ -98,14 +99,11 @@ export const MenuRoot: React.FC<MenuProps> = ({
     onNavigate: setActiveIndex,
     loop: true,
     focusItemOnOpen: true,
-    // Also skips items hidden with CSS, such as per-breakpoint items. jsdom has no `checkVisibility`.
+    // Disabled items stay focusable, as APG menus require. Skip only items hidden with CSS, such as
+    // per-breakpoint items. jsdom has no `checkVisibility`.
     disabledIndices: (index) => {
       const item = itemsRef.current[index];
-      return (
-        !item ||
-        item.getAttribute('aria-disabled') === 'true' ||
-        !(item.checkVisibility?.() ?? true)
-      );
+      return !item || !(item.checkVisibility?.() ?? true);
     },
   });
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
@@ -148,7 +146,15 @@ export const MenuRoot: React.FC<MenuProps> = ({
                 style={{ ...floatingStyles, pointerEvents: 'auto' }}
                 className={classNames(popupStyles.wrapper, styles.menu, className)}
                 data-testid={dataTestId}
-                {...getFloatingProps()}
+                {...getFloatingProps({
+                  // Shift+Tab would focus the trigger, which counts as inside, so the menu would stay
+                  // open. Close it instead, and focus returns to the trigger. Tab already closes it.
+                  onKeyDown: (event) => {
+                    if (event.key !== 'Tab' || !event.shiftKey) return;
+                    event.preventDefault();
+                    handleOpenChange(false, event.nativeEvent, 'focus-out');
+                  },
+                })}
                 id={surfaceId}
                 role="menu"
                 aria-label={ariaLabel}
