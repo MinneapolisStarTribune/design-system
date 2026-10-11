@@ -1,76 +1,42 @@
-import { describe, it } from 'vitest';
-import { expectNoA11yViolations, renderAndCheckA11y } from '@/test-utils/a11y';
-import { Button, UtilityBody } from '@/components/index.web';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { expect } from 'vitest';
+import { axe } from 'vitest-axe';
+import { Button } from '@/components/Button/web/Button';
+import { renderWithProvider } from '@/test-utils/render';
 import * as Popover from './Popover';
 
-describe('Popover Accessibility', () => {
-  it('has no violations for basic popover', async () => {
-    await expectNoA11yViolations(
+// The dialog is portaled outside the render container, so scan the open dialog itself.
+const expectAccessibleDialog = async () => {
+  const dialog = await screen.findByRole('dialog');
+  expect((await axe(dialog, { rules: { region: { enabled: false } } })).violations).toHaveLength(0);
+};
+
+describe('Popover accessibility', () => {
+  it('has no violations with a heading and interactive content', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(
       <Popover.Root trigger={<Button>Open</Button>}>
         <Popover.Heading>Title</Popover.Heading>
-
-        <Popover.Description>This is a popover description.</Popover.Description>
-      </Popover.Root>
-    );
-  });
-
-  it('has no violations with body content', async () => {
-    await expectNoA11yViolations(
-      <Popover.Root trigger={<Button>Open</Button>}>
-        <Popover.Heading>Title</Popover.Heading>
-
-        <Popover.Body>
-          <UtilityBody>Option 1</UtilityBody>
-          <UtilityBody>Option 2</UtilityBody>
-          <UtilityBody>Option 3</UtilityBody>
-        </Popover.Body>
-      </Popover.Root>
-    );
-  });
-
-  it('has no violations with divider', async () => {
-    const { checkA11y } = await renderAndCheckA11y(
-      <Popover.Root trigger={<Button>Open</Button>}>
-        <Popover.Heading>Title</Popover.Heading>
-
+        <Popover.Description>Description</Popover.Description>
         <Popover.Divider />
-
         <Popover.Body>
-          <UtilityBody>Popover body content</UtilityBody>
+          <Button>Action</Button>
         </Popover.Body>
       </Popover.Root>
     );
-
-    await checkA11y();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await expectAccessibleDialog();
   });
 
-  it('has no violations without heading using aria-label', async () => {
-    const { checkA11y } = await renderAndCheckA11y(
+  it('has no violations when named with aria-label', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(
       <Popover.Root trigger={<Button>Open</Button>} aria-label="Popover information">
-        <Popover.Body>
-          <UtilityBody>Content without heading</UtilityBody>
-        </Popover.Body>
+        <Popover.Body>Content</Popover.Body>
       </Popover.Root>
     );
-
-    await checkA11y();
-  });
-
-  it('has no violations with custom classNames', async () => {
-    const { checkA11y } = await renderAndCheckA11y(
-      <Popover.Root trigger={<Button>Open</Button>} className="custom-popover">
-        <Popover.Heading className="custom-header">Title</Popover.Heading>
-
-        <Popover.Description className="custom-description">Description</Popover.Description>
-
-        <Popover.Divider className="custom-divider" />
-
-        <Popover.Body className="custom-body">
-          <UtilityBody>Body content</UtilityBody>
-        </Popover.Body>
-      </Popover.Root>
-    );
-
-    await checkA11y();
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await expectAccessibleDialog();
   });
 });
