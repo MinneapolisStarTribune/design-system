@@ -16,10 +16,15 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import type { OpenChangeReason } from '@floating-ui/react';
-import { getPopupMiddleware, PopupArrow, popupStyles } from '@/components/Popover/floatingPopup';
+import {
+  getPopupMiddleware,
+  PopupArrow,
+  popupStyles,
+  resolveArrowOffset,
+} from '@/components/Popover/floatingPopup';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
-import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
+import { MENU_ARROW } from './Menu.constants';
 import { MenuContext } from './MenuContext';
 import type { MenuCloseReason, MenuProps } from './Menu.types';
 
@@ -78,8 +83,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
     middleware: getPopupMiddleware({
       boundary,
       arrowElement,
-      arrowSize: MENU_ARROW_SIZE,
-      arrowPadding: MENU_ARROW_CORNER_INSET,
+      arrowSpec: MENU_ARROW,
       hideArrow,
     }),
   });
@@ -151,10 +155,11 @@ export const MenuRoot: React.FC<MenuProps> = ({
                   <PopupArrow
                     ref={setArrowElement}
                     context={context}
-                    arrowSize={MENU_ARROW_SIZE}
-                    staticOffset={resolveMenuArrowOffset(
+                    arrowSpec={MENU_ARROW}
+                    staticOffset={resolveArrowOffset(
                       resolveResponsive(arrowOffset, breakpoint),
-                      placement
+                      placement,
+                      MENU_ARROW
                     )}
                   />
                 )}

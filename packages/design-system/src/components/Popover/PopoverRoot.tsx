@@ -13,8 +13,9 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
-import { getPopupMiddleware, POPOVER_ARROW_SIZE, PopupArrow, popupStyles } from './floatingPopup';
+import { getPopupMiddleware, PopupArrow, popupStyles } from './floatingPopup';
 import type { PopupTriggerProps } from './floatingPopup';
+import { POPOVER_ARROW } from './Popover.constants';
 import { PopoverProps } from './Popover.types';
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
@@ -63,7 +64,7 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
     open,
     onOpenChange: handleOpenChange,
     whileElementsMounted: autoUpdate,
-    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSize: POPOVER_ARROW_SIZE }),
+    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec: POPOVER_ARROW }),
   });
   const click = useClick(context, { enabled: !isDisabled });
   const dismiss = useDismiss(context);
@@ -125,7 +126,7 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
               role="dialog"
               {...labelProps}
             >
-              <PopupArrow ref={setArrowElement} context={context} arrowSize={POPOVER_ARROW_SIZE} />
+              <PopupArrow ref={setArrowElement} context={context} arrowSpec={POPOVER_ARROW} />
               <div className={popupStyles.container}>
                 <div className={popupStyles.content}>{children}</div>
               </div>
