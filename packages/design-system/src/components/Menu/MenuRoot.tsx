@@ -17,6 +17,7 @@ import {
 } from '@floating-ui/react';
 import type { OpenChangeReason } from '@floating-ui/react';
 import {
+  composeTriggerProps,
   getPopupMiddleware,
   PopupArrow,
   popupStyles,
@@ -120,13 +121,15 @@ export const MenuRoot: React.FC<MenuProps> = ({
 
   const triggerRef = useMergeRefs([setReference, trigger.props.ref ?? null]);
   const triggerElement = cloneElement(trigger, {
-    ...getReferenceProps({
-      ...trigger.props,
-      // Set explicitly: `useRole` would replace the menu's own accessible name with the trigger's.
-      'aria-haspopup': 'menu',
-      'aria-expanded': open,
-      'aria-controls': open ? surfaceId : undefined,
-    }),
+    ...composeTriggerProps(
+      trigger.props,
+      getReferenceProps({
+        // Set explicitly: `useRole` would replace the menu's own accessible name with the trigger's.
+        'aria-haspopup': 'menu',
+        'aria-expanded': open,
+        'aria-controls': open ? surfaceId : undefined,
+      })
+    ),
     ref: triggerRef,
     // Element triggers keep their own display, and their own style wins over the cursor.
     style: { cursor: 'pointer', ...trigger.props.style },

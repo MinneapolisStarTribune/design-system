@@ -27,7 +27,11 @@ export type PopoverProps = {
   open?: boolean;
   /** Called when the popover requests an open/close transition. Required when `open` is provided. */
   onOpenChange?: (open: boolean) => void;
-  /** When set, the popover content portals into this element instead of document.body (e.g. for Storybook). */
+  /**
+   * When set, the popover content portals into this element instead of document.body (e.g. for
+   * Storybook). The popover also flips, shifts, and sizes to stay inside this element, so it must not
+   * clip the space the popover needs.
+   */
   portalRoot?: HTMLElement | null;
   /**
    * Accessible label for the popover dialog. Used only when there is no `Popover.Heading`. With a

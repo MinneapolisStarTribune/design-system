@@ -13,7 +13,7 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
-import { getPopupMiddleware, PopupArrow, popupStyles } from './floatingPopup';
+import { composeTriggerProps, getPopupMiddleware, PopupArrow, popupStyles } from './floatingPopup';
 import type { PopupTriggerProps } from './floatingPopup';
 import { POPOVER_ARROW } from './Popover.constants';
 import { PopoverProps } from './Popover.types';
@@ -93,7 +93,7 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   // Add trigger props to a single element. Otherwise, use a button-role wrapper.
   const triggerElement = childElement ? (
     cloneElement(childElement, {
-      ...getReferenceProps({ ...childElement.props, ...triggerAriaProps }),
+      ...composeTriggerProps(childElement.props, getReferenceProps(triggerAriaProps)),
       ref: triggerRef,
       // Element triggers keep their own display, and their own style wins over the cursor.
       style: { cursor: isDisabled ? 'default' : 'pointer', ...childElement.props.style },

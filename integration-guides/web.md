@@ -20,6 +20,8 @@ By default, `Popover`, `Menu`, and `Drawer` render their content into `document.
 - You use **Storybook** and want the overlay to stay within the story frame
 - You need a **custom container** for styling or layout (e.g. a dedicated overlay layer)
 
+`Popover` and `Menu` also use `portalRoot` as their collision boundary: they flip, shift, and shrink to stay inside it. Choose an element large enough for the overlay, or it may open on the other side or shrink to fit.
+
 Keep the element in state with a ref callback, so the overlay re-renders once the element exists:
 
 ```tsx

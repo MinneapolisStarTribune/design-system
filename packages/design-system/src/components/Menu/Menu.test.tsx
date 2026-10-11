@@ -484,6 +484,170 @@ describe('Menu', () => {
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
+  it.each([
+    ['Down Arrow', '{ArrowDown}'],
+    ['Up Arrow', '{ArrowUp}'],
+  ])('opens from a div role="button" trigger with %s', async (_, key) => {
+    const user = userEvent.setup();
+    const onOpen = vi.fn();
+
+    renderWithProvider(
+      <Menu.Root
+        aria-label="Row actions"
+        trigger={divTrigger}
+        open={false}
+        onOpen={onOpen}
+        onClose={vi.fn()}
+      >
+        <Menu.Item>Edit</Menu.Item>
+      </Menu.Root>
+    );
+
+    screen.getByRole('button', { name: 'Actions' }).focus();
+    await user.keyboard(key);
+
+    expect(onOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it('runs the trigger element handlers along with its own', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const onKeyDown = vi.fn();
+    const onOpen = vi.fn();
+
+    renderWithProvider(
+      <Menu.Root
+        aria-label="Row actions"
+        trigger={
+          <button type="button" onClick={onClick} onKeyDown={onKeyDown}>
+            Actions
+          </button>
+        }
+        open={false}
+        onOpen={onOpen}
+        onClose={vi.fn()}
+      >
+        <Menu.Item>Edit</Menu.Item>
+      </Menu.Root>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Actions' });
+    await user.click(trigger);
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onOpen).toHaveBeenCalledTimes(1);
+
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    expect(onOpen).toHaveBeenCalledTimes(2);
+  });
+
+  describe('item composition', () => {
+    it('navigates items in document order through wrappers and conditional items', async () => {
+      const user = userEvent.setup();
+
+      const Composed = () => {
+        const [showExtra, setShowExtra] = useState(false);
+        return (
+          <Harness>
+            <div>
+              <Menu.Item>First</Menu.Item>
+              {showExtra && <Menu.Item>Inserted</Menu.Item>}
+            </div>
+            <Menu.Divider />
+            <div>
+              <Menu.Item closeOnSelect={false} onClick={() => setShowExtra(true)}>
+                Show more
+              </Menu.Item>
+            </div>
+          </Harness>
+        );
+      };
+      renderWithProvider(<Composed />);
+
+      await openMenu(user);
+      const first = screen.getByRole('menuitem', { name: 'First' });
+      const showMore = screen.getByRole('menuitem', { name: 'Show more' });
+      await waitFor(() => expect(first).toHaveFocus());
+
+      await user.keyboard('{ArrowDown}');
+      expect(showMore).toHaveFocus();
+
+      await user.keyboard('{Enter}');
+      const inserted = await screen.findByRole('menuitem', { name: 'Inserted' });
+
+      await user.keyboard('{Home}');
+      expect(first).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(inserted).toHaveFocus();
+      await user.keyboard('{ArrowDown}');
+      expect(showMore).toHaveFocus();
+    });
+
+    it('skips items hidden with CSS', async () => {
+      const user = userEvent.setup();
+      const visible = (element: Element) => element.textContent !== 'Hidden';
+      const original = HTMLElement.prototype.checkVisibility;
+      HTMLElement.prototype.checkVisibility = function (this: HTMLElement) {
+        return visible(this);
+      };
+      onTestFinished(() => {
+        HTMLElement.prototype.checkVisibility = original;
+      });
+
+      renderWithProvider(
+        <Harness>
+          <Menu.Item>First</Menu.Item>
+          <Menu.Item>Hidden</Menu.Item>
+          <Menu.Item>Last</Menu.Item>
+        </Harness>
+      );
+
+      await openMenu(user);
+      await waitFor(() => expect(screen.getByRole('menuitem', { name: 'First' })).toHaveFocus());
+
+      await user.keyboard('{ArrowDown}');
+      expect(screen.getByRole('menuitem', { name: 'Last' })).toHaveFocus();
+    });
+
+    it('navigates to a router link item and selects it with Enter', async () => {
+      const user = userEvent.setup();
+      const navigate = vi.fn();
+      const onClose = vi.fn();
+      const RouterLink = ({ href, onClick, ...rest }: ComponentProps<'a'> & { href: string }) => (
+        <a
+          {...rest}
+          href={href}
+          onClick={(event) => {
+            onClick?.(event);
+            event.preventDefault();
+            navigate(href);
+          }}
+        />
+      );
+
+      renderWithProvider(
+        <Harness onClose={onClose}>
+          <Menu.Item>Edit</Menu.Item>
+          <Menu.Item disabled>Archive</Menu.Item>
+          <Menu.Item as={RouterLink} href="/profile">
+            Profile
+          </Menu.Item>
+        </Harness>
+      );
+
+      await openMenu(user);
+      await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+
+      await user.keyboard('{ArrowDown}');
+      expect(screen.getByRole('menuitem', { name: 'Profile' })).toHaveFocus();
+
+      await user.keyboard('{Enter}');
+      expect(navigate).toHaveBeenCalledWith('/profile');
+      expect(onClose).toHaveBeenCalledWith('itemSelect');
+    });
+  });
+
   it('names each part with its namespace for React DevTools', () => {
     expect(Menu.Root.displayName).toBe('Menu.Root');
     expect(Menu.Item.displayName).toBe('Menu.Item');

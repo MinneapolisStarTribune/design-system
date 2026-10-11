@@ -355,6 +355,89 @@ describe('Popover', () => {
     expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('aria-disabled', 'true');
   });
 
+  it.each<[string, ReactNode]>([
+    ['element', <Button key="open">Open</Button>],
+    ['text', 'Open'],
+  ])('does not open a disabled %s trigger with Enter or Space', async (_, trigger) => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+
+    renderWithProvider(
+      <Popover.Root trigger={trigger} isDisabled onOpenChange={onOpenChange}>
+        <Popover.Body>Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    screen.getByRole('button', { name: 'Open' }).focus();
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('takes a disabled text trigger out of the tab order', () => {
+    renderWithProvider(
+      <Popover.Root trigger="Open" isDisabled>
+        <Popover.Body>Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('tabIndex', '-1');
+  });
+
+  it('runs the trigger element handlers along with its own', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const onKeyDown = vi.fn();
+
+    renderWithProvider(
+      <Popover.Root
+        trigger={
+          <div role="button" tabIndex={0} onClick={onClick} onKeyDown={onKeyDown}>
+            Open
+          </div>
+        }
+        aria-label="Options"
+      >
+        <Popover.Body>Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    await user.click(trigger);
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+
+    trigger.focus();
+    await user.keyboard('{Enter}');
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
+  it('does not toggle when the trigger element prevents the key event', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(
+      <Popover.Root
+        trigger={
+          <div role="button" tabIndex={0} onKeyDown={(event) => event.preventDefault()}>
+            Open
+          </div>
+        }
+        aria-label="Options"
+      >
+        <Popover.Body>Content</Popover.Body>
+      </Popover.Root>
+    );
+
+    screen.getByRole('button', { name: 'Open' }).focus();
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
   it('does not open on Down Arrow, which only menu triggers handle', async () => {
     const user = userEvent.setup();
 

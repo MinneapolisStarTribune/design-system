@@ -1,11 +1,14 @@
 'use client';
 
 import { arrow, FloatingArrow, flip, offset, shift, size } from '@floating-ui/react';
-import type { ComponentProps, CSSProperties, Ref } from 'react';
+import type { ComponentProps, CSSProperties, Ref, SyntheticEvent } from 'react';
 import type { Middleware, Placement } from '@floating-ui/react';
 import styles from './Popover.module.scss';
 
-/** Shared by Popover and Menu. Tooltip and Coachmark position themselves. */
+/**
+ * Internal to Popover and Menu, and not exported from the package. Tooltip and Coachmark position
+ * themselves.
+ */
 
 export type PopupArrowSpec = {
   width: number;
@@ -21,6 +24,34 @@ export type ArrowOffset = (typeof ARROW_OFFSETS)[number];
 
 /** Trigger element props the popup reads before cloning the trigger. */
 export type PopupTriggerProps = { style?: CSSProperties; ref?: Ref<Element> };
+
+const KEY_HANDLERS = new Set(['onKeyDown', 'onKeyUp']);
+
+/**
+ * Merges the popup's trigger props over the trigger element's props. The element's own handlers run
+ * first, and a key event the element prevents does not reach the popup, as with the old trigger.
+ * `getReferenceProps` alone runs the popup's handlers first.
+ */
+export const composeTriggerProps = (
+  elementProps: Record<string, unknown>,
+  popupProps: Record<string, unknown>
+): Record<string, unknown> =>
+  Object.fromEntries(
+    Object.entries(popupProps).map(([key, popupValue]) => {
+      const elementValue = elementProps[key];
+      if (typeof popupValue !== 'function' || typeof elementValue !== 'function') {
+        return [key, popupValue];
+      }
+      return [
+        key,
+        (event: SyntheticEvent) => {
+          elementValue(event);
+          if (KEY_HANDLERS.has(key) && event.defaultPrevented) return;
+          popupValue(event);
+        },
+      ];
+    })
+  );
 
 /** Space between the anchor and the surface, added to the arrow height. */
 const FLOATING_GAP = 4;
