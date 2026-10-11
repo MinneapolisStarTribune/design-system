@@ -16,7 +16,7 @@
 
 /* Root */
 .container {
-  /* Fit the space FloatingSurface measures, less the wrapper's 1px borders and the left padding. */
+  /* Fit the space the `size` middleware in floatingPopup.tsx measures, less the wrapper's 1px borders and the left padding. */
   --popover-fit-width: calc(var(--floating-available-width, 100vw) - 2px - var(--spacing-16));
   min-width: min(var(--popover-min-width, 240px), var(--popover-fit-width));
   max-width: min(var(--popover-max-width, 320px), var(--popover-fit-width));
@@ -154,4 +154,3 @@
 .arrow > path:last-of-type {
   stroke: var(--popover-arrow-fill, var(--color-background-light-default));
 }
-

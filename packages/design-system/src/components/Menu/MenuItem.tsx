@@ -2,16 +2,20 @@
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import classNames from 'classnames';
+import { useListItem } from '@floating-ui/react';
 import styles from './Menu.module.scss';
 import { useMenuContext } from './MenuContext';
 import type { MenuItemProps } from './Menu.types';
 
 /** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
 export const MenuItem: React.FC<MenuItemProps> = (props) => {
-  const { closeFromItem } = useMenuContext();
+  const { getItemProps, closeFromItem } = useMenuContext();
+  // Registers the item for arrow key navigation in document order.
+  const { ref } = useListItem();
   const { disabled, closeOnSelect = true } = props;
 
   const itemProps = {
+    ref,
     role: 'menuitem',
     tabIndex: -1,
     'aria-disabled': disabled || undefined,
@@ -46,9 +50,11 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
 
     return (
       <LinkComponent
-        {...rest}
-        {...itemProps}
-        onClick={(event: MouseEvent<HTMLAnchorElement>) => select(event, onClick)}
+        {...getItemProps({
+          ...rest,
+          ...itemProps,
+          onClick: (event: MouseEvent<HTMLAnchorElement>) => select(event, onClick),
+        })}
       >
         {children}
       </LinkComponent>
@@ -65,7 +71,14 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
   } = props;
 
   return (
-    <button {...rest} {...itemProps} type="button" onClick={(event) => select(event, onClick)}>
+    <button
+      {...getItemProps({
+        ...rest,
+        ...itemProps,
+        onClick: (event: MouseEvent<HTMLButtonElement>) => select(event, onClick),
+      })}
+      type="button"
+    >
       {children}
     </button>
   );

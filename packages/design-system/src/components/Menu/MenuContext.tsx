@@ -1,8 +1,10 @@
 'use client';
 
 import { createContext, useContext } from 'react';
+import type { useInteractions } from '@floating-ui/react';
 
 type MenuContextValue = {
+  getItemProps: ReturnType<typeof useInteractions>['getItemProps'];
   closeFromItem: () => void;
 };
 

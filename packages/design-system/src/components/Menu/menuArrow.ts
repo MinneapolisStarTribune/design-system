@@ -11,7 +11,7 @@ const ARROW_FAR_EDGE = `calc(100% - ${MENU_ARROW_CORNER_INSET + MENU_ARROW_SIZE.
 const ARROW_CENTER = `calc(50% - ${MENU_ARROW_SIZE.width / 2}px)`;
 
 /**
- * Converts `arrowOffset` to `FloatingSurface`'s `arrowStaticOffset` value.
+ * Converts `arrowOffset` to the `FloatingArrow` `staticOffset` value.
  * Returns null when `arrowOffset` is not set. Floating UI then points to the anchor center.
  *
  * For `-end` placements, FloatingArrow measures from the menu end edge. This function swaps

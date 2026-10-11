@@ -1,41 +1,29 @@
 'use client';
 
-import { type KeyboardEvent, useCallback, useId, useMemo, useRef, useState } from 'react';
+import { cloneElement, useCallback, useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
+import {
+  autoUpdate,
+  FloatingFocusManager,
+  FloatingList,
+  FloatingOverlay,
+  FloatingPortal,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useListNavigation,
+  useMergeRefs,
+} from '@floating-ui/react';
 import type { OpenChangeReason } from '@floating-ui/react';
-import { FloatingSurface } from '@/components/Popover/FloatingSurface';
-import { FloatingTrigger } from '@/components/Popover/FloatingTrigger';
+import { getPopupMiddleware, PopupArrow, popupStyles } from '@/components/Popover/floatingPopup';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
 import { MenuContext } from './MenuContext';
 import type { MenuCloseReason, MenuProps } from './Menu.types';
 
-const POPUP_ROLE = 'menu';
-const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
-
-// Skips items hidden with CSS, such as per-breakpoint items. jsdom has no `checkVisibility`.
-const getEnabledItems = (container: HTMLElement) =>
-  Array.from(container.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR)).filter(
-    (item) => item.checkVisibility?.() ?? true
-  );
-
-const getNextIndex = (key: string, current: number, count: number) => {
-  switch (key) {
-    case 'ArrowDown':
-      return (current + 1) % count;
-    case 'ArrowUp':
-      return current <= 0 ? count - 1 : current - 1;
-    case 'Home':
-      return 0;
-    case 'End':
-      return count - 1;
-    default:
-      return null;
-  }
-};
-
-// The reasons FloatingTrigger, useDismiss, and FloatingFocusManager send with this setup.
+// The reasons useClick, useDismiss, and FloatingFocusManager send with this setup.
 const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
   'escape-key': 'escapeKey',
   'focus-out': 'focusOut',
@@ -53,85 +41,137 @@ export const MenuRoot: React.FC<MenuProps> = ({
   onClose,
   placement: placementProp,
   arrowOffset,
+  hideArrow = false,
+  portalRoot,
   className,
   dataTestId = 'menu',
   children,
-  ...rest
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }) => {
-  const initialFocusRef = useRef<HTMLElement | null>(null);
-  const focusLastOnOpenRef = useRef(false);
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
+  const itemsRef = useRef<Array<HTMLElement | null>>([]);
   const surfaceId = useId();
 
-  // All items have tabIndex -1. Set the first enabled item, or the last after Up Arrow, as the initial focus target.
-  const listRef = useCallback((node: HTMLDivElement | null) => {
-    const items = node ? getEnabledItems(node) : [];
-    initialFocusRef.current =
-      (focusLastOnOpenRef.current ? items[items.length - 1] : items[0]) ?? null;
-  }, []);
+  const breakpoint = useBreakpoint();
+  const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
+  const boundary = portalRoot ?? undefined;
 
   const handleOpenChange = useCallback(
-    (nextOpen: boolean, event?: Event, reason?: OpenChangeReason) => {
-      if (nextOpen) {
-        focusLastOnOpenRef.current = event instanceof KeyboardEvent && event.key === 'ArrowUp';
-        onOpen();
-      } else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
+    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
+      if (nextOpen) onOpen();
+      else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
     },
     [onOpen, onClose]
   );
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const items = getEnabledItems(event.currentTarget);
-    const current = items.findIndex((item) => item === document.activeElement);
-    const next = getNextIndex(event.key, current, items.length);
+  const {
+    refs: { setReference, setFloating },
+    context,
+    floatingStyles,
+  } = useFloating({
+    placement,
+    open,
+    onOpenChange: handleOpenChange,
+    whileElementsMounted: autoUpdate,
+    middleware: getPopupMiddleware({
+      boundary,
+      arrowElement,
+      arrowSize: MENU_ARROW_SIZE,
+      arrowPadding: MENU_ARROW_CORNER_INSET,
+      hideArrow,
+    }),
+  });
 
-    if (next === null || items.length === 0) return;
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  // Opens with Down Arrow or Up Arrow, focuses the first or last item, and handles Home and End.
+  const listNavigation = useListNavigation(context, {
+    listRef: itemsRef,
+    activeIndex,
+    onNavigate: setActiveIndex,
+    loop: true,
+    focusItemOnOpen: true,
+    // Also skips items hidden with CSS, such as per-breakpoint items. jsdom has no `checkVisibility`.
+    disabledIndices: (index) => {
+      const item = itemsRef.current[index];
+      return (
+        !item ||
+        item.getAttribute('aria-disabled') === 'true' ||
+        !(item.checkVisibility?.() ?? true)
+      );
+    },
+  });
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
+    click,
+    dismiss,
+    listNavigation,
+  ]);
 
-    event.preventDefault();
-    items[next].focus();
-  };
+  const contextValue = useMemo(
+    () => ({ getItemProps, closeFromItem: () => onClose('itemSelect') }),
+    [getItemProps, onClose]
+  );
 
-  const contextValue = useMemo(() => ({ closeFromItem: () => onClose('itemSelect') }), [onClose]);
-
-  const breakpoint = useBreakpoint();
-  const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
+  const triggerRef = useMergeRefs([setReference, trigger.props.ref ?? null]);
+  const triggerElement = cloneElement(trigger, {
+    ...getReferenceProps({
+      ...trigger.props,
+      // Set explicitly: `useRole` would replace the menu's own accessible name with the trigger's.
+      'aria-haspopup': 'menu',
+      'aria-expanded': open,
+      'aria-controls': open ? surfaceId : undefined,
+    }),
+    ref: triggerRef,
+    // Element triggers keep their own display, and their own style wins over the cursor.
+    style: { cursor: 'pointer', ...trigger.props.style },
+  });
 
   return (
     <>
-      <FloatingTrigger
-        trigger={trigger}
-        open={open}
-        onOpenChange={handleOpenChange}
-        popupRole={POPUP_ROLE}
-        surfaceId={surfaceId}
-        onElementChange={setAnchorElement}
-      />
-      <FloatingSurface
-        {...rest}
-        anchor={anchorElement}
-        open={open}
-        onOpenChange={handleOpenChange}
-        role={POPUP_ROLE}
-        id={surfaceId}
-        placement={placement}
-        lockScroll
-        arrowStaticOffset={resolveMenuArrowOffset(
-          resolveResponsive(arrowOffset, breakpoint),
-          placement
-        )}
-        arrowSize={MENU_ARROW_SIZE}
-        arrowPadding={MENU_ARROW_CORNER_INSET}
-        initialFocus={initialFocusRef}
-        dataTestId={dataTestId}
-        className={classNames(styles.menu, className)}
-        containerClassName={styles.container}
-      >
-        <MenuContext.Provider value={contextValue}>
-          <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
-            {children}
-          </div>
-        </MenuContext.Provider>
-      </FloatingSurface>
+      {triggerElement}
+      {open && (
+        <FloatingPortal root={boundary}>
+          {/* Lets presses through so the trigger can still toggle the menu. */}
+          <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
+            <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
+              <div
+                ref={setFloating}
+                style={{ ...floatingStyles, pointerEvents: 'auto' }}
+                className={classNames(popupStyles.wrapper, styles.menu, className)}
+                data-testid={dataTestId}
+                {...getFloatingProps()}
+                id={surfaceId}
+                role="menu"
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+              >
+                {!hideArrow && (
+                  <PopupArrow
+                    ref={setArrowElement}
+                    context={context}
+                    arrowSize={MENU_ARROW_SIZE}
+                    staticOffset={resolveMenuArrowOffset(
+                      resolveResponsive(arrowOffset, breakpoint),
+                      placement
+                    )}
+                  />
+                )}
+                <div className={classNames(popupStyles.container, styles.container)}>
+                  <div className={popupStyles.content}>
+                    <MenuContext.Provider value={contextValue}>
+                      <FloatingList elementsRef={itemsRef}>
+                        <div className={styles.list}>{children}</div>
+                      </FloatingList>
+                    </MenuContext.Provider>
+                  </div>
+                </div>
+              </div>
+            </FloatingFocusManager>
+          </FloatingOverlay>
+        </FloatingPortal>
+      )}
     </>
   );
 };

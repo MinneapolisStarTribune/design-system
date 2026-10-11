@@ -1,5 +1,6 @@
 import type { ComponentProps, ElementType, ReactElement, ReactNode } from 'react';
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
+import type { PopupTriggerProps } from '@/components/Popover/floatingPopup';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
 import type { MENU_ARROW_OFFSETS, MENU_CLOSE_REASONS } from './Menu.constants';
@@ -46,7 +47,7 @@ export type MenuProps = MenuBaseProps &
      * Element that toggles the menu. It must be a single element that accepts a ref. The menu
      * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
      */
-    trigger: ReactElement;
+    trigger: ReactElement<PopupTriggerProps>;
     /** Called when the trigger requests to open the menu. */
     onOpen: () => void;
     /** Renders the menu in this element instead of `document.body` (e.g. for Storybook). */

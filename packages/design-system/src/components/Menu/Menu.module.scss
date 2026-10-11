@@ -1,10 +1,10 @@
 /* Set menu sizes with `--menu-*` or a width class on the menu. */
 .menu {
-  /* Shrink to the space FloatingSurface measures. Subtract the 1px border on each side. */
+  /* Shrink to the space the `size` middleware in floatingPopup.tsx measures. Subtract the 1px border on each side. */
   width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
 }
 
-/* Scoped under `.menu` so it beats Popover's `.container` sizing whatever the CSS load order. */
+/* Scoped under `.menu` so it beats the shared `.container` sizing whatever the CSS load order. */
 .menu .container {
   /* Fill the surface width, padding included. */
   box-sizing: border-box;
