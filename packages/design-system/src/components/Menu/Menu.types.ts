@@ -15,7 +15,7 @@ export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
 export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
-  /** Called when the menu requests to close. Receives a reason. */
+  /** Called with the reason when the menu requests to close. */
   onClose: (reason: MenuCloseReason) => void;
   /**
    * Where the menu opens relative to the anchor. Accepts a value per breakpoint.
@@ -45,7 +45,7 @@ export type MenuProps = MenuBaseProps &
   Pick<HTMLAttributes<HTMLDivElement>, 'id'> & {
     /**
      * Element that toggles the menu. It must be a single element that accepts a ref. The menu
-     * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
+     * adds its click and key handlers, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
      */
     trigger: ReactElement;
     /** Called when the trigger requests to open the menu. */

@@ -1,34 +1,15 @@
 'use client';
 
-import { type KeyboardEvent, useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { FloatingList, useInteractions, useListNavigation, useTypeahead } from '@floating-ui/react';
 import type { OpenChangeReason } from '@floating-ui/react';
-import { FloatingSurface } from '@/components/Popover/FloatingSurface';
+import { FloatingSurface, useFloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
 import { MenuContext } from './MenuContext';
 import type { MenuCloseReason, MenuProps } from './Menu.types';
-
-const ENABLED_ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"])';
-
-const getEnabledItems = (container: HTMLElement) =>
-  Array.from(container.querySelectorAll<HTMLElement>(ENABLED_ITEM_SELECTOR));
-
-const getNextIndex = (key: string, current: number, count: number) => {
-  switch (key) {
-    case 'ArrowDown':
-      return (current + 1) % count;
-    case 'ArrowUp':
-      return current <= 0 ? count - 1 : current - 1;
-    case 'Home':
-      return 0;
-    case 'End':
-      return count - 1;
-    default:
-      return null;
-  }
-};
 
 // Any other Floating UI reason is an outside press.
 const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
@@ -54,12 +35,9 @@ export const MenuRoot: React.FC<MenuProps> = ({
   'aria-labelledby': ariaLabelledBy,
   children,
 }) => {
-  const initialFocusRef = useRef<HTMLElement | null>(null);
-
-  // All items have tabIndex -1. Set the first enabled item as the initial focus target.
-  const listRef = useCallback((node: HTMLDivElement | null) => {
-    initialFocusRef.current = node ? (getEnabledItems(node)[0] ?? null) : null;
-  }, []);
+  const elementsRef = useRef<Array<HTMLElement | null>>([]);
+  const labelsRef = useRef<Array<string | null>>([]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
@@ -69,40 +47,53 @@ export const MenuRoot: React.FC<MenuProps> = ({
     [onOpen, onClose]
   );
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const items = getEnabledItems(event.currentTarget);
-    const current = items.findIndex((item) => item === document.activeElement);
-    const next = getNextIndex(event.key, current, items.length);
-
-    if (next === null || items.length === 0) return;
-
-    event.preventDefault();
-    items[next].focus();
-  };
-
-  const contextValue = useMemo(() => ({ closeFromItem: () => onClose('itemSelect') }), [onClose]);
-
   const breakpoint = useBreakpoint();
   const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
 
+  const surface = useFloatingSurface({
+    open,
+    onOpenChange: handleOpenChange,
+    placement,
+    interactionRole: 'menu',
+    hideArrow,
+    arrowSize: MENU_ARROW_SIZE,
+    arrowPadding: MENU_ARROW_CORNER_INSET,
+    portalRoot,
+    id,
+  });
+
+  // Skips items with aria-disabled="true".
+  const listNavigation = useListNavigation(surface.context, {
+    listRef: elementsRef,
+    activeIndex,
+    onNavigate: setActiveIndex,
+    loop: true,
+    focusItemOnOpen: true,
+  });
+  const typeahead = useTypeahead(surface.context, {
+    listRef: labelsRef,
+    activeIndex,
+    onMatch: open ? setActiveIndex : undefined,
+  });
+
+  const interactions = useInteractions([...surface.interactions, listNavigation, typeahead]);
+  const { getItemProps } = interactions;
+
+  const contextValue = useMemo(
+    () => ({ activeIndex, getItemProps, closeFromItem: () => onClose('itemSelect') }),
+    [activeIndex, getItemProps, onClose]
+  );
+
   return (
     <FloatingSurface
+      surface={surface}
+      interactions={interactions}
       trigger={trigger}
-      open={open}
-      onOpenChange={handleOpenChange}
-      interactionRole="menu"
-      placement={placement}
       lockScroll
-      hideArrow={hideArrow}
       arrowStaticOffset={resolveMenuArrowOffset(
         resolveResponsive(arrowOffset, breakpoint),
         placement
       )}
-      arrowSize={MENU_ARROW_SIZE}
-      arrowPadding={MENU_ARROW_CORNER_INSET}
-      initialFocus={initialFocusRef}
-      portalRoot={portalRoot}
-      id={id}
       dataTestId={dataTestId}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
@@ -110,9 +101,9 @@ export const MenuRoot: React.FC<MenuProps> = ({
       containerClassName={styles.container}
     >
       <MenuContext.Provider value={contextValue}>
-        <div ref={listRef} className={styles.list} onKeyDown={handleKeyDown}>
-          {children}
-        </div>
+        <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+          <div className={styles.list}>{children}</div>
+        </FloatingList>
       </MenuContext.Provider>
     </FloatingSurface>
   );

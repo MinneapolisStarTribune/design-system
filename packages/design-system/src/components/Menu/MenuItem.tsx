@@ -2,25 +2,28 @@
 
 import type { MouseEvent, MouseEventHandler } from 'react';
 import classNames from 'classnames';
+import { useListItem, useMergeRefs } from '@floating-ui/react';
 import styles from './Menu.module.scss';
 import { useMenuContext } from './MenuContext';
-import type { MenuItemProps } from './Menu.types';
+import type { MenuItemButtonProps, MenuItemLinkProps, MenuItemProps } from './Menu.types';
 
-/** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
-export const MenuItem: React.FC<MenuItemProps> = (props) => {
-  const { closeFromItem } = useMenuContext();
-  const { disabled, closeOnSelect = true } = props;
+type ItemOptions = Pick<MenuItemProps, 'disabled' | 'closeOnSelect' | 'className' | 'dataTestId'>;
+
+/** Registers the item for list navigation and returns its shared props. */
+const useMenuItem = ({ disabled, closeOnSelect = true, className, dataTestId }: ItemOptions) => {
+  const { activeIndex, getItemProps, closeFromItem } = useMenuContext();
+  const { ref, index } = useListItem();
 
   const itemProps = {
     role: 'menuitem',
-    tabIndex: -1,
+    tabIndex: index === activeIndex ? 0 : -1,
     'aria-disabled': disabled || undefined,
-    'data-testid': props.dataTestId,
+    'data-testid': dataTestId,
     className: classNames(
       styles.item,
       'typography-utility-text-regular-medium',
       disabled && styles.itemDisabled,
-      props.className
+      className
     ),
   };
 
@@ -29,46 +32,82 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
       event.preventDefault();
       return;
     }
+
     onClick?.(event);
     if (closeOnSelect) closeFromItem();
   };
 
-  if (props.href !== undefined) {
-    const {
-      as: LinkComponent = 'a',
-      children,
-      disabled: _disabled,
-      closeOnSelect: _closeOnSelect,
-      dataTestId: _dataTestId,
-      onClick,
-      ...rest
-    } = props;
+  return { listItemRef: ref, itemProps, getItemProps, select };
+};
 
-    return (
-      <LinkComponent
-        {...rest}
-        {...itemProps}
-        onClick={(event: MouseEvent<HTMLAnchorElement>) => select(event, onClick)}
-      >
-        {children}
-      </LinkComponent>
-    );
-  }
-
-  const {
-    children,
-    disabled: _disabled,
-    closeOnSelect: _closeOnSelect,
-    dataTestId: _dataTestId,
-    onClick,
-    ...rest
-  } = props;
+const MenuItemLink = ({
+  as: LinkComponent = 'a',
+  children,
+  disabled,
+  closeOnSelect,
+  dataTestId,
+  className,
+  ref,
+  onClick,
+  ...rest
+}: MenuItemLinkProps) => {
+  const { listItemRef, itemProps, getItemProps, select } = useMenuItem({
+    disabled,
+    closeOnSelect,
+    className,
+    dataTestId,
+  });
+  const mergedRef = useMergeRefs([listItemRef, ref]);
 
   return (
-    <button {...rest} {...itemProps} type="button" onClick={(event) => select(event, onClick)}>
+    <LinkComponent
+      {...getItemProps({
+        ...rest,
+        ...itemProps,
+        onClick: (event: MouseEvent<HTMLAnchorElement>) => select(event, onClick),
+      })}
+      ref={mergedRef}
+    >
+      {children}
+    </LinkComponent>
+  );
+};
+
+const MenuItemButton = ({
+  children,
+  disabled,
+  closeOnSelect,
+  dataTestId,
+  className,
+  ref,
+  onClick,
+  ...rest
+}: MenuItemButtonProps) => {
+  const { listItemRef, itemProps, getItemProps, select } = useMenuItem({
+    disabled,
+    closeOnSelect,
+    className,
+    dataTestId,
+  });
+  const mergedRef = useMergeRefs([listItemRef, ref]);
+
+  return (
+    <button
+      {...getItemProps({
+        ...rest,
+        ...itemProps,
+        onClick: (event: MouseEvent<HTMLButtonElement>) => select(event, onClick),
+      })}
+      ref={mergedRef}
+      type="button"
+    >
       {children}
     </button>
   );
 };
+
+/** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
+export const MenuItem: React.FC<MenuItemProps> = (props) =>
+  props.href !== undefined ? <MenuItemLink {...props} /> : <MenuItemButton {...props} />;
 
 MenuItem.displayName = 'Menu.Item';

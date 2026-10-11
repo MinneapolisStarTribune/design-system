@@ -1,12 +1,15 @@
 import type { MenuArrowOffset, MenuPlacement } from './Menu.types';
 
-/** Arrow size from the Core Components Dropdown Menu design (12 × 9). Popover uses its own 16 × 8 size. */
+/** Arrow size from the Core Components Dropdown Menu design. Popover uses 16 × 8. */
 export const MENU_ARROW_SIZE = { width: 12, height: 9 };
+
 /** Minimum distance from the arrow to rounded corners. */
 export const MENU_ARROW_CORNER_INSET = 16;
+
 const ARROW_EDGE_INSET = `${MENU_ARROW_CORNER_INSET}px`;
 // `staticOffset` sets the arrow's near edge. Subtract the arrow width for the far edge.
 const ARROW_FAR_EDGE = `calc(100% - ${MENU_ARROW_CORNER_INSET + MENU_ARROW_SIZE.width}px)`;
+
 // Subtract half the arrow width to center it.
 const ARROW_CENTER = `calc(50% - ${MENU_ARROW_SIZE.width / 2}px)`;
 

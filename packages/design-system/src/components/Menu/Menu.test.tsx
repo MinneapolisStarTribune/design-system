@@ -175,6 +175,32 @@ describe('Menu', () => {
     expect(del).toHaveFocus();
   });
 
+  it('moves focus to the item that starts with a typed character', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+
+    await openMenu(user);
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+    await user.keyboard('d');
+
+    expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus();
+  });
+
+  it('opens from the trigger with ArrowDown and ArrowUp, focusing the first or last item', async () => {
+    const user = userEvent.setup();
+    renderWithProvider(<Harness />);
+    const trigger = screen.getByRole('button', { name: 'Actions' });
+
+    trigger.focus();
+    await user.keyboard('{ArrowDown}');
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+
+    await user.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveFocus());
+    await user.keyboard('{ArrowUp}');
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus());
+  });
+
   it('closes on Escape and returns focus to the trigger', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();

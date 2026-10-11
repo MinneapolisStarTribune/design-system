@@ -15,12 +15,16 @@ import {
   useClick,
   useDismiss,
   useFloating,
-  useInteractions,
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
 import type { ComponentProps, CSSProperties } from 'react';
-import type { OpenChangeReason, Placement, UseRoleProps } from '@floating-ui/react';
+import type {
+  OpenChangeReason,
+  Placement,
+  UseInteractionsReturn,
+  UseRoleProps,
+} from '@floating-ui/react';
 import styles from './Popover.module.scss';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
@@ -30,85 +34,43 @@ const FLOATING_GAP = 4;
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
 
-type FloatingSurfaceBaseProps = {
-  children: ReactNode;
+type UseFloatingSurfaceOptions = {
   open: boolean;
   onOpenChange: (open: boolean, event?: Event, reason?: OpenChangeReason) => void;
   placement: Placement;
-  /**
-   * Stops page scroll while the surface is open.
-   * The overlay lets presses through so the trigger can still toggle the surface.
-   */
-  lockScroll?: boolean;
   isDisabled?: boolean;
-  modal?: boolean;
   portalRoot?: HTMLElement | null;
   /** Role that Floating UI sets on the trigger and surface. */
   interactionRole?: UseRoleProps['role'];
   hideArrow?: boolean;
-  arrowStaticOffset?: string | number | null;
   arrowSize?: { width: number; height: number };
   arrowPadding?: number;
-  initialFocus?: ComponentProps<typeof FloatingFocusManager>['initialFocus'];
-  /** Applied to the surface. */
-  className?: string;
-  /** Applied to the padded container inside the surface. */
-  containerClassName?: string;
   id?: string;
-  style?: CSSProperties;
-  dataTestId?: string;
-  'aria-label'?: string;
-  'aria-labelledby'?: string;
+  // May be used to anchor the surface to a specific element instead of the trigger.
+  anchor?: Element | null;
 };
 
-type TriggerSurfaceProps = FloatingSurfaceBaseProps & { trigger: ReactNode; anchorEl?: never };
-// Unused by Popover and Menu. Kept for a surface that positions against an element it doesn't render.
-type AnchoredSurfaceProps = FloatingSurfaceBaseProps & {
-  anchorEl: Element | null;
-  trigger?: never;
-};
-
-type TriggerElementProps = { style?: CSSProperties; ref?: Ref<unknown>; [key: string]: unknown };
-
-/** Internal Floating UI surface. */
-export const FloatingSurface = ({
-  trigger,
-  anchorEl,
-  children,
+/**
+ * Positioning and base interactions (click, dismiss, role) for `FloatingSurface`.
+ * Pass `interactions` to `useInteractions` with any extra hooks that need `context`.
+ */
+export const useFloatingSurface = ({
   open,
   onOpenChange,
   placement,
-  lockScroll = false,
   isDisabled,
-  modal = false,
   portalRoot,
   interactionRole = 'dialog',
   hideArrow = false,
-  arrowStaticOffset,
   arrowSize = DEFAULT_ARROW_SIZE,
   arrowPadding = 0,
-  initialFocus,
-  className,
-  containerClassName,
   id,
-  style: styleProp,
-  dataTestId,
-  'aria-label': ariaLabel,
-  'aria-labelledby': ariaLabelledBy,
-}: TriggerSurfaceProps | AnchoredSurfaceProps) => {
+  anchor,
+}: UseFloatingSurfaceOptions) => {
   // Use state so `arrow()` receives the element without reading a ref during render.
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const resolvedPortalRoot = portalRoot ?? undefined;
-  const isAnchored = anchorEl !== undefined;
-  const middleware = useMemo(
-    () => [
-      offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
-      shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
-      flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
-      arrow({ element: arrowElement, padding: arrowPadding }),
-    ],
-    [resolvedPortalRoot, hideArrow, arrowSize.height, arrowPadding, arrowElement]
-  );
+  const isAnchored = anchor !== undefined;
   const {
     refs: { setReference, setFloating },
     context,
@@ -118,16 +80,24 @@ export const FloatingSurface = ({
     open,
     onOpenChange,
     whileElementsMounted: autoUpdate,
-    middleware,
-    elements: isAnchored ? { reference: anchorEl } : undefined,
+    middleware: [
+      offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
+      shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
+      flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
+      arrow({ element: arrowElement, padding: arrowPadding }),
+    ],
+    elements: isAnchored ? { reference: anchor } : undefined,
   });
+
   const click = useClick(context, { enabled: !isDisabled && !isAnchored });
   const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
   const generatedRoleInteraction = useRole(context, { role: interactionRole });
+
   // useRole reads a custom `id` from the surface only after it mounts. Until then, the trigger
   // references the generated ID. Use the custom `id` on both elements from the first render.
   const roleInteraction = useMemo(() => {
     if (id === undefined) return generatedRoleInteraction;
+
     const { reference, floating } = generatedRoleInteraction;
     return {
       ...generatedRoleInteraction,
@@ -135,14 +105,82 @@ export const FloatingSurface = ({
       floating: { ...floating, id },
     };
   }, [generatedRoleInteraction, id]);
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-    roleInteraction,
-  ]);
+
+  return {
+    context,
+    setReference,
+    setFloating,
+    floatingStyles,
+    setArrowElement,
+    interactions: [click, dismiss, roleInteraction],
+    isAnchored,
+    isDisabled,
+    portalRoot: resolvedPortalRoot,
+    hideArrow,
+    arrowSize,
+  };
+};
+
+type FloatingSurfaceProps = {
+  surface: ReturnType<typeof useFloatingSurface>;
+  interactions: Pick<UseInteractionsReturn, 'getReferenceProps' | 'getFloatingProps'>;
+  /** Omit when the surface is anchored with `anchor`. */
+  trigger?: ReactNode;
+  children: ReactNode;
+  /**
+   * Stops page scroll while the surface is open.
+   * The overlay lets presses through so the trigger can still toggle the surface.
+   */
+  lockScroll?: boolean;
+  modal?: boolean;
+  initialFocus?: ComponentProps<typeof FloatingFocusManager>['initialFocus'];
+  arrowStaticOffset?: string | number | null;
+  /** Applied to the surface. */
+  className?: string;
+  /** Applied to the padded container inside the surface. */
+  containerClassName?: string;
+  style?: CSSProperties;
+  dataTestId?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+};
+
+type TriggerElementProps = { style?: CSSProperties; ref?: Ref<unknown>; [key: string]: unknown };
+
+/** Internal Floating UI surface. Renders the trigger and the state from `useFloatingSurface`. */
+export const FloatingSurface = ({
+  surface,
+  interactions: { getReferenceProps, getFloatingProps },
+  trigger,
+  children,
+  lockScroll = false,
+  modal = false,
+  initialFocus,
+  arrowStaticOffset,
+  className,
+  containerClassName,
+  style: styleProp,
+  dataTestId,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+}: FloatingSurfaceProps) => {
+  const {
+    context,
+    setReference,
+    setFloating,
+    floatingStyles,
+    setArrowElement,
+    isAnchored,
+    isDisabled,
+    portalRoot,
+    hideArrow,
+    arrowSize,
+  } = surface;
+
   const childElement = isValidElement<TriggerElementProps>(trigger) ? trigger : null;
   const mergedRef = useMergeRefs([setReference, childElement?.props.ref ?? null]);
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
+
   // Add ARIA attributes to a single trigger element. Otherwise, use a button-role wrapper.
   const triggerElement =
     !isAnchored &&
@@ -167,7 +205,8 @@ export const FloatingSurface = ({
         {trigger}
       </span>
     ));
-  const surface = (
+
+  const surfaceElement = (
     <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
       <div
         ref={setFloating}
@@ -195,17 +234,19 @@ export const FloatingSurface = ({
       </div>
     </FloatingFocusManager>
   );
-  const floatingElement = open && (
-    <FloatingPortal root={resolvedPortalRoot}>
+
+  const floatingElement = context.open && (
+    <FloatingPortal root={portalRoot}>
       {lockScroll ? (
         <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
-          {surface}
+          {surfaceElement}
         </FloatingOverlay>
       ) : (
-        surface
+        surfaceElement
       )}
     </FloatingPortal>
   );
+
   return (
     <>
       {triggerElement}

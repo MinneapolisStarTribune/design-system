@@ -13,7 +13,7 @@ import * as MenuStories from './Menu.stories';
 
 ## Anatomy
 
-1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` and handles dismiss, focus, and arrow-key navigation.
+1. **Container** (`Menu.Root`): the rounded popover surface that holds the items. It renders `trigger` and handles dismiss, focus, and keyboard navigation.
 2. **Pointer**: the arrow that points at the anchor. It can be pinned or hidden.
 3. **Item** (`Menu.Item`): one row. It renders a `<button>`, or an `<a>` when `href` is set.
 4. **Start icon (optional)** (`Menu.ItemIcon`): shown before the label.
@@ -368,6 +368,9 @@ For example, `placement="top-end"` with `arrowOffset="end"` pins the pointer 16p
 - The first enabled item receives focus when the menu opens
 - **Arrow Down / Arrow Up** move between items and wrap around. Disabled items are skipped
 - **Home / End** jump to the first or last item
+- **Arrow Down / Arrow Up** on the trigger open the menu and focus the first or last item
+- Typing a character moves focus to the next item whose label starts with it
+- Moving the pointer over an item focuses it
 - **Enter** selects the focused item. **Space** also selects button items; links follow the browser's default
 - **Escape**, **Tab**, or a click outside closes the menu, and focus returns to the anchor
 

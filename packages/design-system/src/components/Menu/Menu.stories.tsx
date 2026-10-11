@@ -200,7 +200,7 @@ const ROW_ACTION_ITEMS_CODE = `  <Menu.Item onClick={onEdit}>
     Delete
   </Menu.Item>`;
 
-/** Examples for the Configurable story. Each keeps its own position unless a control overrides it. */
+/** Examples for the Configurable story. */
 const EXAMPLES = {
   account: {
     label: 'Account menu',
@@ -474,7 +474,6 @@ export const Configurable: StoryObj<ExampleArgs> = {
   },
 };
 
-/** A titled group in All variants. */
 const Group = ({ title, children }: { title: string; children: ReactNode }) => (
   <section className={styles.group}>
     <UtilityLabel size="large" weight="semibold">
@@ -506,7 +505,10 @@ const Example = ({
   </div>
 );
 
-/** Every example on one page for Chromatic. Only the account menu starts open, since open menus lock scroll. */
+/**
+ * Every example on one page for Chromatic.
+ * Only the account menu starts open, since open menus lock scroll.
+ */
 export const AllVariants: Story = {
   parameters: {
     layout: 'fullscreen',
