@@ -251,7 +251,7 @@ The breakpoint is read from the viewport on the client. During SSR the drawer re
 
 ## Menu
 
-`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` with the reason (`escapeKey`, `outsidePress`, `focusOut`, `itemSelect`, `triggerClick`).
+`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` when the menu requests to close.
 
 ```tsx
 import { useState } from 'react';

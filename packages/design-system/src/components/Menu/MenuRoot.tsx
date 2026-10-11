@@ -15,7 +15,6 @@ import {
   useListNavigation,
   useMergeRefs,
 } from '@floating-ui/react';
-import type { OpenChangeReason } from '@floating-ui/react';
 import {
   composeTriggerProps,
   getPopupMiddleware,
@@ -27,18 +26,7 @@ import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW } from './Menu.constants';
 import { MenuContext } from './MenuContext';
-import type { MenuCloseReason, MenuProps } from './Menu.types';
-
-// The reasons useClick, useDismiss, and FloatingFocusManager send with this setup.
-const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
-  'escape-key': 'escapeKey',
-  'focus-out': 'focusOut',
-  'outside-press': 'outsidePress',
-  click: 'triggerClick',
-};
-// Unreachable with the hooks above. Satisfies the type if a future hook or Floating UI version
-// sends another reason; the menu still closes.
-const FALLBACK_CLOSE_REASON: MenuCloseReason = 'outsidePress';
+import type { MenuProps } from './Menu.types';
 
 /** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
@@ -56,6 +44,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }) => {
+  /** the active item index in a list */
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const itemsRef = useRef<Array<HTMLElement | null>>([]);
@@ -66,9 +55,9 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const boundary = portalRoot ?? undefined;
 
   const handleOpenChange = useCallback(
-    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
-      if (nextOpen) onOpen();
-      else onClose((reason && CLOSE_REASONS[reason]) ?? FALLBACK_CLOSE_REASON);
+    (open: boolean) => {
+      if (open) onOpen();
+      else onClose();
     },
     [onOpen, onClose]
   );
@@ -92,6 +81,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
+
   // Opens with Down Arrow or Up Arrow, focuses the first or last item, and handles Home and End.
   const listNavigation = useListNavigation(context, {
     listRef: itemsRef,
@@ -106,6 +96,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
       return !item || !(item.checkVisibility?.() ?? true);
     },
   });
+
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
     click,
     dismiss,
@@ -113,8 +104,8 @@ export const MenuRoot: React.FC<MenuProps> = ({
   ]);
 
   const contextValue = useMemo(
-    () => ({ getItemProps, closeFromItem: () => onClose('itemSelect') }),
-    [getItemProps, onClose]
+    () => ({ activeIndex, getItemProps, closeFromItem: onClose }),
+    [activeIndex, getItemProps, onClose]
   );
 
   const triggerRef = useMergeRefs([setReference, trigger.props.ref ?? null]);
@@ -152,7 +143,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
                   onKeyDown: (event) => {
                     if (event.key !== 'Tab' || !event.shiftKey) return;
                     event.preventDefault();
-                    handleOpenChange(false, event.nativeEvent, 'focus-out');
+                    handleOpenChange(false);
                   },
                 })}
                 id={surfaceId}

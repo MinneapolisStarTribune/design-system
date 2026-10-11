@@ -121,7 +121,6 @@ export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } fro
 export * as Menu from './Menu/Menu';
 export type {
   MenuArrowOffset,
-  MenuCloseReason,
   MenuDividerProps,
   MenuItemIconProps,
   MenuItemProps,

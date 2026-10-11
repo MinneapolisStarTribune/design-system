@@ -4,6 +4,7 @@ import { createContext, useContext } from 'react';
 import type { useInteractions } from '@floating-ui/react';
 
 type MenuContextValue = {
+  activeIndex: number | null;
   getItemProps: ReturnType<typeof useInteractions>['getItemProps'];
   closeFromItem: () => void;
 };

@@ -11,12 +11,3 @@ export const MENU_ARROW_OFFSETS = ARROW_OFFSETS;
 
 /** Size from the Core Components Dropdown Menu design. The arrow stays clear of the rounded corners. */
 export const MENU_ARROW: PopupArrowSpec = { width: 12, height: 9, cornerInset: 16 };
-
-/** Values passed to `onClose`. */
-export const MENU_CLOSE_REASONS = [
-  'escapeKey',
-  'outsidePress',
-  'focusOut',
-  'itemSelect',
-  'triggerClick',
-] as const;

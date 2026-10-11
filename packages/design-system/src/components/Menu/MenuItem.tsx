@@ -9,15 +9,16 @@ import type { MenuItemProps } from './Menu.types';
 
 /** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
 export const MenuItem: React.FC<MenuItemProps> = (props) => {
-  const { getItemProps, closeFromItem } = useMenuContext();
+  const { activeIndex, getItemProps, closeFromItem } = useMenuContext();
+
   // Registers the item for arrow key navigation in document order.
-  const { ref } = useListItem();
+  const { ref, index } = useListItem();
   const { disabled, closeOnSelect = true } = props;
 
   const itemProps = {
     ref,
     role: 'menuitem',
-    tabIndex: -1,
+    tabIndex: activeIndex === index ? 0 : -1,
     'aria-disabled': disabled || undefined,
     'data-testid': props.dataTestId,
     className: classNames(
@@ -28,6 +29,7 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
     ),
   };
 
+  // trigger on item selection and close menu if closeOnSelect is enabled (default)
   const select = <E extends HTMLElement>(event: MouseEvent<E>, onClick?: MouseEventHandler<E>) => {
     if (disabled) {
       event.preventDefault();
@@ -37,6 +39,7 @@ export const MenuItem: React.FC<MenuItemProps> = (props) => {
     if (closeOnSelect) closeFromItem();
   };
 
+  // return link if href is added
   if (props.href !== undefined) {
     const {
       as: LinkComponent = 'a',

@@ -9,7 +9,7 @@ import type {
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
-import type { MENU_ARROW_OFFSETS, MENU_CLOSE_REASONS } from './Menu.constants';
+import type { MENU_ARROW_OFFSETS } from './Menu.constants';
 
 /** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
@@ -17,13 +17,11 @@ export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
 /** Arrow position along the menu edge that faces the anchor. */
 export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
 
-export type MenuCloseReason = (typeof MENU_CLOSE_REASONS)[number];
-
 export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
   open: boolean;
-  /** Called when the menu requests to close. Receives a reason. */
-  onClose: (reason: MenuCloseReason) => void;
+  /** Called when the menu requests to close. */
+  onClose: () => void;
   /**
    * Where the menu opens relative to the anchor. Accepts a value per breakpoint.
    * @default 'bottom-start'

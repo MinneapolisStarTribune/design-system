@@ -36,8 +36,8 @@ const Harness = ({
           onOpen?.();
           setOpen(true);
         }}
-        onClose={(reason) => {
-          onClose?.(reason);
+        onClose={() => {
+          onClose?.();
           setOpen(false);
         }}
       >
@@ -187,7 +187,7 @@ describe('Menu', () => {
       expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
-    it('closes with triggerClick when the trigger is clicked again', async () => {
+    it('closes when the trigger is clicked again', async () => {
       const onClose = vi.fn();
       const user = renderMenu({ onClose });
 
@@ -196,7 +196,7 @@ describe('Menu', () => {
 
       // The trigger closes it, and the surface doesn't also report an outside press.
       expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith('triggerClick');
+      expect(onClose).toHaveBeenCalledWith();
       await waitForClosed();
     });
   });
@@ -212,7 +212,7 @@ describe('Menu', () => {
 
       expect(onEdit).toHaveBeenCalledTimes(1);
       expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith('itemSelect');
+      expect(onClose).toHaveBeenCalledWith();
       await waitForClosed();
     });
 
@@ -322,7 +322,7 @@ describe('Menu', () => {
         await user.click(link);
 
         expect(navigate).toHaveBeenCalledWith('/profile');
-        expect(onClose).toHaveBeenCalledWith('itemSelect');
+        expect(onClose).toHaveBeenCalledWith();
       });
 
       it('does not navigate when disabled', async () => {
@@ -436,7 +436,7 @@ describe('Menu', () => {
       await user.keyboard('{Escape}');
 
       expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith('escapeKey');
+      expect(onClose).toHaveBeenCalledWith();
       await waitForClosed();
       await waitFor(() => expect(trigger()).toHaveFocus());
     });
@@ -448,7 +448,7 @@ describe('Menu', () => {
       await openMenu(user);
       await user.click(screen.getByRole('button', { name: 'Outside' }));
 
-      expect(onClose).toHaveBeenCalledWith('outsidePress');
+      expect(onClose).toHaveBeenCalledWith();
       await waitForClosed();
     });
 
@@ -464,7 +464,7 @@ describe('Menu', () => {
 
       await waitForClosed();
       expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith('focusOut');
+      expect(onClose).toHaveBeenCalledWith();
       expect(screen.getByRole('button', { name: focusTarget })).toHaveFocus();
     });
 
