@@ -48,8 +48,6 @@ type UseFloatingSurfaceOptions = {
   arrowSize?: { width: number; height: number };
   arrowPadding?: number;
   id?: string;
-  /** Positions the surface against this element. When set, no trigger renders. */
-  anchor?: Element | null;
 };
 
 /**
@@ -67,12 +65,10 @@ export const useFloatingSurface = ({
   arrowSize = DEFAULT_ARROW_SIZE,
   arrowPadding = 0,
   id,
-  anchor,
 }: UseFloatingSurfaceOptions) => {
   // Use state so `arrow()` receives the element without reading a ref during render.
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const resolvedPortalRoot = portalRoot ?? undefined;
-  const isAnchored = anchor !== undefined;
   const {
     refs: { setReference, setFloating },
     context,
@@ -88,10 +84,9 @@ export const useFloatingSurface = ({
       flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
       arrow({ element: arrowElement, padding: arrowPadding }),
     ],
-    elements: isAnchored ? { reference: anchor } : undefined,
   });
 
-  const click = useClick(context, { enabled: !isDisabled && !isAnchored });
+  const click = useClick(context, { enabled: !isDisabled });
   const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
   const generatedRoleInteraction = useRole(context, { role: interactionRole });
 
@@ -115,7 +110,6 @@ export const useFloatingSurface = ({
     floatingStyles,
     setArrowElement,
     interactions: [click, dismiss, roleInteraction],
-    isAnchored,
     isDisabled,
     portalRoot: resolvedPortalRoot,
     hideArrow,
@@ -126,8 +120,7 @@ export const useFloatingSurface = ({
 type FloatingSurfaceProps = {
   surface: ReturnType<typeof useFloatingSurface>;
   interactions: Pick<UseInteractionsReturn, 'getReferenceProps' | 'getFloatingProps'>;
-  /** Omit when the surface is anchored with `anchor`. */
-  trigger?: ReactNode;
+  trigger: ReactNode;
   children: ReactNode;
   /**
    * Stops page scroll while the surface is open.
@@ -171,7 +164,6 @@ export const FloatingSurface = ({
     setFloating,
     floatingStyles,
     setArrowElement,
-    isAnchored,
     isDisabled,
     portalRoot,
     hideArrow,
@@ -183,29 +175,27 @@ export const FloatingSurface = ({
   const triggerStyle = isDisabled ? DISABLED_TRIGGER_STYLE : ENABLED_TRIGGER_STYLE;
 
   // Add ARIA attributes to a single trigger element. Otherwise, use a button-role wrapper.
-  const triggerElement =
-    !isAnchored &&
-    (childElement ? (
-      cloneElement(
-        childElement,
-        getReferenceProps({
-          ...childElement.props,
-          ref: mergedRef,
-          // Element triggers keep their own display, and their own style wins over the cursor.
-          style: { cursor: isDisabled ? 'default' : 'pointer', ...childElement.props.style },
-        })
-      )
-    ) : (
-      <span
-        ref={setReference}
-        role="button"
-        tabIndex={isDisabled ? -1 : 0}
-        style={triggerStyle}
-        {...getReferenceProps()}
-      >
-        {trigger}
-      </span>
-    ));
+  const triggerElement = childElement ? (
+    cloneElement(
+      childElement,
+      getReferenceProps({
+        ...childElement.props,
+        ref: mergedRef,
+        // Element triggers keep their own display, and their own style wins over the cursor.
+        style: { cursor: isDisabled ? 'default' : 'pointer', ...childElement.props.style },
+      })
+    )
+  ) : (
+    <span
+      ref={setReference}
+      role="button"
+      tabIndex={isDisabled ? -1 : 0}
+      style={triggerStyle}
+      {...getReferenceProps()}
+    >
+      {trigger}
+    </span>
+  );
 
   const surfaceElement = (
     <FloatingFocusManager context={context} modal={modal} initialFocus={initialFocus}>
