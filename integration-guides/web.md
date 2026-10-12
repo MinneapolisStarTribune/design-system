@@ -274,7 +274,7 @@ function AccountMenu() {
 }
 ```
 
-Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowPosition` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## ToggleGroup
 

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { resolveMenuArrowOffset } from './menuArrow';
+import { resolveMenuArrowPosition } from './menuArrow';
 
-describe('resolveMenuArrowOffset', () => {
+describe('resolveMenuArrowPosition', () => {
   it('leaves the arrow unpinned by default so it aims at the anchor', () => {
-    expect(resolveMenuArrowOffset(undefined, 'bottom-start')).toBeNull();
+    expect(resolveMenuArrowPosition(undefined, 'bottom-start')).toBeNull();
   });
 
   it.each([
@@ -15,7 +15,7 @@ describe('resolveMenuArrowOffset', () => {
     ['end', 'bottom-end', '16px'],
     ['center', 'bottom-start', 'calc(50% - 6px)'],
     ['center', 'right-end', 'calc(50% - 6px)'],
-  ] as const)('resolves %o on %s to %s', (offset, placement, expected) => {
-    expect(resolveMenuArrowOffset(offset, placement)).toBe(expected);
+  ] as const)('resolves %o on %s to %s', (position, placement, expected) => {
+    expect(resolveMenuArrowPosition(position, placement)).toBe(expected);
   });
 });

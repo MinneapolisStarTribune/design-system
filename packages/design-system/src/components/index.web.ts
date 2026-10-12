@@ -120,7 +120,7 @@ export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
 export * as Menu from './Menu/Menu';
 export type {
-  MenuArrowOffset,
+  MenuArrowPosition,
   MenuDividerProps,
   MenuItemIconProps,
   MenuItemProps,

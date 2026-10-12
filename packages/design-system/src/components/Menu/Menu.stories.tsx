@@ -2,7 +2,7 @@ import { ComponentProps, ReactElement, ReactNode, useContext, useState } from 'r
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
-import { MENU_ARROW_OFFSETS, MENU_PLACEMENTS } from './Menu.constants';
+import { MENU_ARROW_POSITIONS, MENU_PLACEMENTS } from './Menu.constants';
 import type { MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import * as Dialog from '@/components/Dialog/Dialog';
@@ -55,7 +55,7 @@ const DemoMenu = ({ initialOpen = false, ...menuProps }: DemoMenuProps) => {
   );
 };
 
-type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowOffset'>;
+type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowPosition'>;
 
 /**
  * Stand-in for `next/link` so Storybook doesn't depend on `next`.
@@ -325,11 +325,11 @@ const isExampleKey = (value: unknown): value is ExampleKey =>
 
 const resolvePosition = (
   example: MenuExample,
-  { placement, hideArrow, arrowOffset }: ExamplePosition
+  { placement, hideArrow, arrowPosition }: ExamplePosition
 ): ExamplePosition => ({
   placement: placement ?? example.placement,
   hideArrow,
-  arrowOffset,
+  arrowPosition,
 });
 
 const formatValue = (value: unknown) =>
@@ -400,9 +400,9 @@ const meta = {
       description: 'Hides the arrow.',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
-    arrowOffset: {
+    arrowPosition: {
       control: 'select',
-      options: [undefined, ...MENU_ARROW_OFFSETS],
+      options: [undefined, ...MENU_ARROW_POSITIONS],
       description:
         'Sets a fixed arrow position. When not set, the arrow points at the anchor’s center.',
       table: { type: { summary: 'Responsive<start | center | end>' } },
@@ -422,7 +422,7 @@ type Story = StoryObj<typeof meta>;
 
 type ExampleArgs = ExamplePosition & { example: ExampleKey };
 
-const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowOffset'];
+const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowPosition'];
 
 export const Configurable: StoryObj<ExampleArgs> = {
   args: { example: 'account' },

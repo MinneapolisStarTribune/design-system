@@ -105,7 +105,7 @@ import * as MenuStories from './Menu.stories';
 
     <tr>
       <td>
-        <code>arrowOffset</code>
+        <code>arrowPosition</code>
       </td>
       <td>Menu.Root</td>
       <td>
@@ -316,15 +316,15 @@ Common positions:
 
 ### Responsive
 
-`placement` and `arrowOffset` also take an object keyed by breakpoint. Each key applies from that breakpoint up. Breakpoints below the smallest key use the default.
+`placement` and `arrowPosition` also take an object keyed by breakpoint. Each key applies from that breakpoint up. Breakpoints below the smallest key use the default.
 
 ```tsx
-<Menu.Root placement={{ small: 'right', large: 'top' }} arrowOffset={{ large: 'end' }} />
+<Menu.Root placement={{ small: 'right', large: 'top' }} arrowPosition={{ large: 'end' }} />
 ```
 
 ## Pointer
 
-By default the pointer aims at the center of the anchor and stays at least 16px from the menu's rounded corners. Use `arrowOffset` only when a design needs the pointer in a fixed position:
+By default the pointer aims at the center of the anchor and stays at least 16px from the menu's rounded corners. Use `arrowPosition` only when a design needs the pointer in a fixed position:
 
 <table>
   <thead>
@@ -357,7 +357,7 @@ By default the pointer aims at the center of the anchor and stays at least 16px 
   </tbody>
 </table>
 
-For example, `placement="top-end"` with `arrowOffset="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
+For example, `placement="top-end"` with `arrowPosition="end"` pins the pointer 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a pinned pointer goes back to aiming at the anchor. Set `hideArrow` to remove the pointer.
 
 ## Accessibility
 

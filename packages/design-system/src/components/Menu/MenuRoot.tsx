@@ -6,7 +6,7 @@ import { FloatingList, useInteractions, useListNavigation, useTypeahead } from '
 import { FloatingSurface, useFloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
-import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
+import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowPosition } from './menuArrow';
 import { MenuContext } from './MenuContext';
 import type { MenuProps } from './Menu.types';
 
@@ -18,7 +18,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   onClose,
   placement: placementProp,
   hideArrow,
-  arrowOffset,
+  arrowPosition,
   className,
   portalRoot,
   id,
@@ -82,8 +82,8 @@ export const MenuRoot: React.FC<MenuProps> = ({
       interactions={interactions}
       trigger={trigger}
       lockScroll
-      arrowStaticOffset={resolveMenuArrowOffset(
-        resolveResponsive(arrowOffset, breakpoint),
+      arrowStaticOffset={resolveMenuArrowPosition(
+        resolveResponsive(arrowPosition, breakpoint),
         placement
       )}
       dataTestId={dataTestId}

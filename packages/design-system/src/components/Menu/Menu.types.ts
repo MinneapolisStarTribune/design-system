@@ -2,13 +2,13 @@ import type { ComponentProps, ElementType, HTMLAttributes, ReactElement, ReactNo
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
-import type { MENU_ARROW_OFFSETS } from './Menu.constants';
+import type { MENU_ARROW_POSITIONS } from './Menu.constants';
 
 /** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
 
 /** Arrow position along the menu edge that faces the anchor. */
-export type MenuArrowOffset = (typeof MENU_ARROW_OFFSETS)[number];
+export type MenuArrowPosition = (typeof MENU_ARROW_POSITIONS)[number];
 
 export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
@@ -30,7 +30,7 @@ export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
    * The arrow stays 16px from the rounded corners. By default, it points to the anchor center.
    * Accepts a value per breakpoint. Breakpoints without a value use the default.
    */
-  arrowOffset?: Responsive<MenuArrowOffset>;
+  arrowPosition?: Responsive<MenuArrowPosition>;
 };
 
 /** A menu needs exactly one accessible name. */
