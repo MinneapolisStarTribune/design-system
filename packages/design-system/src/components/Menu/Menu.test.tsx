@@ -25,8 +25,8 @@ const Harness = ({ onEdit, onDelete, onClose, children, ...menuProps }: HarnessP
         trigger={<button type="button">Actions</button>}
         open={open}
         onOpen={() => setOpen(true)}
-        onClose={(reason) => {
-          onClose?.(reason);
+        onClose={() => {
+          onClose?.();
           setOpen(false);
         }}
       >
@@ -107,7 +107,7 @@ describe('Menu', () => {
 
     expect(onEdit).toHaveBeenCalledTimes(1);
     expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose).toHaveBeenCalledWith('itemSelect');
+    expect(onClose).toHaveBeenCalledWith();
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
@@ -211,7 +211,7 @@ describe('Menu', () => {
     await user.keyboard('{Escape}');
 
     expect(onClose).toHaveBeenCalledTimes(1);
-    expect(onClose).toHaveBeenCalledWith('escapeKey');
+    expect(onClose).toHaveBeenCalledWith();
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
     await waitFor(() => expect(screen.getByRole('button', { name: 'Actions' })).toHaveFocus());
   });
@@ -224,7 +224,7 @@ describe('Menu', () => {
     await openMenu(user);
     await user.click(screen.getByRole('button', { name: 'Outside' }));
 
-    expect(onClose).toHaveBeenCalledWith('outsidePress');
+    expect(onClose).toHaveBeenCalledWith();
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
@@ -237,7 +237,7 @@ describe('Menu', () => {
     await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
     await user.tab();
 
-    await waitFor(() => expect(onClose).toHaveBeenCalledWith('focusOut'));
+    await waitFor(() => expect(onClose).toHaveBeenCalledWith());
   });
 
   it('renders a link item when href is set', async () => {
@@ -306,7 +306,7 @@ describe('Menu', () => {
       await user.click(link);
 
       expect(navigate).toHaveBeenCalledWith('/profile');
-      expect(onClose).toHaveBeenCalledWith('itemSelect');
+      expect(onClose).toHaveBeenCalledWith();
     });
 
     it('does not navigate when disabled', async () => {
@@ -434,7 +434,7 @@ describe('Menu', () => {
     expect(trigger).toHaveAttribute('aria-controls', menu.id);
   });
 
-  it('closes with triggerClick when the trigger is clicked again', async () => {
+  it('closes when the trigger is clicked again', async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
     renderWithProvider(<Harness onClose={onClose} />);
@@ -442,7 +442,7 @@ describe('Menu', () => {
     await openMenu(user);
     await user.click(screen.getByRole('button', { name: 'Actions' }));
 
-    expect(onClose).toHaveBeenCalledWith('triggerClick');
+    expect(onClose).toHaveBeenCalledWith();
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 

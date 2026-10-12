@@ -400,7 +400,7 @@ const meta = {
     onOpen: { control: false, table: { type: { summary: '() => void' } } },
     onClose: {
       control: false,
-      table: { type: { summary: '(reason: MenuCloseReason) => void' } },
+      table: { type: { summary: '() => void' } },
     },
     children: {
       control: false,

@@ -3,20 +3,12 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FloatingList, useInteractions, useListNavigation, useTypeahead } from '@floating-ui/react';
-import type { OpenChangeReason } from '@floating-ui/react';
 import { FloatingSurface, useFloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowOffset } from './menuArrow';
 import { MenuContext } from './MenuContext';
-import type { MenuCloseReason, MenuProps } from './Menu.types';
-
-// Any other Floating UI reason is an outside press.
-const CLOSE_REASONS: Partial<Record<OpenChangeReason, MenuCloseReason>> = {
-  'escape-key': 'escapeKey',
-  'focus-out': 'focusOut',
-  click: 'triggerClick',
-};
+import type { MenuProps } from './Menu.types';
 
 /** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
@@ -40,9 +32,9 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleOpenChange = useCallback(
-    (nextOpen: boolean, _event?: Event, reason?: OpenChangeReason) => {
+    (nextOpen: boolean) => {
       if (nextOpen) onOpen();
-      else onClose((reason && CLOSE_REASONS[reason]) ?? 'outsidePress');
+      else onClose();
     },
     [onOpen, onClose]
   );
@@ -80,7 +72,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const { getItemProps } = interactions;
 
   const contextValue = useMemo(
-    () => ({ activeIndex, getItemProps, closeFromItem: () => onClose('itemSelect') }),
+    () => ({ activeIndex, getItemProps, closeFromItem: onClose }),
     [activeIndex, getItemProps, onClose]
   );
 
