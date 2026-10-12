@@ -1,7 +1,17 @@
 'use client';
 
-import { arrow, FloatingArrow, flip, offset, shift, size } from '@floating-ui/react';
-import type { ComponentProps, CSSProperties, Ref, SyntheticEvent } from 'react';
+import { cloneElement, useCallback, useState } from 'react';
+import {
+  arrow,
+  autoUpdate,
+  FloatingArrow,
+  flip,
+  offset,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react';
+import type { ComponentProps, CSSProperties, ReactElement, Ref, SyntheticEvent } from 'react';
 import type { Middleware, Placement } from '@floating-ui/react';
 import styles from './Popover.module.scss';
 
@@ -32,7 +42,7 @@ const KEY_HANDLERS = new Set(['onKeyDown', 'onKeyUp']);
  * first, and a key event the element prevents does not reach the popup, as with the old trigger.
  * `getReferenceProps` alone runs the popup's handlers first.
  */
-export const composeTriggerProps = (
+const composeTriggerProps = (
   elementProps: Record<string, unknown>,
   popupProps: Record<string, unknown>
 ): Record<string, unknown> =>
@@ -63,7 +73,7 @@ type PopupMiddlewareOptions = {
   hideArrow?: boolean;
 };
 
-export const getPopupMiddleware = ({
+const getPopupMiddleware = ({
   boundary,
   arrowElement,
   arrowSpec,
@@ -90,6 +100,66 @@ export const getPopupMiddleware = ({
   }),
   arrow({ element: arrowElement, padding: arrowSpec.cornerInset }),
 ];
+
+type UsePopupOptions = Omit<PopupMiddlewareOptions, 'arrowElement'> & {
+  /** Controlled open state. When undefined, the popup keeps its own state. */
+  open: boolean | undefined;
+  onOpenChange: ((open: boolean) => void) | undefined;
+  placement: Placement;
+  /** Blocks opening. Closing still works. */
+  disabled?: boolean;
+};
+
+/** Open state, in controlled or uncontrolled mode, and positioning shared by Popover and Menu. */
+export const usePopup = ({
+  open: openProp,
+  onOpenChange,
+  placement,
+  disabled = false,
+  boundary,
+  arrowSpec,
+  hideArrow,
+}: UsePopupOptions) => {
+  const [openState, setOpenState] = useState(false);
+  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : openState;
+
+  const setOpen = useCallback(
+    (isOpen: boolean) => {
+      if (disabled && isOpen) return;
+      if (!isControlled) setOpenState(isOpen);
+      onOpenChange?.(isOpen);
+    },
+    [disabled, isControlled, onOpenChange]
+  );
+
+  const floating = useFloating({
+    placement,
+    open,
+    onOpenChange: setOpen,
+    whileElementsMounted: autoUpdate,
+    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec, hideArrow }),
+  });
+
+  return { ...floating, open, setOpen, setArrowElement };
+};
+
+/**
+ * Clones the trigger with the popup's props and `ref`. Element triggers keep their own display, and
+ * their own style wins over the cursor.
+ */
+export const cloneTrigger = (
+  element: ReactElement<PopupTriggerProps>,
+  ref: Ref<Element>,
+  popupProps: Record<string, unknown>,
+  cursor: CSSProperties['cursor']
+) =>
+  cloneElement(element, {
+    ...composeTriggerProps(element.props, popupProps),
+    ref,
+    style: { cursor, ...element.props.style },
+  });
 
 /**
  * Converts an `ArrowOffset` to the `FloatingArrow` `staticOffset` value.

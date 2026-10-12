@@ -12,9 +12,6 @@ export type MenuArrowOffset = ArrowOffset;
 
 export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   children: ReactNode;
-  open: boolean;
-  /** Called when the menu requests to close. */
-  onClose: () => void;
   /**
    * Where the menu opens relative to the anchor. Accepts a value per breakpoint.
    * @default 'bottom-start'
@@ -31,6 +28,10 @@ export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
    * Accepts a value per breakpoint. Breakpoints without a value use the default.
    */
   arrowOffset?: Responsive<MenuArrowOffset>;
+  /** Controlled open state. If omitted, the component manages open state internally. */
+  open?: boolean;
+  /** Called when the menu requests an open/close transition. Required when `open` is provided. */
+  onOpenChange?: (open: boolean) => void;
 };
 
 /** A menu needs exactly one accessible name. */
@@ -45,8 +46,6 @@ export type MenuProps = MenuBaseProps &
      * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
      */
     trigger: ReactElement<PopupTriggerProps>;
-    /** Called when the trigger requests to open the menu. */
-    onOpen: () => void;
     /**
      * Renders the menu in this element instead of `document.body` (e.g. for Storybook). The menu also
      * flips, shifts, and sizes to stay inside this element, so it must not clip the space the menu needs.

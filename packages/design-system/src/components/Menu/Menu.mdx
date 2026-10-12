@@ -44,10 +44,10 @@ import * as MenuStories from './Menu.stories';
   <tbody>
     <tr>
       <td>
-        <code>trigger</code> / <code>onOpen</code>
+        <code>trigger</code>
       </td>
       <td>Menu.Root</td>
-      <td>Required. The element that toggles the menu, and its open callback.</td>
+      <td>Required. The element that toggles the menu.</td>
     </tr>
 
     <tr>
@@ -55,17 +55,15 @@ import * as MenuStories from './Menu.stories';
         <code>open</code>
       </td>
       <td>Menu.Root</td>
-      <td>Required. Whether the menu is shown.</td>
+      <td>Controlled open state. Leave it out and the menu manages its own state.</td>
     </tr>
 
     <tr>
       <td>
-        <code>onClose</code>
+        <code>onOpenChange</code>
       </td>
       <td>Menu.Root</td>
-      <td>
-        Called when the menu requests to close.
-      </td>
+      <td>Called with <code>true</code> or <code>false</code> when the menu requests to open or close. Required with <code>open</code>.</td>
     </tr>
 
     <tr>
@@ -217,8 +215,8 @@ design-system CSS sits in a lower cascade layer than utilities.
       <td>
         <code>--menu-max-height</code>
       </td>
-      <td>362px</td>
-      <td>Maximum list height. Longer menus scroll inside the surface.</td>
+      <td>301px</td>
+      <td>Maximum list height. Fits seven items. Longer menus scroll inside the surface.</td>
     </tr>
 
     <tr>

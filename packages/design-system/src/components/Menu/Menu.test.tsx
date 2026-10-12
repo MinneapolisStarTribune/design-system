@@ -2,6 +2,8 @@ import { useState, type ComponentProps } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { onTestFinished, vi } from 'vitest';
+import { Button } from '@/components/Button/web/Button';
+import * as Dialog from '@/components/Dialog/Dialog';
 import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
 import * as Menu from './Menu';
@@ -9,17 +11,17 @@ import type { MenuLabelProps, MenuProps } from './Menu.types';
 
 type User = ReturnType<typeof userEvent.setup>;
 
-type HarnessProps = Partial<Omit<MenuProps, 'open' | keyof MenuLabelProps>> & {
+type HarnessProps = Partial<Omit<MenuProps, 'open' | 'onOpenChange' | keyof MenuLabelProps>> & {
+  onOpenChange?: (open: boolean) => void;
   onEdit?: () => void;
   onDelete?: () => void;
 };
 
 const Harness = ({
   trigger = <button type="button">Actions</button>,
-  onOpen,
+  onOpenChange,
   onEdit,
   onDelete,
-  onClose,
   children,
   ...menuProps
 }: HarnessProps) => {
@@ -32,13 +34,9 @@ const Harness = ({
         {...menuProps}
         trigger={trigger}
         open={open}
-        onOpen={() => {
-          onOpen?.();
-          setOpen(true);
-        }}
-        onClose={() => {
-          onClose?.();
-          setOpen(false);
+        onOpenChange={(isOpen) => {
+          onOpenChange?.(isOpen);
+          setOpen(isOpen);
         }}
       >
         {children ?? (
@@ -130,13 +128,13 @@ describe('Menu', () => {
       ['native button', buttonTrigger, 'Enter', '{Enter}'],
       ['native button', buttonTrigger, 'Space', ' '],
     ])('opens once from a %s trigger with %s', async (_, triggerElement, _keyName, key) => {
-      const onOpen = vi.fn();
-      const user = renderMenu({ trigger: triggerElement, onOpen });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ trigger: triggerElement, onOpenChange });
 
       trigger().focus();
       await user.keyboard(key);
 
-      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onOpenChange.mock.calls).toEqual([[true]]);
     });
 
     it.each([
@@ -166,54 +164,123 @@ describe('Menu', () => {
     it('runs the trigger element handlers along with its own', async () => {
       const onClick = vi.fn();
       const onKeyDown = vi.fn();
-      const onOpen = vi.fn();
+      const onOpenChange = vi.fn();
       const user = renderMenu({
         trigger: (
           <button type="button" onClick={onClick} onKeyDown={onKeyDown}>
             Actions
           </button>
         ),
-        onOpen,
+        onOpenChange,
       });
 
       await openMenuWithFocus(user);
       expect(onClick).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onOpenChange.mock.calls).toEqual([[true]]);
 
       await user.keyboard('{Escape}');
       await waitFor(() => expect(trigger()).toHaveFocus());
       await user.keyboard('{ArrowDown}');
       expect(onKeyDown).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledTimes(2);
+      expect(onOpenChange.mock.calls).toEqual([[true], [false], [true]]);
     });
 
     it('closes when the trigger is clicked again', async () => {
-      const onClose = vi.fn();
-      const user = renderMenu({ onClose });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ onOpenChange });
 
       await openMenu(user);
       await user.click(trigger());
 
       // The trigger closes it, and the surface doesn't also report an outside press.
-      expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith();
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
       await waitForClosed();
+    });
+  });
+
+  describe('uncontrolled', () => {
+    const renderUncontrolled = (onOpenChange?: (open: boolean) => void) => {
+      const user = userEvent.setup();
+      renderWithProvider(
+        <Menu.Root
+          aria-label="Row actions"
+          trigger={<button type="button">Actions</button>}
+          onOpenChange={onOpenChange}
+        >
+          <Menu.Item>Edit</Menu.Item>
+          <Menu.Item>Delete</Menu.Item>
+        </Menu.Root>
+      );
+      return user;
+    };
+
+    it('opens from the trigger and closes on item select without open state', async () => {
+      const user = renderUncontrolled();
+
+      await openMenuWithFocus(user);
+      expect(trigger()).toHaveAttribute('aria-expanded', 'true');
+
+      await user.click(item('Edit'));
+      await waitForClosed();
+      expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('reports each open and close to onOpenChange', async () => {
+      const onOpenChange = vi.fn();
+      const user = renderUncontrolled(onOpenChange);
+
+      await openMenu(user);
+      await user.keyboard('{Escape}');
+      await waitForClosed();
+
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
     });
   });
 
   describe('items', () => {
     it('calls onClick and then closes when an item is selected', async () => {
       const onEdit = vi.fn();
-      const onClose = vi.fn();
-      const user = renderMenu({ onEdit, onClose });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ onEdit, onOpenChange });
 
       await openMenu(user);
       await user.click(item('Edit'));
 
       expect(onEdit).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith();
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
       await waitForClosed();
+    });
+
+    it('moves focus into a dialog opened from an item, then back to the trigger', async () => {
+      const RowWithDelete = () => {
+        const [deleteOpen, setDeleteOpen] = useState(false);
+        return (
+          <>
+            <Harness>
+              <Menu.Item onClick={() => setDeleteOpen(true)}>Delete</Menu.Item>
+            </Harness>
+            <Dialog.Root open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+              <Dialog.Title>Delete item?</Dialog.Title>
+              <Dialog.Actions>
+                <Button onClick={() => setDeleteOpen(false)}>Cancel</Button>
+              </Dialog.Actions>
+            </Dialog.Root>
+          </>
+        );
+      };
+      const user = userEvent.setup();
+      renderWithProvider(<RowWithDelete />);
+
+      await openMenuWithFocus(user, 'Delete');
+      await user.keyboard('{Enter}');
+
+      const dialog = await screen.findByRole('dialog', { name: 'Delete item?' });
+      await waitForClosed();
+      await waitFor(() => expect(dialog).toHaveFocus());
+
+      await user.click(screen.getByRole('button', { name: 'Cancel' }));
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      await waitFor(() => expect(trigger()).toHaveFocus());
     });
 
     it('stays open when an item sets closeOnSelect to false', async () => {
@@ -235,9 +302,9 @@ describe('Menu', () => {
 
     it('does not activate or close a disabled item with a click, Enter, or Space', async () => {
       const onClick = vi.fn();
-      const onClose = vi.fn();
+      const onOpenChange = vi.fn();
       const user = renderMenu({
-        onClose,
+        onOpenChange,
         children: (
           <>
             <Menu.Item>Edit</Menu.Item>
@@ -255,7 +322,7 @@ describe('Menu', () => {
       await user.keyboard(' ');
 
       expect(onClick).not.toHaveBeenCalled();
-      expect(onClose).not.toHaveBeenCalled();
+      expect(onOpenChange).not.toHaveBeenCalledWith(false);
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
@@ -303,9 +370,7 @@ describe('Menu', () => {
       beforeEach(() => navigate.mockClear());
 
       it('renders the link with menuitem semantics and navigates, then closes', async () => {
-        const onClose = vi.fn();
         const user = renderMenu({
-          onClose,
           children: (
             <Menu.Item as={MockNextLink} href="/profile" prefetch={false}>
               Profile
@@ -322,13 +387,12 @@ describe('Menu', () => {
         await user.click(link);
 
         expect(navigate).toHaveBeenCalledWith('/profile');
-        expect(onClose).toHaveBeenCalledWith();
       });
 
       it('does not navigate when disabled', async () => {
-        const onClose = vi.fn();
+        const onOpenChange = vi.fn();
         const user = renderMenu({
-          onClose,
+          onOpenChange,
           children: (
             <Menu.Item as={MockNextLink} href="/profile" disabled>
               Profile
@@ -340,7 +404,7 @@ describe('Menu', () => {
         await user.click(item('Profile'));
 
         expect(navigate).not.toHaveBeenCalled();
-        expect(onClose).not.toHaveBeenCalled();
+        expect(onOpenChange).not.toHaveBeenCalledWith(false);
       });
     });
   });
@@ -429,42 +493,39 @@ describe('Menu', () => {
 
   describe('dismissal', () => {
     it('closes on Escape and returns focus to the trigger', async () => {
-      const onClose = vi.fn();
-      const user = renderMenu({ onClose });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ onOpenChange });
 
       await openMenuWithFocus(user);
       await user.keyboard('{Escape}');
 
-      expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith();
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
       await waitForClosed();
       await waitFor(() => expect(trigger()).toHaveFocus());
     });
 
     it('closes on outside click', async () => {
-      const onClose = vi.fn();
-      const user = renderMenu({ onClose });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ onOpenChange });
 
       await openMenu(user);
       await user.click(screen.getByRole('button', { name: 'Outside' }));
-
-      expect(onClose).toHaveBeenCalledWith();
       await waitForClosed();
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
     });
 
     it.each([
       ['Tab', false, 'Outside'],
       ['Shift+Tab', true, 'Actions'],
     ])('closes when focus leaves the menu with %s', async (_, shift, focusTarget) => {
-      const onClose = vi.fn();
-      const user = renderMenu({ onClose });
+      const onOpenChange = vi.fn();
+      const user = renderMenu({ onOpenChange });
 
       await openMenuWithFocus(user);
       await user.tab({ shift });
 
       await waitForClosed();
-      expect(onClose).toHaveBeenCalledTimes(1);
-      expect(onClose).toHaveBeenCalledWith();
+      expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
       expect(screen.getByRole('button', { name: focusTarget })).toHaveFocus();
     });
 

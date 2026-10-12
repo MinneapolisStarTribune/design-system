@@ -1,26 +1,24 @@
 'use client';
 
-import { cloneElement, useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import {
-  autoUpdate,
   FloatingFocusManager,
   FloatingList,
   FloatingOverlay,
   FloatingPortal,
   useClick,
   useDismiss,
-  useFloating,
   useInteractions,
   useListNavigation,
   useMergeRefs,
 } from '@floating-ui/react';
 import {
-  composeTriggerProps,
-  getPopupMiddleware,
+  cloneTrigger,
   PopupArrow,
   popupStyles,
   resolveArrowOffset,
+  usePopup,
 } from '@/components/Popover/floatingPopup';
 import type { PopupArrowSpec } from '@/components/Popover/floatingPopup';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
@@ -33,9 +31,8 @@ const MENU_ARROW_SPEC: PopupArrowSpec = { width: 12, height: 9, cornerInset: 16 
 /** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
   trigger,
-  open,
-  onOpen,
-  onClose,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
   placement: placementProp,
   arrowOffset,
   hideArrow = false,
@@ -48,7 +45,6 @@ export const MenuRoot: React.FC<MenuProps> = ({
 }) => {
   /** the active item index in a list */
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const itemsRef = useRef<Array<HTMLElement | null>>([]);
   const surfaceId = useId();
 
@@ -56,29 +52,20 @@ export const MenuRoot: React.FC<MenuProps> = ({
   const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
   const boundary = portalRoot ?? undefined;
 
-  const handleOpenChange = useCallback(
-    (open: boolean) => {
-      if (open) onOpen();
-      else onClose();
-    },
-    [onOpen, onClose]
-  );
-
   const {
+    open,
+    setOpen,
+    setArrowElement,
     refs: { setReference, setFloating },
     context,
     floatingStyles,
-  } = useFloating({
+  } = usePopup({
+    open: openProp,
+    onOpenChange: onOpenChangeProp,
     placement,
-    open,
-    onOpenChange: handleOpenChange,
-    whileElementsMounted: autoUpdate,
-    middleware: getPopupMiddleware({
-      boundary,
-      arrowElement,
-      arrowSpec: MENU_ARROW_SPEC,
-      hideArrow,
-    }),
+    boundary,
+    arrowSpec: MENU_ARROW_SPEC,
+    hideArrow,
   });
 
   const click = useClick(context);
@@ -106,25 +93,22 @@ export const MenuRoot: React.FC<MenuProps> = ({
   ]);
 
   const contextValue = useMemo(
-    () => ({ activeIndex, getItemProps, closeFromItem: onClose }),
-    [activeIndex, getItemProps, onClose]
+    () => ({ activeIndex, getItemProps, closeFromItem: () => setOpen(false) }),
+    [activeIndex, getItemProps, setOpen]
   );
 
   const triggerRef = useMergeRefs([setReference, trigger.props.ref ?? null]);
-  const triggerElement = cloneElement(trigger, {
-    ...composeTriggerProps(
-      trigger.props,
-      getReferenceProps({
-        // Set explicitly: `useRole` would replace the menu's own accessible name with the trigger's.
-        'aria-haspopup': 'menu',
-        'aria-expanded': open,
-        'aria-controls': open ? surfaceId : undefined,
-      })
-    ),
-    ref: triggerRef,
-    // Element triggers keep their own display, and their own style wins over the cursor.
-    style: { cursor: 'pointer', ...trigger.props.style },
-  });
+  const triggerElement = cloneTrigger(
+    trigger,
+    triggerRef,
+    getReferenceProps({
+      // Set explicitly: `useRole` would replace the menu's own accessible name with the trigger's.
+      'aria-haspopup': 'menu',
+      'aria-expanded': open,
+      'aria-controls': open ? surfaceId : undefined,
+    }),
+    'pointer'
+  );
 
   return (
     <>
@@ -145,7 +129,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
                   onKeyDown: (event) => {
                     if (event.key !== 'Tab' || !event.shiftKey) return;
                     event.preventDefault();
-                    handleOpenChange(false);
+                    setOpen(false);
                   },
                 })}
                 id={surfaceId}

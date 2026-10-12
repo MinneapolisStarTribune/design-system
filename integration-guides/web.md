@@ -251,23 +251,14 @@ The breakpoint is read from the viewport on the client. During SSR the drawer re
 
 ## Menu
 
-`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` when the menu requests to close.
+Pass a `trigger` element: the menu adds its click handler, ref, and ARIA attributes, opens on click, and closes when an item is selected or the menu is dismissed.
 
 ```tsx
-import { useState } from 'react';
 import { Button, Menu } from '@minneapolisstartribune/design-system/web';
 
 function AccountMenu() {
-  const [open, setOpen] = useState(false);
-
   return (
-    <Menu.Root
-      trigger={<Button>Account</Button>}
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      aria-label="Account"
-    >
+    <Menu.Root trigger={<Button>Account</Button>} aria-label="Account">
       <Menu.Item href="/profile">Manage Profile</Menu.Item>
       <Menu.Divider />
       <Menu.Item onClick={logOut}>Log Out</Menu.Item>
@@ -275,6 +266,8 @@ function AccountMenu() {
   );
 }
 ```
+
+To control the menu, pass `open` and `onOpenChange` together, for example `open={open} onOpenChange={setOpen}`. `onOpenChange` is called with `true` or `false` each time the menu requests to open or close.
 
 Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 

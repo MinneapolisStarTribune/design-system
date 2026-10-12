@@ -1,19 +1,17 @@
 'use client';
 
-import { cloneElement, isValidElement, useCallback, useId, useMemo, useState } from 'react';
+import { isValidElement, useId, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
-  autoUpdate,
   FloatingFocusManager,
   FloatingPortal,
   useClick,
   useDismiss,
-  useFloating,
   useInteractions,
   useMergeRefs,
 } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
-import { composeTriggerProps, getPopupMiddleware, PopupArrow, popupStyles } from './floatingPopup';
+import { cloneTrigger, PopupArrow, popupStyles, usePopup } from './floatingPopup';
 import type { PopupArrowSpec, PopupTriggerProps } from './floatingPopup';
 import { PopoverProps } from './Popover.types';
 
@@ -37,35 +35,25 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   portalRoot,
   dataTestId,
 }) => {
-  const [openState, setOpenState] = useState(false);
-  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
   const generatedId = useId();
   const surfaceId = id ?? generatedId;
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
-  // Support controlled and uncontrolled modes
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : openState;
-  const handleOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (isDisabled && nextOpen) return;
-      if (!isControlled) setOpenState(nextOpen);
-      onOpenChangeProp?.(nextOpen);
-    },
-    [isDisabled, isControlled, onOpenChangeProp]
-  );
-
   const boundary = portalRoot ?? undefined;
   const {
+    open,
+    setOpen,
+    setArrowElement,
     refs: { setReference, setFloating },
     context,
     floatingStyles,
-  } = useFloating({
+  } = usePopup({
+    open: openProp,
+    onOpenChange: onOpenChangeProp,
     placement,
-    open,
-    onOpenChange: handleOpenChange,
-    whileElementsMounted: autoUpdate,
-    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec: POPOVER_ARROW_SPEC }),
+    disabled: isDisabled,
+    boundary,
+    arrowSpec: POPOVER_ARROW_SPEC,
   });
   const click = useClick(context, { enabled: !isDisabled });
   const dismiss = useDismiss(context);
@@ -74,8 +62,8 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   // Memoize context value to prevent unnecessary re-renders of all
   // context consumers when this component re-renders for unrelated reasons.
   const contextValue = useMemo(
-    () => ({ close: () => handleOpenChange(false), headingId, setHasHeading }),
-    [handleOpenChange, headingId]
+    () => ({ close: () => setOpen(false), headingId, setHasHeading }),
+    [setOpen, headingId]
   );
   // A heading names the dialog when present. Otherwise `aria-label` does.
   const labelProps = hasHeading ? { 'aria-labelledby': headingId } : { 'aria-label': ariaLabel };
@@ -93,12 +81,12 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
 
   // Add trigger props to a single element. Otherwise, use a button-role wrapper.
   const triggerElement = childElement ? (
-    cloneElement(childElement, {
-      ...composeTriggerProps(childElement.props, getReferenceProps(triggerAriaProps)),
-      ref: triggerRef,
-      // Element triggers keep their own display, and their own style wins over the cursor.
-      style: { cursor: isDisabled ? 'default' : 'pointer', ...childElement.props.style },
-    })
+    cloneTrigger(
+      childElement,
+      triggerRef,
+      getReferenceProps(triggerAriaProps),
+      isDisabled ? 'default' : 'pointer'
+    )
   ) : (
     <span
       ref={setReference}

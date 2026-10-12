@@ -19,8 +19,7 @@ const renderOpenMenu = (
         </button>
       }
       open
-      onOpen={vi.fn()}
-      onClose={vi.fn()}
+      onOpenChange={vi.fn()}
     >
       {children}
     </Menu.Root>
