@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveArrowOffset } from './floatingPopup';
+import { resolveArrowOffset } from './FloatingPopup';
 
 const ARROW = { width: 12, height: 9, cornerInset: 16 };
 

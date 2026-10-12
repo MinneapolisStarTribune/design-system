@@ -13,7 +13,7 @@ import {
 } from '@floating-ui/react';
 import type { CSSProperties, ReactElement, Ref, SyntheticEvent } from 'react';
 import type { Middleware, Placement } from '@floating-ui/react';
-import styles from './floatingPopup.module.scss';
+import styles from './FloatingPopup.module.scss';
 import type {
   ArrowOffset,
   PopupArrowProps,
@@ -21,7 +21,7 @@ import type {
   PopupMiddlewareOptions,
   PopupTriggerProps,
   UsePopupOptions,
-} from './floatingPopup.types';
+} from './FloatingPopup.types';
 
 /**
  * Internal to Popover and Menu, and not exported from the package. Tooltip and Coachmark position

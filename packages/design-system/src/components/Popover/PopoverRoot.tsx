@@ -16,11 +16,11 @@ import {
   PopupArrow,
   popupStyles,
   usePopup,
-} from '@/components/FloatingPopup/floatingPopup';
+} from '@/components/FloatingPopup/FloatingPopup';
 import type {
   PopupArrowSpec,
   PopupTriggerProps,
-} from '@/components/FloatingPopup/floatingPopup.types';
+} from '@/components/FloatingPopup/FloatingPopup.types';
 import { PopoverProps } from './Popover.types';
 
 const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 16, height: 8, cornerInset: 0 };
