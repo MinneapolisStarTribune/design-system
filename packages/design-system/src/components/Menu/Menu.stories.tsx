@@ -1,5 +1,6 @@
-import { ComponentProps, ReactElement, ReactNode, useContext, useState } from 'react';
+import { ReactElement, ReactNode, useContext, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, screen, within } from 'storybook/test';
 import classNames from 'classnames';
 import * as Menu from './Menu';
 import { MENU_ARROW_POSITIONS, MENU_PLACEMENTS } from './Menu.constants';
@@ -21,335 +22,6 @@ import {
   TrashIcon,
 } from '@/icons';
 import styles from './Menu.stories.module.scss';
-
-/** `frame` aligns the trigger in its cell so the menu has room on the side it opens. */
-const POSITIONS = [
-  { label: 'Below, left edges (default)', frame: 'bottom-start', placement: 'bottom-start' },
-  { label: 'Above, centered', frame: 'top', placement: 'top' },
-  { label: 'Left, top edges', frame: 'left', placement: 'left-start' },
-  { label: 'Right, bottom edges', frame: 'right', placement: 'right-end' },
-  { label: 'hideArrow', frame: 'bottom', placement: 'bottom', hideArrow: true },
-] satisfies {
-  label: string;
-  frame: 'bottom' | 'bottom-start' | 'top' | 'right' | 'left';
-  placement: MenuPlacement;
-  hideArrow?: boolean;
-}[];
-
-type DemoMenuProps = Omit<MenuProps, 'open' | 'onOpen' | 'onClose' | keyof MenuLabelProps> &
-  MenuLabelProps & {
-    /** Starts open, so the All variants snapshot shows an open menu. */
-    initialOpen?: boolean;
-  };
-
-const DemoMenu = ({ initialOpen = false, ...menuProps }: DemoMenuProps) => {
-  const [open, setOpen] = useState(initialOpen);
-
-  return (
-    <Menu.Root
-      {...menuProps}
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-    />
-  );
-};
-
-type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowPosition'>;
-
-/**
- * Stand-in for `next/link` so Storybook doesn't depend on `next`.
- * In your app: `import NextLink from 'next/link'` and pass `as={NextLink}`.
- */
-const StoryMockNextLink = ({
-  prefetch,
-  ...rest
-}: ComponentProps<'a'> & { href: string; prefetch?: boolean }) => (
-  <a {...rest} data-prefetch={prefetch === undefined ? undefined : String(prefetch)} />
-);
-
-const BRAND_SITES = {
-  startribune: {
-    label: 'Star Tribune',
-    href: 'https://www.startribune.com/',
-    icon: <LogoStribColorIcon size="large" />,
-  },
-  varsity: {
-    label: 'Strib Varsity',
-    href: 'https://varsity.startribune.com/',
-    icon: <LogoVarsityIcon size="large" color="brand-01" />,
-  },
-};
-
-const AccountItems = () => {
-  const site = BRAND_SITES[useContext(DesignSystemContext)?.brand ?? 'startribune'];
-
-  return (
-    <>
-      <Menu.Item href={site.href} target="_blank" rel="noreferrer">
-        <Menu.ItemIcon>{site.icon}</Menu.ItemIcon>
-        {site.label}
-        <Menu.ItemIcon position="end">
-          <ArrowDiagonalIcon />
-        </Menu.ItemIcon>
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item href="https://varsity.startribune.com/">
-        <Menu.ItemIcon>
-          <HelpIcon size="large" />
-        </Menu.ItemIcon>
-        Help Center
-      </Menu.Item>
-      <Menu.Item as={StoryMockNextLink} href="#profile" prefetch={false}>
-        <Menu.ItemIcon>
-          <SettingsIcon size="large" />
-        </Menu.ItemIcon>
-        Manage Profile
-      </Menu.Item>
-      <Menu.Item onClick={() => undefined}>
-        <Menu.ItemIcon>
-          <LogOutIcon size="large" />
-        </Menu.ItemIcon>
-        Log Out
-      </Menu.Item>
-    </>
-  );
-};
-
-const ItemActionsDemo = (props: ExamplePosition) => {
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const closeDelete = () => setDeleteOpen(false);
-
-  return (
-    <div className={styles.itemRow}>
-      <DemoMenu
-        {...props}
-        aria-label="Item actions"
-        className={styles.itemActionsMenu}
-        trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Item actions" />}
-      >
-        <Menu.Item onClick={() => setDeleteOpen(true)}>
-          <Menu.ItemIcon>
-            <TrashIcon size="large" />
-          </Menu.ItemIcon>
-          Delete
-        </Menu.Item>
-      </DemoMenu>
-      <Dialog.Root open={deleteOpen} onClose={closeDelete}>
-        <Dialog.Title>Delete item?</Dialog.Title>
-        <Dialog.Content>
-          Are you sure you want to delete this item? This cannot be undone.
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button variant="outlined" onClick={closeDelete}>
-            Cancel
-          </Button>
-          <Button color="error" onClick={closeDelete}>
-            Delete
-          </Button>
-        </Dialog.Actions>
-      </Dialog.Root>
-    </div>
-  );
-};
-
-const ItemsDemo = (props: ExamplePosition) => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className={styles.itemsDemo}>
-      <DemoMenu
-        {...props}
-        aria-label="Other variations"
-        className={styles.itemsMenu}
-        trigger={<Button variant="outlined">Other Variations</Button>}
-      >
-        <Menu.Item onClick={() => undefined}>Text only</Menu.Item>
-        <Menu.Item onClick={() => setCount((prev) => prev + 1)} closeOnSelect={false}>
-          <Menu.ItemIcon>
-            <PlusIcon />
-          </Menu.ItemIcon>
-          Click me (stays open)
-        </Menu.Item>
-        <Menu.Item disabled onClick={() => undefined}>
-          <Menu.ItemIcon>
-            <TrashIcon />
-          </Menu.ItemIcon>
-          Disabled
-        </Menu.Item>
-      </DemoMenu>
-      <UtilityBody size="x-small">Count: {count}</UtilityBody>
-    </div>
-  );
-};
-
-type MenuExample = {
-  label: string;
-  placement?: MenuPlacement;
-  render: (position: ExamplePosition) => ReactElement;
-  code: (positionProps: string) => string;
-};
-
-const OPEN_STATE_CODE = `const [open, setOpen] = useState(false);
-
-`;
-
-const OPEN_STATE_PROPS = `  open={open}
-  onOpen={() => setOpen(true)}
-  onClose={() => setOpen(false)}
-`;
-
-const EXAMPLES = {
-  account: {
-    label: 'Account Items',
-    placement: 'right-end',
-    render: (position) => (
-      <div className={styles.accountFrame}>
-        <DemoMenu
-          {...position}
-          aria-label="Account"
-          className={styles.accountMenu}
-          trigger={<Button variant="ghost" icon={<AvatarIcon />} aria-label="Account" />}
-        >
-          <AccountItems />
-        </DemoMenu>
-      </div>
-    ),
-    code: (positionProps) => `import NextLink from 'next/link';
-
-${OPEN_STATE_CODE}<Menu.Root
-  trigger={<Button variant="ghost" icon={<AvatarIcon />} aria-label="Account" />}
-${OPEN_STATE_PROPS}${positionProps}  aria-label="Account"
->
-  <Menu.Item href="https://varsity.startribune.com/" target="_blank" rel="noreferrer">
-    <Menu.ItemIcon><LogoVarsityIcon size="large" color="brand-01" /></Menu.ItemIcon>
-    Strib Varsity
-    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
-  </Menu.Item>
-  <Menu.Divider />
-  <Menu.Item href="https://varsity.startribune.com/">
-    <Menu.ItemIcon><HelpIcon size="large" /></Menu.ItemIcon>
-    Help Center
-  </Menu.Item>
-  <Menu.Item as={NextLink} href="/profile" prefetch={false}>
-    <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
-    Manage Profile
-  </Menu.Item>
-  <Menu.Item onClick={logOut}>
-    <Menu.ItemIcon><LogOutIcon size="large" /></Menu.ItemIcon>
-    Log Out
-  </Menu.Item>
-</Menu.Root>`,
-  },
-  itemActions: {
-    label: 'Action Items',
-    placement: 'bottom-end',
-    render: (position) => <ItemActionsDemo {...position} />,
-    code: (positionProps) => `const [open, setOpen] = useState(false);
-const [deleteOpen, setDeleteOpen] = useState(false);
-
-<Menu.Root
-  trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Item actions" />}
-${OPEN_STATE_PROPS}${positionProps}  aria-label="Item actions"
->
-  <Menu.Item onClick={() => setDeleteOpen(true)}>
-    <Menu.ItemIcon><TrashIcon size="large" /></Menu.ItemIcon>
-    Delete
-  </Menu.Item>
-</Menu.Root>
-
-<Dialog.Root open={deleteOpen} onClose={() => setDeleteOpen(false)}>
-  <Dialog.Title>Delete item?</Dialog.Title>
-  <Dialog.Content>
-    Are you sure you want to delete this item? This cannot be undone.
-  </Dialog.Content>
-  <Dialog.Actions>
-    <Button variant="outlined" onClick={() => setDeleteOpen(false)}>Cancel</Button>
-    <Button color="error" onClick={deleteItem}>Delete</Button>
-  </Dialog.Actions>
-</Dialog.Root>`,
-  },
-  items: {
-    label: 'Other Items',
-    placement: 'right-start',
-    render: (position) => <ItemsDemo {...position} />,
-    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
-  trigger={<Button variant="outlined">Other Variations</Button>}
-${OPEN_STATE_PROPS}${positionProps}  aria-label="Other variations"
->
-  <Menu.Item onClick={onSelect}>Text only</Menu.Item>
-  <Menu.Item onClick={increment} closeOnSelect={false}>
-    <Menu.ItemIcon><PlusIcon /></Menu.ItemIcon>
-    Click me (stays open)
-  </Menu.Item>
-  <Menu.Item disabled onClick={onSelect}>
-    <Menu.ItemIcon><TrashIcon /></Menu.ItemIcon>
-    Disabled
-  </Menu.Item>
-</Menu.Root>`,
-  },
-  list: {
-    label: 'List Items',
-    render: (position) => (
-      <DemoMenu
-        {...position}
-        aria-label="Options"
-        trigger={<Button variant="outlined">Scrollable List</Button>}
-      >
-        {Array.from({ length: 20 }, (_, index) => (
-          <Menu.Item key={index} onClick={() => undefined}>
-            Option {index + 1}
-          </Menu.Item>
-        ))}
-      </DemoMenu>
-    ),
-    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
-  trigger={<Button variant="outlined">Scrollable List</Button>}
-${OPEN_STATE_PROPS}${positionProps}  aria-label="Options"
->
-  {options.map((option) => (
-    <Menu.Item key={option.id} onClick={() => onSelect(option)}>
-      {option.label}
-    </Menu.Item>
-  ))}
-</Menu.Root>`,
-  },
-} satisfies Record<string, MenuExample>;
-
-type ExampleKey = keyof typeof EXAMPLES;
-
-const EXAMPLE_KEYS = Object.keys(EXAMPLES).filter((key): key is ExampleKey => key in EXAMPLES);
-
-const isExampleKey = (value: unknown): value is ExampleKey =>
-  typeof value === 'string' && value in EXAMPLES;
-
-const resolvePosition = (
-  example: MenuExample,
-  { placement, hideArrow, arrowPosition }: ExamplePosition
-): ExamplePosition => ({
-  placement: placement ?? example.placement,
-  hideArrow,
-  arrowPosition,
-});
-
-const formatValue = (value: unknown) =>
-  typeof value === 'string'
-    ? `"${value}"`
-    : `{${JSON.stringify(value)
-        .replace(/"([^"]+)":/g, ' $1: ')
-        .replace(/"/g, "'")
-        .replace(/}/g, ' }')}}`;
-
-const formatPositionProps = (position: ExamplePosition) =>
-  Object.entries(position)
-    .filter(([, value]) => value !== undefined && value !== false)
-    .map(([name, value]) => (value === true ? `  ${name}\n` : `  ${name}=${formatValue(value)}\n`))
-    .join('');
-
-const getExampleCode = (key: ExampleKey, position: ExamplePosition) => {
-  const example: MenuExample = EXAMPLES[key];
-  return example.code(formatPositionProps(resolvePosition(example, position)));
-};
 
 const meta = {
   title: 'Actions/Menu',
@@ -420,9 +92,333 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+/* Demo menus shared by the stories */
+
+type DemoMenuProps = Omit<MenuProps, 'open' | 'onOpen' | 'onClose' | keyof MenuLabelProps> &
+  MenuLabelProps;
+
+const DemoMenu = (menuProps: DemoMenuProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Menu.Root
+      {...menuProps}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+    />
+  );
+};
+
+type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowPosition'>;
+type ExampleRenderProps = ExamplePosition & Pick<MenuProps, 'portalRoot'>;
+
+const BRAND_SITES = {
+  startribune: {
+    label: 'Star Tribune',
+    icon: <LogoStribColorIcon size="large" />,
+  },
+  varsity: {
+    label: 'Strib Varsity',
+    icon: <LogoVarsityIcon size="large" color="brand-01" />,
+  },
+};
+
+const AccountItems = () => {
+  const site = BRAND_SITES[useContext(DesignSystemContext)?.brand ?? 'startribune'];
+
+  return (
+    <>
+      <Menu.Item onClick={() => undefined}>
+        <Menu.ItemIcon>{site.icon}</Menu.ItemIcon>
+        {site.label}
+        <Menu.ItemIcon position="end">
+          <ArrowDiagonalIcon />
+        </Menu.ItemIcon>
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={() => undefined}>
+        <Menu.ItemIcon>
+          <HelpIcon size="large" />
+        </Menu.ItemIcon>
+        Help Center
+      </Menu.Item>
+      <Menu.Item onClick={() => undefined}>
+        <Menu.ItemIcon>
+          <SettingsIcon size="large" />
+        </Menu.ItemIcon>
+        Manage Profile
+      </Menu.Item>
+      <Menu.Item onClick={() => undefined}>
+        <Menu.ItemIcon>
+          <LogOutIcon size="large" />
+        </Menu.ItemIcon>
+        Log Out
+      </Menu.Item>
+    </>
+  );
+};
+
+const AccountDemo = (props: ExampleRenderProps) => (
+  <div className={styles.accountFrame}>
+    <DemoMenu
+      {...props}
+      aria-label="Account"
+      className={styles.accountMenu}
+      trigger={<Button variant="ghost" icon={<AvatarIcon />} aria-label="Account" />}
+    >
+      <AccountItems />
+    </DemoMenu>
+  </div>
+);
+
+const ItemActionsDemo = (props: ExampleRenderProps) => {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const closeDelete = () => setDeleteOpen(false);
+
+  return (
+    <div className={styles.itemRow}>
+      <DemoMenu
+        {...props}
+        aria-label="Item actions"
+        className={styles.itemActionsMenu}
+        trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Item actions" />}
+      >
+        <Menu.Item onClick={() => setDeleteOpen(true)}>
+          <Menu.ItemIcon>
+            <TrashIcon size="large" />
+          </Menu.ItemIcon>
+          Delete
+        </Menu.Item>
+      </DemoMenu>
+      <Dialog.Root open={deleteOpen} onClose={closeDelete}>
+        <Dialog.Title>Delete item?</Dialog.Title>
+        <Dialog.Content>
+          Are you sure you want to delete this item? This cannot be undone.
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button variant="outlined" onClick={closeDelete}>
+            Cancel
+          </Button>
+          <Button color="error" onClick={closeDelete}>
+            Delete
+          </Button>
+        </Dialog.Actions>
+      </Dialog.Root>
+    </div>
+  );
+};
+
+const ItemsDemo = (props: ExampleRenderProps) => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className={styles.itemsDemo}>
+      <DemoMenu
+        {...props}
+        aria-label="Other variations"
+        className={styles.itemsMenu}
+        trigger={<Button variant="outlined">Other Variations</Button>}
+      >
+        <Menu.Item onClick={() => undefined}>Text only</Menu.Item>
+        <Menu.Item onClick={() => setCount((prev) => prev + 1)} closeOnSelect={false}>
+          <Menu.ItemIcon>
+            <PlusIcon />
+          </Menu.ItemIcon>
+          Click me (stays open)
+        </Menu.Item>
+        <Menu.Item disabled onClick={() => undefined}>
+          <Menu.ItemIcon>
+            <TrashIcon />
+          </Menu.ItemIcon>
+          Disabled
+        </Menu.Item>
+      </DemoMenu>
+      <UtilityBody size="x-small">Count: {count}</UtilityBody>
+    </div>
+  );
+};
+
+const ListDemo = (props: ExampleRenderProps) => (
+  <DemoMenu
+    {...props}
+    aria-label="Items"
+    trigger={<Button variant="outlined">Scrollable List</Button>}
+  >
+    {Array.from({ length: 10 }, (_, index) => (
+      <Menu.Item key={index} onClick={() => undefined}>
+        Item {index + 1}
+      </Menu.Item>
+    ))}
+  </DemoMenu>
+);
+
+/* Configurable */
+
+type MenuExample = {
+  label: string;
+  placement?: MenuPlacement;
+  render: (props: ExampleRenderProps) => ReactElement;
+  code: (positionProps: string) => string;
+};
+
+const OPEN_STATE_CODE = `const [open, setOpen] = useState(false);
+
+`;
+
+const OPEN_STATE_PROPS = `  open={open}
+  onOpen={() => setOpen(true)}
+  onClose={() => setOpen(false)}
+`;
+
+const EXAMPLES = {
+  account: {
+    label: 'Account Items',
+    placement: 'right-end',
+    render: (position) => <AccountDemo {...position} />,
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="ghost" icon={<AvatarIcon />} aria-label="Account" />}
+${OPEN_STATE_PROPS}${positionProps}  aria-label="Account"
+>
+  <Menu.Item onClick={openVarsity}>
+    <Menu.ItemIcon><LogoVarsityIcon size="large" color="brand-01" /></Menu.ItemIcon>
+    Strib Varsity
+    <Menu.ItemIcon position="end"><ArrowDiagonalIcon /></Menu.ItemIcon>
+  </Menu.Item>
+  <Menu.Divider />
+  <Menu.Item onClick={openHelpCenter}>
+    <Menu.ItemIcon><HelpIcon size="large" /></Menu.ItemIcon>
+    Help Center
+  </Menu.Item>
+  <Menu.Item onClick={openProfile}>
+    <Menu.ItemIcon><SettingsIcon size="large" /></Menu.ItemIcon>
+    Manage Profile
+  </Menu.Item>
+  <Menu.Item onClick={logOut}>
+    <Menu.ItemIcon><LogOutIcon size="large" /></Menu.ItemIcon>
+    Log Out
+  </Menu.Item>
+</Menu.Root>`,
+  },
+  itemActions: {
+    label: 'Action Items',
+    placement: 'bottom-end',
+    render: (position) => <ItemActionsDemo {...position} />,
+    code: (positionProps) => `const [open, setOpen] = useState(false);
+const [deleteOpen, setDeleteOpen] = useState(false);
+
+<Menu.Root
+  trigger={<Button variant="ghost" icon={<MenuVerticalIcon />} aria-label="Item actions" />}
+${OPEN_STATE_PROPS}${positionProps}  aria-label="Item actions"
+>
+  <Menu.Item onClick={() => setDeleteOpen(true)}>
+    <Menu.ItemIcon><TrashIcon size="large" /></Menu.ItemIcon>
+    Delete
+  </Menu.Item>
+</Menu.Root>
+
+<Dialog.Root open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+  <Dialog.Title>Delete item?</Dialog.Title>
+  <Dialog.Content>
+    Are you sure you want to delete this item? This cannot be undone.
+  </Dialog.Content>
+  <Dialog.Actions>
+    <Button variant="outlined" onClick={() => setDeleteOpen(false)}>Cancel</Button>
+    <Button color="error" onClick={deleteItem}>Delete</Button>
+  </Dialog.Actions>
+</Dialog.Root>`,
+  },
+  items: {
+    label: 'Other Items',
+    placement: 'right-start',
+    render: (position) => <ItemsDemo {...position} />,
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="outlined">Other Variations</Button>}
+${OPEN_STATE_PROPS}${positionProps}  aria-label="Other variations"
+>
+  <Menu.Item onClick={onSelect}>Text only</Menu.Item>
+  <Menu.Item onClick={increment} closeOnSelect={false}>
+    <Menu.ItemIcon><PlusIcon /></Menu.ItemIcon>
+    Click me (stays open)
+  </Menu.Item>
+  <Menu.Item disabled onClick={onSelect}>
+    <Menu.ItemIcon><TrashIcon /></Menu.ItemIcon>
+    Disabled
+  </Menu.Item>
+</Menu.Root>`,
+  },
+  list: {
+    label: 'List Items',
+    render: (position) => <ListDemo {...position} />,
+    code: (positionProps) => `${OPEN_STATE_CODE}<Menu.Root
+  trigger={<Button variant="outlined">Scrollable List</Button>}
+${OPEN_STATE_PROPS}${positionProps}  aria-label="Items"
+>
+  {items.map((item) => (
+    <Menu.Item key={item.id} onClick={() => onSelect(item)}>
+      {item.label}
+    </Menu.Item>
+  ))}
+</Menu.Root>`,
+  },
+} satisfies Record<string, MenuExample>;
+
+type ExampleKey = keyof typeof EXAMPLES;
+
+const EXAMPLE_KEYS = Object.keys(EXAMPLES).filter((key): key is ExampleKey => key in EXAMPLES);
+
+const isExampleKey = (value: unknown): value is ExampleKey =>
+  typeof value === 'string' && value in EXAMPLES;
+
+const resolvePosition = (
+  example: MenuExample,
+  { placement, hideArrow, arrowPosition }: ExamplePosition
+): ExamplePosition => ({
+  placement: placement ?? example.placement,
+  hideArrow,
+  arrowPosition,
+});
+
+const formatValue = (value: unknown) =>
+  typeof value === 'string'
+    ? `"${value}"`
+    : `{${JSON.stringify(value)
+        .replace(/"([^"]+)":/g, ' $1: ')
+        .replace(/"/g, "'")
+        .replace(/}/g, ' }')}}`;
+
+const formatPositionProps = (position: ExamplePosition) =>
+  Object.entries(position)
+    .filter(([, value]) => value !== undefined && value !== false)
+    .map(([name, value]) => (value === true ? `  ${name}\n` : `  ${name}=${formatValue(value)}\n`))
+    .join('');
+
+const getExampleCode = (key: ExampleKey, position: ExamplePosition) => {
+  const example: MenuExample = EXAMPLES[key];
+  return example.code(formatPositionProps(resolvePosition(example, position)));
+};
+
 type ExampleArgs = ExamplePosition & { example: ExampleKey };
 
 const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowPosition'];
+
+/** Renders the menu inside the canvas frame, which it flips, shifts, and shrinks to stay inside. */
+const ConfigurableFrame = ({
+  example,
+  position,
+}: {
+  example: ExampleKey;
+  position: ExamplePosition;
+}) => {
+  const [frame, setFrame] = useState<HTMLDivElement | null>(null);
+  const selected: MenuExample = EXAMPLES[example];
+
+  return (
+    <div ref={setFrame} className={styles.configurableFrame}>
+      {frame && selected.render({ ...resolvePosition(selected, position), portalRoot: frame })}
+    </div>
+  );
+};
 
 export const Configurable: StoryObj<ExampleArgs> = {
   args: { example: 'account' },
@@ -437,6 +433,7 @@ export const Configurable: StoryObj<ExampleArgs> = {
     },
   },
   parameters: {
+    layout: 'padded',
     chromatic: { disable: true },
     controls: { include: ['example', ...POSITION_CONTROLS] },
     docs: {
@@ -446,11 +443,46 @@ export const Configurable: StoryObj<ExampleArgs> = {
       },
     },
   },
-  render: ({ example, ...position }) => {
-    const selected: MenuExample = EXAMPLES[example];
-    return selected.render(resolvePosition(selected, position));
+  render: ({ example, ...position }) => <ConfigurableFrame example={example} position={position} />,
+};
+
+/* Open state */
+
+export const OpenState: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: () => (
+    <div className={styles.page}>
+      <AccountDemo placement="right-end" />
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Account' }));
+    // The menu portals out of the canvas.
+    const menu = await screen.findByRole('menu', { name: 'Account' });
+    await expect(menu).toBeVisible();
+    // Moves keyboard focus to the second item so Chromatic captures the item focus style.
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(within(menu).getAllByRole('menuitem')[1]).toHaveFocus();
   },
 };
+
+/* All variants */
+
+/** `frame` aligns the trigger in its cell so the menu has room on the side it opens. */
+const POSITIONS = [
+  { label: 'Below, left edges (default)', frame: 'bottom-start', placement: 'bottom-start' },
+  { label: 'Above, centered', frame: 'top', placement: 'top' },
+  { label: 'Left, top edges', frame: 'left', placement: 'left-start' },
+  { label: 'Right, bottom edges', frame: 'right', placement: 'right-end' },
+  { label: 'hideArrow', frame: 'bottom', placement: 'bottom', hideArrow: true },
+] satisfies {
+  label: string;
+  frame: 'bottom' | 'bottom-start' | 'top' | 'right' | 'left';
+  placement: MenuPlacement;
+  hideArrow?: boolean;
+}[];
 
 const Group = ({
   title,
@@ -497,7 +529,7 @@ const Example = ({
   </div>
 );
 
-/** Only the account menu starts open; multiple open menus compete for focus. */
+/** Every menu starts closed. `OpenState` covers the open state. */
 export const AllVariants: Story = {
   parameters: {
     layout: 'fullscreen',
@@ -510,17 +542,7 @@ export const AllVariants: Story = {
           title="Account Items"
           description="Links and actions related to the user’s account"
         >
-          <div className={styles.accountFrame}>
-            <DemoMenu
-              initialOpen
-              aria-label="Account"
-              className={styles.accountMenu}
-              placement="right-end"
-              trigger={<Button variant="ghost" icon={<AvatarIcon />} aria-label="Account" />}
-            >
-              <AccountItems />
-            </DemoMenu>
-          </div>
+          <AccountDemo placement="right-end" />
         </Example>
 
         <Example
@@ -542,16 +564,7 @@ export const AllVariants: Story = {
           title="List Items"
           description="Lists longer than seven items scroll inside the surface."
         >
-          <DemoMenu
-            aria-label="Options"
-            trigger={<Button variant="outlined">Scrollable List</Button>}
-          >
-            {Array.from({ length: 20 }, (_, index) => (
-              <Menu.Item key={index} onClick={() => undefined}>
-                Option {index + 1}
-              </Menu.Item>
-            ))}
-          </DemoMenu>
+          <ListDemo />
         </Example>
       </Group>
 

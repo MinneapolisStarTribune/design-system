@@ -53,6 +53,17 @@
   }
 }
 
+/* Docs canvas frame for the Configurable story. The menu renders inside it via `portalRoot`. */
+.configurableFrame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 480px;
+}
+
 .accountFrame {
   display: flex;
   align-items: flex-end;
