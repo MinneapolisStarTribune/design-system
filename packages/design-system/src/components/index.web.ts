@@ -2,10 +2,15 @@
 // Icons are exported from the icons barrel, so we don't need to export them here.
 export type {
   CoachmarkAlignment,
-  CoachmarkPosition,
+  CoachmarkCtaLayout,
+  CoachmarkPlacement,
   CoachmarkProps,
 } from './Coachmark/Coachmark.types';
-export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
+export {
+  COACHMARK_ALIGNMENTS,
+  COACHMARK_CTA_LAYOUTS,
+  COACHMARK_PLACEMENTS,
+} from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
 export * as Dialog from './Dialog/Dialog';
@@ -121,14 +126,20 @@ export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } fro
 export * as Menu from './Menu/Menu';
 export type {
   MenuArrowOffset,
+  MenuCheckboxItemProps,
   MenuDividerProps,
+  MenuEmptyProps,
+  MenuGroupProps,
+  MenuItemCountProps,
   MenuItemIconProps,
   MenuItemProps,
   MenuPlacement,
   MenuProps,
+  MenuRadioItemProps,
+  MenuSubmenuProps,
 } from './Menu/Menu.types';
 export * as Popover from './Popover/Popover';
-export type { PopoverProps } from './Popover/Popover.types';
+export type { PopoverPlacement, PopoverProps } from './Popover/Popover.types';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
 export {

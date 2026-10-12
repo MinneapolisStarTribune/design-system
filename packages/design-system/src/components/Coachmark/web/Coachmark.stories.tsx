@@ -2,7 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import type { CoachmarkProps } from '../Coachmark.types';
 import { Coachmark } from './Coachmark';
-import { Button, COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from '@/components/index.web';
+import {
+  Button,
+  COACHMARK_ALIGNMENTS,
+  COACHMARK_CTA_LAYOUTS,
+  COACHMARK_PLACEMENTS,
+} from '@/components/index.web';
 import { ChevronRightIcon, StarIcon } from '@/icons';
 
 const meta = {
@@ -22,10 +27,24 @@ const meta = {
     ctaText: { control: 'text' },
     actionHref: { control: 'text' },
     onAction: { control: false },
+    secondaryCtaText: { control: 'text' },
+    secondaryActionHref: { control: 'text' },
+    onSecondaryAction: { control: false },
     secondaryContent: { control: false },
-    position: {
+    ctaLayout: {
       control: 'select',
-      options: COACHMARK_POSITIONS,
+      options: COACHMARK_CTA_LAYOUTS,
+      table: { defaultValue: { summary: 'stacked' } },
+    },
+    counter: { control: 'text' },
+    showCloseButton: { control: 'boolean', table: { defaultValue: { summary: 'true' } } },
+    placement: {
+      control: 'select',
+      options: COACHMARK_PLACEMENTS,
+      table: {
+        type: { summary: 'Responsive<CoachmarkPlacement>' },
+        defaultValue: { summary: 'bottom' },
+      },
     },
     alignment: {
       control: 'select',
@@ -90,7 +109,7 @@ export const Configurable: Story = {
     title: 'Never miss a story',
     description: 'Create a free account to save articles for later.',
     ctaText: 'Create Free Account',
-    position: 'bottom-center',
+    placement: 'bottom',
     dismissOnOutsideClick: false,
   },
   render: ({ open: _open, onOpenChange: _onOpenChange, children: _children, ...args }) => (
@@ -118,12 +137,8 @@ const [open, setOpen] = useState(true);
 };
 
 /**
- * Every variant/combination rendered statically for Chromatic visual regression -- alignment,
- * icon, badge, secondary content, and all eight `position` values. 'top'/'bottom' positions open
- * above/below the trigger (with 'left'/'right'/'center' controlling where along that edge);
- * 'center-left'/'center-right' open beside the trigger instead, vertically centered -- e.g. for a
- * trigger flush against a screen edge with no room above/below. The flip middleware auto-flips
- * any of these when there isn't room (e.g. near a viewport edge, or scrolled close to it).
+ * Every variant rendered statically for Chromatic: alignment, icon, badge, secondary content, and
+ * all eight placements. Flip still moves any of them to the other side when there isn't room.
  */
 export const AllVariants: Story = {
   args: baseArgs,
@@ -178,6 +193,54 @@ export const AllVariants: Story = {
         />
       </div>
       <div>
+        <h3 style={{ marginBottom: 24 }}>Stacked actions</h3>
+        <StoryCoachmark
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Create Free Account"
+          secondaryCtaText="Not now"
+        />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Inline actions</h3>
+        <StoryCoachmark
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Sign up"
+          secondaryCtaText="Not now"
+          ctaLayout="inline"
+        />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Inline, primary only</h3>
+        <StoryCoachmark
+          title="Never miss a story"
+          description="Create a free account to save articles for later."
+          ctaText="Sign up"
+          ctaLayout="inline"
+        />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>Counter</h3>
+        <StoryCoachmark
+          title="Follow your favorites"
+          description="Tap the star on any team to follow it."
+          ctaText="Next"
+          secondaryCtaText="Skip"
+          ctaLayout="inline"
+          counter="1 of 3"
+        />
+      </div>
+      <div>
+        <h3 style={{ marginBottom: 24 }}>No close button</h3>
+        <StoryCoachmark
+          title="Follow your favorites"
+          description="Tap the star on any team to follow it."
+          ctaText="Got it"
+          showCloseButton={false}
+        />
+      </div>
+      <div>
         <h3 style={{ marginBottom: 24 }}>With secondary content</h3>
         <StoryCoachmark
           title="Never miss a story"
@@ -203,24 +266,19 @@ export const AllVariants: Story = {
           }
         />
       </div>
-      {COACHMARK_POSITIONS.map((position) => (
-        <div key={position}>
-          <h3 style={{ marginBottom: 24 }}>{`position="${position}"`}</h3>
+      {COACHMARK_PLACEMENTS.map((placement) => (
+        <div key={placement}>
+          <h3 style={{ marginBottom: 24 }}>{`placement="${placement}"`}</h3>
           <div
-            // 'center-left'/'center-right' open beside the trigger, at the same height as the
-            // label above -- shifting just the trigger (not the label) right gives the panel
-            // room to extend left without reaching back far enough to cover that label text.
-            style={
-              position === 'center-left' || position === 'center-right'
-                ? { marginLeft: 400 }
-                : undefined
-            }
+            // Side placements open level with the label above. Shifting only the trigger gives the
+            // panel room to extend left without covering the label.
+            style={placement === 'left' || placement === 'right' ? { marginLeft: 400 } : undefined}
           >
             <StoryCoachmark
-              title={position}
+              title={placement}
               description="The flip middleware still auto-flips this when there isn't room."
               ctaText="Got it"
-              position={position}
+              placement={placement}
             />
           </div>
         </div>

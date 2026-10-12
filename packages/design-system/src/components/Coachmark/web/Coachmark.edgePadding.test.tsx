@@ -37,7 +37,7 @@ describe("Coachmark's edge-hugging padding", () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="bottom-right"
+        placement="bottom-start"
       >
         <Button>Trigger</Button>
       </Coachmark>

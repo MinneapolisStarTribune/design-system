@@ -87,7 +87,7 @@ function FavoriteButtonWithCoachmark() {
 }
 ```
 
-Key props: `position` (`COACHMARK_POSITIONS` — which side of `children` it opens on, defaults to `'bottom-center'`), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref`, `secondaryContent`, and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
+Key props: `placement` (`COACHMARK_PLACEMENTS`, the same values as Menu and Popover, such as `'bottom'` or `'top-start'`; defaults to `'bottom'` and accepts a value per breakpoint), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref` (filled primary action), `secondaryCtaText`/`onSecondaryAction`/`secondaryActionHref` (ghost secondary action), `ctaLayout` (`'stacked' | 'inline'`, defaults to `'stacked'`; use stacked for long or localized labels), `secondaryContent` (content below the actions, such as a log-in link), `counter` (replaces the close button with step text such as `'1 of 3'`), `showCloseButton` (defaults to `true`; without it, provide another way to dismiss), and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
 
 Two more props cover less common cases:
 

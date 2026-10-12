@@ -115,10 +115,10 @@ On change (base payload + any `analytics` prop):
 
 ```json
 {
+  "checked": true,
   "component": "Checkbox",
   "event": "checkbox_change",
   "label": "Subscribe to newsletter",
-  "checked": true,
   "variant": "neutral"
 }
 ```
@@ -131,12 +131,12 @@ CheckboxGroup passes `analytics` to each child Checkbox. Events include `option_
 
 ```json
 {
+  "checked": true,
   "component": "Checkbox",
   "event": "checkbox_change",
+  "form_field": "preferences",
   "label": "Option A",
-  "checked": true,
-  "option_value": "a",
-  "form_field": "preferences"
+  "option_value": "a"
 }
 ```
 
@@ -156,7 +156,7 @@ On blur (when user leaves the field):
 
 ### Coachmark
 
-Three events, each with the base payload (`title`, `position`, `alignment`) + any `analytics` prop:
+Three events, each with the base payload (`title`, `placement`, `alignment`) + any `analytics` prop:
 
 ```json
 // Fired once when it opens
@@ -164,7 +164,7 @@ Three events, each with the base payload (`title`, `position`, `alignment`) + an
   "component": "Coachmark",
   "event": "coachmark_shown",
   "title": "Never miss a story",
-  "position": "bottom-center",
+  "placement": "bottom",
   "alignment": "center"
 }
 
@@ -177,12 +177,14 @@ Three events, each with the base payload (`title`, `position`, `alignment`) + an
   "dismiss_reason": "close_button"
 }
 
-// Fired when the CTA button is clicked, in addition to Button's own generic button_click
+// Fired when either action is clicked, in addition to Button's own generic button_click.
+// cta_role is "primary" (ctaText) or "secondary" (secondaryCtaText).
 {
   "component": "Coachmark",
   "event": "coachmark_cta_click",
   "title": "Never miss a story",
-  "cta_text": "Create Free Account"
+  "cta_text": "Create Free Account",
+  "cta_role": "primary"
 }
 ```
 
