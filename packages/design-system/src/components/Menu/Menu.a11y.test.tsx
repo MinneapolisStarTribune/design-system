@@ -55,4 +55,44 @@ describe('Menu Accessibility', () => {
     expect(menu).toHaveAttribute('aria-labelledby', 'menu-trigger');
     expect(await axeMenu(menu)).toHaveNoViolations();
   });
+
+  it('has no violations with groups, checkbox, radio, count, and empty items', async () => {
+    renderOpenMenu(
+      { 'aria-label': 'Filters' },
+      <>
+        <Menu.Group label="Sport">
+          <Menu.CheckboxItem checked onCheckedChange={vi.fn()}>
+            Football
+            <Menu.ItemCount>(112)</Menu.ItemCount>
+          </Menu.CheckboxItem>
+          <Menu.CheckboxItem checked={false} onCheckedChange={vi.fn()}>
+            Soccer
+          </Menu.CheckboxItem>
+        </Menu.Group>
+        <Menu.Group label="Sort by">
+          <Menu.RadioItem checked>Newest</Menu.RadioItem>
+          <Menu.RadioItem checked={false}>Oldest</Menu.RadioItem>
+        </Menu.Group>
+      </>
+    );
+
+    expect(await axeMenu(await screen.findByRole('menu'))).toHaveNoViolations();
+  });
+
+  it('has no violations with only an empty item', async () => {
+    renderOpenMenu({ 'aria-label': 'Filters' }, <Menu.Empty />);
+
+    expect(await axeMenu(await screen.findByRole('menu'))).toHaveNoViolations();
+  });
+
+  it('has no violations with a submenu row', async () => {
+    renderOpenMenu(
+      { 'aria-label': 'Row actions' },
+      <Menu.Submenu label="Move to">
+        <Menu.Item>Trash</Menu.Item>
+      </Menu.Submenu>
+    );
+
+    expect(await axeMenu(await screen.findByRole('menu'))).toHaveNoViolations();
+  });
 });

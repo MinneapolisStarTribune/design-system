@@ -1,43 +1,18 @@
 'use client';
 
-import type { MouseEvent, MouseEventHandler } from 'react';
-import classNames from 'classnames';
-import { useListItem } from '@floating-ui/react';
-import styles from './Menu.module.scss';
-import { useMenuContext } from './MenuContext';
+import type { MouseEvent } from 'react';
 import type { MenuItemProps } from './Menu.types';
+import { useMenuItem } from './useMenuItem';
 
 /** A menu row. Renders `as` (default `a`) when `href` is set, otherwise a `button`. */
 export const MenuItem: React.FC<MenuItemProps> = (props) => {
-  const { activeIndex, getItemProps, closeFromItem } = useMenuContext();
-
-  // Registers the item for arrow key navigation in document order.
-  const { ref, index } = useListItem();
-  const { disabled, closeOnSelect = true } = props;
-
-  const itemProps = {
-    ref,
+  const { itemProps, getItemProps, select } = useMenuItem({
     role: 'menuitem',
-    tabIndex: activeIndex === index ? 0 : -1,
-    'aria-disabled': disabled || undefined,
-    'data-testid': props.dataTestId,
-    className: classNames(
-      styles.item,
-      'typography-utility-text-regular-medium',
-      disabled && styles.itemDisabled,
-      props.className
-    ),
-  };
-
-  // trigger on item selection and close menu if closeOnSelect is enabled (default)
-  const select = <E extends HTMLElement>(event: MouseEvent<E>, onClick?: MouseEventHandler<E>) => {
-    if (disabled) {
-      event.preventDefault();
-      return;
-    }
-    onClick?.(event);
-    if (closeOnSelect) closeFromItem();
-  };
+    disabled: props.disabled,
+    closeOnSelect: props.closeOnSelect ?? true,
+    className: props.className,
+    dataTestId: props.dataTestId,
+  });
 
   // return link if href is added
   if (props.href !== undefined) {

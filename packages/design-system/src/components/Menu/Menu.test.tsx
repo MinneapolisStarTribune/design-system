@@ -1,5 +1,5 @@
 import { useState, type ComponentProps } from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { onTestFinished, vi } from 'vitest';
 import { Button } from '@/components/Button/web/Button';
@@ -610,5 +610,201 @@ describe('Menu', () => {
     expect(screen.getByTestId('edit-icon')).toBeInTheDocument();
     expect(screen.getByTestId('divider')).toHaveAttribute('role', 'separator');
     expect(screen.getByTestId('profile-link').tagName).toBe('A');
+  });
+});
+
+describe('Menu variants', () => {
+  it('names a group by its title', async () => {
+    const user = renderMenu({
+      children: (
+        <Menu.Group label="Sort by">
+          <Menu.Item>Newest</Menu.Item>
+        </Menu.Group>
+      ),
+    });
+
+    await openMenu(user);
+
+    const group = screen.getByRole('group', { name: 'Sort by' });
+    expect(within(group).getByRole('menuitem', { name: 'Newest' })).toBeInTheDocument();
+  });
+
+  it('toggles a checkbox item and keeps the menu open', async () => {
+    const Checkboxes = () => {
+      const [checked, setChecked] = useState(false);
+      return (
+        <Harness>
+          <Menu.CheckboxItem checked={checked} onCheckedChange={setChecked}>
+            Football
+          </Menu.CheckboxItem>
+        </Harness>
+      );
+    };
+    const user = userEvent.setup();
+    renderWithProvider(<Checkboxes />);
+    await openMenu(user);
+    const option = screen.getByRole('menuitemcheckbox', { name: 'Football' });
+
+    expect(option).toHaveAttribute('aria-checked', 'false');
+    await user.click(option);
+
+    expect(screen.getByRole('menuitemcheckbox', { name: 'Football' })).toHaveAttribute(
+      'aria-checked',
+      'true'
+    );
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  it('does not toggle a disabled checkbox item', async () => {
+    const onCheckedChange = vi.fn();
+    const user = renderMenu({
+      children: (
+        <Menu.CheckboxItem checked={false} onCheckedChange={onCheckedChange} disabled>
+          Football
+        </Menu.CheckboxItem>
+      ),
+    });
+    await openMenu(user);
+
+    await user.click(screen.getByRole('menuitemcheckbox', { name: 'Football' }));
+
+    expect(onCheckedChange).not.toHaveBeenCalled();
+  });
+
+  it('marks the checked radio item and closes on select', async () => {
+    const onClick = vi.fn();
+    const user = renderMenu({
+      children: (
+        <Menu.Group label="Sort by">
+          <Menu.RadioItem checked>Newest</Menu.RadioItem>
+          <Menu.RadioItem checked={false} onClick={onClick}>
+            Oldest
+          </Menu.RadioItem>
+        </Menu.Group>
+      ),
+    });
+    await openMenu(user);
+
+    expect(screen.getByRole('menuitemradio', { name: 'Newest' })).toHaveAttribute(
+      'aria-checked',
+      'true'
+    );
+    await user.click(screen.getByRole('menuitemradio', { name: 'Oldest' }));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    await waitForClosed();
+  });
+
+  it('includes the count in the item name', async () => {
+    const user = renderMenu({
+      children: (
+        <Menu.Item>
+          Football
+          <Menu.ItemCount>(112)</Menu.ItemCount>
+        </Menu.Item>
+      ),
+    });
+    await openMenu(user);
+
+    expect(screen.getByRole('menuitem', { name: /^Football\s*\(112\)$/ })).toBeInTheDocument();
+  });
+
+  it('shows a reachable, disabled empty item', async () => {
+    const user = renderMenu({ children: <Menu.Empty /> });
+
+    await user.click(trigger());
+    const empty = await screen.findByRole('menuitem', { name: 'No options' });
+
+    expect(empty).toHaveAttribute('aria-disabled', 'true');
+    await waitFor(() => expect(empty).toHaveFocus());
+  });
+
+  describe('submenu', () => {
+    const renderSubmenu = (onSelect = vi.fn()) =>
+      renderMenu({
+        children: (
+          <>
+            <Menu.Item>Edit</Menu.Item>
+            <Menu.Submenu label="Move to">
+              <Menu.Item onClick={onSelect}>Archive folder</Menu.Item>
+              <Menu.Item>Trash</Menu.Item>
+            </Menu.Submenu>
+          </>
+        ),
+      });
+
+    const submenuTrigger = () => item('Move to');
+
+    it('opens with Right Arrow, focuses its first item, and closes with Left Arrow', async () => {
+      const user = renderSubmenu();
+      await openMenuWithFocus(user);
+      await user.keyboard('{ArrowDown}');
+      expect(submenuTrigger()).toHaveAttribute('aria-haspopup', 'menu');
+      expect(submenuTrigger()).toHaveAttribute('aria-expanded', 'false');
+
+      await user.keyboard('{ArrowRight}');
+
+      await screen.findByRole('menu', { name: 'Move to' });
+      await waitFor(() => expect(item('Archive folder')).toHaveFocus());
+      expect(submenuTrigger()).toHaveAttribute('aria-expanded', 'true');
+
+      await user.keyboard('{ArrowLeft}');
+
+      await waitFor(() => expect(screen.queryByRole('menu', { name: 'Move to' })).toBeNull());
+      expect(submenuTrigger()).toHaveFocus();
+      expect(screen.getByRole('menu', { name: 'Row actions' })).toBeInTheDocument();
+    });
+
+    it('closes only the submenu on Escape', async () => {
+      const user = renderSubmenu();
+      await openMenuWithFocus(user);
+      await user.keyboard('{ArrowDown}{ArrowRight}');
+      await waitFor(() => expect(item('Archive folder')).toHaveFocus());
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() => expect(screen.queryByRole('menu', { name: 'Move to' })).toBeNull());
+      expect(screen.getByRole('menu', { name: 'Row actions' })).toBeInTheDocument();
+      expect(submenuTrigger()).toHaveFocus();
+    });
+
+    it('closes the whole menu when a submenu item is selected', async () => {
+      const onSelect = vi.fn();
+      const user = renderSubmenu(onSelect);
+      await openMenuWithFocus(user);
+      await user.keyboard('{ArrowDown}{ArrowRight}');
+      await waitFor(() => expect(item('Archive folder')).toHaveFocus());
+
+      await user.keyboard('{Enter}');
+
+      expect(onSelect).toHaveBeenCalledTimes(1);
+      await waitForClosed();
+    });
+
+    it('opens on hover', async () => {
+      const user = renderSubmenu();
+      await openMenu(user);
+
+      await user.hover(submenuTrigger());
+
+      expect(await screen.findByRole('menu', { name: 'Move to' })).toBeInTheDocument();
+    });
+
+    it('does not open a disabled submenu', async () => {
+      const user = renderMenu({
+        children: (
+          <Menu.Submenu label="Move to" disabled>
+            <Menu.Item>Trash</Menu.Item>
+          </Menu.Submenu>
+        ),
+      });
+      await openMenu(user);
+
+      await user.hover(submenuTrigger());
+      await user.keyboard('{ArrowRight}');
+
+      expect(screen.queryByRole('menu', { name: 'Move to' })).toBeNull();
+      expect(submenuTrigger()).toHaveAttribute('aria-disabled', 'true');
+    });
   });
 });

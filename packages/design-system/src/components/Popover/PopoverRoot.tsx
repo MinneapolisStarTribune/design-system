@@ -2,29 +2,27 @@
 
 import { isValidElement, useId, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import {
-  FloatingFocusManager,
-  FloatingPortal,
-  useClick,
-  useDismiss,
-  useInteractions,
-  useMergeRefs,
-} from '@floating-ui/react';
+import { useClick, useDismiss, useInteractions, useMergeRefs } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
 import {
   cloneTrigger,
+  FloatingPopupSurface,
   PopupArrow,
   popupStyles,
-  usePopup,
 } from '@/components/FloatingPopup/FloatingPopup';
+import {
+  createAnchoredMiddleware,
+  useFloatingPopup,
+} from '@/components/FloatingPopup/useFloatingPopup';
 import type {
   PopupArrowSpec,
   PopupTriggerProps,
 } from '@/components/FloatingPopup/FloatingPopup.types';
+import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import { PopoverProps } from './Popover.types';
 
-/** The arrow can reach the corners. */
-const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 16, height: 8, cornerInset: 0 };
+/** Size from the Core Components Popover design. The arrow stays clear of the rounded corners. */
+const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 10, height: 6, cornerInset: 16 };
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
@@ -32,7 +30,7 @@ const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as 
 export const PopoverRoot: React.FC<PopoverProps> = ({
   trigger,
   children,
-  placement = 'bottom',
+  placement: placementProp,
   isDisabled,
   open: openProp,
   onOpenChange: onOpenChangeProp,
@@ -49,6 +47,8 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
   const boundary = portalRoot ?? undefined;
+  const breakpoint = useBreakpoint();
+  const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom';
   const {
     open,
     setOpen,
@@ -56,20 +56,17 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
     refs: { setReference, setFloating },
     context,
     floatingStyles,
-  } = usePopup({
+  } = useFloatingPopup({
     open: openProp,
     onOpenChange: onOpenChangeProp,
     placement,
     disabled: isDisabled,
-    boundary,
-    arrowSpec: POPOVER_ARROW_SPEC,
+    middleware: createAnchoredMiddleware({ boundary, arrowSpec: POPOVER_ARROW_SPEC }),
   });
   const click = useClick(context, { enabled: !isDisabled });
   const dismiss = useDismiss(context);
   const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss]);
 
-  // Memoize context value to prevent unnecessary re-renders of all
-  // context consumers when this component re-renders for unrelated reasons.
   const contextValue = useMemo(
     () => ({ close: () => setOpen(false), headingId, setHasHeading }),
     [setOpen, headingId]
@@ -111,27 +108,25 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   return (
     <PopoverContext.Provider value={contextValue}>
       {triggerElement}
-      {open && (
-        <FloatingPortal root={boundary}>
-          <FloatingFocusManager context={context} modal={modal}>
-            <div
-              ref={setFloating}
-              style={{ ...floatingStyles, ...style }}
-              className={classNames(popupStyles.wrapper, className)}
-              data-testid={dataTestId}
-              {...getFloatingProps()}
-              id={surfaceId}
-              role="dialog"
-              {...labelProps}
-            >
-              <PopupArrow ref={setArrowElement} context={context} arrowSpec={POPOVER_ARROW_SPEC} />
-              <div className={popupStyles.container}>
-                <div className={popupStyles.content}>{children}</div>
-              </div>
-            </div>
-          </FloatingFocusManager>
-        </FloatingPortal>
-      )}
+      <FloatingPopupSurface
+        context={context}
+        setFloating={setFloating}
+        floatingStyles={floatingStyles}
+        portalProps={{ root: boundary }}
+        focusProps={{ modal }}
+        style={style}
+        className={classNames(popupStyles.wrapper, className)}
+        data-testid={dataTestId}
+        {...getFloatingProps()}
+        id={surfaceId}
+        role="dialog"
+        {...labelProps}
+      >
+        <PopupArrow ref={setArrowElement} context={context} arrowSpec={POPOVER_ARROW_SPEC} />
+        <div className={popupStyles.container}>
+          <div className={popupStyles.content}>{children}</div>
+        </div>
+      </FloatingPopupSurface>
     </PopoverContext.Provider>
   );
 };

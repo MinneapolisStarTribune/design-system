@@ -5,9 +5,8 @@ import * as Menu from './Menu';
 import type { MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import * as Dialog from '@/components/Dialog/Dialog';
-import { ARROW_OFFSETS } from '@/components/FloatingPopup/FloatingPopup.types';
+import { ARROW_OFFSETS, FLOATING_PLACEMENTS } from '@/components/FloatingPopup/FloatingPopup.types';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
-import { POSITIONS as SIDES } from '@/types';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import {
   ArrowDiagonalIcon,
@@ -179,6 +178,105 @@ const ItemsDemo = (props: ExamplePosition) => {
   );
 };
 
+const SORT_OPTIONS = ['Newest', 'Oldest', 'Most viewed'];
+
+/** Two titled groups: a single-select sort and plain actions. */
+const GroupedDemo = (props: ExamplePosition) => {
+  const [sort, setSort] = useState('Newest');
+
+  return (
+    <Menu.Root
+      {...props}
+      aria-label="View options"
+      trigger={<Button variant="outlined">View</Button>}
+    >
+      <Menu.Group label="Sort by">
+        {SORT_OPTIONS.map((option) => (
+          <Menu.RadioItem key={option} checked={sort === option} onClick={() => setSort(option)}>
+            {option}
+          </Menu.RadioItem>
+        ))}
+      </Menu.Group>
+      <Menu.Group label="Share">
+        <Menu.Item onClick={() => undefined}>Copy link</Menu.Item>
+        <Menu.Item onClick={() => undefined}>Email</Menu.Item>
+      </Menu.Group>
+    </Menu.Root>
+  );
+};
+
+const SPORT_FILTERS = [
+  { label: 'Football', count: 112 },
+  { label: 'Soccer', count: 48 },
+  { label: 'Volleyball', count: 30 },
+  { label: 'Swimming', count: 0, disabled: true },
+];
+
+/** Checkbox items stay open so several filters can be picked at once. */
+const MultiSelectDemo = (props: ExamplePosition) => {
+  const [selected, setSelected] = useState<string[]>(['Football']);
+  const toggle = (label: string, checked: boolean) =>
+    setSelected((current) =>
+      checked ? [...current, label] : current.filter((item) => item !== label)
+    );
+
+  return (
+    <Menu.Root {...props} aria-label="Sports" trigger={<Button variant="outlined">Sports</Button>}>
+      {SPORT_FILTERS.map(({ label, count, disabled }) => (
+        <Menu.CheckboxItem
+          key={label}
+          checked={selected.includes(label)}
+          onCheckedChange={(checked) => toggle(label, checked)}
+          disabled={disabled}
+        >
+          {label}
+          <Menu.ItemCount>({count})</Menu.ItemCount>
+        </Menu.CheckboxItem>
+      ))}
+    </Menu.Root>
+  );
+};
+
+/** A row opens a nested menu beside it. */
+const MultiLevelDemo = (props: ExamplePosition) => (
+  <Menu.Root
+    {...props}
+    aria-label="Navigate"
+    trigger={<Button variant="outlined">Navigate</Button>}
+  >
+    <Menu.Item onClick={() => undefined}>
+      <Menu.ItemIcon>
+        <HelpIcon size="large" />
+      </Menu.ItemIcon>
+      Help Center
+    </Menu.Item>
+    <Menu.Submenu label="Sports" icon={<SettingsIcon size="large" />}>
+      {SPORT_FILTERS.map(({ label, count }) => (
+        <Menu.Item key={label} onClick={() => undefined}>
+          {label}
+          <Menu.ItemCount>({count})</Menu.ItemCount>
+        </Menu.Item>
+      ))}
+    </Menu.Submenu>
+    <Menu.Item onClick={() => undefined}>
+      <Menu.ItemIcon>
+        <LogOutIcon size="large" />
+      </Menu.ItemIcon>
+      Log Out
+    </Menu.Item>
+  </Menu.Root>
+);
+
+const EmptyDemo = (props: ExamplePosition) => (
+  <Menu.Root
+    {...props}
+    aria-label="Saved searches"
+    trigger={<Button variant="outlined">Saved</Button>}
+  >
+    <Menu.Empty />
+  </Menu.Root>
+);
+
 type MenuExample = {
   label: string;
   placement?: MenuPlacement;
@@ -302,6 +400,66 @@ ${positionProps}  aria-label="Options"
   ))}
 </Menu.Root>`,
   },
+  grouped: {
+    label: 'Grouped',
+    render: (position) => <GroupedDemo {...position} />,
+    code: (positionProps) => `const [sort, setSort] = useState('Newest');
+
+<Menu.Root trigger={<Button variant="outlined">View</Button>}
+${positionProps}  aria-label="View options"
+>
+  <Menu.Group label="Sort by">
+    {options.map((option) => (
+      <Menu.RadioItem key={option} checked={sort === option} onClick={() => setSort(option)}>
+        {option}
+      </Menu.RadioItem>
+    ))}
+  </Menu.Group>
+  <Menu.Group label="Share">
+    <Menu.Item onClick={copyLink}>Copy link</Menu.Item>
+  </Menu.Group>
+</Menu.Root>`,
+  },
+  multiSelect: {
+    label: 'Multi-select',
+    render: (position) => <MultiSelectDemo {...position} />,
+    code: (positionProps) => `<Menu.Root trigger={<Button variant="outlined">Sports</Button>}
+${positionProps}  aria-label="Sports"
+>
+  {sports.map(({ label, count }) => (
+    <Menu.CheckboxItem
+      key={label}
+      checked={selected.includes(label)}
+      onCheckedChange={(checked) => toggle(label, checked)}
+    >
+      {label}
+      <Menu.ItemCount>({count})</Menu.ItemCount>
+    </Menu.CheckboxItem>
+  ))}
+</Menu.Root>`,
+  },
+  multiLevel: {
+    label: 'Multi-level',
+    render: (position) => <MultiLevelDemo {...position} />,
+    code: (positionProps) => `<Menu.Root trigger={<Button variant="outlined">Navigate</Button>}
+${positionProps}  aria-label="Navigate"
+>
+  <Menu.Item onClick={openHelp}>Help Center</Menu.Item>
+  <Menu.Submenu label="Sports" icon={<SettingsIcon size="large" />}>
+    <Menu.Item onClick={() => go('football')}>Football</Menu.Item>
+    <Menu.Item onClick={() => go('soccer')}>Soccer</Menu.Item>
+  </Menu.Submenu>
+</Menu.Root>`,
+  },
+  empty: {
+    label: 'No options',
+    render: (position) => <EmptyDemo {...position} />,
+    code: (positionProps) => `<Menu.Root trigger={<Button variant="outlined">Saved</Button>}
+${positionProps}  aria-label="Saved searches"
+>
+  {searches.length ? searches.map(renderItem) : <Menu.Empty />}
+</Menu.Root>`,
+  },
 } satisfies Record<string, MenuExample>;
 
 type ExampleKey = keyof typeof EXAMPLES;
@@ -382,7 +540,7 @@ const meta = {
     },
     placement: {
       control: 'select',
-      options: [undefined, ...SIDES.flatMap((side) => [side, `${side}-start`, `${side}-end`])],
+      options: [undefined, ...FLOATING_PLACEMENTS],
       description: 'Where the menu opens relative to the anchor.',
       table: {
         type: { summary: 'Responsive<MenuPlacement>' },
@@ -553,6 +711,24 @@ export const AllVariants: Story = {
               </Menu.Item>
             ))}
           </DemoMenu>
+        </Example>
+      </Group>
+
+      <Group title="Variants">
+        <Example title="Grouped" description="Titled groups. Sort by is a single-select set.">
+          <GroupedDemo />
+        </Example>
+        <Example
+          title="Multi-select"
+          description="Checkbox items with result counts stay open on select"
+        >
+          <MultiSelectDemo />
+        </Example>
+        <Example title="Multi-level" description="Sports opens a submenu on hover or Right Arrow">
+          <MultiLevelDemo />
+        </Example>
+        <Example title="No options" description="A menu with nothing to choose">
+          <EmptyDemo />
         </Example>
       </Group>
 

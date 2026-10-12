@@ -352,6 +352,35 @@ describe('Popover', () => {
   });
 });
 
+describe('Popover placement', () => {
+  it.each([
+    ['left', 'rotate(-90deg)'],
+    ['right-start', 'rotate(90deg)'],
+  ] as const)('opens at placement="%s"', async (placement, arrowTransform) => {
+    const user = userEvent.setup();
+    renderPopover(<Popover.Body>Content</Popover.Body>, { placement, 'aria-label': 'Info' });
+
+    await openPopover(user);
+
+    // The arrow's rotation shows which side Floating UI placed the popover on.
+    const arrow = (await screen.findByRole('dialog')).querySelector('svg');
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: arrowTransform }));
+  });
+
+  it('resolves a per-breakpoint placement', async () => {
+    const user = userEvent.setup();
+    renderPopover(<Popover.Body>Content</Popover.Body>, {
+      placement: { small: 'left' },
+      'aria-label': 'Info',
+    });
+
+    await openPopover(user);
+
+    const arrow = (await screen.findByRole('dialog')).querySelector('svg');
+    await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(-90deg)' }));
+  });
+});
+
 describe('Popover.Heading', () => {
   it('hides the close button when showCloseButton is false', async () => {
     const user = userEvent.setup();

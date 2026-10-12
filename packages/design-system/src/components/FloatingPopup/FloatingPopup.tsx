@@ -1,39 +1,34 @@
 'use client';
 
-import { cloneElement, useCallback, useState } from 'react';
+import { cloneElement } from 'react';
+import classNames from 'classnames';
 import {
-  arrow,
-  autoUpdate,
   FloatingArrow,
-  flip,
-  offset,
-  shift,
-  size,
-  useFloating,
+  FloatingFocusManager,
+  FloatingOverlay,
+  FloatingPortal,
 } from '@floating-ui/react';
 import type { CSSProperties, ReactElement, Ref, SyntheticEvent } from 'react';
-import type { Middleware, Placement } from '@floating-ui/react';
+import type { Placement } from '@floating-ui/react';
 import styles from './FloatingPopup.module.scss';
 import type {
   ArrowOffset,
+  FloatingPopupSurfaceProps,
   PopupArrowProps,
   PopupArrowSpec,
-  PopupMiddlewareOptions,
   PopupTriggerProps,
-  UsePopupOptions,
 } from './FloatingPopup.types';
 
 /**
- * Internal to Popover and Menu, and not exported from the package. Tooltip and Coachmark position
- * themselves.
+ * Internal to Popover, Menu, and Coachmark, and not exported from the package. Each root keeps its
+ * own interaction hooks and passes `context` in.
  */
 
 const KEY_HANDLERS = new Set(['onKeyDown', 'onKeyUp']);
 
 /**
- * Merges the popup's trigger props over the trigger element's props. The element's own handlers run
- * first, and a key event the element prevents does not reach the popup, as with the old trigger.
- * `getReferenceProps` alone runs the popup's handlers first.
+ * Merges the popup's props over the trigger's props. The trigger's handlers run first, and a key
+ * event it prevents does not reach the popup. `getReferenceProps` alone runs the popup's first.
  */
 const composeTriggerProps = (
   elementProps: Record<string, unknown>,
@@ -56,76 +51,7 @@ const composeTriggerProps = (
     })
   );
 
-/** Space between the anchor and the surface, added to the arrow height. */
-const FLOATING_GAP = 4;
-
-const getPopupMiddleware = ({
-  boundary,
-  arrowElement,
-  arrowSpec,
-  hideArrow = false,
-}: PopupMiddlewareOptions): Middleware[] => [
-  offset(hideArrow ? FLOATING_GAP : arrowSpec.height + FLOATING_GAP),
-  // A side placement that fits neither side falls back to below or above the anchor. Edge overflow
-  // flips only the `-start`/`-end` alignment, never the side, and `shift` slides the surface back in.
-  flip({
-    boundary,
-    padding: FLOATING_GAP,
-    crossAxis: 'alignment',
-    fallbackAxisSideDirection: 'end',
-  }),
-  shift({ boundary, padding: FLOATING_GAP }),
-  // Expose the space left on the chosen side so surface styles can shrink to fit narrow screens.
-  size({
-    boundary,
-    padding: FLOATING_GAP,
-    apply({ availableWidth, availableHeight, elements }) {
-      elements.floating.style.setProperty('--floating-available-width', `${availableWidth}px`);
-      elements.floating.style.setProperty('--floating-available-height', `${availableHeight}px`);
-    },
-  }),
-  arrow({ element: arrowElement, padding: arrowSpec.cornerInset }),
-];
-
-/** Open state, in controlled or uncontrolled mode, and positioning shared by Popover and Menu. */
-export const usePopup = ({
-  open: openProp,
-  onOpenChange,
-  placement,
-  disabled = false,
-  boundary,
-  arrowSpec,
-  hideArrow,
-}: UsePopupOptions) => {
-  const [openState, setOpenState] = useState(false);
-  const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : openState;
-
-  const setOpen = useCallback(
-    (isOpen: boolean) => {
-      if (disabled && isOpen) return;
-      if (!isControlled) setOpenState(isOpen);
-      onOpenChange?.(isOpen);
-    },
-    [disabled, isControlled, onOpenChange]
-  );
-
-  const floating = useFloating({
-    placement,
-    open,
-    onOpenChange: setOpen,
-    whileElementsMounted: autoUpdate,
-    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec, hideArrow }),
-  });
-
-  return { ...floating, open, setOpen, setArrowElement };
-};
-
-/**
- * Clones the trigger with the popup's props and `ref`. Element triggers keep their own display, and
- * their own style wins over the cursor.
- */
+/** Clones the trigger with the popup's props and `ref`. The trigger's style wins over `cursor`. */
 export const cloneTrigger = (
   element: ReactElement<PopupTriggerProps>,
   ref: Ref<Element>,
@@ -139,11 +65,9 @@ export const cloneTrigger = (
   });
 
 /**
- * Converts an `ArrowOffset` to the `FloatingArrow` `staticOffset` value.
- * Returns null when `offset` is not set. Floating UI then points to the anchor center.
- *
- * For `-end` placements, FloatingArrow measures from the surface end edge. This function swaps
- * `start` and `end` for these placements.
+ * Converts an `ArrowOffset` to `FloatingArrow`'s `staticOffset`. Returns null when unset, so the
+ * arrow points at the anchor center. `-end` placements measure from the end edge, so `start` and
+ * `end` swap.
  */
 export const resolveArrowOffset = (
   offset: ArrowOffset | undefined,
@@ -151,7 +75,6 @@ export const resolveArrowOffset = (
   { width, cornerInset }: PopupArrowSpec
 ): string | null => {
   if (offset === undefined) return null;
-  // Subtract half the arrow width to center it.
   if (offset === 'center') return `calc(50% - ${width / 2}px)`;
 
   const nearEdge = `${cornerInset}px`;
@@ -163,15 +86,56 @@ export const resolveArrowOffset = (
 };
 
 /** Bordered arrow that blends into the surface border. */
-export const PopupArrow = ({ arrowSpec, ...rest }: PopupArrowProps) => (
+export const PopupArrow = ({ arrowSpec, className, ...rest }: PopupArrowProps) => (
   <FloatingArrow
     {...rest}
     width={arrowSpec.width}
     height={arrowSpec.height}
     strokeWidth={1}
-    className={styles.arrow}
+    className={classNames(styles.arrow, className)}
   />
 );
+
+/** Portal, focus manager, and the floating element. Renders nothing while closed. */
+export const FloatingPopupSurface: React.FC<FloatingPopupSurfaceProps> = ({
+  context,
+  setFloating,
+  floatingStyles,
+  portalProps,
+  focusProps,
+  lockScroll = false,
+  style,
+  children,
+  ...rest
+}) => {
+  if (!context.open) return null;
+
+  const surface = (
+    <FloatingFocusManager context={context} modal={false} {...focusProps}>
+      <div
+        ref={setFloating}
+        style={{ ...floatingStyles, ...(lockScroll && { pointerEvents: 'auto' }), ...style }}
+        {...rest}
+      >
+        {children}
+      </div>
+    </FloatingFocusManager>
+  );
+
+  return (
+    <FloatingPortal {...portalProps}>
+      {lockScroll ? (
+        <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
+          {surface}
+        </FloatingOverlay>
+      ) : (
+        surface
+      )}
+    </FloatingPortal>
+  );
+};
+
+FloatingPopupSurface.displayName = 'FloatingPopupSurface';
 
 /** Surface chrome classes: `wrapper` on the floating element, then `container` and `content`. */
 export { styles as popupStyles };

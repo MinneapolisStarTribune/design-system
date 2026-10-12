@@ -1,14 +1,15 @@
 import type { ComponentProps, ElementType, ReactElement, ReactNode } from 'react';
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
-import type { BaseProps, IconPosition, Position } from '@/types';
+import type { BaseProps, IconPosition } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
 import type {
   ArrowOffset,
+  FloatingPlacement,
   PopupTriggerProps,
 } from '@/components/FloatingPopup/FloatingPopup.types';
 
 /** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
-export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;
+export type MenuPlacement = FloatingPlacement;
 
 /** Arrow position along the menu edge that faces the anchor. */
 export type MenuArrowOffset = ArrowOffset;
@@ -92,3 +93,57 @@ export type MenuItemIconProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
 };
 
 export type MenuDividerProps = Pick<BaseProps, 'className' | 'dataTestId'>;
+
+type MenuButtonItemProps = Omit<
+  ComponentProps<'button'>,
+  keyof MenuItemBaseProps | 'type' | 'role' | 'onChange'
+>;
+
+/** A menu row that toggles an option on or off, for multi-select menus. */
+export type MenuCheckboxItemProps = Omit<MenuItemBaseProps, 'closeOnSelect'> &
+  MenuButtonItemProps & {
+    checked: boolean;
+    /** Called with the new checked state. */
+    onCheckedChange: (checked: boolean) => void;
+    /**
+     * Whether selecting this item closes the menu.
+     * @default false
+     */
+    closeOnSelect?: boolean;
+  };
+
+/**
+ * A menu row that marks the current choice of a single-select set, such as a sort order. Put the
+ * set in a `Menu.Group`.
+ */
+export type MenuRadioItemProps = MenuItemBaseProps &
+  MenuButtonItemProps & {
+    checked: boolean;
+  };
+
+export type MenuGroupProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** Visible group title. It also names the group for screen readers. */
+  label: ReactNode;
+  children: ReactNode;
+};
+
+/** Result count shown at the end of a row, such as `(112)` on a filter option. */
+export type MenuItemCountProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  children: ReactNode;
+};
+
+export type MenuEmptyProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** @default 'No options' */
+  children?: ReactNode;
+};
+
+export type MenuSubmenuProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** Content of the row that opens the submenu. It also names the submenu. */
+  label: ReactNode;
+  /** Decorative icon before the label. */
+  icon?: ReactNode;
+  /** Keeps the row focusable but stops it from opening the submenu. */
+  disabled?: boolean;
+  /** The submenu's items. */
+  children: ReactNode;
+};

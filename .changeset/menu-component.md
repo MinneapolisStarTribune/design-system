@@ -8,4 +8,4 @@ Popover now shrinks to fit narrow screens, and a side placement with no room on 
 
 Exports the `MenuProps`, `MenuItemProps`, `MenuItemIconProps`, `MenuDividerProps`, `MenuPlacement`, and `MenuArrowOffset` types.
 
-Planned follow-up, not in this release: Tooltip and `Coachmark` can move onto the positioning that Popover and Menu share (placement, middleware, arrow, and portal), and each component will keep its own open, dismiss, and ARIA behavior. The follow-up adds an overflow boundary option separate from `portalRoot`, so a custom portal container no longer limits where a surface flips and shifts. `Coachmark`'s `position` prop will become `placement`.
+Planned follow-up, not in this release: Tooltip can move onto the popup layer that Popover, Menu, and `Coachmark` share, and an overflow boundary option separate from `portalRoot` will let a custom portal container stop limiting where a surface flips and shifts.

@@ -1,19 +1,18 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import { POSITIONS } from '@/types';
-import type { BaseProps } from '@/types/globalTypes';
+import type { BaseProps, Responsive } from '@/types/globalTypes';
+import type { FloatingPlacement } from '@/components/FloatingPopup/FloatingPopup.types';
 
-export const POPOVER_PLACEMENTS = POSITIONS;
-
-export type Placement = (typeof POPOVER_PLACEMENTS)[number];
+/** Side of the trigger the popover opens on, with an optional `-start` or `-end` edge alignment. */
+export type PopoverPlacement = FloatingPlacement;
 
 export type PopoverProps = {
   trigger: ReactNode;
   children: ReactNode;
   /**
-   * Which side of the trigger the popover appears on.
-   * Defaults to 'bottom'.
+   * Which side of the trigger the popover appears on, with an optional `-start` or `-end` edge
+   * alignment. Accepts a value per breakpoint. Defaults to 'bottom'.
    */
-  placement?: Placement;
+  placement?: Responsive<PopoverPlacement>;
   isDisabled?: boolean;
   /**
    * Whether to trap focus inside the popover (modal behavior).
@@ -27,7 +26,11 @@ export type PopoverProps = {
   open?: boolean;
   /** Called when the popover requests an open/close transition. Required when `open` is provided. */
   onOpenChange?: (open: boolean) => void;
-  /** When set, the popover content portals into this element instead of document.body (e.g. for Storybook). */
+  /**
+   * Renders the popover in this element instead of `document.body` (e.g. for Storybook). The
+   * popover also flips, shifts, and sizes to stay inside this element, so it must not clip the space
+   * the popover needs.
+   */
   portalRoot?: HTMLElement | null;
   /**
    * Accessible label for the popover dialog. Used only when there is no `Popover.Heading`. With a

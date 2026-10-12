@@ -19,6 +19,12 @@ import * as MenuStories from './Menu.stories';
 4. **Start icon (optional)** (`Menu.ItemIcon`): shown before the label.
 5. **End icon (optional)** (`Menu.ItemIcon position="end"`): pushed to the right, for example an external-link arrow.
 6. **Divider (optional)** (`Menu.Divider`): separates groups of items.
+7. **Group title (optional)** (`Menu.Group label`): a divider and bold title above a set of items.
+8. **Checkbox item** (`Menu.CheckboxItem`): a row with a checkbox, for picking several options.
+9. **Selected item** (`Menu.RadioItem checked`): the current choice of a single-select set, shown with a gray background and semibold text.
+10. **Count (optional)** (`Menu.ItemCount`): a result count such as `(112)` at the end of a filter option.
+11. **Submenu row** (`Menu.Submenu`): a row with a right chevron that opens a nested menu beside it.
+12. **No options** (`Menu.Empty`): shown when there is nothing to choose.
 
 ## Usage
 
@@ -147,7 +153,7 @@ import * as MenuStories from './Menu.stories';
         <code>disabled</code>
       </td>
       <td>Menu.Item</td>
-      <td>Fades the item. It can't be selected, and the arrow keys skip it (default: false).</td>
+      <td>Fades the item. It can't be selected, but the arrow keys still reach it (default: false).</td>
     </tr>
 
     <tr>
@@ -186,6 +192,78 @@ import * as MenuStories from './Menu.stories';
 </table>
 
 Other button or anchor attributes on `Menu.Item`, such as `aria-label` or `data-*`, are passed through.
+
+### Groups, selection, and submenus
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Props</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>Menu.Group</code>
+      </td>
+      <td>
+        <code>label</code>
+      </td>
+      <td>Titled set of items. The title names the group for screen readers.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Menu.CheckboxItem</code>
+      </td>
+      <td>
+        <code>checked</code>, <code>onCheckedChange</code>, <code>disabled</code>,{' '}
+        <code>closeOnSelect</code> (default: false)
+      </td>
+      <td>Toggles one option of a multi-select menu. The menu stays open by default.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Menu.RadioItem</code>
+      </td>
+      <td>
+        <code>checked</code>, <code>onClick</code>, <code>disabled</code>,{' '}
+        <code>closeOnSelect</code> (default: true)
+      </td>
+      <td>
+        One choice of a single-select set, such as a sort order. Put the set in a{' '}
+        <code>Menu.Group</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>Menu.ItemCount</code>
+      </td>
+      <td>children</td>
+      <td>Result count at the end of a row. Reserve it for filter options.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>Menu.Submenu</code>
+      </td>
+      <td>
+        <code>label</code>, <code>icon</code>, <code>disabled</code>, children
+      </td>
+      <td>
+        Row that opens a nested menu to its right, or its left when there is no room. Selecting a
+        nested item closes every level.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>Menu.Empty</code>
+      </td>
+      <td>children (default: "No options")</td>
+      <td>Disabled row for a menu with nothing to choose.</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Sizing
 
@@ -362,14 +440,19 @@ For example, `placement="top-end"` with `arrowOffset="end"` pins the pointer 16p
 ### Keyboard Navigation
 
 - The first enabled item receives focus when the menu opens
-- **Arrow Down / Arrow Up** move between items and wrap around. Disabled items are skipped
+- **Arrow Down / Arrow Up** move between items and wrap around. Disabled items are still reached, as APG menus require
 - **Home / End** jump to the first or last item
 - **Enter** selects the focused item. **Space** also selects button items; links follow the browser's default
 - **Escape**, **Tab**, or a click outside closes the menu, and focus returns to the anchor
+- On a submenu row, **Right Arrow**, **Enter**, or **Space** opens the submenu and focuses its first item. Hovering also opens it
+- In a submenu, **Left Arrow** or **Escape** closes it and returns focus to its row. A click outside closes every level
 
 ### Screen Readers
 
-- The menu uses the `menu` ARIA role, and each item uses `menuitem`
+- The menu uses the `menu` ARIA role, and each item uses `menuitem`, `menuitemcheckbox`, or `menuitemradio` with `aria-checked`
+- `Menu.Group` uses the `group` role, named by its title
+- A submenu row sets `aria-haspopup="menu"` and `aria-expanded`, and the submenu is named by its row
+- `Menu.Empty` is a disabled `menuitem`, so the menu still contains an item screen readers can reach
 - Give the menu an `aria-label` or `aria-labelledby`
 - Icons are decorative and hidden from screen readers, so the label has to make sense on its own
 - Menu sets `aria-haspopup`, `aria-expanded`, and `aria-controls` on the trigger

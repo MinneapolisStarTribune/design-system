@@ -3,11 +3,11 @@
 import { useId, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import {
-  FloatingFocusManager,
   FloatingList,
-  FloatingOverlay,
-  FloatingPortal,
+  FloatingNode,
+  FloatingTree,
   useClick,
+  useFloatingNodeId,
   useDismiss,
   useInteractions,
   useListNavigation,
@@ -15,22 +15,36 @@ import {
 } from '@floating-ui/react';
 import {
   cloneTrigger,
+  FloatingPopupSurface,
   PopupArrow,
   popupStyles,
   resolveArrowOffset,
-  usePopup,
 } from '@/components/FloatingPopup/FloatingPopup';
+import {
+  createAnchoredMiddleware,
+  useFloatingPopup,
+} from '@/components/FloatingPopup/useFloatingPopup';
 import type { PopupArrowSpec } from '@/components/FloatingPopup/FloatingPopup.types';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MenuContext } from './MenuContext';
+import { isHiddenItem } from './menuItems';
 import type { MenuProps } from './Menu.types';
 
 /** Size from the Core Components Dropdown Menu design. The arrow stays clear of the rounded corners. */
 const MENU_ARROW_SPEC: PopupArrowSpec = { width: 12, height: 9, cornerInset: 16 };
 
 /** A list of actions or links attached to a trigger. */
-export const MenuRoot: React.FC<MenuProps> = ({
+export const MenuRoot: React.FC<MenuProps> = (props) => (
+  // The tree lets submenus count as inside the menu for dismissal and focus.
+  <FloatingTree>
+    <MenuRootContent {...props} />
+  </FloatingTree>
+);
+
+MenuRoot.displayName = 'Menu.Root';
+
+const MenuRootContent: React.FC<MenuProps> = ({
   trigger,
   open: openProp,
   onOpenChange: onOpenChangeProp,
@@ -44,10 +58,10 @@ export const MenuRoot: React.FC<MenuProps> = ({
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }) => {
-  /** the active item index in a list */
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const itemsRef = useRef<Array<HTMLElement | null>>([]);
   const surfaceId = useId();
+  const nodeId = useFloatingNodeId();
 
   const breakpoint = useBreakpoint();
   const placement = resolveResponsive(placementProp, breakpoint) ?? 'bottom-start';
@@ -60,13 +74,12 @@ export const MenuRoot: React.FC<MenuProps> = ({
     refs: { setReference, setFloating },
     context,
     floatingStyles,
-  } = usePopup({
+  } = useFloatingPopup({
     open: openProp,
     onOpenChange: onOpenChangeProp,
     placement,
-    boundary,
-    arrowSpec: MENU_ARROW_SPEC,
-    hideArrow,
+    nodeId,
+    middleware: createAnchoredMiddleware({ boundary, arrowSpec: MENU_ARROW_SPEC, hideArrow }),
   });
 
   const click = useClick(context);
@@ -79,12 +92,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
     onNavigate: setActiveIndex,
     loop: true,
     focusItemOnOpen: true,
-    // Disabled items stay focusable, as APG menus require. Skip only items hidden with CSS, such as
-    // per-breakpoint items. jsdom has no `checkVisibility`.
-    disabledIndices: (index) => {
-      const item = itemsRef.current[index];
-      return !item || !(item.checkVisibility?.() ?? true);
-    },
+    disabledIndices: (index) => isHiddenItem(itemsRef.current[index]),
   });
 
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
@@ -94,8 +102,8 @@ export const MenuRoot: React.FC<MenuProps> = ({
   ]);
 
   const contextValue = useMemo(
-    () => ({ activeIndex, getItemProps, closeFromItem: () => setOpen(false) }),
-    [activeIndex, getItemProps, setOpen]
+    () => ({ activeIndex, getItemProps, closeFromItem: () => setOpen(false), boundary }),
+    [activeIndex, getItemProps, setOpen, boundary]
   );
 
   const triggerRef = useMergeRefs([setReference, trigger.props.ref ?? null]);
@@ -112,60 +120,53 @@ export const MenuRoot: React.FC<MenuProps> = ({
   );
 
   return (
-    <>
+    <FloatingNode id={nodeId}>
       {triggerElement}
-      {open && (
-        <FloatingPortal root={boundary}>
-          {/* Lets presses through so the trigger can still toggle the menu. */}
-          <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
-            <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
-              <div
-                ref={setFloating}
-                style={{ ...floatingStyles, pointerEvents: 'auto' }}
-                className={classNames(popupStyles.wrapper, styles.menu, className)}
-                data-testid={dataTestId}
-                {...getFloatingProps({
-                  // Shift+Tab would focus the trigger, which counts as inside, so the menu would stay
-                  // open. Close it instead, and focus returns to the trigger. Tab already closes it.
-                  onKeyDown: (event) => {
-                    if (event.key !== 'Tab' || !event.shiftKey) return;
-                    event.preventDefault();
-                    setOpen(false);
-                  },
-                })}
-                id={surfaceId}
-                role="menu"
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-              >
-                {!hideArrow && (
-                  <PopupArrow
-                    ref={setArrowElement}
-                    context={context}
-                    arrowSpec={MENU_ARROW_SPEC}
-                    staticOffset={resolveArrowOffset(
-                      resolveResponsive(arrowOffset, breakpoint),
-                      placement,
-                      MENU_ARROW_SPEC
-                    )}
-                  />
-                )}
-                <div className={classNames(popupStyles.container, styles.container)}>
-                  <div className={popupStyles.content}>
-                    <MenuContext.Provider value={contextValue}>
-                      <FloatingList elementsRef={itemsRef}>
-                        <div className={styles.list}>{children}</div>
-                      </FloatingList>
-                    </MenuContext.Provider>
-                  </div>
-                </div>
-              </div>
-            </FloatingFocusManager>
-          </FloatingOverlay>
-        </FloatingPortal>
-      )}
-    </>
+      <FloatingPopupSurface
+        context={context}
+        setFloating={setFloating}
+        floatingStyles={floatingStyles}
+        portalProps={{ root: boundary }}
+        focusProps={{ initialFocus: -1 }}
+        lockScroll
+        className={classNames(popupStyles.wrapper, styles.menu, className)}
+        data-testid={dataTestId}
+        {...getFloatingProps({
+          // Shift+Tab would focus the trigger, which counts as inside, so the menu would stay
+          // open. Close it instead, and focus returns to the trigger. Tab already closes it.
+          onKeyDown: (event) => {
+            if (event.key !== 'Tab' || !event.shiftKey) return;
+            event.preventDefault();
+            setOpen(false);
+          },
+        })}
+        id={surfaceId}
+        role="menu"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+      >
+        {!hideArrow && (
+          <PopupArrow
+            ref={setArrowElement}
+            context={context}
+            arrowSpec={MENU_ARROW_SPEC}
+            staticOffset={resolveArrowOffset(
+              resolveResponsive(arrowOffset, breakpoint),
+              placement,
+              MENU_ARROW_SPEC
+            )}
+          />
+        )}
+        <div className={classNames(popupStyles.container, styles.container)}>
+          <div className={popupStyles.content}>
+            <MenuContext.Provider value={contextValue}>
+              <FloatingList elementsRef={itemsRef}>
+                <div className={styles.list}>{children}</div>
+              </FloatingList>
+            </MenuContext.Provider>
+          </div>
+        </div>
+      </FloatingPopupSurface>
+    </FloatingNode>
   );
 };
-
-MenuRoot.displayName = 'Menu.Root';
