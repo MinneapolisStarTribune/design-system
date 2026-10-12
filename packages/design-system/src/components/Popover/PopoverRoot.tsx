@@ -25,7 +25,6 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
   const headingId = useId();
   const [hasHeading, setHasHeading] = useState(false);
 
-  // Support controlled and uncontrolled modes
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
 

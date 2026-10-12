@@ -48,7 +48,10 @@ export type MenuProps = MenuBaseProps &
     trigger: ReactElement;
     /** Called when the trigger requests to open the menu. */
     onOpen: () => void;
-    /** Renders the menu in this element instead of `document.body` (e.g. for Storybook). */
+    /**
+     * Renders the menu in this element instead of `document.body`. The menu flips and shifts to
+     * stay inside it.
+     */
     portalRoot?: HTMLElement | null;
   };
 
@@ -70,7 +73,8 @@ export type MenuItemLinkProps = MenuItemBaseProps &
   Omit<ComponentProps<'a'>, keyof MenuItemBaseProps | keyof ButtonRouterLinkProps | 'role'> & {
     href: string;
     /**
-     * Link component to render, such as `Link` from `next/link`. It must forward props to its `<a>`.
+     * Link component to render, such as `Link` from `next/link`. It must forward props to its
+     * `<a>`.
      * @default 'a'
      */
     as?: ElementType;

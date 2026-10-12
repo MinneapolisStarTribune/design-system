@@ -95,12 +95,17 @@
   color: var(--color-text-on-light-secondary) !important;
 }
 
-/* Divider */
+/* Divider. Inset to match the body's right padding. */
 .divider {
   height: 1px;
   background: var(--color-border-on-light-subtle-01);
 
-  margin: var(--spacing-12) 0 0 calc(-1 * var(--spacing-16));
+  margin: var(--spacing-12) var(--spacing-16) 0 0;
+}
+
+/* Spans the wrapper edge to edge by pulling back over the container's left padding. */
+.dividerFullBleed {
+  margin-inline: calc(-1 * var(--spacing-16)) 0;
 }
 
 /* Body */
@@ -138,8 +143,8 @@
   padding: var(--spacing-16);
 }
 
-/* Arrow (critical for seamless look). FloatingArrow draws a border path, then a fill path whose
-   stroke hides the seam with the surface. */
+/* FloatingArrow draws a border path, then a fill path whose stroke hides the seam with the
+   surface. */
 .arrow {
   position: absolute;
   fill: var(--popover-arrow-fill, var(--color-background-light-default));
@@ -152,4 +157,3 @@
 .arrow > path:last-of-type {
   stroke: var(--popover-arrow-fill, var(--color-background-light-default));
 }
-

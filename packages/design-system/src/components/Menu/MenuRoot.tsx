@@ -54,7 +54,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
     id,
   });
 
-  // Skips items with aria-disabled="true".
+  // Floating UI skips `aria-disabled` items during arrow navigation.
   const listNavigation = useListNavigation(surface.context, {
     listRef: elementsRef,
     activeIndex,

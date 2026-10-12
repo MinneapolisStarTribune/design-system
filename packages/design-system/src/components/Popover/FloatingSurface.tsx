@@ -28,7 +28,10 @@ import type {
 import styles from './Popover.module.scss';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
-/** Space between the anchor and the surface, added to the arrow height. */
+/**
+ * Gap between the anchor and the arrow tip, or the surface when `hideArrow` is set.
+ * Also the edge padding for `shift` and `flip`.
+ */
 const FLOATING_GAP = 4;
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
@@ -40,13 +43,12 @@ type UseFloatingSurfaceOptions = {
   placement: Placement;
   isDisabled?: boolean;
   portalRoot?: HTMLElement | null;
-  /** Role that Floating UI sets on the trigger and surface. */
   interactionRole?: UseRoleProps['role'];
   hideArrow?: boolean;
   arrowSize?: { width: number; height: number };
   arrowPadding?: number;
   id?: string;
-  // May be used to anchor the surface to a specific element instead of the trigger.
+  /** Positions the surface against this element. When set, no trigger renders. */
   anchor?: Element | null;
 };
 
@@ -147,7 +149,6 @@ type FloatingSurfaceProps = {
 
 type TriggerElementProps = { style?: CSSProperties; ref?: Ref<unknown>; [key: string]: unknown };
 
-/** Internal Floating UI surface. Renders the trigger and the state from `useFloatingSurface`. */
 export const FloatingSurface = ({
   surface,
   interactions: { getReferenceProps, getFloatingProps },

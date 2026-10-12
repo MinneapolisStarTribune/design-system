@@ -343,7 +343,6 @@ describe('Menu', () => {
 
     const menu = await openMenu(user);
 
-    // FloatingArrow pins itself to the menu edge that faces the anchor.
     expect(menu.querySelector<SVGElement>(':scope > svg')?.style.top).toBe('100%');
   });
 

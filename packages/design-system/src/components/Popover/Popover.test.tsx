@@ -193,7 +193,7 @@ describe('Popover', () => {
     expect(await screen.findByTestId('heading')).toHaveTextContent('Title');
     expect(screen.getByTestId('heading-close-button')).toHaveAccessibleName('Close popover');
     expect(screen.getByTestId('description')).toHaveTextContent('Description');
-    expect(screen.getByTestId('divider')).toBeInTheDocument();
+    expect(screen.getByRole('separator')).toBe(screen.getByTestId('divider'));
     expect(screen.getByTestId('body')).toHaveTextContent('Body');
   });
 
