@@ -26,6 +26,7 @@ import styles from './Menu.module.scss';
 import { MenuContext } from './MenuContext';
 import type { MenuProps } from './Menu.types';
 
+/** Size from the Core Components Dropdown Menu design. The arrow stays clear of the rounded corners. */
 const MENU_ARROW_SPEC: PopupArrowSpec = { width: 12, height: 9, cornerInset: 16 };
 
 /** A list of actions or links attached to a trigger. */

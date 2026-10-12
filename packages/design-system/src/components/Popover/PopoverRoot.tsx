@@ -23,6 +23,7 @@ import type {
 } from '@/components/FloatingPopup/FloatingPopup.types';
 import { PopoverProps } from './Popover.types';
 
+/** The arrow can reach the corners. */
 const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 16, height: 8, cornerInset: 0 };
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
