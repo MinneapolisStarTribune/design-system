@@ -2,9 +2,10 @@ import { ComponentProps, ReactElement, ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import classNames from 'classnames';
 import * as Menu from './Menu';
-import { MENU_ARROW_OFFSETS, MENU_PLACEMENTS } from './Menu.constants';
 import type { MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
+import { ARROW_OFFSETS } from '@/components/Popover/floatingPopup';
+import { POSITIONS as SIDES } from '@/types';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
 import {
   ArrowDiagonalIcon,
@@ -409,7 +410,7 @@ const meta = {
     },
     placement: {
       control: 'select',
-      options: [undefined, ...MENU_PLACEMENTS],
+      options: [undefined, ...SIDES.flatMap((side) => [side, `${side}-start`, `${side}-end`])],
       description: 'Where the menu opens relative to the anchor.',
       table: {
         type: { summary: 'Responsive<MenuPlacement>' },
@@ -423,7 +424,7 @@ const meta = {
     },
     arrowOffset: {
       control: 'select',
-      options: [undefined, ...MENU_ARROW_OFFSETS],
+      options: [undefined, ...ARROW_OFFSETS],
       description:
         'Sets a fixed arrow position. When not set, the arrow points at the anchor’s center.',
       table: { type: { summary: 'Responsive<start | center | end>' } },

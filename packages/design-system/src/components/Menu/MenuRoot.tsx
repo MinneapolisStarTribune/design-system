@@ -22,11 +22,13 @@ import {
   popupStyles,
   resolveArrowOffset,
 } from '@/components/Popover/floatingPopup';
+import type { PopupArrowSpec } from '@/components/Popover/floatingPopup';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
-import { MENU_ARROW } from './Menu.constants';
 import { MenuContext } from './MenuContext';
 import type { MenuProps } from './Menu.types';
+
+const MENU_ARROW_SPEC: PopupArrowSpec = { width: 12, height: 9, cornerInset: 16 };
 
 /** A list of actions or links attached to a trigger. */
 export const MenuRoot: React.FC<MenuProps> = ({
@@ -74,7 +76,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
     middleware: getPopupMiddleware({
       boundary,
       arrowElement,
-      arrowSpec: MENU_ARROW,
+      arrowSpec: MENU_ARROW_SPEC,
       hideArrow,
     }),
   });
@@ -155,11 +157,11 @@ export const MenuRoot: React.FC<MenuProps> = ({
                   <PopupArrow
                     ref={setArrowElement}
                     context={context}
-                    arrowSpec={MENU_ARROW}
+                    arrowSpec={MENU_ARROW_SPEC}
                     staticOffset={resolveArrowOffset(
                       resolveResponsive(arrowOffset, breakpoint),
                       placement,
-                      MENU_ARROW
+                      MENU_ARROW_SPEC
                     )}
                   />
                 )}

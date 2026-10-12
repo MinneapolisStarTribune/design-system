@@ -11,6 +11,7 @@ export const PopoverDivider: React.FC<PopoverDividerProps> = ({
 }) => {
   return (
     <div
+      role="separator"
       className={classNames(styles.divider, fullBleed && styles.dividerFullBleed, className)}
       data-testid={dataTestId}
     />

@@ -70,8 +70,14 @@ export const getPopupMiddleware = ({
   hideArrow = false,
 }: PopupMiddlewareOptions): Middleware[] => [
   offset(hideArrow ? FLOATING_GAP : arrowSpec.height + FLOATING_GAP),
-  // A side placement that fits neither side falls back to below or above the anchor.
-  flip({ boundary, padding: FLOATING_GAP, fallbackAxisSideDirection: 'end' }),
+  // A side placement that fits neither side falls back to below or above the anchor. Edge overflow
+  // flips only the `-start`/`-end` alignment, never the side, and `shift` slides the surface back in.
+  flip({
+    boundary,
+    padding: FLOATING_GAP,
+    crossAxis: 'alignment',
+    fallbackAxisSideDirection: 'end',
+  }),
   shift({ boundary, padding: FLOATING_GAP }),
   // Expose the space left on the chosen side so surface styles can shrink to fit narrow screens.
   size({

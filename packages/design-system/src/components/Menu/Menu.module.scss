@@ -2,6 +2,11 @@
 .menu {
   /* Shrink to the space the `size` middleware in floatingPopup.tsx measures. Subtract the 1px border on each side. */
   width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
+
+  /* `useListNavigation` focuses the surface when the pointer leaves the items. Items keep their own ring. */
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 /* Scoped under `.menu` so it beats the shared `.container` sizing whatever the CSS load order. */
@@ -11,7 +16,7 @@
   width: 100%;
   min-width: 0;
   max-width: none;
-  max-height: min(var(--menu-max-height, 362px), var(--floating-available-height, 100vh) - 2px);
+  max-height: min(var(--menu-max-height, 301px), var(--floating-available-height, 100vh) - 2px);
   padding: 0 var(--spacing-4);
   /* Match the wrapper radius minus its border. */
   border-radius: calc(var(--radius-16) - 1px);

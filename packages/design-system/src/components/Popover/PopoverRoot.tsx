@@ -14,9 +14,10 @@ import {
 } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
 import { composeTriggerProps, getPopupMiddleware, PopupArrow, popupStyles } from './floatingPopup';
-import type { PopupTriggerProps } from './floatingPopup';
-import { POPOVER_ARROW } from './Popover.constants';
+import type { PopupArrowSpec, PopupTriggerProps } from './floatingPopup';
 import { PopoverProps } from './Popover.types';
+
+const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 16, height: 8, cornerInset: 0 };
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
@@ -64,7 +65,7 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
     open,
     onOpenChange: handleOpenChange,
     whileElementsMounted: autoUpdate,
-    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec: POPOVER_ARROW }),
+    middleware: getPopupMiddleware({ boundary, arrowElement, arrowSpec: POPOVER_ARROW_SPEC }),
   });
   const click = useClick(context, { enabled: !isDisabled });
   const dismiss = useDismiss(context);
@@ -126,7 +127,7 @@ export const PopoverRoot: React.FC<PopoverProps> = ({
               role="dialog"
               {...labelProps}
             >
-              <PopupArrow ref={setArrowElement} context={context} arrowSpec={POPOVER_ARROW} />
+              <PopupArrow ref={setArrowElement} context={context} arrowSpec={POPOVER_ARROW_SPEC} />
               <div className={popupStyles.container}>
                 <div className={popupStyles.content}>{children}</div>
               </div>
