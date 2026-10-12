@@ -1,7 +1,8 @@
 import { ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Popover from './Popover';
-import { POPOVER_PLACEMENTS, Placement } from './Popover.types';
+import { FLOATING_PLACEMENTS } from '@/components/FloatingPopup/FloatingPopup.types';
+import type { PopoverPlacement } from './Popover.types';
 import { Button } from '@/components/Button/web/Button';
 import { Link } from '@/components/Link/web/Link';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
@@ -14,7 +15,7 @@ const POINTERS = [
   { pointer: 'Top', placement: 'bottom' },
   { pointer: 'Right', placement: 'left' },
   { pointer: 'Bottom', placement: 'top' },
-] satisfies readonly { pointer: string; placement: Placement }[];
+] satisfies readonly { pointer: string; placement: PopoverPlacement }[];
 
 const DETAILS = [
   { label: 'Label', value: 'value' },
@@ -47,10 +48,10 @@ const meta = {
     },
     placement: {
       control: 'select',
-      options: [...POPOVER_PLACEMENTS],
-      description: 'Side of the trigger the popover opens on.',
+      options: [...FLOATING_PLACEMENTS],
+      description: 'Where the popover opens relative to the trigger.',
       table: {
-        type: { summary: 'top | right | bottom | left' },
+        type: { summary: 'Responsive<FloatingPlacement>' },
         defaultValue: { summary: 'bottom' },
       },
     },

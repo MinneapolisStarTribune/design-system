@@ -3,7 +3,8 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { Coachmark } from './Coachmark';
-import { COACHMARK_POSITIONS } from '../Coachmark.types';
+import { COACHMARK_PLACEMENTS } from '../Coachmark.types';
+import type { CoachmarkProps } from '../Coachmark.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '../../../test-utils/render';
 
@@ -444,7 +445,7 @@ describe('Coachmark', () => {
           title="Never miss a story"
           description="Description"
           ctaText="Do it"
-          position="bottom-center"
+          placement="bottom"
           alignment="center"
         >
           <Button>Trigger</Button>
@@ -457,7 +458,7 @@ describe('Coachmark', () => {
           event: 'coachmark_shown',
           component: 'Coachmark',
           title: 'Never miss a story',
-          position: 'bottom-center',
+          placement: 'bottom',
           alignment: 'center',
         })
       );
@@ -661,7 +662,7 @@ describe('Coachmark', () => {
     });
   });
 
-  it('opens above the trigger when position is top-center', async () => {
+  it('opens above the trigger when placement is top', async () => {
     renderWithProvider(
       <Coachmark
         open
@@ -669,7 +670,7 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="top-center"
+        placement="top"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -698,7 +699,7 @@ describe('Coachmark', () => {
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(180deg)' }));
   });
 
-  it('exposes the actual resolved side as data-placement, not just the requested position', async () => {
+  it('exposes the actual resolved side as data-placement, not just the requested placement', async () => {
     renderWithProvider(
       <Coachmark
         open
@@ -706,14 +707,14 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="top-center"
+        placement="top"
       >
         <Button>Trigger</Button>
       </Coachmark>
     );
 
     // jsdom has no real layout, so this only confirms the attribute mirrors the resolved
-    // `position`, not an actual flip() override.
+    // `placement`, not an actual flip() override.
     await waitFor(() =>
       expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', 'top')
     );
@@ -774,7 +775,7 @@ describe('Coachmark', () => {
     expect(document.getElementById('piano-coachmark-tracker')).not.toBeInTheDocument();
   });
 
-  it.each(COACHMARK_POSITIONS)('accepts position="%s" without error', async (position) => {
+  it('opens beside the trigger, vertically centered, when placement is left', async () => {
     renderWithProvider(
       <Coachmark
         open
@@ -782,26 +783,7 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position={position}
-      >
-        <Button>Trigger</Button>
-      </Coachmark>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-  });
-
-  it('opens beside the trigger, vertically centered, when position is center-left', async () => {
-    renderWithProvider(
-      <Coachmark
-        open
-        onOpenChange={vi.fn()}
-        title="Title"
-        description="Description"
-        ctaText="Do it"
-        position="center-left"
+        placement="left"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -813,7 +795,7 @@ describe('Coachmark', () => {
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(-90deg)' }));
   });
 
-  it('opens beside the trigger, vertically centered, when position is center-right', async () => {
+  it('opens beside the trigger, vertically centered, when placement is right', async () => {
     renderWithProvider(
       <Coachmark
         open
@@ -821,7 +803,7 @@ describe('Coachmark', () => {
         title="Title"
         description="Description"
         ctaText="Do it"
-        position="center-right"
+        placement="right"
       >
         <Button>Trigger</Button>
       </Coachmark>
@@ -829,5 +811,124 @@ describe('Coachmark', () => {
 
     const arrow = screen.getByRole('dialog').querySelector('svg');
     await waitFor(() => expect(arrow).toHaveStyle({ transform: 'rotate(90deg)' }));
+  });
+});
+
+describe('Coachmark placement', () => {
+  const renderCoachmark = (
+    props: Pick<CoachmarkProps, 'placement'>,
+    mockOnTrackingEvent = vi.fn()
+  ) =>
+    renderWithProvider(
+      <Coachmark open onOpenChange={vi.fn()} title="Title" description="Description" {...props}>
+        <Button>Trigger</Button>
+      </Coachmark>,
+      { mockOnTrackingEvent }
+    );
+
+  it.each(COACHMARK_PLACEMENTS)('opens at placement="%s"', async (placement) => {
+    renderCoachmark({ placement });
+
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', placement)
+    );
+  });
+
+  it('resolves a per-breakpoint placement', async () => {
+    renderCoachmark({ placement: { small: 'top' } });
+
+    await waitFor(() =>
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-placement', 'top')
+    );
+  });
+
+  it('reports the resolved placement to analytics', () => {
+    const mockOnTrackingEvent = vi.fn();
+
+    renderCoachmark({ placement: { small: 'bottom-end' } }, mockOnTrackingEvent);
+
+    expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({ event: 'coachmark_shown', placement: 'bottom-end' })
+    );
+  });
+});
+
+describe('Coachmark top-right corner and actions', () => {
+  const renderCoachmark = (props: Partial<CoachmarkProps> = {}, mockOnTrackingEvent = vi.fn()) =>
+    renderWithProvider(
+      <Coachmark open onOpenChange={vi.fn()} title="Title" description="Description" {...props}>
+        <Button>Trigger</Button>
+      </Coachmark>,
+      { mockOnTrackingEvent }
+    );
+
+  it('replaces the close button with the counter', () => {
+    renderCoachmark({ counter: '1 of 3' });
+
+    expect(screen.getByText('1 of 3')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+  });
+
+  it('hides the close button when showCloseButton is false', () => {
+    renderCoachmark({ showCloseButton: false, ctaText: 'Got it' });
+
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Got it' })).toBeInTheDocument();
+  });
+
+  it('runs onSecondaryAction and reports it as the secondary CTA', async () => {
+    const user = userEvent.setup();
+    const onSecondaryAction = vi.fn();
+    const mockOnTrackingEvent = vi.fn();
+    renderCoachmark(
+      { ctaText: 'Sign up', secondaryCtaText: 'Not now', onSecondaryAction },
+      mockOnTrackingEvent
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Not now' }));
+
+    expect(onSecondaryAction).toHaveBeenCalledTimes(1);
+    expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: 'coachmark_cta_click',
+        cta_text: 'Not now',
+        cta_role: 'secondary',
+      })
+    );
+  });
+
+  it('reports the primary CTA with its role', async () => {
+    const user = userEvent.setup();
+    const mockOnTrackingEvent = vi.fn();
+    renderCoachmark({ ctaText: 'Sign up' }, mockOnTrackingEvent);
+
+    await user.click(screen.getByRole('button', { name: 'Sign up' }));
+
+    expect(mockOnTrackingEvent).toHaveBeenCalledWith(
+      expect.objectContaining({ event: 'coachmark_cta_click', cta_role: 'primary' })
+    );
+  });
+
+  it('renders the secondary action as a link when secondaryActionHref is set', () => {
+    renderCoachmark({
+      ctaText: 'Sign up',
+      secondaryCtaText: 'Learn more',
+      secondaryActionHref: '/about',
+    });
+
+    expect(screen.getByRole('link', { name: 'Learn more' })).toHaveAttribute('href', '/about');
+  });
+
+  it.each([
+    ['stacked', ['Sign up', 'Not now']],
+    ['inline', ['Not now', 'Sign up']],
+  ] as const)('orders the %s actions as %j', (ctaLayout, order) => {
+    renderCoachmark({ ctaText: 'Sign up', secondaryCtaText: 'Not now', ctaLayout });
+
+    const names = screen
+      .getAllByRole('button')
+      .map((button) => button.textContent)
+      .filter((name) => name === 'Sign up' || name === 'Not now');
+    expect(names).toEqual(order);
   });
 });

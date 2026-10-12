@@ -1,0 +1,156 @@
+/* Set menu sizes with `--menu-*` or a width class on the menu. */
+.menu {
+  /* Shrink to the space the `size` middleware in useFloatingPopup.ts measures. Subtract the 1px border on each side. */
+  width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
+
+  /* `useListNavigation` focuses the surface when the pointer leaves the items. Items keep their own ring. */
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+/* Scoped under `.menu` so it beats the shared `.container` sizing whatever the CSS load order. */
+.menu .container {
+  /* Fill the surface width, padding included. */
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: min(var(--menu-max-height, 301px), var(--floating-available-height, 100vh) - 2px);
+  padding: 0 var(--spacing-4);
+  /* Match the wrapper radius minus its border. */
+  border-radius: calc(var(--radius-16) - 1px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--spacing-12);
+
+  border: none;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-select-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--spacing-2) solid var(--color-border-on-light-strong-02);
+    outline-offset: calc(-1 * var(--spacing-2));
+  }
+}
+
+/* Current choice of a radio set, and the row whose submenu is open. */
+.itemSelected,
+.itemExpanded {
+  background: var(--color-select-hover);
+}
+
+.itemDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  margin-inline-start: auto;
+}
+
+.divider {
+  position: relative;
+  height: 1px;
+  /* Overlap the preceding row so the divider adds no height. */
+  margin-block-start: -1px;
+  flex-shrink: 0;
+  background: var(--color-border-on-light-subtle-01);
+}
+
+/* Group title with a divider above it, inset to the item padding. */
+.groupLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-16) var(--spacing-12) var(--spacing-4);
+  color: var(--color-text-on-light-primary);
+
+  &::before {
+    content: '';
+    height: 1px;
+    background: var(--color-border-on-light-strong-02);
+  }
+}
+
+/* Decorative checkbox. The row carries the checked state as `aria-checked`. */
+.checkbox {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  border: 1px solid var(--color-checkbox-border-unchecked);
+  border-radius: var(--radius-4);
+  background: var(--color-checkbox-background-unchecked);
+}
+
+.checked {
+  border-color: var(--color-checkbox-border-selected-neutral);
+  background: var(--color-checkbox-background-selected-neutral);
+}
+
+.checkIcon {
+  /* `!important` beats the icon's own color. */
+  color: var(--color-checkbox-icon-selected-neutral) !important;
+}
+
+.count {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  /* `!important` beats the global `[class*='typography-']` color, which loads later. */
+  color: var(--color-text-on-light-tertiary) !important;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--spacing-12);
+  box-sizing: border-box;
+  /* `!important` beats the global `[class*='typography-']` color, which loads later. */
+  color: var(--color-text-on-light-tertiary) !important;
+  cursor: default;
+
+  &:focus-visible {
+    outline: var(--spacing-2) solid var(--color-border-on-light-strong-02);
+    outline-offset: calc(-1 * var(--spacing-2));
+    border-radius: var(--radius-4);
+  }
+}

@@ -16,15 +16,14 @@ export interface AlignmentShiftOptions {
 }
 
 /**
- * For a top/bottom placement with a 'start'/'end' alignment (Coachmark's -left/-right
- * positions), keeps the card looking anchored to its trigger when the viewport edge would
- * otherwise clip it: shifts it back into view along the alignment axis by up to 40% of its own
- * width, and only flips to the opposite alignment (e.g. bottom-left -> bottom-right) once that
- * budget is exceeded -- rather than either shifting it arbitrarily far from the trigger, or
- * flipping immediately the moment it touches the edge.
+ * For a top/bottom placement with a 'start'/'end' alignment, keeps the card looking anchored to
+ * its trigger when the viewport edge would otherwise clip it: shifts it back into view along the
+ * alignment axis by up to 40% of its own width, and only flips to the opposite alignment (e.g.
+ * bottom-end -> bottom-start) once that budget is exceeded -- rather than either shifting it
+ * arbitrarily far from the trigger, or flipping immediately the moment it touches the edge.
  *
- * 'top-center'/'bottom-center' (no alignment) and 'center-left'/'center-right' (not a top/bottom
- * side) don't have an alignment axis in this sense and are left untouched.
+ * 'top'/'bottom' (no alignment) and 'left'/'right' (not a top/bottom side) don't have an
+ * alignment axis in this sense and are left untouched.
  *
  * Must run after `flip` (side) and, if flipping alignment, will cause floating-ui to reset and
  * re-run the middleware pipeline once for the new placement -- guarded by `middlewareData` so it
@@ -48,10 +47,8 @@ export function alignmentShift(options: AlignmentShiftOptions = {}): Middleware 
         padding: options.padding ?? 0,
       });
 
-      // 'end' alignment is Coachmark's '-left' positions (the card sits toward/extends past the
-      // trigger's left side, per PLACEMENT's inverted start/end mapping) -- the viewport's left
-      // edge is what can clip it. 'start' ('-right' positions) is the mirror, against the right
-      // edge.
+      // An 'end' card is wider than its trigger and extends past the trigger's left side, so the
+      // viewport's left edge is what can clip it. 'start' is the mirror, against the right edge.
       const relevantOverflow = alignment === 'end' ? overflow.left : overflow.right;
 
       if (relevantOverflow <= 0) {

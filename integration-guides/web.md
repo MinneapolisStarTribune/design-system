@@ -14,11 +14,13 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover`, `Menu`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame
 - You need a **custom container** for styling or layout (e.g. a dedicated overlay layer)
+
+`Popover` and `Menu` also use `portalRoot` as their collision boundary: they flip, shift, and shrink to stay inside it. Choose an element large enough for the overlay, or it may open on the other side or shrink to fit.
 
 Keep the element in state with a ref callback, so the overlay re-renders once the element exists:
 
@@ -85,7 +87,7 @@ function FavoriteButtonWithCoachmark() {
 }
 ```
 
-Key props: `position` (`COACHMARK_POSITIONS` — which side of `children` it opens on, defaults to `'bottom-center'`), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref`, `secondaryContent`, and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
+Key props: `placement` (`COACHMARK_PLACEMENTS`, the same values as Menu and Popover, such as `'bottom'` or `'top-start'`; defaults to `'bottom'` and accepts a value per breakpoint), `alignment` (`'left' | 'center'`, defaults to `'center'` — horizontal alignment of the title/description, independent of whether `icon` is given), `icon`, `badgeText`, `ctaText`/`onAction`/`actionHref` (filled primary action), `secondaryCtaText`/`onSecondaryAction`/`secondaryActionHref` (ghost secondary action), `ctaLayout` (`'stacked' | 'inline'`, defaults to `'stacked'`; use stacked for long or localized labels), `secondaryContent` (content below the actions, such as a log-in link), `counter` (replaces the close button with step text such as `'1 of 3'`), `showCloseButton` (defaults to `true`; without it, provide another way to dismiss), and `dismissOnOutsideClick` (defaults to `false` — an unprompted coachmark should only close via its own controls unless you opt in; this also gates Escape).
 
 Two more props cover less common cases:
 
@@ -246,6 +248,28 @@ const current: Breakpoint = 'large';
 ```
 
 The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
+## Menu
+
+Pass a `trigger` element: the menu adds its click handler, ref, and ARIA attributes, opens on click, and closes when an item is selected or the menu is dismissed.
+
+```tsx
+import { Button, Menu } from '@minneapolisstartribune/design-system/web';
+
+function AccountMenu() {
+  return (
+    <Menu.Root trigger={<Button>Account</Button>} aria-label="Account">
+      <Menu.Item href="/profile">Manage Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+    </Menu.Root>
+  );
+}
+```
+
+To control the menu, pass `open` and `onOpenChange` together, for example `open={open} onOpenChange={setOpen}`. `onOpenChange` is called with `true` or `false` each time the menu requests to open or close.
+
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowOffset` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
 
 ## ToggleGroup
 

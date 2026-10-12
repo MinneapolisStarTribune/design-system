@@ -12,11 +12,8 @@ vi.mock('@floating-ui/react', async () => {
 const FLOATING_WIDTH = 200;
 
 function buildState(
-  // The *real* floating-ui placement, not Coachmark's own position name -- floating-ui only ever
-  // produces 'start'/'end' alignment suffixes (e.g. 'bottom-end'), never 'left'/'right' literally.
-  // Coachmark's 'bottom-left' maps to floating-ui's 'bottom-end', 'bottom-right' to 'bottom-start'
-  // (see PLACEMENT in Coachmark.tsx -- the suffixes are intentionally inverted from floating-ui's
-  // own start/end so the card visually sits on the *named* side).
+  // An 'end' placement (e.g. 'bottom-end') extends past the trigger's left side, a 'start' one past
+  // its right side.
   placement: Placement,
   overflow: { top?: number; bottom?: number; left?: number; right?: number },
   extra: Partial<MiddlewareState> = {}

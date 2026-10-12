@@ -1,28 +1,28 @@
 import type { ReactNode } from 'react';
+import type { FloatingPlacement } from '@/components/FloatingPopup/FloatingPopup.types';
+import type { Responsive } from '@/types/globalTypes';
 
 /**
- * Which side of `children` the coachmark opens on, and where along that side. The first segment
- * is the side ('top'/'bottom' open above/below `children`; 'left'/'right' open beside it,
- * vertically centered, e.g. for a trigger flush against a screen edge with no room above/below).
- * The second segment positions the card along a 'top'/'bottom' side ('left'/'right' shift the
- * card so it visually sits toward that side of `children`, 'center' centers it) -- 'left'/'right'
- * have no second axis to position along, so they're always paired with 'center'.
- *
- * Physical left/right, not logical start/end, since this is a fixed-locale product with no RTL
- * support.
+ * Placements the coachmark design supports. Side placements stay vertically centered on
+ * `children`.
  */
-export const COACHMARK_POSITIONS = [
-  'top-left',
-  'top-center',
-  'top-right',
-  'bottom-left',
-  'bottom-center',
-  'bottom-right',
-  'center-left',
-  'center-right',
-] as const;
+export const COACHMARK_PLACEMENTS = [
+  'top-start',
+  'top',
+  'top-end',
+  'bottom-start',
+  'bottom',
+  'bottom-end',
+  'left',
+  'right',
+] as const satisfies readonly FloatingPlacement[];
 
-export type CoachmarkPosition = (typeof COACHMARK_POSITIONS)[number];
+export type CoachmarkPlacement = (typeof COACHMARK_PLACEMENTS)[number];
+
+/** 'stacked' puts full-width actions in a column. 'inline' puts them in a row at the end. */
+export const COACHMARK_CTA_LAYOUTS = ['stacked', 'inline'] as const;
+
+export type CoachmarkCtaLayout = (typeof COACHMARK_CTA_LAYOUTS)[number];
 
 /** Horizontal alignment of the title/description within the card. */
 export const COACHMARK_ALIGNMENTS = ['left', 'center'] as const;
@@ -64,23 +64,47 @@ export type CoachmarkProps = {
    */
   badgeText?: string;
 
-  /** Label for the solid action button. Omit to render the coachmark with no action button. */
+  /** Label for the filled primary action. Omit both actions to render no footer. */
   ctaText?: string;
 
-  /** Renders the action as a link to this href instead of a button with `onAction`. */
+  /** Renders the primary action as a link to this href instead of a button with `onAction`. */
   actionHref?: string;
 
-  /** Called when the action button is clicked. Ignored when `actionHref` is set. */
+  /** Called when the primary action is clicked. Ignored when `actionHref` is set. */
   onAction?: () => void;
 
-  /** Optional content rendered below the action button, e.g. a secondary link. */
+  /** Label for the ghost secondary action. */
+  secondaryCtaText?: string;
+
+  /** Renders the secondary action as a link to this href instead of a button. */
+  secondaryActionHref?: string;
+
+  /** Called when the secondary action is clicked. Ignored when `secondaryActionHref` is set. */
+  onSecondaryAction?: () => void;
+
+  /** Content below the actions, such as an "Already have an account? Log in" link. */
   secondaryContent?: ReactNode;
 
   /**
-   * Which side of `children` the coachmark opens on, and where along that side. Defaults to
-   * 'bottom-center'.
+   * Layout of the actions. Use 'stacked' for long or localized labels and 'inline' when both
+   * labels are short. Defaults to 'stacked'.
    */
-  position?: CoachmarkPosition;
+  ctaLayout?: CoachmarkCtaLayout;
+
+  /** Replaces the close button with step progress text, such as "1 of 3". */
+  counter?: string;
+
+  /**
+   * Shows the close button. Defaults to true. Without it, give people another way to dismiss, such
+   * as an action or `dismissOnOutsideClick`.
+   */
+  showCloseButton?: boolean;
+
+  /**
+   * Where the coachmark opens relative to `children`, named like Menu and Popover placements but
+   * limited to `COACHMARK_PLACEMENTS`. Accepts a value per breakpoint. Defaults to 'bottom'.
+   */
+  placement?: Responsive<CoachmarkPlacement>;
 
   /**
    * Horizontal alignment of the title/description. Defaults to 'center'.
@@ -94,7 +118,10 @@ export type CoachmarkProps = {
    */
   dismissOnOutsideClick?: boolean;
 
-  /** Portal target for the floating panel. Defaults to document.body. */
+  /**
+   * Renders the coachmark in this element instead of `document.body`. The coachmark also flips and
+   * shifts to stay inside this element, so it must not clip the space the coachmark needs.
+   */
   portalRoot?: HTMLElement | null;
 
   /**

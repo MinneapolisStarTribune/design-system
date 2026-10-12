@@ -1,0 +1,149 @@
+import type { ComponentProps, ElementType, ReactElement, ReactNode } from 'react';
+import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
+import type { BaseProps, IconPosition } from '@/types';
+import type { Responsive } from '@/types/globalTypes';
+import type {
+  ArrowOffset,
+  FloatingPlacement,
+  PopupTriggerProps,
+} from '@/components/FloatingPopup/FloatingPopup.types';
+
+/** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
+export type MenuPlacement = FloatingPlacement;
+
+/** Arrow position along the menu edge that faces the anchor. */
+export type MenuArrowOffset = ArrowOffset;
+
+export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  children: ReactNode;
+  /**
+   * Where the menu opens relative to the anchor. Accepts a value per breakpoint.
+   * @default 'bottom-start'
+   */
+  placement?: Responsive<MenuPlacement>;
+  /**
+   * Hides the arrow.
+   * @default false
+   */
+  hideArrow?: boolean;
+  /**
+   * Sets a fixed arrow position on the menu edge that faces the anchor.
+   * The arrow stays 16px from the rounded corners. By default, it points to the anchor center.
+   * Accepts a value per breakpoint. Breakpoints without a value use the default.
+   */
+  arrowOffset?: Responsive<MenuArrowOffset>;
+  /** Controlled open state. If omitted, the component manages open state internally. */
+  open?: boolean;
+  /** Called when the menu requests an open/close transition. Required when `open` is provided. */
+  onOpenChange?: (open: boolean) => void;
+};
+
+/** A menu needs exactly one accessible name. */
+export type MenuLabelProps =
+  | { 'aria-label': string; 'aria-labelledby'?: never }
+  | { 'aria-label'?: never; 'aria-labelledby': string };
+
+export type MenuProps = MenuBaseProps &
+  MenuLabelProps & {
+    /**
+     * Element that toggles the menu. It must be a single element that accepts a ref. The menu
+     * adds its click handler, `aria-haspopup`, `aria-expanded`, and `aria-controls`.
+     */
+    trigger: ReactElement<PopupTriggerProps>;
+    /**
+     * Renders the menu in this element instead of `document.body` (e.g. for Storybook). The menu also
+     * flips, shifts, and sizes to stay inside this element, so it must not clip the space the menu needs.
+     */
+    portalRoot?: HTMLElement | null;
+  };
+
+type MenuItemBaseProps = Pick<BaseProps, 'dataTestId'> & {
+  children: ReactNode;
+  disabled?: boolean;
+  /**
+   * Whether selecting this item closes the menu.
+   * @default true
+   */
+  closeOnSelect?: boolean;
+};
+
+export type MenuItemButtonProps = MenuItemBaseProps &
+  Omit<ComponentProps<'button'>, keyof MenuItemBaseProps | 'type' | 'role'> & { href?: undefined };
+
+export type MenuItemLinkProps = MenuItemBaseProps &
+  ButtonRouterLinkProps &
+  Omit<ComponentProps<'a'>, keyof MenuItemBaseProps | keyof ButtonRouterLinkProps | 'role'> & {
+    href: string;
+    /**
+     * Link component to render, such as `Link` from `next/link`. It must forward props to its `<a>`.
+     * @default 'a'
+     */
+    as?: ElementType;
+  };
+
+export type MenuItemProps = MenuItemButtonProps | MenuItemLinkProps;
+
+export type MenuItemIconProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  children: ReactNode;
+  /**
+   * Which side of the label the icon sits on.
+   * @default 'start'
+   */
+  position?: IconPosition;
+};
+
+export type MenuDividerProps = Pick<BaseProps, 'className' | 'dataTestId'>;
+
+type MenuButtonItemProps = Omit<
+  ComponentProps<'button'>,
+  keyof MenuItemBaseProps | 'type' | 'role' | 'onChange'
+>;
+
+/** A menu row that toggles an option on or off, for multi-select menus. */
+export type MenuCheckboxItemProps = Omit<MenuItemBaseProps, 'closeOnSelect'> &
+  MenuButtonItemProps & {
+    checked: boolean;
+    /** Called with the new checked state. */
+    onCheckedChange: (checked: boolean) => void;
+    /**
+     * Whether selecting this item closes the menu.
+     * @default false
+     */
+    closeOnSelect?: boolean;
+  };
+
+/**
+ * A menu row that marks the current choice of a single-select set, such as a sort order. Put the
+ * set in a `Menu.Group`.
+ */
+export type MenuRadioItemProps = MenuItemBaseProps &
+  MenuButtonItemProps & {
+    checked: boolean;
+  };
+
+export type MenuGroupProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** Visible group title. It also names the group for screen readers. */
+  label: ReactNode;
+  children: ReactNode;
+};
+
+/** Result count shown at the end of a row, such as `(112)` on a filter option. */
+export type MenuItemCountProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  children: ReactNode;
+};
+
+export type MenuEmptyProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** @default 'No options' */
+  children?: ReactNode;
+};
+
+export type MenuSubmenuProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
+  /** Content of the row that opens the submenu. It also names the submenu. */
+  label: ReactNode;
+  /** Decorative icon before the label. */
+  icon?: ReactNode;
+  /** Keeps the row focusable but stops it from opening the submenu. */
+  disabled?: boolean;
+  /** The submenu's items. */
+  children: ReactNode;
+};
