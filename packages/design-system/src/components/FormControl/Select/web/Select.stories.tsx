@@ -432,8 +432,8 @@ export const AllVariants: Story = {
           </FormGroup>
         </div>
 
-        {/* Reserves room for the absolutely positioned dropdown (362px max-height + 8px offset) */}
-        <div style={{ ...cellStyle, paddingBottom: 380 }}>
+        {/* Reserves room for the absolutely positioned dropdown (317px max-height + 8px offset) */}
+        <div style={{ ...cellStyle, paddingBottom: 335 }}>
           <SectionLabel>State: Open</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>

@@ -121,13 +121,14 @@
   top: calc(100% + var(--spacing-8));
   left: 0;
   width: 100%;
-  padding: 0 var(--spacing-4);
+  padding: var(--spacing-8);
   margin: 0;
   list-style: none;
   border-radius: var(--radius-16);
   z-index: 20;
 
-  max-height: 362px;
+  /* Fits seven options plus the list padding. */
+  max-height: 317px;
   overflow-y: auto;
 
   background: var(--color-select-background);
@@ -147,7 +148,7 @@
   display: flex;
   align-items: center;
   padding: var(--spacing-12);
-  border-radius: var(--radius-4);
+  border-radius: var(--radius-8);
 
   cursor: pointer;
   user-select: none;

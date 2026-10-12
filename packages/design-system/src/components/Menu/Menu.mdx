@@ -23,7 +23,7 @@ import * as MenuStories from './Menu.stories';
 ## Usage
 
 - Use a menu for a handful of actions or links tied to one element
-- Don't use a menu to pick a form value; use `Select`
+- Don't use a menu to pick a form value; use `Select`, or `MultiSelect` for several values
 - Don't use a menu for rich content such as text, forms, or headings; use `Popover`
 - Keep labels short and start them with a verb, for example "Edit" or "Pause Account"
 - Group related items and separate the groups with `Menu.Divider`
@@ -217,7 +217,7 @@ design-system CSS sits in a lower cascade layer than utilities.
       <td>
         <code>--menu-max-height</code>
       </td>
-      <td>301px</td>
+      <td>317px</td>
       <td>Maximum list height. Longer menus scroll inside the surface.</td>
     </tr>
 
@@ -253,7 +253,7 @@ Icons keep their own color. Pass a named color such as `brand-01`, which resolve
 <Menu.Root placement="bottom-end" />
 ```
 
-If the chosen side runs out of room, the menu flips to the opposite side.
+If the chosen side runs out of room, the menu flips to the opposite side. A `left` or `right` menu that fits on neither side opens below or above the anchor instead. When no side has enough room, the menu shrinks to fit and its items scroll.
 
 While the menu is open, page scroll is locked, so the menu can't drift away from its anchor. Pressing outside the menu closes it; that press doesn't reach the element underneath.
 

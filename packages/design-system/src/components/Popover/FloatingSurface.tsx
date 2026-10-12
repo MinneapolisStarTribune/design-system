@@ -12,6 +12,7 @@ import {
   flip,
   offset,
   shift,
+  size,
   useClick,
   useDismiss,
   useFloating,
@@ -30,7 +31,7 @@ import styles from './Popover.module.scss';
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
 /**
  * Gap between the anchor and the arrow tip, or the surface when `hideArrow` is set.
- * Also the edge padding for `shift` and `flip`.
+ * Also the edge padding for `flip`, `shift`, and `size`.
  */
 const FLOATING_GAP = 4;
 
@@ -80,8 +81,27 @@ export const useFloatingSurface = ({
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
+      // A side placement that fits neither side falls back to below or above the anchor. Edge overflow
+      // flips only the `-start`/`-end` alignment, never the side, and `shift` slides the surface back in.
+      flip({
+        boundary: resolvedPortalRoot,
+        padding: FLOATING_GAP,
+        crossAxis: 'alignment',
+        fallbackAxisSideDirection: 'end',
+      }),
       shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
-      flip({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
+      // Expose the space left on the chosen side so surface styles can shrink to fit narrow screens.
+      size({
+        boundary: resolvedPortalRoot,
+        padding: FLOATING_GAP,
+        apply({ availableWidth, availableHeight, elements }) {
+          elements.floating.style.setProperty('--floating-available-width', `${availableWidth}px`);
+          elements.floating.style.setProperty(
+            '--floating-available-height',
+            `${availableHeight}px`
+          );
+        },
+      }),
       arrow({ element: arrowElement, padding: arrowPadding }),
     ],
   });

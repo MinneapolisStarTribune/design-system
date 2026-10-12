@@ -49,8 +49,8 @@ export type MenuProps = MenuBaseProps &
     /** Called when the trigger requests to open the menu. */
     onOpen: () => void;
     /**
-     * Renders the menu in this element instead of `document.body`. The menu flips and shifts to
-     * stay inside it.
+     * Renders the menu in this element instead of `document.body`. The menu flips, shifts, and
+     * shrinks to stay inside it.
      */
     portalRoot?: HTMLElement | null;
   };
