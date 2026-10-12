@@ -11,29 +11,22 @@ import {
   size,
   useFloating,
 } from '@floating-ui/react';
-import type { ComponentProps, CSSProperties, ReactElement, Ref, SyntheticEvent } from 'react';
+import type { CSSProperties, ReactElement, Ref, SyntheticEvent } from 'react';
 import type { Middleware, Placement } from '@floating-ui/react';
-import styles from './Popover.module.scss';
+import styles from './floatingPopup.module.scss';
+import type {
+  ArrowOffset,
+  PopupArrowProps,
+  PopupArrowSpec,
+  PopupMiddlewareOptions,
+  PopupTriggerProps,
+  UsePopupOptions,
+} from './floatingPopup.types';
 
 /**
  * Internal to Popover and Menu, and not exported from the package. Tooltip and Coachmark position
  * themselves.
  */
-
-export type PopupArrowSpec = {
-  width: number;
-  height: number;
-  /** Minimum distance from the arrow to the surface's rounded corners. */
-  cornerInset: number;
-};
-
-/** Fixed arrow positions on the surface edge that faces the anchor. */
-export const ARROW_OFFSETS = ['start', 'center', 'end'] as const;
-
-export type ArrowOffset = (typeof ARROW_OFFSETS)[number];
-
-/** Trigger element props the popup reads before cloning the trigger. */
-export type PopupTriggerProps = { style?: CSSProperties; ref?: Ref<Element> };
 
 const KEY_HANDLERS = new Set(['onKeyDown', 'onKeyUp']);
 
@@ -66,13 +59,6 @@ const composeTriggerProps = (
 /** Space between the anchor and the surface, added to the arrow height. */
 const FLOATING_GAP = 4;
 
-type PopupMiddlewareOptions = {
-  boundary: HTMLElement | undefined;
-  arrowElement: SVGSVGElement | null;
-  arrowSpec: PopupArrowSpec;
-  hideArrow?: boolean;
-};
-
 const getPopupMiddleware = ({
   boundary,
   arrowElement,
@@ -100,15 +86,6 @@ const getPopupMiddleware = ({
   }),
   arrow({ element: arrowElement, padding: arrowSpec.cornerInset }),
 ];
-
-type UsePopupOptions = Omit<PopupMiddlewareOptions, 'arrowElement'> & {
-  /** Controlled open state. When undefined, the popup keeps its own state. */
-  open: boolean | undefined;
-  onOpenChange: ((open: boolean) => void) | undefined;
-  placement: Placement;
-  /** Blocks opening. Closing still works. */
-  disabled?: boolean;
-};
 
 /** Open state, in controlled or uncontrolled mode, and positioning shared by Popover and Menu. */
 export const usePopup = ({
@@ -184,11 +161,6 @@ export const resolveArrowOffset = (
   if (offset === 'start') return measuresFromEnd ? farEdge : nearEdge;
   return measuresFromEnd ? nearEdge : farEdge;
 };
-
-type PopupArrowProps = Pick<
-  ComponentProps<typeof FloatingArrow>,
-  'ref' | 'context' | 'staticOffset'
-> & { arrowSpec: PopupArrowSpec };
 
 /** Bordered arrow that blends into the surface border. */
 export const PopupArrow = ({ arrowSpec, ...rest }: PopupArrowProps) => (

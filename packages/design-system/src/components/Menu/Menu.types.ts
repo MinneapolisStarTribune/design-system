@@ -2,7 +2,10 @@ import type { ComponentProps, ElementType, ReactElement, ReactNode } from 'react
 import type { ButtonRouterLinkProps } from '@/components/Button/web/Button.types';
 import type { BaseProps, IconPosition, Position } from '@/types';
 import type { Responsive } from '@/types/globalTypes';
-import type { ArrowOffset, PopupTriggerProps } from '@/components/Popover/floatingPopup';
+import type {
+  ArrowOffset,
+  PopupTriggerProps,
+} from '@/components/FloatingPopup/floatingPopup.types';
 
 /** Side of the anchor the menu opens on, with an optional `-start` or `-end` edge alignment. */
 export type MenuPlacement = Position | `${Position}-${'start' | 'end'}`;

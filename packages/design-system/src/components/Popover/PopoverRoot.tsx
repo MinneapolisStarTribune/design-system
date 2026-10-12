@@ -11,8 +11,16 @@ import {
   useMergeRefs,
 } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
-import { cloneTrigger, PopupArrow, popupStyles, usePopup } from './floatingPopup';
-import type { PopupArrowSpec, PopupTriggerProps } from './floatingPopup';
+import {
+  cloneTrigger,
+  PopupArrow,
+  popupStyles,
+  usePopup,
+} from '@/components/FloatingPopup/floatingPopup';
+import type {
+  PopupArrowSpec,
+  PopupTriggerProps,
+} from '@/components/FloatingPopup/floatingPopup.types';
 import { PopoverProps } from './Popover.types';
 
 const POPOVER_ARROW_SPEC: PopupArrowSpec = { width: 16, height: 8, cornerInset: 0 };

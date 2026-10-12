@@ -19,8 +19,8 @@ import {
   popupStyles,
   resolveArrowOffset,
   usePopup,
-} from '@/components/Popover/floatingPopup';
-import type { PopupArrowSpec } from '@/components/Popover/floatingPopup';
+} from '@/components/FloatingPopup/floatingPopup';
+import type { PopupArrowSpec } from '@/components/FloatingPopup/floatingPopup.types';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MenuContext } from './MenuContext';

@@ -5,7 +5,7 @@ import * as Menu from './Menu';
 import type { MenuLabelProps, MenuPlacement, MenuProps } from './Menu.types';
 import { Button } from '@/components/Button/web/Button';
 import * as Dialog from '@/components/Dialog/Dialog';
-import { ARROW_OFFSETS } from '@/components/Popover/floatingPopup';
+import { ARROW_OFFSETS } from '@/components/FloatingPopup/floatingPopup.types';
 import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { POSITIONS as SIDES } from '@/types';
 import { UtilityBody, UtilityLabel } from '@/components/Typography/Utility';
