@@ -7,6 +7,7 @@ export {
   type Brand,
   DesignSystemProvider,
   DS_ROOT_BRAND_ATTRIBUTE,
+  DS_ROOT_THEME_ATTRIBUTE,
 } from '@/providers/DesignSystemProvider';
 export {
   type CandyBarActions,

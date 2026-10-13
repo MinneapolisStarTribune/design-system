@@ -134,11 +134,17 @@ import '@minneapolisstartribune/design-system/web/startribune-dark.scoped.css';
 <section data-theme="dark">…</section>
 ```
 
-To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
+To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Known limitation: `TextInput`, `CandyBar`, and `Link` apply their dark styles when any ancestor has `data-theme="dark"`, so they keep those styles inside a light region nested in a dark page. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
 
-Set `forceColorScheme` on `DesignSystemProvider` to the scheme on `<html>`. A few components read it from context.
+When you pass `forceColorScheme`, `DesignSystemProvider` sets `data-theme` on `<html>` to match, and restores the previous value when it unmounts. Leave `forceColorScheme` out to manage `data-theme` on `<html>` yourself; components that read the scheme from context then treat it as `light`.
 
-To avoid a flash of the wrong theme, set `data-theme` before the first paint, either in the server-rendered HTML or with a small inline script in `<head>`.
+```tsx
+<DesignSystemProvider brand="startribune" forceColorScheme={theme}>
+```
+
+The provider sets the attribute after hydration. To avoid a flash of the wrong theme in server-rendered apps, also render `data-theme` on `<html>` in the server HTML, or set it with a small inline script in `<head>`.
+
+`surface="dark"` and `surface="light"` work the same in either scheme: dark-surface styles use the `on-dark` tokens, which have the same values in light and dark themes.
 
 ## Dialog
 
