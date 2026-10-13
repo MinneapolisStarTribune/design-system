@@ -1,0 +1,86 @@
+.menu {
+  /* Shrink to the space the `size` middleware in FloatingSurface.tsx measures. Subtract the 1px border on each side. */
+  width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
+
+  /* `useListNavigation` focuses the surface when the pointer leaves the items.
+     Only items show a focus ring. */
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+/* Overrides Popover's `.container` sizing regardless of CSS load order. */
+.menu .container {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: min(var(--menu-max-height, 317px), var(--floating-available-height, 100vh) - 2px);
+  padding: var(--spacing-8);
+  /* Match the wrapper radius minus its border. */
+  border-radius: calc(var(--radius-16) - 1px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--menu-item-min-height, 43px);
+  padding: var(--spacing-12);
+
+  border: none;
+  border-radius: var(--radius-8);
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--color-select-hover);
+  }
+
+  /* Outline instead of border so focus doesn't shift the layout. The -1px offset keeps the ring
+     inside the row so it doesn't cover the neighboring items. */
+  &:focus-visible {
+    outline: 1px solid var(--color-border-state-focus);
+    outline-offset: -1px;
+  }
+}
+
+.itemDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  margin-inline-start: auto;
+}
+
+.divider {
+  height: 1px;
+  /* Keeps hover and focus backgrounds 2px clear of the line.
+     Each divider adds an extra 4px of height. */
+  margin-block: var(--spacing-2);
+  flex-shrink: 0;
+  background: var(--color-border-on-light-subtle-01);
+}

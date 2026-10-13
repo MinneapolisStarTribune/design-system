@@ -16,8 +16,10 @@
 
 /* Root */
 .container {
-  min-width: var(--popover-min-width, 240px);
-  max-width: var(--popover-max-width, 320px);
+  /* Fit the space the `size` middleware in FloatingSurface.tsx measures, less the wrapper's 1px borders and the left padding. */
+  --popover-fit-width: calc(var(--floating-available-width, 100vw) - 2px - var(--spacing-16));
+  min-width: min(var(--popover-min-width, 240px), var(--popover-fit-width));
+  max-width: min(var(--popover-max-width, 320px), var(--popover-fit-width));
   max-height: var(--popover-max-height, 500px);
 
   background: transparent;
@@ -95,12 +97,17 @@
   color: var(--color-text-on-light-secondary) !important;
 }
 
-/* Divider */
+/* Divider. Inset to match the body's right padding. */
 .divider {
   height: 1px;
   background: var(--color-border-on-light-subtle-01);
 
-  margin: var(--spacing-12) 0 0 calc(-1 * var(--spacing-16));
+  margin: var(--spacing-12) var(--spacing-16) 0 0;
+}
+
+/* Spans the wrapper edge to edge by pulling back over the container's left padding. */
+.dividerFullBleed {
+  margin-inline: calc(-1 * var(--spacing-16)) 0;
 }
 
 /* Body */
@@ -138,8 +145,8 @@
   padding: var(--spacing-16);
 }
 
-/* Arrow (critical for seamless look). FloatingArrow draws a border path, then a fill path whose
-   stroke hides the seam with the surface. */
+/* FloatingArrow draws a border path, then a fill path whose stroke hides the seam with the
+   surface. */
 .arrow {
   position: absolute;
   fill: var(--popover-arrow-fill, var(--color-background-light-default));
@@ -152,4 +159,3 @@
 .arrow > path:last-of-type {
   stroke: var(--popover-arrow-fill, var(--color-background-light-default));
 }
-

@@ -1,0 +1,141 @@
+/* Keep `&` suffix blocks directly under their parent, so class names match the `styles.*` keys. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-96, 6rem) + var(--spacing-64, 4rem));
+  padding: var(--spacing-40, 2.5rem);
+  color: var(--color-text-on-light-primary);
+
+  @media (min-width: 1160px) {
+    padding: var(--spacing-80, 5rem);
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24, 1.5rem);
+
+  &Grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-64, 4rem) var(--spacing-40, 2.5rem);
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &GridThreeColumns {
+    @media (min-width: 1160px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+
+.example {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8, 0.5rem);
+
+  &FitContent {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  &Description {
+    margin: 0;
+  }
+
+  &Content {
+    margin-top: var(--spacing-16, 1rem);
+  }
+}
+
+/* Docs canvas frame for the Configurable story. The menu renders inside it via `portalRoot`. */
+.configurableFrame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 480px;
+}
+
+.accountFrame {
+  display: flex;
+  align-items: flex-end;
+  min-height: 200px;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 240px;
+  padding: var(--spacing-8, 0.5rem) var(--spacing-16, 1rem);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-8);
+}
+
+.itemsDemo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-8, 0.5rem);
+}
+
+.positionFrame {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 320px;
+  height: 166px;
+  padding: var(--spacing-16, 1rem);
+
+  &-bottom {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  &-bottom-start {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  &-top {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  &-right {
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &-left {
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+}
+
+.positionMenu {
+  --menu-width: 200px;
+}
+
+.accountMenu {
+  --menu-width: 315px;
+  --menu-item-min-height: 48px;
+}
+
+.itemActionsMenu {
+  --menu-width: 160px;
+}
+
+.itemsMenu {
+  --menu-width: 240px;
+}

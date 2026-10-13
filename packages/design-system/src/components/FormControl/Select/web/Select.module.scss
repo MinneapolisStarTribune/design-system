@@ -127,7 +127,8 @@
   border-radius: var(--radius-16);
   z-index: 20;
 
-  max-height: 362px;
+  /* Fits seven options plus the list padding. */
+  max-height: 317px;
   overflow-y: auto;
 
   background: var(--color-select-background);

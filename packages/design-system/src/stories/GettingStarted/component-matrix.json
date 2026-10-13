@@ -25,6 +25,11 @@
     "web": true
   },
   {
+    "component": "Menu",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "FormGroup.Label",
     "native": true,
     "web": true
