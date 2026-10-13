@@ -366,9 +366,9 @@ loadBrandFonts('startribune');
 
 - [ ] Import theme CSS: `@minneapolisstartribune/design-system/web/{brand}-{scheme}.css`
 - [ ] Import component styles: `@minneapolisstartribune/design-system/web/components.css`
+- [ ] (Theme switching) Import `{brand}-dark.scoped.css` after the theme file
 - [ ] Wrap with `<DesignSystemProvider brand="..." forceColorScheme="...">`
 - [ ] Ensure `brand`/`forceColorScheme` props match the imported theme CSS file
-- [ ] (Theme switching) Import `{brand}-dark.scoped.css` after the theme file and set `data-theme="dark"`
 - [ ] Import CSS **before** components render (top of entry file)
 
 **Verify:** In DevTools, `getComputedStyle(document.documentElement).getPropertyValue('--color-text-primary')` should return a value.
