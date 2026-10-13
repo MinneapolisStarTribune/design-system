@@ -136,7 +136,7 @@ import '@minneapolisstartribune/design-system/web/startribune-dark.scoped.css';
 
 To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Known limitation: `TextInput`, `CandyBar`, and `Link` apply their dark styles when any ancestor has `data-theme="dark"`, so they keep those styles inside a light region nested in a dark page. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
 
-When you pass `forceColorScheme`, `DesignSystemProvider` sets `data-theme` on `<html>` to match, and restores the previous value when it unmounts. Leave `forceColorScheme` out to manage `data-theme` on `<html>` yourself; components that read the scheme from context then treat it as `light`.
+When you pass `forceColorScheme`, `DesignSystemProvider` sets `data-theme` on `<html>` to match, and restores the previous value when it unmounts. Leave `forceColorScheme` out to manage `data-theme` on `<html>` yourself; components that read the scheme from context then treat it as `light`. The attribute name is exported as `DS_ROOT_THEME_ATTRIBUTE` (and the brand attribute, `data-ds-brand`, as `DS_ROOT_BRAND_ATTRIBUTE`).
 
 ```tsx
 <DesignSystemProvider brand="startribune" forceColorScheme={theme}>
