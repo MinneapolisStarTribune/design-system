@@ -101,59 +101,44 @@ For a Piano-driven coachmark (triggered by Piano's `setResponseVariable` event i
 | Star Tribune | `startribune-light.css` | `startribune-dark.css` |
 | Varsity      | `varsity-light.css`     | `varsity-dark.css`     |
 
-### Static vs Dynamic Loading
+Each theme file sets its CSS variables on `:root` and includes the brand's typography classes. Import one per page.
 
-**Static** — import the CSS file at the top of your entry file (shown above).
+Each scheme also ships as a scoped file that only contains the CSS variables, under a `data-theme` selector:
 
-**Dynamic** — swap `<link>` elements at runtime if you need to switch themes:
+| Brand        | Light                          | Dark                          |
+| ------------ | ------------------------------ | ----------------------------- |
+| Star Tribune | `startribune-light.scoped.css` | `startribune-dark.scoped.css` |
+| Varsity      | `varsity-light.scoped.css`     | `varsity-dark.scoped.css`     |
 
-**Option B: Dynamic loading (if you need to switch themes at runtime)**
+### Static Loading
+
+Import the theme CSS file at the top of your entry file (shown above).
+
+### Switching Themes with `data-theme`
+
+To switch schemes at runtime, keep the light theme file and add the scoped dark file. The dark variables apply to any element with `data-theme="dark"` and its descendants, and they set `color-scheme: dark`. This is the same attribute `components.css` uses for its dark component styles.
 
 ```tsx
-import { useEffect, useState } from 'react';
 import '@minneapolisstartribune/design-system/web/components.css';
-import { DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
-
-function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const brand = 'startribune'; // or 'varsity'
-
-  useEffect(() => {
-    // Remove any existing theme link
-    const existingLink = document.getElementById('design-system-theme');
-    if (existingLink) {
-      existingLink.remove();
-    }
-
-    // Load the correct combined CSS file (typography + themes)
-    // Note: Adjust this path based on how your bundler resolves node_modules
-    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`
-    // For Webpack/CRA: You may need to use a dynamic import or copy files to public folder
-    const link = document.createElement('link');
-    link.id = 'design-system-theme';
-    link.rel = 'stylesheet';
-    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`;
-    document.head.appendChild(link);
-
-    // Cleanup on unmount
-    return () => {
-      const linkToRemove = document.getElementById('design-system-theme');
-      if (linkToRemove) {
-        linkToRemove.remove();
-      }
-    };
-  }, [brand, theme]);
-
-  return (
-    <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-      {/* Your app with theme switcher */}
-      <button onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}>
-        Toggle Theme
-      </button>
-    </DesignSystemProvider>
-  );
-}
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/startribune-dark.scoped.css';
 ```
+
+```html
+<!-- Whole page -->
+<html data-theme="dark">
+  …
+</html>
+
+<!-- One region -->
+<section data-theme="dark">…</section>
+```
+
+To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
+
+Set `forceColorScheme` on `DesignSystemProvider` to the scheme on `<html>`. A few components read it from context.
+
+To avoid a flash of the wrong theme, set `data-theme` before the first paint, either in the server-rendered HTML or with a small inline script in `<head>`.
 
 ## Dialog
 
@@ -377,6 +362,7 @@ loadBrandFonts('startribune');
 - [ ] Import component styles: `@minneapolisstartribune/design-system/web/components.css`
 - [ ] Wrap with `<DesignSystemProvider brand="..." forceColorScheme="...">`
 - [ ] Ensure `brand`/`forceColorScheme` props match the imported theme CSS file
+- [ ] (Theme switching) Import `{brand}-dark.scoped.css` after the theme file and set `data-theme="dark"`
 - [ ] Import CSS **before** components render (top of entry file)
 
 **Verify:** In DevTools, `getComputedStyle(document.documentElement).getPropertyValue('--color-text-primary')` should return a value.
