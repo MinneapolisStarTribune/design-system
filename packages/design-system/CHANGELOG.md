@@ -1,5 +1,19 @@
 # @minneapolisstartribune/design-system
 
+## 3.1.0
+
+### Minor Changes
+
+- [#455](https://github.com/MinneapolisStarTribune/design-system/pull/455) [`50e6e2d`](https://github.com/MinneapolisStarTribune/design-system/commit/50e6e2d67d507d5029e798102d9700c0390bc4c4) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add web `Menu`, with `Menu.Item`, `Menu.ItemIcon`, and `Menu.Divider`. The divider leaves 2px above and below it, so hovered and focused items don't touch it. The menu renders and wires a `trigger` element (with `onOpen`). It supports `placement`, pointer controls, link and disabled items (pass `as={NextLink}` to render a router link), item-closing behavior, and arrow-key navigation. `placement` and `arrowPosition` accept a value per breakpoint. Its `onClose` callback takes no arguments. If the chosen side runs out of room, the menu flips to the other side, then shrinks to fit and scrolls. Pass `portalRoot` to render it outside `document.body`.
+
+  Exports the `MenuProps`, `MenuItemProps`, `MenuPlacement`, and `MenuArrowPosition` types.
+
+### Patch Changes
+
+- [#455](https://github.com/MinneapolisStarTribune/design-system/pull/455) [`aaf6052`](https://github.com/MinneapolisStarTribune/design-system/commit/aaf605267d485d98e5590d939eb473696e05bdd4) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Popover` now shrinks to fit narrow screens or its `portalRoot`. A `left` or `right` popover that fits on neither side opens below or above the trigger instead. `Popover.Divider` now applies `fullBleed`: by default it spans the popover edge to edge, and with `fullBleed={false}` it lines up with the body text. The divider also has `role="separator"`.
+
+- [#456](https://github.com/MinneapolisStarTribune/design-system/pull/456) [`3cac61b`](https://github.com/MinneapolisStarTribune/design-system/commit/3cac61bfccef8b587774f17998db8ecd84267a50) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Select` now matches the Core `select` component. The options list uses the dropdown menu styles shared with `Menu`: 16px list radius, no vertical list padding, 12px option padding, 16px option text at every size, a 3px scrollbar, and a max height of 317px (was 280px), scrolling past that. The large trigger has a 12px gap before the chevron. Default and error borders use the `border-on-light-subtle-02` and `border-state-attention-on-light` tokens, so they follow dark mode. `Select` also no longer adds an `undefined` class to its container when a value is selected.
+
 ## 3.0.0
 
 ### Major Changes
