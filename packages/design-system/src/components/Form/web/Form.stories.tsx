@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { formDefaults, TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import { useForm } from '@tanstack/react-form';
+import { z } from 'zod';
 import { Form } from './Form';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { FormControl } from '@/components/FormControl/FormControl';
-import { useFormLogic } from '../useFormLogic';
 
 const meta = {
   title: 'Forms/Form (Optional Layout & Logic Wrapper)',
@@ -45,104 +47,81 @@ export const FormDocSources = {
 </Form>
 `.trim(),
   withValidationSimple: `
+import { z } from 'zod';
+import { useForm } from '@tanstack/react-form';
+import { formDefaults, TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import { Form } from '@minneapolisstartribune/design-system/web';
+
+const schema = z.object({
+  email: z.string().trim().min(1, 'Email is required').pipe(z.email('Please enter a valid email address')),
+});
+
 function SimpleValidationExample() {
-  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
-    initialValues: { email: '' },
-    validateOnSubmit: true,
-    validateOnBlur: true,
-    validate: (vals) => {
-      const email = (vals.email as string)?.trim() ?? '';
-      if (!email) return { email: 'Email is required' };
-      if (!email.includes('@')) return { email: 'Please enter a valid email address (include @)' };
-      return {};
-    },
-    onSubmit: (vals) => {
-      alert(\`Submitted: \${vals.email}\`);
-    },
+  const form = useForm({
+    ...formDefaults,
+    defaultValues: { email: '' },
+    validators: [{ run: schema, triggers: ['change', 'blur'] }],
+    onSubmit: ({ value }) => alert(\`Submitted: \${value.email}\`),
   });
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <FormGroup.Label>Email</FormGroup.Label>
-        <FormControl.TextInput
-          name="email"
-          placeholderText="you@example.com"
-          value={values.email as string}
-          onChange={(e) => handleChange('email', e.target.value)}
-          onBlur={() => handleBlur('email')}
-        />
-        {errors.email && (
-          <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>
-        )}
-      </FormGroup>
+    <Form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field name="email">
+        {(field) => <TextField field={field} label="Email" placeholderText="you@example.com" />}
+      </form.Field>
       <Form.Button>Submit</Form.Button>
     </Form>
   );
 }
 `.trim(),
   withValidationMultiField: `
+import { z } from 'zod';
+import { useForm } from '@tanstack/react-form';
+import { formDefaults, TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import { Form } from '@minneapolisstartribune/design-system/web';
+
+const schema = z.object({
+  name: z.string(),
+  email: z.string().trim().min(1, 'Email is required').pipe(z.email('Please enter a valid email address')),
+  message: z.string().trim().min(1, 'Message is required'),
+});
+
 function MultiFieldValidationExample() {
-  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
-    initialValues: {
-      name: 'Jane Doe',
-      email: '',
-      message: '',
-    },
-    validateOnSubmit: true,
-    validateOnBlur: true,
-    validate: (vals) => {
-      const email = (vals.email as string)?.trim() ?? '';
-      const message = (vals.message as string)?.trim() ?? '';
-      const errs: Record<string, string> = {};
-      if (!email) errs.email = 'Email is required';
-      else if (!email.includes('@')) errs.email = 'Please enter a valid email address (include @)';
-      if (!message) errs.message = 'Message is required';
-      return errs;
-    },
-    onSubmit: (vals) => {
-      alert(\`Submitted: \${vals.name}, \${vals.email}, \${vals.message}\`);
-    },
+  const form = useForm({
+    ...formDefaults,
+    defaultValues: { name: 'Jane Doe', email: '', message: '' },
+    validators: [{ run: schema, triggers: ['change', 'blur'] }],
+    onSubmit: ({ value }) => alert(\`Submitted: \${value.name}, \${value.email}, \${value.message}\`),
   });
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <FormGroup.Label optional>Name</FormGroup.Label>
-        <FormControl.TextInput
-          name="name"
-          placeholderText="Your name"
-          value={values.name as string}
-          onChange={(e) => handleChange('name', e.target.value)}
-          onBlur={() => handleBlur('name')}
-        />
-      </FormGroup>
-      <FormGroup>
-        <FormGroup.Label>Email</FormGroup.Label>
-        <FormControl.TextInput
-          name="email"
-          placeholderText="you@example.com"
-          value={values.email as string}
-          onChange={(e) => handleChange('email', e.target.value)}
-          onBlur={() => handleBlur('email')}
-        />
-        {errors.email && (
-          <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>
+    <Form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field name="name">
+        {(field) => <TextField field={field} label="Name" optional placeholderText="Your name" />}
+      </form.Field>
+      <form.Field name="email">
+        {(field) => (
+          <TextField
+            field={field}
+            label="Email"
+            description="Where should we email updates?"
+            placeholderText="you@example.com"
+          />
         )}
-      </FormGroup>
-      <FormGroup>
-        <FormGroup.Label>Message</FormGroup.Label>
-        <FormControl.TextInput
-          name="message"
-          placeholderText="Your message"
-          value={values.message as string}
-          onChange={(e) => handleChange('message', e.target.value)}
-          onBlur={() => handleBlur('message')}
-        />
-        {errors.message && (
-          <FormGroup.Caption variant="error">{errors.message}</FormGroup.Caption>
-        )}
-      </FormGroup>
+      </form.Field>
+      <form.Field name="message">
+        {(field) => <TextField field={field} label="Message" placeholderText="Your message" />}
+      </form.Field>
       <Form.Button>Submit</Form.Button>
     </Form>
   );
@@ -206,42 +185,38 @@ export const Horizontal: Story = {
 
 type FormOrientation = React.ComponentProps<typeof Form>['orientation'];
 
+const requiredEmail = z
+  .string()
+  .trim()
+  .min(1, 'Email is required')
+  .pipe(z.email('Please enter a valid email address'));
+
+const simpleSchema = z.object({ email: requiredEmail });
+
 /**
  * Real-world example:
- * Validation is provided by the app (email must contain `@`). Error appears when the field
- * is blurred without `@` or when submit is clicked. Try entering "jane" and tabbing away or submitting.
+ * A zod schema validates the form through TanStack Form. The error appears once the field is
+ * blurred or submit is clicked. Try entering "jane" and tabbing away or submitting.
  */
 function SimpleValidationExample({ orientation }: { orientation?: FormOrientation }) {
-  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
-    initialValues: { email: '' },
-    validateOnSubmit: true,
-    validateOnBlur: true,
-    validate: (vals) => {
-      const email = (vals.email as string)?.trim() ?? '';
-      if (!email) return { email: 'Email is required' };
-      if (!email.includes('@')) return { email: 'Please enter a valid email address (include @)' };
-      return {};
-    },
-    onSubmit: (vals) => {
-      alert(`Submitted: ${vals.email}`);
-    },
+  const form = useForm({
+    ...formDefaults,
+    defaultValues: { email: '' },
+    validators: [{ run: simpleSchema, triggers: ['change', 'blur'] }],
+    onSubmit: ({ value }) => alert(`Submitted: ${value.email}`),
   });
 
   return (
-    <Form onSubmit={handleSubmit} orientation={orientation}>
-      <FormGroup>
-        <FormGroup.Label>Email</FormGroup.Label>
-        <FormControl.TextInput
-          name="email"
-          placeholderText="you@example.com"
-          value={values.email as string}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('email', e.target.value)
-          }
-          onBlur={() => handleBlur('email')}
-        />
-        {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
-      </FormGroup>
+    <Form
+      orientation={orientation}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field name="email">
+        {(field) => <TextField field={field} label="Email" placeholderText="you@example.com" />}
+      </form.Field>
       <Form.Button>Submit</Form.Button>
     </Form>
   );
@@ -255,13 +230,7 @@ export const WithValidationSimple: Story = {
     docs: {
       description: {
         story:
-          'Uses **useFormLogic** for state and validation. Enter an email without the @ symbol, then blur the field or click Submit to see the error.\n\n' +
-          '**useFormLogic** options:\n' +
-          '- **initialValues** — Initial field values (keyed by field name).\n' +
-          '- **onSubmit** — Called when the form is submitted and validation passes (if validate is provided).\n' +
-          '- **validate** — Optional. Function that receives current values and returns an object of field names to error messages (omit or undefined = no error).\n' +
-          '- **validateOnSubmit** — Run validate on form submit. Default: `true`.\n' +
-          '- **validateOnBlur** — Run validate when a field blurs and set that field’s error. Default: `false`.',
+          'Uses TanStack Form `useForm` with `formDefaults` and the `TextField` adapter from `@minneapolisstartribune/design-system-tanstack-form` and a **zod** schema. Enter an email without the @ symbol, then blur the field or click Submit to see the error.',
       },
       source: {
         code: FormDocSources.withValidationSimple,
@@ -272,74 +241,48 @@ export const WithValidationSimple: Story = {
   render: (args) => <SimpleValidationExample orientation={args.orientation} />,
 };
 
+const multiFieldSchema = z.object({
+  name: z.string(),
+  email: requiredEmail,
+  message: z.string().trim().min(1, 'Message is required'),
+});
+
 /**
  * Multi-field example: one field has an initial value, another is required and shows an error
- * when empty. Demonstrates initialValues, multiple validations, and mixed optional/required fields.
+ * when empty. Demonstrates defaultValues, a multi-field schema, and mixed optional/required fields.
  */
 function MultiFieldValidationExample({ orientation }: { orientation?: FormOrientation }) {
-  const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
-    initialValues: {
-      name: 'Jane Doe',
-      email: '',
-      message: '',
-    },
-    validateOnSubmit: true,
-    validateOnBlur: true,
-    validate: (vals) => {
-      const email = (vals.email as string)?.trim() ?? '';
-      const message = (vals.message as string)?.trim() ?? '';
-      const errs: Record<string, string> = {};
-      if (!email) errs.email = 'Email is required';
-      else if (!email.includes('@')) errs.email = 'Please enter a valid email address (include @)';
-      if (!message) errs.message = 'Message is required';
-      return errs;
-    },
-    onSubmit: (vals) => {
-      alert(`Submitted: ${vals.name}, ${vals.email}, ${vals.message}`);
-    },
+  const form = useForm({
+    ...formDefaults,
+    defaultValues: { name: 'Jane Doe', email: '', message: '' },
+    validators: [{ run: multiFieldSchema, triggers: ['change', 'blur'] }],
+    onSubmit: ({ value }) => alert(`Submitted: ${value.name}, ${value.email}, ${value.message}`),
   });
 
   return (
-    <Form onSubmit={handleSubmit} orientation={orientation}>
-      <FormGroup>
-        <FormGroup.Label optional>Name</FormGroup.Label>
-        <FormControl.TextInput
-          name="name"
-          placeholderText="Your name"
-          value={values.name as string}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('name', e.target.value)
-          }
-          onBlur={() => handleBlur('name')}
-        />
-      </FormGroup>
-      <FormGroup>
-        <FormGroup.Label>Email</FormGroup.Label>
-        <FormGroup.Description>Where should we email updates??</FormGroup.Description>
-        <FormControl.TextInput
-          name="email"
-          placeholderText="you@example.com"
-          value={values.email as string}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('email', e.target.value)
-          }
-          onBlur={() => handleBlur('email')}
-        />
-        {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
-      </FormGroup>
-      <FormGroup>
-        <FormGroup.Label>Message</FormGroup.Label>
-        <FormControl.TextInput
-          name="message"
-          placeholderText="Your message"
-          value={values.message as string}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange('message', e.target.value)
-          }
-          onBlur={() => handleBlur('message')}
-        />
-        {errors.message && <FormGroup.Caption variant="error">{errors.message}</FormGroup.Caption>}
-      </FormGroup>
+    <Form
+      orientation={orientation}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field name="name">
+        {(field) => <TextField field={field} label="Name" optional placeholderText="Your name" />}
+      </form.Field>
+      <form.Field name="email">
+        {(field) => (
+          <TextField
+            field={field}
+            label="Email"
+            description="Where should we email updates?"
+            placeholderText="you@example.com"
+          />
+        )}
+      </form.Field>
+      <form.Field name="message">
+        {(field) => <TextField field={field} label="Message" placeholderText="Your message" />}
+      </form.Field>
       <Form.Button>Submit</Form.Button>
     </Form>
   );
@@ -353,9 +296,9 @@ export const WithValidationMultiField: Story = {
     docs: {
       description: {
         story:
-          'Multi-field form with **initial value**, **required field with error**, and **format validation**.\n\n' +
+          'Multi-field form with **initial value**, **required field with error**, and **format validation**, all from one zod schema.\n\n' +
           '- **Name** — Optional; pre-filled with `"Jane Doe"`.\n' +
-          '- **Email** — Required; shows an error if empty or if the value doesn’t include `@`.\n' +
+          '- **Email** — Required; shows an error if empty or not a valid email.\n' +
           '- **Message** — Required; shows "Message is required" if left empty.',
       },
       source: {

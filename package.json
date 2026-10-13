@@ -28,7 +28,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix --filter=@minneapolisstartribune/design-system",
     "prepare": "lefthook install",
-    "release": "turbo run build --filter=@minneapolisstartribune/design-system && changeset publish",
+    "release": "turbo run build --filter=@minneapolisstartribune/design-system --filter=@minneapolisstartribune/design-system-tanstack-form && changeset publish",
     "storybook:native": "turbo run storybook --filter=@minneapolisstartribune/mobile-storybook",
     "storybook:ios": "turbo run storybook:ios --filter=@minneapolisstartribune/mobile-storybook",
     "storybook:android": "turbo run storybook:android --filter=@minneapolisstartribune/mobile-storybook",
