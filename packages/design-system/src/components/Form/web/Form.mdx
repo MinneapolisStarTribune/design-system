@@ -38,15 +38,6 @@ The form system is layered — you can use as much or as little as you need:
       </td>
       <td>Optional</td>
     </tr>
-    <tr>
-      <td>
-        <code>@minneapolisstartribune/design-system-tanstack-form</code>
-      </td>
-      <td>
-        TanStack Form adapters (e.g. <code>TextField</code>) that wire a field's value, errors, and blur to <code>FormGroup</code> + <code>FormControl</code>.
-      </td>
-      <td>Optional</td>
-    </tr>
   </tbody>
 </table>
 
@@ -74,15 +65,9 @@ Always use `Form.Button` inside `Form` for the submit action. It renders a `type
 
 Pressing Enter/Return while focused in any input will also submit the form natively, as long as `Form.Button` is present.
 
-## Form logic with TanStack Form
+## Form state and validation
 
-`Form` doesn't own state or validation. Our recommended setup is [TanStack Form](https://tanstack.com/form) with the adapters from `@minneapolisstartribune/design-system-tanstack-form` and a [zod](https://zod.dev) schema. See that package's README for every adapter and prop.
-
-Spread `formDefaults` into `useForm` (it shows errors after blur or a submit attempt), pass the zod schema as a form validator, and hand each `field` to an adapter. Schema issues map to fields by path, so each adapter shows its own error caption. No `createFormHook` setup needed.
-
-<Source dark language="tsx" code={FormStories.FormDocSources.withValidationSimple} />
-
-Already using something else (React Hook Form, `useState`)? Pass your own handler to `<Form onSubmit={...}>` and render `FormGroup.Caption variant="error"` yourself.
+`Form` doesn't own state or validation. See **Forms/TanStack Form** for the recommended setup, or pass your own handler to `<Form onSubmit={...}>` and render `FormGroup.Caption variant="error"` yourself.
 
 ## Exports
 
@@ -120,26 +105,4 @@ Already using something else (React Hook Form, `useState`)? Pass your own handle
   </tbody>
 </table>
 
-
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
-
----
-
-
-## Validation
-
-### With validation (simple)
-
-TanStack Form + zod. Enter an email without the `@` symbol, then blur the field or click Submit to see the error.
-
-<Canvas of={FormStories.WithValidationSimple} sourceState="hidden" />
-
-### With validation (multi-field)
-
-Multi-field form with initial value, required field with error, and format validation, all from one zod schema.
-
-- **Name** — Optional; pre-filled with "Jane Doe".
-- **Email** — Required; shows an error if empty or not a valid email.
-- **Message** — Required; shows "Message is required" if left empty.
-
-<Canvas of={FormStories.WithValidationMultiField} sourceState="hidden" />

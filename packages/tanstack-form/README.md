@@ -1,41 +1,50 @@
 # @minneapolisstartribune/design-system-tanstack-form
 
-[TanStack Form v2](https://tanstack.com/form) field adapters for `@minneapolisstartribune/design-system`. Each adapter wires a design-system form control (label, description, caption, error state, ARIA) to a TanStack Form field so forms don't have to re-plumb `value` / `onChange` / `onBlur` / errors by hand.
-
-> TanStack Form v2 is in alpha. This package tracks `@tanstack/react-form@^2.0.0-alpha.2` and may break alongside it.
+[TanStack Form v1](https://tanstack.com/form) field adapters for `@minneapolisstartribune/design-system`. Each adapter wires a design-system form control (label, description, caption, error state, ARIA) to a TanStack Form field so forms don't have to re-plumb `value` / `onChange` / `onBlur` / errors by hand.
 
 ## Install
 
 ```sh
-yarn add @minneapolisstartribune/design-system-tanstack-form @tanstack/react-form@alpha
+yarn add @minneapolisstartribune/design-system-tanstack-form @tanstack/react-form
 ```
 
-Peer deps: `@minneapolisstartribune/design-system` (web), `@tanstack/react-form` v2, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
+Peer deps: `@minneapolisstartribune/design-system` (web), `@tanstack/react-form` v1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
 
 ## Adapters
 
-| Adapter     | Wraps                     | Field value |
-| ----------- | ------------------------- | ----------- |
-| `TextField` | `FormGroup` + `TextInput` | `string`    |
+| Adapter              | Wraps                            | Field value                          |
+| -------------------- | -------------------------------- | ------------------------------------ |
+| `TextField`          | `FormGroup` + `TextInput`        | `string`                             |
+| `PasswordField`      | `FormGroup` + `PasswordInput`    | `string`                             |
+| `NumberField`        | `FormGroup` + `NumberInput`      | `number \| undefined`                |
+| `SelectField`        | `FormGroup` + `Select`           | `string` (`null`/`undefined` = none) |
+| `MultiSelectField`   | `FormGroup` + `MultiSelect`      | `string[]`                           |
+| `RadioGroupField`    | `FormGroup` + `RadioGroup`       | `string` (`null`/`undefined` = none) |
+| `CheckboxField`      | `FormGroup` + `Checkbox`         | `boolean`                            |
+| `CheckboxGroupField` | `FormGroup` + `CheckboxGroup`    | `string[]`                           |
+| `SwitchField`        | `FormGroup` + `Switch`           | `boolean`                            |
+| `ToggleGroupField`   | `FormGroup` + `ToggleGroup.Root` | `string` or `string[]` (`multiple`)  |
 
 ## Usage
 
-Use plain `useForm`, spread in `formDefaults`, and pass each `field` to an adapter. Nothing to register, and you only bundle the adapters you import.
+Use plain `useForm` and pass each `field` to an adapter. Nothing to register, and you only bundle the adapters you import.
 
 ```tsx
 import { useForm } from '@tanstack/react-form';
-import { formDefaults, TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import { TextField } from '@minneapolisstartribune/design-system-tanstack-form';
 import { z } from 'zod';
 
 const schema = z.object({
-  email: z.string().min(1, 'Email is required').pipe(z.email('Enter a valid email')),
+  email: z.string().trim().min(1, 'Email is required').pipe(z.email('Enter a valid email')),
 });
+
+// Type the defaults with the schema's input type and useForm infers every field from it.
+const defaultValues: z.input<typeof schema> = { email: '' };
 
 function SignupForm() {
   const form = useForm({
-    ...formDefaults,
-    defaultValues: { email: '' },
-    validators: [{ run: schema, triggers: ['change', 'blur'] }],
+    defaultValues,
+    validators: { onChange: schema, onBlur: schema },
     onSubmit: ({ value }) => save(value),
   });
 
@@ -56,26 +65,59 @@ function SignupForm() {
 }
 ```
 
-`TextField` only accepts string fields, so TypeScript rejects it on a `number` or object field.
+Each adapter only accepts fields of its value type, so TypeScript rejects e.g. `TextField` on a `number` field.
 
-`formDefaults` currently sets `errorVisibility` so errors show once a field is blurred or the form has been submitted. Spread it first so anything you pass per form wins.
+If you want the `field.TextField` shorthand, wrap the adapter with `useFieldContext` and register it with `createFormHook`. Every form using that hook then bundles every registered adapter.
 
-If you want the `field.TextField` shorthand or `defineAppFieldGroup`, wrap adapters yourself with `getFormHookHelpers().fieldComponent.strict(TextField, 'field')` and register them with `createFormHook`. Every form using that hook then bundles every registered adapter.
+```tsx
+const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
 
-## `TextField` props
+const AppTextField = (props: Omit<TextFieldProps, 'field'>) => (
+  <TextField field={useFieldContext<string>()} {...props} />
+);
 
-Everything `TextInput` accepts (`size`, `placeholderText`, `icon`, `rounded`, `isDisabled`, `isSuccess`, `analytics`, `type`, …) except `value`, `name`, `isError` and `aria-invalid`, which come from the field. Plus:
+export const { useAppForm } = createFormHook({
+  fieldContext,
+  formContext,
+  fieldComponents: { TextField: AppTextField },
+  formComponents: {},
+});
+```
 
-| Prop          | Description                                                                |
-| ------------- | -------------------------------------------------------------------------- |
-| `field`       | The field from `form.Field`'s render prop. Required.                       |
-| `label`       | Renders `FormGroup.Label`, associated with the input.                      |
-| `description` | Renders `FormGroup.Description` under the label.                           |
-| `caption`     | Info caption under the input. Replaced by the validation error when shown. |
-| `optional`    | Shows the "(Optional)" marker on the label.                                |
+## Props
 
-`onChange` / `onBlur` still work — they run after the field is updated.
+Each adapter takes the props of the component it wraps, minus the ones the field drives (value, change handler, `name`, error state). Plus:
+
+| Prop          | Description                                                                  |
+| ------------- | ---------------------------------------------------------------------------- |
+| `field`       | The field from `form.Field`'s render prop. Required.                         |
+| `label`       | Renders `FormGroup.Label`, associated with the control.                      |
+| `description` | Renders `FormGroup.Description` under the label.                             |
+| `caption`     | Info caption under the control. Replaced by the validation error when shown. |
+| `optional`    | Shows the "(Optional)" marker on the label.                                  |
+
+`onChange` / `onBlur` still work where the wrapped component has them. They run after the field is updated.
+
+A few differ:
+
+- `CheckboxField` and `SwitchField` pass `label` and `caption` to the checkbox/switch itself, there's no group label. The error shows as a caption below.
+- `NumberField` writes `undefined` when the input is cleared, so the field has to be `number | undefined`. With zod, `z.number().optional().refine((n) => n !== undefined, 'Required')` keeps it required, and typing `defaultValues` as `z.input<typeof schema>` gives the right field types without casts.
+- `ToggleGroupField` takes `ToggleGroup.Item`s as children and needs `label` or `aria-labelledby`. Set `type="multiple"` for a `string[]` field. String unions work: a `'list' | 'grid'` field gets typed `onChange` and item values.
+- `SelectField` doesn't need an `id`, it uses the FormGroup's.
+
+```tsx
+<form.Field name="view">
+  {(field) => (
+    <ToggleGroupField field={field} label="View">
+      <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+      <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
+    </ToggleGroupField>
+  )}
+</form.Field>
+```
 
 ### Errors
 
-The adapter shows the first entry of `field.errors` as an error caption (`role="alert"`) and puts the input in its error state. `field.errors` already respects the form's `errorVisibility` policy, so decide _when_ errors appear there (form- or field-level), not in the component.
+Every adapter shows the first entry of `field.state.meta.errors` as an error caption (`role="alert"`) and puts the control in its error state where it has one. Errors stay hidden until the field has been blurred or the form has been submitted. For controls without an `onBlur` (selects, checkboxes, radios, switches, toggle groups), the field counts as blurred when focus leaves the whole control, so moving between options doesn't. Validators can live on the form (a zod schema, issues map to fields by path) or on `form.Field`.
+
+A field-level `onChange` validator only runs when the value changes, so to flag an untouched required select or checkbox on blur, also pass it as `onBlur` (the zod examples pass the schema to both).

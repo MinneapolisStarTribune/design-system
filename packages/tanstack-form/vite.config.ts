@@ -23,7 +23,7 @@ export default defineConfig({
     preserveDirectives(),
     dts({
       include: ['src'],
-      exclude: ['src/**/*.test.tsx', 'src/**/*.test.ts'],
+      exclude: ['src/**/*.test.tsx', 'src/**/*.test.ts', 'src/test-utils/**'],
       outDir: 'dist',
       entryRoot: path.resolve(__dirname, 'src'),
     }),

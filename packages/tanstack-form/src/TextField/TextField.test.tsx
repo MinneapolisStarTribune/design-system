@@ -1,12 +1,10 @@
 import { useForm } from '@tanstack/react-form';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { formDefaults } from '../formDefaults';
 import { TextField } from './TextField';
 
 const Fixture = ({ onSubmit = () => {} }: { onSubmit?: (value: unknown) => void }) => {
   const form = useForm({
-    ...formDefaults,
     defaultValues: { email: '' },
     onSubmit: ({ value }) => onSubmit(value),
   });
@@ -20,12 +18,9 @@ const Fixture = ({ onSubmit = () => {} }: { onSubmit?: (value: unknown) => void 
     >
       <form.Field
         name="email"
-        validators={[
-          {
-            run: ({ value }) => (value.length === 0 ? 'Email is required' : undefined),
-            triggers: ['change', 'blur'],
-          },
-        ]}
+        validators={{
+          onChange: ({ value }) => (value.length === 0 ? 'Email is required' : undefined),
+        }}
       >
         {(field) => (
           <TextField
@@ -108,7 +103,7 @@ describe('TextField', () => {
   });
 });
 
-describe('TextField without formDefaults', () => {
+describe('TextField binding', () => {
   it('binds initial values', async () => {
     const CityFixture = () => {
       const form = useForm({ defaultValues: { city: 'Minneapolis' } });
