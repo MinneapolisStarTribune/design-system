@@ -54,6 +54,18 @@ describe('getStyleDictionaryConfig', () => {
     expect(config.platforms.css.files[0].destination).toBe('varsity-dark.css');
   });
 
+  it('adds a scoped theme file under the mode data-theme selector', () => {
+    existsSyncSpy.mockReturnValue(true);
+
+    const config = getStyleDictionaryConfig('varsity', 'dark');
+
+    expect(config.platforms.css.files[1]).toMatchObject({
+      destination: '../varsity-dark.scoped.css',
+      format: 'css/variables',
+      options: { selector: "[data-theme='dark']", colorScheme: 'dark' },
+    });
+  });
+
   it('throws error when required files are missing', () => {
     existsSyncSpy.mockImplementation((filePath) => {
       return !filePath.includes('tokens/primitives/color.json');
