@@ -47,7 +47,6 @@ export const SelectField = ({
           // Select falls back to the FormGroup id when this is undefined.
           id={id as string}
           value={field.state.value ?? undefined}
-          isError={errorMessage !== undefined}
           onChange={(value) => {
             field.handleChange(value);
             onChange?.(value);

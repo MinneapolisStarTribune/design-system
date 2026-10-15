@@ -43,7 +43,6 @@ export const RadioGroupField = ({
           {...groupProps}
           name={field.name}
           value={field.state.value}
-          error={errorMessage !== undefined}
           onChange={(value) => {
             field.handleChange(value);
             onChange?.(value);

@@ -291,10 +291,6 @@ function SimpleValidationExample() {
 export const Simple: Story = {
   parameters: {
     docs: {
-      description: {
-        story:
-          'Enter an email without the @ symbol, then blur the field or click Submit to see the error.',
-      },
       source: { code: TanStackFormDocSources.simple, type: 'code' },
     },
   },
@@ -352,12 +348,6 @@ function MultiFieldValidationExample() {
 export const MultiField: Story = {
   parameters: {
     docs: {
-      description: {
-        story:
-          '- **Name** — Optional; pre-filled with `"Jane Doe"`.\n' +
-          '- **Email** — Required; shows an error if empty or not a valid email.\n' +
-          '- **Message** — Required; shows "Message is required" if left empty.',
-      },
       source: { code: TanStackFormDocSources.multiField, type: 'code' },
     },
   },
@@ -494,10 +484,6 @@ function AllAdaptersExample() {
 export const AllAdapters: Story = {
   parameters: {
     docs: {
-      description: {
-        story:
-          'One adapter per input, all validated by one zod schema. Click Submit without touching anything to see every error.',
-      },
       source: { code: TanStackFormDocSources.allAdapters, type: 'code' },
     },
   },

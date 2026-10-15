@@ -42,7 +42,6 @@ export const MultiSelectField = ({
         <MultiSelect
           {...selectProps}
           value={field.state.value}
-          error={errorMessage !== undefined}
           onChange={(values) => {
             field.handleChange(values);
             onChange?.(values);
