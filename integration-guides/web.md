@@ -183,7 +183,8 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 - For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. Use `color="error"` on the destructive button. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
 - At 767px and below, `Dialog.Actions` stacks its actions full width, the usual pattern for confirmations. For forms and longer content, pass `stackOnMobile={false}` to keep them side by side. It has no effect from 768px up.
 - `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
-- It shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
+- For prompts that can't be skipped, like signing in again after a session expires, pass `dismissible={false}` (default `true`). Escape and overlay presses no longer call `onClose`, and the close button is hidden unless you pass `showCloseButton`. The dialog closes only when you set `open` to `false`, so always give it an action that moves the user forward.
+- It shares Drawer's `dismissible`, `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
 - The switch between sheet and centered dialog is read from the viewport on the client, like Drawer's `position`. During SSR it resolves the bottom sheet, then updates after hydration.
 - Requires `components.css` (see [Quick Start](#quick-start)).
 
@@ -216,7 +217,7 @@ function FilterDrawer({ position }: Pick<DrawerProps, 'position'>) {
 }
 ```
 
-- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input).
+- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input). Pass `dismissible={false}` (default `true`) to stop Escape and overlay presses from calling `onClose` and hide the close button; pass `showCloseButton` to keep it.
 - `role="alertdialog"` marks urgent interruptions and describes the drawer with its `Drawer.Body`; `describeWithBody` does the same for a regular drawer. `closeLabel` localizes the close button.
 - Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title. `Drawer.Heading` takes the same `as` prop as `Dialog.Title`.
 - It renders into `document.body`. Pass `portalRoot` to render into another element instead.
