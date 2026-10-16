@@ -1,8 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import {
+  CheckboxField,
+  CheckboxGroupField,
+  MultiSelectField,
+  NumberField,
+  PasswordField,
+  RadioGroupField,
+  SelectField,
+  SwitchField,
+  TextField,
+  ToggleGroupField,
+} from '@minneapolisstartribune/design-system-tanstack-form';
 import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { Button } from '@/components/Button/web/Button';
+import * as ToggleGroup from '@/components/ToggleGroup/ToggleGroup';
 
 const meta = {
   title: 'Forms/TanStack Form',
@@ -96,6 +108,140 @@ function MultiFieldValidationExample() {
   );
 }
 `.trim(),
+  allAdapters: `
+import { z } from 'zod';
+import { useForm } from '@tanstack/react-form';
+import {
+  CheckboxField,
+  CheckboxGroupField,
+  MultiSelectField,
+  NumberField,
+  PasswordField,
+  RadioGroupField,
+  SelectField,
+  SwitchField,
+  ToggleGroupField,
+} from '@minneapolisstartribune/design-system-tanstack-form';
+import { Button, ToggleGroup } from '@minneapolisstartribune/design-system/web';
+
+const schema = z.object({
+  password: z.string().min(8, 'At least 8 characters'),
+  age: z
+    .number()
+    .int()
+    .min(18, 'Must be 18 or older')
+    .optional()
+    .refine((age) => age !== undefined, 'Age is required'),
+  state: z.string().min(1, 'Pick a state'),
+  topics: z.array(z.string()).min(1, 'Pick at least one topic'),
+  plan: z.string().min(1, 'Pick a plan'),
+  newsletters: z.array(z.string()).min(1, 'Pick at least one newsletter'),
+  alerts: z.boolean(),
+  view: z.enum(['list', 'grid']),
+  terms: z.boolean().refine((accepted) => accepted, 'Accept the terms to continue'),
+});
+
+// The form holds what's been entered so far, which is the schema's input type.
+const defaultValues: z.input<typeof schema> = {
+  password: '',
+  age: undefined,
+  state: '',
+  topics: [],
+  plan: '',
+  newsletters: [],
+  alerts: true,
+  view: 'list',
+  terms: false,
+};
+
+function AllAdaptersExample() {
+  const form = useForm({
+    defaultValues,
+    validators: { onChange: schema, onBlur: schema },
+    onSubmit: ({ value }) => alert(JSON.stringify(value, null, 2)),
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field name="password">
+        {(field) => <PasswordField field={field} label="Password" autoComplete="new-password" />}
+      </form.Field>
+      <form.Field name="age">
+        {(field) => <NumberField field={field} label="Age" />}
+      </form.Field>
+      <form.Field name="state">
+        {(field) => (
+          <SelectField
+            field={field}
+            label="State"
+            options={[
+              { value: 'mn', label: 'Minnesota' },
+              { value: 'wi', label: 'Wisconsin' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="topics">
+        {(field) => (
+          <MultiSelectField
+            field={field}
+            label="Topics"
+            options={[
+              { value: 'news', label: 'News' },
+              { value: 'sports', label: 'Sports' },
+              { value: 'food', label: 'Food' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="plan">
+        {(field) => (
+          <RadioGroupField
+            field={field}
+            label="Plan"
+            options={[
+              { value: 'print', title: 'Print' },
+              { value: 'digital', title: 'Digital' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="newsletters">
+        {(field) => (
+          <CheckboxGroupField
+            field={field}
+            label="Newsletters"
+            options={[
+              { value: 'morning', title: 'Morning briefing' },
+              { value: 'evening', title: 'Evening wrap' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="alerts">
+        {(field) => <SwitchField field={field} label="Breaking news alerts" />}
+      </form.Field>
+      <form.Field name="view">
+        {(field) => (
+          <ToggleGroupField field={field} label="View">
+            <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+            <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
+          </ToggleGroupField>
+        )}
+      </form.Field>
+      <form.Field name="terms">
+        {(field) => <CheckboxField field={field} label="I accept the terms" />}
+      </form.Field>
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}
+`.trim(),
 } as const;
 
 // Stories only, keeps fields and the button from touching
@@ -105,6 +251,9 @@ const formStyle = {
   alignItems: 'flex-start',
   gap: 16,
 } as const;
+
+// Stories only, text-like fields fill the form up to a readable width
+const wideFieldStyle = { width: '100%', maxWidth: 250 } as const;
 
 const requiredEmail = z
   .string()
@@ -203,4 +352,140 @@ export const MultiField: Story = {
     },
   },
   render: () => <MultiFieldValidationExample />,
+};
+
+const allAdaptersSchema = z.object({
+  password: z.string().min(8, 'At least 8 characters'),
+  age: z
+    .number()
+    .int()
+    .min(18, 'Must be 18 or older')
+    .optional()
+    .refine((age) => age !== undefined, 'Age is required'),
+  state: z.string().min(1, 'Pick a state'),
+  topics: z.array(z.string()).min(1, 'Pick at least one topic'),
+  plan: z.string().min(1, 'Pick a plan'),
+  newsletters: z.array(z.string()).min(1, 'Pick at least one newsletter'),
+  alerts: z.boolean(),
+  view: z.enum(['list', 'grid']),
+  terms: z.boolean().refine((accepted) => accepted, 'Accept the terms to continue'),
+});
+
+// The form holds what's been entered so far, which is the schema's input type.
+const allAdaptersDefaults: z.input<typeof allAdaptersSchema> = {
+  password: '',
+  age: undefined,
+  state: '',
+  topics: [],
+  plan: '',
+  newsletters: [],
+  alerts: true,
+  view: 'list',
+  terms: false,
+};
+
+function AllAdaptersExample() {
+  const form = useForm({
+    defaultValues: allAdaptersDefaults,
+    validators: { onChange: allAdaptersSchema, onBlur: allAdaptersSchema },
+    onSubmit: ({ value }) => alert(JSON.stringify(value, null, 2)),
+  });
+
+  return (
+    <form
+      style={formStyle}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <div style={wideFieldStyle}>
+        <form.Field name="password">
+          {(field) => <PasswordField field={field} label="Password" autoComplete="new-password" />}
+        </form.Field>
+      </div>
+      <div style={wideFieldStyle}>
+        <form.Field name="age">{(field) => <NumberField field={field} label="Age" />}</form.Field>
+      </div>
+      <div style={wideFieldStyle}>
+        <form.Field name="state">
+          {(field) => (
+            <SelectField
+              field={field}
+              label="State"
+              options={[
+                { value: 'mn', label: 'Minnesota' },
+                { value: 'wi', label: 'Wisconsin' },
+              ]}
+            />
+          )}
+        </form.Field>
+      </div>
+      <div style={wideFieldStyle}>
+        <form.Field name="topics">
+          {(field) => (
+            <MultiSelectField
+              field={field}
+              label="Topics"
+              options={[
+                { value: 'news', label: 'News' },
+                { value: 'sports', label: 'Sports' },
+                { value: 'food', label: 'Food' },
+              ]}
+            />
+          )}
+        </form.Field>
+      </div>
+      <form.Field name="plan">
+        {(field) => (
+          <RadioGroupField
+            field={field}
+            label="Plan"
+            options={[
+              { value: 'print', title: 'Print' },
+              { value: 'digital', title: 'Digital' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="newsletters">
+        {(field) => (
+          <CheckboxGroupField
+            field={field}
+            label="Newsletters"
+            options={[
+              { value: 'morning', title: 'Morning briefing' },
+              { value: 'evening', title: 'Evening wrap' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="alerts">
+        {(field) => <SwitchField field={field} label="Breaking news alerts" />}
+      </form.Field>
+      <div style={wideFieldStyle}>
+        <form.Field name="view">
+          {(field) => (
+            <ToggleGroupField field={field} label="View" fullWidth>
+              <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+              <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
+            </ToggleGroupField>
+          )}
+        </form.Field>
+      </div>
+      <form.Field name="terms">
+        {(field) => <CheckboxField field={field} label="I accept the terms" />}
+      </form.Field>
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}
+
+export const AllAdapters: Story = {
+  parameters: {
+    docs: {
+      source: { code: TanStackFormDocSources.allAdapters, type: 'code' },
+    },
+  },
+  render: () => <AllAdaptersExample />,
 };

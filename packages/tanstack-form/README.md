@@ -12,9 +12,18 @@ Peer deps: `@minneapolisstartribune/design-system` (web), `@tanstack/react-form`
 
 ## Adapters
 
-| Adapter     | Wraps                     | Field value |
-| ----------- | ------------------------- | ----------- |
-| `TextField` | `FormGroup` + `TextInput` | `string`    |
+| Adapter              | Wraps                            | Field value                          |
+| -------------------- | -------------------------------- | ------------------------------------ |
+| `TextField`          | `FormGroup` + `TextInput`        | `string`                             |
+| `PasswordField`      | `FormGroup` + `PasswordInput`    | `string`                             |
+| `NumberField`        | `FormGroup` + `NumberInput`      | `number \| undefined`                |
+| `SelectField`        | `FormGroup` + `Select`           | `string` (`null`/`undefined` = none) |
+| `MultiSelectField`   | `FormGroup` + `MultiSelect`      | `string[]`                           |
+| `RadioGroupField`    | `FormGroup` + `RadioGroup`       | `string` (`null`/`undefined` = none) |
+| `CheckboxField`      | `FormGroup` + `Checkbox`         | `boolean`                            |
+| `CheckboxGroupField` | `FormGroup` + `CheckboxGroup`    | `string[]`                           |
+| `SwitchField`        | `FormGroup` + `Switch`           | `boolean`                            |
+| `ToggleGroupField`   | `FormGroup` + `ToggleGroup.Root` | `string` or `string[]` (`multiple`)  |
 
 ## Usage
 
@@ -75,8 +84,28 @@ Each adapter takes the props of the component it wraps, minus the ones the field
 | `caption`     | Info caption under the control. Replaced by the validation error when shown. |
 | `optional`    | Shows the "(Optional)" marker on the label.                                  |
 
-`onChange` / `onBlur` still work. They run after the field is updated.
+`onChange` / `onBlur` still work where the wrapped component has them. They run after the field is updated.
+
+A few differ:
+
+- `CheckboxField` and `SwitchField` pass `label` and `caption` to the checkbox/switch itself, there's no group label. The error shows as a caption below.
+- `NumberField` writes `undefined` when the input is cleared, so the field has to be `number | undefined`. With zod, `z.number().optional().refine((n) => n !== undefined, 'Required')` keeps it required, and typing `defaultValues` as `z.input<typeof schema>` gives the right field types without casts.
+- `ToggleGroupField` takes `ToggleGroup.Item`s as children and needs `label` or `aria-labelledby`. Set `type="multiple"` for a `string[]` field. String unions work: a `'list' | 'grid'` field gets typed `onChange` and item values.
+- `SelectField` doesn't need an `id`, it uses the FormGroup's.
+
+```tsx
+<form.Field name="view">
+  {(field) => (
+    <ToggleGroupField field={field} label="View">
+      <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+      <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
+    </ToggleGroupField>
+  )}
+</form.Field>
+```
 
 ### Errors
 
-`TextField` shows the first entry of `field.state.meta.errors` as an error caption (`role="alert"`) and puts the input in its error state. Errors stay hidden until the field has been blurred or the form has been submitted. Validators can live on the form (a zod schema, issues map to fields by path) or on `form.Field`.
+Every adapter shows the first entry of `field.state.meta.errors` as an error caption (`role="alert"`) and puts the control in its error state where it has one. Errors stay hidden until the field has been blurred or the form has been submitted. For controls without an `onBlur` (selects, checkboxes, radios, switches, toggle groups), the field counts as blurred when focus leaves the whole control, so moving between options doesn't. Validators can live on the form (a zod schema, issues map to fields by path) or on `form.Field`.
+
+A field-level `onChange` validator only runs when the value changes, so to flag an untouched required select or checkbox on blur, also pass it as `onBlur` (the zod examples pass the schema to both).

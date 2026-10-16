@@ -17,6 +17,7 @@ export function ToggleGroupRoot<T extends string = string>(
     children,
     label,
     'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
     size = 'medium',
     fullWidth = false,
     disabled = false,
@@ -54,6 +55,7 @@ export function ToggleGroupRoot<T extends string = string>(
       role={isMultiple ? 'group' : 'radiogroup'}
       aria-label={ariaLabelledBy ? undefined : label}
       aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
       aria-disabled={disabled || undefined}
       className={classNames(
         styles.root,
