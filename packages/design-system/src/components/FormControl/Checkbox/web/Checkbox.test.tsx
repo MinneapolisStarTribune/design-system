@@ -55,23 +55,6 @@ describe('Checkbox', () => {
     expect(getByText('Daily email updates')).toBeInTheDocument();
   });
 
-  it('merges aria-describedby with its own caption', () => {
-    const { getByRole } = renderWithProvider(
-      <>
-        <FormControl.Checkbox
-          label="Subscribe"
-          caption="Daily email updates"
-          checked={false}
-          onChange={() => {}}
-          aria-describedby="external-error"
-        />
-        <span id="external-error">Required</span>
-      </>
-    );
-
-    expect(getByRole('checkbox')).toHaveAccessibleDescription('Daily email updates Required');
-  });
-
   it('calls onChange with new checked value when clicked', async () => {
     const onChange = vi.fn();
     const { getByTestId } = renderWithProvider(

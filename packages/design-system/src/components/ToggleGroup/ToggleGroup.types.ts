@@ -18,8 +18,6 @@ interface ToggleGroupBaseProps extends BaseProps {
   fullWidth?: boolean;
   /** Disables every item in the group. */
   disabled?: boolean;
-  /** Ids of elements describing the group, e.g. a caption or validation error. */
-  'aria-describedby'?: string;
 }
 
 /** Every group needs an accessible name: `label`, `aria-labelledby`, or both. */

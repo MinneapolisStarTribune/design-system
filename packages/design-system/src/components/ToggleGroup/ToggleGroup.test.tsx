@@ -260,24 +260,6 @@ describe('ToggleGroup', () => {
     expect(screen.getByRole('radiogroup', { name: 'Schedule' })).toBeInTheDocument();
   });
 
-  it('describes the group by aria-describedby', () => {
-    render(
-      <>
-        <ToggleGroup.Root
-          label="Schedule"
-          aria-describedby="schedule-help"
-          value="day"
-          onChange={() => {}}
-        >
-          <ToggleGroup.Item value="day">Day</ToggleGroup.Item>
-        </ToggleGroup.Root>
-        <p id="schedule-help">Pick one</p>
-      </>
-    );
-
-    expect(screen.getByRole('radiogroup')).toHaveAccessibleDescription('Pick one');
-  });
-
   it('throws when an item is rendered outside a root', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => render(<ToggleGroup.Item value="day">Day</ToggleGroup.Item>)).toThrow(
