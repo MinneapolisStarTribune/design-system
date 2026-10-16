@@ -1,5 +1,27 @@
 # @minneapolisstartribune/design-system
 
+## 4.0.0
+
+### Major Changes
+
+- [#462](https://github.com/MinneapolisStarTribune/design-system/pull/462) [`a9004df`](https://github.com/MinneapolisStarTribune/design-system/commit/a9004df141915a5bf151711f944292776c6ea8e4) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Removed `useFormLogic` and its types (`FormValidationErrors`, `UseFormLogicOptions`, `UseFormLogicReturn`). Use TanStack Form v1 with the new `@minneapolisstartribune/design-system-tanstack-form` package instead, see the Form docs in Storybook.
+
+  The new package starts with a `TextField` adapter. It wraps `TextInput` in a `FormGroup`, binds it to a string field, and shows the field's validation error as an error caption once the field is blurred or the form is submitted.
+
+### Minor Changes
+
+- [#467](https://github.com/MinneapolisStarTribune/design-system/pull/467) [`6ec71d0`](https://github.com/MinneapolisStarTribune/design-system/commit/6ec71d0956dceb4591c1b526c94a8b1534271d05) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - `Dialog.Root` and `Drawer.Root` take a `dismissible` prop. Set it to `false` for prompts that can't be skipped, like signing in again after a session expires: Escape and overlay presses no longer call `onClose`, and the close button is hidden unless you pass `showCloseButton`.
+
+### Patch Changes
+
+- [#468](https://github.com/MinneapolisStarTribune/design-system/pull/468) [`626bbb7`](https://github.com/MinneapolisStarTribune/design-system/commit/626bbb7d6045c25fe1d8be9823902796313fb33d) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Menu` now closes when the user presses Shift+Tab from an item and returns focus to the trigger, as Escape does. This follows the APG menu button pattern that Floating UI does not handle.
+
+- [#466](https://github.com/MinneapolisStarTribune/design-system/pull/466) [`94ca106`](https://github.com/MinneapolisStarTribune/design-system/commit/94ca1064fa67b82499b30ab3546e50ffcbccd13e) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Select` and `MultiSelect` stay inside their container with `box-sizing: border-box`, update their dropdowns padding and item radius.
+
+  `Select` has one tab stop. The nested button is now a plain element, so screen readers no longer announce the field twice. The combobox opens and selects with Space, exposes `aria-disabled` when disabled, and leaves the tab order.
+
+  `Select` now selects the active option and closes on Tab, and closes when focus moves to another control.
+
 ## 3.2.0
 
 ### Minor Changes
