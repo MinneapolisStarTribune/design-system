@@ -240,6 +240,21 @@ describe('Menu', () => {
     await waitFor(() => expect(onClose).toHaveBeenCalledWith());
   });
 
+  it('closes when Shift+Tab moves focus back to the trigger', async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    renderWithProvider(<Harness onClose={onClose} />);
+
+    await openMenu(user);
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+    await user.tab({ shift: true });
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledWith();
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Actions' })).toHaveFocus());
+  });
+
   it('renders a link item when href is set', async () => {
     const user = userEvent.setup();
     renderWithProvider(

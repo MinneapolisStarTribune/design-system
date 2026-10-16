@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FloatingList, useInteractions, useListNavigation, useTypeahead } from '@floating-ui/react';
+import type { ElementProps } from '@floating-ui/react';
 import { FloatingSurface, useFloatingSurface } from '@/components/Popover/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
@@ -68,7 +69,27 @@ export const MenuRoot: React.FC<MenuProps> = ({
     onMatch: open ? setActiveIndex : undefined,
   });
 
-  const interactions = useInteractions([...surface.interactions, listNavigation, typeahead]);
+  // APG: Shift+Tab closes the menu. Floating UI's focus-out close treats the trigger as inside the
+  // menu, so close here and let the focus manager return focus to the trigger, as Escape does.
+  const shiftTabDismiss = useMemo<ElementProps>(
+    () => ({
+      floating: {
+        onKeyDown: (event) => {
+          if (event.key !== 'Tab' || !event.shiftKey) return;
+          event.preventDefault();
+          onClose();
+        },
+      },
+    }),
+    [onClose]
+  );
+
+  const interactions = useInteractions([
+    ...surface.interactions,
+    listNavigation,
+    typeahead,
+    shiftTabDismiss,
+  ]);
   const { getItemProps } = interactions;
 
   const contextValue = useMemo(
