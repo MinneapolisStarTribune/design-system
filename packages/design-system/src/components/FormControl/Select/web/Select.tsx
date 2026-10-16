@@ -104,8 +104,8 @@ export const Select: React.FC<SelectProps> = ({
     optionRefs.current = [];
   }, [safeOptions]);
 
-  const handleToggle = () => {
-    if (isDisabled) return;
+  const handleToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDisabled || listboxRef.current?.contains(e.target as Node)) return;
 
     setIsOpen((prev) => !prev);
 
@@ -146,6 +146,7 @@ export const Select: React.FC<SelectProps> = ({
         break;
 
       case 'Enter':
+      case ' ':
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
@@ -159,6 +160,21 @@ export const Select: React.FC<SelectProps> = ({
         setIsOpen(false);
         setActiveIndex(-1);
         break;
+
+      // Follows the APG select-only combobox: commit the active option, close, and let focus move on.
+      case 'Tab':
+        if (isOpen) handleSelect(safeOptions[activeIndex]);
+        setIsOpen(false);
+        setActiveIndex(-1);
+        break;
+    }
+  };
+
+  // Options are not focusable, so a click on one blurs with a null relatedTarget and must not close the list.
+  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (e.relatedTarget && !e.currentTarget.contains(e.relatedTarget)) {
+      setIsOpen(false);
+      setActiveIndex(-1);
     }
   };
 
@@ -187,18 +203,16 @@ export const Select: React.FC<SelectProps> = ({
       aria-describedby={ariaDescribedBy}
       aria-activedescendant={activeIndex >= 0 ? `${inputId}-option-${activeIndex}` : undefined}
       aria-invalid={hasError || undefined}
-      tabIndex={0}
+      aria-disabled={isDisabled || undefined}
+      tabIndex={isDisabled ? -1 : 0}
+      onClick={handleToggle}
       onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
       className={containerClasses}
       data-testid={dataTestId}
     >
-      <button
-        type="button"
-        aria-label={placeholderText}
-        className={classNames(styles.selectTrigger, triggerTypographyClass)}
-        onClick={handleToggle}
-        disabled={isDisabled}
-      >
+      {/* Not a button: a second focusable control makes screen readers announce the field twice. */}
+      <div className={classNames(styles.selectTrigger, triggerTypographyClass)}>
         <span
           className={classNames(
             styles.selectValue,
@@ -222,7 +236,7 @@ export const Select: React.FC<SelectProps> = ({
             color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}
           />
         </span>
-      </button>
+      </div>
 
       {isOpen && (
         <ul

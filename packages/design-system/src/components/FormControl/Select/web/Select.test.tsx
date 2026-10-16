@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
-import { within } from '@testing-library/react';
+import { act } from '@testing-library/react';
 
 const OPTIONS = [
   { value: 'us', label: 'United States' },
@@ -31,7 +31,7 @@ describe('Select', () => {
       <FormControl.Select id="test" options={OPTIONS} size="small" />
     );
 
-    await user.click(within(getByRole('combobox')).getByRole('button'));
+    await user.click(getByRole('combobox'));
 
     expect(getByRole('listbox')).toHaveClass('typography-utility-text-regular-medium');
   });
@@ -42,7 +42,7 @@ describe('Select', () => {
     const { getByRole } = renderWithProvider(<FormControl.Select id="test" options={OPTIONS} />);
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
 
@@ -60,7 +60,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Outside'));
@@ -77,7 +77,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Canada'));
@@ -85,7 +85,54 @@ describe('Select', () => {
     expect(onChange).toHaveBeenCalledWith('ca');
   });
 
-  describe.each(['combobox', 'button'] as const)('Enter on the %s', (role) => {
+  it('selects the active option and closes on Tab', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+    );
+
+    getByRole('combobox').focus();
+    await user.keyboard('{ArrowDown}{ArrowDown}{Tab}');
+
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('ca');
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('closes when focus moves to another control', async () => {
+    const user = userEvent.setup();
+    const { getByRole, getByText, queryByRole } = renderWithProvider(
+      <>
+        <FormControl.Select id="test" options={OPTIONS} />
+        <button>Other</button>
+      </>
+    );
+
+    await user.click(getByRole('combobox'));
+    expect(getByRole('listbox')).toBeInTheDocument();
+
+    act(() => getByText('Other').focus());
+
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('opens with Space and selects the active option with Space', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+    );
+
+    getByRole('combobox').focus();
+    await user.keyboard(' ');
+    expect(getByRole('listbox')).toBeInTheDocument();
+
+    await user.keyboard('{ArrowDown} ');
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('ca');
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  describe('Enter on the combobox', () => {
     it.each([
       { value: undefined, label: 'United States', expectedValue: 'us' },
       { value: 'ca', label: 'Canada', expectedValue: 'ca' },
@@ -99,7 +146,7 @@ describe('Select', () => {
           <FormControl.Select id="test" options={OPTIONS} value={value} onChange={onChange} />
         );
 
-        getByRole(role).focus();
+        getByRole('combobox').focus();
         await user.keyboard('{Enter}');
 
         const select = getByRole('combobox');
@@ -128,7 +175,7 @@ describe('Select', () => {
       const select = getByRole('combobox');
 
       if (openWith === 'click') {
-        await user.click(getByRole('button'));
+        await user.click(getByRole('combobox'));
       } else {
         select.focus();
         await user.keyboard(`{${openWith}}`);
@@ -181,7 +228,7 @@ describe('Select', () => {
         expect(scrollIntoView).not.toHaveBeenCalled();
         const select = getByRole('combobox');
         if (openWith === 'click') {
-          await user.click(within(select).getByRole('button'));
+          await user.click(select);
         } else {
           select.focus();
           await user.keyboard(`{${openWith}}`);
@@ -217,7 +264,7 @@ describe('Select', () => {
       const { getByRole } = renderWithProvider(
         <FormControl.Select id="test" options={OPTIONS} value="ca" />
       );
-      const trigger = getByRole('button');
+      const trigger = getByRole('combobox');
 
       await user.click(trigger);
       await user.click(trigger);
@@ -237,7 +284,7 @@ describe('Select', () => {
         <FormControl.Select id="test" options={OPTIONS} isDisabled />
       );
 
-      await user.click(getByRole('button'));
+      await user.click(getByRole('combobox'));
       getByRole('combobox').focus();
       await user.keyboard('{Enter}{ArrowDown}{ArrowUp}');
 
