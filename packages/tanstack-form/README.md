@@ -36,7 +36,8 @@ function SignupForm() {
   const form = useForm({
     defaultValues,
     validators: { onChange: schema, onBlur: schema },
-    onSubmit: ({ value }) => save(value),
+    // value is the raw input. Parse it to get the schema's output (trimmed, transformed, typed).
+    onSubmit: ({ value }) => save(schema.parse(value)),
   });
 
   return (
@@ -57,6 +58,10 @@ function SignupForm() {
 ```
 
 Each adapter only accepts fields of its value type, so TypeScript rejects e.g. `TextField` on a `number` field.
+
+### Parse on submit
+
+Schema validators only check values. TanStack Form doesn't apply the schema's transforms, so `value` in `onSubmit` is still `z.input<typeof schema>` (untrimmed, uncoerced). Call `schema.parse(value)` in `onSubmit` to get `z.output<typeof schema>`. It won't throw there, since submit only runs once validation has passed.
 
 ## Props
 
