@@ -14,14 +14,14 @@ pre-commit:
   commands:
     # Run from repo root so {staged_files} paths (root-relative) resolve correctly
     prettier:
-      glob: 'packages/design-system/**/*.{ts,tsx,json,md,css}'
+      glob: 'packages/{design-system,tanstack-form}/**/*.{ts,tsx,json,md,css}'
       run: node ./node_modules/.bin/prettier --write {staged_files}
     eslint:
-      glob: 'packages/design-system/**/*.{ts,tsx}'
+      glob: 'packages/{design-system,tanstack-form}/**/*.{ts,tsx}'
       run: node ./node_modules/.bin/eslint --fix --max-warnings 0 {staged_files}
     # Re-stage fixed files so the commit includes Prettier/ESLint changes
     restage:
-      glob: 'packages/design-system/**/*.{ts,tsx,json,md,css}'
+      glob: 'packages/{design-system,tanstack-form}/**/*.{ts,tsx,json,md,css}'
       run: git add {staged_files}
     # Typecheck without turbo so output is just tsc errors (no turbo wrapper).
     # Only design-system has a typecheck script; hook runs when design-system TS files are staged.

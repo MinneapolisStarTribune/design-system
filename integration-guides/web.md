@@ -294,6 +294,10 @@ function GameFilter() {
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
 
+## TanStack Form
+
+If your forms use [TanStack Form](https://tanstack.com/form), `@minneapolisstartribune/design-system-tanstack-form` has field adapters (`TextField`, `SelectField`, `CheckboxField`, etc.) that wire the form controls' value, blur, errors and ARIA to a TanStack field. See its [README](../packages/tanstack-form/README.md) for setup and usage.
+
 ## Using CSS Variables Directly
 
 All themes expose the same token names, so you can use them in CSS modules or inline styles:

@@ -13,6 +13,7 @@ This document serves as a living reference for code standards and conventions us
 - [Storybook Standards](#storybook-standards)
 - [Testing Standards](#testing-standards)
 - [Path Aliases](#path-aliases)
+- [Dependencies](#dependencies)
 - [Documentation Requirements](#documentation-requirements)
 
 ---
@@ -420,6 +421,14 @@ import type { ComponentName } from '@/types/component-names';
 // ❌ Bad - relative imports (unless in same directory)
 import { useBrandValidation } from '../../../hooks/useBrandValidation';
 ```
+
+---
+
+## Dependencies
+
+### Pin Versions
+
+When adding a package to `dependencies` or `devDependencies`, pin the exact version (`"1.33.5"`, not `"^1.33.5"` or `"~1.33.5"`). `peerDependencies` keep ranges so consumers aren't forced onto one version, and `workspace:*` stays as is.
 
 ---
 

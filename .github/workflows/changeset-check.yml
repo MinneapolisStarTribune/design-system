@@ -1,6 +1,6 @@
 name: Changeset
 
-# Fails PRs that change the published package without adding a changeset,
+# Fails PRs that change a published package without adding a changeset,
 # and PRs that hand-edit the package version (the changesets bot owns it).
 # `yarn changeset --empty` satisfies the check when a PR intentionally
 # needs no release.
@@ -26,7 +26,9 @@ jobs:
         run: |
           # The changesets bot owns the version field; it changes only via the
           # "chore: version packages" PR, which skips this job entirely.
-          version_edit=$(git diff "origin/${BASE_REF}...HEAD" -- packages/design-system/package.json \
+          # --diff-filter=M: a newly added package.json starts with a version,
+          # which isn't a bump.
+          version_edit=$(git diff --diff-filter=M "origin/${BASE_REF}...HEAD" -- packages/design-system/package.json packages/tanstack-form/package.json \
             | grep -E '^[+-][[:space:]]*"version":' || true)
 
           if [ -z "$version_edit" ]; then
@@ -34,7 +36,7 @@ jobs:
             exit 0
           fi
 
-          echo "This PR edits the version field in packages/design-system/package.json:" >&2
+          echo "This PR edits a package version field:" >&2
           echo "$version_edit" >&2
           echo "" >&2
           echo "Version bumps happen only through the bot's version PR." >&2
@@ -50,10 +52,11 @@ jobs:
           # docs, and repo-only tooling in scripts/. Build scripts (builders/,
           # formats/, create-root-entry-error.cjs, fetch-fonts.js) generate
           # dist content, so they are NOT exempt.
-          package_changes=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- packages/design-system \
+          package_changes=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- packages/design-system packages/tanstack-form \
             | grep -Ev '\.(test|stories)\.[jt]sx?$' \
             | grep -Ev '\.snap$' \
             | grep -Ev '^packages/design-system/(\.storybook|architecture|src/stories)/' \
+            | grep -Ev '^packages/tanstack-form/(src/test-utils/|vitest\.)' \
             | grep -Ev '^packages/design-system/scripts/(builders/build-if-needed|component-matrix|generate-component-matrix|minimal-reporter|release-verify|should-rebuild|sync-versions-from-vercel)' \
             | grep -Ev '\.md$' || true)
 
@@ -73,7 +76,7 @@ jobs:
             exit 0
           fi
 
-          echo "This PR changes the published package but has no changeset." >&2
+          echo "This PR changes a published package but has no changeset." >&2
           echo "" >&2
           echo "Changed files that affect the package:" >&2
           echo "$package_changes" >&2

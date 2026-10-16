@@ -63,10 +63,21 @@ const config: StorybookConfig = {
 
     return mergeConfig(baseConfig, {
       resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '../src'),
-          '@storybook-config': path.resolve(__dirname, '.'),
-        },
+        alias: [
+          { find: '@', replacement: path.resolve(__dirname, '../src') },
+          { find: '@storybook-config', replacement: path.resolve(__dirname, '.') },
+          // Stories use the tanstack-form adapters straight from source (not a workspace dep,
+          // that would be a cycle). Point its design-system import at src too so both sides
+          // share the same components and styles.
+          {
+            find: /^@minneapolisstartribune\/design-system-tanstack-form$/,
+            replacement: path.resolve(__dirname, '../../tanstack-form/src/index.ts'),
+          },
+          {
+            find: /^@minneapolisstartribune\/design-system\/web$/,
+            replacement: path.resolve(__dirname, '../src/index.web.ts'),
+          },
+        ],
       },
     });
   },
