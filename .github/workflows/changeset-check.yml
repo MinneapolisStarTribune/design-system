@@ -26,7 +26,9 @@ jobs:
         run: |
           # The changesets bot owns the version field; it changes only via the
           # "chore: version packages" PR, which skips this job entirely.
-          version_edit=$(git diff "origin/${BASE_REF}...HEAD" -- packages/design-system/package.json packages/tanstack-form/package.json \
+          # --diff-filter=M: a newly added package.json starts with a version,
+          # which isn't a bump.
+          version_edit=$(git diff --diff-filter=M "origin/${BASE_REF}...HEAD" -- packages/design-system/package.json packages/tanstack-form/package.json \
             | grep -E '^[+-][[:space:]]*"version":' || true)
 
           if [ -z "$version_edit" ]; then
