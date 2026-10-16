@@ -36,6 +36,8 @@ export interface CheckboxProps extends BaseProps {
   onChange: (checked: boolean) => void;
   /** Per-checkbox tracking data merged into the event. Use to distinguish checkboxes (e.g. form_field, module_name). */
   analytics?: Record<string, unknown>;
+  /** Extra ids describing the input, e.g. an error caption rendered outside the checkbox. Merged with the checkbox's own caption. */
+  'aria-describedby'?: string;
 }
 
 /** React Native — no `className`; `style` uses RN layout types. */

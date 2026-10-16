@@ -41,6 +41,7 @@
     "test:native": "turbo run test:native --filter=@minneapolisstartribune/design-system",
     "test:watch": "turbo run test:watch --filter=@minneapolisstartribune/design-system",
     "test:web": "turbo run test:web --filter=@minneapolisstartribune/design-system",
+    "version-packages": "changeset version && yarn install --no-immutable --mode=update-lockfile",
     "tokens": "turbo run tokens --filter=@minneapolisstartribune/design-system",
     "typecheck": "turbo run typecheck",
     "build:android": "yarn workspace @minneapolisstartribune/mobile-storybook run android",
