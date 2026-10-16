@@ -77,6 +77,34 @@ describe('ToggleGroupField', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Pick a section');
   });
 
+  it('keeps a passed aria-describedby alongside its own caption', () => {
+    const Fixture = () => {
+      const form = useForm({ defaultValues: { view: 'list' as View } });
+      return (
+        <>
+          <p id="view-help">Applies everywhere</p>
+          <form.Field name="view">
+            {(field) => (
+              <ToggleGroupField
+                field={field}
+                label="View"
+                caption="Pick one"
+                aria-describedby="view-help"
+              >
+                <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+              </ToggleGroupField>
+            )}
+          </form.Field>
+        </>
+      );
+    };
+    render(<Fixture />);
+
+    expect(screen.getByRole('radiogroup', { name: 'View' })).toHaveAccessibleDescription(
+      'Applies everywhere Pick one'
+    );
+  });
+
   it('needs a label or aria-labelledby, and the right field type for the mode', () => {
     const Fixture = () => {
       const form = useForm({ defaultValues: { view: 'list', views: ['list'] } });

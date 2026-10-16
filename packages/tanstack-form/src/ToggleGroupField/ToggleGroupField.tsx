@@ -82,7 +82,11 @@ export function ToggleGroupField<T extends string = string>(
     style,
     dataTestId,
     'aria-labelledby': ariaLabelledBy ?? ids.label,
-    'aria-describedby': describedBy(ids, { description, caption, errorMessage }),
+    'aria-describedby': describedBy(
+      ids,
+      { description, caption, errorMessage },
+      props['aria-describedby']
+    ),
   };
 
   return (

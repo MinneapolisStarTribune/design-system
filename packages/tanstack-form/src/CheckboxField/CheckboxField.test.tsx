@@ -47,6 +47,31 @@ describe('CheckboxField', () => {
     expect(checkbox).toHaveAccessibleDescription('Accept the terms');
   });
 
+  it('keeps a passed aria-describedby alongside the error', async () => {
+    const Described = () => {
+      const form = useForm({ defaultValues: { terms: true } });
+      return (
+        <>
+          <p id="terms-help">Read them first</p>
+          <form.Field
+            name="terms"
+            validators={{ onChange: ({ value }) => (value ? undefined : 'Accept the terms') }}
+          >
+            {(field) => <CheckboxField field={field} label="Terms" aria-describedby="terms-help" />}
+          </form.Field>
+        </>
+      );
+    };
+    render(<Described />);
+    const checkbox = screen.getByRole('checkbox', { name: 'Terms' });
+    expect(checkbox).toHaveAccessibleDescription('Read them first');
+
+    await userEvent.click(checkbox);
+    await userEvent.tab();
+
+    expect(checkbox).toHaveAccessibleDescription('Read them first Accept the terms');
+  });
+
   it('only accepts boolean fields', () => {
     const StringFixture = () => {
       const form = useForm({ defaultValues: { terms: '' } });

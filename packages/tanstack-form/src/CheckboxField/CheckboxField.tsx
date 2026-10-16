@@ -33,7 +33,7 @@ export const CheckboxField = ({ field, onChange, ...checkboxProps }: CheckboxFie
           {...checkboxProps}
           checked={field.state.value}
           error={errorMessage !== undefined}
-          aria-describedby={describedBy(ids, { errorMessage })}
+          aria-describedby={describedBy(ids, { errorMessage }, checkboxProps['aria-describedby'])}
           onChange={(checked) => {
             field.handleChange(checked);
             onChange?.(checked);

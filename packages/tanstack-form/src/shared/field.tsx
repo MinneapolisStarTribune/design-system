@@ -108,12 +108,17 @@ export const FieldGroup = ({
   </FormGroup>
 );
 
-/** `aria-describedby` for hand-wired controls, pointing only at elements that are rendered. */
+/**
+ * `aria-describedby` for hand-wired controls, pointing only at elements that are rendered.
+ * Keeps any ids the caller passed in `own`.
+ */
 export const describedBy = (
   ids: FieldGroupIds,
-  { description, caption, errorMessage }: FieldLabelProps & { errorMessage: string | undefined }
+  { description, caption, errorMessage }: FieldLabelProps & { errorMessage: string | undefined },
+  own?: string
 ): string | undefined =>
   [
+    own,
     description != null && ids.description,
     (errorMessage !== undefined || caption != null) && ids.caption,
   ]
