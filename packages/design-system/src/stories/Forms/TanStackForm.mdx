@@ -5,7 +5,7 @@ import * as TanStackFormStories from './TanStackForm.stories';
 
 # TanStack Form
 
-For form state and validation, use [TanStack Form](https://tanstack.com/form) with the adapters from `@minneapolisstartribune/design-system-tanstack-form` and a [zod](https://zod.dev) schema. See that package's README for props.
+For form state and validation, we recommend using [TanStack Form](https://tanstack.com/form) with the adapters from `@minneapolisstartribune/design-system-tanstack-form` and a [zod](https://zod.dev) schema. See the [package README](https://github.com/MinneapolisStarTribune/design-system/blob/main/packages/tanstack-form/README.md) for props.
 
 Pass the zod schema as a form validator and hand each `field` to an adapter. Schema issues map to fields by path, so each adapter shows its own error caption once the field is blurred or the form is submitted. No `createFormHook` setup needed.
 
