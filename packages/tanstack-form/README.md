@@ -31,15 +31,52 @@ Use plain `useForm` and pass each `field` to an adapter. Nothing to register, an
 
 ```tsx
 import { useForm } from '@tanstack/react-form';
-import { TextField } from '@minneapolisstartribune/design-system-tanstack-form';
+import {
+  CheckboxField,
+  CheckboxGroupField,
+  MultiSelectField,
+  NumberField,
+  PasswordField,
+  RadioGroupField,
+  SelectField,
+  SwitchField,
+  TextField,
+  ToggleGroupField,
+} from '@minneapolisstartribune/design-system-tanstack-form';
+import { Button, ToggleGroup } from '@minneapolisstartribune/design-system/web';
 import { z } from 'zod';
 
 const schema = z.object({
   email: z.string().trim().min(1, 'Email is required').pipe(z.email('Enter a valid email')),
+  password: z.string().min(8, 'At least 8 characters'),
+  age: z
+    .number()
+    .int()
+    .min(18, 'Must be 18 or older')
+    .optional()
+    .refine((age) => age !== undefined, 'Age is required'),
+  state: z.string().min(1, 'Pick a state'),
+  topics: z.array(z.string()).min(1, 'Pick at least one topic'),
+  plan: z.string().min(1, 'Pick a plan'),
+  newsletters: z.array(z.string()).min(1, 'Pick at least one newsletter'),
+  alerts: z.boolean(),
+  view: z.enum(['list', 'grid']),
+  terms: z.boolean().refine((accepted) => accepted, 'Accept the terms to continue'),
 });
 
 // Type the defaults with the schema's input type and useForm infers every field from it.
-const defaultValues: z.input<typeof schema> = { email: '' };
+const defaultValues: z.input<typeof schema> = {
+  email: '',
+  password: '',
+  age: undefined,
+  state: '',
+  topics: [],
+  plan: '',
+  newsletters: [],
+  alerts: true,
+  view: 'list',
+  terms: false,
+};
 
 function SignupForm() {
   const form = useForm({
@@ -61,6 +98,74 @@ function SignupForm() {
           <TextField field={field} label="Email" caption="We never share it" type="email" />
         )}
       </form.Field>
+      <form.Field name="password">
+        {(field) => <PasswordField field={field} label="Password" autoComplete="new-password" />}
+      </form.Field>
+      <form.Field name="age">{(field) => <NumberField field={field} label="Age" />}</form.Field>
+      <form.Field name="state">
+        {(field) => (
+          <SelectField
+            field={field}
+            label="State"
+            options={[
+              { value: 'mn', label: 'Minnesota' },
+              { value: 'wi', label: 'Wisconsin' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="topics">
+        {(field) => (
+          <MultiSelectField
+            field={field}
+            label="Topics"
+            options={[
+              { value: 'news', label: 'News' },
+              { value: 'sports', label: 'Sports' },
+              { value: 'food', label: 'Food' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="plan">
+        {(field) => (
+          <RadioGroupField
+            field={field}
+            label="Plan"
+            options={[
+              { value: 'print', title: 'Print' },
+              { value: 'digital', title: 'Digital' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="newsletters">
+        {(field) => (
+          <CheckboxGroupField
+            field={field}
+            label="Newsletters"
+            options={[
+              { value: 'morning', title: 'Morning briefing' },
+              { value: 'evening', title: 'Evening wrap' },
+            ]}
+          />
+        )}
+      </form.Field>
+      <form.Field name="alerts">
+        {(field) => <SwitchField field={field} label="Breaking news alerts" />}
+      </form.Field>
+      <form.Field name="view">
+        {(field) => (
+          <ToggleGroupField field={field} label="View">
+            <ToggleGroup.Item value="list">List</ToggleGroup.Item>
+            <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
+          </ToggleGroupField>
+        )}
+      </form.Field>
+      <form.Field name="terms">
+        {(field) => <CheckboxField field={field} label="I accept the terms" />}
+      </form.Field>
+      <Button type="submit">Sign up</Button>
     </form>
   );
 }
@@ -92,17 +197,6 @@ A few differ:
 - `NumberField` writes `undefined` when the input is cleared, so the field has to be `number | undefined`. With zod, `z.number().optional().refine((n) => n !== undefined, 'Required')` keeps it required, and typing `defaultValues` as `z.input<typeof schema>` gives the right field types without casts.
 - `ToggleGroupField` takes `ToggleGroup.Item`s as children and needs `label` or `aria-labelledby`. Set `type="multiple"` for a `string[]` field. String unions work: a `'list' | 'grid'` field gets typed `onChange` and item values.
 - `SelectField` doesn't need an `id`, it uses the FormGroup's.
-
-```tsx
-<form.Field name="view">
-  {(field) => (
-    <ToggleGroupField field={field} label="View">
-      <ToggleGroup.Item value="list">List</ToggleGroup.Item>
-      <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
-    </ToggleGroupField>
-  )}
-</form.Field>
-```
 
 ### Errors
 
