@@ -45,6 +45,8 @@ For contextual, non-blocking content next to a control, use
   applies and closes
 - `onClose` receives what triggered it: `'closeButton'`, `'escapeKey'` or `'overlayPress'`. Ignore
   `'overlayPress'` while a form has unsaved input so a stray click outside doesn't discard it
+- Set `dismissible={false}` to ignore Escape and overlay presses and hide the close button, so the
+  drawer closes only when you set `open` to `false`. Keep it for prompts that can't be skipped
 - Use `role="alertdialog"` for urgent interruptions that need a response; it's described by its
   `Drawer.Body` automatically. Add `describeWithBody` to describe a regular drawer holding a short
   message

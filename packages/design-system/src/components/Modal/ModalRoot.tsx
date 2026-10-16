@@ -50,7 +50,8 @@ export const ModalRoot: React.FC<ModalRootProps> = ({
   open,
   onClose,
   position,
-  showCloseButton = true,
+  dismissible = true,
+  showCloseButton = dismissible,
   role,
   describeWithBody,
   closeLabel = 'Close',
@@ -89,7 +90,7 @@ export const ModalRoot: React.FC<ModalRootProps> = ({
     },
   });
 
-  const dismiss = useDismiss(context);
+  const dismiss = useDismiss(context, { enabled: dismissible });
   const roleProps = useRole(context, { role });
 
   const { getFloatingProps } = useInteractions([dismiss, roleProps]);
