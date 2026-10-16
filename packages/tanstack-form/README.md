@@ -58,23 +58,6 @@ function SignupForm() {
 
 Each adapter only accepts fields of its value type, so TypeScript rejects e.g. `TextField` on a `number` field.
 
-If you want the `field.TextField` shorthand, wrap the adapter with `useFieldContext` and register it with `createFormHook`. Every form using that hook then bundles every registered adapter.
-
-```tsx
-const { fieldContext, formContext, useFieldContext } = createFormHookContexts();
-
-const AppTextField = (props: Omit<TextFieldProps, 'field'>) => (
-  <TextField field={useFieldContext<string>()} {...props} />
-);
-
-export const { useAppForm } = createFormHook({
-  fieldContext,
-  formContext,
-  fieldComponents: { TextField: AppTextField },
-  formComponents: {},
-});
-```
-
 ## Props
 
 Each adapter takes the props of the component it wraps, minus the ones the field drives (value, change handler, `name`, error state). Plus:
