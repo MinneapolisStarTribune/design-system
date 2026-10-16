@@ -22,7 +22,8 @@ On phones a dialog looks like a bottom drawer.
 1. **Overlay** — Dims the page, blocks interaction underneath, and locks page scroll.
 2. **Panel** — 560px wide with rounded corners, centered in the viewport. At 767px and below it's
    a full-width bottom sheet with its top corners rounded.
-3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`.
+3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`; it's hidden
+   by default when `dismissible={false}`.
 4. **Title** — Names the dialog.
 5. **Content** — Main content. The only region that scrolls; its edges fade while content sits
    beyond them.
@@ -52,6 +53,10 @@ When the content is supplementary rather than a decision — filters, details, s
   long content, which are noisy when read out as a description
 - `onClose` receives what triggered it: `'closeButton'`, `'escapeKey'` or `'overlayPress'`. Ignore
   `'overlayPress'` while a form has unsaved input so a stray click outside doesn't discard it
+- For prompts that can't be skipped, like signing in again after a session expires, set
+  `dismissible={false}`. Escape and overlay presses are ignored and the close button is hidden, so
+  the dialog closes only when you set `open` to `false`, from an action or once the problem is
+  resolved. Keep it rare, and always give the user an action that moves them forward
 - Pass `closeLabel` to localize the close button's accessible name
 - Don't nest dialogs
 
@@ -161,3 +166,7 @@ Each example opens in its own frame. On this page they start closed, so their fo
 ### No Close Button
 
 <Canvas of={DialogStories.NoCloseButton} />
+
+### Blocking
+
+<Canvas of={DialogStories.Blocking} />

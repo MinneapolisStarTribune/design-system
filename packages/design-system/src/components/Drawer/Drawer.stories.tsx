@@ -127,10 +127,19 @@ const meta = {
         defaultValue: { summary: "{ small: 'bottom', medium: 'right' }" },
       },
     },
+    dismissible: {
+      control: 'boolean',
+      description:
+        'Whether Escape and overlay presses request a close. Turn it off for blocking prompts that need an action.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
     showCloseButton: {
       control: 'boolean',
       description: 'Whether the top-right X icon button is rendered.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'the value of dismissible' },
+      },
     },
     role: {
       control: 'inline-radio',
