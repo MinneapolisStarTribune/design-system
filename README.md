@@ -277,6 +277,7 @@ yarn add @minneapolisstartribune/design-system@latest
 - **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
 - **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
 - **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
+- **[TanStack Form adapters](packages/tanstack-form/README.md)** - Design-system form fields bound to TanStack Form (web)
 - **[Release Checklist](integration-guides/release-checklist.md)** - Required pre-release checks for web, native, and multi-brand safety
 - **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 
