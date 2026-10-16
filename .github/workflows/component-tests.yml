@@ -85,3 +85,6 @@ jobs:
           path: 'packages/design-system/reports/a11y-junit.xml'
           reporter: 'java-junit'
           fail-on-error: true
+
+      - name: Run tanstack-form tests
+        run: yarn turbo run test --filter=@minneapolisstartribune/design-system-tanstack-form

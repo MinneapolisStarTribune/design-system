@@ -38,13 +38,6 @@ The form system is layered — you can use as much or as little as you need:
       </td>
       <td>Optional</td>
     </tr>
-    <tr>
-      <td>
-        <code>useFormLogic</code>
-      </td>
-      <td>Controlled field state, validation, and a ready-made <code>handleSubmit</code>.</td>
-      <td>Optional</td>
-    </tr>
   </tbody>
 </table>
 
@@ -72,73 +65,9 @@ Always use `Form.Button` inside `Form` for the submit action. It renders a `type
 
 Pressing Enter/Return while focused in any input will also submit the form natively, as long as `Form.Button` is present.
 
-## Form logic with `useFormLogic`
+## Form state and validation
 
-`useFormLogic` is an optional hook that gives you controlled field state, validation, and a `handleSubmit` function ready to pass to `<Form>`. Use it when you don't want to wire up form state yourself.
-
-The snippet below is the **body of a component** (not a full file): call the hook, then `return` the `<Form>` and fields.
-
-<Source
-  dark
-  language="tsx"
-  code={`const { values, errors, handleChange, handleBlur, handleSubmit } = useFormLogic({
-  initialValues: { email: '' },
-  validate: (values) => {
-    const errors: Record<string, string> = {};
-    if (!values.email) errors.email = 'Email is required';
-    return errors;
-  },
-});
-
-return (
-  <Form onSubmit={handleSubmit}>
-    <FormGroup>
-      <FormGroup.Label>Email</FormGroup.Label>
-      <FormControl.TextInput
-        name="email"
-        value={values.email}
-        onChange={(e) => handleChange('email', e.target.value)}
-        onBlur={() => handleBlur('email')}
-      />
-      {errors.email && <FormGroup.Caption variant="error">{errors.email}</FormGroup.Caption>}
-    </FormGroup>
-    <Form.Button>Submit</Form.Button>
-  </Form>
-);`}
-/>
-
-Skip the hook if you're already using React Hook Form, Formik, or your own `useState` — just pass your own `handleSubmit` to `<Form onSubmit={...}>` directly.
-
-### React Native
-
-`useFormLogic` is platform-agnostic. On React Native there is no `<form>` or DOM change event, so:
-
-- **Field updates:** Use `handleChange(field, value)` instead of `handleChangeEvent`. Wire your text input’s `onChangeText` (or equivalent) to `(value) => handleChange('fieldName', value)`.
-- **Submit:** Use `handleSubmit()` with no arguments, or `handleSubmitPress`. Pass the latter to your submit button: `onPress={handleSubmitPress}`. Both run the same validation and `onSubmit` flow.
-
-<Source
-  dark
-  language="tsx"
-  code={`const { values, errors, handleChange, handleBlur, handleSubmitPress } = useFormLogic({
-  initialValues: { email: '' },
-  validate: (values) => {
-    const fieldErrors: Record<string, string> = {};
-    if (!values.email) fieldErrors.email = 'Email is required';
-    return fieldErrors;
-  },
-});
-
-return (
-  <>
-    <TextInput
-      value={values.email}
-      onChangeText={(value) => handleChange('email', value)}
-      onBlur={() => handleBlur('email')}
-    />
-    <Button onPress={handleSubmitPress} title="Submit" />
-  </>
-);`}
-/>
+`Form` doesn't own state or validation. See **Forms/TanStack Form** for the recommended setup, or pass your own handler to `<Form onSubmit={...}>` and render `FormGroup.Caption variant="error"` yourself.
 
 ## Exports
 
@@ -173,68 +102,7 @@ return (
         Props for <code>Form</code> (e.g. <code>orientation</code>, <code>onSubmit</code>, <code>children</code>).
       </td>
     </tr>
-    <tr>
-      <td>
-        <code>useFormLogic</code>
-      </td>
-      <td>Hook for controlled values, errors, and <code>handleSubmit</code>; optional.</td>
-    </tr>
-    <tr>
-      <td>
-        <code>FormValidationErrors&lt;T&gt;</code>
-      </td>
-      <td>Type: object of field names to error strings (from <code>validate</code>).</td>
-    </tr>
-    <tr>
-      <td>
-        <code>UseFormLogicOptions&lt;T&gt;</code>
-      </td>
-      <td>
-        Options passed to <code>useFormLogic</code> (<code>initialValues</code>, <code>onSubmit</code>, <code>validate</code>,{' '}
-        <code>validateOnSubmit</code>, <code>validateOnBlur</code>).
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <code>UseFormLogicReturn&lt;T&gt;</code>
-      </td>
-      <td>
-        Return type of <code>useFormLogic</code> (<code>values</code>, <code>errors</code>, <code>handleChange</code>, <code>handleBlur</code>,{' '}
-        <code>handleSubmit</code>, <code>handleSubmitPress</code>, etc.).
-      </td>
-    </tr>
   </tbody>
 </table>
 
-Use the types when you need to annotate wrappers, options, or return values (e.g. a custom hook that returns the same shape as `useFormLogic`).
-
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
-
----
-
-
-## Validation
-
-### With validation (simple)
-
-Uses `useFormLogic` for state and validation. Enter an email without the `@` symbol, then blur the field or click Submit to see the error.
-
-**`useFormLogic` options:**
-
-- **initialValues** — Initial field values (keyed by field name).
-- **onSubmit** — Called when the form is submitted and validation passes (if `validate` is provided).
-- **validate** — Optional. Function that receives current values and returns an object of field names to error messages (omit or undefined = no error).
-- **validateOnSubmit** — Run `validate` on form submit. Default: `true`.
-- **validateOnBlur** — Run `validate` when a field blurs and set that field’s error. Default: `false`.
-
-<Canvas of={FormStories.WithValidationSimple} sourceState="hidden" />
-
-### With validation (multi-field)
-
-Multi-field form with initial value, required field with error, and format validation.
-
-- **Name** — Optional; pre-filled with "Jane Doe".
-- **Email** — Required; shows an error if empty or if the value doesn’t include `@`.
-- **Message** — Required; shows "Message is required" if left empty.
-
-<Canvas of={FormStories.WithValidationMultiField} sourceState="hidden" />

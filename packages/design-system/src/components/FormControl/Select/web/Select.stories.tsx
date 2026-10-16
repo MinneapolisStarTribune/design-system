@@ -448,7 +448,7 @@ export const AllVariants: Story = {
   play: async ({ canvas, userEvent }) => {
     // findBy waits out the decorator's async theme load
     const select = await canvas.findByTestId('select-open');
-    await userEvent.click(within(select).getByRole('button'));
+    await userEvent.click(select);
     await expect(await within(select).findByRole('listbox')).toBeVisible();
   },
 };
