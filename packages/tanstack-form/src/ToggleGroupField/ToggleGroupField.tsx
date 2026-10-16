@@ -7,6 +7,7 @@ import {
 } from '@minneapolisstartribune/design-system/web';
 import {
   type BoundField,
+  describedBy,
   FieldGroup,
   type FieldLabelProps,
   FocusBoundary,
@@ -69,7 +70,7 @@ export function ToggleGroupField<T extends string = string>(
     dataTestId,
   } = props;
   const errorMessage = useFieldError(props.field);
-  // ToggleGroup doesn't read FormGroup context, so the label is wired by id here.
+  // ToggleGroup doesn't read FormGroup context, so the label and captions are wired by id here.
   const ids = useFieldGroupIds();
 
   const rootProps = {
@@ -81,6 +82,7 @@ export function ToggleGroupField<T extends string = string>(
     style,
     dataTestId,
     'aria-labelledby': ariaLabelledBy ?? ids.label,
+    'aria-describedby': describedBy(ids, { description, caption, errorMessage }),
   };
 
   return (

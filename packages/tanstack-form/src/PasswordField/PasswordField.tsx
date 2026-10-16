@@ -30,6 +30,7 @@ export const PasswordField = ({
       caption={caption}
       optional={optional}
       errorMessage={errorMessage}
+      htmlFor={inputProps.id}
     >
       <PasswordInput
         {...inputProps}

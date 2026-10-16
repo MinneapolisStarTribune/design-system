@@ -44,6 +44,7 @@ describe('CheckboxField', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Accept the terms');
     expect(checkbox).toHaveAttribute('aria-invalid', 'true');
+    expect(checkbox).toHaveAccessibleDescription('Accept the terms');
   });
 
   it('only accepts boolean fields', () => {

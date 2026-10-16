@@ -39,6 +39,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   analytics: analyticsOverride,
   className,
   dataTestId,
+  'aria-describedby': ariaDescribedByProp,
 }) => {
   const { track } = useAnalytics();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,6 +72,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     }
   };
 
+  const ariaDescribedBy =
+    [caption ? `${id}-caption` : undefined, ariaDescribedByProp].filter(Boolean).join(' ') ||
+    undefined;
+
   const iconKey = indeterminate ? 'minus' : checked ? 'check' : 'checkbox-inactive';
   const IconComponent = CHECKBOX_ICONS[iconKey];
 
@@ -101,7 +106,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           onChange={handleChange}
           aria-checked={indeterminate ? 'mixed' : checked}
           aria-invalid={error ? true : undefined}
-          aria-describedby={caption ? `${id}-caption` : undefined}
+          aria-describedby={ariaDescribedBy}
           className={styles.input}
         />
         <span className={styles.visualBox} aria-hidden="true">

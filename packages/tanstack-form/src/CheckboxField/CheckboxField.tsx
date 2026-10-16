@@ -1,7 +1,14 @@
 'use client';
 
 import { Checkbox, type CheckboxProps } from '@minneapolisstartribune/design-system/web';
-import { type BoundField, FieldGroup, FocusBoundary, useFieldError } from '../shared/field';
+import {
+  type BoundField,
+  describedBy,
+  FieldGroup,
+  FocusBoundary,
+  useFieldError,
+  useFieldGroupIds,
+} from '../shared/field';
 
 export interface CheckboxFieldProps extends Omit<CheckboxProps, 'checked' | 'onChange' | 'error'> {
   /** The field from `form.Field`'s render prop. Must be a boolean field. */
@@ -16,14 +23,17 @@ export interface CheckboxFieldProps extends Omit<CheckboxProps, 'checked' | 'onC
  */
 export const CheckboxField = ({ field, onChange, ...checkboxProps }: CheckboxFieldProps) => {
   const errorMessage = useFieldError(field);
+  // Checkbox doesn't read FormGroup context, so the error caption is wired here.
+  const ids = useFieldGroupIds();
 
   return (
-    <FieldGroup errorMessage={errorMessage}>
+    <FieldGroup errorMessage={errorMessage} ids={ids}>
       <FocusBoundary onLeave={field.handleBlur}>
         <Checkbox
           {...checkboxProps}
           checked={field.state.value}
           error={errorMessage !== undefined}
+          aria-describedby={describedBy(ids, { errorMessage })}
           onChange={(checked) => {
             field.handleChange(checked);
             onChange?.(checked);

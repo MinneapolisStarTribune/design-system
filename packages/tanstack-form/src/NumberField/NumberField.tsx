@@ -33,6 +33,7 @@ export const NumberField = ({
       caption={caption}
       optional={optional}
       errorMessage={errorMessage}
+      htmlFor={inputProps.id}
     >
       <NumberInput
         {...inputProps}

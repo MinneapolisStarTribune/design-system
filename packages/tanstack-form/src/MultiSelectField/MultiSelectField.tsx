@@ -37,6 +37,7 @@ export const MultiSelectField = ({
       caption={caption}
       optional={optional}
       errorMessage={errorMessage}
+      htmlFor={selectProps.id}
     >
       <FocusBoundary onLeave={field.handleBlur}>
         <MultiSelect

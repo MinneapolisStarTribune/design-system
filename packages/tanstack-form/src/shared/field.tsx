@@ -68,6 +68,8 @@ interface FieldGroupProps extends FieldLabelProps {
   errorMessage: string | undefined;
   /** Explicit ids for label/description/caption. Leave unset when the control reads FormGroup context. */
   ids?: FieldGroupIds;
+  /** The control's id when the caller sets one, so the label still points at it. */
+  htmlFor?: string;
   children: React.ReactNode;
 }
 
@@ -79,11 +81,12 @@ export const FieldGroup = ({
   optional,
   errorMessage,
   ids,
+  htmlFor,
   children,
 }: FieldGroupProps) => (
   <FormGroup>
     {label != null && (
-      <FormGroup.Label id={ids?.label} optional={optional}>
+      <FormGroup.Label id={ids?.label} htmlFor={htmlFor} optional={optional}>
         {label}
       </FormGroup.Label>
     )}

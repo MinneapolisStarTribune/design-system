@@ -35,6 +35,7 @@ export const TextField = ({
       caption={caption}
       optional={optional}
       errorMessage={errorMessage}
+      htmlFor={inputProps.id}
     >
       <TextInput
         {...inputProps}

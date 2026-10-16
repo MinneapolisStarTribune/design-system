@@ -40,6 +40,7 @@ export const SelectField = ({
       caption={caption}
       optional={optional}
       errorMessage={errorMessage}
+      htmlFor={id}
     >
       <FocusBoundary onLeave={field.handleBlur}>
         <Select
