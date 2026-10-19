@@ -36,7 +36,7 @@ describe('SelectField', () => {
     expect(screen.getByRole('combobox', { name: 'State' })).toHaveAccessibleDescription(
       'Where you live'
     );
-    await userEvent.click(screen.getByRole('button', { name: 'Select an option' }));
+    await userEvent.click(screen.getByRole('combobox', { name: 'State' }));
     await userEvent.click(screen.getByRole('option', { name: 'Wisconsin' }));
     await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
@@ -55,7 +55,7 @@ describe('SelectField', () => {
   it('marks the field blurred only when focus leaves the select', async () => {
     render(<Fixture />);
 
-    await userEvent.click(screen.getByRole('button', { name: 'Select an option' }));
+    await userEvent.click(screen.getByRole('combobox', { name: 'State' }));
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
     await userEvent.click(document.body);
