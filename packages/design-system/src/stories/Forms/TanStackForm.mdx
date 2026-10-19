@@ -28,3 +28,11 @@ Initial value, required field with error, and format validation, all from one zo
 - **Message** — Required; shows "Message is required" if left empty.
 
 <Canvas of={TanStackFormStories.MultiField} sourceState="hidden" />
+
+### Every adapter
+
+One adapter per input, all validated by one zod schema. Click Submit without touching anything to see every error.
+
+<Canvas of={TanStackFormStories.AllAdapters} sourceState="hidden" />
+
+<Source dark language="tsx" code={TanStackFormStories.TanStackFormDocSources.allAdapters} />

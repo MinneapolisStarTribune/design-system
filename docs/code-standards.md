@@ -194,6 +194,10 @@ export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvid
 
 Web component styles live in `ComponentName.module.scss` but the contents should be **mostly native CSS**, not Sass. Reach for Sass only when native CSS genuinely can't do the job. Stick to camel case for class names.
 
+### No Inline `style` in Web Code
+
+Put web styles, including story layout, in a co-located `.module.scss` and apply them with `className`. Don't add `style={{…}}` for static values. Two exceptions: values only known at runtime (positions, measured sizes), which should set a CSS custom property the module reads, and packages without a CSS build, like `packages/tanstack-form`. The `style` prop components accept and pass through for consumers is fine.
+
 ---
 
 ## Storybook Standards
@@ -279,7 +283,7 @@ export const Configurable: Story = {
 // ✅ Second story - all variants for Chromatic regression testing
 export const AllVariants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div className={styles.variants}>
       {/* Render all size/weight/capitalize combinations */}
     </div>
   ),

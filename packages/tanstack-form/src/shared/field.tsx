@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useId } from 'react';
 import { FormGroup } from '@minneapolisstartribune/design-system/web';
 import { type AnyFieldApi, type AnyFieldMeta, useSelector } from '@tanstack/react-form';
 
@@ -15,6 +15,9 @@ export type BoundField<TValue, TChange = TValue> = Pick<
   state: { value: TValue; meta: AnyFieldMeta };
   handleChange: (value: TChange) => void;
 };
+
+/** Omit that keeps union members apart (for union prop types like CheckboxGroup's). */
+export type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 
 /** Label/description/caption props shared by adapters that render their own FormGroup label. */
 export interface FieldLabelProps {
@@ -49,8 +52,22 @@ export const useFieldError = (
   return showErrors ? field.state.meta.errors.map(getErrorMessage).find(Boolean) : undefined;
 };
 
+/** Ids for controls that don't read FormGroup context and need aria wired by hand. */
+export interface FieldGroupIds {
+  label: string;
+  description: string;
+  caption: string;
+}
+
+export const useFieldGroupIds = (): FieldGroupIds => {
+  const id = useId();
+  return { label: `${id}-label`, description: `${id}-description`, caption: `${id}-caption` };
+};
+
 interface FieldGroupProps extends FieldLabelProps {
   errorMessage: string | undefined;
+  /** Explicit ids for label/description/caption. Leave unset when the control reads FormGroup context. */
+  ids?: FieldGroupIds;
   /** The control's id when the caller sets one, so the label still points at it. */
   htmlFor?: string;
   children: React.ReactNode;
@@ -63,21 +80,68 @@ export const FieldGroup = ({
   caption,
   optional,
   errorMessage,
+  ids,
   htmlFor,
   children,
 }: FieldGroupProps) => (
   <FormGroup>
     {label != null && (
-      <FormGroup.Label htmlFor={htmlFor} optional={optional}>
+      <FormGroup.Label id={ids?.label} htmlFor={htmlFor} optional={optional}>
         {label}
       </FormGroup.Label>
     )}
-    {description != null && <FormGroup.Description>{description}</FormGroup.Description>}
+    {description != null && (
+      <FormGroup.Description id={ids?.description}>{description}</FormGroup.Description>
+    )}
     {children}
     {errorMessage !== undefined ? (
-      <FormGroup.Caption variant="error">{errorMessage}</FormGroup.Caption>
+      <FormGroup.Caption id={ids?.caption} variant="error">
+        {errorMessage}
+      </FormGroup.Caption>
     ) : (
-      caption != null && <FormGroup.Caption variant="info">{caption}</FormGroup.Caption>
+      caption != null && (
+        <FormGroup.Caption id={ids?.caption} variant="info">
+          {caption}
+        </FormGroup.Caption>
+      )
     )}
   </FormGroup>
+);
+
+/**
+ * `aria-describedby` for hand-wired controls, pointing only at elements that are rendered.
+ * Keeps any ids the caller passed in `own`.
+ */
+export const describedBy = (
+  ids: FieldGroupIds,
+  { description, caption, errorMessage }: FieldLabelProps & { errorMessage: string | undefined },
+  own?: string
+): string | undefined =>
+  [
+    own,
+    description != null && ids.description,
+    (errorMessage !== undefined || caption != null) && ids.caption,
+  ]
+    .filter(Boolean)
+    .join(' ') || undefined;
+
+/**
+ * Calls `onLeave` when focus moves out of the wrapped control, for controls that don't take an
+ * `onBlur`. Moving focus between parts of the control (radios, options, the trigger) doesn't count.
+ * `display: contents` keeps it out of layout. It's inline because this package has no CSS build.
+ */
+export const FocusBoundary = ({
+  onLeave,
+  children,
+  ...rest
+}: { onLeave: () => void; children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    {...rest}
+    style={{ display: 'contents' }}
+    onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) onLeave();
+    }}
+  >
+    {children}
+  </div>
 );

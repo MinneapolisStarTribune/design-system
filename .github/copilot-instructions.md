@@ -58,6 +58,10 @@ commenting on any of those — the rules stay here, the lookups live there.
 - **Hardcoded design values.** Hex or `rgba()` colour literals in `*.module.scss` or in a
   native `StyleSheet` where a `--color-*` custom property (web) or a `NativeTheme` token
   (native) exists. Same for spacing — `var(--spacing-*)`.
+- **New inline `style` in web code.** Static styles, story layout included, go in a co-located
+  `.module.scss` via `className`. Runtime-only values (positions, measured sizes) may set a CSS
+  custom property through `style`, and `packages/tanstack-form` has no CSS build. Passing a
+  consumer's `style` prop through is fine. Existing inline styles aren't a blocker.
 - **Themed native styles outside the two hooks.** Native components get styles from
   `useNativeStyles(factory)` or `useNativeStylesWithDefaults(factory)`
   (`@/hooks/useNativeStyles`), with `StyleSheet.create` inside the factory. Reading theme
