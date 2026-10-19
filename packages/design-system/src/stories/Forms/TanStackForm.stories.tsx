@@ -15,6 +15,7 @@ import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { Button } from '@/components/Button/web/Button';
 import * as ToggleGroup from '@/components/ToggleGroup/ToggleGroup';
+import styles from './TanStackForm.module.scss';
 
 const meta = {
   title: 'Forms/TanStack Form',
@@ -244,17 +245,6 @@ function AllAdaptersExample() {
 `.trim(),
 } as const;
 
-// Stories only, keeps fields and the button from touching
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  gap: 16,
-} as const;
-
-// Stories only, text-like fields fill the form up to a readable width
-const wideFieldStyle = { width: '100%', maxWidth: 250 } as const;
-
 const requiredEmail = z
   .string()
   .trim()
@@ -274,7 +264,7 @@ function SimpleValidationExample() {
 
   return (
     <form
-      style={formStyle}
+      className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
         void form.handleSubmit();
@@ -318,7 +308,7 @@ function MultiFieldValidationExample() {
 
   return (
     <form
-      style={formStyle}
+      className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
         void form.handleSubmit();
@@ -393,21 +383,21 @@ function AllAdaptersExample() {
 
   return (
     <form
-      style={formStyle}
+      className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
         void form.handleSubmit();
       }}
     >
-      <div style={wideFieldStyle}>
+      <div className={styles.wideField}>
         <form.Field name="password">
           {(field) => <PasswordField field={field} label="Password" autoComplete="new-password" />}
         </form.Field>
       </div>
-      <div style={wideFieldStyle}>
+      <div className={styles.wideField}>
         <form.Field name="age">{(field) => <NumberField field={field} label="Age" />}</form.Field>
       </div>
-      <div style={wideFieldStyle}>
+      <div className={styles.wideField}>
         <form.Field name="state">
           {(field) => (
             <SelectField
@@ -421,7 +411,7 @@ function AllAdaptersExample() {
           )}
         </form.Field>
       </div>
-      <div style={wideFieldStyle}>
+      <div className={styles.wideField}>
         <form.Field name="topics">
           {(field) => (
             <MultiSelectField
@@ -463,7 +453,7 @@ function AllAdaptersExample() {
       <form.Field name="alerts">
         {(field) => <SwitchField field={field} label="Breaking news alerts" />}
       </form.Field>
-      <div style={wideFieldStyle}>
+      <div className={styles.wideField}>
         <form.Field name="view">
           {(field) => (
             <ToggleGroupField field={field} label="View" fullWidth>

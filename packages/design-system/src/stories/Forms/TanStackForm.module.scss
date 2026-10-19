@@ -1,0 +1,13 @@
+/** Stories only. Keeps fields and the button from touching. */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-16);
+}
+
+/** Text-like fields fill the form up to a readable width. */
+.wideField {
+  width: 100%;
+  max-width: 250px;
+}

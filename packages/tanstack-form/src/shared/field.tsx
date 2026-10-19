@@ -128,7 +128,7 @@ export const describedBy = (
 /**
  * Calls `onLeave` when focus moves out of the wrapped control, for controls that don't take an
  * `onBlur`. Moving focus between parts of the control (radios, options, the trigger) doesn't count.
- * `display: contents` keeps it out of layout.
+ * `display: contents` keeps it out of layout. It's inline because this package has no CSS build.
  */
 export const FocusBoundary = ({
   onLeave,
