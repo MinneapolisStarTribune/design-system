@@ -123,10 +123,6 @@
 /* ---------- Dropdown ---------- */
 
 .selectDropdown {
-  position: absolute;
-  top: calc(100% + var(--spacing-8));
-  left: 0;
-  width: 100%;
   padding: var(--spacing-8);
   margin: 0;
   list-style: none;
@@ -134,7 +130,7 @@
   z-index: 20;
 
   /* Fits seven options plus the list padding. */
-  max-height: 317px;
+  max-height: min(317px, var(--select-available-height, 317px));
   overflow-y: auto;
 
   background: var(--color-select-background);

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
-import { expect, within } from 'storybook/test';
+import { useRef, useState } from 'react';
+import { expect, waitFor, within } from 'storybook/test';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
@@ -133,6 +133,178 @@ export const Configurable: Story = {
     },
   },
   render: (args) => <ConfigurableComponent {...args} />,
+};
+
+const SelectTable = ({ constrained = true }: { constrained?: boolean }) => (
+  <div style={{ padding: 24 }}>
+    <div
+      data-testid="select-table-scroll"
+      style={{
+        height: constrained ? 'min(420px, calc(100vh - 48px))' : undefined,
+        overflow: 'auto',
+      }}
+    >
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <tbody>
+          {Array.from({ length: 20 }, (_, index) => (
+            <tr key={index}>
+              <td style={{ padding: 12 }}>Game {index + 1}</td>
+              <td style={{ padding: 12, width: '60%' }}>
+                <FormControl.Select
+                  id={`table-status-${index}`}
+                  placeholderText={`Status for game ${index + 1}`}
+                  options={OPTIONS}
+                  value="1"
+                  size="small"
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
+export const ScrollableTable: Story = {
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'The last row opens upward without adding scrollable space or moving the table.',
+      },
+    },
+  },
+  render: () => <SelectTable />,
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const scroller = await canvas.findByTestId('select-table-scroll');
+    const table = within(scroller).getByRole('table');
+    const page = canvasElement.ownerDocument.documentElement;
+    const body = within(canvasElement.ownerDocument.body);
+    const first = canvas.getByRole('combobox', { name: 'Status for game 1' });
+    const last = canvas.getByRole('combobox', { name: 'Status for game 20' });
+    const measurements = () => ({
+      scrollTop: scroller.scrollTop,
+      scrollHeight: scroller.scrollHeight,
+      tableHeight: table.getBoundingClientRect().height,
+      pageScroll: page.scrollTop,
+      pageHeight: page.scrollHeight,
+    });
+
+    scroller.scrollTop = scroller.scrollHeight;
+    last.scrollIntoView({ block: 'nearest' });
+    const before = measurements();
+    const triggerTop = last.getBoundingClientRect().top;
+    await userEvent.click(last);
+    await waitFor(() => {
+      const menu = body.getByRole('listbox').getBoundingClientRect();
+      expect(menu.height).toBeGreaterThan(0);
+      expect(menu.bottom).toBeLessThanOrEqual(triggerTop);
+      expect(menu.top).toBeGreaterThanOrEqual(scroller.getBoundingClientRect().top);
+      expect(last.getBoundingClientRect().top).toBe(triggerTop);
+      expect(measurements()).toEqual(before);
+    });
+    // Navigating a long menu scrolls only the options, never its containing table/page.
+    await userEvent.keyboard('{ArrowDown>8/}');
+    await expect(body.getByRole('listbox').scrollTop).toBeGreaterThan(0);
+    await expect(measurements()).toEqual(before);
+    await userEvent.keyboard('{Escape}');
+
+    scroller.scrollTop = 0;
+    first.scrollIntoView({ block: 'nearest' });
+    const beforeTop = measurements();
+    await userEvent.click(first);
+    await waitFor(() => {
+      expect(body.getByRole('listbox').getBoundingClientRect().top).toBeGreaterThanOrEqual(
+        first.getBoundingClientRect().bottom
+      );
+      expect(measurements()).toEqual(beforeTop);
+    });
+    await userEvent.keyboard('{Escape}');
+
+    scroller.scrollTop = scroller.scrollHeight;
+    last.scrollIntoView({ block: 'nearest' });
+    await userEvent.click(last);
+    await waitFor(() => {
+      expect(body.getByRole('listbox').getBoundingClientRect().bottom).toBeLessThanOrEqual(
+        last.getBoundingClientRect().top
+      );
+    });
+  },
+};
+
+export const ViewportBottom: Story = {
+  ...ScrollableTable,
+  render: () => <SelectTable constrained={false} />,
+};
+
+export const RegionalTheme: Story = {
+  ...ScrollableTable,
+  render: () => (
+    <section
+      data-theme="dark"
+      data-testid="select-theme-region"
+      style={{
+        background: 'var(--color-select-background)',
+        color: 'var(--color-text-on-light-primary)',
+      }}
+    >
+      <link rel="stylesheet" href="/startribune-dark.scoped.css" />
+      <SelectTable />
+    </section>
+  ),
+  play: async (context) => {
+    await ScrollableTable.play?.(context);
+    const region = context.canvas.getByTestId('select-theme-region');
+    const menu = within(region).getByRole('listbox');
+    await waitFor(() => {
+      expect(getComputedStyle(menu).backgroundColor).toBe(getComputedStyle(region).backgroundColor);
+      expect(getComputedStyle(menu).backgroundColor).not.toBe('rgb(255, 255, 255)');
+    });
+  },
+};
+
+export const NativeDialog: Story = {
+  render: function Render() {
+    const dialogRef = useRef<HTMLDialogElement>(null);
+    const [value, setValue] = useState('1');
+    return (
+      <>
+        <button onClick={() => dialogRef.current?.showModal()}>Open dialog</button>
+        <dialog ref={dialogRef} aria-label="Select example" style={{ width: 400, height: 450 }}>
+          <button onClick={() => dialogRef.current?.close()}>Close dialog</button>
+          <FormControl.Select
+            id="native-dialog-select"
+            options={OPTIONS}
+            value={value}
+            onChange={setValue}
+          />
+        </dialog>
+      </>
+    );
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Open dialog' }));
+    const dialog = canvas.getByRole('dialog', { name: 'Select example' });
+    const trigger = within(dialog).getByRole('combobox');
+    await userEvent.click(trigger);
+    const option = await within(dialog).findByRole('option', { name: 'Option-2' });
+    await waitFor(() => {
+      const rect = option.getBoundingClientRect();
+      const target = dialog.ownerDocument.elementFromPoint(
+        rect.x + rect.width / 2,
+        rect.y + rect.height / 2
+      );
+      expect(option.contains(target)).toBe(true);
+    });
+    await userEvent.click(option);
+    await expect(trigger).toHaveTextContent('Option-2');
+    await expect(trigger).toHaveFocus();
+    await expect(within(dialog).queryByRole('listbox')).not.toBeInTheDocument();
+    await userEvent.click(trigger);
+    await expect(await within(dialog).findByRole('listbox')).toBeVisible();
+  },
 };
 
 export const AllVariants: Story = {
@@ -432,7 +604,7 @@ export const AllVariants: Story = {
           </FormGroup>
         </div>
 
-        {/* Reserves room for the absolutely positioned dropdown (317px max-height + 8px offset) */}
+        {/* Reserves room for the open dropdown in the visual overview. */}
         <div style={{ ...cellStyle, paddingBottom: 335 }}>
           <SectionLabel>State: Open</SectionLabel>
           <FormGroup>
@@ -449,6 +621,6 @@ export const AllVariants: Story = {
     // findBy waits out the decorator's async theme load
     const select = await canvas.findByTestId('select-open');
     await userEvent.click(select);
-    await expect(await within(select).findByRole('listbox')).toBeVisible();
+    await expect(await within(select.ownerDocument.body).findByRole('listbox')).toBeVisible();
   },
 };

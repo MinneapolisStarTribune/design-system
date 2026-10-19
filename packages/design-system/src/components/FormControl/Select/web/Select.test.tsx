@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 
 const OPTIONS = [
   { value: 'us', label: 'United States' },
@@ -11,6 +11,48 @@ const OPTIONS = [
 ];
 
 describe('Select', () => {
+  it.each(['native dialog', 'regional theme', 'theme inside dialog', 'dialog inside theme'])(
+    'keeps options interactive inside a %s',
+    async (scenario) => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const select = <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />;
+      const { getByRole, getByTestId, queryByRole } = renderWithProvider(
+        scenario === 'native dialog' ? (
+          <dialog open data-testid="portal-scope">
+            {select}
+          </dialog>
+        ) : scenario === 'regional theme' ? (
+          <section data-theme="dark" data-testid="portal-scope">
+            {select}
+          </section>
+        ) : scenario === 'theme inside dialog' ? (
+          <dialog open>
+            <section data-theme="dark" data-testid="portal-scope">
+              {select}
+            </section>
+          </dialog>
+        ) : (
+          <section data-theme="dark">
+            <dialog open data-testid="portal-scope">
+              {select}
+            </dialog>
+          </section>
+        )
+      );
+
+      const trigger = getByRole('combobox');
+      await user.click(trigger);
+      const listbox = getByRole('listbox');
+      expect(getByTestId('portal-scope').contains(listbox)).toBe(true);
+      expect(trigger.contains(listbox)).toBe(false);
+      await user.click(getByRole('option', { name: 'Canada' }));
+      expect(onChange).toHaveBeenCalledExactlyOnceWith('ca');
+      expect(queryByRole('listbox')).not.toBeInTheDocument();
+      expect(trigger).toHaveFocus();
+    }
+  );
+
   it('renders combobox', () => {
     const { getByRole } = renderWithProvider(<FormControl.Select id="test" options={OPTIONS} />);
 
@@ -218,7 +260,7 @@ describe('Select', () => {
     });
 
     it.each(['click', 'Enter', 'ArrowDown', 'ArrowUp'])(
-      'reveals the listbox on %s, without scrolling it again during navigation',
+      'opens on %s and navigates without scrolling ancestors',
       async (openWith) => {
         const user = userEvent.setup();
         const { getByRole, queryByRole, rerender } = renderWithProvider(
@@ -234,20 +276,20 @@ describe('Select', () => {
           await user.keyboard(`{${openWith}}`);
         }
 
-        const listbox = getByRole('listbox');
+        expect(getByRole('listbox')).toBeInTheDocument();
         const firstOption = getByRole('option', { name: 'United States' });
         expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
-        expect(scrollIntoView.mock.contexts).toEqual([firstOption, listbox]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         scrollIntoView.mockClear();
         await user.keyboard('{ArrowDown}');
         const secondOption = getByRole('option', { name: 'Canada' });
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+        expect(select).toHaveAttribute('aria-activedescendant', secondOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         await user.hover(firstOption);
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption, firstOption]);
+        expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         scrollIntoView.mockClear();
         rerender(<FormControl.Select id="test" options={OPTIONS} isError />);
@@ -259,7 +301,7 @@ describe('Select', () => {
       }
     );
 
-    it('reveals the selected option and listbox again after closing with the trigger', async () => {
+    it('reopens at the selected option without scrolling ancestors', async () => {
       const user = userEvent.setup();
       const { getByRole } = renderWithProvider(
         <FormControl.Select id="test" options={OPTIONS} value="ca" />
@@ -271,11 +313,11 @@ describe('Select', () => {
       scrollIntoView.mockClear();
       await user.click(trigger);
 
-      expect(scrollIntoView.mock.contexts).toEqual([
-        getByRole('option', { name: 'Canada' }),
-        getByRole('listbox'),
-      ]);
-      expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+      expect(trigger).toHaveAttribute(
+        'aria-activedescendant',
+        getByRole('option', { name: 'Canada' }).id
+      );
+      expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
     it('does not open or scroll a disabled Select', async () => {
@@ -290,6 +332,55 @@ describe('Select', () => {
 
       expect(queryByRole('listbox')).not.toBeInTheDocument();
       expect(scrollIntoView).not.toHaveBeenCalled();
+    });
+
+    it('scrolls only the list to reveal selected and keyboard-active options', async () => {
+      const user = userEvent.setup();
+      const options = Array.from({ length: 12 }, (_, index) => ({
+        value: String(index),
+        label: `Option ${index}`,
+      }));
+      const originalRect = HTMLElement.prototype.getBoundingClientRect;
+      const rectSpy = vi
+        .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+        .mockImplementation(function (this: HTMLElement) {
+          if (this.getAttribute('role') === 'listbox') {
+            return new DOMRect(0, 100, 200, 120);
+          }
+          if (this.getAttribute('role') === 'option') {
+            const index = Number(this.textContent?.replace('Option ', ''));
+            return new DOMRect(0, 100 + index * 40 - (this.parentElement?.scrollTop ?? 0), 200, 40);
+          }
+          return originalRect.call(this);
+        });
+      const heightSpy = vi
+        .spyOn(HTMLElement.prototype, 'clientHeight', 'get')
+        .mockImplementation(function (this: HTMLElement) {
+          return this.getAttribute('role') === 'listbox' ? 120 : 0;
+        });
+      try {
+        const { getByRole, getByTestId } = renderWithProvider(
+          <div data-testid="scroll-parent" style={{ overflow: 'auto', height: 200 }}>
+            <FormControl.Select id="test" options={options} value="9" />
+          </div>
+        );
+        const parent = getByTestId('scroll-parent');
+        parent.scrollTop = 400;
+        await user.click(getByRole('combobox'));
+        const listbox = getByRole('listbox');
+        await waitFor(() => expect(listbox.scrollTop).toBe(280));
+        await user.keyboard('{ArrowDown}');
+        expect(listbox.scrollTop).toBe(320);
+        await user.keyboard('{ArrowUp}');
+        expect(listbox.scrollTop).toBe(320);
+        await user.keyboard('{ArrowUp>3/}');
+        expect(listbox.scrollTop).toBe(240);
+        expect(parent.scrollTop).toBe(400);
+        expect(scrollIntoView).not.toHaveBeenCalled();
+      } finally {
+        rectSpy.mockRestore();
+        heightSpy.mockRestore();
+      }
     });
 
     it('can open when scrollIntoView is unavailable', async () => {
