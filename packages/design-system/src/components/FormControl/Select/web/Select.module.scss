@@ -127,8 +127,7 @@
   margin: 0;
   list-style: none;
   border-radius: var(--radius-16);
-  /* The listbox portals to `body`, so it must clear the Modal overlay (z-index 1000). */
-  z-index: 1001;
+  z-index: 20;
 
   /* Fits seven options plus the list padding, and shrinks to the space beside the trigger. */
   max-height: min(317px, var(--floating-available-height, 317px));

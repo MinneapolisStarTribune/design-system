@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FloatingPortal, useDismiss, useInteractions, useMergeRefs } from '@floating-ui/react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
+import { getScopedPortalRoot } from '@/components/FloatingSurface/getScopedPortalRoot';
 import { useAnchoredFloating } from '@/components/FloatingSurface/useAnchoredFloating';
 import styles from './Select.module.scss';
 import type { SelectOption, SelectProps } from '../Select.types';
@@ -29,7 +30,7 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   const safeOptions = React.useMemo(() => (Array.isArray(options) ? options : []), [options]);
 
-  const rootRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -45,6 +46,7 @@ export const Select: React.FC<SelectProps> = ({
     elements,
     context,
     floatingStyles,
+    isPositioned,
   } = useAnchoredFloating<HTMLDivElement>({
     open: isOpen,
     onOpenChange: handleOpenChange,
@@ -54,7 +56,7 @@ export const Select: React.FC<SelectProps> = ({
   });
   // Closes on a press outside both the combobox and the portaled listbox, and on Escape.
   const { getReferenceProps, getFloatingProps } = useInteractions([useDismiss(context)]);
-  const mergedRootRef = useMergeRefs([rootRef, setReference]);
+  const mergedListboxRef = useMergeRefs([listboxRef, setFloating]);
 
   const formGroup = useFormGroupContext();
 
@@ -91,15 +93,20 @@ export const Select: React.FC<SelectProps> = ({
     'typography-utility-text-italic-large': size === 'large',
   });
 
-  // The portal mounts the listbox after the open render, so wait for its element.
+  // `scrollIntoView` also scrolls the page and any scrollable ancestor, so scroll only the list.
   useEffect(() => {
-    if (isOpen && elements.floating && activeIndex >= 0) {
-      const el = optionRefs.current[activeIndex];
-      if (el && typeof el.scrollIntoView === 'function') {
-        el.scrollIntoView({ block: 'nearest' });
-      }
+    const listbox = listboxRef.current;
+    const option = optionRefs.current[activeIndex];
+    if (!isOpen || !isPositioned || !listbox || !option) return;
+
+    const listTop = listbox.getBoundingClientRect().top + listbox.clientTop;
+    const optionRect = option.getBoundingClientRect();
+    if (optionRect.top < listTop) {
+      listbox.scrollTop += optionRect.top - listTop;
+    } else if (optionRect.bottom > listTop + listbox.clientHeight) {
+      listbox.scrollTop += optionRect.bottom - listTop - listbox.clientHeight;
     }
-  }, [activeIndex, isOpen, elements.floating]);
+  }, [activeIndex, isOpen, isPositioned]);
 
   useEffect(() => {
     optionRefs.current = [];
@@ -193,7 +200,7 @@ export const Select: React.FC<SelectProps> = ({
         onKeyDown: handleKeyDown,
         onBlur: handleBlur,
       })}
-      ref={mergedRootRef}
+      ref={setReference}
       id={inputId}
       role="combobox"
       aria-expanded={isOpen}
@@ -237,16 +244,17 @@ export const Select: React.FC<SelectProps> = ({
       </div>
 
       {isOpen && (
-        <FloatingPortal>
+        <FloatingPortal root={getScopedPortalRoot(elements.domReference)}>
           <ul
             {...getFloatingProps({
               // Keep focus on the combobox, which is outside the portaled listbox in the DOM.
               onMouseDown: (e) => e.preventDefault(),
             })}
-            ref={setFloating}
+            ref={mergedListboxRef}
             id={listboxId}
             role="listbox"
-            style={floatingStyles}
+            // Hidden until positioned, so the list doesn't flash at the page origin.
+            style={{ ...floatingStyles, visibility: isPositioned ? undefined : 'hidden' }}
             className={classNames(styles.selectDropdown, 'typography-utility-text-regular-medium')}
           >
             {safeOptions.map((option, index) => {

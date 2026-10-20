@@ -20,6 +20,7 @@ import type {
   UseRoleProps,
 } from '@floating-ui/react';
 import styles from './FloatingSurface.module.scss';
+import { getScopedPortalRoot } from './getScopedPortalRoot';
 import { FLOATING_GAP, useAnchoredFloating } from './useAnchoredFloating';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
@@ -213,7 +214,7 @@ export const FloatingSurface = ({
   );
 
   const floatingElement = context.open && (
-    <FloatingPortal root={portalRoot}>
+    <FloatingPortal root={portalRoot ?? getScopedPortalRoot(context.elements.domReference)}>
       {lockScroll ? (
         <FloatingOverlay lockScroll style={{ pointerEvents: 'none' }}>
           {surfaceElement}

@@ -41,6 +41,8 @@ export const useAnchoredFloating = <RT extends ReferenceType = Element>({
     open,
     onOpenChange,
     placement,
+    // The portal can sit inside a scrolling or `overflow: hidden` dialog panel; `fixed` escapes it.
+    strategy: 'fixed',
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetDistance),

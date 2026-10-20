@@ -240,7 +240,7 @@ describe('Select', () => {
     });
 
     it.each(['click', 'Enter', 'ArrowDown', 'ArrowUp'])(
-      'reveals the active option on %s without scrolling the page to the listbox',
+      'opens on %s and navigates without scrolling ancestors',
       async (openWith) => {
         const user = userEvent.setup();
         const { findByRole, getByRole, queryByRole, rerender } = renderWithProvider(
@@ -258,17 +258,16 @@ describe('Select', () => {
 
         const firstOption = await findByRole('option', { name: 'United States' });
         expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
-        expect(scrollIntoView.mock.contexts).toEqual([firstOption]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
-        scrollIntoView.mockClear();
         await user.keyboard('{ArrowDown}');
         const secondOption = getByRole('option', { name: 'Canada' });
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+        expect(select).toHaveAttribute('aria-activedescendant', secondOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         await user.hover(firstOption);
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption, firstOption]);
+        expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         scrollIntoView.mockClear();
         rerender(<FormControl.Select id="test" options={OPTIONS} isError />);
@@ -280,7 +279,7 @@ describe('Select', () => {
       }
     );
 
-    it('reveals the selected option again after closing with the trigger', async () => {
+    it('reopens at the selected option without scrolling ancestors', async () => {
       const user = userEvent.setup();
       const { findByRole, getByRole } = renderWithProvider(
         <FormControl.Select id="test" options={OPTIONS} value="ca" />
@@ -292,10 +291,11 @@ describe('Select', () => {
       scrollIntoView.mockClear();
       await user.click(trigger);
 
-      expect(scrollIntoView.mock.contexts).toEqual([
-        await findByRole('option', { name: 'Canada' }),
-      ]);
-      expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+      expect(trigger).toHaveAttribute(
+        'aria-activedescendant',
+        (await findByRole('option', { name: 'Canada' })).id
+      );
+      expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
     it('does not open or scroll a disabled Select', async () => {
