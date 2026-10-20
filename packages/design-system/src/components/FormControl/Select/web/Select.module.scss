@@ -131,7 +131,7 @@
   z-index: 1001;
 
   /* Fits seven options plus the list padding, and shrinks to the space beside the trigger. */
-  max-height: min(317px, var(--select-available-height, 317px));
+  max-height: min(317px, var(--floating-available-height, 317px));
   overflow-y: auto;
 
   background: var(--color-select-background);

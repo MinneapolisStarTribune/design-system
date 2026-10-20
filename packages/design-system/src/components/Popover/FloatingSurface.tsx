@@ -3,19 +3,12 @@
 import { cloneElement, isValidElement, ReactNode, Ref, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
-  arrow,
-  autoUpdate,
   FloatingArrow,
   FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
-  flip,
-  offset,
-  shift,
-  size,
   useClick,
   useDismiss,
-  useFloating,
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
@@ -27,13 +20,9 @@ import type {
   UseRoleProps,
 } from '@floating-ui/react';
 import styles from './Popover.module.scss';
+import { FLOATING_GAP, useAnchoredFloating } from './useAnchoredFloating';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };
-/**
- * Gap between the anchor and the arrow tip, or the surface when `hideArrow` is set.
- * Also the edge padding for `flip`, `shift`, and `size`.
- */
-const FLOATING_GAP = 4;
 
 const DISABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'default' } as const;
 const ENABLED_TRIGGER_STYLE = { display: 'inline-block', cursor: 'pointer' } as const;
@@ -74,36 +63,13 @@ export const useFloatingSurface = ({
     refs: { setReference, setFloating },
     context,
     floatingStyles,
-  } = useFloating({
-    placement,
+  } = useAnchoredFloating({
     open,
     onOpenChange,
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP),
-      // A side placement that fits neither side falls back to below or above the anchor. Edge overflow
-      // flips only the `-start`/`-end` alignment, never the side, and `shift` slides the surface back in.
-      flip({
-        boundary: resolvedPortalRoot,
-        padding: FLOATING_GAP,
-        crossAxis: 'alignment',
-        fallbackAxisSideDirection: 'end',
-      }),
-      shift({ boundary: resolvedPortalRoot, padding: FLOATING_GAP }),
-      // Expose the space left on the chosen side so surface styles can shrink to fit narrow screens.
-      size({
-        boundary: resolvedPortalRoot,
-        padding: FLOATING_GAP,
-        apply({ availableWidth, availableHeight, elements }) {
-          elements.floating.style.setProperty('--floating-available-width', `${availableWidth}px`);
-          elements.floating.style.setProperty(
-            '--floating-available-height',
-            `${availableHeight}px`
-          );
-        },
-      }),
-      arrow({ element: arrowElement, padding: arrowPadding }),
-    ],
+    placement,
+    offset: hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP,
+    portalRoot: resolvedPortalRoot,
+    arrow: { element: arrowElement, padding: arrowPadding },
   });
 
   const click = useClick(context, { enabled: !isDisabled });

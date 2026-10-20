@@ -2,16 +2,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  size as sizeMiddleware,
-  useFloating,
-  useMergeRefs,
-} from '@floating-ui/react';
+import { FloatingPortal, useDismiss, useInteractions, useMergeRefs } from '@floating-ui/react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
+import { useAnchoredFloating } from '@/components/Popover/useAnchoredFloating';
 import styles from './Select.module.scss';
 import type { SelectOption, SelectProps } from '../Select.types';
 import { ChevronDownIcon } from '@/icons';
@@ -41,27 +34,26 @@ export const Select: React.FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setIsOpen(nextOpen);
+    if (!nextOpen) setActiveIndex(-1);
+  };
+
   // Portal the listbox so overflow on an ancestor, such as a scrollable table, cannot clip it.
   const {
     refs: { setReference, setFloating },
     elements,
+    context,
     floatingStyles,
-  } = useFloating<HTMLDivElement>({
+  } = useAnchoredFloating<HTMLDivElement>({
     open: isOpen,
+    onOpenChange: handleOpenChange,
     placement: 'bottom-start',
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(DROPDOWN_GAP),
-      flip({ padding: DROPDOWN_GAP }),
-      sizeMiddleware({
-        padding: DROPDOWN_GAP,
-        apply({ rects, availableHeight, elements }) {
-          elements.floating.style.width = `${rects.reference.width}px`;
-          elements.floating.style.setProperty('--select-available-height', `${availableHeight}px`);
-        },
-      }),
-    ],
+    gap: DROPDOWN_GAP,
+    matchAnchorWidth: true,
   });
+  // Closes on a press outside both the combobox and the portaled listbox, and on Escape.
+  const { getReferenceProps, getFloatingProps } = useInteractions([useDismiss(context)]);
   const mergedRootRef = useMergeRefs([rootRef, setReference]);
 
   const formGroup = useFormGroupContext();
@@ -98,22 +90,6 @@ export const Select: React.FC<SelectProps> = ({
     'typography-utility-text-italic-medium': size === 'medium',
     'typography-utility-text-italic-large': size === 'large',
   });
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!rootRef.current) return;
-      const target = event.target as Node;
-      if (!rootRef.current.contains(target) && !elements.floating?.contains(target)) {
-        setIsOpen(false);
-        setActiveIndex(-1);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, elements.floating]);
 
   // The portal mounts the listbox after the open render, so wait for its element.
   useEffect(() => {
@@ -181,11 +157,6 @@ export const Select: React.FC<SelectProps> = ({
         }
         break;
 
-      case 'Escape':
-        setIsOpen(false);
-        setActiveIndex(-1);
-        break;
-
       // Follows the APG select-only combobox: commit the active option, close, and let focus move on.
       case 'Tab':
         if (isOpen) handleSelect(safeOptions[activeIndex]);
@@ -217,6 +188,11 @@ export const Select: React.FC<SelectProps> = ({
 
   return (
     <div
+      {...getReferenceProps({
+        onClick: handleToggle,
+        onKeyDown: handleKeyDown,
+        onBlur: handleBlur,
+      })}
       ref={mergedRootRef}
       id={inputId}
       role="combobox"
@@ -230,9 +206,6 @@ export const Select: React.FC<SelectProps> = ({
       aria-invalid={hasError || undefined}
       aria-disabled={isDisabled || undefined}
       tabIndex={isDisabled ? -1 : 0}
-      onClick={handleToggle}
-      onKeyDown={handleKeyDown}
-      onBlur={handleBlur}
       className={containerClasses}
       data-testid={dataTestId}
     >
@@ -266,13 +239,15 @@ export const Select: React.FC<SelectProps> = ({
       {isOpen && (
         <FloatingPortal>
           <ul
+            {...getFloatingProps({
+              // Keep focus on the combobox, which is outside the portaled listbox in the DOM.
+              onMouseDown: (e) => e.preventDefault(),
+            })}
             ref={setFloating}
             id={listboxId}
             role="listbox"
             style={floatingStyles}
             className={classNames(styles.selectDropdown, 'typography-utility-text-regular-medium')}
-            // Keep focus on the combobox, which is outside the portaled listbox in the DOM.
-            onMouseDown={(e) => e.preventDefault()}
           >
             {safeOptions.map((option, index) => {
               const isSelected = option.value === value;
