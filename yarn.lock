@@ -3601,7 +3601,7 @@ __metadata:
     vite-plugin-dts: "npm:4.5.4"
     vitest: "npm:3.2.4"
   peerDependencies:
-    "@minneapolisstartribune/design-system": ^3.0.0 || ^4.0.0
+    "@minneapolisstartribune/design-system": ^4.0.0
     "@tanstack/react-form": ^1.33.1
     react: ^19.1.0
   languageName: unknown
