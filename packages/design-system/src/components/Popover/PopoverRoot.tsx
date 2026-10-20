@@ -3,7 +3,7 @@
 import { useCallback, useId, useMemo, useState } from 'react';
 import { useInteractions } from '@floating-ui/react';
 import { PopoverContext } from './PopoverContext';
-import { FloatingSurface, useFloatingSurface } from './FloatingSurface';
+import { FloatingSurface, useFloatingSurface } from '@/components/FloatingSurface/FloatingSurface';
 import { PopoverProps } from './Popover.types';
 
 export const PopoverRoot: React.FC<PopoverProps> = ({

@@ -64,6 +64,7 @@ const TooltipRoot: React.FC<TooltipProps> = ({
   const portalRootFromContext = useContext(TooltipPortalRootContext);
   const resolvedPortalRoot = portalRootProp ?? portalRootFromContext ?? undefined;
 
+  // TODO: Position with `useAnchoredFloating` from `FloatingSurface`.
   const middleware = useMemo(
     () => [
       offset(ARROW_HEIGHT + GAP),

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FloatingList, useInteractions, useListNavigation, useTypeahead } from '@floating-ui/react';
 import type { ElementProps } from '@floating-ui/react';
-import { FloatingSurface, useFloatingSurface } from '@/components/Popover/FloatingSurface';
+import { FloatingSurface, useFloatingSurface } from '@/components/FloatingSurface/FloatingSurface';
 import { resolveResponsive, useBreakpoint } from '@/hooks/useResponsiveValue';
 import styles from './Menu.module.scss';
 import { MENU_ARROW_CORNER_INSET, MENU_ARROW_SIZE, resolveMenuArrowPosition } from './menuArrow';

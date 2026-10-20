@@ -19,7 +19,7 @@ import type {
   UseInteractionsReturn,
   UseRoleProps,
 } from '@floating-ui/react';
-import styles from './Popover.module.scss';
+import styles from './FloatingSurface.module.scss';
 import { FLOATING_GAP, useAnchoredFloating } from './useAnchoredFloating';
 
 const DEFAULT_ARROW_SIZE = { width: 16, height: 8 };

@@ -1,5 +1,5 @@
 .menu {
-  /* Shrink to the space the `size` middleware in FloatingSurface.tsx measures. Subtract the 1px border on each side. */
+  /* Shrink to the space the `size` middleware in useAnchoredFloating.ts measures. Subtract the 1px border on each side. */
   width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
 
   /* `useListNavigation` focuses the surface when the pointer leaves the items.
@@ -9,7 +9,7 @@
   }
 }
 
-/* Overrides Popover's `.container` sizing regardless of CSS load order. */
+/* Overrides FloatingSurface's `.container` sizing regardless of CSS load order. */
 .menu .container {
   box-sizing: border-box;
   width: 100%;

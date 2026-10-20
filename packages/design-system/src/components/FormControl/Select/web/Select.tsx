@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { FloatingPortal, useDismiss, useInteractions, useMergeRefs } from '@floating-ui/react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
-import { useAnchoredFloating } from '@/components/Popover/useAnchoredFloating';
+import { useAnchoredFloating } from '@/components/FloatingSurface/useAnchoredFloating';
 import styles from './Select.module.scss';
 import type { SelectOption, SelectProps } from '../Select.types';
 import { ChevronDownIcon } from '@/icons';
