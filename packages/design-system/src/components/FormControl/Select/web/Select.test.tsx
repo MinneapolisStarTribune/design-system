@@ -85,6 +85,28 @@ describe('Select', () => {
     expect(onChange).toHaveBeenCalledWith('ca');
   });
 
+  it('renders the listbox outside a clipping container and keeps focus on the combobox', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, getByTestId, findByRole } = renderWithProvider(
+      <div data-testid="clip" style={{ overflow: 'auto' }}>
+        <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+      </div>
+    );
+    const select = getByRole('combobox');
+
+    await user.click(select);
+    const listbox = await findByRole('listbox');
+
+    expect(getByTestId('clip').contains(listbox)).toBe(false);
+    expect(select).toHaveAttribute('aria-controls', listbox.id);
+
+    await user.click(getByRole('option', { name: 'Canada' }));
+
+    expect(onChange).toHaveBeenCalledWith('ca');
+    expect(select).toHaveFocus();
+  });
+
   it('selects the active option and closes on Tab', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -218,10 +240,10 @@ describe('Select', () => {
     });
 
     it.each(['click', 'Enter', 'ArrowDown', 'ArrowUp'])(
-      'reveals the listbox on %s, without scrolling it again during navigation',
+      'reveals the active option on %s without scrolling the page to the listbox',
       async (openWith) => {
         const user = userEvent.setup();
-        const { getByRole, queryByRole, rerender } = renderWithProvider(
+        const { findByRole, getByRole, queryByRole, rerender } = renderWithProvider(
           <FormControl.Select id="test" options={OPTIONS} />
         );
 
@@ -234,11 +256,10 @@ describe('Select', () => {
           await user.keyboard(`{${openWith}}`);
         }
 
-        const listbox = getByRole('listbox');
-        const firstOption = getByRole('option', { name: 'United States' });
+        const firstOption = await findByRole('option', { name: 'United States' });
         expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
-        expect(scrollIntoView.mock.contexts).toEqual([firstOption, listbox]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+        expect(scrollIntoView.mock.contexts).toEqual([firstOption]);
+        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
 
         scrollIntoView.mockClear();
         await user.keyboard('{ArrowDown}');
@@ -259,9 +280,9 @@ describe('Select', () => {
       }
     );
 
-    it('reveals the selected option and listbox again after closing with the trigger', async () => {
+    it('reveals the selected option again after closing with the trigger', async () => {
       const user = userEvent.setup();
-      const { getByRole } = renderWithProvider(
+      const { findByRole, getByRole } = renderWithProvider(
         <FormControl.Select id="test" options={OPTIONS} value="ca" />
       );
       const trigger = getByRole('combobox');
@@ -272,10 +293,9 @@ describe('Select', () => {
       await user.click(trigger);
 
       expect(scrollIntoView.mock.contexts).toEqual([
-        getByRole('option', { name: 'Canada' }),
-        getByRole('listbox'),
+        await findByRole('option', { name: 'Canada' }),
       ]);
-      expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+      expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
     });
 
     it('does not open or scroll a disabled Select', async () => {
