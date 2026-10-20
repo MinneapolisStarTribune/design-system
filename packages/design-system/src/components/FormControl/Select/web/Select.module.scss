@@ -131,6 +131,8 @@
 
   /* Fits seven options plus the list padding, and shrinks to the space beside the trigger. */
   max-height: min(317px, var(--floating-available-height, 317px));
+  /* Caps the trigger-matched width so a trigger wider than the viewport can't push the list off screen. */
+  max-width: var(--floating-available-width, none);
   overflow-y: auto;
 
   background: var(--color-select-background);

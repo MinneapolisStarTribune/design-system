@@ -14,7 +14,7 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover`, `Menu`, and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover`, `Menu`, and `Select` render into the nearest dialog or `data-theme` region around their trigger, so they stay inside focus traps and scoped themes, and fall back to `document.body` when there is none. `Drawer` always renders into `document.body`. Pass `portalRoot` to `Popover`, `Menu`, or `Drawer` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame
@@ -267,6 +267,12 @@ function AccountMenu() {
 ```
 
 Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowPosition` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+
+An open menu stops the page from scrolling (`lockScroll`, default `true`). Scrollable areas inside the page still scroll. Pass `lockScroll={false}` to let the page scroll while the menu stays attached to its trigger:
+
+```tsx
+<Menu.Root lockScroll={false} trigger={<Button>Account</Button>} /* ... */>
+```
 
 ## ToggleGroup
 
