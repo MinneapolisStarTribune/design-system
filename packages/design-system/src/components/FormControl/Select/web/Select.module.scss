@@ -123,18 +123,16 @@
 /* ---------- Dropdown ---------- */
 
 .selectDropdown {
-  position: absolute;
-  top: calc(100% + var(--spacing-8));
-  left: 0;
-  width: 100%;
   padding: var(--spacing-8);
   margin: 0;
   list-style: none;
   border-radius: var(--radius-16);
   z-index: 20;
 
-  /* Fits seven options plus the list padding. */
-  max-height: 317px;
+  /* Fits seven options plus the list padding, and shrinks to the space beside the trigger. */
+  max-height: min(317px, var(--floating-available-height, 317px));
+  /* Caps the trigger-matched width so a trigger wider than the viewport can't push the list off screen. */
+  max-width: var(--floating-available-width, none);
   overflow-y: auto;
 
   background: var(--color-select-background);

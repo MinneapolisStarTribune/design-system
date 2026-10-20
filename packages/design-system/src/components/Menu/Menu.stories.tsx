@@ -84,6 +84,11 @@ const meta = {
       description: 'Classes for the menu surface.',
       table: { type: { summary: 'string' } },
     },
+    lockScroll: {
+      control: 'boolean',
+      description: 'Stops page scroll while the menu is open.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
     portalRoot: { control: false, table: { disable: true } },
   },
 } satisfies Meta<typeof Menu.Root>;
@@ -110,7 +115,7 @@ const DemoMenu = (menuProps: DemoMenuProps) => {
   );
 };
 
-type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowPosition'>;
+type ExamplePosition = Pick<MenuProps, 'placement' | 'hideArrow' | 'arrowPosition' | 'lockScroll'>;
 type ExampleRenderProps = ExamplePosition & Pick<MenuProps, 'portalRoot'>;
 
 const BRAND_SITES = {
@@ -372,11 +377,12 @@ const isExampleKey = (value: unknown): value is ExampleKey =>
 
 const resolvePosition = (
   example: MenuExample,
-  { placement, hideArrow, arrowPosition }: ExamplePosition
+  { placement, hideArrow, arrowPosition, lockScroll }: ExamplePosition
 ): ExamplePosition => ({
   placement: placement ?? example.placement,
   hideArrow,
   arrowPosition,
+  lockScroll,
 });
 
 const formatValue = (value: unknown) =>
@@ -387,9 +393,12 @@ const formatValue = (value: unknown) =>
         .replace(/"/g, "'")
         .replace(/}/g, ' }')}}`;
 
+// Props left at their default are omitted from the code sample.
+const DEFAULT_POSITION: Record<string, unknown> = { hideArrow: false, lockScroll: true };
+
 const formatPositionProps = (position: ExamplePosition) =>
   Object.entries(position)
-    .filter(([, value]) => value !== undefined && value !== false)
+    .filter(([name, value]) => value !== undefined && value !== DEFAULT_POSITION[name])
     .map(([name, value]) => (value === true ? `  ${name}\n` : `  ${name}=${formatValue(value)}\n`))
     .join('');
 
@@ -400,7 +409,7 @@ const getExampleCode = (key: ExampleKey, position: ExamplePosition) => {
 
 type ExampleArgs = ExamplePosition & { example: ExampleKey };
 
-const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowPosition'];
+const POSITION_CONTROLS = ['placement', 'hideArrow', 'arrowPosition', 'lockScroll'];
 
 /** Renders the menu inside the canvas frame, which it flips, shifts, and shrinks to stay inside. */
 const ConfigurableFrame = ({
@@ -560,10 +569,7 @@ export const AllVariants: Story = {
           <ItemActionsDemo placement="bottom-end" />
         </Example>
 
-        <Example
-          title="List Items"
-          description="Lists longer than seven items scroll inside the surface."
-        >
+        <Example title="List Items" description="Long lists scroll inside the surface.">
           <ListDemo />
         </Example>
       </Group>
