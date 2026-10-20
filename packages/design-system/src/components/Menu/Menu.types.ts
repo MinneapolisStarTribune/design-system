@@ -53,6 +53,11 @@ export type MenuProps = MenuBaseProps &
      * shrinks to stay inside it.
      */
     portalRoot?: HTMLElement | null;
+    /**
+     * Stops page scroll while the menu is open. Scrollable areas inside the page still scroll.
+     * @default true
+     */
+    lockScroll?: boolean;
   };
 
 type MenuItemBaseProps = Pick<BaseProps, 'dataTestId'> & {

@@ -22,6 +22,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
   arrowPosition,
   className,
   portalRoot,
+  lockScroll = true,
   id,
   dataTestId = 'menu',
   'aria-label': ariaLabel,
@@ -102,7 +103,7 @@ export const MenuRoot: React.FC<MenuProps> = ({
       surface={surface}
       interactions={interactions}
       trigger={trigger}
-      lockScroll
+      lockScroll={lockScroll}
       arrowStaticOffset={resolveMenuArrowPosition(
         resolveResponsive(arrowPosition, breakpoint),
         placement
