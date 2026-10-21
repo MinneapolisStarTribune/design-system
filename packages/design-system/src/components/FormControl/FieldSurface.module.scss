@@ -26,7 +26,7 @@
 }
 
 /* Dark theme - when sb-dark (Storybook) or data-theme="dark" is present */
-.sb-dark .surface,
+:global(.sb-dark) .surface,
 [data-theme='dark'] .surface {
   --field-border: var(--color-border-on-dark-subtle-01);
   --field-border-hover: var(--color-border-on-dark-subtle-02);

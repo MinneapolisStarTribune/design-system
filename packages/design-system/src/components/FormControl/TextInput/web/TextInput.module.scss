@@ -49,14 +49,14 @@
   }
 }
 
-.sb-dark .iconStart,
-.sb-dark .iconEnd,
+:global(.sb-dark) .iconStart,
+:global(.sb-dark) .iconEnd,
 [data-theme='dark'] .iconStart,
 [data-theme='dark'] .iconEnd {
   color: var(--color-text-on-dark-tertiary);
 }
 
-.sb-dark .iconSuccess,
+:global(.sb-dark) .iconSuccess,
 [data-theme='dark'] .iconSuccess {
   color: var(--color-border-state-success-on-dark);
 }
