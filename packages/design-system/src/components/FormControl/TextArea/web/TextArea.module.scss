@@ -1,0 +1,26 @@
+/* TextArea component - multi-line text input for comments, messages, etc. */
+/* The textarea is the bordered box itself, so the browser's resize handle sits in the corner (Figma spec) */
+/* Border, background and text colors for every state come from FieldSurface.module.scss (shared with TextInput) */
+
+.textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--spacing-64);
+  box-sizing: border-box;
+  margin: 0;
+  /* Figma spec: 8px top, 12px horizontal */
+  padding: var(--spacing-8) var(--spacing-12);
+  border-radius: var(--radius-8);
+  outline: none;
+  resize: none;
+
+  &.resizable:not(:disabled) {
+    resize: vertical;
+  }
+
+  /* Placeholder uses italic typography; value text uses regular */
+  &:not(:placeholder-shown) {
+    font-style: normal;
+  }
+}

@@ -3,6 +3,7 @@
 import React from 'react';
 import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
+import { TextArea } from './TextArea/web/TextArea';
 import { NumberInput } from './NumberInput/web/NumberInput';
 import { PasswordInput } from './PasswordInput/web/PasswordInput';
 import { Checkbox } from './Checkbox/web/Checkbox';
@@ -22,6 +23,8 @@ export interface FormControlProps extends BaseProps {
 export const FormControl: React.FC<FormControlProps> & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TextArea: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   NumberInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,6 +54,7 @@ export const FormControl: React.FC<FormControlProps> & {
 
 // Attach subcomponents
 FormControl.TextInput = TextInput;
+FormControl.TextArea = TextArea;
 FormControl.NumberInput = NumberInput;
 FormControl.PasswordInput = PasswordInput;
 FormControl.Checkbox = Checkbox;

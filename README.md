@@ -157,6 +157,7 @@ import type {
   FormGroupProps,
   FormControlProps,
   TextInputProps,
+  TextAreaProps,
   NewsHeadingProps,
   // ... and many more
 } from '@minneapolisstartribune/design-system/web';

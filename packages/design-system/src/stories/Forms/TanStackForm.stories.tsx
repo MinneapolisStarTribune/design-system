@@ -8,6 +8,7 @@ import {
   RadioGroupField,
   SelectField,
   SwitchField,
+  TextAreaField,
   TextField,
   ToggleGroupField,
 } from '@minneapolisstartribune/design-system-tanstack-form';
@@ -121,6 +122,7 @@ import {
   RadioGroupField,
   SelectField,
   SwitchField,
+  TextAreaField,
   ToggleGroupField,
 } from '@minneapolisstartribune/design-system-tanstack-form';
 import { Button, ToggleGroup } from '@minneapolisstartribune/design-system/web';
@@ -135,6 +137,7 @@ const schema = z.object({
     .refine((age) => age !== undefined, 'Age is required'),
   state: z.string().min(1, 'Pick a state'),
   topics: z.array(z.string()).min(1, 'Pick at least one topic'),
+  comments: z.string().trim().min(1, 'Add a comment').max(200, 'Keep it under 200 characters'),
   plan: z.string().min(1, 'Pick a plan'),
   newsletters: z.array(z.string()).min(1, 'Pick at least one newsletter'),
   alerts: z.boolean(),
@@ -148,7 +151,8 @@ const defaultValues: z.input<typeof schema> = {
   age: undefined,
   state: '',
   topics: [],
-  plan: '',
+  comments: '',
+  plan: 'digital',
   newsletters: [],
   alerts: true,
   view: 'list',
@@ -198,6 +202,11 @@ function AllAdaptersExample() {
               { value: 'food', label: 'Food' },
             ]}
           />
+        )}
+      </form.Field>
+      <form.Field name="comments">
+        {(field) => (
+          <TextAreaField field={field} label="Comments" caption="Up to 200 characters" maxLength={200} />
         )}
       </form.Field>
       <form.Field name="plan">
@@ -354,6 +363,7 @@ const allAdaptersSchema = z.object({
     .refine((age) => age !== undefined, 'Age is required'),
   state: z.string().min(1, 'Pick a state'),
   topics: z.array(z.string()).min(1, 'Pick at least one topic'),
+  comments: z.string().trim().min(1, 'Add a comment').max(200, 'Keep it under 200 characters'),
   plan: z.string().min(1, 'Pick a plan'),
   newsletters: z.array(z.string()).min(1, 'Pick at least one newsletter'),
   alerts: z.boolean(),
@@ -367,7 +377,8 @@ const allAdaptersDefaults: z.input<typeof allAdaptersSchema> = {
   age: undefined,
   state: '',
   topics: [],
-  plan: '',
+  comments: '',
+  plan: 'digital',
   newsletters: [],
   alerts: true,
   view: 'list',
@@ -422,6 +433,18 @@ function AllAdaptersExample() {
                 { value: 'sports', label: 'Sports' },
                 { value: 'food', label: 'Food' },
               ]}
+            />
+          )}
+        </form.Field>
+      </div>
+      <div className={styles.wideField}>
+        <form.Field name="comments">
+          {(field) => (
+            <TextAreaField
+              field={field}
+              label="Comments"
+              caption="Up to 200 characters"
+              maxLength={200}
             />
           )}
         </form.Field>

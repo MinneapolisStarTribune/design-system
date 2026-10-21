@@ -8,13 +8,14 @@
 yarn add @minneapolisstartribune/design-system-tanstack-form @tanstack/react-form
 ```
 
-Peer deps: `@minneapolisstartribune/design-system` (web), `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
+Peer deps: `@minneapolisstartribune/design-system` (web) ^4.1.0, `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
 
 ## Adapters
 
 | Adapter              | Wraps                            | Field value                          |
 | -------------------- | -------------------------------- | ------------------------------------ |
 | `TextField`          | `FormGroup` + `TextInput`        | `string`                             |
+| `TextAreaField`      | `FormGroup` + `TextArea`         | `string`                             |
 | `PasswordField`      | `FormGroup` + `PasswordInput`    | `string`                             |
 | `NumberField`        | `FormGroup` + `NumberInput`      | `number \| undefined`                |
 | `SelectField`        | `FormGroup` + `Select`           | `string` (`null`/`undefined` = none) |

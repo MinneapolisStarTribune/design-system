@@ -11,5 +11,6 @@ export { PasswordField, type PasswordFieldProps } from './PasswordField/Password
 export { RadioGroupField, type RadioGroupFieldProps } from './RadioGroupField/RadioGroupField';
 export { SelectField, type SelectFieldProps } from './SelectField/SelectField';
 export { SwitchField, type SwitchFieldProps } from './SwitchField/SwitchField';
+export { TextAreaField, type TextAreaFieldProps } from './TextAreaField/TextAreaField';
 export { TextField, type TextFieldProps } from './TextField/TextField';
 export { ToggleGroupField, type ToggleGroupFieldProps } from './ToggleGroupField/ToggleGroupField';

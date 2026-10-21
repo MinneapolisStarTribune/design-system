@@ -71,6 +71,12 @@ commenting on any of those — the rules stay here, the lookups live there.
   never a literal list.
 - **Story shape.** A new `*.stories.tsx` exports exactly two stories: `Configurable` (or
   `Configurable<Component>`) first, `AllVariants` second. Chromatic snapshots `AllVariants`.
+- **Form control without a TanStack Form adapter.** Per `docs/code-standards.md`, a new web
+  control that holds a user-entered value (`FormControl/*`, `ToggleGroup`) needs a
+  `packages/tanstack-form/src/<Name>Field/` adapter, test, `adapters.a11y.test.tsx` case,
+  `index.ts` export, README row and `tanstack-form` changeset in the same PR. A change to an
+  existing control's value type or change/error props must update its adapter too. Name the
+  missing piece. A PR that says the omission is deliberate closes it.
 - **Missing a11y test.** A new or behaviour-changed web component needs `*.a11y.test.tsx`;
   native needs `*.native.a11y.test.tsx`.
 - **Cross-area relative imports.** Use `@/…`. `../ComponentName.types` from inside `web/` or
