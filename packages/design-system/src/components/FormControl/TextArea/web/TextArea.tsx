@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
@@ -9,25 +9,16 @@ import styles from './TextArea.module.scss';
 import type { BaseTextAreaProps } from '../TextArea.types';
 import { type AccessibilityProps } from '@/types';
 
-/** Native textarea attributes TextArea passes through. Add here (and to the JSX below) to support more. */
-type NativeTextAreaProps = Pick<
+type NativeTextAreaProps = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  | 'id'
-  | 'name'
-  | 'value'
-  | 'defaultValue'
-  | 'rows'
-  | 'maxLength'
-  | 'minLength'
-  | 'required'
-  | 'readOnly'
-  | 'autoComplete'
-  | 'autoFocus'
-  | 'spellCheck'
-  | 'onChange'
-  | 'onBlur'
-  | 'onFocus'
-  | 'onKeyDown'
+  | 'disabled'
+  | 'className'
+  | 'placeholder'
+  | 'aria-label'
+  | 'aria-labelledby'
+  | 'aria-describedby'
+  | 'aria-invalid'
+  | 'aria-hidden'
 >;
 
 export interface TextAreaProps
@@ -60,22 +51,12 @@ export const TextArea: React.FC<TextAreaProps> = ({
   'aria-labelledby': ariaLabelledByProp,
   'aria-invalid': ariaInvalidProp,
   id: idProp,
-  name,
   value,
   defaultValue,
-  maxLength,
-  minLength,
-  required,
-  readOnly,
-  autoComplete,
-  autoFocus,
-  spellCheck,
   onChange,
   onBlur,
-  onFocus,
-  onKeyDown,
   analytics: analyticsOverride,
-  ref,
+  ...props
 }) => {
   const { track } = useAnalytics();
   const formGroupContext = useFormGroupContext();
@@ -88,21 +69,28 @@ export const TextArea: React.FC<TextAreaProps> = ({
   const ariaLabelledBy = ariaLabelledByProp ?? formGroupContext?.labelId;
   const inputId = idProp ?? formGroupContext?.inputId;
 
-  const describedBy = formGroupContext
-    ? [formGroupContext.descriptionId, formGroupContext.captionId].filter(Boolean).join(' ') ||
-      undefined
-    : undefined;
-  const ariaDescribedBy = ariaDescribedByProp ?? describedBy;
+  // Keep the caller's ids alongside FormGroup's so the caption stays linked
+  const ariaDescribedBy =
+    [ariaDescribedByProp, formGroupContext?.descriptionId, formGroupContext?.captionId]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   const ariaInvalid = ariaInvalidProp ?? (hasError ? true : undefined);
 
-  const isFilled = value != null && String(value).trim().length > 0;
+  // Uncontrolled textareas track their own text so the filled border still applies
+  const [uncontrolledText, setUncontrolledText] = useState(() => String(defaultValue ?? ''));
+  const isFilled = String(value ?? uncontrolledText).trim().length > 0;
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (value == null) setUncontrolledText(e.target.value);
+    onChange?.(e);
+  };
 
   const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
     track({
       event: 'text_area_blur',
       component: 'TextArea',
-      value_length: value != null ? String(value).length : 0,
+      value_length: e.currentTarget.value.length,
       ...analyticsOverride,
     });
     onBlur?.(e);
@@ -110,9 +98,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
 
   return (
     <textarea
-      ref={ref}
       id={inputId}
-      name={name}
       rows={rows}
       className={classNames(
         fieldStyles.surface,
@@ -133,22 +119,14 @@ export const TextArea: React.FC<TextAreaProps> = ({
       disabled={isDisabled}
       value={value}
       defaultValue={defaultValue}
-      maxLength={maxLength}
-      minLength={minLength}
-      required={required}
-      readOnly={readOnly}
-      autoComplete={autoComplete}
-      autoFocus={autoFocus}
-      spellCheck={spellCheck}
-      onChange={onChange}
+      onChange={handleChange}
       onBlur={handleBlur}
-      onFocus={onFocus}
-      onKeyDown={onKeyDown}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-describedby={ariaDescribedBy}
       aria-invalid={ariaInvalid}
       data-testid={dataTestId}
+      {...props}
     />
   );
 };

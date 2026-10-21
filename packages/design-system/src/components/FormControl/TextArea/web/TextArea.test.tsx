@@ -70,6 +70,57 @@ describe('TextArea (web)', () => {
     expect(textarea).toHaveAccessibleDescription('Required');
   });
 
+  it('keeps FormGroup caption in aria-describedby alongside a custom id', () => {
+    render(
+      <FormGroup>
+        <FormGroup.Label>Comment</FormGroup.Label>
+        <TextArea dataTestId="ta" aria-describedby="counter" />
+        <FormGroup.Caption variant="error">Required</FormGroup.Caption>
+      </FormGroup>
+    );
+
+    const describedBy = screen.getByTestId('ta').getAttribute('aria-describedby')?.split(' ');
+    expect(describedBy).toContain('counter');
+    expect(describedBy).toHaveLength(2);
+    expect(screen.getByTestId('ta')).toHaveAccessibleDescription(/Required/);
+  });
+
+  it('shows the filled state when uncontrolled', () => {
+    render(<TextArea aria-label="Comment" dataTestId="ta" />);
+    const textarea = screen.getByTestId('ta');
+    expect(textarea).not.toHaveClass(fieldStyles.filled);
+
+    fireEvent.change(textarea, { target: { value: 'typed' } });
+    expect(textarea).toHaveClass(fieldStyles.filled);
+  });
+
+  it('shows the filled state from defaultValue', () => {
+    render(<TextArea aria-label="Comment" dataTestId="ta" defaultValue="draft" />);
+    expect(screen.getByTestId('ta')).toHaveClass(fieldStyles.filled);
+  });
+
+  it('passes other native attributes through', () => {
+    const onPaste = vi.fn();
+    render(
+      <TextArea aria-label="Comment" dataTestId="ta" onPaste={onPaste} data-analytics-id="x" />
+    );
+
+    const textarea = screen.getByTestId('ta');
+    fireEvent.paste(textarea);
+    expect(onPaste).toHaveBeenCalledTimes(1);
+    expect(textarea).toHaveAttribute('data-analytics-id', 'x');
+  });
+
+  it('tracks blur value length when uncontrolled', () => {
+    render(<TextArea aria-label="Comment" dataTestId="ta" />);
+    const textarea = screen.getByTestId('ta');
+
+    fireEvent.change(textarea, { target: { value: 'abc' } });
+    fireEvent.blur(textarea);
+
+    expect(mockTrack).toHaveBeenCalledWith(expect.objectContaining({ value_length: 3 }));
+  });
+
   it('passes supported native attributes through', () => {
     render(
       <TextArea

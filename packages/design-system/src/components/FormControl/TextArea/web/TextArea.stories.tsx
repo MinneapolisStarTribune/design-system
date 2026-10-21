@@ -60,10 +60,6 @@ const meta = {
       control: 'boolean',
       description: 'Success state (green border)',
     },
-    value: {
-      control: 'text',
-      description: 'Controlled value (shows filled state when non-empty)',
-    },
   },
 } satisfies Meta<typeof FormControl.TextArea>;
 
