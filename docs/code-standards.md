@@ -56,16 +56,6 @@ type ButtonProps = {
 
 Every web control that holds a user-entered value (anything under `FormControl/`, plus value controls elsewhere like `ToggleGroup`) ships with an adapter in `packages/tanstack-form` in the same PR. Consumers build forms through those adapters, so a control without one can't be used in a TanStack form without re-plumbing value, blur, errors and ARIA by hand.
 
-For a new control, copy the closest existing adapter (`TextField` for text-like inputs) and:
-
-- Add `src/<Name>Field/<Name>Field.tsx` and `<Name>Field.test.tsx`. Bind `value`, the change handler, `name` and the error state to the field, render it in `FieldGroup`, and still call the consumer's `onChange` / `onBlur`.
-- Add the adapter to both case lists in `src/adapters.a11y.test.tsx` (the second only if it takes an `id`).
-- Export it from `src/index.ts`, alphabetically.
-- Add a row to the adapters table in `packages/tanstack-form/README.md`.
-- Add a `tanstack-form` changeset, and raise the `@minneapolisstartribune/design-system` peer range to the first version that has the control.
-
-When a control's value type, change handler or error props change, update its adapter in the same PR. A control that's deliberately left without one (e.g. it doesn't hold a value) needs that said in the PR.
-
 ---
 
 ## File Naming Conventions

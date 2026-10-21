@@ -13,7 +13,6 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-// Filled styling follows the controlled `value`, so this keeps its own state to stay editable
 const FilledTextArea = () => {
   const [value, setValue] = useState('Lorem ipsum');
   return (

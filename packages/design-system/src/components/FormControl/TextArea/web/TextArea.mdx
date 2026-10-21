@@ -45,8 +45,6 @@ Inside `FormGroup`, `TextArea` inherits `aria-labelledby`, `aria-describedby` an
 ## Notes for consuming repositories
 
 - Only the native attributes on `TextAreaProps` are passed through: `id`, `name`, `value`, `defaultValue`, `rows`, `maxLength`, `minLength`, `required`, `readOnly`, `autoComplete`, `autoFocus`, `spellCheck`, `onChange`, `onBlur`, `onFocus` and `onKeyDown`. Ask for others to be added rather than reaching around the component.
-- `ref` goes to the native `<textarea>`, so form libraries like react-hook-form's `register` work.
-- There's no built-in character counter; render it as a `FormGroup.Caption` as shown above.
 
 ## Exports
 
