@@ -1,6 +1,6 @@
 /* TextInput component - single-line text input for names, emails, etc. */
 /* Uses design tokens for colors, spacing, typography */
-/* Supports both light and dark themes via .sb-dark (Storybook) or [data-theme="dark"] */
+/* Supports both light and dark themes */
 /* Border, background and text colors for every state come from FieldSurface.module.scss (shared with TextArea) */
 
 .wrapper {
@@ -49,14 +49,11 @@
   }
 }
 
-:global(.sb-dark) .iconStart,
-:global(.sb-dark) .iconEnd,
 [data-theme='dark'] .iconStart,
 [data-theme='dark'] .iconEnd {
   color: var(--color-text-on-dark-tertiary);
 }
 
-:global(.sb-dark) .iconSuccess,
 [data-theme='dark'] .iconSuccess {
   color: var(--color-border-state-success-on-dark);
 }
