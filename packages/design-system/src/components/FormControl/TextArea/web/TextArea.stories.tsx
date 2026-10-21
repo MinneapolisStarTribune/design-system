@@ -206,16 +206,3 @@ export const AllVariants: Story = {
     </div>
   ),
 };
-
-export const AllVariantsDark: Story = {
-  ...AllVariants,
-  parameters: {
-    ...AllVariants.parameters,
-    theme: 'dark' as const,
-    docs: {
-      description: {
-        story: 'All variants on the dark theme.',
-      },
-    },
-  },
-};
