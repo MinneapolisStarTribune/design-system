@@ -25,8 +25,7 @@
     box-shadow 0.15s ease;
 }
 
-/* Dark theme - when sb-dark (Storybook) or data-theme="dark" is present */
-:global(.sb-dark) .surface,
+/* Dark theme - when data-theme="dark" is present */
 [data-theme='dark'] .surface {
   --field-border: var(--color-border-on-dark-subtle-01);
   --field-border-hover: var(--color-border-on-dark-subtle-02);

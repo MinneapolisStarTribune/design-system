@@ -3620,7 +3620,6 @@ __metadata:
     "@storybook/addon-a11y": "npm:10.3.5"
     "@storybook/addon-docs": "npm:10.3.5"
     "@storybook/addon-mcp": "npm:^0.6.0"
-    "@storybook/addon-themes": "npm:10.3.5"
     "@storybook/react-vite": "npm:10.3.5"
     "@svgr/core": "npm:^8.1.0"
     "@tanstack/react-form": "npm:1.33.5"
@@ -4897,17 +4896,6 @@ __metadata:
     "@gorhom/bottom-sheet":
       optional: true
   checksum: 10c0/f9f8006d4d5f36876e42d2daddf0d3683e1f66b3ec3f723de805defd3986c1a17dcc5ac4b1f20b744de33f1c82102c0508cee1d6e851630b8d2219bf5f567100
-  languageName: node
-  linkType: hard
-
-"@storybook/addon-themes@npm:10.3.5":
-  version: 10.3.5
-  resolution: "@storybook/addon-themes@npm:10.3.5"
-  dependencies:
-    ts-dedent: "npm:^2.0.0"
-  peerDependencies:
-    storybook: ^10.3.5
-  checksum: 10c0/fef56bb9c6d45fea53f4a5f0d209a7ba77a16f2b6665f38526e20bc50b755fbf3976f87848c85955e86828ec1a02762ac9b82c275f7f69b14b22b8fc8913eb60
   languageName: node
   linkType: hard
 

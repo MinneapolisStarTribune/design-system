@@ -1,6 +1,8 @@
 import { createRef } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { hydrateRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { TextArea } from './TextArea';
 import fieldStyles from '@/components/FormControl/FieldSurface.module.scss';
@@ -99,6 +101,22 @@ describe('TextArea (web)', () => {
     expect(screen.getByTestId('ta')).toHaveClass(fieldStyles.filled);
   });
 
+  it('shows the filled state for text the browser restored before hydration', async () => {
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(<TextArea aria-label="Comment" dataTestId="ta" />);
+    document.body.appendChild(container);
+    container.querySelector('textarea')!.value = 'restored';
+
+    const root = await act(async () =>
+      hydrateRoot(container, <TextArea aria-label="Comment" dataTestId="ta" />)
+    );
+    onTestFinished(() => {
+      act(() => root.unmount());
+      container.remove();
+    });
+    expect(screen.getByTestId('ta')).toHaveClass(fieldStyles.filled);
+  });
+
   it('passes other native attributes through', () => {
     const onPaste = vi.fn();
     render(
@@ -147,6 +165,13 @@ describe('TextArea (web)', () => {
     render(<TextArea aria-label="Comment" dataTestId="ta" ref={ref} />);
 
     expect(ref.current).toBe(screen.getByTestId('ta'));
+  });
+
+  it('forwards a callback ref to the native textarea', () => {
+    const ref = vi.fn();
+    render(<TextArea aria-label="Comment" dataTestId="ta" ref={ref} />);
+
+    expect(ref).toHaveBeenCalledWith(screen.getByTestId('ta'));
   });
 
   it('tracks blur with value length and custom metadata', () => {

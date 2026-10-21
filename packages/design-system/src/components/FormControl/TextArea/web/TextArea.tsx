@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
@@ -56,6 +56,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
   onChange,
   onBlur,
   analytics: analyticsOverride,
+  ref,
   ...props
 }) => {
   const { track } = useAnalytics();
@@ -81,6 +82,16 @@ export const TextArea: React.FC<TextAreaProps> = ({
   const [uncontrolledText, setUncontrolledText] = useState(() => String(defaultValue ?? ''));
   const isFilled = String(value ?? uncontrolledText).trim().length > 0;
 
+  // Sync with text the browser restored before hydration (back/forward, autofill), then forward the ref
+  const textAreaRef = useCallback(
+    (el: HTMLTextAreaElement | null) => {
+      if (el) setUncontrolledText(el.value);
+      if (typeof ref === 'function') return ref(el);
+      if (ref) ref.current = el;
+    },
+    [ref]
+  );
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (value == null) setUncontrolledText(e.target.value);
     onChange?.(e);
@@ -98,6 +109,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
 
   return (
     <textarea
+      ref={textAreaRef}
       id={inputId}
       rows={rows}
       className={classNames(

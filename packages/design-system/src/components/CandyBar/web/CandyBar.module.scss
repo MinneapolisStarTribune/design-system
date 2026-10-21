@@ -79,8 +79,7 @@
   }
 }
 
-:global([data-theme='dark']) .content,
-:global(.sb-dark) .content {
+:global([data-theme='dark']) .content {
   --candy-bar-field-text: var(--color-text-on-dark-primary);
   --candy-bar-field-disabled: var(--color-text-state-disabled-on-dark);
   --candy-bar-field-placeholder: var(--color-text-state-disabled-on-dark);
