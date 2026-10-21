@@ -143,7 +143,6 @@
   }
 }
 
-:global(.sb-dark) .link,
 :global([data-theme='dark']) .link {
   color: var(--color-text-on-dark-primary);
 
@@ -161,7 +160,6 @@
   }
 }
 
-:global(.sb-dark) .link.inline,
 :global([data-theme='dark']) .link.inline {
   color: inherit;
 

@@ -82,6 +82,7 @@ export {
   type SwitchProps,
   type SwitchSize,
 } from './FormControl/Switch/web/Switch';
+export { TextArea, type TextAreaProps } from './FormControl/TextArea/web/TextArea';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,

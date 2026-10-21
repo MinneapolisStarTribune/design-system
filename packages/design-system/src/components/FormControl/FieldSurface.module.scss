@@ -1,0 +1,94 @@
+/* Shared field chrome (border, background, text colors) for bordered form fields like TextInput and TextArea. */
+/* Web counterpart of utils/fieldSurface.ts. Internal: not exported from the package. */
+/* Apply .surface to the bordered element and .control to the native input/textarea (they can be the same element), */
+/* plus the state classes (.filled, .success, .error, .disabled) on the .surface element. */
+
+/* Colors are custom properties so the dark theme only swaps values and never competes with state rules */
+.surface {
+  --field-border: var(--color-border-on-light-subtle-02);
+  --field-border-hover: var(--color-border-on-light-strong-02);
+  --field-border-filled: var(--color-border-on-light-strong-01);
+  --field-border-success: var(--color-border-state-success-on-light);
+  --field-border-error: var(--color-border-state-attention-on-light);
+  --field-border-disabled: var(--color-border-state-disabled-on-light);
+  --field-background: var(--color-background-light-default);
+  --field-background-disabled: var(--color-background-light-gray-01);
+  --field-text: var(--color-text-on-light-primary);
+  --field-text-placeholder: var(--color-text-state-disabled-on-light);
+  --field-text-disabled: var(--color-text-state-disabled-on-light);
+  --field-ring: var(--color-border-state-focus);
+
+  border: 1px solid var(--field-border);
+  background-color: var(--field-background);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Dark theme - when data-theme="dark" is present */
+[data-theme='dark'] .surface {
+  --field-border: var(--color-border-on-dark-subtle-01);
+  --field-border-hover: var(--color-border-on-dark-subtle-02);
+  --field-border-filled: var(--color-border-on-dark-strong-01);
+  --field-border-success: var(--color-border-state-success-on-dark);
+  --field-border-error: var(--color-border-state-attention-on-dark);
+  --field-border-disabled: var(--color-border-state-disabled-on-dark);
+  --field-background: var(--color-background-dark-gray-01);
+  --field-background-disabled: var(--color-background-dark-gray-02);
+  --field-text: var(--color-text-on-dark-primary);
+  --field-text-placeholder: var(--color-text-state-disabled-on-dark);
+  --field-text-disabled: var(--color-text-state-disabled-on-dark);
+}
+
+/* State rules all share one specificity, so source order is the priority: */
+/* hover < filled < focus < success < error < disabled (same order as native utils/fieldSurface.ts) */
+.surface:hover {
+  border-color: var(--field-border-hover);
+}
+
+.surface.filled {
+  border-color: var(--field-border-filled);
+}
+
+/* Keyboard focus on the surface itself (TextArea) or on the control inside it (TextInput) */
+.surface:is(:focus-visible, :has(:focus-visible)) {
+  border-color: var(--color-border-state-focus);
+  box-shadow: 0 0 0 1px var(--field-ring);
+}
+
+.surface.success {
+  --field-ring: var(--field-border-success);
+  border-color: var(--field-border-success);
+}
+
+.surface.error {
+  --field-ring: var(--field-border-error);
+  border-color: var(--field-border-error);
+}
+
+.surface.disabled {
+  cursor: not-allowed;
+  border-color: var(--field-border-disabled);
+  background-color: var(--field-background-disabled);
+}
+
+/* Shadows are dropped in forced colors; a transparent outline gets painted with the system color instead. */
+@media (forced-colors: active) {
+  .surface:is(:focus-visible, :has(:focus-visible)) {
+    outline: var(--spacing-2) solid transparent;
+    outline-offset: var(--spacing-2);
+  }
+}
+
+.control {
+  color: var(--field-text);
+}
+
+.control::placeholder {
+  color: var(--field-text-placeholder);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--field-text-disabled);
+}

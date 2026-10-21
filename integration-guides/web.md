@@ -134,7 +134,7 @@ import '@minneapolisstartribune/design-system/web/startribune-dark.scoped.css';
 <section data-theme="dark">…</section>
 ```
 
-To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Known limitation: `TextInput`, `CandyBar`, and `Link` apply their dark styles when any ancestor has `data-theme="dark"`, so they keep those styles inside a light region nested in a dark page. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
+To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Known limitation: `TextInput`, `TextArea`, `CandyBar`, and `Link` apply their dark styles when any ancestor has `data-theme="dark"`, so they keep those styles inside a light region nested in a dark page. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
 
 When you pass `forceColorScheme`, `DesignSystemProvider` sets `data-theme` on `<html>` to match, and restores the previous value when it unmounts. Leave `forceColorScheme` out to manage `data-theme` on `<html>` yourself; components that read the scheme from context then treat it as `light`. The attribute name is exported as `DS_ROOT_THEME_ATTRIBUTE` (and the brand attribute, `data-ds-brand`, as `DS_ROOT_BRAND_ATTRIBUTE`).
 
@@ -300,6 +300,29 @@ function GameFilter() {
 - Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
+
+## TextArea
+
+`FormControl.TextArea` (also exported as `TextArea`) is a web-only multi-line field. Put it in a `FormGroup` and it picks up the label, description and caption wiring, and error/success state from a `FormGroup.Caption` variant, same as `FormControl.TextInput`.
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Comment</FormGroup.Label>
+  <FormControl.TextArea
+    name="comment"
+    placeholderText="Write a comment..."
+    maxLength={200}
+    value={comment}
+    onChange={(e) => setComment(e.target.value)}
+  />
+  <FormGroup.Caption variant="info">{`${comment.length}/200 characters`}</FormGroup.Caption>
+</FormGroup>
+```
+
+- `rows` (default `2`) sets the visible lines; `resizable` (default `true`) lets users drag the height.
+- Only the native attributes listed on `TextAreaProps` are passed through (`name`, `maxLength`, `required`, `readOnly`, `autoComplete`, etc). `ref` goes to the `<textarea>`.
+- Outside a `FormGroup`, pass `aria-label` or `aria-labelledby`.
+- With TanStack Form, use `TextAreaField` from the [tanstack-form package](#tanstack-form).
 
 ## TanStack Form
 

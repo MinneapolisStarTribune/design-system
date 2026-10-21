@@ -1,0 +1,16 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-32) var(--spacing-24);
+  padding: var(--spacing-24);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cell {
+  min-width: 0;
+}
+
+.sectionLabel {
+  margin-bottom: var(--spacing-4);
+}

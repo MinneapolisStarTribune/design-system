@@ -11,6 +11,7 @@ import {
   PasswordField,
   RadioGroupField,
   SelectField,
+  TextAreaField,
   TextField,
   ToggleGroupField,
 } from './index';
@@ -38,6 +39,12 @@ const cases: Case[] = [
     role: 'textbox',
     defaultValue: '',
     render: (field) => <TextField field={field} {...labelProps} />,
+  },
+  {
+    name: 'TextAreaField',
+    role: 'textbox',
+    defaultValue: '',
+    render: (field) => <TextAreaField field={field} {...labelProps} />,
   },
   {
     name: 'PasswordField',
@@ -145,6 +152,12 @@ describe('custom control id', () => {
       role: 'textbox',
       defaultValue: '',
       render: (field) => <TextField field={field} label="Label" id="custom" />,
+    },
+    {
+      name: 'TextAreaField',
+      role: 'textbox',
+      defaultValue: '',
+      render: (field) => <TextAreaField field={field} label="Label" id="custom" />,
     },
     {
       name: 'PasswordField',

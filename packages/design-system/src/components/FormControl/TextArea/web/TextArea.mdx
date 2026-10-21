@@ -1,0 +1,59 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as TextAreaStories from './TextArea.stories';
+
+<Meta of={TextAreaStories} />
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION START ========== */}
+
+# TextArea
+
+`FormControl.TextArea` is the multi-line text field for longer freeform input (comments, messages, descriptions). Use `FormControl.TextInput` for single-line values.
+
+Use it inside `FormGroup` for label/description/caption composition, same as `TextInput`.
+
+## Canonical usage
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Comment</FormGroup.Label>
+  <FormControl.TextArea
+    name="comment"
+    placeholderText="Write a comment..."
+    maxLength={200}
+    value={comment}
+    onChange={(e) => setComment(e.target.value)}
+  />
+  <FormGroup.Caption variant="info">{`${comment.length}/200 characters`}</FormGroup.Caption>
+</FormGroup>
+```
+
+## State and validation
+
+- `isError`: applies error styling and sets `aria-invalid`. Falls back to an error `FormGroup.Caption` when omitted.
+- `isSuccess`: applies success styling. Falls back to a success `FormGroup.Caption` when omitted.
+- `isDisabled`: disables the textarea and applies disabled styling.
+
+## Sizing
+
+- `rows`: visible lines before scrolling. Defaults to `2`; the field never goes below 64px.
+- `resizable`: lets users drag the corner to change the height. Defaults to `true`. Set `false` when layout consistency matters.
+
+## Accessibility behavior
+
+Inside `FormGroup`, `TextArea` inherits `aria-labelledby`, `aria-describedby` and its `id` the same way `TextInput` does. Outside `FormGroup`, pass `aria-label` or `aria-labelledby` directly.
+
+## Notes for consuming repositories
+
+- Other native `<textarea>` attributes (`maxLength`, `onPaste`, `data-*` and so on) are passed through to the element.
+- A custom `aria-describedby` is added to the `FormGroup` description and caption ids, not swapped in for them.
+
+## Exports
+
+- `TextArea`: the concrete textarea component
+- `TextAreaProps`: props interface for the component
+
+{/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}
+
+<Primary />
+<Controls />
+<Stories />

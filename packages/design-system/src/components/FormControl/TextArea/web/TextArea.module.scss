@@ -1,0 +1,20 @@
+.textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--spacing-64);
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--spacing-8) var(--spacing-12);
+  border-radius: var(--radius-8);
+  outline: none;
+  resize: none;
+
+  &.resizable:not(:disabled) {
+    resize: vertical;
+  }
+
+  &:not(:placeholder-shown) {
+    font-style: normal;
+  }
+}

@@ -5,7 +5,7 @@ import type { NativeTheme } from '@/hooks/useNativeStyles';
  * Maps {@link NativeTheme} semantic colors to field-style chrome; **not** a public surface for apps —
  * consumers should use `FormControl` / `useNativeStyles` with the theme, not import this module.
  *
- * Parallels web `TextInput.module.scss` state order: disabled → error → success → focus → filled → default.
+ * Parallels web `FormControl/FieldSurface.module.scss` state order: disabled → error → success → focus → filled → default.
  */
 export type FieldSurfaceTokens = Pick<
   NativeTheme,

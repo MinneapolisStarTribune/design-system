@@ -52,6 +52,10 @@ type ButtonProps = {
 
 1. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
 
+### Form Controls Need a TanStack Form Adapter
+
+Every web control that holds a user-entered value (anything under `FormControl/`, plus value controls elsewhere like `ToggleGroup`) ships with an adapter in `packages/tanstack-form` in the same PR. Consumers build forms through those adapters, so a control without one can't be used in a TanStack form without re-plumbing value, blur, errors and ARIA by hand.
+
 ---
 
 ## File Naming Conventions
