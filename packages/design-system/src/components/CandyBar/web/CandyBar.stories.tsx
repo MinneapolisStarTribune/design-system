@@ -23,7 +23,6 @@ const meta = {
   component: CandyBar,
   parameters: {
     layout: 'fullscreen',
-    theme: 'dark' as const,
     docs: {
       description: {
         component:
