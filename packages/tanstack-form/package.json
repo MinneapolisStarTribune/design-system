@@ -1,6 +1,6 @@
 {
   "name": "@minneapolisstartribune/design-system-tanstack-form",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "TanStack Form (v1) field adapters for @minneapolisstartribune/design-system",
   "type": "module",
   "main": "dist/index.cjs",

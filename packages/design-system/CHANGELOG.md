@@ -1,5 +1,13 @@
 # @minneapolisstartribune/design-system
 
+## 4.1.0
+
+### Minor Changes
+
+- [#472](https://github.com/MinneapolisStarTribune/design-system/pull/472) [`5b27e88`](https://github.com/MinneapolisStarTribune/design-system/commit/5b27e889d86e94f233ba7cbf8003ea6720ee99ab) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Adds `FormControl.TextArea` (also exported as `TextArea`) on web for multi-line input. It takes `resizable` and `rows`, and picks up error/success state from `FormGroup.Caption`.
+
+  `TextInput` now shares its field styles with `TextArea`, which fixes a few focus states: the focus border now shows on filled or hovered fields, a focused error field keeps its red border, and keyboard focus is visible in Windows High Contrast mode.
+
 ## 4.0.0
 
 ### Major Changes

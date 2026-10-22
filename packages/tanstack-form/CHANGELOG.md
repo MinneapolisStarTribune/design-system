@@ -1,5 +1,16 @@
 # @minneapolisstartribune/design-system-tanstack-form
 
+## 1.1.0
+
+### Minor Changes
+
+- [#472](https://github.com/MinneapolisStarTribune/design-system/pull/472) [`5b27e88`](https://github.com/MinneapolisStarTribune/design-system/commit/5b27e889d86e94f233ba7cbf8003ea6720ee99ab) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Adds `TextAreaField`, which binds `TextArea` to a string field. The design-system peer range moves to `^4.1.0`, the first version with `TextArea`.
+
+### Patch Changes
+
+- Updated dependencies [[`5b27e88`](https://github.com/MinneapolisStarTribune/design-system/commit/5b27e889d86e94f233ba7cbf8003ea6720ee99ab)]:
+  - @minneapolisstartribune/design-system@4.1.0
+
 ## 1.0.0
 
 ### Minor Changes
