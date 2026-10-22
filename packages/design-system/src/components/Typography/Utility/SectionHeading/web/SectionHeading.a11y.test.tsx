@@ -21,4 +21,12 @@ describe('SectionHeading Accessibility', () => {
 
     await checkA11y();
   });
+
+  it('has no violations with semantic tag override', async () => {
+    await expectNoA11yViolations(
+      <SectionHeading importance={3} as="h2">
+        Semantic H2, H3 Style
+      </SectionHeading>
+    );
+  });
 });
