@@ -434,6 +434,24 @@ describe('Menu', () => {
     expect(screen.getByTestId('profile-link').tagName).toBe('A');
   });
 
+  it('closes when the trigger stops rendering', async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    renderWithProvider(<Harness onClose={onClose} />);
+
+    await user.click(screen.getByRole('button', { name: 'Actions' }));
+    await screen.findByRole('menu');
+    // jsdom has no layout, so it does not implement `checkVisibility`.
+    Element.prototype.checkVisibility = () => false;
+    try {
+      window.dispatchEvent(new Event('resize'));
+      await waitFor(() => expect(onClose).toHaveBeenCalled());
+    } finally {
+      // @ts-expect-error Restores the jsdom default.
+      delete Element.prototype.checkVisibility;
+    }
+  });
+
   it('renders the trigger with menu button attributes', async () => {
     const user = userEvent.setup();
     renderWithProvider(<Harness />);
