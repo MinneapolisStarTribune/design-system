@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { expect, screen } from 'storybook/test';
+import { expect, screen, waitFor } from 'storybook/test';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
+import { Button } from '@/components/Button/web/Button';
+import * as Popover from '@/components/Popover/Popover';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import type { SelectProps } from '../Select.types';
+import styles from './Select.stories.module.scss';
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{ marginBottom: 4 }}>
@@ -26,6 +29,27 @@ const OPTIONS = [
   { value: '9', label: 'Option-9' },
   { value: '10', label: 'Option-0', disabled: true },
 ];
+
+const JoinedSelects = ({ testIdPrefix }: { testIdPrefix: string }) => (
+  <div className={styles.joinedControls}>
+    <FormControl.Select
+      id={`${testIdPrefix}-first`}
+      options={OPTIONS}
+      value="1"
+      size="small"
+      className={styles.joinedSelect}
+      dataTestId={`${testIdPrefix}-first`}
+    />
+    <FormControl.Select
+      id={`${testIdPrefix}-second`}
+      options={OPTIONS}
+      value="2"
+      size="small"
+      className={styles.joinedSelect}
+      dataTestId={`${testIdPrefix}-second`}
+    />
+  </div>
+);
 
 const meta = {
   title: 'Forms/FormControl/Select',
@@ -419,7 +443,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Error</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} isError />
+            <FormControl.Select options={OPTIONS} isError dataTestId="select-error" />
             <FormGroup.Caption variant="error">Error message</FormGroup.Caption>
           </FormGroup>
         </div>
@@ -428,8 +452,44 @@ export const AllVariants: Story = {
           <SectionLabel>State: Disabled</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} isDisabled />
+            <FormControl.Select options={OPTIONS} isDisabled dataTestId="select-disabled" />
           </FormGroup>
+        </div>
+
+        <div className={styles.regressionExample}>
+          <SectionLabel>Joined controls</SectionLabel>
+          <JoinedSelects testIdPrefix="select-joined" />
+        </div>
+
+        <div className={styles.regressionExample}>
+          <SectionLabel>Inside Popover</SectionLabel>
+          <Popover.Root
+            aria-label="Select inside Popover"
+            trigger={<Button dataTestId="select-popover-trigger">Open Select</Button>}
+          >
+            <Popover.Body dataTestId="select-popover-body">
+              <FormControl.Select
+                id="select-popover"
+                options={OPTIONS}
+                value="1"
+                dataTestId="select-popover"
+              />
+            </Popover.Body>
+          </Popover.Root>
+        </div>
+
+        <div className={styles.regressionExample}>
+          <SectionLabel>Joined controls inside Popover</SectionLabel>
+          <Popover.Root
+            aria-label="Joined Selects inside Popover"
+            trigger={
+              <Button dataTestId="select-popover-joined-trigger">Open joined Selects</Button>
+            }
+          >
+            <Popover.Body dataTestId="select-popover-joined-body">
+              <JoinedSelects testIdPrefix="select-popover-joined" />
+            </Popover.Body>
+          </Popover.Root>
         </div>
 
         {/* Reserves room for the absolutely positioned dropdown (317px max-height + 8px offset) */}
@@ -444,11 +504,80 @@ export const AllVariants: Story = {
       </div>
     );
   },
-  // Chromatic snapshots after play completes, so the open dropdown is captured
+  // Capture the clipped Popover edges and joined seam in Chromatic's final snapshot.
   play: async ({ canvas, userEvent }) => {
     // findBy waits out the decorator's async theme load
     const select = await canvas.findByTestId('select-open');
-    await userEvent.click(select);
+    let focusColor: string | undefined;
+    const dimensions = (element: HTMLElement) => {
+      const { width, height } = element.getBoundingClientRect();
+      return { width, height };
+    };
+    const keyboardFocus = async (element: HTMLElement) => {
+      for (let count = 0; document.activeElement !== element && count < 40; count++) {
+        await userEvent.tab();
+      }
+      await expect(element).toHaveFocus();
+    };
+    const expectActive = async (
+      element: HTMLElement,
+      size: ReturnType<typeof dimensions>,
+      borderColor?: string
+    ) => {
+      await waitFor(() => {
+        const style = getComputedStyle(element);
+        const color = focusColor ?? style.borderTopColor;
+        expect(style.boxShadow).toBe(`${color} 0px 0px 0px 1px inset`);
+        for (const side of ['top', 'right', 'bottom', 'left']) {
+          expect(style.getPropertyValue(`border-${side}-width`)).toBe('1px');
+          expect(style.getPropertyValue(`border-${side}-color`)).toBe(borderColor ?? color);
+        }
+        expect(dimensions(element)).toEqual(size);
+      });
+      focusColor ??= getComputedStyle(element).borderTopColor;
+    };
+    const checkControl = async (element: HTMLElement, errorColor?: string) => {
+      const size = dimensions(element);
+      await keyboardFocus(element);
+      await expect(element).toHaveAttribute('aria-expanded', 'false');
+      await expectActive(element, size);
+      await userEvent.hover(element);
+      await expectActive(element, size);
+      await userEvent.click(element);
+      await expect(element).toHaveAttribute('aria-expanded', 'true');
+      await expect(await screen.findByRole('listbox')).toBeVisible();
+      await expectActive(element, size, errorColor);
+      await userEvent.click(element);
+    };
+
+    await checkControl(select);
+    for (const id of ['select-joined-first', 'select-joined-second']) {
+      await checkControl(canvas.getByTestId(id));
+    }
+    for (const prefix of ['select-popover', 'select-popover-joined']) {
+      const trigger = canvas.getByTestId(`${prefix}-trigger`);
+      await keyboardFocus(trigger);
+      await userEvent.keyboard('{Enter}');
+      const ids = prefix.endsWith('joined') ? [`${prefix}-first`, `${prefix}-second`] : [prefix];
+      await waitFor(() => expect(screen.getByTestId(ids[0])).toHaveFocus());
+      for (const id of ids) await checkControl(await screen.findByTestId(id));
+      await userEvent.click(trigger);
+    }
+
+    const error = canvas.getByTestId('select-error');
+    await checkControl(error, getComputedStyle(error).borderTopColor);
+    const disabled = canvas.getByTestId('select-disabled');
+    const disabledSize = dimensions(disabled);
+    const disabledBorder = getComputedStyle(disabled).borderTopColor;
+    await userEvent.click(disabled);
+    await expect(disabled).toHaveAttribute('aria-expanded', 'false');
+    await expect(disabled).toHaveAttribute('tabindex', '-1');
+    await expect(getComputedStyle(disabled).boxShadow).toBe('none');
+    await expect(getComputedStyle(disabled).borderTopColor).toBe(disabledBorder);
+    await expect(dimensions(disabled)).toEqual(disabledSize);
+
+    await userEvent.click(canvas.getByTestId('select-popover-joined-trigger'));
+    await userEvent.click(await screen.findByTestId('select-popover-joined-first'));
     // The listbox is portaled out of the combobox.
     await expect(await screen.findByRole('listbox')).toBeVisible();
   },

@@ -1,0 +1,28 @@
+.regressionExample {
+  min-width: 0;
+}
+
+.joinedControls {
+  display: flex;
+
+  .joinedSelect {
+    flex: 1;
+    min-width: 0;
+
+    &:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      margin-left: -1px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:focus-within,
+    &[aria-expanded='true'] {
+      z-index: 1;
+    }
+  }
+}

@@ -335,6 +335,10 @@ Use only these two native style hooks:
 
 ## Testing Standards
 
+Select's Storybook interaction coverage exercises open and keyboard-focused controls alone,
+inside Popover, and with joined borders. Keep the final joined-in-Popover state visible for
+Chromatic: computed style assertions alone cannot detect a clipped or overlapped border.
+
 ### Test Runner Split
 
 - **Web tests** run with **Vitest** (`@testing-library/react`, `jsdom`)

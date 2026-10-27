@@ -83,6 +83,9 @@ Only the `dist/` tree is published (`files: ["dist"]` in the package). Integrati
 
 ### Web
 
+Select's active ring is implemented in its web styles as an inset shadow, so browser overflow
+clipping does not hide it. This requires no shared API or native implementation change.
+
 | Export / import shape                                                  | What you get                                                                                                                                                                                                                                                                                    |
 | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | **`@minneapolisstartribune/design-system/web`**                        | Main web entry: ESM and CJS bundles plus TypeScript types (`index.web.es.js`, `index.web.cjs.js`, `index.web.d.ts`). Components, `DesignSystemProvider`, icons, AnalyticsProvider, font helpers — see [`index.web.ts`](../packages/design-system/src/index.web.ts) for the full public surface. |

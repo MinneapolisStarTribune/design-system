@@ -2,6 +2,9 @@
 
 A React component library built with TypeScript and a comprehensive design token system. Supports both web (React) and native (React Native) platforms.
 
+Web Select supplies its active border inside the control so it remains visible in scrollable
+containers. Consumers do not need an additional focus border; see the [web integration guide](integration-guides/web.md).
+
 ## Installation
 
 This package is published to GitHub Packages. To install it, you'll need to configure npm/yarn to authenticate with GitHub.
