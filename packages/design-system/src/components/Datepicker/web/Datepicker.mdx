@@ -1,0 +1,104 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as DatepickerStories from './Datepicker.stories';
+
+<Meta of={DatepickerStories} />
+
+# Datepicker
+
+A single-date calendar for desktop and mobile browsers. Omit `trigger` to render inline, or pass
+a focusable button to open a calendar popover. Import `Datepicker` and `DatepickerProps` from
+`@minneapolisstartribune/design-system/web`.
+
+```tsx
+const [date, setDate] = useState<DatepickerProps['value']>(null);
+
+<Datepicker
+  value={date}
+  onChange={setDate}
+  label="Choose game date"
+  min="2026-03-01"
+  max="2026-06-30"
+  trigger={<UtilityButton label={date ?? 'Choose date'} />}
+/>;
+```
+
+## Values and bounds
+
+- Use real, zero-padded `YYYY-MM-DD` dates, years `0001` through `9999`. Values represent calendar
+  dates, not timestamps; no timezone conversion is applied.
+- `value={null}` is a controlled empty selection. Omit `value` and optionally set `defaultValue`
+  for uncontrolled use. `defaultValue` is read only on mount.
+- `onChange` fires when a user selects a date, including selecting the current selection again.
+  Navigating, dismissing, and changing props do not emit a change.
+- `min` and `max` are inclusive. Their boundary months remain visible; navigation cannot leave
+  the permitted range. Adjacent-month dates are shown as disabled context.
+- Invalid values are treated as empty; invalid bounds are ignored. An inverted range disables
+  all dates and month navigation. A controlled selection outside the range is not rewritten;
+  opening and navigation focus the nearest available day.
+
+## Keyboard and focus
+
+Opening focuses the selected day, otherwise today (in the user's local calendar), clamped to
+the permitted range. The calendar has one tabbable date. Arrow keys move by day/week, Home/End
+move to the beginning/end of the week, and Page Up/Down change months. Shift + Page Up/Down
+changes years without adding a month/year selection view. Month changes retain the day number
+when possible, otherwise use the month's final day.
+
+Enter/Space selects a date. Popover selection and Escape return focus to the trigger; Escape
+does not change the value. Outside presses and tabbing away dismiss the nonmodal popover without
+pulling focus away from the destination. Inline calendars remain visible and do not take focus
+on mount. The month heading announces navigation, and days expose their full date to assistive
+technology.
+
+`label` defaults to **Choose a date**. It names the calendar and popover and is appended to the
+trigger's accessible description. The consumer owns the trigger's name, including any selected
+date text. Custom trigger components must forward their ref, event handlers, and ARIA attributes
+to a focusable DOM element. Existing handlers, refs, and descriptions are preserved.
+
+When server-rendered, an explicit `value` or `defaultValue` determines the initial month.
+Without a selected date, the calendar renders a loading container until hydration resolves the
+browser's local day. The today marker also appears only after hydration, so differing server and
+browser time zones cannot produce mismatched markup.
+
+## Schedule controls example
+
+The **All variants** story composes existing `UtilityButton` controls into a joined Today/calendar
+pill on desktop and a calendar footer on mobile. This is a consumer example, not an additional Datepicker API or exported component.
+
+- Initially, today is selected and the calendar is closed: only the outlined circular calendar
+  button is visible. The story does not open the popover automatically.
+- From 768px, the calendar button shows `CalendarIcon` when closed and `ChevronUpIcon` with an active border
+  when open. The custom trigger reads the injected `aria-expanded` attribute; it does not maintain
+  a second open state.
+- On desktop, Today fades and slides in or out as the control expands or contracts. The icon fades in with
+  a small rotation on both opening and closing, over 180ms. These CSS transitions and animations
+  are disabled when the user prefers reduced motion. A hiding Today action immediately leaves
+  the tab order and accessibility tree while its visual transition finishes.
+- Below 768px, the trigger stays a circular calendar icon while open. Today appears only inside
+  the popup, as a full-width outlined button beneath a divider. Both layouts share one action
+  handler and render only one Today button, using the existing responsive breakpoint hook.
+- Today appears only while the calendar is open. Activating it selects the local current date,
+  returns to the current month, and keeps both the calendar and Today visible. It respects
+  `min`/`max`; when today is outside those limits, the action is disabled.
+- On desktop, Today and the calendar toggle are separate buttons inside one floating reference, so Today
+  does not count as an outside press. The toggle receives the ARIA attributes and toggle handlers.
+  The popover arrow remains aligned with that toggle.
+- Choosing a day, closing the toggle, pressing Escape, or clicking outside closes the calendar
+  and hides Today. Focus returns to the toggle unless the user clicks another control.
+- The example shares the private Datepicker implementation and resets only the calendar body
+  when Today is activated, including when today's date was already selected. The public API is unchanged.
+
+Keep this composition with the consuming schedule page. Calculate today from local calendar
+fields; `toISOString()` uses UTC and can produce a different day near midnight. The example
+reuses the calendar's internal date helpers without adding a public date-utility API.
+
+## Scope
+
+This is a web component; mobile browsers use the same calendar. React Native is not implemented.
+The schedule page owns its **Today** action. The input wrapper, input validation UI, and TanStack
+Form adapter are deliberately deferred to **VAR-1335**. No typed input, range selection, or
+month/year selection view is included here.
+
+<Primary />
+<Controls />
+<Stories />

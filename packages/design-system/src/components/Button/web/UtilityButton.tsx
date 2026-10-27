@@ -34,7 +34,9 @@ function getUtilityButtonIconSize(size: UtilityButtonSize, isIconOnly: boolean):
   return isIconOnly ? 'small' : 'x-small';
 }
 
-interface UtilityButtonBaseProps extends BaseProps {
+interface UtilityButtonBaseProps
+  extends BaseProps,
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps | 'children' | 'disabled'> {
   size?: UtilityButtonSize;
   /** Optional icon element (e.g. icon={<Share02Icon />}) */
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;

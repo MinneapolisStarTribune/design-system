@@ -56,6 +56,10 @@ type ButtonProps = {
 
 Every web control that holds a user-entered value (anything under `FormControl/`, plus value controls elsewhere like `ToggleGroup`) ships with an adapter in `packages/tanstack-form` in the same PR. Consumers build forms through those adapters, so a control without one can't be used in a TanStack form without re-plumbing value, blur, errors and ARIA by hand.
 
+Scoped exception: VAR-1334 adds the standalone web `Datepicker` calendar. VAR-1335 explicitly owns
+its `FormControl` input wrapper and TanStack Form adapter, so that adapter is deliberately deferred
+to VAR-1335. Keep this exception documented when reviewing the calendar PR.
+
 ---
 
 ## File Naming Conventions

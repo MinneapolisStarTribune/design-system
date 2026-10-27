@@ -8,6 +8,7 @@ export type {
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
+export { Datepicker, type DatepickerProps } from './Datepicker/web/Datepicker';
 export * as Dialog from './Dialog/Dialog';
 export {
   type DialogActionsProps,

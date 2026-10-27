@@ -50,6 +50,11 @@
     "web": true
   },
   {
+    "component": "Datepicker",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "Checkbox",
     "native": true,
     "web": true

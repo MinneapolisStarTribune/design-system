@@ -90,6 +90,11 @@ Only the `dist/` tree is published (`files: ["dist"]` in the package). Integrati
 | **`@minneapolisstartribune/design-system/web/<path>`**                 | **Deep imports** into `dist/web/*` — e.g. **`startribune-light.css`**, **`varsity-dark.css`** (brand + scheme theme files).                                                                                                                                                                     |
 | **`@minneapolisstartribune/design-system/web/fonts/font-face/<file>`** | **@font-face** CSS per brand.                                                                                                                                                                                                                                                                   |     |
 
+`Datepicker` is exported only from `/web`. Its inline calendar and popover share a private calendar
+body; the popover reuses the internal floating-surface positioning and focus layer. Date-only
+arithmetic has no additional package dependency. The FormControl wrapper and TanStack adapter
+are deliberately deferred to VAR-1335.
+
 ### React Native
 
 | Export / import shape                              | What you get                                                                                                                                                                                                                                                                                                                                                       |
