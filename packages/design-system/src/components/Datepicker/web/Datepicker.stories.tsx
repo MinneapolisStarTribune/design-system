@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useArgs } from 'storybook/preview-api';
+import { useEffect, useState } from 'react';
 import { UtilityButton } from '@/components/Button/web/UtilityButton';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { CalendarIcon } from '@/icons';
@@ -40,15 +40,18 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: { value: '2026-03-10', label: 'Choose a date', trigger: undefined },
   render: function ConfigurableCalendar(args) {
-    const [, updateArgs] = useArgs();
+    const [value, setValue] = useState(args.value);
+    useEffect(() => {
+      setValue(args.value);
+    }, [args.value]);
     return (
       <Datepicker
         key={args.defaultValue ?? 'empty'}
-        value={args.value}
+        value={args.value === undefined ? undefined : value}
         defaultValue={args.defaultValue}
-        onChange={(value) => {
-          args.onChange?.(value);
-          if (args.value !== undefined) updateArgs({ value });
+        onChange={(nextValue) => {
+          args.onChange?.(nextValue);
+          if (args.value !== undefined) setValue(nextValue);
         }}
         label={args.label}
         min={args.min}

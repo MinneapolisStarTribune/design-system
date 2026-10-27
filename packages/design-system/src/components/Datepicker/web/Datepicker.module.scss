@@ -71,7 +71,7 @@
   }
 
   &:hover:not(:disabled) {
-    border-color: var(--color-button-neutral-utility-hover-border);
+    background: var(--color-button-neutral-ghost-hover-background);
   }
 
   &:disabled {
@@ -93,6 +93,11 @@
 .grid:focus-visible {
   outline: 2px solid var(--color-button-neutral-utility-hover-border);
   outline-offset: 2px;
+}
+
+.day:focus-visible {
+  // Keep the focus ring inside its date so it cannot overlap adjacent dates.
+  outline-offset: -2px;
 }
 
 .popover .popoverContainer {
