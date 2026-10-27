@@ -27,7 +27,7 @@ export type MenuBaseProps = Pick<BaseProps, 'className' | 'dataTestId'> & {
   hideArrow?: boolean;
   /**
    * Sets a fixed arrow position on the menu edge that faces the anchor.
-   * The arrow stays 16px from the rounded corners. By default, it points to the anchor center.
+   * Fixed start/end arrows are centered 32px from the edge. By default, it points to the anchor center.
    * Accepts a value per breakpoint. Breakpoints without a value use the default.
    */
   arrowPosition?: Responsive<MenuArrowPosition>;

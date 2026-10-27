@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode, useContext, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, screen, within } from 'storybook/test';
+import { expect, screen, waitFor, within } from 'storybook/test';
 import classNames from 'classnames';
 import * as Menu from './Menu';
 import { MENU_ARROW_POSITIONS, MENU_PLACEMENTS } from './Menu.constants';
@@ -474,6 +474,111 @@ export const OpenState: Story = {
     // Moves keyboard focus to the second item so Chromatic captures the item focus style.
     await userEvent.keyboard('{ArrowDown}');
     await expect(within(menu).getAllByRole('menuitem')[1]).toHaveFocus();
+  },
+};
+
+/** A wide trigger at the viewport edge must not force the fixed arrow back to the center. */
+export const AboveWideTrigger: Story = {
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+  },
+  render: () => (
+    <div className={styles.wideTriggerFrame}>
+      <DemoMenu
+        aria-label="Profile actions"
+        placement="top"
+        arrowPosition="end"
+        trigger={<Button className={styles.wideTrigger}>Account</Button>}
+      >
+        <Menu.Item>
+          <Menu.ItemIcon>
+            <SettingsIcon size="large" />
+          </Menu.ItemIcon>
+          Manage Profile
+        </Menu.Item>
+        <Menu.Item>
+          <Menu.ItemIcon>
+            <LogOutIcon size="large" />
+          </Menu.ItemIcon>
+          Log Out
+        </Menu.Item>
+      </DemoMenu>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const trigger = await canvas.findByRole('button', { name: 'Account' });
+    await userEvent.click(trigger);
+    const menu = await screen.findByRole('menu', { name: 'Profile actions' });
+    await waitFor(() => {
+      const bounds = menu.getBoundingClientRect();
+      const anchor = trigger.getBoundingClientRect();
+      expect(bounds.width).toBe(324);
+      expect(bounds.height).toBe(96);
+      expect(Math.abs(bounds.left - anchor.left - 8)).toBeLessThanOrEqual(1);
+      const arrow = menu.querySelector(':scope > svg');
+      expect(arrow).not.toBeNull();
+      if (!arrow) return;
+      const arrowBounds = arrow.getBoundingClientRect();
+      expect(
+        Math.abs(bounds.right - (arrowBounds.left + arrowBounds.width / 2) - 32)
+      ).toBeLessThanOrEqual(0.5);
+      expect(arrowBounds.top).toBeGreaterThanOrEqual(bounds.bottom - 1);
+      expect(bounds.bottom).toBeLessThan(anchor.top);
+    });
+    await userEvent.keyboard('{Escape}');
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await expect(await screen.findByRole('menu', { name: 'Profile actions' })).toBeVisible();
+    await expect(screen.getByRole('menuitem', { name: 'Manage Profile' })).toHaveFocus();
+  },
+};
+
+/** Tablet account menu beside a collapsed navigation rail, using Menu defaults. */
+export const BesideNarrowTrigger: Story = {
+  parameters: {
+    layout: 'fullscreen',
+    controls: { disable: true },
+  },
+  render: () => (
+    <div className={styles.narrowTriggerFrame}>
+      <DemoMenu
+        aria-label="Tablet account"
+        placement="right"
+        trigger={
+          <button type="button" className={styles.narrowTrigger} aria-label="Account">
+            <AvatarIcon size="large" color="on-dark-secondary" />
+          </button>
+        }
+      >
+        <Menu.Item>
+          <Menu.ItemIcon>
+            <LogoVarsityIcon size="large" />
+          </Menu.ItemIcon>
+          Strib Varsity
+          <Menu.ItemIcon position="end">
+            <ArrowDiagonalIcon />
+          </Menu.ItemIcon>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item>
+          <Menu.ItemIcon>
+            <SettingsIcon size="large" />
+          </Menu.ItemIcon>
+          Manage Profile
+        </Menu.Item>
+        <Menu.Item>
+          <Menu.ItemIcon>
+            <LogOutIcon size="large" />
+          </Menu.ItemIcon>
+          Log Out
+        </Menu.Item>
+      </DemoMenu>
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Account' }));
+    await expect(await screen.findByRole('menu', { name: 'Tablet account' })).toBeVisible();
   },
 };
 

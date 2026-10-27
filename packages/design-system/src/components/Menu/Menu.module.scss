@@ -1,12 +1,18 @@
 .menu {
-  /* Shrink to the space the `size` middleware in useAnchoredFloating.ts measures. Subtract the 1px border on each side. */
-  width: min(var(--menu-width, 360px), var(--floating-available-width, 100vw) - 2px);
+  /* Shrink to the space the `size` middleware in useAnchoredFloating.ts measures. */
+  width: min(var(--menu-width, 324px), var(--floating-available-width, 100vw));
 
   /* `useListNavigation` focuses the surface when the pointer leaves the items.
-     Only items show a focus ring. */
+     Only items show a focus highlight. */
   &:focus-visible {
     outline: none;
   }
+}
+
+/* Menu owns its borderless surface; Popover keeps FloatingSurface's border. */
+.menu.menu {
+  border: none;
+  --popover-arrow-stroke: var(--color-background-light-default);
 }
 
 /* Overrides FloatingSurface's `.container` sizing regardless of CSS load order. */
@@ -15,10 +21,9 @@
   width: 100%;
   min-width: 0;
   max-width: none;
-  max-height: min(var(--menu-max-height, 317px), var(--floating-available-height, 100vh) - 2px);
-  padding: var(--spacing-8);
-  /* Match the wrapper radius minus its border. */
-  border-radius: calc(var(--radius-16) - 1px);
+  max-height: min(var(--menu-max-height, 317px), var(--floating-available-height, 100vh));
+  padding: 0 var(--spacing-4);
+  border-radius: var(--radius-16);
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-on-light-subtle-01) transparent;
@@ -46,15 +51,14 @@
   text-decoration: none;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: var(--color-select-hover);
   }
 
-  /* Outline instead of border so focus doesn't shift the layout. The -1px offset keeps the ring
-     inside the row so it doesn't cover the neighboring items. */
+  /* Keyboard focus uses the same background highlight as hover. */
   &:focus-visible {
-    outline: 1px solid var(--color-border-state-focus);
-    outline-offset: -1px;
+    outline: none;
   }
 }
 
@@ -62,7 +66,8 @@
   opacity: 0.4;
   cursor: not-allowed;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: transparent;
   }
 }

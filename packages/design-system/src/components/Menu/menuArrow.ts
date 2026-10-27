@@ -5,11 +5,15 @@ export const MENU_ARROW_SIZE = { width: 12, height: 9 };
 
 export const MENU_ARROW_CORNER_INSET = 16;
 
-const ARROW_EDGE_INSET = `${MENU_ARROW_CORNER_INSET}px`;
-// `staticOffset` sets the arrow's near edge. Subtract the arrow width for the far edge.
-const ARROW_FAR_EDGE = `calc(100% - ${MENU_ARROW_CORNER_INSET + MENU_ARROW_SIZE.width}px)`;
+// FloatingSurface renders a 1px stroke on each side of the arrow SVG.
+const ARROW_RENDERED_WIDTH = MENU_ARROW_SIZE.width + 2;
+// Fixed arrows are centered in a 64px edge region in the approved menu design.
+const FIXED_ARROW_EDGE_INSET = 32 - ARROW_RENDERED_WIDTH / 2;
+const ARROW_EDGE_INSET = `${FIXED_ARROW_EDGE_INSET}px`;
+// `staticOffset` sets the arrow's near edge. Subtract the rendered arrow width for the far edge.
+const ARROW_FAR_EDGE = `calc(100% - ${FIXED_ARROW_EDGE_INSET + ARROW_RENDERED_WIDTH}px)`;
 
-const ARROW_CENTER = `calc(50% - ${MENU_ARROW_SIZE.width / 2}px)`;
+const ARROW_CENTER = `calc(50% - ${ARROW_RENDERED_WIDTH / 2}px)`;
 
 /**
  * Converts `arrowPosition` to `FloatingSurface`'s `arrowStaticOffset` value.

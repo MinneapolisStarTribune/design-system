@@ -194,6 +194,8 @@ Other `<button>` or `<a>` attributes on `Menu.Item`, such as `aria-label` or `da
 
 ### Sizing
 
+The default menu has a borderless 324px surface, 4px horizontal list padding, and no vertical list padding. Two rows with 24px icons produce a 96px body. This follows the [approved account-menu layout](https://www.figma.com/design/VBdGkrMOoM5XfVf9cbglHG/CoPo-Hi-Fi-%7C-Dev-Ready-Designs?node-id=15004-336844).
+
 Set these CSS variables on the class you pass to `Menu.Root`. A Tailwind width class such as `w-80`
 works only if Tailwind's styles take priority over the design system's. Otherwise, set
 `--menu-width`.
@@ -212,7 +214,7 @@ works only if Tailwind's styles take priority over the design system's. Otherwis
       <td>
         <code>--menu-width</code>
       </td>
-      <td>360px</td>
+      <td>324px</td>
       <td>Menu width.</td>
     </tr>
 
@@ -275,13 +277,15 @@ By default, the page can't scroll while the menu is open. Scrollable areas insid
 
 ## Arrow
 
-By default, the arrow points at the center of the trigger and stays at least 16px from the menu's rounded corners. Use `arrowPosition` only when a design needs the arrow in a fixed place. `'start'` or `'end'` puts it 16px from that edge of the menu (left or right; top or bottom for `left` and `right` menus), and `'center'` puts it in the middle.
+By default, the arrow points at the center of the trigger and stays at least 16px from the menu's rounded corners. Use `arrowPosition` only when a design needs the arrow in a fixed place. `'start'` or `'end'` centers it 32px from that edge of the menu (left or right; top or bottom for `left` and `right` menus), and `'center'` puts it in the middle.
 
-For example, `placement="top-end"` with `arrowPosition="end"` puts the arrow 16px from the menu's right edge. If the menu has to shift sideways to fit on screen, a fixed arrow goes back to pointing at the trigger.
+For example, `placement="top-end"` with `arrowPosition="end"` centers the arrow 32px from the menu's right edge. If the menu has to shift sideways to fit on screen, a fixed arrow goes back to pointing at the trigger.
 
 ## Accessibility
 
 ### Keyboard Navigation
+
+Hover and keyboard focus highlight the item's background without a border or outline. Disabled items remain unhighlighted.
 
 - **Enter**, **Space**, or **Arrow Down** on the trigger opens the menu and focuses the first enabled item. **Arrow Up** opens it and focuses the last item
 - **Arrow Down / Arrow Up** move between items and wrap around. Disabled items are skipped
