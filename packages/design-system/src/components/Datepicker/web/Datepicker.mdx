@@ -10,12 +10,12 @@ a focusable button to open a calendar popover. Import `Datepicker` and `Datepick
 `@minneapolisstartribune/design-system/web`.
 
 ```tsx
-const [date, setDate] = useState<DatepickerProps['value']>(null);
+const [date, setDate] = useState<string | null>(null);
 
 <Datepicker
   value={date}
   onChange={setDate}
-  label="Choose game date"
+  label="Choose event date"
   min="2026-03-01"
   max="2026-06-30"
   trigger={<UtilityButton label={date ?? 'Choose date'} />}
@@ -24,6 +24,7 @@ const [date, setDate] = useState<DatepickerProps['value']>(null);
 
 ## Values and bounds
 
+- Date props and the `onChange` value use `string`, so formatted strings need no type assertion.
 - Use real, zero-padded `YYYY-MM-DD` dates, years `0001` through `9999`. Values represent calendar
   dates, not timestamps; no timezone conversion is applied.
 - `value={null}` is a controlled empty selection. Omit `value` and optionally set `defaultValue`
@@ -60,7 +61,7 @@ Without a selected date, the calendar renders a loading container until hydratio
 browser's local day. The today marker also appears only after hydration, so differing server and
 browser time zones cannot produce mismatched markup.
 
-## Schedule controls example
+## Today action example
 
 The **All variants** story composes existing `UtilityButton` controls into a joined Today/calendar
 pill on desktop and a calendar footer on mobile. This is a consumer example, not an additional Datepicker API or exported component.
@@ -88,14 +89,14 @@ pill on desktop and a calendar footer on mobile. This is a consumer example, not
 - The example shares the private Datepicker implementation and resets only the calendar body
   when Today is activated, including when today's date was already selected. The public API is unchanged.
 
-Keep this composition with the consuming schedule page. Calculate today from local calendar
-fields; `toISOString()` uses UTC and can produce a different day near midnight. The example
-reuses the calendar's internal date helpers without adding a public date-utility API.
+Build today from the local date, e.g. `new Date().toLocaleDateString('en-CA')` (`YYYY-MM-DD`).
+`toISOString()` uses UTC, so in US time zones it returns tomorrow's date in the evening.
+The example reuses the calendar's internal date helpers without adding a public date-utility API.
 
 ## Scope
 
 This is a web component; mobile browsers use the same calendar. React Native is not implemented.
-The schedule page owns its **Today** action. The input wrapper, input validation UI, and TanStack
+The consumer owns its **Today** action. The input wrapper, input validation UI, and TanStack
 Form adapter are deliberately deferred to **VAR-1335**. No typed input, range selection, or
 month/year selection view is included here.
 

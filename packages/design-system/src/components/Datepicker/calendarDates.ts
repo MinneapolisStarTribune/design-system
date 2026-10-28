@@ -1,5 +1,3 @@
-import type { DatepickerProps } from './Datepicker.types';
-
 // UTC is used only for calendar arithmetic; values never represent a consumer's instant in time.
 export const DAY = 86_400_000;
 
@@ -25,11 +23,9 @@ export function parseDate(value: string | null | undefined): number | null {
     : null;
 }
 
-export function formatDate(day: number): NonNullable<DatepickerProps['value']> {
+export function formatDate(day: number): string {
   const date = new Date(day);
-  return `${String(date.getUTCFullYear()).padStart(4, '0')}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}` as NonNullable<
-    DatepickerProps['value']
-  >;
+  return `${String(date.getUTCFullYear()).padStart(4, '0')}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
 }
 
 export function today(): number {

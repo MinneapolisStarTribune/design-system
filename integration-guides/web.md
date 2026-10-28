@@ -64,20 +64,21 @@ The `brand` prop must match the CSS file brand; `forceColorScheme` must match th
 ## Datepicker
 
 `Datepicker` renders inline without `trigger`, or opens a nonmodal calendar popover from a
-focusable trigger. Use zero-padded `YYYY-MM-DD` dates rather than timestamps. Both bounds are
-inclusive. `value={null}` is controlled; omit `value` to use `defaultValue` and internal state.
+focusable trigger. Date props and `onChange` use plain `string` values in zero-padded `YYYY-MM-DD`
+format rather than timestamps. Both bounds are inclusive. `value={null}` is controlled; omit
+`value` to use `defaultValue` and internal state.
 
 ```tsx
 import { useState } from 'react';
-import { Datepicker, type DatepickerProps, UtilityButton } from '@minneapolisstartribune/design-system/web';
+import { Datepicker, UtilityButton } from '@minneapolisstartribune/design-system/web';
 
-function GameDate() {
-  const [date, setDate] = useState<DatepickerProps['value']>(null);
+function EventDate() {
+  const [date, setDate] = useState<string | null>(null);
   return (
     <Datepicker
       value={date}
       onChange={setDate}
-      label="Choose game date"
+      label="Choose event date"
       min="2026-03-01"
       max="2026-06-30"
       trigger={<UtilityButton label={date ?? 'Choose date'} />}
@@ -95,7 +96,7 @@ Malformed dates are treated as empty and malformed bounds as absent. Inverted bo
 dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
 Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
 
-The schedule page owns its Today action. The text input wrapper and TanStack Form adapter are
+The consumer owns its Today action. The text input wrapper and TanStack Form adapter are
 deliberately deferred to VAR-1335; this calendar does not add them to `FormControl`.
 
 ## Coachmark

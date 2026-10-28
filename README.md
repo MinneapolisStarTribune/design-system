@@ -119,7 +119,8 @@ A dismissible, externally-controlled callout for an unprompted single action. Se
 ### Datepicker (web)
 
 `Datepicker` provides an inline calendar or a custom-trigger popover, date-only `YYYY-MM-DD`
-values, inclusive `min`/`max` bounds, and keyboard navigation. Import it and `DatepickerProps`
+strings, inclusive `min`/`max` bounds, and keyboard navigation. Date props accept plain `string`
+values without type assertions. Import it and `DatepickerProps`
 from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
 The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
 

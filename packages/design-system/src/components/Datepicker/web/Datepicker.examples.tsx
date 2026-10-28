@@ -8,14 +8,14 @@ import type { DatepickerProps } from './Datepicker';
 import { DatepickerRoot } from './DatepickerRoot';
 import styles from './Datepicker.module.scss';
 
-interface ScheduleTriggerProps extends ComponentPropsWithoutRef<'button'> {
+interface TodayTriggerProps extends ComponentPropsWithoutRef<'button'> {
   isMobile: boolean;
   todayAction: ReactElement<ComponentPropsWithoutRef<typeof UtilityButton>>;
   todayRef: RefObject<HTMLButtonElement | null>;
 }
 
 // Consumer-owned composition: FloatingSurface forwards its state and handlers to this trigger.
-const ScheduleTrigger = forwardRef<HTMLDivElement, ScheduleTriggerProps>(
+const TodayTrigger = forwardRef<HTMLDivElement, TodayTriggerProps>(
   ({ isMobile, todayAction, todayRef, ...triggerProps }, ref) => {
     const toggleRef = useRef<HTMLButtonElement>(null);
     const expanded =
@@ -31,7 +31,7 @@ const ScheduleTrigger = forwardRef<HTMLDivElement, ScheduleTriggerProps>(
       <div
         ref={ref}
         tabIndex={-1}
-        className={styles.scheduleControls}
+        className={styles.calendarControls}
         data-mobile={isMobile}
         onFocus={(event) => {
           // Return focus from the popover to the actual toggle within this compound reference.
@@ -66,10 +66,10 @@ const ScheduleTrigger = forwardRef<HTMLDivElement, ScheduleTriggerProps>(
   }
 );
 
-ScheduleTrigger.displayName = 'ScheduleTrigger';
+TodayTrigger.displayName = 'TodayTrigger';
 
-/** Story-only example of the schedule page owning its date and Today action. */
-export function ScheduleDatepickerExample({
+/** Story-only example of a consumer owning its date and Today action. */
+export function TodayDatepickerExample({
   defaultValue = formatDate(today()),
   min,
   max,
@@ -130,9 +130,7 @@ export function ScheduleDatepickerExample({
       min={min}
       max={max}
       footer={isMobile ? <div className={styles.todayFooter}>{todayAction}</div> : undefined}
-      trigger={
-        <ScheduleTrigger isMobile={isMobile} todayAction={todayAction} todayRef={todayRef} />
-      }
+      trigger={<TodayTrigger isMobile={isMobile} todayAction={todayAction} todayRef={todayRef} />}
     />
   );
 }

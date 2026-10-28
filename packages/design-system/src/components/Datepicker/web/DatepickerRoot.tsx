@@ -16,7 +16,7 @@ interface DatepickerRootProps extends DatepickerProps {
   footer?: ReactNode;
 }
 
-/** Internal composition shared by Datepicker and the schedule example. */
+/** Internal composition shared by Datepicker and the Today action example. */
 export function DatepickerRoot({
   value,
   defaultValue = null,

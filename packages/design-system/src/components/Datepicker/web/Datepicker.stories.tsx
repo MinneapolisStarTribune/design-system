@@ -4,7 +4,7 @@ import { UtilityButton } from '@/components/Button/web/UtilityButton';
 import { UtilityLabel } from '@/components/Typography/Utility';
 import { CalendarIcon } from '@/icons';
 import { Datepicker } from './Datepicker';
-import { ScheduleDatepickerExample } from './Datepicker.examples';
+import { TodayDatepickerExample } from './Datepicker.examples';
 import styles from './Datepicker.module.scss';
 
 const TRIGGERS = {
@@ -86,9 +86,9 @@ export const AllVariants: Story = {
       </section>
       <section className={`${styles.example} ${styles.popoverExample}`}>
         <UtilityLabel size="large" weight="semibold">
-          Schedule calendar and Today
+          Calendar with Today action
         </UtilityLabel>
-        <ScheduleDatepickerExample />
+        <TodayDatepickerExample />
       </section>
     </div>
   ),

@@ -60,6 +60,9 @@ Scoped exception: VAR-1334 adds the standalone web `Datepicker` calendar. VAR-13
 its `FormControl` input wrapper and TanStack Form adapter, so that adapter is deliberately deferred
 to VAR-1335. Keep this exception documented when reviewing the calendar PR.
 
+Datepicker date props and `onChange` use plain `string` types; validate `YYYY-MM-DD` dates at
+runtime rather than requiring consumers to cast formatted strings to a template-literal type.
+
 ---
 
 ## File Naming Conventions

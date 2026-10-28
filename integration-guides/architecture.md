@@ -92,7 +92,8 @@ Only the `dist/` tree is published (`files: ["dist"]` in the package). Integrati
 
 `Datepicker` is exported only from `/web`. Its inline calendar and popover share a private calendar
 body; the popover reuses the internal floating-surface positioning and focus layer. Date-only
-arithmetic has no additional package dependency. The FormControl wrapper and TanStack adapter
+arithmetic has no additional package dependency. Its public date values use `string`, with
+`YYYY-MM-DD` validation handled at runtime. The FormControl wrapper and TanStack adapter
 are deliberately deferred to VAR-1335.
 
 ### React Native

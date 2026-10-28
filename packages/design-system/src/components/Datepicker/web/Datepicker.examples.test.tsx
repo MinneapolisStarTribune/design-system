@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockViewport } from '@/test-utils/viewport';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
-import { ScheduleDatepickerExample } from './Datepicker.examples';
+import { TodayDatepickerExample } from './Datepicker.examples';
 
 const wrapper = TestWrapperInDesignSystemProvider();
 let viewport: ReturnType<typeof mockViewport>;
@@ -21,10 +21,10 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe('Schedule Datepicker example', () => {
+describe('Datepicker with Today action', () => {
   it('shows Today only while open, including after choosing another date', async () => {
     const user = userEvent.setup();
-    render(<ScheduleDatepickerExample />, { wrapper });
+    render(<TodayDatepickerExample />, { wrapper });
     expect(openButton()).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(todayButton()).not.toBeInTheDocument();
@@ -48,7 +48,7 @@ describe('Schedule Datepicker example', () => {
     async (defaultValue) => {
       const user = userEvent.setup();
       const onChange = vi.fn();
-      render(<ScheduleDatepickerExample defaultValue={defaultValue} onChange={onChange} />, {
+      render(<TodayDatepickerExample defaultValue={defaultValue} onChange={onChange} />, {
         wrapper,
       });
       expect(todayButton()).not.toBeInTheDocument();
@@ -66,7 +66,7 @@ describe('Schedule Datepicker example', () => {
 
   it('returns to the current month when today is already selected', async () => {
     const user = userEvent.setup();
-    render(<ScheduleDatepickerExample />, { wrapper });
+    render(<TodayDatepickerExample />, { wrapper });
     await user.click(openButton());
     await user.click(screen.getByRole('button', { name: 'Next month' }));
     expect(screen.getByRole('grid')).toHaveAccessibleName('Choose a date April 2026');
@@ -81,7 +81,7 @@ describe('Schedule Datepicker example', () => {
   it('keeps the calendar open when focusing and activating Today with the keyboard', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<ScheduleDatepickerExample defaultValue="2026-03-14" onChange={onChange} />, {
+    render(<TodayDatepickerExample defaultValue="2026-03-14" onChange={onChange} />, {
       wrapper,
     });
     await user.tab();
@@ -105,7 +105,7 @@ describe('Schedule Datepicker example', () => {
     const user = userEvent.setup();
     render(
       <>
-        <ScheduleDatepickerExample defaultValue={currentDate} />
+        <TodayDatepickerExample defaultValue={currentDate} />
         <button type="button">After calendar</button>
       </>,
       { wrapper }
@@ -128,7 +128,7 @@ describe('Schedule Datepicker example', () => {
   ] as const)('disables Today outside the allowed dates: %j', async (bounds) => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<ScheduleDatepickerExample {...bounds} onChange={onChange} />, { wrapper });
+    render(<TodayDatepickerExample {...bounds} onChange={onChange} />, { wrapper });
 
     expect(todayButton()).not.toBeInTheDocument();
     await user.tab();
@@ -139,13 +139,13 @@ describe('Schedule Datepicker example', () => {
   });
 });
 
-describe('Mobile schedule Datepicker', () => {
+describe('Mobile Datepicker with Today action', () => {
   beforeEach(() => viewport.resize(375));
 
   it('places one Today action inside the calendar and keeps it open on activation', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<ScheduleDatepickerExample defaultValue="2026-02-14" onChange={onChange} />, {
+    render(<TodayDatepickerExample defaultValue="2026-02-14" onChange={onChange} />, {
       wrapper,
     });
     const initialIcon = openButton().querySelector('svg')?.innerHTML;
@@ -171,7 +171,7 @@ describe('Mobile schedule Datepicker', () => {
 
   it('supports the footer action with the keyboard and restores focus on Escape', async () => {
     const user = userEvent.setup();
-    render(<ScheduleDatepickerExample />, { wrapper });
+    render(<TodayDatepickerExample />, { wrapper });
     await user.click(openButton());
     await user.tab();
     expect(todayButton()).toHaveFocus();
@@ -185,7 +185,7 @@ describe('Mobile schedule Datepicker', () => {
 
   it('moves Today across the breakpoint without resetting the selected date or closing', async () => {
     const user = userEvent.setup();
-    render(<ScheduleDatepickerExample defaultValue="2026-03-14" />, { wrapper });
+    render(<TodayDatepickerExample defaultValue="2026-03-14" />, { wrapper });
     await user.click(openButton());
     act(() => todayButton()?.focus());
     viewport.resize(768);
@@ -203,7 +203,7 @@ describe('Mobile schedule Datepicker', () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <ScheduleDatepickerExample min="2026-03-12" defaultValue="2026-03-14" onChange={onChange} />,
+      <TodayDatepickerExample min="2026-03-12" defaultValue="2026-03-14" onChange={onChange} />,
       { wrapper }
     );
     await user.click(openButton());

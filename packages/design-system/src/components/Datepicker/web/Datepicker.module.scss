@@ -142,7 +142,7 @@
   background: var(--color-background-light-gray-01);
 }
 
-.scheduleControls {
+.calendarControls {
   display: inline-flex;
   flex-shrink: 0;
   border-radius: var(--radius-full);
@@ -197,7 +197,7 @@
   overflow: hidden;
 }
 
-.scheduleControls .todayButton {
+.calendarControls .todayButton {
   white-space: nowrap;
 
   &:focus-visible {
@@ -218,11 +218,11 @@
     }
   }
 
-  .scheduleControls:not([data-mobile='true']) [aria-expanded='true'] > svg {
+  .calendarControls:not([data-mobile='true']) [aria-expanded='true'] > svg {
     animation: revealCalendarArrow 180ms ease-out;
   }
 
-  .scheduleControls:not([data-mobile='true']) [aria-expanded='false'] > svg {
+  .calendarControls:not([data-mobile='true']) [aria-expanded='false'] > svg {
     animation: revealCalendarIcon 180ms ease-out;
   }
 }

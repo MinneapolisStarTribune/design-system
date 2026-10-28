@@ -67,10 +67,10 @@ describe('Datepicker', () => {
     const change = vi.fn();
     render(
       <>
-        <span id="hint">Schedule</span>
+        <span id="hint">Event</span>
         <Datepicker
           value="2026-03-10"
-          label="Choose game date"
+          label="Choose event date"
           onChange={change}
           trigger={
             <button
@@ -89,11 +89,11 @@ describe('Datepicker', () => {
     );
     const trigger = screen.getByRole('button', { name: 'March 10, 2026' });
     expect(ref.current).toBe(trigger);
-    expect(trigger).toHaveAccessibleDescription('Schedule Choose game date');
+    expect(trigger).toHaveAccessibleDescription('Event Choose event date');
     await user.click(trigger);
     expect(click).toHaveBeenCalledTimes(1);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('dialog', { name: 'Choose game date' })).toHaveAttribute(
+    expect(screen.getByRole('dialog', { name: 'Choose event date' })).toHaveAttribute(
       'id',
       trigger.getAttribute('aria-controls')
     );
@@ -364,7 +364,7 @@ describe('Datepicker', () => {
   it('keeps a nested calendar inside its dialog and dismisses only the calendar on Escape', async () => {
     const onClose = vi.fn();
     render(
-      <Dialog.Root open onClose={onClose} aria-label="Edit game">
+      <Dialog.Root open onClose={onClose} aria-label="Edit event">
         <Dialog.Content>
           <Datepicker value="2026-03-10" trigger={<button type="button">Open calendar</button>} />
         </Dialog.Content>
@@ -375,7 +375,7 @@ describe('Datepicker', () => {
     await user.click(screen.getByRole('button', { name: 'Open calendar' }));
     expect(
       screen
-        .getByRole('dialog', { name: 'Edit game' })
+        .getByRole('dialog', { name: 'Edit event' })
         .contains(screen.getByRole('dialog', { name: 'Choose a date' }))
     ).toBe(true);
     await user.keyboard('{Escape}');
