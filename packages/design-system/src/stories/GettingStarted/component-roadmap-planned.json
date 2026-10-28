@@ -9,6 +9,7 @@
   { "category": "Forms", "name": "FormGroup.Caption", "platform": ["web", "native"] },
   { "category": "Forms", "name": "FormGroup.Description", "platform": ["web", "native"] },
   { "category": "Forms", "name": "Form", "platform": ["web", "native"] },
+  { "category": "Forms", "name": "Datepicker", "platform": ["web"] },
   { "category": "Forms", "name": "Checkbox", "platform": ["web", "native"] },
   { "category": "Forms", "name": "CheckboxGroup", "platform": ["web", "native"] },
   { "category": "Forms", "name": "Radio", "platform": ["web", "native"] },

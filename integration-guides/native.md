@@ -53,6 +53,10 @@ function App() {
 
 Components use design tokens internally - you don't need to import tokens directly. The library handles all token consumption based on the brand and color scheme provided by `DesignSystemProvider`.
 
+`Datepicker` and its string-based date props are currently web-only (including mobile browsers)
+and are not exported from `/native`.
+VAR-1334 does not introduce a React Native date picker or a native date-picker dependency.
+
 ## Hooks and Helpers
 
 ### `useNativeStyles`

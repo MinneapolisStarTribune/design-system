@@ -61,6 +61,44 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
+## Datepicker
+
+`Datepicker` renders inline without `trigger`, or opens a nonmodal calendar popover from a
+focusable trigger. Date props and `onChange` use plain `string` values in zero-padded `YYYY-MM-DD`
+format rather than timestamps. Both bounds are inclusive. `value={null}` is controlled; omit
+`value` to use `defaultValue` and internal state.
+
+```tsx
+import { useState } from 'react';
+import { Datepicker, UtilityButton } from '@minneapolisstartribune/design-system/web';
+
+function EventDate() {
+  const [date, setDate] = useState<string | null>(null);
+  return (
+    <Datepicker
+      value={date}
+      onChange={setDate}
+      label="Choose event date"
+      min="2026-03-01"
+      max="2026-06-30"
+      trigger={<UtilityButton label={date ?? 'Choose date'} />}
+    />
+  );
+}
+```
+
+The trigger must forward its ref, handlers, and ARIA props to a focusable element. Its accessible
+name stays intact; `label` is appended to its description. Selection or Escape returns focus to
+the trigger. Tabbing or clicking outside dismisses without stealing focus from the destination.
+Portals automatically respect the surrounding dialog and theme scope.
+
+Malformed dates are treated as empty and malformed bounds as absent. Inverted bounds disable all
+dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
+Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
+
+The consumer owns its Today action. The text input wrapper and TanStack Form adapter are
+deliberately deferred to VAR-1335; this calendar does not add them to `FormControl`.
+
 ## Coachmark
 
 `Coachmark` is a dismissible, pointed callout for an unprompted, single action (e.g. a CMS-driven prompt to create an account or favorite something) — anchored to `children`, always externally controlled via `open`/`onOpenChange` (it never opens itself on hover, focus, or click, unlike `Tooltip`).
