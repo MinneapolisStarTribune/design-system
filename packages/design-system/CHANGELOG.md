@@ -1,5 +1,15 @@
 # @minneapolisstartribune/design-system
 
+## 4.2.0
+
+### Minor Changes
+
+- [#474](https://github.com/MinneapolisStarTribune/design-system/pull/474) [`7e6746b`](https://github.com/MinneapolisStarTribune/design-system/commit/7e6746bfc08bda7d61b9b774112b2ec0e8fad9a7) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add as prop to SectionHeading web so semantic heading tag can differ from importance-based visual style.
+
+- [#476](https://github.com/MinneapolisStarTribune/design-system/pull/476) [`998b73a`](https://github.com/MinneapolisStarTribune/design-system/commit/998b73aaedfe2021de1694388d6fbeeaf5ab7edb) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Datepicker with inline and custom-trigger popover modes, controlled or uncontrolled date selection, inclusive date limits, and keyboard/focus support.
+
+  Document a consumer-owned Today/calendar trigger composition and expose the native button event props that UtilityButton already forwards.
+
 ## 4.1.0
 
 ### Minor Changes

@@ -1,5 +1,9 @@
 [
   {
+    "version": "v4.2.0",
+    "url": "https://design-system-isefh0ci4-startribune-team-one.vercel.app"
+  },
+  {
     "version": "v4.1.0",
     "url": "https://design-system-i4sot41e9-startribune-team-one.vercel.app"
   },
@@ -30,6 +34,10 @@
   {
     "version": "v2.2.0",
     "url": "https://design-system-171h1zz10-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v2.0.0",
+    "url": "https://design-system-f4edy33q4-startribune-team-one.vercel.app"
   },
   {
     "version": "v1.14.0",
