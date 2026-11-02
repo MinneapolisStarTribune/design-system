@@ -1,7 +1,7 @@
 'use client';
 
-import { cloneElement, useId, useRef, useState } from 'react';
-import type { ReactElement, ReactNode } from 'react';
+import { cloneElement, useEffect, useId, useRef, useState } from 'react';
+import type { ReactElement, ReactNode, RefObject } from 'react';
 import { useInteractions } from '@floating-ui/react';
 import { FloatingSurface, useFloatingSurface } from '@/components/FloatingSurface/FloatingSurface';
 import { useBrandValidation } from '@/hooks/useBrandValidation';
@@ -11,6 +11,7 @@ import { Calendar } from './Calendar';
 import styles from './Datepicker.module.scss';
 
 interface DatepickerRootProps extends DatepickerProps {
+  fieldAnchor?: RefObject<HTMLDivElement | null>;
   calendarKey?: number;
   arrowStaticOffset?: number;
   footer?: ReactNode;
@@ -25,6 +26,7 @@ export function DatepickerRoot({
   min,
   max,
   trigger,
+  fieldAnchor,
   calendarKey,
   arrowStaticOffset,
   footer,
@@ -34,7 +36,19 @@ export function DatepickerRoot({
   const [open, setOpen] = useState(false);
   const descriptionId = useId();
   const initialFocus = useRef<HTMLElement | null>(null);
-  const surface = useFloatingSurface({ open, onOpenChange: setOpen, placement: 'bottom-end' });
+  const surface = useFloatingSurface({
+    open,
+    onOpenChange: setOpen,
+    placement: fieldAnchor ? 'bottom-start' : 'bottom-end',
+    hideArrow: !!fieldAnchor,
+    matchAnchorWidth: !!fieldAnchor,
+  });
+  // Keep keyboard focus on the trigger while positioning the panel against the entire field.
+  const { setPositionReference } = surface.context.refs;
+  useEffect(() => {
+    if (fieldAnchor) setPositionReference(fieldAnchor.current);
+  }, [fieldAnchor, setPositionReference]);
+
   const interactions = useInteractions(surface.interactions);
   const selected = parseDate(value !== undefined ? value : uncontrolledValue);
 
@@ -77,7 +91,7 @@ export function DatepickerRoot({
         trigger={describedTrigger}
         initialFocus={initialFocus}
         arrowStaticOffset={arrowStaticOffset}
-        className={styles.popover}
+        className={fieldAnchor ? `${styles.popover} ${styles.fieldPopover}` : styles.popover}
         containerClassName={styles.popoverContainer}
         aria-label={label}
       >

@@ -258,3 +258,12 @@
     width: 100%;
   }
 }
+
+.fieldPopover {
+  box-sizing: border-box;
+  max-width: var(--floating-available-width);
+
+  .calendar {
+    width: 100%;
+  }
+}

@@ -8,23 +8,24 @@
 yarn add @minneapolisstartribune/design-system-tanstack-form @tanstack/react-form
 ```
 
-Peer deps: `@minneapolisstartribune/design-system` (web) ^4.1.0, `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
+Peer deps: `@minneapolisstartribune/design-system` (web) ^4.3.0, `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
 
 ## Adapters
 
-| Adapter              | Wraps                            | Field value                          |
-| -------------------- | -------------------------------- | ------------------------------------ |
-| `TextField`          | `FormGroup` + `TextInput`        | `string`                             |
-| `TextAreaField`      | `FormGroup` + `TextArea`         | `string`                             |
-| `PasswordField`      | `FormGroup` + `PasswordInput`    | `string`                             |
-| `NumberField`        | `FormGroup` + `NumberInput`      | `number \| undefined`                |
-| `SelectField`        | `FormGroup` + `Select`           | `string` (`null`/`undefined` = none) |
-| `MultiSelectField`   | `FormGroup` + `MultiSelect`      | `string[]`                           |
-| `RadioGroupField`    | `FormGroup` + `RadioGroup`       | `string` (`null`/`undefined` = none) |
-| `CheckboxField`      | `FormGroup` + `Checkbox`         | `boolean`                            |
-| `CheckboxGroupField` | `FormGroup` + `CheckboxGroup`    | `string[]`                           |
-| `SwitchField`        | `FormGroup` + `Switch`           | `boolean`                            |
-| `ToggleGroupField`   | `FormGroup` + `ToggleGroup.Root` | `string` or `string[]` (`multiple`)  |
+| Adapter              | Wraps                                 | Field value                          |
+| -------------------- | ------------------------------------- | ------------------------------------ |
+| `DateField`          | `FormGroup` + `FormControlDatepicker` | `string` (accepts `null` for empty)  |
+| `TextField`          | `FormGroup` + `TextInput`             | `string`                             |
+| `TextAreaField`      | `FormGroup` + `TextArea`              | `string`                             |
+| `PasswordField`      | `FormGroup` + `PasswordInput`         | `string`                             |
+| `NumberField`        | `FormGroup` + `NumberInput`           | `number \| undefined`                |
+| `SelectField`        | `FormGroup` + `Select`                | `string` (`null`/`undefined` = none) |
+| `MultiSelectField`   | `FormGroup` + `MultiSelect`           | `string[]`                           |
+| `RadioGroupField`    | `FormGroup` + `RadioGroup`            | `string` (`null`/`undefined` = none) |
+| `CheckboxField`      | `FormGroup` + `Checkbox`              | `boolean`                            |
+| `CheckboxGroupField` | `FormGroup` + `CheckboxGroup`         | `string[]`                           |
+| `SwitchField`        | `FormGroup` + `Switch`                | `boolean`                            |
+| `ToggleGroupField`   | `FormGroup` + `ToggleGroup.Root`      | `string` or `string[]` (`multiple`)  |
 
 ## Usage
 
@@ -204,3 +205,27 @@ A few differ:
 Every adapter shows the first entry of `field.state.meta.errors` as an error caption (`role="alert"`) and puts the control in its error state where it has one. Errors stay hidden until the field has been blurred or the form has been submitted. For controls without an `onBlur` (selects, checkboxes, radios, switches, toggle groups), the field counts as blurred when focus leaves the whole control, so moving between options doesn't. Validators can live on the form (a zod schema, issues map to fields by path) or on `form.Field`.
 
 A field-level `onChange` validator only runs when the value changes, so to flag an untouched required select or checkbox on blur, also pass it as `onBlur` (the zod examples pass the schema to both).
+
+### DateField
+
+`DateField` binds `FormControlDatepicker` to a string or nullable-string field. Valid dates use
+`YYYY-MM-DD`; clearing emits `''`; incomplete or invalid typed text remains in form state.
+It shares the existing adapters' label, caption, blur/submit error timing, and reset behavior.
+
+```tsx
+import { DateField } from '@minneapolisstartribune/design-system-tanstack-form';
+import { validateDateInput } from '@minneapolisstartribune/design-system/web';
+
+const limits = { required: true, min: '2026-04-01', max: '2026-06-30' };
+
+<form.Field
+  name="gameDate"
+  validators={{ onChange: ({ value }) => validateDateInput(value, limits) }}
+>
+  {(field) => <DateField field={field} label="Game date" {...limits} />}
+</form.Field>;
+```
+
+Use the same limits in the validator and control. Native input validity alone cannot protect
+programmatic `form.handleSubmit()` or a form using `noValidate`. The validator returns a message
+for required, invalid, or out-of-range values, and `undefined` when valid.

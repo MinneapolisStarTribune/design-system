@@ -88,3 +88,6 @@ jobs:
 
       - name: Run tanstack-form tests
         run: yarn turbo run test --filter=@minneapolisstartribune/design-system-tanstack-form
+
+      - name: Verify unused form controls exclude calendar code
+        run: yarn workspace @minneapolisstartribune/design-system check:formcontrol-tree-shaking
