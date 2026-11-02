@@ -446,6 +446,7 @@ describe('Menu', () => {
     try {
       window.dispatchEvent(new Event('resize'));
       await waitFor(() => expect(onClose).toHaveBeenCalled());
+      await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument());
     } finally {
       // @ts-expect-error Restores the jsdom default.
       delete Element.prototype.checkVisibility;
