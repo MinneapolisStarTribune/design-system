@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 4.2.1
+
+### Patch Changes
+
+- [#475](https://github.com/MinneapolisStarTribune/design-system/pull/475) [`9c674be`](https://github.com/MinneapolisStarTribune/design-system/commit/9c674beb505cc83ee2aa820111e0bdd9685c52dd) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Close Select, Menu, and Popover when their trigger stops rendering, such as when a responsive layout hides it. Before, the open list stayed in the top left corner of the page with no width.
+
 ## 4.2.0
 
 ### Minor Changes
