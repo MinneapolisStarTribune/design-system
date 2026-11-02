@@ -269,6 +269,48 @@ describe('ImageGallery (native)', () => {
     expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
   });
 
+  it('fires onIndexChange with the 1-based logical index after a momentum scroll', () => {
+    const onIndexChange = jest.fn();
+    const { UNSAFE_getByType } = render(
+      <ImageGallery images={images} onIndexChange={onIndexChange} />,
+      { wrapper }
+    );
+    const scrollView = UNSAFE_getByType(ScrollView);
+
+    fireEvent(scrollView, 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+
+    expect(onIndexChange).toHaveBeenCalledWith(2);
+  });
+
+  it('accepts an initialIndex prop without error', () => {
+    const { getByTestId } = render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+
+    expect(getByTestId('image-gallery')).toBeTruthy();
+  });
+
+  it('initializes the active slide from initialIndex', () => {
+    render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
+  it('repositions the carousel in standard mode when the container width changes', () => {
+    const { UNSAFE_getByType } = render(<ImageGallery images={images} />, { wrapper });
+
+    fireEvent(UNSAFE_getByType(ScrollView), 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    fireEvent(screen.getByTestId('image-gallery'), 'layout', {
+      nativeEvent: { layout: { width: 812, height: 375 } },
+    });
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
   it('goes back to the previous image from the lightbox', () => {
     render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
 

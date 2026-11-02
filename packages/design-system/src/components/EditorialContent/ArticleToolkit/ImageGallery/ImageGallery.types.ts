@@ -26,6 +26,8 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   spaceBetween?: number;
   /** Called with 1-based active slide index on mount and whenever the active slide changes. */
   onIndexChange?: (index: number) => void;
+  /** 0-based index to scroll to on mount. */
+  initialIndex?: number;
   variant?: Variant;
   loop?: boolean;
   ImageComponent?: React.ComponentType<TImageProps>;

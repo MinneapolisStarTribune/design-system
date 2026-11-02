@@ -265,6 +265,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   wrapperStyle,
   captionStyle,
   dataTestId = 'image-gallery',
+  initialIndex,
+  onIndexChange,
   'aria-label': ariaLabel,
 }) => {
   const designSystemContext = useContext(DesignSystemContext);
@@ -294,7 +296,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const loopedImages = hasLoop ? [images[total - 1], ...images, images[0]] : images;
 
-  const [index, setIndex] = useState(hasLoop ? 1 : 0);
+  const [index, setIndex] = useState(hasLoop ? (initialIndex ?? 0) + 1 : (initialIndex ?? 0));
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   const Img: React.ComponentType<NativeImageProps> = ImageComponent ?? DSImage;
@@ -318,8 +320,6 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   }, [isImmersive, interval, hasLoop]);
 
   useEffect(() => {
-    if (!isImmersive) return;
-
     scrollRef.current?.scrollTo({
       x: index * interval,
       animated: false,
@@ -345,6 +345,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
       setIndex(nextIndex);
 
+      onIndexChange?.(logicalIndex + 1);
+
       if (expandedIndex !== null && logicalIndex !== expandedIndex) {
         setExpandedIndex(null);
       }
@@ -353,7 +355,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         AccessibilityInfo.announceForAccessibility(`Image ${logicalIndex + 1} of ${total}`);
       }
     },
-    [expandedIndex, interval, total, hasLoop]
+    [expandedIndex, interval, total, hasLoop, onIndexChange]
   );
 
   const scrollTo = (i: number) => {
