@@ -123,7 +123,7 @@ export function FormControlDatepicker({
           icon={
             <CalendarIcon
               size={size === 'small' ? 'x-small' : 'small'}
-              style={{ color: 'currentColor' }}
+              className={styles.fieldIcon}
               aria-hidden
             />
           }
@@ -167,13 +167,12 @@ export function FormControlDatepicker({
               type="button"
               className={styles.trigger}
               disabled={calendarDisabled}
-              style={calendarDisabled ? { cursor: 'not-allowed' } : undefined}
               aria-label={calendarLabel}
               aria-describedby={props['aria-labelledby'] ?? group?.labelId}
             >
               <ChevronDownIcon
                 size={size === 'small' ? 'x-small' : 'small'}
-                style={{ color: 'currentColor' }}
+                className={styles.fieldIcon}
                 aria-hidden
               />
             </button>

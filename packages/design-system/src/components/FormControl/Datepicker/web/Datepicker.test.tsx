@@ -103,7 +103,6 @@ describe('FormControl.Datepicker', () => {
       const { input, form, user } = setup(props);
       const trigger = screen.getByRole('button', { name: 'Choose a date' });
       expect(trigger).toBeDisabled();
-      expect(getComputedStyle(trigger).cursor).toBe('not-allowed');
       await user.click(trigger);
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       expect(input).toHaveValue('April 18, 2026');

@@ -122,7 +122,8 @@ A dismissible, externally-controlled callout for an unprompted single action. Se
 strings, inclusive `min`/`max` bounds, and keyboard navigation. Date props accept plain `string`
 values without type assertions. Import it and `DatepickerProps`
 from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
-The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
+For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDatepicker`) and
+`validateDateInput` from `/web`. For TanStack Form, use [`DateField`](packages/tanstack-form/README.md#datefield) from the adapter package.
 
 ## TypeScript Support
 

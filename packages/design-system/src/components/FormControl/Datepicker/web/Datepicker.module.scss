@@ -33,6 +33,11 @@
 }
 // UtilityButton offers 32px and 40px icon buttons. Like PasswordInput, this inset
 // action also needs 24px and 28px targets for the small and medium fields.
+// Icon sets its default color inline; both glyphs should inherit their own container's color.
+.fieldIcon {
+  color: inherit !important;
+}
+
 .trigger {
   position: absolute;
   top: 50%;
@@ -57,6 +62,8 @@
   }
   &:disabled {
     color: var(--date-icon-disabled);
+    // FloatingSurface sets the trigger cursor inline.
+    cursor: not-allowed !important;
   }
 }
 .error {

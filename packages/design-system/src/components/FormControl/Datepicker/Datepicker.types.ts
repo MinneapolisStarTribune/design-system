@@ -1,5 +1,11 @@
 import type { TextInputProps } from '../TextInput/web/TextInput';
 
+export const DATEPICKER_SIZES = [
+  'small',
+  'medium',
+  'large',
+] as const satisfies readonly NonNullable<TextInputProps['size']>[];
+
 export interface DateInputLimits {
   /** Earliest selectable date, inclusive (YYYY-MM-DD). */
   min?: string;
