@@ -20,6 +20,16 @@
     "web": true
   },
   {
+    "component": "ToggleGroup",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Menu",
+    "native": false,
+    "web": true
+  },
+  {
     "component": "FormGroup.Label",
     "native": true,
     "web": true
@@ -36,6 +46,11 @@
   },
   {
     "component": "Form",
+    "native": false,
+    "web": true
+  },
+  {
+    "component": "Datepicker",
     "native": false,
     "web": true
   },
@@ -62,6 +77,11 @@
   {
     "component": "TextInput",
     "native": true,
+    "web": true
+  },
+  {
+    "component": "TextArea",
+    "native": false,
     "web": true
   },
   {
@@ -140,9 +160,14 @@
     "web": false
   },
   {
-    "component": "Modal",
+    "component": "Dialog",
     "native": false,
-    "web": false
+    "web": true
+  },
+  {
+    "component": "Drawer",
+    "native": false,
+    "web": true
   },
   {
     "component": "SwiperCarousel",

@@ -107,7 +107,7 @@ The version dropdown in the Storybook toolbar is built from production deploymen
 
 **The version PR merged, but nothing was published and no tag exists.** Release runs queue in order (`queue: max` in `release.yml`), so this should only happen if the run was canceled by hand or never started. If nothing package-changing has landed on `main` since, a dispatch re-run publishes it. If newer changesets have already landed, a dispatch run just updates the version PR instead, so either let the next release absorb it (the skipped version never exists on the registry; its changes ship with the next version), or publish it by hand from the version PR's merge commit: check it out, run `yarn install && yarn release`, then `git push --tags`, then create the GitHub Release as described above.
 
-**The Slack post failed or never arrived.** Re-run the failed `release-notify.yml` run from the Actions tab. It only posts to Slack, so re-running it never touches the registry or the tags.
+**The Slack post failed or never arrived.** Dispatch `release-notify.yml` from the Actions tab with the release tag (`@minneapolisstartribune/design-system@X.Y.Z`). Don't re-run the failed run: re-runs use that run's workflow file, so a fix to the workflow wouldn't be picked up. It only posts to Slack, so dispatching it never touches the registry or the tags.
 
 **The Storybook production deploy failed, or a version is missing from the dropdown.** Dispatch `storybook-versioned-deploy.yml` with the release tag (either format works: `@minneapolisstartribune/design-system@X.Y.Z` or `vX.Y.Z`). The dropdown updates on the next `sync-versions-from-vercel.yml` run, which fires automatically after the deploy; dispatch it if you don't want to wait.
 

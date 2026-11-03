@@ -1,0 +1,337 @@
+.overlay {
+  /* Keep in sync with ENTER_DURATION / EXIT_DURATION in ModalRoot.tsx. */
+  --modal-enter-duration: 250ms;
+  --modal-exit-duration: 200ms;
+  --modal-slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --modal-close-size: 32px;
+
+  z-index: 1000;
+  display: flex;
+  align-items: var(--modal-align);
+  justify-content: var(--modal-justify);
+  background: var(--color-overlay-black);
+  opacity: 0;
+  transition: opacity var(--modal-enter-duration) ease;
+
+  &[data-status='open'] {
+    opacity: 1;
+  }
+
+  &[data-status='close'] {
+    opacity: 0;
+    transition-duration: var(--modal-exit-duration);
+    pointer-events: none;
+  }
+}
+
+/*
+ * Shared by Drawer and Dialog. The position class is resolved in JS (from Drawer's responsive
+ * `position` prop, or Dialog's bottom-sheet-to-center switch) and sets the panel variables below.
+ */
+.position-left,
+.position-right {
+  --modal-align: stretch;
+  --modal-panel-width: 408px;
+  --modal-panel-max-width: 100%;
+  --modal-panel-height: 100%;
+  --modal-panel-max-height: none;
+  --modal-panel-radius: 0;
+  --modal-panel-shadow: 0 32px 64px -12px rgba(10, 10, 10, 0.18);
+}
+
+.position-left {
+  --modal-justify: flex-start;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 1px;
+  --modal-panel-hidden-transform: translateX(-100%);
+}
+
+.position-right {
+  --modal-justify: flex-end;
+  --modal-panel-border-left: 1px;
+  --modal-panel-border-right: 0;
+  --modal-panel-hidden-transform: translateX(100%);
+}
+
+.position-top,
+.position-bottom {
+  --modal-justify: stretch;
+  --modal-panel-width: 100%;
+  --modal-panel-max-width: none;
+  --modal-panel-height: auto;
+  /* Leave a strip of page visible beyond a tall sheet */
+  --modal-panel-max-height: calc(100% - var(--spacing-20));
+  --modal-panel-shadow: none;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 0;
+}
+
+.position-top {
+  --modal-align: flex-start;
+  --modal-panel-hidden-transform: translateY(-100%);
+  --modal-panel-radius: 0 0 var(--radius-24) var(--radius-24);
+}
+
+.position-bottom {
+  --modal-align: flex-end;
+  --modal-panel-hidden-transform: translateY(100%);
+  --modal-panel-radius: var(--radius-24) var(--radius-24) 0 0;
+}
+
+/* A dialog centered in the viewport, with a strip of page visible on every side. */
+.position-center {
+  --modal-align: center;
+  --modal-justify: center;
+  --modal-panel-width: 560px;
+  --modal-panel-max-width: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-height: auto;
+  --modal-panel-max-height: calc(100% - 2 * var(--spacing-8));
+  --modal-panel-radius: var(--radius-24);
+  --modal-panel-shadow: none;
+  --modal-panel-border-left: 0;
+  --modal-panel-border-right: 0;
+  --modal-panel-hidden-transform: translateY(var(--spacing-16)) scale(0.98);
+}
+
+/* Rounded corners are a phone sheet treatment; from 768px up every placement is square. */
+@media (width >= 768px) {
+  .position-top,
+  .position-bottom {
+    --modal-panel-max-height: calc(100% - var(--spacing-24));
+    --modal-panel-radius: 0;
+  }
+}
+
+.panel {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: var(--modal-panel-width);
+  max-width: var(--modal-panel-max-width);
+  height: var(--modal-panel-height);
+  max-height: var(--modal-panel-max-height);
+  overflow: hidden;
+  border: 0 solid var(--color-border-on-light-subtle-01);
+  border-left-width: var(--modal-panel-border-left);
+  border-right-width: var(--modal-panel-border-right);
+  border-radius: var(--modal-panel-radius);
+  box-shadow: var(--modal-panel-shadow);
+  background: var(--color-background-light-default);
+  color: var(--color-text-on-light-primary);
+  transform: var(--modal-panel-hidden-transform);
+  transition: transform var(--modal-enter-duration) var(--modal-slide-easing);
+
+  &[data-status='open'] {
+    transform: none;
+  }
+
+  &[data-status='close'] {
+    transition-duration: var(--modal-exit-duration);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  /* Shadows are dropped in forced colors. */
+  @media (forced-colors: active) {
+    outline: 1px solid transparent;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--spacing-20);
+  right: var(--spacing-12);
+  z-index: 1;
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
+  flex-shrink: 0;
+  border-radius: var(--radius-full) !important;
+
+  @media (width >= 768px) {
+    top: var(--spacing-24);
+    right: var(--spacing-24);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.panel .heading {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: calc(var(--modal-close-size) + 2 * var(--spacing-20));
+  margin: 0;
+  padding: var(--spacing-20) var(--spacing-16);
+  color: var(--color-text-on-light-primary);
+
+  @media (width >= 768px) {
+    min-height: calc(var(--modal-close-size) + 2 * var(--spacing-24));
+    padding: var(--spacing-24) var(--spacing-32);
+  }
+}
+
+/* Keep the title clear of the absolutely positioned close button. */
+.withCloseButton {
+  .heading {
+    padding-right: calc(var(--spacing-12) + var(--modal-close-size) + var(--spacing-12));
+
+    @media (width >= 768px) {
+      padding-right: calc(var(--spacing-24) + var(--modal-close-size) + var(--spacing-8));
+    }
+  }
+
+  /* Without a heading, push the first section below the close button. */
+  > :first-child:not(.heading) {
+    padding-top: calc(var(--spacing-20) + var(--modal-close-size) + var(--spacing-16));
+
+    @media (width >= 768px) {
+      padding-top: calc(var(--spacing-24) + var(--modal-close-size) + var(--spacing-16));
+    }
+  }
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* No bottom padding: the scroll fade supplies the trailing space. */
+  padding: var(--spacing-16) var(--spacing-16) 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+
+  @media (width >= 768px) {
+    padding: var(--spacing-16) var(--spacing-32) 0;
+  }
+
+  /* Scroll hints: top fade while content sits above, bottom fade while more sits below (needs scroll timelines). */
+  &::before,
+  &::after {
+    content: '';
+    position: sticky;
+    z-index: 1;
+    display: block;
+    height: var(--spacing-40);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &::before {
+    /* Sticky offsets are inset by the scroller's padding; cancel the top padding to pin to the edge. */
+    top: calc(-1 * var(--spacing-16));
+    /*
+     * Sized only by its scroll animation, which runs only while the body overflows. A static
+     * 40px box would itself overflow content shorter than it and make the body scrollable.
+     */
+    height: 0;
+    background: linear-gradient(to top, transparent, var(--color-background-light-default));
+  }
+
+  &::after {
+    bottom: 0;
+    margin-top: calc(-1 * var(--spacing-24));
+    background: linear-gradient(to bottom, transparent, var(--color-background-light-default));
+  }
+
+  @supports (animation-timeline: scroll()) {
+    /* The `animation` shorthand resets `animation-timeline`, so set the timeline after it. */
+    &::before {
+      animation: body-scroll-fade-top linear both;
+      animation-timeline: scroll(nearest block);
+    }
+
+    &::after {
+      animation: body-scroll-fade-bottom linear both;
+      animation-timeline: scroll(nearest block);
+    }
+  }
+
+  /* WebKit scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: var(--radius-full);
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Negative margin overlays the first content instead of pushing it down. */
+@keyframes body-scroll-fade-top {
+  0% {
+    height: var(--spacing-40);
+    margin-bottom: calc(-1 * var(--spacing-40));
+    opacity: 0;
+  }
+
+  10%,
+  100% {
+    height: var(--spacing-40);
+    margin-bottom: calc(-1 * var(--spacing-40));
+    opacity: 1;
+  }
+}
+
+@keyframes body-scroll-fade-bottom {
+  0%,
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*
+ * Actions keep their label width and share the leftover space. Labels never wrap; when they
+ * can't sit side by side, the actions stack full width instead.
+ */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-16);
+  flex-shrink: 0;
+  padding: var(--spacing-20) var(--spacing-16);
+
+
+  @media (width >= 768px) {
+    padding: var(--spacing-24) var(--spacing-32);
+  }
+
+  > * {
+    flex: 1 1 auto;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel {
+    transition-duration: 1ms;
+  }
+
+  /* Placed after .panel's rules so it wins without !important. */
+  .panel {
+    transform: none;
+  }
+}

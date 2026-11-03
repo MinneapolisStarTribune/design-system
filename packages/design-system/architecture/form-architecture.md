@@ -16,7 +16,6 @@ Form (Optional - semantic <form>, layout, and onSubmit)
       ├── FormControl.TextInput (basic text input)
       ├── FormControl.CheckboxGroup (a group of checkboxes)
   └── Form.Button (Optional - type="submit", layout-aware)
-  └── useFormLogic (Optional - adds controlled state and validation)
 ```
 
 ## Component Responsibilities
@@ -25,13 +24,13 @@ Form (Optional - semantic <form>, layout, and onSubmit)
 
 **Location:** `src/components/Form/Form.tsx`
 
-`FormGroup` + `FormControl` work standalone in any container. `Form` adds the semantic form element and layout. `useFormLogic` adds controlled state and validation — or bring your own (React Hook Form, Formik, `useState`).
+`FormGroup` + `FormControl` work standalone in any container. `Form` adds the semantic form element and layout. For state and validation, use TanStack Form with the `@minneapolisstartribune/design-system-tanstack-form` adapters (see `packages/tanstack-form`), or bring your own.
 
 **What it does:**
 
 Controls layout via `orientation` prop (vertical by default, or horizontal for inline forms)
 
-Validation state lives in the **app** (or in `useFormLogic`). `Form` does not own it.
+Validation state lives in the **app**. `Form` does not own it.
 
 **Example Usage:**
 

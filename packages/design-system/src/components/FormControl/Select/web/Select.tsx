@@ -2,10 +2,15 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import { FloatingPortal, useDismiss, useInteractions, useMergeRefs } from '@floating-ui/react';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
+import { getScopedPortalRoot } from '@/components/FloatingSurface/getScopedPortalRoot';
+import { useAnchoredFloating } from '@/components/FloatingSurface/useAnchoredFloating';
 import styles from './Select.module.scss';
 import type { SelectOption, SelectProps } from '../Select.types';
 import { ChevronDownIcon } from '@/icons';
+
+const DROPDOWN_GAP = 8;
 
 export const Select: React.FC<SelectProps> = ({
   options,
@@ -25,10 +30,33 @@ export const Select: React.FC<SelectProps> = ({
 }) => {
   const safeOptions = React.useMemo(() => (Array.isArray(options) ? options : []), [options]);
 
-  const rootRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
   const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setIsOpen(nextOpen);
+    if (!nextOpen) setActiveIndex(-1);
+  };
+
+  // Portal the listbox so overflow on an ancestor, such as a scrollable table, cannot clip it.
+  const {
+    refs: { setReference, setFloating },
+    elements,
+    context,
+    floatingStyles,
+    isPositioned,
+  } = useAnchoredFloating<HTMLDivElement>({
+    open: isOpen,
+    onOpenChange: handleOpenChange,
+    placement: 'bottom-start',
+    gap: DROPDOWN_GAP,
+    matchAnchorWidth: true,
+  });
+  // Closes on a press outside both the combobox and the portaled listbox, and on Escape.
+  const { getReferenceProps, getFloatingProps } = useInteractions([useDismiss(context)]);
+  const mergedListboxRef = useMergeRefs([listboxRef, setFloating]);
 
   const formGroup = useFormGroupContext();
 
@@ -45,6 +73,8 @@ export const Select: React.FC<SelectProps> = ({
 
   const selectedOption = value ? safeOptions.find((o) => o.value === value) : undefined;
   const selectedIndex = safeOptions.findIndex((o) => o.value === value);
+  const firstOptionIndex = safeOptions.length > 0 ? 0 : -1;
+  const initialActiveIndex = selectedIndex >= 0 ? selectedIndex : firstOptionIndex;
 
   const isFilled = !!selectedOption;
   const displayLabel = isFilled ? selectedOption?.label : placeholderText;
@@ -57,53 +87,38 @@ export const Select: React.FC<SelectProps> = ({
     'typography-utility-text-regular-large': size === 'large',
   });
 
-  const optionTypographyClass = classNames({
-    'typography-utility-text-regular-small': size === 'small',
-    'typography-utility-text-regular-medium': size === 'medium',
-    'typography-utility-text-regular-large': size === 'large',
-  });
-
   const placeholderTypographyClass = classNames({
     'typography-utility-text-italic-small': size === 'small',
     'typography-utility-text-italic-medium': size === 'medium',
     'typography-utility-text-italic-large': size === 'large',
   });
 
+  // `scrollIntoView` also scrolls the page and any scrollable ancestor, so scroll only the list.
   useEffect(() => {
-    if (!isOpen) return;
+    const listbox = listboxRef.current;
+    const option = optionRefs.current[activeIndex];
+    if (!isOpen || !isPositioned || !listbox || !option) return;
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!rootRef.current) return;
-      if (!rootRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setActiveIndex(-1);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (activeIndex >= 0) {
-      const el = optionRefs.current[activeIndex];
-      if (el && typeof el.scrollIntoView === 'function') {
-        el.scrollIntoView({ block: 'nearest' });
-      }
+    const listTop = listbox.getBoundingClientRect().top + listbox.clientTop;
+    const optionRect = option.getBoundingClientRect();
+    if (optionRect.top < listTop) {
+      listbox.scrollTop += optionRect.top - listTop;
+    } else if (optionRect.bottom > listTop + listbox.clientHeight) {
+      listbox.scrollTop += optionRect.bottom - listTop - listbox.clientHeight;
     }
-  }, [activeIndex]);
+  }, [activeIndex, isOpen, isPositioned]);
 
   useEffect(() => {
     optionRefs.current = [];
   }, [safeOptions]);
 
-  const handleToggle = () => {
-    if (isDisabled) return;
+  const handleToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDisabled || elements.floating?.contains(e.target as Node)) return;
 
     setIsOpen((prev) => !prev);
 
     if (!isOpen) {
-      setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+      setActiveIndex(initialActiveIndex);
     }
   };
 
@@ -122,7 +137,7 @@ export const Select: React.FC<SelectProps> = ({
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
-          setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+          setActiveIndex(initialActiveIndex);
         } else {
           setActiveIndex((prev) => (prev < safeOptions.length - 1 ? prev + 1 : prev));
         }
@@ -132,25 +147,37 @@ export const Select: React.FC<SelectProps> = ({
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
-          setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+          setActiveIndex(initialActiveIndex);
         } else {
-          setActiveIndex((prev) => (prev > 0 ? prev - 1 : 0));
+          setActiveIndex((prev) => (prev > 0 ? prev - 1 : firstOptionIndex));
         }
         break;
 
       case 'Enter':
+      case ' ':
         e.preventDefault();
         if (!isOpen) {
           setIsOpen(true);
+          setActiveIndex(initialActiveIndex);
         } else if (activeIndex >= 0) {
           handleSelect(safeOptions[activeIndex]);
         }
         break;
 
-      case 'Escape':
+      // Follows the APG select-only combobox: commit the active option, close, and let focus move on.
+      case 'Tab':
+        if (isOpen) handleSelect(safeOptions[activeIndex]);
         setIsOpen(false);
         setActiveIndex(-1);
         break;
+    }
+  };
+
+  // Options are not focusable, so a click on one blurs with a null relatedTarget and must not close the list.
+  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (e.relatedTarget && !e.currentTarget.contains(e.relatedTarget)) {
+      setIsOpen(false);
+      setActiveIndex(-1);
     }
   };
 
@@ -162,14 +189,18 @@ export const Select: React.FC<SelectProps> = ({
       [styles.isDisabled]: isDisabled,
       [styles.isError]: hasError,
       [styles.isOpen]: isOpen,
-      [styles.isFilled]: isFilled,
     },
     className
   );
 
   return (
     <div
-      ref={rootRef}
+      {...getReferenceProps({
+        onClick: handleToggle,
+        onKeyDown: handleKeyDown,
+        onBlur: handleBlur,
+      })}
+      ref={setReference}
       id={inputId}
       role="combobox"
       aria-expanded={isOpen}
@@ -180,18 +211,13 @@ export const Select: React.FC<SelectProps> = ({
       aria-describedby={ariaDescribedBy}
       aria-activedescendant={activeIndex >= 0 ? `${inputId}-option-${activeIndex}` : undefined}
       aria-invalid={hasError || undefined}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
+      aria-disabled={isDisabled || undefined}
+      tabIndex={isDisabled ? -1 : 0}
       className={containerClasses}
       data-testid={dataTestId}
     >
-      <button
-        type="button"
-        aria-label={placeholderText}
-        className={classNames(styles.selectTrigger, triggerTypographyClass)}
-        onClick={handleToggle}
-        disabled={isDisabled}
-      >
+      {/* Not a button: a second focusable control makes screen readers announce the field twice. */}
+      <div className={classNames(styles.selectTrigger, triggerTypographyClass)}>
         <span
           className={classNames(
             styles.selectValue,
@@ -215,40 +241,49 @@ export const Select: React.FC<SelectProps> = ({
             color={isDisabled ? 'state-disabled-on-light' : 'on-light-primary'}
           />
         </span>
-      </button>
+      </div>
 
       {isOpen && (
-        <ul
-          id={listboxId}
-          role="listbox"
-          className={classNames(styles.selectDropdown, optionTypographyClass)}
-        >
-          {safeOptions.map((option, index) => {
-            const isSelected = option.value === value;
-            const isActive = index === activeIndex;
+        <FloatingPortal root={getScopedPortalRoot(elements.domReference)}>
+          <ul
+            {...getFloatingProps({
+              // Keep focus on the combobox, which is outside the portaled listbox in the DOM.
+              onMouseDown: (e) => e.preventDefault(),
+            })}
+            ref={mergedListboxRef}
+            id={listboxId}
+            role="listbox"
+            // Hidden until positioned, so the list doesn't flash at the page origin.
+            style={{ ...floatingStyles, visibility: isPositioned ? undefined : 'hidden' }}
+            className={classNames(styles.selectDropdown, 'typography-utility-text-regular-medium')}
+          >
+            {safeOptions.map((option, index) => {
+              const isSelected = option.value === value;
+              const isActive = index === activeIndex;
 
-            return (
-              <li
-                key={option.value}
-                id={`${inputId}-option-${index}`}
-                role="option"
-                aria-selected={isSelected}
-                ref={(el) => {
-                  optionRefs.current[index] = el;
-                }}
-                className={classNames(styles.selectOption, {
-                  [styles.selectOptionSelected]: isSelected,
-                  [styles.selectOptionDisabled]: option.disabled,
-                  [styles.selectOptionActive]: isActive,
-                })}
-                onClick={() => handleSelect(option)}
-                onMouseEnter={() => setActiveIndex(index)}
-              >
-                {option.label}
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li
+                  key={option.value}
+                  id={`${inputId}-option-${index}`}
+                  role="option"
+                  aria-selected={isSelected}
+                  ref={(el) => {
+                    optionRefs.current[index] = el;
+                  }}
+                  className={classNames(styles.selectOption, {
+                    [styles.selectOptionSelected]: isSelected,
+                    [styles.selectOptionDisabled]: option.disabled,
+                    [styles.selectOptionActive]: isActive,
+                  })}
+                  onClick={() => handleSelect(option)}
+                  onMouseEnter={() => setActiveIndex(index)}
+                >
+                  {option.label}
+                </li>
+              );
+            })}
+          </ul>
+        </FloatingPortal>
       )}
     </div>
   );

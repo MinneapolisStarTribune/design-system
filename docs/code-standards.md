@@ -9,9 +9,11 @@ This document serves as a living reference for code standards and conventions us
 - [File Naming Conventions](#file-naming-conventions)
 - [Export Patterns](#export-patterns)
 - [Brand Validation](#brand-validation)
+- [Web Styling Standards](#web-styling-standards)
 - [Storybook Standards](#storybook-standards)
 - [Testing Standards](#testing-standards)
 - [Path Aliases](#path-aliases)
+- [Dependencies](#dependencies)
 - [Documentation Requirements](#documentation-requirements)
 
 ---
@@ -49,6 +51,17 @@ type ButtonProps = {
 ### Component Structure
 
 1. **Props Spreading**: Avoid spreading props `{...props}`; be verbose instead
+
+### Form Controls Need a TanStack Form Adapter
+
+Every web control that holds a user-entered value (anything under `FormControl/`, plus value controls elsewhere like `ToggleGroup`) ships with an adapter in `packages/tanstack-form` in the same PR. Consumers build forms through those adapters, so a control without one can't be used in a TanStack form without re-plumbing value, blur, errors and ARIA by hand.
+
+Scoped exception: VAR-1334 adds the standalone web `Datepicker` calendar. VAR-1335 explicitly owns
+its `FormControl` input wrapper and TanStack Form adapter, so that adapter is deliberately deferred
+to VAR-1335. Keep this exception documented when reviewing the calendar PR.
+
+Datepicker date props and `onChange` use plain `string` types; validate `YYYY-MM-DD` dates at
+runtime rather than requiring consumers to cast formatted strings to a template-literal type.
 
 ---
 
@@ -99,11 +112,11 @@ Use **one** `ComponentName.types.ts` next to `web/` and `native/`:
 
 **Explicit fields on some native-only interfaces** (e.g. editorial headings) are not accidental duplication:
 
-| Field | Why it appears on native |
-| --- | --- |
-| **`color`** | Web inherits semantic color via `ColorVariantProps`; native types often define a minimal interface instead of the same `extends`, so `color?: TextColor` is listed explicitly for parity. |
-| **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`. |
-| **`style`** | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`. |
+| Field            | Why it appears on native                                                                                                                                                                  |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`color`**      | Web inherits semantic color via `ColorVariantProps`; native types often define a minimal interface instead of the same `extends`, so `color?: TextColor` is listed explicitly for parity. |
+| **`dataTestId`** | Aligns with `BaseProps` for automation; native implementations wire this to React Native `testID`.                                                                                        |
+| **`style`**      | Replaces web `className` / CSS — use `StyleProp<TextStyle>` or `StyleProp<ViewStyle>`.                                                                                                    |
 
 See the module comment on `packages/design-system/src/types/native-base-props.ts` for the full pattern.
 
@@ -133,6 +146,36 @@ type ButtonColor = ButtonProps['color'];
 type NewsHeadingImportance = NewsHeadingProps['importance'];
 ```
 
+#### Compound components: keep them tree-shakeable
+
+Don't attach sub-components as static properties (`Drawer.Heading = DrawerHeading`) — a static property keeps every part in the bundle even when unused. Instead, export the parts from a namespace module, with the main component as `Root`, and re-export it with `export * as`:
+
+```typescript
+// Drawer/Drawer.tsx
+export { DrawerRoot as Root } from './DrawerRoot';
+export { DrawerHeading as Heading } from './DrawerHeading';
+
+// src/components/index.web.ts
+export * as Drawer from './Drawer/Drawer';
+export { type DrawerHeadingProps, type DrawerProps } from './Drawer/Drawer.types';
+```
+
+Consumers write `<Drawer.Root>` / `<Drawer.Heading>`, and bundlers drop the parts they don't import.
+
+Give every part an explicit `displayName`: `'Drawer.Root'` for the root, the part's own name (`'DrawerHeading'`) for the rest.
+
+```typescript
+// Drawer/DrawerRoot.tsx
+DrawerRoot.displayName = 'Drawer.Root';
+
+// Drawer/DrawerHeading.tsx
+DrawerHeading.displayName = 'DrawerHeading';
+```
+
+#### Shared internals stay private
+
+When public components share behavior, put it in an internal base and build each public component as a thin preset on top, rather than having one public component wrap another. `Drawer` and `Dialog` both build on `src/components/Modal/` (overlay, focus trap, dismissal, ARIA wiring, sections and their styles); each owns its public props, defaults and placement. `Modal` is not exported from `index.web.ts`.
+
 ### Export Example
 
 ```typescript
@@ -153,6 +196,18 @@ export { DesignSystemProvider, type Brand } from './providers/DesignSystemProvid
 ### Component Registration
 
 - **All components must be registered** in `src/types/component-names.ts`
+
+---
+
+## Web Styling Standards
+
+### Write Native CSS in `.module.scss` Files
+
+Web component styles live in `ComponentName.module.scss` but the contents should be **mostly native CSS**, not Sass. Reach for Sass only when native CSS genuinely can't do the job. Stick to camel case for class names.
+
+### No Inline `style` in Web Code
+
+Put web styles, including story layout, in a co-located `.module.scss` and apply them with `className`. Don't add `style={{…}}` for static values. Two exceptions: values only known at runtime (positions, measured sizes), which should set a CSS custom property the module reads, and packages without a CSS build, like `packages/tanstack-form`. The `style` prop components accept and pass through for consumers is fine.
 
 ---
 
@@ -239,7 +294,7 @@ export const Configurable: Story = {
 // ✅ Second story - all variants for Chromatic regression testing
 export const AllVariants: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div className={styles.variants}>
       {/* Render all size/weight/capitalize combinations */}
     </div>
   ),
@@ -265,11 +320,10 @@ export const MyComponent: React.FC<MyComponentProps> = ({ variant, children }) =
   return <Text style={styles[variant]}>{children}</Text>;
 };
 
-const createStyles = (theme) =>
-  ({
-    primary: { ...theme.typographyArticleQuoteSmall },
-    secondary: { ...theme.typographyArticleQuoteLarge },
-  });
+const createStyles = (theme) => ({
+  primary: { ...theme.typographyArticleQuoteSmall },
+  secondary: { ...theme.typographyArticleQuoteLarge },
+});
 ```
 
 This pattern:
@@ -280,8 +334,10 @@ This pattern:
 - **Infers the theme type** so token names are autocompleted and typo-checked
 
 Use only these two native style hooks:
+
 - `useNativeStyles`
 - `useNativeStylesWithDefaults`
+
 ---
 
 ## Testing Standards
@@ -328,7 +384,6 @@ import { nativeTokenFixtures } from '@/test-utils/nativeTokenFixtures';
 ```
 
 Avoid inline `vi.mock()` token stubs for native token modules in test files.
-
 
 ### Test Wrappers
 
@@ -381,6 +436,14 @@ import type { ComponentName } from '@/types/component-names';
 // ❌ Bad - relative imports (unless in same directory)
 import { useBrandValidation } from '../../../hooks/useBrandValidation';
 ```
+
+---
+
+## Dependencies
+
+### Pin Versions
+
+When adding a package to `dependencies` or `devDependencies`, pin the exact version (`"1.33.5"`, not `"^1.33.5"` or `"~1.33.5"`). `peerDependencies` keep ranges so consumers aren't forced onto one version, and `workspace:*` stays as is.
 
 ---
 

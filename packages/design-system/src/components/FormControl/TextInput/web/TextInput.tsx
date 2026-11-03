@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { SuccessIcon } from '@/icons';
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
+import fieldStyles from '@/components/FormControl/FieldSurface.module.scss';
 import styles from './TextInput.module.scss';
 import type { BaseTextInputProps, TextInputSize } from '../TextInput.types';
 import { type AccessibilityProps } from '@/types';
@@ -45,8 +46,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   iconPosition = 'end',
   rounded = false,
   isDisabled = false,
-  isError = false,
-  isSuccess = false,
+  isError,
+  isSuccess,
   showSuccessIcon = true,
   className,
   dataTestId,
@@ -109,14 +110,15 @@ export const TextInput: React.FC<TextInputProps> = ({
     ) : null;
 
   const wrapperClasses = classNames(
+    fieldStyles.surface,
     styles.wrapper,
     styles[size],
     {
       [styles.rounded]: rounded,
-      [styles.disabled]: isDisabled,
-      [styles.error]: hasError,
-      [styles.success]: hasSuccess,
-      [styles.filled]: isFilled,
+      [fieldStyles.disabled]: isDisabled,
+      [fieldStyles.error]: hasError,
+      [fieldStyles.success]: hasSuccess,
+      [fieldStyles.filled]: isFilled,
     },
     className
   );
@@ -127,7 +129,12 @@ export const TextInput: React.FC<TextInputProps> = ({
       <input
         type={type}
         id={inputId}
-        className={classNames(styles.input, PLACEHOLDER_TYPOGRAPHY[size], styles.valueTypography)}
+        className={classNames(
+          fieldStyles.control,
+          styles.input,
+          PLACEHOLDER_TYPOGRAPHY[size],
+          styles.valueTypography
+        )}
         placeholder={placeholderText}
         disabled={isDisabled}
         value={value}

@@ -104,7 +104,7 @@ function parseExportBracesFromSource(source) {
 }
 
 /**
- * Brace exports plus `export * from '...'` (recursively). One read per file.
+ * Brace exports, `export * as Name` namespaces, and `export * from '...'` (recursively). One read per file.
  * @param {string} filePath
  * @param {Map<string, Set<string>>} memo
  * @param {Set<string>} stack cycle guard
@@ -127,6 +127,12 @@ function parseBarrelExportsWithStars(filePath, memo, stack) {
 
   const source = fs.readFileSync(normalizedPath, 'utf8');
   const names = parseExportBracesFromSource(source);
+  // Namespace exports for compound components, e.g. `export * as Drawer from './Drawer/Drawer'`.
+  const namespaceRegex = /export\s*\*\s*as\s+([A-Z][A-Za-z0-9]*)\s+from/g;
+  let namespaceMatch;
+  while ((namespaceMatch = namespaceRegex.exec(source)) !== null) {
+    names.add(namespaceMatch[1]);
+  }
   const directory = path.dirname(normalizedPath);
   const starRegex = /export\s*\*\s*from\s*['"]([^'"]+)['"]\s*;?/g;
   let starMatch;

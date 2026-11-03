@@ -23,6 +23,7 @@
  * - dist/web/startribune-dark.css (combined typography + color theme)
  * - dist/web/varsity-light.css (combined typography + color theme)
  * - dist/web/varsity-dark.css (combined typography + color theme)
+ * - dist/web/{brand}-{mode}.scoped.css (color theme under [data-theme='{mode}'])
  * - dist/web/fonts/font-face/startribune.css (@font-face from tokens/fonts/startribune.json)
  * - dist/web/fonts/font-face/varsity.css (@font-face from tokens/fonts/varsity.json)
  * Mobile JavaScript Files (no .d.ts files - TypeScript can infer types from JSON exports):

@@ -67,7 +67,7 @@ describe('buildThemeTokens', () => {
       expect(built).toContain('colorButtonNeutralGhostBackground: "rgba(0, 0, 0, 0)"');
       expect(built).toContain('colorButtonBrandGhostBackground: "rgba(0, 0, 0, 0)"');
       expect(built).toContain('colorButtonBrandGhostHoverBackground: "rgba(0, 133, 75, 0.08)"');
-      expect(built).toContain('colorOverlayBlack: "rgba(0, 0, 0, 0.6)"');
+      expect(built).toContain('colorOverlayBlack: "rgba(0, 0, 0, 0.8)"');
       expect(built).toContain('colorBaseBlack: "#000000"');
     } finally {
       fs.rmSync(outputDir, { recursive: true, force: true });

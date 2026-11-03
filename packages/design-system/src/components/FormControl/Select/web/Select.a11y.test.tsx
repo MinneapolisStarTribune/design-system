@@ -27,7 +27,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
 
@@ -45,7 +45,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Outside'));
@@ -67,7 +67,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Option 2'));
@@ -89,7 +89,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Option 3'));
@@ -105,7 +105,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     expect(select).toHaveAttribute('aria-expanded', 'false');
 
@@ -113,4 +113,37 @@ describe('Select', () => {
 
     expect(select).toHaveAttribute('aria-expanded', 'true');
   });
+
+  it.each([
+    { value: 'opt2', label: 'Option 2', selected: true },
+    { value: undefined, label: 'Option 1', selected: false },
+  ])(
+    'exposes $label as the active option when Enter opens the list',
+    async ({ value, label, selected }) => {
+      const user = userEvent.setup();
+      const { getByRole, queryByRole } = renderWithProvider(
+        <FormControl.Select id="test" options={OPTIONS} value={value} />
+      );
+      const select = getByRole('combobox');
+
+      select.focus();
+      await user.keyboard('{Enter}');
+
+      const listbox = getByRole('listbox');
+      const activeOption = within(listbox).getByRole('option', { name: label });
+      expect(select).toHaveFocus();
+      expect(select).toHaveAttribute('aria-expanded', 'true');
+      expect(select).toHaveAttribute('aria-controls', listbox.id);
+      expect(select).toHaveAttribute('aria-activedescendant', activeOption.id);
+      expect(activeOption).toHaveAttribute('aria-selected', String(selected));
+
+      await user.keyboard('{Escape}');
+
+      expect(select).toHaveFocus();
+      expect(select).toHaveAttribute('aria-expanded', 'false');
+      expect(select).not.toHaveAttribute('aria-controls');
+      expect(select).not.toHaveAttribute('aria-activedescendant');
+      expect(queryByRole('listbox')).not.toBeInTheDocument();
+    }
+  );
 });

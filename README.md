@@ -110,7 +110,19 @@ See [Native Integration Guide](integration-guides/native.md) for more details.
 
 ## Available Components
 
-Browse all components interactively in [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app).
+Browse all components interactively in [Storybook](https://design-system.startribune.com).
+
+### Coachmark (web)
+
+A dismissible, externally-controlled callout for an unprompted single action. See [Coachmark](integration-guides/web.md#coachmark) in the web integration guide for setup and usage. For a Piano-driven variant, see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one.
+
+### Datepicker (web)
+
+`Datepicker` provides an inline calendar or a custom-trigger popover, date-only `YYYY-MM-DD`
+strings, inclusive `min`/`max` bounds, and keyboard navigation. Date props accept plain `string`
+values without type assertions. Import it and `DatepickerProps`
+from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
+The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
 
 ## TypeScript Support
 
@@ -130,6 +142,17 @@ This means each component is exported alongside its main Props type. For example
 - `NewsHeading` and `NewsHeadingProps`
 - `Icon` and `IconProps`
 
+Compound components are exported as a namespace, with a Props type for their root and for any part that adds props of its own. For example, `Drawer` exposes `Drawer.Root`, `Drawer.Heading`, `Drawer.Body` and `Drawer.Footer`; `DrawerProps` types `Drawer.Root` and `DrawerHeadingProps` types `Drawer.Heading` (web only):
+
+```tsx
+import { Drawer, type DrawerProps } from '@minneapolisstartribune/design-system/web';
+
+<Drawer.Root open={open} onClose={() => setOpen(false)}>
+  <Drawer.Heading>Filter Calendar</Drawer.Heading>
+  <Drawer.Body>{/* content */}</Drawer.Body>
+</Drawer.Root>;
+```
+
 ### Importing Types
 
 You can import TypeScript types from the package for use in your own code. All types are exported from the main package entry point.
@@ -142,6 +165,7 @@ import type {
   FormGroupProps,
   FormControlProps,
   TextInputProps,
+  TextAreaProps,
   NewsHeadingProps,
   // ... and many more
 } from '@minneapolisstartribune/design-system/web';
@@ -218,6 +242,26 @@ interface CustomButtonProps extends ButtonProps {
 }
 ```
 
+### Responsive Props
+
+Some props accept a value per breakpoint, typed as `Responsive<T>`. Pass a single value for every screen size, or an object keyed by `Breakpoint` (`'small' | 'medium' | 'large'`; `medium` is 768px+, `large` is 1160px+). Each key applies from that breakpoint up, sizes below the smallest key use the component's default, and the object needs at least one key.
+
+```typescript
+import type {
+  Breakpoint,
+  DrawerProps,
+  Responsive,
+} from '@minneapolisstartribune/design-system/web';
+
+const position: DrawerProps['position'] = { small: 'bottom', large: 'left' };
+
+// Type your own breakpoint-aware values
+const columns: Responsive<number> = { small: 1, medium: 2 };
+const current: Breakpoint = 'medium';
+```
+
+Breakpoint-driven values resolve on the client, so server-rendered markup uses the `small` value until hydration.
+
 ## Versioning
 
 This package follows [semantic versioning](https://semver.org/). Check your installed version:
@@ -242,12 +286,13 @@ yarn add @minneapolisstartribune/design-system@latest
 - **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
 - **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
 - **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
+- **[TanStack Form adapters](packages/tanstack-form/README.md)** - Design-system form fields bound to TanStack Form (web)
 - **[Release Checklist](integration-guides/release-checklist.md)** - Required pre-release checks for web, native, and multi-brand safety
 - **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 
 ## Still Having Issues?
 
-- Check the [Storybook](https://design-system-8bmbp4q1g-startribune-team-one.vercel.app) for working examples
+- Check the [Storybook](https://design-system.startribune.com) for working examples
 - Review component source code in the repository
 - Open an issue on GitHub with details about your setup and error messages
 - Please reach out to the team in Slack

@@ -9,6 +9,9 @@
  * 
  * @param {Object} options - Style Dictionary format options
  * @param {Object} options.dictionary - The Style Dictionary token dictionary
+ * @param {Object} [options.options] - File options
+ * @param {string} [options.options.selector=':root'] - Selector the variables are declared on
+ * @param {string} [options.options.colorScheme] - Optional `color-scheme` value declared with them
  * @returns {string} Complete CSS file content with :root block and all variables
  * 
  * Example output:
@@ -24,7 +27,9 @@
  * }
  * ```
  */
-function cssVariablesFormat({ dictionary }) {
+function cssVariablesFormat({ dictionary, options = {} }) {
+  const { selector = ':root', colorScheme } = options;
+
   // Transform all tokens into CSS variable declarations
   const tokens = dictionary.allTokens
     .map((token) => {
@@ -45,7 +50,9 @@ function cssVariablesFormat({ dictionary }) {
     })
     .join('\n');
 
-  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n:root {\n${tokens}\n}\n`;
+  const declarations = colorScheme ? `  color-scheme: ${colorScheme};\n${tokens}` : tokens;
+
+  return `/**\n * Do not edit directly, this file was auto-generated.\n */\n${selector} {\n${declarations}\n}\n`;
 }
 
 module.exports = cssVariablesFormat;

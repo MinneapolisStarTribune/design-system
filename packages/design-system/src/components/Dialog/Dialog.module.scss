@@ -1,0 +1,35 @@
+/* Scoped under .dialog to outrank the shared footer's rules, whose stylesheet may load after this one. */
+.dialog .actions {
+  padding: var(--spacing-20) var(--spacing-16);
+
+  /* `stackOnMobile`: full-width actions on phones. Without it, the shared footer's row applies. */
+  &.stacked {
+    @media (width < 768px) {
+      flex-direction: column;
+      flex-wrap: nowrap;
+
+      > * {
+        width: 100%;
+      }
+    }
+  }
+
+  /* Matches the switch to the centered position in DialogRoot.tsx. */
+  @media (width >= 768px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: var(--spacing-24) var(--spacing-32);
+
+    > * {
+      flex: 0 0 auto;
+      width: auto;
+    }
+
+    /* A leading secondary action (e.g. Cancel) sits at the start; the rest stay at the end. */
+    > :first-child:not(:only-child) {
+      margin-right: auto;
+      /* A leading ghost button gives up its padding so its label lines up with the content edge. */
+      margin-left: calc(-1 * var(--button-ghost-inset, 0px));
+    }
+  }
+}

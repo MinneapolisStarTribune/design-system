@@ -397,7 +397,7 @@
     "overlay": {
       "black": {
         "description": "Primary dark overlay used behind modals, drawers, or high-emphasis layers — creates strong contrast and draws attention to the active surface.",
-        "value": "rgb(0 0 0 / 60%)"
+        "value": "rgb(0 0 0 / 80%)"
       },
       "black-subtle": {
         "description": "Lighter dark overlay used for less intrusive layering — ideal for tooltips, media overlays, or subtle depth effects.",

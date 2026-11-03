@@ -306,6 +306,31 @@ describe('Button (native)', () => {
     );
   });
 
+  it('maps error color to the semantic error pair, inverted for filled', () => {
+    const theme = {
+      ...nativeTokenFixtures.startribune.light.theme,
+      ...nativeTokenFixtures.startribune.light.typography,
+    };
+
+    expect(getNativeButtonSurface(theme, 'error', 'filled', false, 'light')).toEqual({
+      backgroundColor: theme.colorSemanticErrorForeground,
+      color: theme.colorSemanticErrorBackground,
+    });
+    expect(getNativeButtonSurface(theme, 'error', 'outlined', false, 'light')).toEqual(
+      expect.objectContaining({
+        color: theme.colorSemanticErrorForeground,
+        borderColor: theme.colorSemanticErrorForeground,
+      })
+    );
+    expect(getNativeButtonSurface(theme, 'error', 'ghost', true, 'light').backgroundColor).toBe(
+      'rgb(177 27 27 / 12%)'
+    );
+    expect(getNativeButtonSurface(theme, 'error', 'filled', false, 'dark')).toEqual({
+      backgroundColor: theme.colorRed200,
+      color: theme.colorRed950,
+    });
+  });
+
   it('uses white foreground for ghost neutral button on dark surface', () => {
     const theme = {
       ...nativeTokenFixtures.startribune.light.theme,

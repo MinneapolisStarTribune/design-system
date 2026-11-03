@@ -1,5 +1,32 @@
 // This is what we will export out to consuming apps for the web. This file is sorted alphabetically.
 // Icons are exported from the icons barrel, so we don't need to export them here.
+export type {
+  CoachmarkAlignment,
+  CoachmarkPosition,
+  CoachmarkProps,
+} from './Coachmark/Coachmark.types';
+export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
+export { Coachmark } from './Coachmark/web/Coachmark';
+export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
+export { Datepicker, type DatepickerProps } from './Datepicker/web/Datepicker';
+export * as Dialog from './Dialog/Dialog';
+export {
+  type DialogActionsProps,
+  type DialogCloseReason,
+  type DialogProps,
+  type DialogRole,
+  type DialogSectionProps,
+  type DialogTitleProps,
+} from './Dialog/Dialog.types';
+export * as Drawer from './Drawer/Drawer';
+export {
+  type DrawerCloseReason,
+  type DrawerHeadingProps,
+  type DrawerPosition,
+  type DrawerProps,
+  type DrawerRole,
+  type DrawerSectionProps,
+} from './Drawer/Drawer.types';
 export { type AuthorBioCardProps } from './EditorialContent/ArticleToolkit/AuthorBioCard/AuthorBioCard.types';
 export { AuthorBioCard } from './EditorialContent/ArticleToolkit/AuthorBioCard/web/AuthorBioCard';
 export {
@@ -22,15 +49,7 @@ export {
   type EyebrowBadgeSize,
   type EyebrowBadgeVariant,
 } from './EyebrowBadge/web/EyebrowBadge';
-export {
-  Form,
-  FormButton,
-  type FormProps,
-  type FormValidationErrors,
-  useFormLogic,
-  type UseFormLogicOptions,
-  type UseFormLogicReturn,
-} from './Form';
+export { Form, FormButton, type FormProps } from './Form';
 export { Checkbox, type CheckboxProps } from './FormControl/Checkbox/web/Checkbox';
 export {
   type CheckboxCategory,
@@ -64,6 +83,7 @@ export {
   type SwitchProps,
   type SwitchSize,
 } from './FormControl/Switch/web/Switch';
+export { TextArea, type TextAreaProps } from './FormControl/TextArea/web/TextArea';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
@@ -92,9 +112,17 @@ export {
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
-export { Popover } from './Popover/Popover';
+export * as Menu from './Menu/Menu';
+export type {
+  MenuArrowPosition,
+  MenuDividerProps,
+  MenuItemIconProps,
+  MenuItemProps,
+  MenuPlacement,
+  MenuProps,
+} from './Menu/Menu.types';
+export * as Popover from './Popover/Popover';
 export type { PopoverProps } from './Popover/Popover.types';
-export { PopoverPortalRootContext, PopoverPortalRootProvider } from './Popover/PopoverContext';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';
 export { Radio } from './Radio/web/Radio';
 export {
@@ -103,11 +131,19 @@ export {
   type SkeletonProps,
   type SkeletonVariant,
 } from './Skeleton/web/Skeleton';
+export * as ToggleGroup from './ToggleGroup/ToggleGroup';
+export {
+  type ToggleGroupDetailProps,
+  type ToggleGroupItemProps,
+  type ToggleGroupMultipleProps,
+  type ToggleGroupProps,
+  type ToggleGroupSingleProps,
+  type ToggleGroupSize,
+  type ToggleGroupType,
+} from './ToggleGroup/ToggleGroup.types';
 export { Tooltip } from './Tooltip/Tooltip';
 export type { TooltipProps } from './Tooltip/Tooltip.types';
 export { TooltipPortalRootContext, TooltipPortalRootProvider } from './Tooltip/TooltipContext';
-export { TriggerablePopover } from './TriggerablePopover/TriggerablePopover';
-export type { TriggerablePopoverProps } from './TriggerablePopover/TriggerablePopover.types';
 export type {
   ArticleBodyHeadingImportance,
   ArticleBodyHeadingProps,

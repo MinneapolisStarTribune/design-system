@@ -11,6 +11,10 @@ import * as SectionHeading from './SectionHeading.stories';
 Section headings group related content within a page, providing a clear secondary level of hierarchy beneath the main page heading.
 They help users scan and navigate complex layouts by visually separating functional areas or content groups.
 
+- Use `importance` to control visual style.
+- Use `as` when semantic heading level must differ from visual style.
+- Example: `importance={3}` with `as="h2"` renders H3 typography on an H2 element.
+
 {/* ========== DESIGNER-EDITABLE SECTION END ========== */}
 
 {/* Do not remove the line below — it renders a divider between the doucmentation and. */}
@@ -22,4 +26,3 @@ They help users scan and navigate complex layouts by visually separating functio
 <Primary />
 <Controls />
 <Stories />
-
