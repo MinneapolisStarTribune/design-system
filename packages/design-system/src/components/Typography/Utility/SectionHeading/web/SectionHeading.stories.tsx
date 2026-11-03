@@ -12,6 +12,11 @@ const meta = {
       options: SECTION_HEADING_IMPORTANCE_LEVELS,
       description: 'Heading level (1-6), maps to h1-h6',
     },
+    as: {
+      control: 'select',
+      options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      description: 'Optional semantic heading tag override. Typography still follows importance.',
+    },
     color: {
       control: 'select',
       options: Object.keys(TEXT_COLOR_TOKENS),
@@ -31,6 +36,7 @@ type Story = StoryObj<typeof meta>;
 export const Configurable: Story = {
   args: {
     importance: 1,
+    as: undefined,
     children: 'Section Heading',
   },
 };

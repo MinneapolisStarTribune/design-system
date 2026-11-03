@@ -36,6 +36,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
   const safeOptions = useMemo(() => (Array.isArray(options) ? options : []), [options]);
   const isControlled = value !== undefined && typeof onChange === 'function';
 
+  // TODO: Position with `useAnchoredFloating` from `FloatingSurface`, and portal the list as Select does.
   useEffect(() => {
     if (!isOpen) return;
 

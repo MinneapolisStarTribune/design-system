@@ -8,6 +8,7 @@ export type {
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
+export { Datepicker, type DatepickerProps } from './Datepicker/web/Datepicker';
 export * as Dialog from './Dialog/Dialog';
 export {
   type DialogActionsProps,
@@ -48,15 +49,7 @@ export {
   type EyebrowBadgeSize,
   type EyebrowBadgeVariant,
 } from './EyebrowBadge/web/EyebrowBadge';
-export {
-  Form,
-  FormButton,
-  type FormProps,
-  type FormValidationErrors,
-  useFormLogic,
-  type UseFormLogicOptions,
-  type UseFormLogicReturn,
-} from './Form';
+export { Form, FormButton, type FormProps } from './Form';
 export { Checkbox, type CheckboxProps } from './FormControl/Checkbox/web/Checkbox';
 export {
   type CheckboxCategory,
@@ -90,6 +83,7 @@ export {
   type SwitchProps,
   type SwitchSize,
 } from './FormControl/Switch/web/Switch';
+export { TextArea, type TextAreaProps } from './FormControl/TextArea/web/TextArea';
 export { TextInput, type TextInputProps } from './FormControl/TextInput/web/TextInput';
 export {
   FormGroup,
@@ -118,6 +112,15 @@ export {
 } from './InlineLink/inlineLinkTypographyMatrix';
 export { InlineLink, type InlineLinkProps } from './InlineLink/web/InlineLink';
 export { Link, type LinkInlineProps, type LinkProps, type LinkUtilityProps } from './Link/web/Link';
+export * as Menu from './Menu/Menu';
+export type {
+  MenuArrowPosition,
+  MenuDividerProps,
+  MenuItemIconProps,
+  MenuItemProps,
+  MenuPlacement,
+  MenuProps,
+} from './Menu/Menu.types';
 export * as Popover from './Popover/Popover';
 export type { PopoverProps } from './Popover/Popover.types';
 export type { RadioColor, RadioProps } from './Radio/Radio.types';

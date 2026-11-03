@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { expect, within } from 'storybook/test';
+import { expect, screen } from 'storybook/test';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
@@ -432,8 +432,8 @@ export const AllVariants: Story = {
           </FormGroup>
         </div>
 
-        {/* Reserves room for the absolutely positioned dropdown (362px max-height + 8px offset) */}
-        <div style={{ ...cellStyle, paddingBottom: 380 }}>
+        {/* Reserves room for the absolutely positioned dropdown (317px max-height + 8px offset) */}
+        <div style={{ ...cellStyle, paddingBottom: 335 }}>
           <SectionLabel>State: Open</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
@@ -448,7 +448,8 @@ export const AllVariants: Story = {
   play: async ({ canvas, userEvent }) => {
     // findBy waits out the decorator's async theme load
     const select = await canvas.findByTestId('select-open');
-    await userEvent.click(within(select).getByRole('button'));
-    await expect(await within(select).findByRole('listbox')).toBeVisible();
+    await userEvent.click(select);
+    // The listbox is portaled out of the combobox.
+    await expect(await screen.findByRole('listbox')).toBeVisible();
   },
 };

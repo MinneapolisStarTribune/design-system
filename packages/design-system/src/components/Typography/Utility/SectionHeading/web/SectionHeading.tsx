@@ -20,6 +20,7 @@ const getHeadingConfig = (importance: SectionHeadingProps['importance']) => {
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
   importance,
+  as,
   children,
   className,
   dataTestId,
@@ -27,7 +28,9 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   style,
   ...props
 }) => {
-  const { element: HeadingElement, className: typographyClassName } = getHeadingConfig(importance);
+  const { element: defaultHeadingElement, className: typographyClassName } =
+    getHeadingConfig(importance);
+  const HeadingElement = as ?? defaultHeadingElement;
 
   return (
     <HeadingElement

@@ -17,6 +17,9 @@
     "outDir": "dist",
     "paths": {
       "@/*": ["./src/*"],
+      // Stories only, mirrors the alias in .storybook/main.ts
+      "@minneapolisstartribune/design-system-tanstack-form": ["../tanstack-form/src/index.ts"],
+      "@minneapolisstartribune/design-system/web": ["./src/index.web.ts"],
       "@storybook-config/*": ["./.storybook/*"]
     },
 

@@ -1,5 +1,29 @@
 [
   {
+    "version": "v4.2.1",
+    "url": "https://design-system-8yacyckw5-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v4.2.0",
+    "url": "https://design-system-isefh0ci4-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v4.1.0",
+    "url": "https://design-system-i4sot41e9-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v4.0.0",
+    "url": "https://design-system-kp6653721-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v3.2.0",
+    "url": "https://design-system-5k6ljvf43-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v3.1.0",
+    "url": "https://design-system-qo2rb20jl-startribune-team-one.vercel.app"
+  },
+  {
     "version": "v3.0.0",
     "url": "https://design-system-7spbipld5-startribune-team-one.vercel.app"
   },
@@ -16,6 +40,10 @@
     "url": "https://design-system-171h1zz10-startribune-team-one.vercel.app"
   },
   {
+    "version": "v2.0.0",
+    "url": "https://design-system-f4edy33q4-startribune-team-one.vercel.app"
+  },
+  {
     "version": "v1.14.0",
     "url": "https://design-system-iytjfh6yj-startribune-team-one.vercel.app"
   },
@@ -26,5 +54,13 @@
   {
     "version": "v1.13.1",
     "url": "https://design-system-grafn46mv-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v1.1.0",
+    "url": "https://design-system-bcf122dne-startribune-team-one.vercel.app"
+  },
+  {
+    "version": "v1.0.0",
+    "url": "https://design-system-qba6gjub6-startribune-team-one.vercel.app"
   }
 ]

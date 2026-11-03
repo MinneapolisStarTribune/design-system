@@ -34,13 +34,20 @@ export interface ModalSharedProps extends BaseProps, Pick<AccessibilityProps, 'a
    */
   role?: ModalRole;
   /**
+   * Whether Escape and overlay presses request a close. Turn it off for blocking prompts that need
+   * an action, like signing in again after a session expires; the panel then closes only when
+   * `open` goes `false`.
+   * @default true
+   */
+  dismissible?: boolean;
+  /**
    * Accessible label for the X icon button.
    * @default 'Close'
    */
   closeLabel?: string;
   /**
    * Whether the top-right X icon button is rendered.
-   * @default true
+   * @default the value of `dismissible`
    */
   showCloseButton?: boolean;
   /** Element to focus when the panel opens. Defaults to the panel itself. */

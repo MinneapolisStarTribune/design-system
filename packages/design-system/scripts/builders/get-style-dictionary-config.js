@@ -155,6 +155,17 @@ function getStyleDictionaryConfig(brand, mode, formats = {}) {
               "outputReferences": true
             }
           },
+          {
+            // Same variables under [data-theme='{mode}'] for attribute-based switching.
+            // Written to dist/web/ directly; dist/web/themes/ is removed after the build.
+            destination: `../${brand}-${mode}.scoped.css`,
+            format: 'css/variables',
+            options: {
+              outputReferences: true,
+              selector: `[data-theme='${mode}']`,
+              colorScheme: mode,
+            },
+          },
         ],
       },
       javascript: {

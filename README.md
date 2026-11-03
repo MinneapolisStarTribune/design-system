@@ -116,6 +116,14 @@ Browse all components interactively in [Storybook](https://design-system.startri
 
 A dismissible, externally-controlled callout for an unprompted single action. See [Coachmark](integration-guides/web.md#coachmark) in the web integration guide for setup and usage. For a Piano-driven variant, see `@minneapolisstartribune/piano-coachmark` — a separate package, not part of this one.
 
+### Datepicker (web)
+
+`Datepicker` provides an inline calendar or a custom-trigger popover, date-only `YYYY-MM-DD`
+strings, inclusive `min`/`max` bounds, and keyboard navigation. Date props accept plain `string`
+values without type assertions. Import it and `DatepickerProps`
+from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
+The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.
@@ -157,6 +165,7 @@ import type {
   FormGroupProps,
   FormControlProps,
   TextInputProps,
+  TextAreaProps,
   NewsHeadingProps,
   // ... and many more
 } from '@minneapolisstartribune/design-system/web';
@@ -277,6 +286,7 @@ yarn add @minneapolisstartribune/design-system@latest
 - **[Web Integration](integration-guides/web.md)** - Using the design system in web (React) apps
 - **[Native Integration](integration-guides/native.md)** - Using the design system in React Native apps
 - **[Analytics](integration-guides/analytics.md)** - Wiring up tracking events
+- **[TanStack Form adapters](packages/tanstack-form/README.md)** - Design-system form fields bound to TanStack Form (web)
 - **[Release Checklist](integration-guides/release-checklist.md)** - Required pre-release checks for web, native, and multi-brand safety
 - **[Troubleshooting](integration-guides/troubleshooting.md)** - Common issues and solutions
 

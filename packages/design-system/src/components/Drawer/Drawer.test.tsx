@@ -368,6 +368,24 @@ describe('Drawer', () => {
       await expectClosed();
     });
 
+    it('ignores Escape and overlay presses and hides the close button when not dismissible', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+
+      renderWithProvider(
+        <Drawer.Root open onClose={onClose} dismissible={false} aria-label="Filters">
+          <Drawer.Body>Body copy</Drawer.Body>
+        </Drawer.Root>
+      );
+
+      await user.keyboard('{Escape}');
+      await user.click(screen.getByTestId('drawer-overlay'));
+
+      expect(onClose).not.toHaveBeenCalled();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    });
+
     it('stays open on a press inside the panel', async () => {
       const user = userEvent.setup();
 

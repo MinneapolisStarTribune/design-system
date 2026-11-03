@@ -5,8 +5,8 @@
  * Storybook applies classes like 'docs-story' for docs mode and various classes
  * for regular story containers. We use CSS variables that are loaded by ThemeWrapper.
  * 
- * The @storybook/addon-themes addon applies 'sb-dark' or 'sb-light' classes to the
- * document/html element based on the theme global, which we can use for targeting.
+ * DesignSystemProvider (via the decorator in preview.tsx) sets data-theme on <html>
+ * from the theme global or a story's theme parameter, which we can use for targeting.
  * 
  * Note: The decorator in preview.tsx also sets background on the inner wrapper div,
  * but this CSS is needed for Storybook's native containers in docs mode.
@@ -17,18 +17,19 @@
 .sb-story,
 .docs-story,
 .sb-main-padded,
-.sb-main-centered {
+.sb-main-centered,
+.sb-main-fullscreen {
   /* Use CSS variables from our theme files (loaded by ThemeWrapper) */
   /* These variables are defined in dist/web/themes/{brand}-{theme}.css */
   background-color: var(--color-background-light-default, #ffffff);
 }
 
 /* Dark mode override - when dark theme is active */
-/* The addon-themes applies 'sb-dark' class to html/document */
-.sb-dark .sb-story,
-.sb-dark .docs-story,
-.sb-dark .sb-main-padded,
-.sb-dark .sb-main-centered {
+[data-theme='dark'] .sb-story,
+[data-theme='dark'] .docs-story,
+[data-theme='dark'] .sb-main-padded,
+[data-theme='dark'] .sb-main-centered,
+[data-theme='dark'] .sb-main-fullscreen {
   background-color: var(--color-background-dark-default, #0d0d0d);
 }
 

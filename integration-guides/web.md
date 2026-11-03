@@ -14,7 +14,7 @@ You do not need `react-native` or `@floating-ui/react-native`.
 
 ### Overlay portal root (optional)
 
-By default, `Popover` and `Drawer` render their content into `document.body`. Pass `portalRoot` to render into another element instead, for example when:
+By default, `Popover`, `Menu`, and `Select` render into the nearest dialog or `data-theme` region around their trigger, so they stay inside focus traps and scoped themes, and fall back to `document.body` when there is none. `Drawer` always renders into `document.body`. Pass `portalRoot` to `Popover`, `Menu`, or `Drawer` to render into another element instead, for example when:
 
 - The overlay lives inside a **modal** or **sidebar** and should be clipped or stacked with that container
 - You use **Storybook** and want the overlay to stay within the story frame
@@ -61,6 +61,44 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
+## Datepicker
+
+`Datepicker` renders inline without `trigger`, or opens a nonmodal calendar popover from a
+focusable trigger. Date props and `onChange` use plain `string` values in zero-padded `YYYY-MM-DD`
+format rather than timestamps. Both bounds are inclusive. `value={null}` is controlled; omit
+`value` to use `defaultValue` and internal state.
+
+```tsx
+import { useState } from 'react';
+import { Datepicker, UtilityButton } from '@minneapolisstartribune/design-system/web';
+
+function EventDate() {
+  const [date, setDate] = useState<string | null>(null);
+  return (
+    <Datepicker
+      value={date}
+      onChange={setDate}
+      label="Choose event date"
+      min="2026-03-01"
+      max="2026-06-30"
+      trigger={<UtilityButton label={date ?? 'Choose date'} />}
+    />
+  );
+}
+```
+
+The trigger must forward its ref, handlers, and ARIA props to a focusable element. Its accessible
+name stays intact; `label` is appended to its description. Selection or Escape returns focus to
+the trigger. Tabbing or clicking outside dismisses without stealing focus from the destination.
+Portals automatically respect the surrounding dialog and theme scope.
+
+Malformed dates are treated as empty and malformed bounds as absent. Inverted bounds disable all
+dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
+Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
+
+The consumer owns its Today action. The text input wrapper and TanStack Form adapter are
+deliberately deferred to VAR-1335; this calendar does not add them to `FormControl`.
+
 ## Coachmark
 
 `Coachmark` is a dismissible, pointed callout for an unprompted, single action (e.g. a CMS-driven prompt to create an account or favorite something) — anchored to `children`, always externally controlled via `open`/`onOpenChange` (it never opens itself on hover, focus, or click, unlike `Tooltip`).
@@ -101,59 +139,50 @@ For a Piano-driven coachmark (triggered by Piano's `setResponseVariable` event i
 | Star Tribune | `startribune-light.css` | `startribune-dark.css` |
 | Varsity      | `varsity-light.css`     | `varsity-dark.css`     |
 
-### Static vs Dynamic Loading
+Each theme file sets its CSS variables on `:root` and includes the brand's typography classes. Import one per page.
 
-**Static** — import the CSS file at the top of your entry file (shown above).
+Each scheme also ships as a scoped file that only contains the CSS variables, under a `data-theme` selector:
 
-**Dynamic** — swap `<link>` elements at runtime if you need to switch themes:
+| Brand        | Light                          | Dark                          |
+| ------------ | ------------------------------ | ----------------------------- |
+| Star Tribune | `startribune-light.scoped.css` | `startribune-dark.scoped.css` |
+| Varsity      | `varsity-light.scoped.css`     | `varsity-dark.scoped.css`     |
 
-**Option B: Dynamic loading (if you need to switch themes at runtime)**
+### Static Loading
+
+Import the theme CSS file at the top of your entry file (shown above).
+
+### Switching Themes with `data-theme`
+
+To switch schemes at runtime, keep the light theme file and add the scoped dark file. The dark variables apply to any element with `data-theme="dark"` and its descendants, and they set `color-scheme: dark`. This is the same attribute `components.css` uses for its dark component styles.
 
 ```tsx
-import { useEffect, useState } from 'react';
 import '@minneapolisstartribune/design-system/web/components.css';
-import { DesignSystemProvider } from '@minneapolisstartribune/design-system/web';
-
-function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const brand = 'startribune'; // or 'varsity'
-
-  useEffect(() => {
-    // Remove any existing theme link
-    const existingLink = document.getElementById('design-system-theme');
-    if (existingLink) {
-      existingLink.remove();
-    }
-
-    // Load the correct combined CSS file (typography + themes)
-    // Note: Adjust this path based on how your bundler resolves node_modules
-    // For Vite: `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`
-    // For Webpack/CRA: You may need to use a dynamic import or copy files to public folder
-    const link = document.createElement('link');
-    link.id = 'design-system-theme';
-    link.rel = 'stylesheet';
-    link.href = `/node_modules/@minneapolisstartribune/design-system/dist/web/${brand}-${theme}.css`;
-    document.head.appendChild(link);
-
-    // Cleanup on unmount
-    return () => {
-      const linkToRemove = document.getElementById('design-system-theme');
-      if (linkToRemove) {
-        linkToRemove.remove();
-      }
-    };
-  }, [brand, theme]);
-
-  return (
-    <DesignSystemProvider brand={brand} forceColorScheme={theme}>
-      {/* Your app with theme switcher */}
-      <button onClick={() => setTheme((t) => (t === 'light' ? 'dark' : 'light'))}>
-        Toggle Theme
-      </button>
-    </DesignSystemProvider>
-  );
-}
+import '@minneapolisstartribune/design-system/web/startribune-light.css';
+import '@minneapolisstartribune/design-system/web/startribune-dark.scoped.css';
 ```
+
+```html
+<!-- Whole page -->
+<html data-theme="dark">
+  …
+</html>
+
+<!-- One region -->
+<section data-theme="dark">…</section>
+```
+
+To show a light region inside a dark page, also import `{brand}-light.scoped.css` and set `data-theme="light"` on that region. Known limitation: `TextInput`, `TextArea`, `CandyBar`, and `Link` apply their dark styles when any ancestor has `data-theme="dark"`, so they keep those styles inside a light region nested in a dark page. Import the scoped files after the theme file. If you use cascade layers, put them in the same layer as the theme file or a later one.
+
+When you pass `forceColorScheme`, `DesignSystemProvider` sets `data-theme` on `<html>` to match, and restores the previous value when it unmounts. Leave `forceColorScheme` out to manage `data-theme` on `<html>` yourself; components that read the scheme from context then treat it as `light`. The attribute name is exported as `DS_ROOT_THEME_ATTRIBUTE` (and the brand attribute, `data-ds-brand`, as `DS_ROOT_BRAND_ATTRIBUTE`).
+
+```tsx
+<DesignSystemProvider brand="startribune" forceColorScheme={theme}>
+```
+
+The provider sets the attribute after hydration. To avoid a flash of the wrong theme in server-rendered apps, also render `data-theme` on `<html>` in the server HTML, or set it with a small inline script in `<head>`.
+
+`surface="dark"` and `surface="light"` work the same in either scheme: dark-surface styles use the `on-dark` tokens, which have the same values in light and dark themes.
 
 ## Dialog
 
@@ -192,7 +221,8 @@ function DeleteGameDialog({ onDelete }: { onDelete: () => void }) {
 - For destructive or urgent confirmations, pass `role="alertdialog"` and point `initialFocus` at Cancel. Use `color="error"` on the destructive button. An `alertdialog` is described by its `Dialog.Content`; add `describeWithContent` to describe a regular dialog holding a short message.
 - At 767px and below, `Dialog.Actions` stacks its actions full width, the usual pattern for confirmations. For forms and longer content, pass `stackOnMobile={false}` to keep them side by side. It has no effect from 768px up.
 - `onClose(reason)` reports `'closeButton' | 'escapeKey' | 'overlayPress'`. Ignore `'overlayPress'` when a form has unsaved input.
-- It shares Drawer's `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
+- For prompts that can't be skipped, like signing in again after a session expires, pass `dismissible={false}` (default `true`). Escape and overlay presses no longer call `onClose`, and the close button is hidden unless you pass `showCloseButton`. The dialog closes only when you set `open` to `false`, so always give it an action that moves the user forward.
+- It shares Drawer's `dismissible`, `showCloseButton`, `closeLabel`, `initialFocus` and `portalRoot` props, and behaves the same way: both are built on one internal modal base.
 - The switch between sheet and centered dialog is read from the viewport on the client, like Drawer's `position`. During SSR it resolves the bottom sheet, then updates after hydration.
 - Requires `components.css` (see [Quick Start](#quick-start)).
 
@@ -225,7 +255,7 @@ function FilterDrawer({ position }: Pick<DrawerProps, 'position'>) {
 }
 ```
 
-- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input).
+- The drawer is always controlled. The X icon button, Escape and overlay presses call `onClose(reason)` with `'closeButton' | 'escapeKey' | 'overlayPress'`; set `open` to `false` in response, or ignore a reason (e.g. overlay presses while a form has unsaved input). Pass `dismissible={false}` (default `true`) to stop Escape and overlay presses from calling `onClose` and hide the close button; pass `showCloseButton` to keep it.
 - `role="alertdialog"` marks urgent interruptions and describes the drawer with its `Drawer.Body`; `describeWithBody` does the same for a regular drawer. `closeLabel` localizes the close button.
 - Give it an accessible name: a `Drawer.Heading`, or `aria-label` when there's no visible title. `Drawer.Heading` takes the same `as` prop as `Dialog.Title`.
 - It renders into `document.body`. Pass `portalRoot` to render into another element instead.
@@ -246,6 +276,41 @@ const current: Breakpoint = 'large';
 ```
 
 The breakpoint is read from the viewport on the client. During SSR the drawer resolves `small`, then updates after hydration.
+
+## Menu
+
+`Menu` is controlled. Pass a `trigger` element and keep `open` in state: the menu adds the trigger's click handler, ref, and ARIA attributes, calls `onOpen` when the trigger is clicked, and calls `onClose` when the menu requests to close.
+
+```tsx
+import { useState } from 'react';
+import { Button, Menu } from '@minneapolisstartribune/design-system/web';
+
+function AccountMenu() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Menu.Root
+      trigger={<Button>Account</Button>}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      aria-label="Account"
+    >
+      <Menu.Item href="/profile">Manage Profile</Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={logOut}>Log Out</Menu.Item>
+    </Menu.Root>
+  );
+}
+```
+
+Position the menu with `placement` (default: `'bottom-start'`, below the anchor with left edges aligned). `placement` and `arrowPosition` accept a value per breakpoint. Set `--menu-width`, `--menu-max-height`, and `--menu-item-min-height` on `className` to change the default sizes.
+
+An open menu stops the page from scrolling (`lockScroll`, default `true`). Scrollable areas inside the page still scroll. Pass `lockScroll={false}` to let the page scroll while the menu stays attached to its trigger:
+
+```tsx
+<Menu.Root lockScroll={false} trigger={<Button>Account</Button>} /* ... */>
+```
 
 ## ToggleGroup
 
@@ -273,6 +338,33 @@ function GameFilter() {
 - Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
+
+## TextArea
+
+`FormControl.TextArea` (also exported as `TextArea`) is a web-only multi-line field. Put it in a `FormGroup` and it picks up the label, description and caption wiring, and error/success state from a `FormGroup.Caption` variant, same as `FormControl.TextInput`.
+
+```tsx
+<FormGroup>
+  <FormGroup.Label optional>Comment</FormGroup.Label>
+  <FormControl.TextArea
+    name="comment"
+    placeholderText="Write a comment..."
+    maxLength={200}
+    value={comment}
+    onChange={(e) => setComment(e.target.value)}
+  />
+  <FormGroup.Caption variant="info">{`${comment.length}/200 characters`}</FormGroup.Caption>
+</FormGroup>
+```
+
+- `rows` (default `2`) sets the visible lines; `resizable` (default `true`) lets users drag the height.
+- Only the native attributes listed on `TextAreaProps` are passed through (`name`, `maxLength`, `required`, `readOnly`, `autoComplete`, etc). `ref` goes to the `<textarea>`.
+- Outside a `FormGroup`, pass `aria-label` or `aria-labelledby`.
+- With TanStack Form, use `TextAreaField` from the [tanstack-form package](#tanstack-form).
+
+## TanStack Form
+
+If your forms use [TanStack Form](https://tanstack.com/form), `@minneapolisstartribune/design-system-tanstack-form` has field adapters (`TextField`, `SelectField`, `CheckboxField`, etc.) that wire the form controls' value, blur, errors and ARIA to a TanStack field. See its [README](../packages/tanstack-form/README.md) for setup and usage.
 
 ## Using CSS Variables Directly
 
@@ -346,6 +438,7 @@ loadBrandFonts('startribune');
 
 - [ ] Import theme CSS: `@minneapolisstartribune/design-system/web/{brand}-{scheme}.css`
 - [ ] Import component styles: `@minneapolisstartribune/design-system/web/components.css`
+- [ ] (Theme switching) Import `{brand}-dark.scoped.css` after the theme file
 - [ ] Wrap with `<DesignSystemProvider brand="..." forceColorScheme="...">`
 - [ ] Ensure `brand`/`forceColorScheme` props match the imported theme CSS file
 - [ ] Import CSS **before** components render (top of entry file)

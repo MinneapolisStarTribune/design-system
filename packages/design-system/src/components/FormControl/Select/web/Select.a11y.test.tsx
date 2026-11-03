@@ -27,7 +27,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
 
@@ -45,7 +45,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Outside'));
@@ -67,7 +67,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Option 2'));
@@ -89,7 +89,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Option 3'));
@@ -105,7 +105,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     expect(select).toHaveAttribute('aria-expanded', 'false');
 

@@ -141,7 +141,8 @@ describe('Popover', () => {
     await openPopover(user);
 
     const surface = await screen.findByRole('dialog');
-    expect(surface).toHaveStyle({ zIndex: 5, position: 'absolute', left: 0, top: 0 });
+    expect(surface).toHaveStyle({ zIndex: 5, left: 0, top: 0 });
+    expect(surface.style.position).toBe('fixed');
   });
 
   it('points the trigger aria-controls to the dialog', async () => {
@@ -193,7 +194,7 @@ describe('Popover', () => {
     expect(await screen.findByTestId('heading')).toHaveTextContent('Title');
     expect(screen.getByTestId('heading-close-button')).toHaveAccessibleName('Close popover');
     expect(screen.getByTestId('description')).toHaveTextContent('Description');
-    expect(screen.getByTestId('divider')).toBeInTheDocument();
+    expect(screen.getByRole('separator')).toBe(screen.getByTestId('divider'));
     expect(screen.getByTestId('body')).toHaveTextContent('Body');
   });
 

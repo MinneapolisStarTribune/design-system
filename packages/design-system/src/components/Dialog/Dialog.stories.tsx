@@ -135,10 +135,19 @@ const meta = {
   },
   argTypes: {
     children: { control: false },
+    dismissible: {
+      control: 'boolean',
+      description:
+        'Whether Escape and overlay presses request a close. Turn it off for blocking prompts that need an action.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
     showCloseButton: {
       control: 'boolean',
       description: 'Whether the top-right X icon button is rendered.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'the value of dismissible' },
+      },
     },
     role: {
       control: 'inline-radio',
@@ -189,6 +198,7 @@ export const Configurable: Story = {
   args: {
     open: false,
     onClose: () => {},
+    dismissible: true,
     showCloseButton: true,
     role: 'dialog',
     closeLabel: 'Close',
@@ -272,6 +282,7 @@ export function AddGameDialog() {
 const VariantFrame = ({
   label,
   ariaLabel,
+  dismissible,
   showCloseButton,
   role,
   initialFocus,
@@ -280,6 +291,7 @@ const VariantFrame = ({
 }: {
   label: string;
   ariaLabel?: string;
+  dismissible?: boolean;
   showCloseButton?: boolean;
   role?: DialogProps['role'];
   initialFocus?: DialogProps['initialFocus'];
@@ -302,6 +314,7 @@ const VariantFrame = ({
             onClose={() => setOpen(false)}
             portalRoot={portalRoot}
             aria-label={ariaLabel}
+            dismissible={dismissible}
             showCloseButton={showCloseButton}
             role={role}
             initialFocus={initialFocus}
@@ -364,6 +377,30 @@ const renderNoCloseButtonFrame = (initialOpen: boolean) => (
         <Dialog.Actions>
           <Button color="brand" onClick={onClose}>
             Done
+          </Button>
+        </Dialog.Actions>
+      </>
+    )}
+  </VariantFrame>
+);
+
+// Stands in for a sign-in flow: in an app, the dialog closes once the session is valid again.
+const renderBlockingFrame = (initialOpen: boolean) => (
+  <VariantFrame
+    label='dismissible={false}, role="alertdialog": closes only from an action'
+    dismissible={false}
+    role="alertdialog"
+    initialOpen={initialOpen}
+  >
+    {(onClose) => (
+      <>
+        <Dialog.Title>Your session has expired</Dialog.Title>
+        <Dialog.Content>
+          Sign in again to keep working. Your changes stay on this page.
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button color="brand" onClick={onClose}>
+            Sign in
           </Button>
         </Dialog.Actions>
       </>
@@ -510,6 +547,32 @@ export function GameAddedDialog() {
 `),
   render: (_args, { viewMode }) => (
     <div className={styles.grid}>{renderNoCloseButtonFrame(viewMode !== 'docs')}</div>
+  ),
+};
+
+export const Blocking: Story = {
+  tags: ['!dev'],
+  args: EXAMPLE_ARGS,
+  parameters: exampleParameters(`
+import { Button, Dialog } from '@minneapolisstartribune/design-system/web';
+
+// Opens when a request fails with an expired session; closes once sign-in succeeds elsewhere.
+export function SessionExpiredDialog({ open, onSignIn }: { open: boolean; onSignIn: () => void }) {
+  return (
+    <Dialog.Root role="alertdialog" dismissible={false} open={open} onClose={() => {}}>
+      <Dialog.Title>Your session has expired</Dialog.Title>
+      <Dialog.Content>Sign in again to keep working. Your changes stay on this page.</Dialog.Content>
+      <Dialog.Actions>
+        <Button color="brand" onClick={onSignIn}>
+          Sign in
+        </Button>
+      </Dialog.Actions>
+    </Dialog.Root>
+  );
+}
+`),
+  render: (_args, { viewMode }) => (
+    <div className={styles.grid}>{renderBlockingFrame(viewMode !== 'docs')}</div>
   ),
 };
 

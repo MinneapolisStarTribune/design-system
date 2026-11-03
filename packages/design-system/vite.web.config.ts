@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
 import dts from 'vite-plugin-dts';
 import preserveDirectives from 'rollup-preserve-directives';
+import type { Plugin } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -25,6 +26,26 @@ const WEB_ROLLUP_EXTERNAL = [
   /^swiper(\/.*)?$/,
 ] as const;
 
+/**
+ * esbuild escapes non-ASCII in minified CSS but still prepends `@charset`. Consumers that import
+ * components.css into a cascade layer inline it there, where `@charset` is invalid, so drop it.
+ */
+const stripAsciiCssCharset = (): Plugin => ({
+  name: 'strip-ascii-css-charset',
+  enforce: 'post',
+  generateBundle(_, bundle) {
+    for (const asset of Object.values(bundle)) {
+      if (asset.type !== 'asset' || !asset.fileName.endsWith('.css')) continue;
+      const css =
+        typeof asset.source === 'string' ? asset.source : new TextDecoder().decode(asset.source);
+      // eslint-disable-next-line no-control-regex
+      if (/^@charset "UTF-8";/.test(css) && /^[\x00-\x7F]*$/.test(css)) {
+        asset.source = css.replace(/^@charset "UTF-8";/, '');
+      }
+    }
+  },
+});
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -37,6 +58,7 @@ export default defineConfig({
   plugins: [
     react(),
     preserveDirectives(),
+    stripAsciiCssCharset(),
     svgr({
       svgrOptions: {
         icon: true,

@@ -20,6 +20,6 @@
   outline-offset: 1px;
 }
 
-:global(.sb-dark) .forceFocusRing {
+:global([data-theme='dark']) .forceFocusRing {
   outline-color: var(--color-text-on-dark-primary);
 }

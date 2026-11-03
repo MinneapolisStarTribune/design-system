@@ -1,5 +1,87 @@
 # @minneapolisstartribune/design-system
 
+## 4.2.1
+
+### Patch Changes
+
+- [#475](https://github.com/MinneapolisStarTribune/design-system/pull/475) [`9c674be`](https://github.com/MinneapolisStarTribune/design-system/commit/9c674beb505cc83ee2aa820111e0bdd9685c52dd) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Close Select, Menu, and Popover when their trigger stops rendering, such as when a responsive layout hides it. Before, the open list stayed in the top left corner of the page with no width.
+
+## 4.2.0
+
+### Minor Changes
+
+- [#474](https://github.com/MinneapolisStarTribune/design-system/pull/474) [`7e6746b`](https://github.com/MinneapolisStarTribune/design-system/commit/7e6746bfc08bda7d61b9b774112b2ec0e8fad9a7) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add as prop to SectionHeading web so semantic heading tag can differ from importance-based visual style.
+
+- [#476](https://github.com/MinneapolisStarTribune/design-system/pull/476) [`998b73a`](https://github.com/MinneapolisStarTribune/design-system/commit/998b73aaedfe2021de1694388d6fbeeaf5ab7edb) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Datepicker with inline and custom-trigger popover modes, controlled or uncontrolled date selection, inclusive date limits, and keyboard/focus support.
+
+  Document a consumer-owned Today/calendar trigger composition and expose the native button event props that UtilityButton already forwards.
+
+## 4.1.0
+
+### Minor Changes
+
+- [#472](https://github.com/MinneapolisStarTribune/design-system/pull/472) [`5b27e88`](https://github.com/MinneapolisStarTribune/design-system/commit/5b27e889d86e94f233ba7cbf8003ea6720ee99ab) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Adds `FormControl.TextArea` (also exported as `TextArea`) on web for multi-line input. It takes `resizable` and `rows`, and picks up error/success state from `FormGroup.Caption`.
+
+  `TextInput` now shares its field styles with `TextArea`, which fixes a few focus states: the focus border now shows on filled or hovered fields, a focused error field keeps its red border, and keyboard focus is visible in Windows High Contrast mode.
+
+## 4.0.0
+
+### Major Changes
+
+- [#462](https://github.com/MinneapolisStarTribune/design-system/pull/462) [`a9004df`](https://github.com/MinneapolisStarTribune/design-system/commit/a9004df141915a5bf151711f944292776c6ea8e4) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Removed `useFormLogic` and its types (`FormValidationErrors`, `UseFormLogicOptions`, `UseFormLogicReturn`). Use TanStack Form v1 with the new `@minneapolisstartribune/design-system-tanstack-form` package instead, see the Form docs in Storybook.
+
+  The new package starts with a `TextField` adapter. It wraps `TextInput` in a `FormGroup`, binds it to a string field, and shows the field's validation error as an error caption once the field is blurred or the form is submitted.
+
+### Minor Changes
+
+- [#467](https://github.com/MinneapolisStarTribune/design-system/pull/467) [`6ec71d0`](https://github.com/MinneapolisStarTribune/design-system/commit/6ec71d0956dceb4591c1b526c94a8b1534271d05) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - `Dialog.Root` and `Drawer.Root` take a `dismissible` prop. Set it to `false` for prompts that can't be skipped, like signing in again after a session expires: Escape and overlay presses no longer call `onClose`, and the close button is hidden unless you pass `showCloseButton`.
+
+- [#471](https://github.com/MinneapolisStarTribune/design-system/pull/471) [`b73ec59`](https://github.com/MinneapolisStarTribune/design-system/commit/b73ec59803c3f54fac932e83740adc2521c84bff) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Menu.Root` takes a `lockScroll` prop. It defaults to `true`, so menus still stop the page from scrolling while open. Set it to `false` to let the page scroll; the menu follows its trigger.
+
+  `Menu`, `Popover`, and `Select` now render inside the nearest dialog or `data-theme` region instead of always at the end of `body`. They open above `Dialog` and `Drawer`, stay interactive in native and third-party dialogs, and keep a scoped theme. They now position with `position: fixed`.
+
+  `Select`'s listbox now slides back into view when its trigger is partly off screen, the same way `Menu` and `Popover` do. Moving through options scrolls only the list, never the page or a scrolling container.
+
+- [#464](https://github.com/MinneapolisStarTribune/design-system/pull/464) [`aafa6aa`](https://github.com/MinneapolisStarTribune/design-system/commit/aafa6aa94591f5225ee23f3f09ecaa59ebcec09e) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Added `PasswordField`, `NumberField`, `SelectField`, `MultiSelectField`, `RadioGroupField`, `CheckboxField`, `CheckboxGroupField`, `SwitchField` and `ToggleGroupField` adapters.
+
+  `Checkbox` and `ToggleGroup.Root` take an `aria-describedby` prop, so an error caption rendered outside them can be linked to the control. On `Checkbox` it's added alongside the checkbox's own caption.
+
+### Patch Changes
+
+- [#468](https://github.com/MinneapolisStarTribune/design-system/pull/468) [`626bbb7`](https://github.com/MinneapolisStarTribune/design-system/commit/626bbb7d6045c25fe1d8be9823902796313fb33d) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Menu` now closes when the user presses Shift+Tab from an item and returns focus to the trigger, as Escape does. This follows the APG menu button pattern that Floating UI does not handle.
+
+- [#466](https://github.com/MinneapolisStarTribune/design-system/pull/466) [`94ca106`](https://github.com/MinneapolisStarTribune/design-system/commit/94ca1064fa67b82499b30ab3546e50ffcbccd13e) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Select` and `MultiSelect` stay inside their container with `box-sizing: border-box`, update their dropdowns padding and item radius.
+
+  `Select` has one tab stop. The nested button is now a plain element, so screen readers no longer announce the field twice. The combobox opens and selects with Space, exposes `aria-disabled` when disabled, and leaves the tab order.
+
+  `Select` now selects the active option and closes on Tab, and closes when focus moves to another control.
+
+- [#471](https://github.com/MinneapolisStarTribune/design-system/pull/471) [`80fa290`](https://github.com/MinneapolisStarTribune/design-system/commit/80fa2904c45eac9c4067c74b17ccfecd95ff2dbd) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Select` now renders its listbox in a portal positioned with Floating UI, so a scrollable or `overflow: hidden` ancestor such as a table no longer clips it. Opening the list no longer scrolls the page or its container. The list flips above the trigger when there is no room below, and it shrinks to fit the space available. `Select` on web now needs the `@floating-ui/react` peer dependency.
+
+## 3.2.0
+
+### Minor Changes
+
+- [#461](https://github.com/MinneapolisStarTribune/design-system/pull/461) [`c53d374`](https://github.com/MinneapolisStarTribune/design-system/commit/c53d374aa134bf28579862a1e80a2e86555ad679) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - `components.css` no longer starts with `@charset "UTF-8";`. The file is ASCII-only, so the rule did nothing, and when the file was imported into a cascade layer (`@import … layer(…)`) it caused an "Unknown at rule: @charset" parse warning.
+
+  Add scoped web theme files: `startribune-light.scoped.css`, `startribune-dark.scoped.css`, `varsity-light.scoped.css`, and `varsity-dark.scoped.css`. Each contains only the scheme's CSS variables, under `[data-theme='light']` or `[data-theme='dark']`, and sets `color-scheme`. Import `{brand}-dark.scoped.css` after `{brand}-light.css` to switch to dark with `data-theme="dark"` on `<html>` or on any region. The existing `{brand}-{mode}.css` files are unchanged.
+
+  `DesignSystemProvider` now sets `data-theme` on `<html>` when `forceColorScheme` is passed, and restores the previous value on unmount. When `forceColorScheme` is omitted, the provider leaves `data-theme` alone. Apps that pass `forceColorScheme="dark"` now also get the `[data-theme='dark']` styles in `TextInput` and `CandyBar` (the same styles dark Storybook shows). `Link` now applies its dark styles under `[data-theme='dark']` as well as `.sb-dark`. The new `DS_ROOT_THEME_ATTRIBUTE` export holds the attribute name.
+
+## 3.1.0
+
+### Minor Changes
+
+- [#455](https://github.com/MinneapolisStarTribune/design-system/pull/455) [`50e6e2d`](https://github.com/MinneapolisStarTribune/design-system/commit/50e6e2d67d507d5029e798102d9700c0390bc4c4) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add web `Menu`, with `Menu.Item`, `Menu.ItemIcon`, and `Menu.Divider`. The divider leaves 2px above and below it, so hovered and focused items don't touch it. The menu renders and wires a `trigger` element (with `onOpen`). It supports `placement`, pointer controls, link and disabled items (pass `as={NextLink}` to render a router link), item-closing behavior, and arrow-key navigation. `placement` and `arrowPosition` accept a value per breakpoint. Its `onClose` callback takes no arguments. If the chosen side runs out of room, the menu flips to the other side, then shrinks to fit and scrolls. Pass `portalRoot` to render it outside `document.body`.
+
+  Exports the `MenuProps`, `MenuItemProps`, `MenuPlacement`, and `MenuArrowPosition` types.
+
+### Patch Changes
+
+- [#455](https://github.com/MinneapolisStarTribune/design-system/pull/455) [`aaf6052`](https://github.com/MinneapolisStarTribune/design-system/commit/aaf605267d485d98e5590d939eb473696e05bdd4) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Popover` now shrinks to fit narrow screens or its `portalRoot`. A `left` or `right` popover that fits on neither side opens below or above the trigger instead. `Popover.Divider` now applies `fullBleed`: by default it spans the popover edge to edge, and with `fullBleed={false}` it lines up with the body text. The divider also has `role="separator"`.
+
+- [#456](https://github.com/MinneapolisStarTribune/design-system/pull/456) [`3cac61b`](https://github.com/MinneapolisStarTribune/design-system/commit/3cac61bfccef8b587774f17998db8ecd84267a50) Thanks [@quynhngandao](https://github.com/quynhngandao)! - `Select` now matches the Core `select` component. The options list uses the dropdown menu styles shared with `Menu`: 16px list radius, no vertical list padding, 12px option padding, 16px option text at every size, a 3px scrollbar, and a max height of 317px (was 280px), scrolling past that. The large trigger has a 12px gap before the chevron. Default and error borders use the `border-on-light-subtle-02` and `border-state-attention-on-light` tokens, so they follow dark mode. `Select` also no longer adds an `undefined` class to its container when a value is selected.
+
 ## 3.0.0
 
 ### Major Changes

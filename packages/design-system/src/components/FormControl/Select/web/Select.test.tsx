@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
-import { within } from '@testing-library/react';
+import { act } from '@testing-library/react';
 
 const OPTIONS = [
   { value: 'us', label: 'United States' },
@@ -31,7 +31,7 @@ describe('Select', () => {
       <FormControl.Select id="test" options={OPTIONS} size="small" />
     );
 
-    await user.click(within(getByRole('combobox')).getByRole('button'));
+    await user.click(getByRole('combobox'));
 
     expect(getByRole('listbox')).toHaveClass('typography-utility-text-regular-medium');
   });
@@ -42,7 +42,7 @@ describe('Select', () => {
     const { getByRole } = renderWithProvider(<FormControl.Select id="test" options={OPTIONS} />);
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
 
@@ -60,7 +60,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Outside'));
@@ -77,7 +77,7 @@ describe('Select', () => {
     );
 
     const select = getByRole('combobox');
-    const trigger = within(select).getByRole('button');
+    const trigger = select;
 
     await user.click(trigger);
     await user.click(getByText('Canada'));
@@ -85,7 +85,76 @@ describe('Select', () => {
     expect(onChange).toHaveBeenCalledWith('ca');
   });
 
-  describe.each(['combobox', 'button'] as const)('Enter on the %s', (role) => {
+  it('renders the listbox outside a clipping container and keeps focus on the combobox', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, getByTestId, findByRole } = renderWithProvider(
+      <div data-testid="clip" style={{ overflow: 'auto' }}>
+        <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+      </div>
+    );
+    const select = getByRole('combobox');
+
+    await user.click(select);
+    const listbox = await findByRole('listbox');
+
+    expect(getByTestId('clip').contains(listbox)).toBe(false);
+    expect(select).toHaveAttribute('aria-controls', listbox.id);
+
+    await user.click(getByRole('option', { name: 'Canada' }));
+
+    expect(onChange).toHaveBeenCalledWith('ca');
+    expect(select).toHaveFocus();
+  });
+
+  it('selects the active option and closes on Tab', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+    );
+
+    getByRole('combobox').focus();
+    await user.keyboard('{ArrowDown}{ArrowDown}{Tab}');
+
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('ca');
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('closes when focus moves to another control', async () => {
+    const user = userEvent.setup();
+    const { getByRole, getByText, queryByRole } = renderWithProvider(
+      <>
+        <FormControl.Select id="test" options={OPTIONS} />
+        <button>Other</button>
+      </>
+    );
+
+    await user.click(getByRole('combobox'));
+    expect(getByRole('listbox')).toBeInTheDocument();
+
+    act(() => getByText('Other').focus());
+
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('opens with Space and selects the active option with Space', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} onChange={onChange} />
+    );
+
+    getByRole('combobox').focus();
+    await user.keyboard(' ');
+    expect(getByRole('listbox')).toBeInTheDocument();
+
+    await user.keyboard('{ArrowDown} ');
+    expect(onChange).toHaveBeenCalledExactlyOnceWith('ca');
+    expect(queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  describe('Enter on the combobox', () => {
     it.each([
       { value: undefined, label: 'United States', expectedValue: 'us' },
       { value: 'ca', label: 'Canada', expectedValue: 'ca' },
@@ -99,7 +168,7 @@ describe('Select', () => {
           <FormControl.Select id="test" options={OPTIONS} value={value} onChange={onChange} />
         );
 
-        getByRole(role).focus();
+        getByRole('combobox').focus();
         await user.keyboard('{Enter}');
 
         const select = getByRole('combobox');
@@ -128,7 +197,7 @@ describe('Select', () => {
       const select = getByRole('combobox');
 
       if (openWith === 'click') {
-        await user.click(getByRole('button'));
+        await user.click(getByRole('combobox'));
       } else {
         select.focus();
         await user.keyboard(`{${openWith}}`);
@@ -171,36 +240,34 @@ describe('Select', () => {
     });
 
     it.each(['click', 'Enter', 'ArrowDown', 'ArrowUp'])(
-      'reveals the listbox on %s, without scrolling it again during navigation',
+      'opens on %s and navigates without scrolling ancestors',
       async (openWith) => {
         const user = userEvent.setup();
-        const { getByRole, queryByRole, rerender } = renderWithProvider(
+        const { findByRole, getByRole, queryByRole, rerender } = renderWithProvider(
           <FormControl.Select id="test" options={OPTIONS} />
         );
 
         expect(scrollIntoView).not.toHaveBeenCalled();
         const select = getByRole('combobox');
         if (openWith === 'click') {
-          await user.click(within(select).getByRole('button'));
+          await user.click(select);
         } else {
           select.focus();
           await user.keyboard(`{${openWith}}`);
         }
 
-        const listbox = getByRole('listbox');
-        const firstOption = getByRole('option', { name: 'United States' });
+        const firstOption = await findByRole('option', { name: 'United States' });
         expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
-        expect(scrollIntoView.mock.contexts).toEqual([firstOption, listbox]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
-        scrollIntoView.mockClear();
         await user.keyboard('{ArrowDown}');
         const secondOption = getByRole('option', { name: 'Canada' });
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption]);
-        expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+        expect(select).toHaveAttribute('aria-activedescendant', secondOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         await user.hover(firstOption);
-        expect(scrollIntoView.mock.contexts).toEqual([secondOption, firstOption]);
+        expect(select).toHaveAttribute('aria-activedescendant', firstOption.id);
+        expect(scrollIntoView).not.toHaveBeenCalled();
 
         scrollIntoView.mockClear();
         rerender(<FormControl.Select id="test" options={OPTIONS} isError />);
@@ -212,23 +279,23 @@ describe('Select', () => {
       }
     );
 
-    it('reveals the selected option and listbox again after closing with the trigger', async () => {
+    it('reopens at the selected option without scrolling ancestors', async () => {
       const user = userEvent.setup();
-      const { getByRole } = renderWithProvider(
+      const { findByRole, getByRole } = renderWithProvider(
         <FormControl.Select id="test" options={OPTIONS} value="ca" />
       );
-      const trigger = getByRole('button');
+      const trigger = getByRole('combobox');
 
       await user.click(trigger);
       await user.click(trigger);
       scrollIntoView.mockClear();
       await user.click(trigger);
 
-      expect(scrollIntoView.mock.contexts).toEqual([
-        getByRole('option', { name: 'Canada' }),
-        getByRole('listbox'),
-      ]);
-      expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest', inline: 'nearest' });
+      expect(trigger).toHaveAttribute(
+        'aria-activedescendant',
+        (await findByRole('option', { name: 'Canada' })).id
+      );
+      expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
     it('does not open or scroll a disabled Select', async () => {
@@ -237,7 +304,7 @@ describe('Select', () => {
         <FormControl.Select id="test" options={OPTIONS} isDisabled />
       );
 
-      await user.click(getByRole('button'));
+      await user.click(getByRole('combobox'));
       getByRole('combobox').focus();
       await user.keyboard('{Enter}{ArrowDown}{ArrowUp}');
 

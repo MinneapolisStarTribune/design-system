@@ -335,6 +335,40 @@ describe('Dialog', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
+    it('ignores Escape and overlay presses and hides the close button when not dismissible', async () => {
+      const user = userEvent.setup();
+      const onClose = vi.fn();
+
+      renderWithProvider(
+        <Dialog.Root open onClose={onClose} dismissible={false} aria-label="Session expired">
+          <Dialog.Content>Body copy</Dialog.Content>
+        </Dialog.Root>
+      );
+
+      await user.keyboard('{Escape}');
+      await user.click(screen.getByTestId('dialog-overlay'));
+
+      expect(onClose).not.toHaveBeenCalled();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    });
+
+    it('keeps the close button when not dismissible with showCloseButton', () => {
+      renderWithProvider(
+        <Dialog.Root
+          open
+          onClose={() => {}}
+          dismissible={false}
+          showCloseButton
+          aria-label="Add game"
+        >
+          <Dialog.Content>Body copy</Dialog.Content>
+        </Dialog.Root>
+      );
+
+      expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
+    });
+
     it('closes from an action that sets open to false', async () => {
       const user = userEvent.setup();
 
