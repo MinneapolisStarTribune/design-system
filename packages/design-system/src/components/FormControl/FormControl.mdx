@@ -134,7 +134,7 @@ Switch:
 
 The web container has static members so Rollup/Vite can remove unused controls. Direct named
 exports remain available and are recommended for bundlers that retain compound containers.
-The built-package bundle check verifies that TextInput, NumberInput, and Select imports do not
+The optional local bundle check verifies that TextInput, NumberInput, and Select imports do not
 include datepicker code. After building the web package, run
 `yarn workspace @minneapolisstartribune/design-system check:formcontrol-tree-shaking`.
 
