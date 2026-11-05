@@ -1,5 +1,12 @@
 # @minneapolisstartribune/design-system-tanstack-form
 
+## 3.0.0
+
+### Patch Changes
+
+- Updated dependencies [[`57a1b44`](https://github.com/MinneapolisStarTribune/design-system/commit/57a1b444f23c8175035ac70838682108beaba0d8), [`12e5634`](https://github.com/MinneapolisStarTribune/design-system/commit/12e563404e1ed9ebfeda117b3a3951eebb43fc88)]:
+  - @minneapolisstartribune/design-system@4.3.0
+
 ## 2.0.0
 
 ### Patch Changes

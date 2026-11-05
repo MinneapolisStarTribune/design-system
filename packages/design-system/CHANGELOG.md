@@ -1,5 +1,15 @@
 # @minneapolisstartribune/design-system
 
+## 4.3.0
+
+### Minor Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`57a1b44`](https://github.com/MinneapolisStarTribune/design-system/commit/57a1b444f23c8175035ac70838682108beaba0d8) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `icon` prop to web `Select` for a decorative icon before the value.
+
+### Patch Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`12e5634`](https://github.com/MinneapolisStarTribune/design-system/commit/12e563404e1ed9ebfeda117b3a3951eebb43fc88) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Fix web `TextInput` icons ignoring the tertiary and disabled colors.
+
 ## 4.2.1
 
 ### Patch Changes
