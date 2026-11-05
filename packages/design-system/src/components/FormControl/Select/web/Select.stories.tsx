@@ -4,8 +4,9 @@ import { expect, screen } from 'storybook/test';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
-import { ClockIcon } from '@/icons';
+import { CalendarIcon, ClockIcon, LocationIcon } from '@/icons';
 import type { SelectProps } from '../Select.types';
+import storyStyles from './Select.stories.module.scss';
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{ marginBottom: 4 }}>
@@ -68,6 +69,17 @@ const meta = {
     value: {
       control: 'text',
       description: 'Controlled selected option value.',
+    },
+    icon: {
+      control: 'select',
+      mapping: {
+        None: undefined,
+        Clock: <ClockIcon />,
+        Calendar: <CalendarIcon />,
+        Location: <LocationIcon />,
+      },
+      options: ['None', 'Clock', 'Calendar', 'Location'],
+      description: 'Optional decorative icon shown before the value.',
     },
   },
 } satisfies Meta<typeof FormControl.Select>;
@@ -195,11 +207,19 @@ export const AllVariants: Story = {
         </div>
 
         {/* Icon */}
-        <div style={cellStyle}>
+        <div className={storyStyles.cell}>
           <SectionLabel>Icon</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
             <FormControl.Select options={OPTIONS} icon={<ClockIcon />} />
+          </FormGroup>
+        </div>
+
+        <div className={storyStyles.cell}>
+          <SectionLabel>Icon: Disabled</SectionLabel>
+          <FormGroup>
+            <FormGroup.Label>Label</FormGroup.Label>
+            <FormControl.Select options={OPTIONS} icon={<ClockIcon />} isDisabled />
           </FormGroup>
         </div>
 
@@ -357,11 +377,19 @@ export const AllVariants: Story = {
         </div>
 
         {/* Icon */}
-        <div style={cellStyle}>
+        <div className={storyStyles.cell}>
           <SectionLabel>Icon</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
             <FormControl.Select options={OPTIONS} icon={<ClockIcon />} />
+          </FormGroup>
+        </div>
+
+        <div className={storyStyles.cell}>
+          <SectionLabel>Icon: Disabled</SectionLabel>
+          <FormGroup>
+            <FormGroup.Label>Label</FormGroup.Label>
+            <FormControl.Select options={OPTIONS} icon={<ClockIcon />} isDisabled />
           </FormGroup>
         </div>
 
