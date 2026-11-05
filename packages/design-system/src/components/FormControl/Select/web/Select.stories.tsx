@@ -136,13 +136,19 @@ export const Configurable: Story = {
   render: (args) => <ConfigurableComponent {...args} />,
 };
 
+const TIME_OPTIONS = ['6:00', '7:00', '8:00', '9:00', '10:00'].map((time) => ({
+  value: time,
+  label: `${time} PM`,
+}));
+
 export const WithIcon: Story = {
   args: {
     id: 'select-with-icon',
-    options: OPTIONS,
+    options: TIME_OPTIONS,
     placeholderText: 'Select...',
     icon: <ClockIcon />,
   },
+  render: (args) => <ConfigurableComponent {...args} />,
 };
 
 export const AllVariants: Story = {
