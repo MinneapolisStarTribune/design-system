@@ -242,10 +242,14 @@ export const Coachmark: React.FC<CoachmarkProps> = ({
   };
 
   const childElement = isValidElement(children)
-    ? (children as ReactElement<Record<string, unknown>> & { ref?: React.Ref<unknown> })
+    ? (children as ReactElement<Record<string, unknown>>)
     : null;
 
-  const mergedRef = useMergeRefs([refs.setReference, childElement?.ref ?? null]);
+  // React 19 moved `ref` onto `props` itself -- reading the old top-level `element.ref` getter
+  // still works but warns ("Accessing element.ref was removed in React 19"), since it's slated
+  // for removal from the JSX Element type entirely.
+  const childRef = (childElement?.props.ref ?? null) as React.Ref<unknown> | null;
+  const mergedRef = useMergeRefs([refs.setReference, childRef]);
 
   const triggerElement = childElement ? (
     cloneElement(
