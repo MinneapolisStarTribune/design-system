@@ -339,6 +339,14 @@ function GameFilter() {
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
 
+## Select
+
+`FormControl.Select` takes an optional `icon` (e.g. `<ClockIcon />`) shown before the value. It's decorative (`aria-hidden`) and web-only.
+
+```tsx
+<FormControl.Select id="time" options={options} icon={<ClockIcon />} />
+```
+
 ## TextArea
 
 `FormControl.TextArea` (also exported as `TextArea`) is a web-only multi-line field. Put it in a `FormGroup` and it picks up the label, description and caption wiring, and error/success state from a `FormGroup.Caption` variant, same as `FormControl.TextInput`.
