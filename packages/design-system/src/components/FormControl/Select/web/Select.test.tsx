@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { act } from '@testing-library/react';
+import { ClockIcon } from '@/icons';
 
 const OPTIONS = [
   { value: 'us', label: 'United States' },
@@ -15,6 +16,14 @@ describe('Select', () => {
     const { getByRole } = renderWithProvider(<FormControl.Select id="test" options={OPTIONS} />);
 
     expect(getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('renders a decorative icon', () => {
+    const { getByTestId } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} icon={<ClockIcon data-testid="icon" />} />
+    );
+
+    expect(getByTestId('icon').parentElement).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('puts no undefined class on the container when a value is selected', () => {

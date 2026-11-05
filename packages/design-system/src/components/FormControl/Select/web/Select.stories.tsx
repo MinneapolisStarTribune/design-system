@@ -4,6 +4,7 @@ import { expect, screen } from 'storybook/test';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { UtilityLabel } from '@/components/Typography/Utility';
+import { ClockIcon } from '@/icons';
 import type { SelectProps } from '../Select.types';
 
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
@@ -133,6 +134,15 @@ export const Configurable: Story = {
     },
   },
   render: (args) => <ConfigurableComponent {...args} />,
+};
+
+export const WithIcon: Story = {
+  args: {
+    id: 'select-with-icon',
+    options: OPTIONS,
+    placeholderText: 'Select...',
+    icon: <ClockIcon />,
+  },
 };
 
 export const AllVariants: Story = {

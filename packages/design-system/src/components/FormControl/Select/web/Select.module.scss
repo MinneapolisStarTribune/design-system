@@ -116,6 +116,18 @@
   transition: transform 0.15s ease;
 }
 
+.selectStartIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+  color: var(--color-text-on-light-tertiary);
+}
+
+[data-theme='dark'] .selectStartIcon {
+  color: var(--color-text-on-dark-tertiary);
+}
+
 .selectIconOpen {
   transform: rotate(180deg);
 }
