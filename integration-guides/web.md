@@ -96,8 +96,11 @@ Malformed dates are treated as empty and malformed bounds as absent. Inverted bo
 dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
 Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
 
-The consumer owns its Today action. The text input wrapper and TanStack Form adapter are
-deliberately deferred to VAR-1335; this calendar does not add them to `FormControl`.
+The consumer owns its Today action. For an editable field, import `FormControl.Datepicker`
+(via `FormControl`) or the named `FormControlDatepicker` from `@minneapolisstartribune/design-system/web`.
+The field emits `YYYY-MM-DD` for valid dates, an empty string when cleared, and raw text for
+incomplete edits. Use `validateDateInput(value, { required, min, max })` with the same limits
+when validating programmatic submissions. See the [TanStack `DateField` example](../packages/tanstack-form/README.md#datefield).
 
 ## Coachmark
 

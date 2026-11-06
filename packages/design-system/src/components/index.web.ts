@@ -57,6 +57,12 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
+export { validateDateInput } from './FormControl/Datepicker/dateInput';
+export type { DateInputLimits } from './FormControl/Datepicker/Datepicker.types';
+export {
+  FormControlDatepicker,
+  type FormControlDatepickerProps,
+} from './FormControl/Datepicker/web/Datepicker';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export type {
   MultiSelectOption,

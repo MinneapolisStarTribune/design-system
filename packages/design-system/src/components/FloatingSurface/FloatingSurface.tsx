@@ -36,6 +36,7 @@ type UseFloatingSurfaceOptions = {
   portalRoot?: HTMLElement | null;
   interactionRole?: UseRoleProps['role'];
   hideArrow?: boolean;
+  matchAnchorWidth?: boolean;
   arrowSize?: { width: number; height: number };
   arrowPadding?: number;
   id?: string;
@@ -53,6 +54,7 @@ export const useFloatingSurface = ({
   portalRoot,
   interactionRole = 'dialog',
   hideArrow = false,
+  matchAnchorWidth,
   arrowSize = DEFAULT_ARROW_SIZE,
   arrowPadding = 0,
   id,
@@ -68,6 +70,7 @@ export const useFloatingSurface = ({
     open,
     onOpenChange,
     placement,
+    matchAnchorWidth,
     offset: hideArrow ? FLOATING_GAP : arrowSize.height + FLOATING_GAP,
     portalRoot: resolvedPortalRoot,
     arrow: { element: arrowElement, padding: arrowPadding },

@@ -1,0 +1,9 @@
+.preview {
+  width: 288px;
+  max-width: 100%;
+}
+
+.variants {
+  display: grid;
+  gap: var(--spacing-24);
+}

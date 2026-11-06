@@ -12,6 +12,7 @@ import { RadioGroup } from './RadioGroup/web/RadioGroup';
 import { Select } from './Select/web/Select';
 import { MultiSelect } from './MultiSelect/web/MultiSelect';
 import { Switch } from './Switch/web/Switch';
+import { FormControlDatepicker } from './Datepicker/web/Datepicker';
 
 export type FormControlSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
@@ -20,7 +21,7 @@ export interface FormControlProps extends BaseProps {
   isDisabled?: boolean;
 }
 
-export const FormControl: React.FC<FormControlProps> & {
+export const FormControl: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,26 +42,17 @@ export const FormControl: React.FC<FormControlProps> & {
   MultiSelect: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Switch: React.ComponentType<any>;
-  // Add any new form control subcomponents here
-} = () => {
-  if (typeof console !== 'undefined' && console.error) {
-    console.error(
-      'FormControl must be used with a subcomponent (e.g., FormControl.TextInput). ' +
-        'Use <FormControl.TextInput /> instead of <FormControl />.'
-    );
-  }
-  return null;
+  Datepicker: typeof FormControlDatepicker;
+} = {
+  TextInput,
+  TextArea,
+  NumberInput,
+  PasswordInput,
+  Checkbox,
+  CheckboxGroup,
+  RadioGroup,
+  Select,
+  MultiSelect,
+  Switch,
+  Datepicker: FormControlDatepicker,
 };
-
-// Attach subcomponents
-FormControl.TextInput = TextInput;
-FormControl.TextArea = TextArea;
-FormControl.NumberInput = NumberInput;
-FormControl.PasswordInput = PasswordInput;
-FormControl.Checkbox = Checkbox;
-FormControl.CheckboxGroup = CheckboxGroup;
-FormControl.RadioGroup = RadioGroup;
-FormControl.Select = Select;
-FormControl.MultiSelect = MultiSelect;
-FormControl.Switch = Switch;
-// Add any new form control subcomponents here
