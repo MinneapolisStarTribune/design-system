@@ -8,7 +8,7 @@ import * as Stories from './Autocomplete.stories';
 A web searchable selection field, available as `Autocomplete` or `FormControl.Autocomplete`.
 Uses Select surfaces, sizes, dropdown positioning, and FormGroup labels and validation.
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Configurable} />
 <Controls />
 
 ## Selection and search
@@ -33,16 +33,12 @@ options are toggled. Typing filters results without clearing existing selections
 `onInputChange` and displays the selected-label summary separately. Reopening by click, toggle,
 or arrow key starts with an empty search, including when `inputValue` is controlled.
 
-<Canvas of={Stories.Checkboxes} />
-<Canvas of={Stories.Error} />
-
 ## Custom rows
 
 `renderOption` receives the original option and the props for its `li`. Destructure `key`
 and spread every remaining prop on the row to preserve keyboard and pointer behavior.
 Decorative team logos should use an empty image alt attribute. Do not add interactive controls inside options.
 
-<Canvas of={Stories.TeamOptions} />
-<Canvas of={Stories.Loading} />
-<Canvas of={Stories.LoadingIconText} />
-<Canvas of={Stories.Empty} />
+## All variants
+
+<Canvas of={Stories.AllVariants} />

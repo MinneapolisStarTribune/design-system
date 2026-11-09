@@ -1,6 +1,14 @@
 import type React from 'react';
 import type { SelectOption, SelectProps } from '../Select/Select.types';
 
+export const AUTOCOMPLETE_LOADING_VARIANTS = ['text', 'icon-text'] as const;
+export type AutocompleteLoadingVariant = (typeof AUTOCOMPLETE_LOADING_VARIANTS)[number];
+export const AUTOCOMPLETE_SIZES = [
+  'small',
+  'medium',
+  'large',
+] as const satisfies readonly NonNullable<SelectProps['size']>[];
+
 export type AutocompleteOption = SelectOption;
 export type AutocompleteOptionProps = React.HTMLAttributes<HTMLLIElement> & {
   key: React.Key;
@@ -18,7 +26,7 @@ interface AutocompleteBaseProps<T extends AutocompleteOption>
   /** Accessible loading announcement; skeletons provide the visible loading state. */
   loadingText?: string;
   /** Match loading rows to plain options or options with a leading icon/logo. */
-  loadingVariant?: 'text' | 'icon-text';
+  loadingVariant?: AutocompleteLoadingVariant;
   noOptionsText?: string;
   /** Spread the supplied props on the option's li to preserve interaction and accessibility. */
   renderOption?: (props: AutocompleteOptionProps, option: T) => React.ReactNode;

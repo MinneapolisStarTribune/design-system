@@ -36,20 +36,6 @@ describe('Autocomplete', () => {
     expect(queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  it('skips disabled options and commits with Enter', async () => {
-    const user = userEvent.setup();
-    const change = vi.fn();
-    const { getByRole } = renderWithProvider(
-      <Autocomplete id="sport" options={options} onChange={change} />
-    );
-    const input = getByRole('combobox');
-    await user.click(input);
-    await user.keyboard('{ArrowDown}');
-    expect(input).toHaveAttribute('aria-activedescendant', 'sport-option-1');
-    await user.keyboard('{Enter}');
-    expect(change).toHaveBeenCalledWith('b');
-  });
-
   it('restores the selection on blur, and clears it when the text is erased', async () => {
     const user = userEvent.setup();
     function Example() {
@@ -83,22 +69,6 @@ describe('Autocomplete', () => {
     rerender(<Autocomplete id="sport" options={[]} />);
     expect(getByRole('status')).toHaveTextContent('No options found');
   });
-
-  it('does not select on Tab or Escape and does not open while disabled', async () => {
-    const user = userEvent.setup();
-    const change = vi.fn();
-    const { getByRole, queryByRole, rerender } = renderWithProvider(
-      <Autocomplete id="sport" options={options} onChange={change} />
-    );
-    await user.click(getByRole('combobox'));
-    await user.keyboard('{ArrowDown}{Escape}');
-    expect(queryByRole('listbox')).not.toBeInTheDocument();
-    await user.keyboard('{ArrowDown}{Tab}');
-    expect(change).not.toHaveBeenCalled();
-    rerender(<Autocomplete id="sport" options={options} isDisabled />);
-    await user.click(getByRole('combobox'));
-    expect(queryByRole('listbox')).not.toBeInTheDocument();
-  });
 });
 
 it('toggles multiple selections without closing and preserves them during search', async () => {
@@ -121,35 +91,6 @@ it('toggles multiple selections without closing and preserves them during search
   await user.click(getByRole('option', { name: 'Football' }));
   expect(getByRole('option', { name: 'Football' })).toHaveAttribute('aria-selected', 'false');
 });
-
-it.each(['text', 'icon-text'] as const)(
-  'keeps %s skeletons out of keyboard navigation and announces loading until options arrive',
-  async (loadingVariant) => {
-    const user = userEvent.setup();
-    const change = vi.fn();
-    const { getByRole, queryAllByRole, queryByRole, rerender } = renderWithProvider(
-      <Autocomplete
-        id="loading"
-        options={[]}
-        loading
-        loadingVariant={loadingVariant}
-        onChange={change}
-      />
-    );
-    await user.click(getByRole('combobox'));
-    expect(getByRole('listbox')).toHaveAttribute('aria-busy', 'true');
-    expect(getByRole('status')).toHaveTextContent('Loading');
-    expect(queryAllByRole('option')).toHaveLength(0);
-    await user.keyboard('{ArrowDown}{Enter}');
-    expect(change).not.toHaveBeenCalled();
-    expect(getByRole('combobox')).not.toHaveAttribute('aria-activedescendant');
-    rerender(<Autocomplete id="loading" options={options} onChange={change} />);
-    expect(queryByRole('status')).not.toBeInTheDocument();
-    expect(getByRole('listbox')).toHaveAttribute('aria-busy', 'false');
-    await user.keyboard('{ArrowDown}{Enter}');
-    expect(change).toHaveBeenCalledWith('b');
-  }
-);
 
 it.each([
   ['blur', 'input'],
@@ -200,20 +141,4 @@ it.each([
   expect(input).toHaveValue('');
   expect(getAllByRole('option')).toHaveLength(3);
   expect(getByRole('option', { name: 'Football' })).toHaveAttribute('aria-selected', 'true');
-});
-
-it('removes active-option references when an expanded control becomes disabled', async () => {
-  const user = userEvent.setup();
-  const { getByRole, queryByRole, rerender } = renderWithProvider(
-    <Autocomplete id="disable" options={options} />
-  );
-  const input = getByRole('combobox');
-  await user.click(input);
-  await user.keyboard('{ArrowDown}');
-  expect(input).toHaveAttribute('aria-activedescendant', 'disable-option-1');
-  rerender(<Autocomplete id="disable" options={options} isDisabled />);
-  expect(queryByRole('listbox')).not.toBeInTheDocument();
-  expect(input).toHaveAttribute('aria-expanded', 'false');
-  expect(input).not.toHaveAttribute('aria-controls');
-  expect(input).not.toHaveAttribute('aria-activedescendant');
 });

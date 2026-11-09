@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useArgs } from 'storybook/preview-api';
 import { Autocomplete } from './Autocomplete';
-import type { AutocompleteProps } from '../Autocomplete.types';
+import {
+  AUTOCOMPLETE_LOADING_VARIANTS,
+  AUTOCOMPLETE_SIZES,
+  type AutocompleteProps,
+} from '../Autocomplete.types';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
+import styles from './Autocomplete.stories.module.scss';
 
 const options = [
   { value: 'baseball', label: 'Baseball' },
@@ -12,80 +18,144 @@ const options = [
   { value: 'football', label: 'Football' },
   { value: 'girls-flag-football', label: 'Girls Flag Football' },
 ];
+type StoryArgs = Omit<AutocompleteProps, 'value' | 'onChange' | 'multiple'> & {
+  multiple?: boolean;
+  value?: string | string[];
+};
 const meta = {
   title: 'FormControl/Autocomplete',
   component: Autocomplete,
-  args: { id: 'sport', options, placeholderText: 'Select sport...' },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 320, minHeight: 420 }}>
-        <Story />
-      </div>
-    ),
-  ],
-  render: function Render(args) {
-    const [value, setValue] = useState<string>();
-    return <Autocomplete {...args} multiple={false} value={value} onChange={setValue} />;
+  args: {
+    id: 'sport',
+    options,
+    placeholderText: 'Select sport...',
+    multiple: false,
+    loading: false,
+    loadingVariant: 'text',
+    size: 'medium',
+  },
+  argTypes: {
+    multiple: { control: 'boolean' },
+    value: { control: 'object' },
+    size: { control: 'select', options: AUTOCOMPLETE_SIZES },
+    loadingVariant: { control: 'select', options: AUTOCOMPLETE_LOADING_VARIANTS },
+    isDisabled: { control: 'boolean' },
+    isError: { control: 'boolean' },
+    rounded: { control: 'boolean' },
+    filterOptions: { control: 'boolean' },
   },
 } satisfies Meta<typeof Autocomplete>;
 export default meta;
-type Story = StoryObj<
-  Omit<AutocompleteProps, 'value' | 'onChange' | 'multiple'> & { multiple?: boolean }
->;
-export const Default: Story = {};
-export const Loading: Story = {
-  name: 'Loading — Text',
-  args: { options: [], loading: true, loadingVariant: 'text' },
-};
-export const LoadingIconText: Story = {
-  name: 'Loading — Icon and Text',
-  args: { options: [], loading: true, loadingVariant: 'icon-text' },
-};
-export const Empty: Story = { args: { options: [], noOptionsText: 'No schools found' } };
-export const Disabled: Story = { args: { isDisabled: true } };
-export const Error: Story = {
-  args: { isError: true },
-  render: function ErrorExample(args) {
-    const [value, setValue] = useState<string>();
+type Story = StoryObj<StoryArgs>;
+
+export const Configurable: Story = {
+  render: function Render() {
+    const [args, updateArgs] = useArgs<StoryArgs>();
+    const { value, ...rest } = args;
     return (
-      <FormGroup>
-        <FormGroup.Label htmlFor={args.id}>Sport</FormGroup.Label>
-        <Autocomplete {...args} multiple={false} value={value} onChange={setValue} />
-        <FormGroup.Caption variant="error">Please select a sport.</FormGroup.Caption>
-      </FormGroup>
+      <div className={styles.preview}>
+        <FormGroup>
+          <FormGroup.Label htmlFor={args.id}>Sport</FormGroup.Label>
+          {args.multiple ? (
+            <Autocomplete
+              {...rest}
+              multiple
+              value={Array.isArray(value) ? value : []}
+              onChange={(next) => updateArgs({ value: next })}
+              onInputChange={(next) => {
+                args.onInputChange?.(next);
+                if (args.inputValue !== undefined) updateArgs({ inputValue: next });
+              }}
+            />
+          ) : (
+            <Autocomplete
+              {...rest}
+              multiple={false}
+              value={typeof value === 'string' ? value : undefined}
+              onChange={(next) => updateArgs({ value: next })}
+              onInputChange={(next) => {
+                args.onInputChange?.(next);
+                if (args.inputValue !== undefined) updateArgs({ inputValue: next });
+              }}
+            />
+          )}
+          {args.isError && (
+            <FormGroup.Caption variant="error">Please select a sport.</FormGroup.Caption>
+          )}
+        </FormGroup>
+      </div>
     );
   },
 };
-export const Checkboxes: Story = {
-  args: { multiple: true },
-  render: function CheckboxExample(args) {
-    const [value, setValue] = useState<string[]>([]);
-    return (
+
+function Example({ label, ...args }: StoryArgs & { label: string }) {
+  const [single, setSingle] = useState<string>();
+  const [multiple, setMultiple] = useState<string[]>([]);
+  return (
+    <section className={styles.example}>
       <FormGroup>
-        <FormGroup.Label htmlFor={args.id}>Sport</FormGroup.Label>
-        <Autocomplete {...args} multiple value={value} onChange={setValue} />
+        <FormGroup.Label htmlFor={args.id}>{label}</FormGroup.Label>
+        {args.multiple ? (
+          <Autocomplete {...args} multiple value={multiple} onChange={setMultiple} />
+        ) : (
+          <Autocomplete {...args} multiple={false} value={single} onChange={setSingle} />
+        )}
+        {args.isError && (
+          <FormGroup.Caption variant="error">Please select an option.</FormGroup.Caption>
+        )}
       </FormGroup>
-    );
-  },
-};
-export const TeamOptions: Story = {
-  args: {
-    id: 'team',
-    placeholderText: 'Select team...',
-    options: Array.from({ length: 12 }, (_, index) => ({
-      value: String(index),
-      label: `Team ${index + 1}`,
-    })),
-    renderOption: ({ key, ...props }, option) => (
-      <li key={key} {...props}>
-        <img
-          width={32}
-          height={32}
-          alt=""
-          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23eee'/%3E%3Cpath d='M16 5l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z' fill='%23234b75'/%3E%3C/svg%3E"
+    </section>
+  );
+}
+
+const renderTeam: AutocompleteProps['renderOption'] = ({ key, ...props }, option) => (
+  <li key={key} {...props}>
+    <img
+      className={styles.logo}
+      alt=""
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23eee'/%3E%3Cpath d='M16 5l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z' fill='%23234b75'/%3E%3C/svg%3E"
+    />
+    {option.label}
+  </li>
+);
+
+export const AllVariants: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className={styles.variants}>
+      {AUTOCOMPLETE_SIZES.map((size) => (
+        <Example
+          key={size}
+          id={`size-${size}`}
+          label={`${size} size`}
+          options={options}
+          size={size}
         />
-        {option.label}
-      </li>
-    ),
-  },
+      ))}
+      <Example id="checkboxes" label="Checkbox selection" options={options} multiple />
+      <Example id="rounded" label="Rounded" options={options} rounded />
+      <Example id="disabled" label="Disabled" options={options} isDisabled />
+      <Example id="error" label="Error" options={options} isError />
+      <Example id="empty" label="Empty results" options={[]} noOptionsText="No options found" />
+      {AUTOCOMPLETE_LOADING_VARIANTS.map((loadingVariant) => (
+        <Example
+          key={loadingVariant}
+          id={`loading-${loadingVariant}`}
+          label={`Loading: ${loadingVariant}`}
+          options={[]}
+          loading
+          loadingVariant={loadingVariant}
+        />
+      ))}
+      <Example
+        id="team"
+        label="Custom team options"
+        options={Array.from({ length: 12 }, (_, index) => ({
+          value: String(index),
+          label: `Team ${index + 1}`,
+        }))}
+        renderOption={renderTeam}
+      />
+    </div>
+  ),
 };
