@@ -1,0 +1,48 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as Stories from './Autocomplete.stories';
+
+<Meta of={Stories} />
+
+# Autocomplete
+
+A web searchable selection field, available as `Autocomplete` or `FormControl.Autocomplete`.
+Uses Select surfaces, sizes, dropdown positioning, and FormGroup labels and validation.
+
+<Canvas of={Stories.Default} />
+<Controls />
+
+## Selection and search
+
+Pass a string `value` and update it through `onChange`. Erasing the input emits `undefined`.
+Typing filters option labels without committing a selection. Enter or clicking an option selects it.
+Escape and blur restore the selected label; Tab closes without selecting the highlighted option.
+Arrow keys skip disabled options. The input retains focus while navigating options.
+
+For remote search, use `inputValue` and `onInputChange`, set `filterOptions={false}`, and
+supply the returned options. The consumer owns requests, debouncing, and stale-response handling.
+Keep the selected option available in `options` so its label remains resolvable.
+`loading` displays five skeleton rows while preserving any existing options. Use
+`loadingVariant="text"` (default) or `loadingVariant="icon-text"` for circular logo placeholders
+with text. `loadingText` is announced to screen readers; skeletons are decorative and cannot be selected. Empty results display
+`noOptionsText` once loading finishes. Infinite scrolling is not included.
+
+## Checkbox selection
+
+Set `multiple` and supply a string array `value` with `onChange`. The dropdown stays open while
+options are toggled. Typing filters results without clearing existing selections. Closing resets the search query through
+`onInputChange` and displays the selected-label summary separately. Reopening by click, toggle,
+or arrow key starts with an empty search, including when `inputValue` is controlled.
+
+<Canvas of={Stories.Checkboxes} />
+<Canvas of={Stories.Error} />
+
+## Custom rows
+
+`renderOption` receives the original option and the props for its `li`. Destructure `key`
+and spread every remaining prop on the row to preserve keyboard and pointer behavior.
+Decorative team logos should use an empty image alt attribute. Do not add interactive controls inside options.
+
+<Canvas of={Stories.TeamOptions} />
+<Canvas of={Stories.Loading} />
+<Canvas of={Stories.LoadingIconText} />
+<Canvas of={Stories.Empty} />
