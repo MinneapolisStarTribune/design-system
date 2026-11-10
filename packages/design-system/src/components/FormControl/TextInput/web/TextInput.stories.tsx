@@ -11,6 +11,7 @@ import {
   SearchIcon,
   UserIcon,
 } from '@/icons';
+import storyStyles from './TextInput.stories.module.scss';
 
 const cellStyle = { minWidth: 0 };
 
@@ -243,6 +244,20 @@ export const AllVariants: Story = {
             icon={<UserIcon aria-hidden />}
             iconPosition="end"
             aria-label="Right icon"
+          />
+        </FormGroup>
+      </div>
+
+      <div className={storyStyles.cell}>
+        <SectionLabel>Icon: Disabled</SectionLabel>
+        <FormGroup>
+          <FormGroup.Label>Label</FormGroup.Label>
+          <FormControl.TextInput
+            placeholderText="Placeholder text"
+            icon={<UserIcon aria-hidden />}
+            iconPosition="start"
+            isDisabled
+            aria-label="Disabled with icon"
           />
         </FormGroup>
       </div>

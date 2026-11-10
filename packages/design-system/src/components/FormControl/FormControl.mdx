@@ -8,7 +8,7 @@ import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
 
 `FormControl` is a namespaced entry point for concrete input controls.
 
-It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.TextArea`, `FormControl.NumberInput`, `FormControl.PasswordInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, `FormControl.MultiSelect`, or `FormControl.Switch`.
+It is **not** a standalone renderable component. Always use a subcomponent such as `FormControl.TextInput`, `FormControl.TextArea`, `FormControl.NumberInput`, `FormControl.PasswordInput`, `FormControl.Checkbox`, `FormControl.CheckboxGroup`, `FormControl.RadioGroup`, `FormControl.Select`, `FormControl.MultiSelect`, `FormControl.Switch`, or `FormControl.Datepicker`.
 
 For field wiring and labeling semantics, pair controls with `FormGroup`. For submit/layout semantics, use `Form`.
 
@@ -35,7 +35,7 @@ Checkbox:
 
 ```tsx
 <FormGroup>
-  <FormControl.Checkbox label="I agree to the terms" checked={checked} onChange={setChecked}/>
+  <FormControl.Checkbox label="I agree to the terms" checked={checked} onChange={setChecked} />
 </FormGroup>
 ```
 
@@ -126,7 +126,16 @@ Switch:
 - `FormControl.Select`: single-select dropdown control
 - `FormControl.MultiSelect`: multi-select dropdown control
 - `FormControl.Switch`: single switch toggle control
+- `FormControl.Datepicker`: web date input with typed entry and a calendar action
 - `FormControlProps`: base props type for the namespace entry
 - `FormControlSize`: size union used by applicable controls
+
+## Web bundle behavior
+
+The web container has static members so Rollup/Vite can remove unused controls. Direct named
+exports remain available and are recommended for bundlers that retain compound containers.
+The optional local bundle check verifies that TextInput, NumberInput, and Select imports do not
+include datepicker code. After building the web package, run
+`yarn workspace @minneapolisstartribune/design-system check:formcontrol-tree-shaking`.
 
 {/* ========== ENGINEERING DOCUMENTATION SECTION END ========== */}

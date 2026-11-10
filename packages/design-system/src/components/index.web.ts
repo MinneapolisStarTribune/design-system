@@ -8,6 +8,7 @@ export type {
 export { COACHMARK_ALIGNMENTS, COACHMARK_POSITIONS } from './Coachmark/Coachmark.types';
 export { Coachmark } from './Coachmark/web/Coachmark';
 export { useCoachmarkPortalRoot } from './Coachmark/web/useCoachmarkPortalRoot';
+export { Datepicker, type DatepickerProps } from './Datepicker/web/Datepicker';
 export * as Dialog from './Dialog/Dialog';
 export {
   type DialogActionsProps,
@@ -56,6 +57,12 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
+export { validateDateInput } from './FormControl/Datepicker/dateInput';
+export type { DateInputLimits } from './FormControl/Datepicker/Datepicker.types';
+export {
+  FormControlDatepicker,
+  type FormControlDatepickerProps,
+} from './FormControl/Datepicker/web/Datepicker';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export type {
   MultiSelectOption,

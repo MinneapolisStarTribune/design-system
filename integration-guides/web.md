@@ -61,6 +61,47 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
+## Datepicker
+
+`Datepicker` renders inline without `trigger`, or opens a nonmodal calendar popover from a
+focusable trigger. Date props and `onChange` use plain `string` values in zero-padded `YYYY-MM-DD`
+format rather than timestamps. Both bounds are inclusive. `value={null}` is controlled; omit
+`value` to use `defaultValue` and internal state.
+
+```tsx
+import { useState } from 'react';
+import { Datepicker, UtilityButton } from '@minneapolisstartribune/design-system/web';
+
+function EventDate() {
+  const [date, setDate] = useState<string | null>(null);
+  return (
+    <Datepicker
+      value={date}
+      onChange={setDate}
+      label="Choose event date"
+      min="2026-03-01"
+      max="2026-06-30"
+      trigger={<UtilityButton label={date ?? 'Choose date'} />}
+    />
+  );
+}
+```
+
+The trigger must forward its ref, handlers, and ARIA props to a focusable element. Its accessible
+name stays intact; `label` is appended to its description. Selection or Escape returns focus to
+the trigger. Tabbing or clicking outside dismisses without stealing focus from the destination.
+Portals automatically respect the surrounding dialog and theme scope.
+
+Malformed dates are treated as empty and malformed bounds as absent. Inverted bounds disable all
+dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
+Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
+
+The consumer owns its Today action. For an editable field, import `FormControl.Datepicker`
+(via `FormControl`) or the named `FormControlDatepicker` from `@minneapolisstartribune/design-system/web`.
+The field emits `YYYY-MM-DD` for valid dates, an empty string when cleared, and raw text for
+incomplete edits. Use `validateDateInput(value, { required, min, max })` with the same limits
+when validating programmatic submissions. See the [TanStack `DateField` example](../packages/tanstack-form/README.md#datefield).
+
 ## Coachmark
 
 `Coachmark` is a dismissible, pointed callout for an unprompted, single action (e.g. a CMS-driven prompt to create an account or favorite something) — anchored to `children`, always externally controlled via `open`/`onOpenChange` (it never opens itself on hover, focus, or click, unlike `Tooltip`).
@@ -300,6 +341,14 @@ function GameFilter() {
 - Selected items use the brand filled Button fill; the color isn't configurable. Wrap secondary item content (e.g. a count) in `ToggleGroup.Detail`, which is smaller and dims to suit the selected fill.
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
+
+## Select
+
+`FormControl.Select` takes an optional `icon` (e.g. `<ClockIcon />`) shown before the value. It's decorative (`aria-hidden`) and web-only.
+
+```tsx
+<FormControl.Select id="time" options={options} icon={<ClockIcon />} />
+```
 
 ## TextArea
 

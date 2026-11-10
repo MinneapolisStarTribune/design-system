@@ -1,5 +1,31 @@
 # @minneapolisstartribune/design-system
 
+## 4.3.0
+
+### Minor Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`57a1b44`](https://github.com/MinneapolisStarTribune/design-system/commit/57a1b444f23c8175035ac70838682108beaba0d8) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `icon` prop to web `Select` for a decorative icon before the value.
+
+### Patch Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`12e5634`](https://github.com/MinneapolisStarTribune/design-system/commit/12e563404e1ed9ebfeda117b3a3951eebb43fc88) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Fix web `TextInput` icons ignoring the tertiary and disabled colors.
+
+## 4.2.1
+
+### Patch Changes
+
+- [#475](https://github.com/MinneapolisStarTribune/design-system/pull/475) [`9c674be`](https://github.com/MinneapolisStarTribune/design-system/commit/9c674beb505cc83ee2aa820111e0bdd9685c52dd) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Close Select, Menu, and Popover when their trigger stops rendering, such as when a responsive layout hides it. Before, the open list stayed in the top left corner of the page with no width.
+
+## 4.2.0
+
+### Minor Changes
+
+- [#474](https://github.com/MinneapolisStarTribune/design-system/pull/474) [`7e6746b`](https://github.com/MinneapolisStarTribune/design-system/commit/7e6746bfc08bda7d61b9b774112b2ec0e8fad9a7) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add as prop to SectionHeading web so semantic heading tag can differ from importance-based visual style.
+
+- [#476](https://github.com/MinneapolisStarTribune/design-system/pull/476) [`998b73a`](https://github.com/MinneapolisStarTribune/design-system/commit/998b73aaedfe2021de1694388d6fbeeaf5ab7edb) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Datepicker with inline and custom-trigger popover modes, controlled or uncontrolled date selection, inclusive date limits, and keyboard/focus support.
+
+  Document a consumer-owned Today/calendar trigger composition and expose the native button event props that UtilityButton already forwards.
+
 ## 4.1.0
 
 ### Minor Changes

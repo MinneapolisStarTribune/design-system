@@ -1,0 +1,69 @@
+import { Meta, Primary, Controls, Stories } from '@storybook/addon-docs/blocks';
+import * as DatepickerStories from './Datepicker.stories';
+
+<Meta of={DatepickerStories} />
+
+# FormControl.Datepicker
+
+A web date input that combines TextInput with the existing SUS Datepicker calendar. A decorative calendar icon sits on the left. The chevron on the right points down when closed and up when open. The calendar aligns with the field and uses its width.
+The empty placeholder is `Select date...`; no helper caption is rendered by default.
+
+<Primary />
+<Controls />
+
+## Usage
+
+```tsx
+import { FormControlDatepicker, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+<FormGroup>
+  <FormGroup.Label>Game date</FormGroup.Label>
+  <FormControlDatepicker
+    name="gameDate"
+    value={date}
+    onChange={setDate}
+    calendarLabel="Choose game date"
+    min="2026-04-01"
+    max="2026-06-30"
+  />
+</FormGroup>;
+```
+
+`FormControl.Datepicker` is also available. This is a web control; native FormControl exports are unchanged.
+Use a DesignSystemProvider as with the standalone calendar. Labels, descriptions, and captions are
+provided through FormGroup. Escape dismisses the calendar and returns focus to the trigger.
+
+## Values and validation
+
+- `value` and `defaultValue` accept date-only strings or `null` for empty. Valid values use `YYYY-MM-DD`.
+- `onChange` emits a canonical date for valid input, `''` when cleared, and the raw text for incomplete
+  or invalid edits. Treat the value as unvalidated text until validation succeeds.
+- Numeric `MM/DD/YYYY` input and ISO paste are accepted. A valid date appears as `April 18, 2026`
+  when unfocused and starts as `04/18/2026` on focus. Typed text is preserved until blur.
+- `min` and `max` use inclusive ISO bounds. Both calendar selection and typed input respect them.
+- Native validation blocks required, impossible, and out-of-range dates. Local messages appear when focus leaves
+  the field or submission fails validation. An error caption from FormGroup takes precedence.
+- An explicit `isError` lets an external form library own error visibility and captions. It does
+  not disable native date validation. `onTouched` runs on field exit, calendar selection, or native validation failure;
+  the regular input `onFocus`, `onBlur`, and `onInvalid` callbacks are also forwarded.
+- The named hidden input submits the canonical/raw value rather than its display text. External
+  `form` association is supported. Disabled controls are omitted; read-only values are included.
+- Uncontrolled fields restore `defaultValue` on native reset, respecting cancelled reset events.
+  Controlled values are reset by the caller.
+
+Programmatic submission and forms using `noValidate` need their own validator. Use the exported
+`validateDateInput(value, { required, min, max })` with the same options as the input. It returns
+an error string or `undefined`; it does not normalize raw input.
+
+## TanStack Form
+
+Use the adapter package's `DateField` with the same limits in your field validator and input.
+See [Date Input](?path=/story/forms-tanstack-form--date-input) for a working example of validation,
+submission, and reset.
+
+## Bundling
+
+Vite/Rollup can remove unused controls when you use static members such as `FormControl.TextInput`.
+For bundlers that retain the compound container, import the controls you need by name.
+
+<Stories />

@@ -12,6 +12,7 @@ export const COMPONENT_NAMES = [
   'ArticleBodyText',
   'ArticleQuote',
   'DangerousCodeBlock',
+  'Datepicker',
   'Dialog',
   'Drawer',
   'EditorialSponsoredText',

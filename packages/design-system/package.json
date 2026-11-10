@@ -1,6 +1,6 @@
 {
   "name": "@minneapolisstartribune/design-system",
-  "version": "4.1.0",
+  "version": "4.3.0",
   "main": "dist/web/index.web.cjs.js",
   "module": "dist/web/index.web.es.js",
   "types": "dist/web/index.web.d.ts",
@@ -154,6 +154,7 @@
   "scripts": {
     "build": "yarn clean:dist && yarn tokens && yarn icons && yarn build:web && yarn build:native && node scripts/create-root-entry-error.cjs",
     "build:native": "cross-env NODE_ENV=production vite build --config vite.native.config.ts",
+    "check:formcontrol-tree-shaking": "node scripts/check-formcontrol-tree-shaking.mjs",
     "build:web": "cross-env NODE_ENV=production vite build --config vite.web.config.ts",
     "build:icons": "cross-env NODE_ENV=production vite build --config vite.icons.config.ts && node scripts/builders/generate-icons-dts.js",
     "build-storybook": "yarn tokens && yarn icons && yarn generate:component-matrix && storybook build",
