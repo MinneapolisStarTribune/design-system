@@ -4,6 +4,7 @@
 
 import { createIconWrapper } from '@/components/Icon/Icon';
 import AiIconRaw from './ai.svg?react';
+import ArchiveIconRaw from './archive.svg?react';
 import ArrowCornerIconRaw from './arrow-corner.svg?react';
 import ArrowDiagonalIconRaw from './arrow-diagonal.svg?react';
 import ArrowDownIconRaw from './arrow-down.svg?react';
@@ -283,6 +284,7 @@ import ZoomInIconRaw from './zoom-in.svg?react';
 import ZoomOutIconRaw from './zoom-out.svg?react';
 
 export const AiIcon = createIconWrapper(AiIconRaw);
+export const ArchiveIcon = createIconWrapper(ArchiveIconRaw);
 export const ArrowCornerIcon = createIconWrapper(ArrowCornerIconRaw);
 export const ArrowDiagonalIcon = createIconWrapper(ArrowDiagonalIconRaw);
 export const ArrowDownIcon = createIconWrapper(ArrowDownIconRaw);
