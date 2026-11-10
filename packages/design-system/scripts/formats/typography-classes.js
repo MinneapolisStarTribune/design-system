@@ -264,7 +264,7 @@ function typographyClassesFormat({ dictionary, options = {} }) {
   // Add a single efficient rule that applies color to all typography classes
   // This is much more efficient than adding color to each individual class
   // Uses attribute selector to match any class containing "typography-"
-  const colorRule = `\n/* Apply primary text color to all typography classes */\n[class*="typography-"] {\n  color: ${defaultTypographyColor};\n}\n`;
+  const colorRule = `\n/* Apply primary text color to all typography classes */\n[class*="typography-"] {\n  color: ${defaultTypographyColor};\n}\n\n/* The color prop sets --ds-text-color inline; React can't set !important inline */\n[class*="typography-"][style*="--ds-text-color"] {\n  color: var(--ds-text-color) !important;\n}\n`;
 
   return `/**\n * Do not edit directly, this file was auto-generated.\n */\n${classes.join('\n\n')}${colorRule}`;
 }
