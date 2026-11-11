@@ -1,3 +1,14 @@
+.dialog {
+  @media (width >= 768px) {
+    --modal-panel-width: fit-content;
+    --modal-panel-max-width: min(var(--dialog-max-width, 560px), calc(100% - 2 * var(--spacing-8)));
+
+    &.fullWidth {
+      --modal-panel-width: var(--dialog-max-width, 560px);
+    }
+  }
+}
+
 /* Scoped under .dialog to outrank the shared footer's rules, whose stylesheet may load after this one. */
 .dialog .actions {
   padding: var(--spacing-20) var(--spacing-16);

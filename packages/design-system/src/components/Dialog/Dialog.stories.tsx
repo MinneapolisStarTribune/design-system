@@ -2,11 +2,14 @@ import { type ReactNode, type Ref, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Dialog from './Dialog';
 import type { DialogProps } from './Dialog.types';
+import { DIALOG_MAX_WIDTHS } from './Dialog.constants';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
 import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
 import styles from '@/components/Modal/Modal.stories.module.scss';
 import classNames from 'classnames';
+
+const WIDTH_OPTIONS = Object.keys(DIALOG_MAX_WIDTHS) as Array<NonNullable<DialogProps['maxWidth']>>;
 
 const SPORTS = ['Baseball', 'Softball', 'Football', 'Boys Hockey', 'Girls Hockey'].map((label) => ({
   value: label.toLowerCase().replace(/\s+/g, '-'),
@@ -135,6 +138,22 @@ const meta = {
   },
   argTypes: {
     children: { control: false },
+    maxWidth: {
+      control: 'select',
+      options: WIDTH_OPTIONS,
+      description:
+        'Width presets: xs 476px, sm 500px, md 560px, lg 720px, xl 1086px. Phones stay full width.',
+      table: {
+        type: { summary: WIDTH_OPTIONS.map((size) => `'${size}'`).join(' | ') },
+        defaultValue: { summary: "'md'" },
+      },
+    },
+    fullWidth: {
+      control: 'boolean',
+      description:
+        'Stretch to maxWidth. When false, size to content within that limit. Phones stay full width.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
     dismissible: {
       control: 'boolean',
       description:
@@ -196,6 +215,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
+    maxWidth: 'md',
+    fullWidth: true,
     open: false,
     onClose: () => {},
     dismissible: true,
@@ -275,6 +296,61 @@ export function AddGameDialog() {
 `,
       },
     },
+  },
+};
+
+export const Widths: Story = {
+  args: { open: false, onClose: () => {}, children: null, fullWidth: true },
+  argTypes: { maxWidth: { control: false } },
+  render: function Render({ fullWidth }) {
+    const [width, setWidth] = useState<NonNullable<DialogProps['maxWidth']> | null>(null);
+
+    return (
+      <>
+        <div className={styles.row}>
+          {WIDTH_OPTIONS.map((value) => (
+            <Button key={value} onClick={() => setWidth(value)}>
+              {value} ({DIALOG_MAX_WIDTHS[value]}px)
+            </Button>
+          ))}
+        </div>
+        <Dialog.Root
+          open={width !== null}
+          maxWidth={width ?? 'md'}
+          fullWidth={fullWidth}
+          onClose={() => setWidth(null)}
+        >
+          <AddGameContent onClose={() => setWidth(null)} />
+        </Dialog.Root>
+      </>
+    );
+  },
+};
+
+export const ContentWidth: Story = {
+  args: { open: false, onClose: () => {}, children: null, maxWidth: 'lg', fullWidth: false },
+  render: function Render({ onClose, ...args }) {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open content-sized dialog</Button>
+        <Dialog.Root
+          {...args}
+          open={open}
+          onClose={(reason) => {
+            setOpen(false);
+            onClose(reason);
+          }}
+        >
+          <Dialog.Title>Saved</Dialog.Title>
+          <Dialog.Content>Your changes are saved.</Dialog.Content>
+          <Dialog.Actions>
+            <Button onClick={() => setOpen(false)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog.Root>
+      </>
+    );
   },
 };
 
