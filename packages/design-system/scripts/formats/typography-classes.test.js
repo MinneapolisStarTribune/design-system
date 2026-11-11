@@ -59,6 +59,8 @@ describe('typographyClassesFormat', () => {
     expect(css).toContain('    letter-spacing: 0.02em;');
     expect(css).toContain('[class*="typography-"]');
     expect(css).toContain('color: var(--color-text-on-light-primary);');
+    expect(css).toContain('[class*="typography-"][style*="--ds-text-color"]');
+    expect(css).toContain('color: var(--ds-text-color) !important;');
   });
 
   it('maps mobile, tablet, and desktop path segments to hardcoded media queries (output order: mobile → tablet → desktop)', () => {

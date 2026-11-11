@@ -84,4 +84,33 @@ describe('PageHeading', () => {
 
     expect(getByTestId('heading').querySelector('span')).toHaveTextContent('Nested Content');
   });
+
+  it('sets the color prop as --ds-text-color', () => {
+    const { getByTestId } = renderWithProvider(
+      <PageHeading importance={1} color="on-dark-primary" dataTestId="heading">
+        Title
+      </PageHeading>
+    );
+
+    expect(getByTestId('heading').style.getPropertyValue('--ds-text-color')).toBe(
+      'var(--color-text-on-dark-primary)'
+    );
+  });
+
+  it('lets style.color win over the color prop', () => {
+    const { getByTestId } = renderWithProvider(
+      <PageHeading
+        importance={1}
+        color="on-dark-primary"
+        style={{ color: 'red' }}
+        dataTestId="heading"
+      >
+        Title
+      </PageHeading>
+    );
+
+    const heading = getByTestId('heading');
+    expect(heading.style.color).toBe('red');
+    expect(heading.style.getPropertyValue('--ds-text-color')).toBe('');
+  });
 });
