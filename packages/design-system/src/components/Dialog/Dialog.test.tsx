@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as Dialog from './Dialog';
 import styles from './Dialog.module.scss';
-import type { DialogProps } from './Dialog.types';
+import { DIALOG_MAX_WIDTHS, DIALOG_WIDTH_OPTIONS, type DialogProps } from './Dialog.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
@@ -158,22 +158,18 @@ describe('Dialog', () => {
           </TestDialog>
         );
         const dialog = await openDialog(userEvent.setup());
-        expect(dialog.style.getPropertyValue('--dialog-max-width')).toBe('560px');
+        expect(dialog).toHaveClass(styles.md);
+        expect(dialog).not.toHaveAttribute('style');
         expect(dialog).toHaveClass(styles.fullWidth);
       } finally {
         viewport.restore();
       }
     });
 
-    it.each([
-      ['xs', 476],
-      ['sm', 500],
-      ['md', 560],
-      ['lg', 720],
-      ['xl', 1086],
-    ] as const)(
-      'maps %s to %ipx and preserves bottom-sheet positioning on phones',
-      async (maxWidth, pixels) => {
+    it.each(DIALOG_WIDTH_OPTIONS)(
+      'applies the %s preset and preserves bottom-sheet positioning on phones',
+      async (maxWidth) => {
+        const pixels = DIALOG_MAX_WIDTHS[maxWidth];
         const viewport = mockViewport(1280);
         try {
           renderWithProvider(
@@ -182,7 +178,10 @@ describe('Dialog', () => {
             </TestDialog>
           );
           const dialog = await openDialog(userEvent.setup());
-          expect(dialog.style.getPropertyValue('--dialog-max-width')).toBe(`${pixels}px`);
+          expect(dialog).toHaveClass(styles[maxWidth]);
+          expect(getComputedStyle(dialog).getPropertyValue('--dialog-max-width')).toBe(
+            `${pixels}px`
+          );
 
           viewport.resize(767);
           expect(screen.getByTestId('dialog-overlay').className).toMatch(/position-bottom/);
@@ -191,7 +190,7 @@ describe('Dialog', () => {
 
           viewport.resize(768);
           expect(screen.getByTestId('dialog-overlay').className).toMatch(/position-center/);
-          expect(dialog.style.getPropertyValue('--dialog-max-width')).toBe(`${pixels}px`);
+          expect(dialog).toHaveClass(styles[maxWidth]);
         } finally {
           viewport.restore();
         }
@@ -216,11 +215,13 @@ describe('Dialog', () => {
 
       rerender(renderDialog('xs', false));
       expect(dialog).not.toHaveClass(styles.fullWidth);
-      expect(dialog.style.getPropertyValue('--dialog-max-width')).toBe('476px');
+      expect(dialog).toHaveClass(styles.xs);
+      expect(dialog).not.toHaveClass(styles.xl);
 
       rerender(renderDialog('lg', true));
       expect(dialog).toHaveClass(styles.fullWidth);
-      expect(dialog.style.getPropertyValue('--dialog-max-width')).toBe('720px');
+      expect(dialog).toHaveClass(styles.lg);
+      expect(dialog).not.toHaveClass(styles.xs);
     });
 
     it('passes className and style through to the panel', async () => {
@@ -236,6 +237,7 @@ describe('Dialog', () => {
 
       expect(dialog).toHaveClass('custom-panel');
       expect(dialog.style.maxWidth).toBe('320px');
+      expect(dialog.style.length).toBe(1);
     });
 
     it('passes className and dataTestId through to the sections', async () => {

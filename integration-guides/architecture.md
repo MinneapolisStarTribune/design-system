@@ -97,6 +97,9 @@ arithmetic has no additional package dependency. Its public date values use `str
 `FormControlDatepicker`, and `validateDateInput`. The optional `DateField` adapter lives in
 `@minneapolisstartribune/design-system-tanstack-form`, keeping TanStack Form out of the base control.
 
+`Dialog` is a web-only export. Its named width presets are implemented by component CSS included in
+`/web/components.css`; the shared internal modal handles focus, dismissal, and scrolling.
+
 ### React Native
 
 | Export / import shape                              | What you get                                                                                                                                                                                                                                                                                                                                                       |

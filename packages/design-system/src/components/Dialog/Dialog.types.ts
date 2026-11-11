@@ -5,7 +5,13 @@ import type {
   ModalSectionProps,
   ModalSharedProps,
 } from '@/components/Modal/Modal.types';
-import type { DIALOG_MAX_WIDTHS } from './Dialog.constants';
+import { DIALOG_MAX_WIDTHS } from './Dialog.constants';
+
+export { DIALOG_MAX_WIDTHS };
+
+export const DIALOG_WIDTH_OPTIONS = Object.keys(DIALOG_MAX_WIDTHS) as Array<
+  keyof typeof DIALOG_MAX_WIDTHS
+>;
 
 export type DialogRole = ModalRole;
 export type DialogCloseReason = ModalCloseReason;

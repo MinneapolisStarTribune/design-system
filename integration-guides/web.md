@@ -189,6 +189,8 @@ The provider sets the attribute after hydration. To avoid a flash of the wrong t
 
 ## Dialog
 
+For a short sizing example, see [Dialog in the consumer README](../README.md#dialog-web).
+
 `Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`, `DialogTitleProps` types `Dialog.Title`, `DialogSectionProps` types `Dialog.Content`, and `DialogActionsProps` types `Dialog.Actions`.
 
 Set `maxWidth` on `Dialog.Root` to a named preset: `xs` (476px), `sm` (500px), `md` (560px, default), `lg` (720px), or `xl` (1086px). For example, `maxWidth="lg"` selects the 720px design. These are dialog width presets, independent of viewport breakpoints; arbitrary numbers and strings are not accepted by the prop type. From 768px up, `fullWidth` (default `true`) stretches the panel to that limit, shrinking as needed to leave 8px on each side. Set `fullWidth={false}` to size it to its content within the same limit. Both props follow the Material UI sizing pattern, with SUS preset widths and a default that preserves existing layouts. Below 768px neither prop changes the full-width bottom sheet, its content-based height, or scrolling for long content.

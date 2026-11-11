@@ -125,6 +125,24 @@ from the `/web` entry. See the [Datepicker integration example](integration-guid
 For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDatepicker`) and
 `validateDateInput` from `/web`. For TanStack Form, use [`DateField`](packages/tanstack-form/README.md#datefield) from the adapter package.
 
+### Dialog (web)
+
+Use `maxWidth` to select a dialog width: `xs` (476px), `sm` (500px), `md` (560px, default),
+`lg` (720px), or `xl` (1086px). `fullWidth` defaults to `true`, filling the selected width when
+space allows. Set `fullWidth={false}` to size the dialog to its content within that limit.
+Below 768px, all presets keep the full-width bottom sheet with content-based height.
+
+```tsx
+import { Dialog } from '@minneapolisstartribune/design-system/web';
+
+<Dialog.Root open={open} onClose={() => setOpen(false)} maxWidth="lg">
+  <Dialog.Title>Edit details</Dialog.Title>
+  <Dialog.Content>...</Dialog.Content>
+</Dialog.Root>;
+```
+
+See the [Dialog integration guide](integration-guides/web.md#dialog) for composition and accessibility.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.

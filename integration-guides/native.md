@@ -2,6 +2,9 @@
 
 Complete guide for using the design system in React Native applications.
 
+`Dialog` and its `maxWidth`/`fullWidth` props are web-only and are not exported from `/native`.
+The [Dialog mobile bottom sheet](./web.md#dialog) refers to mobile browsers, not React Native.
+
 ## Dependencies
 
 For **native** (using the `/native` entry), install the pinned peer versions (match the design system’s peerDependencies):

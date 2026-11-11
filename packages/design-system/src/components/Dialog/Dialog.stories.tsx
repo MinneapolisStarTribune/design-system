@@ -1,15 +1,12 @@
 import { type ReactNode, type Ref, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import * as Dialog from './Dialog';
-import type { DialogProps } from './Dialog.types';
-import { DIALOG_MAX_WIDTHS } from './Dialog.constants';
+import { DIALOG_MAX_WIDTHS, DIALOG_WIDTH_OPTIONS, type DialogProps } from './Dialog.types';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
 import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
 import styles from '@/components/Modal/Modal.stories.module.scss';
 import classNames from 'classnames';
-
-const WIDTH_OPTIONS = Object.keys(DIALOG_MAX_WIDTHS) as Array<NonNullable<DialogProps['maxWidth']>>;
 
 const SPORTS = ['Baseball', 'Softball', 'Football', 'Boys Hockey', 'Girls Hockey'].map((label) => ({
   value: label.toLowerCase().replace(/\s+/g, '-'),
@@ -140,11 +137,11 @@ const meta = {
     children: { control: false },
     maxWidth: {
       control: 'select',
-      options: WIDTH_OPTIONS,
+      options: DIALOG_WIDTH_OPTIONS,
       description:
         'Width presets: xs 476px, sm 500px, md 560px, lg 720px, xl 1086px. Phones stay full width.',
       table: {
-        type: { summary: WIDTH_OPTIONS.map((size) => `'${size}'`).join(' | ') },
+        type: { summary: DIALOG_WIDTH_OPTIONS.map((size) => `'${size}'`).join(' | ') },
         defaultValue: { summary: "'md'" },
       },
     },
@@ -308,7 +305,7 @@ export const Widths: Story = {
     return (
       <>
         <div className={styles.row}>
-          {WIDTH_OPTIONS.map((value) => (
+          {DIALOG_WIDTH_OPTIONS.map((value) => (
             <Button key={value} onClick={() => setWidth(value)}>
               {value} ({DIALOG_MAX_WIDTHS[value]}px)
             </Button>
@@ -363,6 +360,8 @@ const VariantFrame = ({
   role,
   initialFocus,
   initialOpen,
+  maxWidth,
+  fullWidth,
   children,
 }: {
   label: string;
@@ -372,6 +371,8 @@ const VariantFrame = ({
   role?: DialogProps['role'];
   initialFocus?: DialogProps['initialFocus'];
   initialOpen: boolean;
+  maxWidth?: DialogProps['maxWidth'];
+  fullWidth?: DialogProps['fullWidth'];
   children: (onClose: () => void) => ReactNode;
 }) => {
   const [portalRoot, setPortalRoot] = useState<HTMLDivElement | null>(null);
@@ -394,6 +395,8 @@ const VariantFrame = ({
             showCloseButton={showCloseButton}
             role={role}
             initialFocus={initialFocus}
+            maxWidth={maxWidth}
+            fullWidth={fullWidth}
           >
             {children(() => setOpen(false))}
           </Dialog.Root>
@@ -671,6 +674,41 @@ export const AllVariants: Story = {
         {renderFormFrame(initialOpen)}
         <ConfirmFrame initialOpen={initialOpen} />
         {renderNoCloseButtonFrame(initialOpen)}
+        {DIALOG_WIDTH_OPTIONS.map((maxWidth) => (
+          <VariantFrame
+            key={maxWidth}
+            label={`maxWidth="${maxWidth}" (${DIALOG_MAX_WIDTHS[maxWidth]}px), fullWidth`}
+            maxWidth={maxWidth}
+            fullWidth
+            initialOpen={initialOpen}
+          >
+            {(onClose) => (
+              <>
+                <Dialog.Title>Saved</Dialog.Title>
+                <Dialog.Content>Your changes are saved.</Dialog.Content>
+                <Dialog.Actions>
+                  <Button onClick={onClose}>Done</Button>
+                </Dialog.Actions>
+              </>
+            )}
+          </VariantFrame>
+        ))}
+        <VariantFrame
+          label='maxWidth="lg", fullWidth={false}: content-sized'
+          maxWidth="lg"
+          fullWidth={false}
+          initialOpen={initialOpen}
+        >
+          {(onClose) => (
+            <>
+              <Dialog.Title>Saved</Dialog.Title>
+              <Dialog.Content>Your changes are saved.</Dialog.Content>
+              <Dialog.Actions>
+                <Button onClick={onClose}>Done</Button>
+              </Dialog.Actions>
+            </>
+          )}
+        </VariantFrame>
       </div>
     );
   },

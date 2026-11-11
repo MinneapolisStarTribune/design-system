@@ -1,3 +1,23 @@
+.xs {
+  --dialog-max-width: 476px;
+}
+
+.sm {
+  --dialog-max-width: 500px;
+}
+
+.md {
+  --dialog-max-width: 560px;
+}
+
+.lg {
+  --dialog-max-width: 720px;
+}
+
+.xl {
+  --dialog-max-width: 1086px;
+}
+
 .dialog {
   @media (width >= 768px) {
     --modal-panel-width: fit-content;
