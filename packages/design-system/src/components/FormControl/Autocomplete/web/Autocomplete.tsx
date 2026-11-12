@@ -6,11 +6,10 @@ import { FloatingPortal, useDismiss, useInteractions, useMergeRefs } from '@floa
 import { useFormGroupContext } from '@/components/FormGroup/FormGroupContext';
 import { getScopedPortalRoot } from '@/components/FloatingSurface/getScopedPortalRoot';
 import { useAnchoredFloating } from '@/components/FloatingSurface/useAnchoredFloating';
-import { CheckIcon, ChevronDownIcon } from '@/icons';
+import { ChevronDownIcon } from '@/icons';
 import selectStyles from '../../Select/web/Select.module.scss';
 import styles from './Autocomplete.module.scss';
 import { Skeleton } from '@/components/Skeleton/web/Skeleton';
-import multiStyles from '../../MultiSelect/web/MultiSelect.module.scss';
 import type {
   AutocompleteOption,
   AutocompleteOptionProps,
@@ -21,7 +20,6 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
   const {
     options,
     value,
-    multiple,
     inputValue,
     onInputChange,
     filterOptions = true,
@@ -51,18 +49,13 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
     describedBy ??
     ([formGroup?.descriptionId, formGroup?.captionId].filter(Boolean).join(' ') || undefined);
   const hasError = isError ?? formGroup?.hasError;
-  const selectedValues = Array.isArray(value) ? value : value === undefined ? [] : [value];
-  const isSelected = (option: T) => selectedValues.includes(option.value);
-  const selectedLabel = options
-    .filter(isSelected)
-    .map((option) => option.label)
-    .join(', ');
+  const isSelected = (option: T) => option.value === value;
+  const selectedLabel = options.find(isSelected)?.label ?? '';
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [editing, setEditing] = useState(false);
   const [activeValue, setActiveValue] = useState<string>();
-  const text =
-    multiple && !editing ? selectedLabel : (inputValue ?? (editing ? query : selectedLabel));
+  const text = inputValue ?? (editing ? query : selectedLabel);
   const visible =
     filterOptions && editing
       ? options.filter((option) =>
@@ -77,20 +70,8 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
   const close = () => {
     setOpen(false);
     setActiveValue(undefined);
-    if (multiple) {
-      setEditing(false);
-      setQuery('');
-      onInputChange?.('');
-    }
   };
-  const openList = () => {
-    if (multiple && !open) {
-      setEditing(true);
-      setQuery('');
-      onInputChange?.('');
-    }
-    setOpen(true);
-  };
+  const openList = () => setOpen(true);
   const {
     refs: { setReference, setFloating },
     elements,
@@ -123,21 +104,13 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
 
   const choose = (option: T) => {
     if (option.disabled) return;
-    if (selection.multiple) {
-      selection.onChange?.(
-        isSelected(option)
-          ? selectedValues.filter((item) => item !== option.value)
-          : [...selectedValues, option.value]
-      );
-      return;
-    }
     selection.onChange?.(option.value);
     onInputChange?.(option.label);
     setEditing(false);
     close();
   };
   const navigate = (direction: number) => {
-    const navigationOptions = multiple && !open ? options : visible;
+    const navigationOptions = visible;
     const start = open ? activeIndex : -1;
     let index = start < 0 ? (direction > 0 ? 0 : navigationOptions.length - 1) : start + direction;
     while (index >= 0 && index < navigationOptions.length) {
@@ -200,12 +173,12 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
             setOpen(true);
             setActiveValue(undefined);
             onInputChange?.(next);
-            if (!next && !selection.multiple) selection.onChange?.(undefined);
+            if (!next) selection.onChange?.(undefined);
           }}
           onBlur={() => {
             close();
             setEditing(false);
-            if (!multiple) onInputChange?.(selectedLabel);
+            onInputChange?.(selectedLabel);
           }}
           onKeyDown={(event) => {
             if (event.nativeEvent.isComposing) return;
@@ -218,7 +191,7 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
             } else if (event.key === 'Escape') {
               close();
               setEditing(false);
-              if (!multiple) onInputChange?.(selectedLabel);
+              onInputChange?.(selectedLabel);
             } else if (event.key === 'Tab') close();
           }}
         />
@@ -264,7 +237,6 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
               aria-label={labelId ? undefined : placeholderText}
               aria-labelledby={labelId}
               aria-busy={loading}
-              aria-multiselectable={multiple || undefined}
               className={styles.list}
             >
               {visible.map((option, index) => {
@@ -275,10 +247,7 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
                   'aria-selected': isSelected(option),
                   'aria-disabled': option.disabled || undefined,
                   className: classNames(selectStyles.selectOption, styles.option, {
-                    [styles.checkboxOption]: multiple,
                     [selectStyles.selectOptionSelected]: isSelected(option),
-                    [multiStyles['multi-select-option-selected']]: multiple && isSelected(option),
-                    [multiStyles['multi-select-option-active']]: multiple && index === activeIndex,
                     [selectStyles.selectOptionDisabled]: option.disabled,
                     [selectStyles.selectOptionActive]: index === activeIndex,
                   }),
@@ -289,16 +258,6 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
                 const { key, ...rest } = props;
                 return (
                   <li key={key} {...rest}>
-                    {multiple && (
-                      <span className={multiStyles['multi-select-checkmark']} aria-hidden>
-                        {isSelected(option) && (
-                          <CheckIcon
-                            size="checkbox-default"
-                            className={multiStyles['multi-select-check-icon']}
-                          />
-                        )}
-                      </span>
-                    )}
                     {option.label}
                   </li>
                 );

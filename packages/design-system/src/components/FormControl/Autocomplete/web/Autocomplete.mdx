@@ -26,12 +26,7 @@ Keep the selected option available in `options` so its label remains resolvable.
 with text. `loadingText` is announced to screen readers; skeletons are decorative and cannot be selected. Empty results display
 `noOptionsText` once loading finishes. Infinite scrolling is not included.
 
-## Checkbox selection
-
-Set `multiple` and supply a string array `value` with `onChange`. The dropdown stays open while
-options are toggled. Typing filters results without clearing existing selections. Closing resets the search query through
-`onInputChange` and displays the selected-label summary separately. Reopening by click, toggle,
-or arrow key starts with an empty search, including when `inputValue` is controlled.
+Multiple selection is out of scope. Use the existing `MultiSelect` for multiple values.
 
 ## Custom rows
 

@@ -32,9 +32,8 @@ interface AutocompleteBaseProps<T extends AutocompleteOption>
   renderOption?: (props: AutocompleteOptionProps, option: T) => React.ReactNode;
 }
 
-export type AutocompleteProps<T extends AutocompleteOption = AutocompleteOption> =
-  AutocompleteBaseProps<T> &
-    (
-      | { multiple?: false; value?: string; onChange?: (value: string | undefined) => void }
-      | { multiple: true; value?: string[]; onChange?: (value: string[]) => void }
-    );
+export interface AutocompleteProps<T extends AutocompleteOption = AutocompleteOption>
+  extends AutocompleteBaseProps<T> {
+  value?: string;
+  onChange?: (value: string | undefined) => void;
+}

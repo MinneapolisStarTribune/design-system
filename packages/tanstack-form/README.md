@@ -8,12 +8,13 @@
 yarn add @minneapolisstartribune/design-system-tanstack-form @tanstack/react-form
 ```
 
-Peer deps: `@minneapolisstartribune/design-system` (web) ^4.3.0, `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
+Peer deps: `@minneapolisstartribune/design-system` (web) ^4.4.0, `@tanstack/react-form` ^1.33.1, `react` 19. Import the design-system CSS as you normally would (`@minneapolisstartribune/design-system/web/components.css`).
 
 ## Adapters
 
 | Adapter              | Wraps                                 | Field value                          |
 | -------------------- | ------------------------------------- | ------------------------------------ |
+| `AutocompleteField` | `FormGroup` + `Autocomplete` | `string` (clears to `''`) |
 | `DateField`          | `FormGroup` + `FormControlDatepicker` | `string` (accepts `null` for empty)  |
 | `TextField`          | `FormGroup` + `TextInput`             | `string`                             |
 | `TextAreaField`      | `FormGroup` + `TextArea`              | `string`                             |
@@ -229,3 +230,21 @@ const limits = { required: true, min: '2026-04-01', max: '2026-06-30' };
 Use the same limits in the validator and control. Native input validity alone cannot protect
 programmatic `form.handleSubmit()` or a form using `noValidate`. The validator returns a message
 for required, invalid, or out-of-range values, and `undefined` when valid.
+
+## AutocompleteField
+
+Import `AutocompleteField` from `@minneapolisstartribune/design-system-tanstack-form`.
+Requires design-system 4.4.0 or later, which introduces Autocomplete. Single fields use strings
+and clear to `''`; null/undefined are accepted when reading an empty field. Multiple selection is out of scope; use `MultiSelectField` for that.
+The adapter connects selection, blur validation, labels, descriptions, and errors.
+
+```tsx
+<form.Field name="sport">
+  {(field) => <AutocompleteField field={field} label="Sport" options={sportOptions} />}
+</form.Field>
+```
+
+Initialize `sport` to `''`. Search state remains separate from
+form values: pass `inputValue`, `onInputChange`, and `filterOptions={false}` for remote search.
+The consumer handles requests, debouncing, and stale responses. See the
+[web guide](../../integration-guides/web.md#autocomplete) for the full search contract.

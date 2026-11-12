@@ -18,10 +18,7 @@ const options = [
   { value: 'football', label: 'Football' },
   { value: 'girls-flag-football', label: 'Girls Flag Football' },
 ];
-type StoryArgs = Omit<AutocompleteProps, 'value' | 'onChange' | 'multiple'> & {
-  multiple?: boolean;
-  value?: string | string[];
-};
+type StoryArgs = AutocompleteProps;
 const meta = {
   title: 'FormControl/Autocomplete',
   component: Autocomplete,
@@ -29,14 +26,12 @@ const meta = {
     id: 'sport',
     options,
     placeholderText: 'Select sport...',
-    multiple: false,
     loading: false,
     loadingVariant: 'text',
     size: 'medium',
   },
   argTypes: {
-    multiple: { control: 'boolean' },
-    value: { control: 'object' },
+    value: { control: 'text' },
     size: { control: 'select', options: AUTOCOMPLETE_SIZES },
     loadingVariant: { control: 'select', options: AUTOCOMPLETE_LOADING_VARIANTS },
     isDisabled: { control: 'boolean' },
@@ -56,29 +51,18 @@ export const Configurable: Story = {
       <div className={styles.preview}>
         <FormGroup>
           <FormGroup.Label htmlFor={args.id}>Sport</FormGroup.Label>
-          {args.multiple ? (
-            <Autocomplete
-              {...rest}
-              multiple
-              value={Array.isArray(value) ? value : []}
-              onChange={(next) => updateArgs({ value: next })}
-              onInputChange={(next) => {
-                args.onInputChange?.(next);
-                if (args.inputValue !== undefined) updateArgs({ inputValue: next });
-              }}
-            />
-          ) : (
-            <Autocomplete
-              {...rest}
-              multiple={false}
-              value={typeof value === 'string' ? value : undefined}
-              onChange={(next) => updateArgs({ value: next })}
-              onInputChange={(next) => {
-                args.onInputChange?.(next);
-                if (args.inputValue !== undefined) updateArgs({ inputValue: next });
-              }}
-            />
-          )}
+          <Autocomplete
+            {...rest}
+            value={value}
+            onChange={(next) => {
+              args.onChange?.(next);
+              updateArgs({ value: next });
+            }}
+            onInputChange={(next) => {
+              args.onInputChange?.(next);
+              if (args.inputValue !== undefined) updateArgs({ inputValue: next });
+            }}
+          />
           {args.isError && (
             <FormGroup.Caption variant="error">Please select a sport.</FormGroup.Caption>
           )}
@@ -90,16 +74,11 @@ export const Configurable: Story = {
 
 function Example({ label, ...args }: StoryArgs & { label: string }) {
   const [single, setSingle] = useState<string>();
-  const [multiple, setMultiple] = useState<string[]>([]);
   return (
     <section className={styles.example}>
       <FormGroup>
         <FormGroup.Label htmlFor={args.id}>{label}</FormGroup.Label>
-        {args.multiple ? (
-          <Autocomplete {...args} multiple value={multiple} onChange={setMultiple} />
-        ) : (
-          <Autocomplete {...args} multiple={false} value={single} onChange={setSingle} />
-        )}
+        <Autocomplete {...args} value={single} onChange={setSingle} />
         {args.isError && (
           <FormGroup.Caption variant="error">Please select an option.</FormGroup.Caption>
         )}
@@ -132,7 +111,6 @@ export const AllVariants: Story = {
           size={size}
         />
       ))}
-      <Example id="checkboxes" label="Checkbox selection" options={options} multiple />
       <Example id="rounded" label="Rounded" options={options} rounded />
       <Example id="disabled" label="Disabled" options={options} isDisabled />
       <Example id="error" label="Error" options={options} isError />
