@@ -477,19 +477,6 @@ function Sports() {
 }
 ```
 
-`FormControl.Autocomplete` exposes the same component. Single selection emits a string option
-value or `undefined` when cleared. Multiple selection is out of scope; use `MultiSelect` instead. Wrap the control in
-`FormGroup` for labels, descriptions, and validation captions; use `htmlFor` matching an explicit id.
-`renderOption` receives the original option and row props: separate `key` and spread the remaining
-props onto the returned `li` so keyboard and pointer selection remain accessible.
-
-Search uses local label filtering by default. For remote search, control `inputValue` with
-`onInputChange`, disable local filtering with `filterOptions={false}`, and supply the results.
-Consumers own fetching, debounce, and stale-response handling. Preserve the selected options
-in `options` so their display labels can be resolved. Single-selection callbacks also synchronize
-the selected label on selection/blur/Escape.
-
-Set `loading` for skeleton rows, with `loadingVariant="text"` or `"icon-text"`.
-`loadingText` supplies the screen-reader announcement. Existing options stay available while
-loading; `noOptionsText` appears only when loading finishes with no matches. Infinite pagination
-is not built in. For TanStack Form, use the [AutocompleteField adapter](../packages/tanstack-form/README.md#autocompletefield).
+See the [Autocomplete Storybook docs](https://design-system.startribune.com/?path=/docs/forms-formcontrol-autocomplete--docs)
+for labeling, validation, custom options, search, and loading examples. For TanStack Form, use the
+[AutocompleteField adapter](../packages/tanstack-form/README.md#autocompletefield).

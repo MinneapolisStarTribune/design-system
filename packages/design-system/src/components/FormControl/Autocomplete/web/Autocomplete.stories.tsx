@@ -19,7 +19,7 @@ const options = [
 ];
 type StoryArgs = AutocompleteProps;
 const meta = {
-  title: 'FormControl/Autocomplete',
+  title: 'Forms/FormControl/Autocomplete',
   component: Autocomplete,
   args: {
     id: 'sport',
