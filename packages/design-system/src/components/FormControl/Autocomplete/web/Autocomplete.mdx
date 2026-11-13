@@ -8,8 +8,49 @@ import * as Stories from './Autocomplete.stories';
 A web searchable selection field, available as `Autocomplete` or `FormControl.Autocomplete`.
 Uses Select surfaces, sizes, dropdown positioning, and FormGroup labels and validation.
 
+[Figma design: Sport & Team dropdowns](https://www.figma.com/design/VBdGkrMOoM5XfVf9cbglHG/CoPo-Hi-Fi-%7C-Dev-Ready-Designs?node-id=15004-441165)
+
+## Architecture
+
+- `Autocomplete` manages search, single selection, keyboard navigation, and the dropdown.
+- `FormGroup` provides labels, descriptions, and validation messages. Match the label's `htmlFor` to the input's `id`.
+- This component is web-only. Use `MultiSelect` when multiple values are required.
+
+## Basic controlled usage
+
+```tsx
+import { useState } from 'react';
+import { Autocomplete, FormGroup } from '@minneapolisstartribune/design-system/web';
+
+const sports = [
+  { value: 'baseball', label: 'Baseball' },
+  { value: 'softball', label: 'Softball' },
+];
+
+export function SportField() {
+  const [value, setValue] = useState<string | undefined>();
+  return (
+    <FormGroup>
+      <FormGroup.Label htmlFor="sport">Sport</FormGroup.Label>
+      <Autocomplete
+        id="sport"
+        options={sports}
+        value={value}
+        onChange={setValue}
+        placeholderText="Select sport..."
+      />
+    </FormGroup>
+  );
+}
+```
+
+## Configurable
+
+Use the story controls to explore sizes, loading, disabled, rounded, and error states.
+The example keeps selection state locally; changing the `value` or `inputValue` control resets it.
+
 <Canvas of={Stories.Configurable} />
-<Controls />
+<Controls of={Stories.Configurable} />
 
 ## Selection and search
 
@@ -28,11 +69,82 @@ with text. `loadingText` is announced to screen readers; skeletons are decorativ
 
 Multiple selection is out of scope. Use the existing `MultiSelect` for multiple values.
 
+## Sizes and validation
+
+Use `size="small"`, `size="medium"` (default), or `size="large"`. Set `rounded` for a pill-shaped field and `isDisabled` to prevent interaction.
+
+```tsx
+<FormGroup>
+  <FormGroup.Label htmlFor="sport-error">Sport</FormGroup.Label>
+  <Autocomplete id="sport-error" options={sports} value={value} onChange={setValue} isError />
+  <FormGroup.Caption variant="error">Please select a sport.</FormGroup.Caption>
+</FormGroup>
+```
+
+## Controlled search and loading
+
+Keep the selected option's `value` separate from the search text:
+
+```tsx
+const [value, setValue] = useState<string | undefined>();
+const [query, setQuery] = useState('');
+
+<Autocomplete
+  id="team"
+  options={teams}
+  value={value}
+  onChange={setValue}
+  inputValue={query}
+  onInputChange={setQuery}
+  filterOptions={false}
+  loading={isLoading}
+  loadingVariant="icon-text"
+  aria-label="Team"
+/>;
+```
+
+Here `teams` and `isLoading` come from your request layer. `onInputChange` also receives the selected label on selection, Escape, and blur; account for these updates when triggering requests.
+Use `loadingVariant="text"` for plain options. `noOptionsText` customizes the empty state.
+
+## Accessibility and keyboard interaction
+
+Provide a visible `FormGroup.Label`, or `aria-label` when a visible label is unavailable.
+The input exposes combobox/listbox relationships and the active option while keeping focus on the input.
+
+- **Arrow Down / Arrow Up:** open the list and move between enabled options.
+- **Enter:** select the highlighted option.
+- **Escape:** close the list and restore the selected label.
+- **Tab:** move focus away without selecting the highlighted option.
+- **Typing:** filter options; clearing the field emits `undefined`.
+
 ## Custom rows
 
 `renderOption` receives the original option and the props for its `li`. Destructure `key`
 and spread every remaining prop on the row to preserve keyboard and pointer behavior.
 Decorative team logos should use an empty image alt attribute. Do not add interactive controls inside options.
+
+```tsx
+<Autocomplete
+  id="team-logo"
+  aria-label="Team"
+  options={teams}
+  value={value}
+  onChange={setValue}
+  renderOption={({ key, ...props }, option) => (
+    <li key={key} {...props}>
+      <img src={option.logoUrl} alt="" width={32} height={32} />
+      {option.label}
+    </li>
+  )}
+/>
+```
+
+Each item in `teams` includes `value`, `label`, and `logoUrl`. Options may also set `disabled: true`.
+
+## Exports
+
+Import `Autocomplete`, `AutocompleteProps`, and `AutocompleteOption` from
+`@minneapolisstartribune/design-system/web`. `FormControl.Autocomplete` is also available.
 
 ## All variants
 

@@ -47,6 +47,10 @@
     border-color: var(--color-border-state-attention-on-light);
     box-shadow: 0 0 0 1px var(--color-border-state-attention-on-light);
   }
+  &:focus-within {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 2px;
+  }
 }
 
 .skeletonRow {
@@ -59,7 +63,7 @@
   flex: 1;
   min-width: 0;
 }
-.loadingAnnouncement {
+.announcement {
   position: absolute;
   width: 1px;
   height: 1px;

@@ -220,6 +220,15 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
           </span>
         </button>
       </div>
+      <div role="status" aria-live="polite" aria-atomic="true" className={styles.announcement}>
+        {open && !isDisabled
+          ? loading
+            ? loadingText
+            : visible.length === 0
+              ? noOptionsText
+              : `${visible.length} ${visible.length === 1 ? 'result' : 'results'} available.`
+          : ''}
+      </div>
       {open && !isDisabled && (
         <FloatingPortal root={getScopedPortalRoot(elements.domReference)}>
           <div
@@ -281,13 +290,10 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
                     </div>
                   ))}
                 </div>
-                <div role="status" className={styles.loadingAnnouncement}>
-                  {loadingText}
-                </div>
               </>
             )}
             {!loading && visible.length === 0 && (
-              <div role="status" className={styles.status}>
+              <div aria-hidden="true" className={styles.status}>
                 {noOptionsText}
               </div>
             )}

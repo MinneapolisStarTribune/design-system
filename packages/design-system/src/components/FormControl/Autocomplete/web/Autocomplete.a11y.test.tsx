@@ -73,7 +73,7 @@ it.each(AUTOCOMPLETE_LOADING_VARIANTS)(
   async (loadingVariant) => {
     const user = userEvent.setup();
     const change = vi.fn();
-    const { getByRole, queryAllByRole, queryByRole, rerender } = renderWithProvider(
+    const { getByRole, queryAllByRole, rerender } = renderWithProvider(
       <Autocomplete
         id="loading"
         options={[]}
@@ -90,7 +90,7 @@ it.each(AUTOCOMPLETE_LOADING_VARIANTS)(
     expect(change).not.toHaveBeenCalled();
     expect(getByRole('combobox')).not.toHaveAttribute('aria-activedescendant');
     rerender(<Autocomplete id="loading" options={options} onChange={change} />);
-    expect(queryByRole('status')).not.toBeInTheDocument();
+    expect(getByRole('status')).toHaveTextContent('3 results available.');
     expect(getByRole('listbox')).toHaveAttribute('aria-busy', 'false');
     await user.keyboard('{ArrowDown}{Enter}');
     expect(change).toHaveBeenCalledWith('b');
@@ -111,4 +111,24 @@ it('removes active-option references when an expanded control becomes disabled',
   expect(input).toHaveAttribute('aria-expanded', 'false');
   expect(input).not.toHaveAttribute('aria-controls');
   expect(input).not.toHaveAttribute('aria-activedescendant');
+});
+
+it('updates an existing live region with results, empty results, and loading', async () => {
+  const user = userEvent.setup();
+  const { getByRole, rerender } = renderWithProvider(
+    <Autocomplete id="results" options={options} noOptionsText="No matching sports" />
+  );
+  const status = getByRole('status');
+  expect(status).toBeEmptyDOMElement();
+  expect(status).toHaveAttribute('aria-live', 'polite');
+  expect(status).toHaveAttribute('aria-atomic', 'true');
+  await user.type(getByRole('combobox'), 'football');
+  expect(getByRole('status')).toBe(status);
+  expect(status).toHaveTextContent('1 result available.');
+  await user.type(getByRole('combobox'), 'zzz');
+  expect(status).toHaveTextContent('No matching sports');
+  rerender(<Autocomplete id="results" options={[]} loading />);
+  expect(status).toHaveTextContent('Loading');
+  await user.keyboard('{Escape}');
+  expect(status).toBeEmptyDOMElement();
 });
