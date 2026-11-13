@@ -50,6 +50,12 @@ export {
   type EyebrowBadgeVariant,
 } from './EyebrowBadge/web/EyebrowBadge';
 export { Form, FormButton, type FormProps } from './Form';
+export type {
+  AutocompleteOption,
+  AutocompleteOptionProps,
+  AutocompleteProps,
+} from './FormControl/Autocomplete/Autocomplete.types';
+export { Autocomplete } from './FormControl/Autocomplete/web/Autocomplete';
 export { Checkbox, type CheckboxProps } from './FormControl/Checkbox/web/Checkbox';
 export {
   type CheckboxCategory,

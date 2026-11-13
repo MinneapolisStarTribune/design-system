@@ -1,0 +1,76 @@
+.input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--color-text-on-light-primary);
+  padding: 0;
+  &::placeholder {
+    font-style: italic;
+    color: var(--color-text-state-disabled-on-light);
+    opacity: 1;
+  }
+  &:disabled {
+    color: var(--color-text-state-disabled-on-light);
+  }
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-8);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.option {
+  gap: var(--spacing-8);
+}
+.status {
+  padding: var(--spacing-12);
+}
+
+/* Keep validation visible while the editable field is focused or expanded. */
+.error.error {
+  &,
+  &:focus-within:not(:disabled) {
+    border-color: var(--color-border-state-attention-on-light);
+    box-shadow: 0 0 0 1px var(--color-border-state-attention-on-light);
+  }
+  &:focus-within {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 2px;
+  }
+}
+
+.skeletonRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-12);
+}
+.skeletonText {
+  flex: 1;
+  min-width: 0;
+}
+.announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

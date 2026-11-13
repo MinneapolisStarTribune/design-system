@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Autocomplete } from './Autocomplete/web/Autocomplete';
 import { BaseProps, Size } from '@/types/globalTypes';
 import { TextInput } from './TextInput/web/TextInput';
 import { TextArea } from './TextArea/web/TextArea';
@@ -22,6 +23,7 @@ export interface FormControlProps extends BaseProps {
 }
 
 export const FormControl: {
+  Autocomplete: typeof Autocomplete;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TextInput: React.ComponentType<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,6 +46,7 @@ export const FormControl: {
   Switch: React.ComponentType<any>;
   Datepicker: typeof FormControlDatepicker;
 } = {
+  Autocomplete,
   TextInput,
   TextArea,
   NumberInput,

@@ -1,3 +1,7 @@
+export {
+  AutocompleteField,
+  type AutocompleteFieldProps,
+} from './AutocompleteField/AutocompleteField';
 // Entry for @minneapolisstartribune/design-system-tanstack-form.
 // This file is sorted alphabetically
 export { CheckboxField, type CheckboxFieldProps } from './CheckboxField/CheckboxField';

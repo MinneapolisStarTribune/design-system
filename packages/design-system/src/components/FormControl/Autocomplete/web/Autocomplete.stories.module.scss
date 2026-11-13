@@ -1,0 +1,19 @@
+.preview {
+  width: 320px;
+  max-width: 100%;
+  min-height: 420px;
+}
+.variants {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: var(--spacing-24);
+}
+.example {
+  min-width: 0;
+  min-height: 420px;
+}
+.logo {
+  width: var(--spacing-32);
+  height: var(--spacing-32);
+  flex-shrink: 0;
+}

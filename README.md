@@ -297,3 +297,12 @@ yarn add @minneapolisstartribune/design-system@latest
 - Review component source code in the repository
 - Open an issue on GitHub with details about your setup and error messages
 - Please reach out to the team in Slack
+
+### Autocomplete (web)
+
+Import `Autocomplete`, `AutocompleteProps`, or `FormControl` from
+`@minneapolisstartribune/design-system/web`. Autocomplete supports searchable single selection
+(`string | undefined`), custom option rows,
+and text-only or icon-and-text loading skeletons. Search text is separate from selected values.
+See the [web usage guide](integration-guides/web.md#autocomplete) and
+[TanStack Form adapter](packages/tanstack-form/README.md#autocompletefield).
