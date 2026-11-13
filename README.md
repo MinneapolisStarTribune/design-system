@@ -127,21 +127,7 @@ For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDate
 
 ### Dialog (web)
 
-Use `maxWidth` to select a dialog width: `xs` (476px), `sm` (500px), `md` (560px, default),
-`lg` (720px), or `xl` (1086px). `fullWidth` defaults to `true`, filling the selected width when
-space allows. Set `fullWidth={false}` to size the dialog to its content within that limit.
-Below 768px, all presets keep the full-width bottom sheet with content-based height.
-
-```tsx
-import { Dialog } from '@minneapolisstartribune/design-system/web';
-
-<Dialog.Root open={open} onClose={() => setOpen(false)} maxWidth="lg">
-  <Dialog.Title>Edit details</Dialog.Title>
-  <Dialog.Content>...</Dialog.Content>
-</Dialog.Root>;
-```
-
-See the [Dialog integration guide](integration-guides/web.md#dialog) for composition and accessibility.
+A modal window for decisions and short tasks, with configurable widths and a mobile bottom sheet. See [Dialog in Storybook](https://design-system.startribune.com/?path=/docs/layout-containers-dialog--docs) for sizing options, defaults, and examples.
 
 ## TypeScript Support
 
