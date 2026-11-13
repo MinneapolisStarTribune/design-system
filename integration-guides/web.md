@@ -191,6 +191,8 @@ The provider sets the attribute after hydration. To avoid a flash of the wrong t
 
 `Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`, `DialogTitleProps` types `Dialog.Title`, `DialogSectionProps` types `Dialog.Content`, and `DialogActionsProps` types `Dialog.Actions`.
 
+Choose `maxWidth="xs" | "sm" | "md" | "lg" | "xl"` (default `md`, 560px). `fullWidth` defaults to `true`; set it to `false` to fit the content within the selected width. Mobile keeps the full-width bottom sheet. See [Dialog sizing details](../packages/design-system/src/components/Dialog/Dialog.mdx#width) for preset widths and responsive behavior.
+
 ```tsx
 import { useState } from 'react';
 import { Button, Dialog } from '@minneapolisstartribune/design-system/web';

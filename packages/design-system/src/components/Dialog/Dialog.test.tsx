@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as Dialog from './Dialog';
 import styles from './Dialog.module.scss';
-import type { DialogProps } from './Dialog.types';
+import { DIALOG_MAX_WIDTHS, DIALOG_WIDTH_OPTIONS, type DialogProps } from './Dialog.types';
 import { Button } from '@/components/Button/web/Button';
 import { renderWithProvider } from '@/test-utils/render';
 import { mockViewport } from '@/test-utils/viewport';
@@ -149,6 +149,81 @@ describe('Dialog', () => {
       viewport.restore();
     });
 
+    it('applies the default desktop width', async () => {
+      const viewport = mockViewport(1280);
+      try {
+        renderWithProvider(
+          <TestDialog aria-label="Default width">
+            <Dialog.Content>Body copy</Dialog.Content>
+          </TestDialog>
+        );
+        const dialog = await openDialog(userEvent.setup());
+        expect(dialog).toHaveClass(styles.md);
+        expect(dialog).not.toHaveAttribute('style');
+        expect(dialog).toHaveClass(styles.fullWidth);
+      } finally {
+        viewport.restore();
+      }
+    });
+
+    it.each(DIALOG_WIDTH_OPTIONS)(
+      'applies the %s preset and preserves bottom-sheet positioning on phones',
+      async (maxWidth) => {
+        const pixels = DIALOG_MAX_WIDTHS[maxWidth];
+        const viewport = mockViewport(1280);
+        try {
+          renderWithProvider(
+            <TestDialog aria-label="Custom width" maxWidth={maxWidth}>
+              <Dialog.Content>Body copy</Dialog.Content>
+            </TestDialog>
+          );
+          const dialog = await openDialog(userEvent.setup());
+          expect(dialog).toHaveClass(styles[maxWidth]);
+          expect(getComputedStyle(dialog).getPropertyValue('--dialog-max-width')).toBe(
+            `${pixels}px`
+          );
+
+          viewport.resize(767);
+          expect(screen.getByTestId('dialog-overlay').className).toMatch(/position-bottom/);
+          expect(dialog.style.width).toBe('');
+          expect(dialog.style.maxWidth).toBe('');
+
+          viewport.resize(768);
+          expect(screen.getByTestId('dialog-overlay').className).toMatch(/position-center/);
+          expect(dialog).toHaveClass(styles[maxWidth]);
+        } finally {
+          viewport.restore();
+        }
+      }
+    );
+
+    it('updates the width limit and stretch mode while open', async () => {
+      const renderDialog = (maxWidth: DialogProps['maxWidth'], fullWidth: boolean) => (
+        <Dialog.Root
+          open
+          onClose={() => {}}
+          aria-label="Width settings"
+          {...{ maxWidth, fullWidth }}
+        >
+          <Dialog.Content>Short message</Dialog.Content>
+        </Dialog.Root>
+      );
+      const { rerender } = renderWithProvider(renderDialog('xl', true));
+      const dialog = screen.getByRole('dialog');
+      await waitFor(() => expect(dialog).toHaveAttribute('data-status', 'open'));
+      expect(dialog).toHaveClass(styles.fullWidth);
+
+      rerender(renderDialog('xs', false));
+      expect(dialog).not.toHaveClass(styles.fullWidth);
+      expect(dialog).toHaveClass(styles.xs);
+      expect(dialog).not.toHaveClass(styles.xl);
+
+      rerender(renderDialog('lg', true));
+      expect(dialog).toHaveClass(styles.fullWidth);
+      expect(dialog).toHaveClass(styles.lg);
+      expect(dialog).not.toHaveClass(styles.xs);
+    });
+
     it('passes className and style through to the panel', async () => {
       const user = userEvent.setup();
 
@@ -162,6 +237,7 @@ describe('Dialog', () => {
 
       expect(dialog).toHaveClass('custom-panel');
       expect(dialog.style.maxWidth).toBe('320px');
+      expect(dialog.style.length).toBe(1);
     });
 
     it('passes className and dataTestId through to the sections', async () => {

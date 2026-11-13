@@ -125,6 +125,10 @@ from the `/web` entry. See the [Datepicker integration example](integration-guid
 For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDatepicker`) and
 `validateDateInput` from `/web`. For TanStack Form, use [`DateField`](packages/tanstack-form/README.md#datefield) from the adapter package.
 
+### Dialog (web)
+
+A modal window for decisions and short tasks, with configurable widths and a mobile bottom sheet. See [Dialog in Storybook](https://design-system.startribune.com/?path=/docs/layout-containers-dialog--docs) for sizing options, defaults, and examples.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.

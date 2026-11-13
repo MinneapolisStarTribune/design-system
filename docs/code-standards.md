@@ -212,6 +212,9 @@ Web component styles live in `ComponentName.module.scss` but the contents should
 
 Put web styles, including story layout, in a co-located `.module.scss` and apply them with `className`. Don't add `style={{…}}` for static values. Two exceptions: values only known at runtime (positions, measured sizes), which should set a CSS custom property the module reads, and packages without a CSS build, like `packages/tanstack-form`. The `style` prop components accept and pass through for consumers is fine.
 
+For example, Dialog selects a preset class for `maxWidth` and passes the consumer's `style` through
+unchanged. Its tests check the CSS custom property against the shared typed preset values.
+
 ---
 
 ## Storybook Standards

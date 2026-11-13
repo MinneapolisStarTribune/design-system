@@ -20,7 +20,7 @@ On phones a dialog looks like a bottom drawer.
 ## Anatomy
 
 1. **Overlay** — Dims the page, blocks interaction underneath, and locks page scroll.
-2. **Panel** — 560px wide with rounded corners, centered in the viewport. At 767px and below it's
+2. **Panel** — 560px wide by default, configurable with `maxWidth`, with rounded corners and centered in the viewport. At 767px and below it's
    a full-width bottom sheet with its top corners rounded.
 3. **Close button** — Top-right X icon button. Hide it with `showCloseButton={false}`; it's hidden
    by default when `dismissible={false}`.
@@ -98,6 +98,42 @@ When the content is supplementary rather than a decision — filters, details, s
 
   </tbody>
 </table>
+
+## Width
+
+Set `maxWidth` on `Dialog.Root` to one of the named presets:
+
+| Preset         | Width  |
+| -------------- | ------ |
+| `xs`           | 476px  |
+| `sm`           | 500px  |
+| `md` (default) | 560px  |
+| `lg`           | 720px  |
+| `xl`           | 1086px |
+
+These names select dialog widths; they do not change the viewport breakpoints. The prop accepts
+only these five names, so editors offer autocomplete and TypeScript rejects arbitrary widths.
+With `fullWidth` (default `true`), the panel fills the selected
+width when space allows and shrinks to fit the viewport with the existing 8px margin on each side.
+Set `fullWidth={false}` to size the panel to its content within the same width limit.
+
+This follows the [Material UI sizing pattern](https://mui.com/material-ui/api/dialog/): `maxWidth`
+sets the limit and `fullWidth` controls stretching. SUS uses its own preset widths and defaults `fullWidth`
+to `true` to preserve existing dialogs.
+
+Below 768px, every width becomes a full-width bottom sheet. Height follows the content, capped
+to the available space; long content scrolls inside `Dialog.Content`.
+
+```tsx
+<Dialog.Root open={open} onClose={onClose} maxWidth="lg">
+  <Dialog.Title>Edit details</Dialog.Title>
+  <Dialog.Content>...</Dialog.Content>
+</Dialog.Root>
+```
+
+<Canvas of={DialogStories.Widths} />
+
+<Canvas of={DialogStories.ContentWidth} />
 
 ## Example
 

@@ -5,11 +5,31 @@ import type {
   ModalSectionProps,
   ModalSharedProps,
 } from '@/components/Modal/Modal.types';
+import { DIALOG_MAX_WIDTHS } from './Dialog.constants';
+
+export { DIALOG_MAX_WIDTHS };
+
+export const DIALOG_WIDTH_OPTIONS = Object.keys(DIALOG_MAX_WIDTHS) as Array<
+  keyof typeof DIALOG_MAX_WIDTHS
+>;
 
 export type DialogRole = ModalRole;
 export type DialogCloseReason = ModalCloseReason;
 
 export interface DialogProps extends ModalSharedProps {
+  /**
+   * Panel width preset from 768px up, also bounded by the available viewport width.
+   * xs: 476px, sm: 500px, md: 560px, lg: 720px, xl: 1086px.
+   * No effect on the mobile bottom sheet.
+   * @default 'md'
+   */
+  maxWidth?: keyof typeof DIALOG_MAX_WIDTHS;
+  /**
+   * Stretch the panel to `maxWidth` when space allows. Set false to size it to its content.
+   * No effect below 768px: the bottom sheet always fills the viewport width.
+   * @default true
+   */
+  fullWidth?: boolean;
   /** Dialog content. Compose with `Dialog.Title`, `Dialog.Content` and `Dialog.Actions`. */
   children: ModalSharedProps['children'];
   /**
