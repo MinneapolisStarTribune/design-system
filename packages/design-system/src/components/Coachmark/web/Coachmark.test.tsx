@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -23,6 +23,39 @@ describe('Coachmark', () => {
 
     expect(screen.getByText('Trigger')).toBeInTheDocument();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it("merges the child's own ref with its floating reference ref, without the React 19 element.ref deprecation warning", () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    let capturedRef: HTMLButtonElement | null = null;
+
+    function Trigger() {
+      const buttonRef = useRef<HTMLButtonElement>(null);
+      return (
+        <button
+          ref={(el) => {
+            buttonRef.current = el;
+            capturedRef = el;
+          }}
+          type="button"
+        >
+          Trigger
+        </button>
+      );
+    }
+
+    renderWithProvider(
+      <Coachmark open onOpenChange={vi.fn()} title="Title" description="Description">
+        <Trigger />
+      </Coachmark>
+    );
+
+    expect(capturedRef).toBe(screen.getByRole('button', { name: 'Trigger' }));
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      expect.stringContaining('Accessing element.ref was removed')
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 
   it('shows the title/description in a dialog when open', () => {
