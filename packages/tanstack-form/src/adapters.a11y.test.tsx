@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { DesignSystemProvider, ToggleGroup } from '@minneapolisstartribune/design-system/web';
 import { SubmitForm } from './test-utils/SubmitForm';
 import {
+  AutocompleteField,
   CheckboxGroupField,
   DateField,
   MultiSelectField,
@@ -35,6 +36,13 @@ interface Case {
 }
 
 const cases: Case[] = [
+  {
+    name: 'AutocompleteField single',
+    role: 'combobox',
+    defaultValue: '',
+    render: (field) => <AutocompleteField field={field} {...labelProps} options={options} />,
+  },
+
   {
     name: 'DateField',
     role: 'textbox',

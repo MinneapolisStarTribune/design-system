@@ -112,3 +112,7 @@ Align React (and React DOM on web, React Native on native) and optional Floating
 - [Web integration](./web.md) — CSS entrypoints, `DesignSystemProvider`, peers
 - [Mobile usage](./native.md) — native peers, provider, hooks
 - [Troubleshooting](./troubleshooting.md) — web and mobile issues
+
+## Autocomplete platform scope
+
+The web entry exports `Autocomplete` and `FormControl.Autocomplete`. The optional TanStack Form package exposes `AutocompleteField` for single string form values; request/search state remains consumer-owned.

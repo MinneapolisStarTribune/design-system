@@ -461,3 +461,24 @@ loadBrandFonts('startribune');
 ## Troubleshooting
 
 See [Troubleshooting](troubleshooting.md#web-issues) for common web-specific issues.
+
+## Autocomplete
+
+```tsx
+import { useState } from 'react';
+import { Autocomplete, type AutocompleteOption } from '@minneapolisstartribune/design-system/web';
+
+const options: AutocompleteOption[] = [
+  { value: 'baseball', label: 'Baseball' },
+  { value: 'softball', label: 'Softball' },
+];
+
+function Sports() {
+  const [sport, setSport] = useState<string>();
+  return <Autocomplete id="sport" options={options} value={sport} onChange={setSport} />;
+}
+```
+
+See the [Autocomplete Storybook docs](https://design-system.startribune.com/?path=/docs/forms-formcontrol-autocomplete--docs)
+for labeling, validation, custom options, search, and loading examples. For TanStack Form, use the
+[AutocompleteField adapter](../packages/tanstack-form/README.md#autocompletefield).

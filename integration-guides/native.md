@@ -116,3 +116,7 @@ const createStyles = (theme) =>
 ## Troubleshooting
 
 See [Troubleshooting](troubleshooting.md#mobile-issues) for common mobile-specific issues.
+
+## Autocomplete platform scope
+
+Autocomplete and AutocompleteField are web-only, including mobile browsers. No React Native implementation or export is provided.
