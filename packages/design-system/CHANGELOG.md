@@ -1,5 +1,25 @@
 # @minneapolisstartribune/design-system
 
+## 4.4.0
+
+### Minor Changes
+
+- [#487](https://github.com/MinneapolisStarTribune/design-system/pull/487) [`6cbc812`](https://github.com/MinneapolisStarTribune/design-system/commit/6cbc812afcb4d6530ec318775678a22d9c7bfe3b) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add archive icon.
+
+- [#485](https://github.com/MinneapolisStarTribune/design-system/pull/485) [`b724574`](https://github.com/MinneapolisStarTribune/design-system/commit/b724574c437ad1d95fbf8773d11cdd26ac3d3dfa) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Autocomplete form control with searchable single selection, custom option rendering, text-only and icon-and-text loading skeletons, and empty and validation states.
+
+- [#488](https://github.com/MinneapolisStarTribune/design-system/pull/488) [`c2a7c95`](https://github.com/MinneapolisStarTribune/design-system/commit/c2a7c954dbf66b5c943f504fa78cf1785ab68022) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add named `maxWidth` presets (`xs`, `sm`, `md`, `lg`, and `xl`) and `fullWidth` to web Dialog for standard and content-sized layouts. Preserve the existing 560px default and mobile bottom-sheet behavior. No Native changes.
+
+- [#480](https://github.com/MinneapolisStarTribune/design-system/pull/480) [`244c720`](https://github.com/MinneapolisStarTribune/design-system/commit/244c7209aeeb5c1a1fa5479755569373d97a07fc) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add FormControl.Datepicker and the direct FormControlDatepicker export, composing the existing calendar with typed date entry, inclusive limits, native form validation, and a leading calendar icon and trailing expand/collapse chevron. Export validateDateInput for matching form validation.
+
+  Add the DateField TanStack adapter with shared label/error handling and reset behavior. Require SUS 4.3.0, which includes the new control.
+
+  Use static web FormControl members so Rollup/Vite consumers of other controls can exclude Datepicker code. All documented compound members and direct exports remain available; FormControl itself remains a non-renderable container.
+
+### Patch Changes
+
+- [#486](https://github.com/MinneapolisStarTribune/design-system/pull/486) [`a0db6ad`](https://github.com/MinneapolisStarTribune/design-system/commit/a0db6ada7e720f9499fb9d8fed30c4b06f618622) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Fix the typography `color` prop being ignored in Firefox and Safari on client renders. The prop now sets `--ds-text-color` inline and the theme CSS applies it with `!important`, since React can't set `!important` inline.
+
 ## 4.3.0
 
 ### Minor Changes

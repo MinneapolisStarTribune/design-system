@@ -1,5 +1,22 @@
 # @minneapolisstartribune/design-system-tanstack-form
 
+## 3.1.0
+
+### Minor Changes
+
+- [#485](https://github.com/MinneapolisStarTribune/design-system/pull/485) [`a460425`](https://github.com/MinneapolisStarTribune/design-system/commit/a4604251d2c02fc2de64ec24ed464941505de20b) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add AutocompleteField for single selection with form value, blur, and accessible validation wiring. Requires design-system ^4.4.0 for the new Autocomplete export.
+
+- [#480](https://github.com/MinneapolisStarTribune/design-system/pull/480) [`244c720`](https://github.com/MinneapolisStarTribune/design-system/commit/244c7209aeeb5c1a1fa5479755569373d97a07fc) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add FormControl.Datepicker and the direct FormControlDatepicker export, composing the existing calendar with typed date entry, inclusive limits, native form validation, and a leading calendar icon and trailing expand/collapse chevron. Export validateDateInput for matching form validation.
+
+  Add the DateField TanStack adapter with shared label/error handling and reset behavior. Require SUS 4.3.0, which includes the new control.
+
+  Use static web FormControl members so Rollup/Vite consumers of other controls can exclude Datepicker code. All documented compound members and direct exports remain available; FormControl itself remains a non-renderable container.
+
+### Patch Changes
+
+- Updated dependencies [[`6cbc812`](https://github.com/MinneapolisStarTribune/design-system/commit/6cbc812afcb4d6530ec318775678a22d9c7bfe3b), [`b724574`](https://github.com/MinneapolisStarTribune/design-system/commit/b724574c437ad1d95fbf8773d11cdd26ac3d3dfa), [`c2a7c95`](https://github.com/MinneapolisStarTribune/design-system/commit/c2a7c954dbf66b5c943f504fa78cf1785ab68022), [`244c720`](https://github.com/MinneapolisStarTribune/design-system/commit/244c7209aeeb5c1a1fa5479755569373d97a07fc), [`a0db6ad`](https://github.com/MinneapolisStarTribune/design-system/commit/a0db6ada7e720f9499fb9d8fed30c4b06f618622)]:
+  - @minneapolisstartribune/design-system@4.4.0
+
 ## 3.0.0
 
 ### Patch Changes
