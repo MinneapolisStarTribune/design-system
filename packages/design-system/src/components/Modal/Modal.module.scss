@@ -214,7 +214,7 @@
     padding: var(--spacing-16) var(--spacing-32) 0;
   }
 
-  /* Scroll hints: top fade while content sits above, bottom fade while more sits below (needs scroll timelines). */
+  /* Scroll hints: top fade while content sits above, bottom fade while more sits below. ModalBody sets the attributes. */
   &::before,
   &::after {
     content: '';
@@ -229,10 +229,7 @@
   &::before {
     /* Sticky offsets are inset by the scroller's padding; cancel the top padding to pin to the edge. */
     top: calc(-1 * var(--spacing-16));
-    /*
-     * Sized only by its scroll animation, which runs only while the body overflows. A static
-     * 40px box would itself overflow content shorter than it and make the body scrollable.
-     */
+    /* Sized only while fading: a static 40px box would overflow content shorter than it and make the body scrollable. */
     height: 0;
     background: linear-gradient(to top, transparent, var(--color-background-light-default));
   }
@@ -243,16 +240,29 @@
     background: linear-gradient(to bottom, transparent, var(--color-background-light-default));
   }
 
-  @supports (animation-timeline: scroll()) {
-    /* The `animation` shorthand resets `animation-timeline`, so set the timeline after it. */
+  &[data-fade-top]::before {
+    height: var(--spacing-40);
+    /* Overlays the first content instead of pushing it down. */
+    margin-bottom: calc(-1 * var(--spacing-40));
+    opacity: 1;
+  }
+
+  &[data-fade-bottom]::after {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Keep the top fade sized until it has faded out. */
     &::before {
-      animation: body-scroll-fade-top linear both;
-      animation-timeline: scroll(nearest block);
+      transition:
+        opacity 0.15s ease,
+        height 0s 0.15s,
+        margin-bottom 0s 0.15s;
     }
 
-    &::after {
-      animation: body-scroll-fade-bottom linear both;
-      animation-timeline: scroll(nearest block);
+    &::after,
+    &[data-fade-top]::before {
+      transition: opacity 0.15s ease;
     }
   }
 
@@ -272,33 +282,6 @@
 
   &::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* Negative margin overlays the first content instead of pushing it down. */
-@keyframes body-scroll-fade-top {
-  0% {
-    height: var(--spacing-40);
-    margin-bottom: calc(-1 * var(--spacing-40));
-    opacity: 0;
-  }
-
-  10%,
-  100% {
-    height: var(--spacing-40);
-    margin-bottom: calc(-1 * var(--spacing-40));
-    opacity: 1;
-  }
-}
-
-@keyframes body-scroll-fade-bottom {
-  0%,
-  90% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
   }
 }
 
