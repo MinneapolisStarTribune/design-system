@@ -1,5 +1,6 @@
 import { type ReactNode, type Ref, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import * as Dialog from './Dialog';
 import { DIALOG_MAX_WIDTHS, DIALOG_WIDTH_OPTIONS, type DialogProps } from './Dialog.types';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
@@ -653,6 +654,63 @@ export function SessionExpiredDialog({ open, onSignIn }: { open: boolean; onSign
   render: (_args, { viewMode }) => (
     <div className={styles.grid}>{renderBlockingFrame(viewMode !== 'docs')}</div>
   ),
+};
+
+const LongContent = ({ onClose, dataTestId }: { onClose: () => void; dataTestId: string }) => (
+  <>
+    <Dialog.Title>Season rules</Dialog.Title>
+    <Dialog.Content dataTestId={dataTestId}>
+      <div className={styles.stack}>
+        {Array.from({ length: 12 }, (_, i) => (
+          <p key={i}>
+            {`${i + 1}. Teams submit scores within 24 hours of the final whistle. Late scores show as pending until a coach or athletic director confirms them.`}
+          </p>
+        ))}
+      </div>
+    </Dialog.Content>
+    <Dialog.Actions>
+      <Button onClick={onClose}>Got it</Button>
+    </Dialog.Actions>
+  </>
+);
+
+// Waits for the fade's opacity transition to finish so the snapshot isn't mid-fade.
+const waitForFade = (body: HTMLElement, edge: 'before' | 'after', opacity: '0' | '1') =>
+  waitFor(() => expect(getComputedStyle(body, `::${edge}`).opacity).toBe(opacity));
+
+/** Chromatic coverage for the content scroll fades: bottom only at the top, both mid-scroll. */
+export const ScrollFade: Story = {
+  args: EXAMPLE_ARGS,
+  parameters: {
+    chromatic: { modes: allModes },
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
+  render: (_args, { viewMode }) => {
+    const initialOpen = viewMode !== 'docs';
+
+    return (
+      <div className={styles.grid}>
+        <VariantFrame label="Scrolled to the top: bottom fade only" initialOpen={initialOpen}>
+          {(onClose) => <LongContent onClose={onClose} dataTestId="scroll-fade-top" />}
+        </VariantFrame>
+        <VariantFrame label="Scrolled partway: top and bottom fades" initialOpen={initialOpen}>
+          {(onClose) => <LongContent onClose={onClose} dataTestId="scroll-fade-middle" />}
+        </VariantFrame>
+      </div>
+    );
+  },
+  play: async ({ canvas }) => {
+    const atTop = await canvas.findByTestId('scroll-fade-top');
+    const middle = await canvas.findByTestId('scroll-fade-middle');
+
+    middle.scrollTop = (middle.scrollHeight - middle.clientHeight) / 2;
+
+    await waitForFade(atTop, 'before', '0');
+    await waitForFade(atTop, 'after', '1');
+    await waitForFade(middle, 'before', '1');
+    await waitForFade(middle, 'after', '1');
+  },
 };
 
 /**
