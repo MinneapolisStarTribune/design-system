@@ -284,10 +284,43 @@ describe('ImageGallery (native)', () => {
     expect(onIndexChange).toHaveBeenCalledWith(2);
   });
 
-  it('accepts an initialIndex prop without error', () => {
-    const { getByTestId } = render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+  it('moves to a new initialIndex when the prop changes', () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
+    const { rerender } = render(<ImageGallery images={images} initialIndex={0} />, { wrapper });
+    expect(screen.getByText('1/2')).toBeTruthy();
+    scrollTo.mockClear();
 
-    expect(getByTestId('image-gallery')).toBeTruthy();
+    rerender(<ImageGallery images={images} initialIndex={1} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+    expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ animated: false }));
+    scrollTo.mockRestore();
+  });
+
+  it('does not undo a swipe by the reader when re-rendered with the same initialIndex', () => {
+    const { rerender, UNSAFE_getByType } = render(
+      <ImageGallery images={images} initialIndex={0} />,
+      {
+        wrapper,
+      }
+    );
+    fireEvent(UNSAFE_getByType(ScrollView), 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    rerender(<ImageGallery images={images} initialIndex={0} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
+  it('stays where it is when initialIndex becomes undefined', () => {
+    const { rerender } = render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    rerender(<ImageGallery images={images} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
   });
 
   it('initializes the active slide from initialIndex', () => {

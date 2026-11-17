@@ -26,7 +26,7 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   spaceBetween?: number;
   /** Called with 1-based active slide index on mount and whenever the active slide changes. */
   onIndexChange?: (index: number) => void;
-  /** 0-based index to scroll to on mount. */
+  /** 0-based index to scroll to on mount and whenever the value changes. Leaving it undefined never moves the carousel. */
   initialIndex?: number;
   variant?: Variant;
   loop?: boolean;

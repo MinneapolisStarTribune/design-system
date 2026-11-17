@@ -299,6 +299,15 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const [index, setIndex] = useState(hasLoop ? (initialIndex ?? 0) + 1 : (initialIndex ?? 0));
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  // Lets a consumer move the carousel after mount by changing `initialIndex`, without remounting it.
+  const [appliedInitialIndex, setAppliedInitialIndex] = useState(initialIndex);
+  if (initialIndex !== appliedInitialIndex) {
+    setAppliedInitialIndex(initialIndex);
+    if (initialIndex !== undefined) {
+      setIndex(hasLoop ? initialIndex + 1 : initialIndex);
+    }
+  }
+
   const Img: React.ComponentType<NativeImageProps> = ImageComponent ?? DSImage;
 
   const spaceBetween = getSpaceBetween(dimensions.width);
