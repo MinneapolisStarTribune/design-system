@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   CheckboxField,
+  DateField,
   CheckboxGroupField,
   MultiSelectField,
   NumberField,
@@ -12,6 +13,8 @@ import {
   TextField,
   ToggleGroupField,
 } from '@minneapolisstartribune/design-system-tanstack-form';
+import { useState } from 'react';
+import { validateDateInput } from '@/components/FormControl/Datepicker/dateInput';
 import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { Button } from '@/components/Button/web/Button';
@@ -501,4 +504,52 @@ export const AllAdapters: Story = {
     },
   },
   render: () => <AllAdaptersExample />,
+};
+
+const dateLimits = { required: true, min: '2026-04-18', max: '2026-04-20' };
+function DateInputExample() {
+  const [saved, setSaved] = useState('');
+  const form = useForm({
+    defaultValues: { date: '' },
+    onSubmit: ({ value }) => setSaved(value.date),
+  });
+  return (
+    <form
+      className={styles.form}
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <form.Field
+        name="date"
+        validators={{ onChange: ({ value }) => validateDateInput(value, dateLimits) }}
+      >
+        {(field) => (
+          <DateField
+            {...dateLimits}
+            field={field}
+            label="Game date"
+            description="Choose April 18–20, 2026."
+          />
+        )}
+      </form.Field>
+      <Button type="submit">Save</Button>
+      <Button
+        type="button"
+        onClick={() => {
+          form.reset();
+          setSaved('');
+        }}
+      >
+        Reset
+      </Button>
+      {saved && <p role="status">Saved {saved}</p>}
+    </form>
+  );
+}
+
+export const DateInput: Story = {
+  render: () => <DateInputExample />,
 };

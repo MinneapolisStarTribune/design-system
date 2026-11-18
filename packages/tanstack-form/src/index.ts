@@ -1,3 +1,7 @@
+export {
+  AutocompleteField,
+  type AutocompleteFieldProps,
+} from './AutocompleteField/AutocompleteField';
 // Entry for @minneapolisstartribune/design-system-tanstack-form.
 // This file is sorted alphabetically
 export { CheckboxField, type CheckboxFieldProps } from './CheckboxField/CheckboxField';
@@ -5,6 +9,7 @@ export {
   CheckboxGroupField,
   type CheckboxGroupFieldProps,
 } from './CheckboxGroupField/CheckboxGroupField';
+export { DateField, type DateFieldProps } from './DateField/DateField';
 export { MultiSelectField, type MultiSelectFieldProps } from './MultiSelectField/MultiSelectField';
 export { NumberField, type NumberFieldProps } from './NumberField/NumberField';
 export { PasswordField, type PasswordFieldProps } from './PasswordField/PasswordField';

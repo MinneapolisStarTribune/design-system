@@ -1,5 +1,51 @@
 # @minneapolisstartribune/design-system
 
+## 4.4.0
+
+### Minor Changes
+
+- [#487](https://github.com/MinneapolisStarTribune/design-system/pull/487) [`6cbc812`](https://github.com/MinneapolisStarTribune/design-system/commit/6cbc812afcb4d6530ec318775678a22d9c7bfe3b) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add archive icon.
+
+- [#485](https://github.com/MinneapolisStarTribune/design-system/pull/485) [`b724574`](https://github.com/MinneapolisStarTribune/design-system/commit/b724574c437ad1d95fbf8773d11cdd26ac3d3dfa) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Autocomplete form control with searchable single selection, custom option rendering, text-only and icon-and-text loading skeletons, and empty and validation states.
+
+- [#488](https://github.com/MinneapolisStarTribune/design-system/pull/488) [`c2a7c95`](https://github.com/MinneapolisStarTribune/design-system/commit/c2a7c954dbf66b5c943f504fa78cf1785ab68022) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add named `maxWidth` presets (`xs`, `sm`, `md`, `lg`, and `xl`) and `fullWidth` to web Dialog for standard and content-sized layouts. Preserve the existing 560px default and mobile bottom-sheet behavior. No Native changes.
+
+- [#480](https://github.com/MinneapolisStarTribune/design-system/pull/480) [`244c720`](https://github.com/MinneapolisStarTribune/design-system/commit/244c7209aeeb5c1a1fa5479755569373d97a07fc) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add FormControl.Datepicker and the direct FormControlDatepicker export, composing the existing calendar with typed date entry, inclusive limits, native form validation, and a leading calendar icon and trailing expand/collapse chevron. Export validateDateInput for matching form validation.
+
+  Add the DateField TanStack adapter with shared label/error handling and reset behavior. Require SUS 4.3.0, which includes the new control.
+
+  Use static web FormControl members so Rollup/Vite consumers of other controls can exclude Datepicker code. All documented compound members and direct exports remain available; FormControl itself remains a non-renderable container.
+
+### Patch Changes
+
+- [#486](https://github.com/MinneapolisStarTribune/design-system/pull/486) [`a0db6ad`](https://github.com/MinneapolisStarTribune/design-system/commit/a0db6ada7e720f9499fb9d8fed30c4b06f618622) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Fix the typography `color` prop being ignored in Firefox and Safari on client renders. The prop now sets `--ds-text-color` inline and the theme CSS applies it with `!important`, since React can't set `!important` inline.
+
+## 4.3.0
+
+### Minor Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`57a1b44`](https://github.com/MinneapolisStarTribune/design-system/commit/57a1b444f23c8175035ac70838682108beaba0d8) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Add `icon` prop to web `Select` for a decorative icon before the value.
+
+### Patch Changes
+
+- [#482](https://github.com/MinneapolisStarTribune/design-system/pull/482) [`12e5634`](https://github.com/MinneapolisStarTribune/design-system/commit/12e563404e1ed9ebfeda117b3a3951eebb43fc88) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Fix web `TextInput` icons ignoring the tertiary and disabled colors.
+
+## 4.2.1
+
+### Patch Changes
+
+- [#475](https://github.com/MinneapolisStarTribune/design-system/pull/475) [`9c674be`](https://github.com/MinneapolisStarTribune/design-system/commit/9c674beb505cc83ee2aa820111e0bdd9685c52dd) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Close Select, Menu, and Popover when their trigger stops rendering, such as when a responsive layout hides it. Before, the open list stayed in the top left corner of the page with no width.
+
+## 4.2.0
+
+### Minor Changes
+
+- [#474](https://github.com/MinneapolisStarTribune/design-system/pull/474) [`7e6746b`](https://github.com/MinneapolisStarTribune/design-system/commit/7e6746bfc08bda7d61b9b774112b2ec0e8fad9a7) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Add as prop to SectionHeading web so semantic heading tag can differ from importance-based visual style.
+
+- [#476](https://github.com/MinneapolisStarTribune/design-system/pull/476) [`998b73a`](https://github.com/MinneapolisStarTribune/design-system/commit/998b73aaedfe2021de1694388d6fbeeaf5ab7edb) Thanks [@andres-startribune](https://github.com/andres-startribune)! - Add a web Datepicker with inline and custom-trigger popover modes, controlled or uncontrolled date selection, inclusive date limits, and keyboard/focus support.
+
+  Document a consumer-owned Today/calendar trigger composition and expose the native button event props that UtilityButton already forwards.
+
 ## 4.1.0
 
 ### Minor Changes

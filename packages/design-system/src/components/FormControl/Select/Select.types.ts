@@ -32,6 +32,8 @@ type SelectBaseProps = {
  * Web props.
  */
 export interface SelectProps extends FormControlWebProps, SelectBaseProps {
+  /** Optional decorative icon shown before the value (e.g. <ClockIcon />). */
+  icon?: React.ReactNode;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
 }

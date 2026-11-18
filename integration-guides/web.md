@@ -96,8 +96,11 @@ Malformed dates are treated as empty and malformed bounds as absent. Inverted bo
 dates. Changing bounds never changes a controlled value; navigation is clamped to available dates.
 Years 0001–9999 are supported. Display labels use English and weeks start on Sunday.
 
-The consumer owns its Today action. The text input wrapper and TanStack Form adapter are
-deliberately deferred to VAR-1335; this calendar does not add them to `FormControl`.
+The consumer owns its Today action. For an editable field, import `FormControl.Datepicker`
+(via `FormControl`) or the named `FormControlDatepicker` from `@minneapolisstartribune/design-system/web`.
+The field emits `YYYY-MM-DD` for valid dates, an empty string when cleared, and raw text for
+incomplete edits. Use `validateDateInput(value, { required, min, max })` with the same limits
+when validating programmatic submissions. See the [TanStack `DateField` example](../packages/tanstack-form/README.md#datefield).
 
 ## Coachmark
 
@@ -187,6 +190,8 @@ The provider sets the attribute after hydration. To avoid a flash of the wrong t
 ## Dialog
 
 `Dialog` is a web-only modal window: centered from 768px up, a bottom sheet below. It's exported as a namespace: compose `Dialog.Root` with `Dialog.Title`, `Dialog.Content` and an optional `Dialog.Actions`. `DialogProps` types `Dialog.Root`, `DialogTitleProps` types `Dialog.Title`, `DialogSectionProps` types `Dialog.Content`, and `DialogActionsProps` types `Dialog.Actions`.
+
+Choose `maxWidth="xs" | "sm" | "md" | "lg" | "xl"` (default `md`, 560px). `fullWidth` defaults to `true`; set it to `false` to fit the content within the selected width. Mobile keeps the full-width bottom sheet. See [Dialog sizing details](../packages/design-system/src/components/Dialog/Dialog.mdx#width) for preset widths and responsive behavior.
 
 ```tsx
 import { useState } from 'react';
@@ -339,6 +344,14 @@ function GameFilter() {
 - `size` (`small`, `medium` (default), `large`) matches the Button heights and padding.
 - Also supports `fullWidth` and `disabled` on the group or a single item.
 
+## Select
+
+`FormControl.Select` takes an optional `icon` (e.g. `<ClockIcon />`) shown before the value. It's decorative (`aria-hidden`) and web-only.
+
+```tsx
+<FormControl.Select id="time" options={options} icon={<ClockIcon />} />
+```
+
 ## TextArea
 
 `FormControl.TextArea` (also exported as `TextArea`) is a web-only multi-line field. Put it in a `FormGroup` and it picks up the label, description and caption wiring, and error/success state from a `FormGroup.Caption` variant, same as `FormControl.TextInput`.
@@ -448,3 +461,24 @@ loadBrandFonts('startribune');
 ## Troubleshooting
 
 See [Troubleshooting](troubleshooting.md#web-issues) for common web-specific issues.
+
+## Autocomplete
+
+```tsx
+import { useState } from 'react';
+import { Autocomplete, type AutocompleteOption } from '@minneapolisstartribune/design-system/web';
+
+const options: AutocompleteOption[] = [
+  { value: 'baseball', label: 'Baseball' },
+  { value: 'softball', label: 'Softball' },
+];
+
+function Sports() {
+  const [sport, setSport] = useState<string>();
+  return <Autocomplete id="sport" options={options} value={sport} onChange={setSport} />;
+}
+```
+
+See the [Autocomplete Storybook docs](https://design-system.startribune.com/?path=/docs/forms-formcontrol-autocomplete--docs)
+for labeling, validation, custom options, search, and loading examples. For TanStack Form, use the
+[AutocompleteField adapter](../packages/tanstack-form/README.md#autocompletefield).

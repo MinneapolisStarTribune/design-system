@@ -2,10 +2,12 @@ import React from 'react';
 import { type AnyFieldApi, useForm } from '@tanstack/react-form';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ToggleGroup } from '@minneapolisstartribune/design-system/web';
+import { DesignSystemProvider, ToggleGroup } from '@minneapolisstartribune/design-system/web';
 import { SubmitForm } from './test-utils/SubmitForm';
 import {
+  AutocompleteField,
   CheckboxGroupField,
+  DateField,
   MultiSelectField,
   NumberField,
   PasswordField,
@@ -34,6 +36,23 @@ interface Case {
 }
 
 const cases: Case[] = [
+  {
+    name: 'AutocompleteField single',
+    role: 'combobox',
+    defaultValue: '',
+    render: (field) => <AutocompleteField field={field} {...labelProps} options={options} />,
+  },
+
+  {
+    name: 'DateField',
+    role: 'textbox',
+    defaultValue: '',
+    render: (field) => (
+      <DesignSystemProvider brand="varsity">
+        <DateField field={field} {...labelProps} />
+      </DesignSystemProvider>
+    ),
+  },
   {
     name: 'TextField',
     role: 'textbox',

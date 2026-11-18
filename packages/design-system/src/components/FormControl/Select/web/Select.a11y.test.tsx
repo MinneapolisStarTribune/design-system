@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithProvider } from '@/test-utils/render';
 import { FormControl } from '@/components/FormControl/FormControl';
 import { within } from '@testing-library/react';
+import { ClockIcon } from '@/icons';
 
 const OPTIONS = [
   { value: 'opt1', label: 'Option 1' },
@@ -17,6 +18,19 @@ describe('Select', () => {
     );
 
     expect(getByRole('combobox')).toBeInTheDocument();
+  });
+
+  it('hides the decorative icon from assistive tech', () => {
+    const { getByRole, queryByRole } = renderWithProvider(
+      <FormControl.Select
+        id="test"
+        options={OPTIONS}
+        icon={<ClockIcon role="img" aria-label="Clock" />}
+      />
+    );
+
+    expect(getByRole('combobox')).toBeInTheDocument();
+    expect(queryByRole('img', { name: 'Clock' })).not.toBeInTheDocument();
   });
 
   it('opens dropdown on click', async () => {

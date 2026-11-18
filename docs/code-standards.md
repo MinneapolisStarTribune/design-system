@@ -56,6 +56,9 @@ type ButtonProps = {
 
 Every web control that holds a user-entered value (anything under `FormControl/`, plus value controls elsewhere like `ToggleGroup`) ships with an adapter in `packages/tanstack-form` in the same PR. Consumers build forms through those adapters, so a control without one can't be used in a TanStack form without re-plumbing value, blur, errors and ARIA by hand.
 
+`AutocompleteField` binds a single string selection and clears to an empty string; search text
+is separate from the form selection. Use the existing `MultiSelectField` for multiple values.
+
 Scoped exception: VAR-1334 adds the standalone web `Datepicker` calendar. VAR-1335 explicitly owns
 its `FormControl` input wrapper and TanStack Form adapter, so that adapter is deliberately deferred
 to VAR-1335. Keep this exception documented when reviewing the calendar PR.
@@ -208,6 +211,9 @@ Web component styles live in `ComponentName.module.scss` but the contents should
 ### No Inline `style` in Web Code
 
 Put web styles, including story layout, in a co-located `.module.scss` and apply them with `className`. Don't add `style={{…}}` for static values. Two exceptions: values only known at runtime (positions, measured sizes), which should set a CSS custom property the module reads, and packages without a CSS build, like `packages/tanstack-form`. The `style` prop components accept and pass through for consumers is fine.
+
+For example, Dialog selects a preset class for `maxWidth` and passes the consumer's `style` through
+unchanged. Its tests check the CSS custom property against the shared typed preset values.
 
 ---
 

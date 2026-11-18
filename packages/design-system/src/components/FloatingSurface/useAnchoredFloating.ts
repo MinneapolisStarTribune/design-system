@@ -1,10 +1,32 @@
 'use client';
 
 import { arrow, autoUpdate, flip, offset, shift, size, useFloating } from '@floating-ui/react';
-import type { OpenChangeReason, Placement, ReferenceType } from '@floating-ui/react';
+import type { Middleware, OpenChangeReason, Placement, ReferenceType } from '@floating-ui/react';
 
 /** Default gap between the anchor and the floating element, and the edge padding for `flip`, `shift`, and `size`. */
 export const FLOATING_GAP = 4;
+
+/**
+ * Closes the floating element when its anchor stops rendering, such as when a responsive layout
+ * hides it with `display: none`. Without this, the element stays open at the top left of the page
+ * with no width. Browsers without `checkVisibility` keep the element open.
+ */
+const closeWhenAnchorHidden = (
+  onOpenChange: UseAnchoredFloatingOptions['onOpenChange']
+): Middleware => ({
+  name: 'closeWhenAnchorHidden',
+  fn({ elements }) {
+    const { reference } = elements;
+    if (
+      reference instanceof Element &&
+      typeof reference.checkVisibility === 'function' &&
+      !reference.checkVisibility()
+    ) {
+      onOpenChange?.(false);
+    }
+    return {};
+  },
+});
 
 type UseAnchoredFloatingOptions = {
   open: boolean;
@@ -45,6 +67,7 @@ export const useAnchoredFloating = <RT extends ReferenceType = Element>({
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
     middleware: [
+      closeWhenAnchorHidden(onOpenChange),
       offset(offsetDistance),
       flip({ boundary, padding: gap, crossAxis: 'alignment', fallbackAxisSideDirection: 'end' }),
       shift({ boundary, padding: gap }),

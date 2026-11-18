@@ -122,7 +122,12 @@ A dismissible, externally-controlled callout for an unprompted single action. Se
 strings, inclusive `min`/`max` bounds, and keyboard navigation. Date props accept plain `string`
 values without type assertions. Import it and `DatepickerProps`
 from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
-The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
+For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDatepicker`) and
+`validateDateInput` from `/web`. For TanStack Form, use [`DateField`](packages/tanstack-form/README.md#datefield) from the adapter package.
+
+### Dialog (web)
+
+A modal window for decisions and short tasks, with configurable widths and a mobile bottom sheet. See [Dialog in Storybook](https://design-system.startribune.com/?path=/docs/layout-containers-dialog--docs) for sizing options, defaults, and examples.
 
 ### ImageGallery (native)
 
@@ -300,3 +305,12 @@ yarn add @minneapolisstartribune/design-system@latest
 - Review component source code in the repository
 - Open an issue on GitHub with details about your setup and error messages
 - Please reach out to the team in Slack
+
+### Autocomplete (web)
+
+Import `Autocomplete`, `AutocompleteProps`, or `FormControl` from
+`@minneapolisstartribune/design-system/web`. Autocomplete supports searchable single selection
+(`string | undefined`), custom option rows,
+and text-only or icon-and-text loading skeletons. Search text is separate from selected values.
+See the [web usage guide](integration-guides/web.md#autocomplete) and
+[TanStack Form adapter](packages/tanstack-form/README.md#autocompletefield).

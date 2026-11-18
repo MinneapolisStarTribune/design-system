@@ -17,6 +17,9 @@ export const DialogRoot: React.FC<DialogProps> = ({
   role = 'dialog',
   describeWithContent = role === 'alertdialog',
   className,
+  maxWidth = 'md',
+  fullWidth = true,
+  style,
   dataTestId = 'dialog',
   ...rest
 }) => {
@@ -28,7 +31,13 @@ export const DialogRoot: React.FC<DialogProps> = ({
       role={role}
       describeWithBody={describeWithContent}
       position={position}
-      className={classNames(styles.dialog, className)}
+      className={classNames(
+        styles.dialog,
+        styles[maxWidth],
+        fullWidth && styles.fullWidth,
+        className
+      )}
+      style={style}
       dataTestId={dataTestId}
       names={NAMES}
     />

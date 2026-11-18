@@ -1,0 +1,96 @@
+.root {
+  width: 100%;
+}
+.field {
+  --date-action-size: 28px;
+  --date-action-inset: var(--spacing-12);
+  --date-icon: var(--color-text-on-light-tertiary);
+  --date-icon-disabled: var(--color-text-state-disabled-on-light);
+  --date-error: var(--color-text-state-attention-on-light);
+  --date-error-border: var(--color-border-state-attention-on-light);
+  position: relative;
+}
+.small {
+  --date-action-size: 24px;
+  --date-action-inset: var(--spacing-8);
+}
+.large {
+  --date-action-size: 32px;
+  --date-action-inset: var(--spacing-16);
+}
+.rounded {
+  --date-action-inset: var(--spacing-16);
+  &.small {
+    --date-action-inset: var(--spacing-12);
+  }
+  &.large {
+    --date-action-inset: var(--spacing-20);
+  }
+}
+// Override TextInput size/rounded padding so text cannot overlap the action.
+.root .field .input {
+  padding-right: calc(var(--date-action-inset) + var(--date-action-size));
+}
+// UtilityButton offers 32px and 40px icon buttons. Like PasswordInput, this inset
+// action also needs 24px and 28px targets for the small and medium fields.
+// Icon sets its default color inline; both glyphs should inherit their own container's color.
+.fieldIcon {
+  color: inherit !important;
+}
+
+.trigger {
+  position: absolute;
+  top: 50%;
+  right: var(--date-action-inset);
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--date-action-size);
+  height: var(--date-action-size);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--date-icon);
+  &[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-border-state-focus);
+    outline-offset: 1px;
+  }
+  &:disabled {
+    color: var(--date-icon-disabled);
+    // FloatingSurface sets the trigger cursor inline.
+    cursor: not-allowed !important;
+  }
+}
+.error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-8);
+  color: var(--color-text-state-attention-on-light);
+}
+[data-theme='dark'] {
+  .field {
+    --date-icon: var(--color-text-on-dark-tertiary);
+    --date-icon-disabled: var(--color-text-state-disabled-on-dark);
+    --date-error: var(--color-text-state-attention-on-dark);
+    --date-error-border: var(--color-border-state-attention-on-dark);
+  }
+  .error {
+    color: var(--color-text-state-attention-on-dark);
+  }
+}
+
+.field:has(input[aria-invalid='true']) {
+  --date-icon: var(--date-error);
+  --date-open-border: var(--date-error-border);
+}
+
+.field:has(.trigger[aria-expanded='true']) .input {
+  border-color: var(--date-open-border, var(--color-border-state-focus));
+  box-shadow: 0 0 0 1px var(--date-open-border, var(--color-border-state-focus));
+}

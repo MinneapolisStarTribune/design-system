@@ -1,7 +1,8 @@
 import { type ReactNode, type Ref, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import * as Dialog from './Dialog';
-import type { DialogProps } from './Dialog.types';
+import { DIALOG_MAX_WIDTHS, DIALOG_WIDTH_OPTIONS, type DialogProps } from './Dialog.types';
 import { Button, FormControl, FormGroup } from '@/components/index.web';
 import { MODAL_ROLES } from '@/components/Modal/Modal.constants';
 import { allModes } from '@storybook-config/modes';
@@ -135,6 +136,22 @@ const meta = {
   },
   argTypes: {
     children: { control: false },
+    maxWidth: {
+      control: 'select',
+      options: DIALOG_WIDTH_OPTIONS,
+      description:
+        'Width presets: xs 476px, sm 500px, md 560px, lg 720px, xl 1086px. Phones stay full width.',
+      table: {
+        type: { summary: DIALOG_WIDTH_OPTIONS.map((size) => `'${size}'`).join(' | ') },
+        defaultValue: { summary: "'md'" },
+      },
+    },
+    fullWidth: {
+      control: 'boolean',
+      description:
+        'Stretch to maxWidth. When false, size to content within that limit. Phones stay full width.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
     dismissible: {
       control: 'boolean',
       description:
@@ -196,6 +213,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Configurable: Story = {
   args: {
+    maxWidth: 'md',
+    fullWidth: true,
     open: false,
     onClose: () => {},
     dismissible: true,
@@ -278,6 +297,61 @@ export function AddGameDialog() {
   },
 };
 
+export const Widths: Story = {
+  args: { open: false, onClose: () => {}, children: null, fullWidth: true },
+  argTypes: { maxWidth: { control: false } },
+  render: function Render({ fullWidth }) {
+    const [width, setWidth] = useState<NonNullable<DialogProps['maxWidth']> | null>(null);
+
+    return (
+      <>
+        <div className={styles.row}>
+          {DIALOG_WIDTH_OPTIONS.map((value) => (
+            <Button key={value} onClick={() => setWidth(value)}>
+              {value} ({DIALOG_MAX_WIDTHS[value]}px)
+            </Button>
+          ))}
+        </div>
+        <Dialog.Root
+          open={width !== null}
+          maxWidth={width ?? 'md'}
+          fullWidth={fullWidth}
+          onClose={() => setWidth(null)}
+        >
+          <AddGameContent onClose={() => setWidth(null)} />
+        </Dialog.Root>
+      </>
+    );
+  },
+};
+
+export const ContentWidth: Story = {
+  args: { open: false, onClose: () => {}, children: null, maxWidth: 'lg', fullWidth: false },
+  render: function Render({ onClose, ...args }) {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open content-sized dialog</Button>
+        <Dialog.Root
+          {...args}
+          open={open}
+          onClose={(reason) => {
+            setOpen(false);
+            onClose(reason);
+          }}
+        >
+          <Dialog.Title>Saved</Dialog.Title>
+          <Dialog.Content>Your changes are saved.</Dialog.Content>
+          <Dialog.Actions>
+            <Button onClick={() => setOpen(false)}>Done</Button>
+          </Dialog.Actions>
+        </Dialog.Root>
+      </>
+    );
+  },
+};
+
 // Renders a dialog inside its own frame so variants can be compared side by side.
 const VariantFrame = ({
   label,
@@ -287,6 +361,8 @@ const VariantFrame = ({
   role,
   initialFocus,
   initialOpen,
+  maxWidth,
+  fullWidth,
   children,
 }: {
   label: string;
@@ -296,6 +372,8 @@ const VariantFrame = ({
   role?: DialogProps['role'];
   initialFocus?: DialogProps['initialFocus'];
   initialOpen: boolean;
+  maxWidth?: DialogProps['maxWidth'];
+  fullWidth?: DialogProps['fullWidth'];
   children: (onClose: () => void) => ReactNode;
 }) => {
   const [portalRoot, setPortalRoot] = useState<HTMLDivElement | null>(null);
@@ -318,6 +396,8 @@ const VariantFrame = ({
             showCloseButton={showCloseButton}
             role={role}
             initialFocus={initialFocus}
+            maxWidth={maxWidth}
+            fullWidth={fullWidth}
           >
             {children(() => setOpen(false))}
           </Dialog.Root>
@@ -576,6 +656,63 @@ export function SessionExpiredDialog({ open, onSignIn }: { open: boolean; onSign
   ),
 };
 
+const LongContent = ({ onClose, dataTestId }: { onClose: () => void; dataTestId: string }) => (
+  <>
+    <Dialog.Title>Season rules</Dialog.Title>
+    <Dialog.Content dataTestId={dataTestId}>
+      <div className={styles.stack}>
+        {Array.from({ length: 12 }, (_, i) => (
+          <p key={i}>
+            {`${i + 1}. Teams submit scores within 24 hours of the final whistle. Late scores show as pending until a coach or athletic director confirms them.`}
+          </p>
+        ))}
+      </div>
+    </Dialog.Content>
+    <Dialog.Actions>
+      <Button onClick={onClose}>Got it</Button>
+    </Dialog.Actions>
+  </>
+);
+
+// Waits for the fade's opacity transition to finish so the snapshot isn't mid-fade.
+const waitForFade = (body: HTMLElement, edge: 'before' | 'after', opacity: '0' | '1') =>
+  waitFor(() => expect(getComputedStyle(body, `::${edge}`).opacity).toBe(opacity));
+
+/** Chromatic coverage for the content scroll fades: bottom only at the top, both mid-scroll. */
+export const ScrollFade: Story = {
+  args: EXAMPLE_ARGS,
+  parameters: {
+    chromatic: { modes: allModes },
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
+  render: (_args, { viewMode }) => {
+    const initialOpen = viewMode !== 'docs';
+
+    return (
+      <div className={styles.grid}>
+        <VariantFrame label="Scrolled to the top: bottom fade only" initialOpen={initialOpen}>
+          {(onClose) => <LongContent onClose={onClose} dataTestId="scroll-fade-top" />}
+        </VariantFrame>
+        <VariantFrame label="Scrolled partway: top and bottom fades" initialOpen={initialOpen}>
+          {(onClose) => <LongContent onClose={onClose} dataTestId="scroll-fade-middle" />}
+        </VariantFrame>
+      </div>
+    );
+  },
+  play: async ({ canvas }) => {
+    const atTop = await canvas.findByTestId('scroll-fade-top');
+    const middle = await canvas.findByTestId('scroll-fade-middle');
+
+    middle.scrollTop = (middle.scrollHeight - middle.clientHeight) / 2;
+
+    await waitForFade(atTop, 'before', '0');
+    await waitForFade(atTop, 'after', '1');
+    await waitForFade(middle, 'before', '1');
+    await waitForFade(middle, 'after', '1');
+  },
+};
+
 /**
  * Every variant in one canvas, for Chromatic visual regression across brand and theme modes.
  * Not shown on the docs page; each variant has its own section there.
@@ -595,6 +732,41 @@ export const AllVariants: Story = {
         {renderFormFrame(initialOpen)}
         <ConfirmFrame initialOpen={initialOpen} />
         {renderNoCloseButtonFrame(initialOpen)}
+        {DIALOG_WIDTH_OPTIONS.map((maxWidth) => (
+          <VariantFrame
+            key={maxWidth}
+            label={`maxWidth="${maxWidth}" (${DIALOG_MAX_WIDTHS[maxWidth]}px), fullWidth`}
+            maxWidth={maxWidth}
+            fullWidth
+            initialOpen={initialOpen}
+          >
+            {(onClose) => (
+              <>
+                <Dialog.Title>Saved</Dialog.Title>
+                <Dialog.Content>Your changes are saved.</Dialog.Content>
+                <Dialog.Actions>
+                  <Button onClick={onClose}>Done</Button>
+                </Dialog.Actions>
+              </>
+            )}
+          </VariantFrame>
+        ))}
+        <VariantFrame
+          label='maxWidth="lg", fullWidth={false}: content-sized'
+          maxWidth="lg"
+          fullWidth={false}
+          initialOpen={initialOpen}
+        >
+          {(onClose) => (
+            <>
+              <Dialog.Title>Saved</Dialog.Title>
+              <Dialog.Content>Your changes are saved.</Dialog.Content>
+              <Dialog.Actions>
+                <Button onClick={onClose}>Done</Button>
+              </Dialog.Actions>
+            </>
+          )}
+        </VariantFrame>
       </div>
     );
   },

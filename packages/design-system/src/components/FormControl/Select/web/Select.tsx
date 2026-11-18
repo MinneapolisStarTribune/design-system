@@ -27,6 +27,7 @@ export const Select: React.FC<SelectProps> = ({
   'aria-labelledby': ariaLabelledByProp,
   'aria-describedby': ariaDescribedByProp,
   dataTestId,
+  icon,
 }) => {
   const safeOptions = React.useMemo(() => (Array.isArray(options) ? options : []), [options]);
 
@@ -218,6 +219,11 @@ export const Select: React.FC<SelectProps> = ({
     >
       {/* Not a button: a second focusable control makes screen readers announce the field twice. */}
       <div className={classNames(styles.selectTrigger, triggerTypographyClass)}>
+        {icon && (
+          <span className={styles.selectStartIcon} aria-hidden>
+            {icon}
+          </span>
+        )}
         <span
           className={classNames(
             styles.selectValue,

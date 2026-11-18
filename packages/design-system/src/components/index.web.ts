@@ -50,6 +50,12 @@ export {
   type EyebrowBadgeVariant,
 } from './EyebrowBadge/web/EyebrowBadge';
 export { Form, FormButton, type FormProps } from './Form';
+export type {
+  AutocompleteOption,
+  AutocompleteOptionProps,
+  AutocompleteProps,
+} from './FormControl/Autocomplete/Autocomplete.types';
+export { Autocomplete } from './FormControl/Autocomplete/web/Autocomplete';
 export { Checkbox, type CheckboxProps } from './FormControl/Checkbox/web/Checkbox';
 export {
   type CheckboxCategory,
@@ -57,6 +63,12 @@ export {
   type CheckboxGroupProps,
   type CheckboxOption,
 } from './FormControl/CheckboxGroup/web/CheckboxGroup';
+export { validateDateInput } from './FormControl/Datepicker/dateInput';
+export type { DateInputLimits } from './FormControl/Datepicker/Datepicker.types';
+export {
+  FormControlDatepicker,
+  type FormControlDatepickerProps,
+} from './FormControl/Datepicker/web/Datepicker';
 export { FormControl, type FormControlProps } from './FormControl/FormControl';
 export type {
   MultiSelectOption,

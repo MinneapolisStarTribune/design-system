@@ -130,17 +130,18 @@ export type VariantProps<Color extends string, Variant extends string> = {
 export type ColorVariantProps = VariantProps<TextColor, string>;
 
 /**
- * Resolve semantic text color to inline style
+ * Resolve semantic text color to inline style. Sets `--ds-text-color`, which the
+ * theme CSS applies with `!important`; React can't set `!important` inline.
  */
 export const resolveTextColorStyle = (
   color?: TextColor,
   style?: React.CSSProperties
 ): React.CSSProperties => {
-  if (!color) return style || {};
+  if (!color || style?.color) return style || {};
   return {
-    color: `${TEXT_COLOR_TOKENS[color]} !important`,
+    '--ds-text-color': TEXT_COLOR_TOKENS[color],
     ...style,
-  };
+  } as React.CSSProperties; // no support for css variables
 };
 
 export type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';

@@ -116,6 +116,23 @@
   transition: transform 0.15s ease;
 }
 
+.selectStartIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 0;
+  color: var(--color-icon-on-light-tertiary);
+
+  /* Wrapped icons set an inline color; make them follow the span so state colors apply. */
+  svg {
+    color: inherit !important;
+  }
+}
+
+.selectContainer.isDisabled .selectStartIcon {
+  color: var(--color-icon-state-disabled-on-light);
+}
+
 .selectIconOpen {
   transform: rotate(180deg);
 }

@@ -50,7 +50,11 @@
 
 [data-theme='dark'] .iconStart,
 [data-theme='dark'] .iconEnd {
-  color: var(--color-text-on-dark-tertiary);
+  color: var(--color-icon-on-dark-tertiary);
+}
+
+[data-theme='dark'] .wrapper:has(.input:disabled) :is(.iconStart, .iconEnd) {
+  color: var(--color-icon-state-disabled-on-dark);
 }
 
 [data-theme='dark'] .iconSuccess {
@@ -85,8 +89,17 @@
   justify-content: center;
   flex-shrink: 0;
   line-height: 0;
-  color: var(--color-text-on-light-tertiary);
+  color: var(--color-icon-on-light-tertiary);
   pointer-events: none;
+
+  /* Wrapped icons set an inline color; make them follow the span so state colors apply. */
+  svg {
+    color: inherit !important;
+  }
+}
+
+.wrapper:has(.input:disabled) :is(.iconStart, .iconEnd) {
+  color: var(--color-icon-state-disabled-on-light);
 }
 
 /* Success checkmark - green to match success border */
