@@ -329,6 +329,23 @@ describe('ImageGallery (native)', () => {
     expect(screen.getByText('2/2')).toBeTruthy();
   });
 
+  it('scrolls to initialIndex when images load into an empty gallery at the same width', () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
+    const { rerender } = render(<ImageGallery images={[]} initialIndex={1} />, { wrapper });
+    scrollTo.mockClear();
+
+    rerender(<ImageGallery images={images} initialIndex={1} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+    const lastCall = scrollTo.mock.calls[scrollTo.mock.calls.length - 1][0] as {
+      x: number;
+      animated: boolean;
+    };
+    expect(lastCall.animated).toBe(false);
+    expect(lastCall.x).toBeGreaterThan(0);
+    scrollTo.mockRestore();
+  });
+
   it('repositions the carousel in standard mode when the container width changes', () => {
     const { UNSAFE_getByType } = render(<ImageGallery images={images} />, { wrapper });
 

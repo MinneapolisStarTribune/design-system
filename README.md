@@ -124,6 +124,10 @@ values without type assertions. Import it and `DatepickerProps`
 from the `/web` entry. See the [Datepicker integration example](integration-guides/web.md#datepicker).
 The input wrapper and TanStack Form adapter are separate work tracked by VAR-1335.
 
+### ImageGallery (native)
+
+The native `ImageGallery` accepts `initialIndex`, a 0-based slide index. It scrolls the carousel on mount and again whenever the value changes; leaving it `undefined` never moves the carousel. The web gallery ignores it. `onIndexChange` reports a 1-based index and, on native, fires only after a swipe, so subtract 1 when syncing it back into `initialIndex`. See the [ImageGallery example](integration-guides/native.md#imagegallery) in the native integration guide.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.

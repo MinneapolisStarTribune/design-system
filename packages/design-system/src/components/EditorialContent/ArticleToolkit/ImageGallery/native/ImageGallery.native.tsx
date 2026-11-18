@@ -328,12 +328,15 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     });
   }, [isImmersive, interval, hasLoop]);
 
+  // The ScrollView only mounts once there are images, so the position has to be applied again then.
+  const hasImages = total > 0;
+
   useEffect(() => {
     scrollRef.current?.scrollTo({
       x: index * interval,
       animated: false,
     });
-  }, [interval, isImmersive, index]);
+  }, [interval, isImmersive, index, hasImages]);
 
   const handleMomentumEnd = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
