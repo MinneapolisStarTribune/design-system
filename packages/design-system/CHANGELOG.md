@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 4.5.0
+
+### Minor Changes
+
+- [#489](https://github.com/MinneapolisStarTribune/design-system/pull/489) [`cfa28a0`](https://github.com/MinneapolisStarTribune/design-system/commit/cfa28a00a572cd3d530edc6c10b24f4cf08a1db5) Thanks [@iivins-livefront-strib](https://github.com/iivins-livefront-strib)! - Add activeIndex prop (scrolls on mount and whenever it changes), wire onIndexChange, fix standard-mode orientation repositioning in ImageGallery
+
 ## 4.4.1
 
 ### Patch Changes
