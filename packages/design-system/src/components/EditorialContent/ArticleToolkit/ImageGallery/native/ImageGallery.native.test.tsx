@@ -284,22 +284,22 @@ describe('ImageGallery (native)', () => {
     expect(onIndexChange).toHaveBeenCalledWith(2);
   });
 
-  it('moves to a new initialIndex when the prop changes', () => {
+  it('moves to a new activeIndex when the prop changes', () => {
     const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
-    const { rerender } = render(<ImageGallery images={images} initialIndex={0} />, { wrapper });
+    const { rerender } = render(<ImageGallery images={images} activeIndex={0} />, { wrapper });
     expect(screen.getByText('1/2')).toBeTruthy();
     scrollTo.mockClear();
 
-    rerender(<ImageGallery images={images} initialIndex={1} />);
+    rerender(<ImageGallery images={images} activeIndex={1} />);
 
     expect(screen.getByText('2/2')).toBeTruthy();
     expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ animated: false }));
     scrollTo.mockRestore();
   });
 
-  it('does not undo a swipe by the reader when re-rendered with the same initialIndex', () => {
+  it('does not undo a swipe by the reader when re-rendered with the same activeIndex', () => {
     const { rerender, UNSAFE_getByType } = render(
-      <ImageGallery images={images} initialIndex={0} />,
+      <ImageGallery images={images} activeIndex={0} />,
       {
         wrapper,
       }
@@ -309,13 +309,13 @@ describe('ImageGallery (native)', () => {
     });
     expect(screen.getByText('2/2')).toBeTruthy();
 
-    rerender(<ImageGallery images={images} initialIndex={0} />);
+    rerender(<ImageGallery images={images} activeIndex={0} />);
 
     expect(screen.getByText('2/2')).toBeTruthy();
   });
 
-  it('stays where it is when initialIndex becomes undefined', () => {
-    const { rerender } = render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+  it('stays where it is when activeIndex becomes undefined', () => {
+    const { rerender } = render(<ImageGallery images={images} activeIndex={1} />, { wrapper });
     expect(screen.getByText('2/2')).toBeTruthy();
 
     rerender(<ImageGallery images={images} />);
@@ -323,18 +323,18 @@ describe('ImageGallery (native)', () => {
     expect(screen.getByText('2/2')).toBeTruthy();
   });
 
-  it('initializes the active slide from initialIndex', () => {
-    render(<ImageGallery images={images} initialIndex={1} />, { wrapper });
+  it('initializes the active slide from activeIndex', () => {
+    render(<ImageGallery images={images} activeIndex={1} />, { wrapper });
 
     expect(screen.getByText('2/2')).toBeTruthy();
   });
 
-  it('scrolls to initialIndex when images load into an empty gallery at the same width', () => {
+  it('scrolls to activeIndex when images load into an empty gallery at the same width', () => {
     const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
-    const { rerender } = render(<ImageGallery images={[]} initialIndex={1} />, { wrapper });
+    const { rerender } = render(<ImageGallery images={[]} activeIndex={1} />, { wrapper });
     scrollTo.mockClear();
 
-    rerender(<ImageGallery images={images} initialIndex={1} />);
+    rerender(<ImageGallery images={images} activeIndex={1} />);
 
     expect(screen.getByText('2/2')).toBeTruthy();
     const lastCall = scrollTo.mock.calls[scrollTo.mock.calls.length - 1][0] as {
@@ -346,48 +346,48 @@ describe('ImageGallery (native)', () => {
     scrollTo.mockRestore();
   });
 
-  it('keeps initialIndex when images load into an empty looping gallery', () => {
+  it('keeps activeIndex when images load into an empty looping gallery', () => {
     const threeImages = [1, 2, 3].map((n) => ({
       src: `https://example.com/${n}.jpg`,
       altText: `Image ${n}`,
       width: 800,
       height: 600,
     }));
-    const { rerender } = render(<ImageGallery images={[]} variant="immersive" initialIndex={1} />, {
+    const { rerender } = render(<ImageGallery images={[]} variant="immersive" activeIndex={1} />, {
       wrapper,
     });
 
-    rerender(<ImageGallery images={threeImages} variant="immersive" initialIndex={1} />);
+    rerender(<ImageGallery images={threeImages} variant="immersive" activeIndex={1} />);
 
     // The immersive variant has no "N/total" tag, so the active image shows in the footer controls.
     expect(screen.getByLabelText('Previous image (1 of 3)')).toBeTruthy();
     expect(screen.getByLabelText('Next image (3 of 3)')).toBeTruthy();
   });
 
-  it('clamps an out-of-range initialIndex', () => {
+  it('clamps an out-of-range activeIndex', () => {
     const threeImages = [1, 2, 3].map((n) => ({
       src: `https://example.com/${n}.jpg`,
       altText: `Image ${n}`,
       width: 800,
       height: 600,
     }));
-    render(<ImageGallery images={threeImages} initialIndex={5} />, { wrapper });
+    render(<ImageGallery images={threeImages} activeIndex={5} />, { wrapper });
 
     expect(screen.getByText('3/3')).toBeTruthy();
   });
 
-  it('clamps an out-of-range initialIndex when the prop changes', () => {
+  it('clamps an out-of-range activeIndex when the prop changes', () => {
     const threeImages = [1, 2, 3].map((n) => ({
       src: `https://example.com/${n}.jpg`,
       altText: `Image ${n}`,
       width: 800,
       height: 600,
     }));
-    const { rerender } = render(<ImageGallery images={threeImages} initialIndex={0} />, {
+    const { rerender } = render(<ImageGallery images={threeImages} activeIndex={0} />, {
       wrapper,
     });
 
-    rerender(<ImageGallery images={threeImages} initialIndex={5} />);
+    rerender(<ImageGallery images={threeImages} activeIndex={5} />);
 
     expect(screen.getByText('3/3')).toBeTruthy();
   });
@@ -401,11 +401,11 @@ describe('ImageGallery (native)', () => {
       height: 600,
     }));
     const { rerender } = render(
-      <ImageGallery images={threeImages} variant="immersive" initialIndex={0} />,
+      <ImageGallery images={threeImages} variant="immersive" activeIndex={0} />,
       { wrapper }
     );
 
-    rerender(<ImageGallery images={[threeImages[0]]} variant="immersive" initialIndex={0} />);
+    rerender(<ImageGallery images={[threeImages[0]]} variant="immersive" activeIndex={0} />);
 
     expect(screen.getByText('Caption 1')).toBeTruthy();
   });

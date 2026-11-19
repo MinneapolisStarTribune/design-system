@@ -62,11 +62,12 @@ VAR-1334 does not introduce a React Native date picker or a native date-picker d
 
 ## ImageGallery
 
-`initialIndex` is native-only; the web gallery ignores it.
+`activeIndex` is native-only; the web gallery ignores it.
 
 - It is a 0-based slide index. The carousel scrolls to it on mount and again whenever the value changes, without remounting.
 - Leaving it `undefined` never moves the carousel, and setting it back to `undefined` leaves the carousel where it is.
-- `onIndexChange` reports a 1-based index and, on native, fires when the carousel lands on a new image (swipe or previous/next tap). It is not called on mount or when `initialIndex` moves the carousel.
+- It does not follow swipes. Use `onIndexChange` to hear about those.
+- `onIndexChange` reports a 1-based index and, on native, fires when the carousel lands on a new image (swipe or previous/next tap). It is not called on mount or when `activeIndex` moves the carousel.
 
 To keep a fullscreen viewer and the carousel in sync, convert between the two indexes:
 
@@ -79,7 +80,7 @@ function Gallery({ images }) {
   return (
     <ImageGallery
       images={images}
-      initialIndex={viewerIndex ?? undefined}
+      activeIndex={viewerIndex ?? undefined}
       onIndexChange={(index) => setViewerIndex(index - 1)}
     />
   );

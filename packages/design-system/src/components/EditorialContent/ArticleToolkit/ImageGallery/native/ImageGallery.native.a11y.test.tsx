@@ -164,7 +164,7 @@ describe('ImageGallery Accessibility (native)', () => {
     findNodeHandleSpy.mockRestore();
   });
 
-  describe('carousel navigation labels follow initialIndex', () => {
+  describe('carousel navigation labels follow activeIndex', () => {
     const threeImages = [
       ...images,
       {
@@ -175,15 +175,15 @@ describe('ImageGallery Accessibility (native)', () => {
       },
     ];
 
-    it('labels navigation from a nonzero initialIndex', () => {
-      render(<ImageGallery images={threeImages} initialIndex={1} />, { wrapper });
+    it('labels navigation from a nonzero activeIndex', () => {
+      render(<ImageGallery images={threeImages} activeIndex={1} />, { wrapper });
 
       expect(screen.getByRole('button', { name: 'Previous image (1 of 3)' })).toBeOnTheScreen();
       expect(screen.getByRole('button', { name: 'Next image (3 of 3)' })).toBeOnTheScreen();
     });
 
-    it('updates navigation labels and disabled state when initialIndex changes', () => {
-      const { rerender } = render(<ImageGallery images={threeImages} initialIndex={0} />, {
+    it('updates navigation labels and disabled state when activeIndex changes', () => {
+      const { rerender } = render(<ImageGallery images={threeImages} activeIndex={0} />, {
         wrapper,
       });
       expect(screen.getByRole('button', { name: 'Previous image (1 of 3)' })).toBeOnTheScreen();
@@ -192,7 +192,7 @@ describe('ImageGallery Accessibility (native)', () => {
         screen.getByTestId('image-gallery-caption-previous').props.accessibilityState.disabled
       ).toBe(true);
 
-      rerender(<ImageGallery images={threeImages} initialIndex={2} />);
+      rerender(<ImageGallery images={threeImages} activeIndex={2} />);
 
       expect(screen.getByRole('button', { name: 'Previous image (2 of 3)' })).toBeOnTheScreen();
       expect(screen.getByRole('button', { name: 'Next image (3 of 3)' })).toBeOnTheScreen();

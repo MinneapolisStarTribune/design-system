@@ -265,7 +265,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   wrapperStyle,
   captionStyle,
   dataTestId = 'image-gallery',
-  initialIndex,
+  activeIndex,
   onIndexChange,
   'aria-label': ariaLabel,
 }) => {
@@ -300,24 +300,24 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   const clampIndex = (i: number) => Math.max(total > 0 ? Math.min(i, total - 1) : i, 0);
 
   const [index, setIndex] = useState(
-    hasLoop ? clampIndex(initialIndex ?? 0) + 1 : clampIndex(initialIndex ?? 0)
+    hasLoop ? clampIndex(activeIndex ?? 0) + 1 : clampIndex(activeIndex ?? 0)
   );
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   // Looping adds a clone slide at the start, so the slide number shifts by one when looping turns on or off.
-  // This must stay above the `initialIndex` block so an `initialIndex` change in the same render wins.
+  // This must stay above the `activeIndex` block so an `activeIndex` change in the same render wins.
   const [prevHasLoop, setPrevHasLoop] = useState(hasLoop);
   if (hasLoop !== prevHasLoop) {
     setPrevHasLoop(hasLoop);
     setIndex((i) => (hasLoop ? i + 1 : Math.max(i - 1, 0)));
   }
 
-  // Lets a consumer move the carousel after mount by changing `initialIndex`, without remounting it.
-  const [appliedInitialIndex, setAppliedInitialIndex] = useState(initialIndex);
-  if (initialIndex !== appliedInitialIndex) {
-    setAppliedInitialIndex(initialIndex);
-    if (initialIndex !== undefined) {
-      const clamped = clampIndex(initialIndex);
+  // Lets a consumer move the carousel after mount by changing `activeIndex`, without remounting it.
+  const [appliedActiveIndex, setAppliedActiveIndex] = useState(activeIndex);
+  if (activeIndex !== appliedActiveIndex) {
+    setAppliedActiveIndex(activeIndex);
+    if (activeIndex !== undefined) {
+      const clamped = clampIndex(activeIndex);
       setIndex(hasLoop ? clamped + 1 : clamped);
     }
   }
