@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 4.4.1
+
+### Patch Changes
+
+- [#490](https://github.com/MinneapolisStarTribune/design-system/pull/490) [`280f074`](https://github.com/MinneapolisStarTribune/design-system/commit/280f0747026ea678b56386b6cd75b5175a6584eb) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Dialog and Drawer scroll fades use an IntersectionObserver instead of scroll-driven animations, so visual snapshot tools no longer catch the bottom fade on content that doesn't scroll.
+
 ## 4.4.0
 
 ### Minor Changes
