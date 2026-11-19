@@ -346,6 +346,70 @@ describe('ImageGallery (native)', () => {
     scrollTo.mockRestore();
   });
 
+  it('keeps initialIndex when images load into an empty looping gallery', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(<ImageGallery images={[]} variant="immersive" initialIndex={1} />, {
+      wrapper,
+    });
+
+    rerender(<ImageGallery images={threeImages} variant="immersive" initialIndex={1} />);
+
+    // The immersive variant has no "N/total" tag, so the active image shows in the footer controls.
+    expect(screen.getByLabelText('Previous image (1 of 3)')).toBeTruthy();
+    expect(screen.getByLabelText('Next image (3 of 3)')).toBeTruthy();
+  });
+
+  it('clamps an out-of-range initialIndex', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    render(<ImageGallery images={threeImages} initialIndex={5} />, { wrapper });
+
+    expect(screen.getByText('3/3')).toBeTruthy();
+  });
+
+  it('clamps an out-of-range initialIndex when the prop changes', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(<ImageGallery images={threeImages} initialIndex={0} />, {
+      wrapper,
+    });
+
+    rerender(<ImageGallery images={threeImages} initialIndex={5} />);
+
+    expect(screen.getByText('3/3')).toBeTruthy();
+  });
+
+  it('keeps the current image when a looping gallery drops to a single image', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      caption: `Caption ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(
+      <ImageGallery images={threeImages} variant="immersive" initialIndex={0} />,
+      { wrapper }
+    );
+
+    rerender(<ImageGallery images={[threeImages[0]]} variant="immersive" initialIndex={0} />);
+
+    expect(screen.getByText('Caption 1')).toBeTruthy();
+  });
+
   it('repositions the carousel in standard mode when the container width changes', () => {
     const { UNSAFE_getByType } = render(<ImageGallery images={images} />, { wrapper });
 

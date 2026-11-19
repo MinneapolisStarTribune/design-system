@@ -131,7 +131,7 @@ A modal window for decisions and short tasks, with configurable widths and a mob
 
 ### ImageGallery (native)
 
-The native `ImageGallery` accepts `initialIndex`, a 0-based slide index. It scrolls the carousel on mount and again whenever the value changes; leaving it `undefined` never moves the carousel. The web gallery ignores it. `onIndexChange` reports a 1-based index and, on native, fires only after a swipe, so subtract 1 when syncing it back into `initialIndex`. See the [ImageGallery example](integration-guides/native.md#imagegallery) in the native integration guide.
+The native `ImageGallery` accepts `initialIndex`, a 0-based slide index. It scrolls the carousel on mount and again whenever the value changes; leaving it `undefined` never moves the carousel. The web gallery ignores it. `onIndexChange` reports a 1-based index and, on native, fires when the carousel lands on a new image, so subtract 1 when syncing it back into `initialIndex`. See the [ImageGallery example](integration-guides/native.md#imagegallery) in the native integration guide.
 
 ## TypeScript Support
 

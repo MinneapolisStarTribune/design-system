@@ -66,7 +66,7 @@ VAR-1334 does not introduce a React Native date picker or a native date-picker d
 
 - It is a 0-based slide index. The carousel scrolls to it on mount and again whenever the value changes, without remounting.
 - Leaving it `undefined` never moves the carousel, and setting it back to `undefined` leaves the carousel where it is.
-- `onIndexChange` reports a 1-based index and, on native, fires only after the reader finishes a swipe. It is not called on mount or when `initialIndex` moves the carousel.
+- `onIndexChange` reports a 1-based index and, on native, fires when the carousel lands on a new image (swipe or previous/next tap). It is not called on mount or when `initialIndex` moves the carousel.
 
 To keep a fullscreen viewer and the carousel in sync, convert between the two indexes:
 

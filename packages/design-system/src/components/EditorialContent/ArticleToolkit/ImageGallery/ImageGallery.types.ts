@@ -27,7 +27,7 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   /**
    * Called with the 1-based active slide index.
    * Web: on mount and whenever the active slide changes.
-   * Native: only after the reader finishes a swipe; not called on mount or when `initialIndex` moves the carousel.
+   * Native: when the carousel lands on a new image after a swipe or a previous/next tap; not called on mount or when `initialIndex` moves the carousel.
    */
   onIndexChange?: (index: number) => void;
   /**
