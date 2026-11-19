@@ -24,8 +24,18 @@ export interface ImageGalleryBaseProps<TImageProps> extends BaseProps, Accessibi
   aspectRatio?: string;
   /** Optional explicit spacing (px) between slides; useful for consumer-defined immersive spacing logic. */
   spaceBetween?: number;
-  /** Called with 1-based active slide index on mount and whenever the active slide changes. */
+  /**
+   * Called with the 1-based active slide index.
+   * Web: on mount and whenever the active slide changes.
+   * Native: when the carousel lands on a new image after a swipe or a previous/next tap; not called on mount or when `activeIndex` moves the carousel.
+   */
   onIndexChange?: (index: number) => void;
+  /**
+   * Native only; web ignores it. 0-based index to scroll to on mount and whenever the value changes.
+   * Leaving it undefined never moves the carousel. It does not follow swipes; use `onIndexChange` to
+   * hear about those. Note `onIndexChange` reports a 1-based index.
+   */
+  activeIndex?: number;
   variant?: Variant;
   loop?: boolean;
   ImageComponent?: React.ComponentType<TImageProps>;

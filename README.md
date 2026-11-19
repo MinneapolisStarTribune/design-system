@@ -129,6 +129,10 @@ For typed entry, use `FormControl.Datepicker` (also exported as `FormControlDate
 
 A modal window for decisions and short tasks, with configurable widths and a mobile bottom sheet. See [Dialog in Storybook](https://design-system.startribune.com/?path=/docs/layout-containers-dialog--docs) for sizing options, defaults, and examples.
 
+### ImageGallery (native)
+
+The native `ImageGallery` accepts `activeIndex`, a 0-based slide index. It scrolls the carousel on mount and again whenever the value changes; leaving it `undefined` never moves the carousel. The web gallery ignores it. `onIndexChange` reports a 1-based index and, on native, fires when the carousel lands on a new image, so subtract 1 when syncing it back into `activeIndex`. See the [ImageGallery example](integration-guides/native.md#imagegallery) in the native integration guide.
+
 ## TypeScript Support
 
 This package includes full TypeScript type definitions. All components and their props are fully typed.

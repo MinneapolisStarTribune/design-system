@@ -269,6 +269,162 @@ describe('ImageGallery (native)', () => {
     expect(screen.getByTestId('gallery-dialog-caption-pagination')).toHaveTextContent('2/2');
   });
 
+  it('fires onIndexChange with the 1-based logical index after a momentum scroll', () => {
+    const onIndexChange = jest.fn();
+    const { UNSAFE_getByType } = render(
+      <ImageGallery images={images} onIndexChange={onIndexChange} />,
+      { wrapper }
+    );
+    const scrollView = UNSAFE_getByType(ScrollView);
+
+    fireEvent(scrollView, 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+
+    expect(onIndexChange).toHaveBeenCalledWith(2);
+  });
+
+  it('moves to a new activeIndex when the prop changes', () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
+    const { rerender } = render(<ImageGallery images={images} activeIndex={0} />, { wrapper });
+    expect(screen.getByText('1/2')).toBeTruthy();
+    scrollTo.mockClear();
+
+    rerender(<ImageGallery images={images} activeIndex={1} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+    expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ animated: false }));
+    scrollTo.mockRestore();
+  });
+
+  it('does not undo a swipe by the reader when re-rendered with the same activeIndex', () => {
+    const { rerender, UNSAFE_getByType } = render(
+      <ImageGallery images={images} activeIndex={0} />,
+      {
+        wrapper,
+      }
+    );
+    fireEvent(UNSAFE_getByType(ScrollView), 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    rerender(<ImageGallery images={images} activeIndex={0} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
+  it('stays where it is when activeIndex becomes undefined', () => {
+    const { rerender } = render(<ImageGallery images={images} activeIndex={1} />, { wrapper });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    rerender(<ImageGallery images={images} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
+  it('initializes the active slide from activeIndex', () => {
+    render(<ImageGallery images={images} activeIndex={1} />, { wrapper });
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
+  it('scrolls to activeIndex when images load into an empty gallery at the same width', () => {
+    const scrollTo = jest.spyOn(ScrollView.prototype, 'scrollTo').mockImplementation(jest.fn());
+    const { rerender } = render(<ImageGallery images={[]} activeIndex={1} />, { wrapper });
+    scrollTo.mockClear();
+
+    rerender(<ImageGallery images={images} activeIndex={1} />);
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+    const lastCall = scrollTo.mock.calls[scrollTo.mock.calls.length - 1][0] as {
+      x: number;
+      animated: boolean;
+    };
+    expect(lastCall.animated).toBe(false);
+    expect(lastCall.x).toBeGreaterThan(0);
+    scrollTo.mockRestore();
+  });
+
+  it('keeps activeIndex when images load into an empty looping gallery', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(<ImageGallery images={[]} variant="immersive" activeIndex={1} />, {
+      wrapper,
+    });
+
+    rerender(<ImageGallery images={threeImages} variant="immersive" activeIndex={1} />);
+
+    // The immersive variant has no "N/total" tag, so the active image shows in the footer controls.
+    expect(screen.getByLabelText('Previous image (1 of 3)')).toBeTruthy();
+    expect(screen.getByLabelText('Next image (3 of 3)')).toBeTruthy();
+  });
+
+  it('clamps an out-of-range activeIndex', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    render(<ImageGallery images={threeImages} activeIndex={5} />, { wrapper });
+
+    expect(screen.getByText('3/3')).toBeTruthy();
+  });
+
+  it('clamps an out-of-range activeIndex when the prop changes', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(<ImageGallery images={threeImages} activeIndex={0} />, {
+      wrapper,
+    });
+
+    rerender(<ImageGallery images={threeImages} activeIndex={5} />);
+
+    expect(screen.getByText('3/3')).toBeTruthy();
+  });
+
+  it('keeps the current image when a looping gallery drops to a single image', () => {
+    const threeImages = [1, 2, 3].map((n) => ({
+      src: `https://example.com/${n}.jpg`,
+      altText: `Image ${n}`,
+      caption: `Caption ${n}`,
+      width: 800,
+      height: 600,
+    }));
+    const { rerender } = render(
+      <ImageGallery images={threeImages} variant="immersive" activeIndex={0} />,
+      { wrapper }
+    );
+
+    rerender(<ImageGallery images={[threeImages[0]]} variant="immersive" activeIndex={0} />);
+
+    expect(screen.getByText('Caption 1')).toBeTruthy();
+  });
+
+  it('repositions the carousel in standard mode when the container width changes', () => {
+    const { UNSAFE_getByType } = render(<ImageGallery images={images} />, { wrapper });
+
+    fireEvent(UNSAFE_getByType(ScrollView), 'momentumScrollEnd', {
+      nativeEvent: { contentOffset: { x: 400, y: 0 } },
+    });
+    expect(screen.getByText('2/2')).toBeTruthy();
+
+    fireEvent(screen.getByTestId('image-gallery'), 'layout', {
+      nativeEvent: { layout: { width: 812, height: 375 } },
+    });
+
+    expect(screen.getByText('2/2')).toBeTruthy();
+  });
+
   it('goes back to the previous image from the lightbox', () => {
     render(<ImageGallery images={images} expandable dataTestId="gallery" />, { wrapper });
 

@@ -265,6 +265,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
   wrapperStyle,
   captionStyle,
   dataTestId = 'image-gallery',
+  activeIndex,
+  onIndexChange,
   'aria-label': ariaLabel,
 }) => {
   const designSystemContext = useContext(DesignSystemContext);
@@ -294,8 +296,31 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
   const loopedImages = hasLoop ? [images[total - 1], ...images, images[0]] : images;
 
-  const [index, setIndex] = useState(hasLoop ? 1 : 0);
+  // Keeps a consumer-supplied index inside `images`. With no images yet it is left alone so it can apply once they load.
+  const clampIndex = (i: number) => Math.max(total > 0 ? Math.min(i, total - 1) : i, 0);
+
+  const [index, setIndex] = useState(
+    hasLoop ? clampIndex(activeIndex ?? 0) + 1 : clampIndex(activeIndex ?? 0)
+  );
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  // Looping adds a clone slide at the start, so the slide number shifts by one when looping turns on or off.
+  // This must stay above the `activeIndex` block so an `activeIndex` change in the same render wins.
+  const [prevHasLoop, setPrevHasLoop] = useState(hasLoop);
+  if (hasLoop !== prevHasLoop) {
+    setPrevHasLoop(hasLoop);
+    setIndex((i) => (hasLoop ? i + 1 : Math.max(i - 1, 0)));
+  }
+
+  // Lets a consumer move the carousel after mount by changing `activeIndex`, without remounting it.
+  const [appliedActiveIndex, setAppliedActiveIndex] = useState(activeIndex);
+  if (activeIndex !== appliedActiveIndex) {
+    setAppliedActiveIndex(activeIndex);
+    if (activeIndex !== undefined) {
+      const clamped = clampIndex(activeIndex);
+      setIndex(hasLoop ? clamped + 1 : clamped);
+    }
+  }
 
   const Img: React.ComponentType<NativeImageProps> = ImageComponent ?? DSImage;
 
@@ -317,14 +342,15 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
     });
   }, [isImmersive, interval, hasLoop]);
 
-  useEffect(() => {
-    if (!isImmersive) return;
+  // The ScrollView only mounts once there are images, so the position has to be applied again then.
+  const hasImages = total > 0;
 
+  useEffect(() => {
     scrollRef.current?.scrollTo({
       x: index * interval,
       animated: false,
     });
-  }, [interval, isImmersive, index]);
+  }, [interval, isImmersive, index, hasImages]);
 
   const handleMomentumEnd = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -345,6 +371,8 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
 
       setIndex(nextIndex);
 
+      onIndexChange?.(logicalIndex + 1);
+
       if (expandedIndex !== null && logicalIndex !== expandedIndex) {
         setExpandedIndex(null);
       }
@@ -353,7 +381,7 @@ export const ImageGallery: React.FC<ImageGalleryProps<NativeImageProps>> = ({
         AccessibilityInfo.announceForAccessibility(`Image ${logicalIndex + 1} of ${total}`);
       }
     },
-    [expandedIndex, interval, total, hasLoop]
+    [expandedIndex, interval, total, hasLoop, onIndexChange]
   );
 
   const scrollTo = (i: number) => {
