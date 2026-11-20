@@ -49,6 +49,7 @@ export function FormControlDatepicker({
   const [focusCalendar, setFocusCalendar] = useState(true);
   const currentValue = (value === undefined ? uncontrolledValue : value) ?? '';
   const calendarDisabled = isDisabled || readOnly;
+  if (calendarDisabled && open) setOpen(false);
   const error = validateDateInput(currentValue, { min, max, required });
   // Explicit isError lets form adapters own visibility and reset without duplicate messages.
   const localError =
@@ -189,7 +190,7 @@ export function FormControlDatepicker({
           min={min}
           max={max}
           label={calendarLabel}
-          open={open && !calendarDisabled}
+          open={open}
           onOpenChange={(next) => {
             setFocusCalendar(true);
             setOpen(next);

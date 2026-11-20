@@ -119,6 +119,17 @@ describe('FormControl.Datepicker', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('keeps the calendar closed after a read-only round trip', async () => {
+    const { user, input, updateProps } = setup();
+    await user.click(input);
+    expect(screen.getByRole('dialog')).toBeVisible();
+    updateProps({ readOnly: true });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    updateProps({});
+    expect(input).toHaveFocus();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('opens the calendar from the text input without taking focus', async () => {
     const { user, input, form } = setup();
     await user.click(input);
