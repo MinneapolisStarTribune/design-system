@@ -44,6 +44,9 @@ export function FormControlDatepicker({
   // Keep the typed text while focused: padding a partial month/day moves the caret.
   const [draft, setDraft] = useState<{ text: string; value: string } | null>(null);
   const [touched, setTouched] = useState(false);
+  const [open, setOpen] = useState(false);
+  // Opening from the text input keeps focus there so typing still works.
+  const [focusCalendar, setFocusCalendar] = useState(true);
   const currentValue = (value === undefined ? uncontrolledValue : value) ?? '';
   const calendarDisabled = isDisabled || readOnly;
   const error = validateDateInput(currentValue, { min, max, required });
@@ -75,6 +78,11 @@ export function FormControlDatepicker({
     if (value === undefined) setUncontrolledValue(next);
     onChange?.(next);
   };
+  const openFromInput = () => {
+    if (calendarDisabled) return;
+    setFocusCalendar(false);
+    setOpen(true);
+  };
   const touch = () => {
     setTouched(true);
     onTouched?.();
@@ -99,12 +107,22 @@ export function FormControlDatepicker({
           currentTarget.ownerDocument.getElementById(dialogId)?.contains(relatedTarget)
         )
           return;
+        setOpen(false);
         touch();
       }}
     >
       <div
         ref={fieldAnchor}
-        className={classNames(styles.field, styles[size], rounded && styles.rounded)}
+        className={classNames(styles.field, styles[size])}
+        // The calendar icon and padding act like the input; the input and chevron handle their own presses.
+        onMouseDown={(event) => {
+          const target = event.target as Element;
+          const input = root.current?.querySelector('input');
+          if (isDisabled || !input || target === input || target.closest('button')) return;
+          event.preventDefault();
+          input.focus();
+          openFromInput();
+        }}
       >
         <TextInput
           {...props}
@@ -138,6 +156,19 @@ export function FormControlDatepicker({
             setDraft((previous) => previous && { text, value: next });
             change(next);
           }}
+          onClick={(event) => {
+            openFromInput();
+            props.onClick?.(event);
+          }}
+          onKeyDown={(event) => {
+            // Floating UI only stops Escape on the calendar and its trigger, so an
+            // enclosing dialog would also close.
+            if (event.key === 'Escape' && open) {
+              event.stopPropagation();
+              setOpen(false);
+            }
+            props.onKeyDown?.(event);
+          }}
           onFocus={(event) => {
             setDraft({ text: displayDateInput(currentValue, true), value: currentValue });
             onFocus?.(event);
@@ -158,6 +189,12 @@ export function FormControlDatepicker({
           min={min}
           max={max}
           label={calendarLabel}
+          open={open && !calendarDisabled}
+          onOpenChange={(next) => {
+            setFocusCalendar(true);
+            setOpen(next);
+          }}
+          focusCalendar={focusCalendar}
           onChange={(next) => {
             change(next);
             touch();
@@ -170,11 +207,7 @@ export function FormControlDatepicker({
               aria-label={calendarLabel}
               aria-describedby={props['aria-labelledby'] ?? group?.labelId}
             >
-              <ChevronDownIcon
-                size={size === 'small' ? 'x-small' : 'small'}
-                className={styles.fieldIcon}
-                aria-hidden
-              />
+              <ChevronDownIcon size={size} className={styles.fieldIcon} aria-hidden />
             </button>
           }
         />

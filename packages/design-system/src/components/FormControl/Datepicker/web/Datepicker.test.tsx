@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { TestWrapperInDesignSystemProvider } from '@/test-utils/wrappers';
+import * as Dialog from '@/components/Dialog/Dialog';
 import { FormGroup } from '@/components/FormGroup/web/FormGroup';
 import { FormControl } from '../../FormControl';
 import { FormControlDatepicker, type FormControlDatepickerProps } from './Datepicker';
@@ -115,6 +116,61 @@ describe('FormControl.Datepicker', () => {
     await user.click(screen.getByRole('button', { name: 'Choose a date' }));
     expect(screen.getByRole('dialog')).toBeVisible();
     updateProps({ isDisabled: true });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('opens the calendar from the text input without taking focus', async () => {
+    const { user, input, form } = setup();
+    await user.click(input);
+    expect(screen.getByRole('dialog')).toBeVisible();
+    expect(input).toHaveFocus();
+    await user.click(input);
+    expect(screen.getByRole('dialog')).toBeVisible();
+    input.select();
+    await user.keyboard('5/10/2026');
+    expect(new FormData(form).get('date')).toBe('2026-05-10');
+    await user.tab();
+    await user.tab();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('opens the calendar and focuses the input from the calendar icon', async () => {
+    const { user, input } = setup();
+    // TextInput's icon ignores pointer events, so a press on it lands on the input wrapper.
+    const wrapper = input.parentElement;
+    if (!wrapper) throw new Error('input wrapper not found');
+    await user.pointer({ keys: '[MouseLeft]', target: wrapper });
+    expect(screen.getByRole('dialog')).toBeVisible();
+    expect(input).toHaveFocus();
+  });
+
+  it('closes only the calendar on Escape from the input inside a dialog', async () => {
+    const onClose = vi.fn();
+    render(
+      <Provider>
+        <Dialog.Root open onClose={onClose} aria-label="Add game">
+          <Dialog.Content>
+            <FormGroup>
+              <FormGroup.Label>Game date</FormGroup.Label>
+              <FormControl.Datepicker />
+            </FormGroup>
+          </Dialog.Content>
+        </Dialog.Root>
+      </Provider>
+    );
+    const user = userEvent.setup();
+    const input = screen.getByRole('textbox', { name: 'Game date' });
+    await user.click(input);
+    expect(screen.getByRole('dialog', { name: 'Choose a date' })).toBeVisible();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog', { name: 'Choose a date' })).not.toBeInTheDocument();
+    expect(input).toHaveFocus();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('does not open the calendar from a read-only input', async () => {
+    const { user, input } = setup({ readOnly: true });
+    await user.click(input);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 

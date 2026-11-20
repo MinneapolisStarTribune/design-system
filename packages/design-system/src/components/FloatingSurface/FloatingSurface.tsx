@@ -40,6 +40,8 @@ type UseFloatingSurfaceOptions = {
   arrowSize?: { width: number; height: number };
   arrowPadding?: number;
   id?: string;
+  /** Return false to keep the surface open for a press outside it. */
+  outsidePress?: boolean | ((event: MouseEvent) => boolean);
 };
 
 /**
@@ -58,6 +60,7 @@ export const useFloatingSurface = ({
   arrowSize = DEFAULT_ARROW_SIZE,
   arrowPadding = 0,
   id,
+  outsidePress = true,
 }: UseFloatingSurfaceOptions) => {
   // Use state so `arrow()` receives the element without reading a ref during render.
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
@@ -77,7 +80,7 @@ export const useFloatingSurface = ({
   });
 
   const click = useClick(context, { enabled: !isDisabled });
-  const dismiss = useDismiss(context, { outsidePress: true, escapeKey: true });
+  const dismiss = useDismiss(context, { outsidePress, escapeKey: true });
   const generatedRoleInteraction = useRole(context, { role: interactionRole });
 
   // useRole reads a custom `id` from the surface only after it mounts. Until then, the trigger
