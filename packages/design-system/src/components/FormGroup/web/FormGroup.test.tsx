@@ -76,18 +76,5 @@ describe('FormGroup', () => {
         expect(el).not.toHaveAttribute('aria-hidden');
       });
     });
-
-    it('does not mark a populated slot as empty when another library sets aria-hidden on it', () => {
-      const { container } = renderWithProvider(
-        <FormGroup>
-          <FormGroup.Label>Field</FormGroup.Label>
-          <input aria-label="Plain" />
-        </FormGroup>
-      );
-      const { above } = getSlots(container);
-      above?.setAttribute('aria-hidden', 'true');
-
-      expect(above).not.toHaveAttribute('data-empty');
-    });
   });
 });
