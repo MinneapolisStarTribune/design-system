@@ -36,6 +36,19 @@ describe('Autocomplete', () => {
     expect(queryByRole('listbox')).not.toBeInTheDocument();
   });
 
+  it('marks the container filled only when the value matches an option', () => {
+    const { getByTestId, rerender } = renderWithProvider(
+      <Autocomplete id="sport" dataTestId="ac" options={options} value="c" />
+    );
+    expect(getByTestId('ac').className).toMatch(/isFilled/);
+
+    rerender(<Autocomplete id="sport" dataTestId="ac" options={options} value={undefined} />);
+    expect(getByTestId('ac').className).not.toMatch(/isFilled/);
+
+    rerender(<Autocomplete id="sport" dataTestId="ac" options={options} value="nope" />);
+    expect(getByTestId('ac').className).not.toMatch(/isFilled/);
+  });
+
   it('restores the selection on blur, and clears it when the text is erased', async () => {
     const user = userEvent.setup();
     function Example() {

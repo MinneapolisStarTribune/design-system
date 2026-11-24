@@ -17,7 +17,7 @@ type SelectBaseProps = {
   /** Stable id for the control. */
   id: string;
   options: SelectOption[];
-  value?: string;
+  value?: string | null;
   onChange?: (value: string) => void;
   placeholderText?: string;
   showPlaceholder?: boolean;

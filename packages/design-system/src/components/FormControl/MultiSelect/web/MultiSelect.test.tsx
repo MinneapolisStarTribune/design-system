@@ -20,6 +20,21 @@ describe('MultiSelect', () => {
     expect(getByRole('combobox')).toBeInTheDocument();
   });
 
+  it('marks the container filled only when something is selected', () => {
+    const onChange = vi.fn();
+    const { getByRole, rerender } = renderWithProvider(
+      <FormControl.MultiSelect options={OPTIONS} value={['tech']} onChange={onChange} />
+    );
+    const container = () => getByRole('combobox').parentElement;
+    expect(container()?.className).toMatch(/is-filled/);
+
+    rerender(<FormControl.MultiSelect options={OPTIONS} value={null} onChange={onChange} />);
+    expect(container()?.className).not.toMatch(/is-filled/);
+
+    rerender(<FormControl.MultiSelect options={OPTIONS} value={[]} onChange={onChange} />);
+    expect(container()?.className).not.toMatch(/is-filled/);
+  });
+
   it('opens and closes the dropdown from trigger click', async () => {
     const user = userEvent.setup();
     const { getByRole, queryByRole } = renderWithProvider(

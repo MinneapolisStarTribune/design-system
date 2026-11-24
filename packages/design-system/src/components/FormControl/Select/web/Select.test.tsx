@@ -34,6 +34,22 @@ describe('Select', () => {
     expect(getByRole('combobox')).not.toHaveClass('undefined');
   });
 
+  it('marks the container filled only when the value matches an option', () => {
+    const { getByRole, rerender } = renderWithProvider(
+      <FormControl.Select id="test" options={OPTIONS} value="ca" />
+    );
+    expect(getByRole('combobox').className).toMatch(/isFilled/);
+
+    rerender(<FormControl.Select id="test" options={OPTIONS} value={null} />);
+    expect(getByRole('combobox').className).not.toMatch(/isFilled/);
+
+    rerender(<FormControl.Select id="test" options={OPTIONS} value="" />);
+    expect(getByRole('combobox').className).not.toMatch(/isFilled/);
+
+    rerender(<FormControl.Select id="test" options={OPTIONS} value="nope" />);
+    expect(getByRole('combobox').className).not.toMatch(/isFilled/);
+  });
+
   it('uses 16px option text at every size', async () => {
     const user = userEvent.setup();
     const { getByRole } = renderWithProvider(

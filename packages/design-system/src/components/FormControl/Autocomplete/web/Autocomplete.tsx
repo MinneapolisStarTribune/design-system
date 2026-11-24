@@ -50,7 +50,8 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
     ([formGroup?.descriptionId, formGroup?.captionId].filter(Boolean).join(' ') || undefined);
   const hasError = isError ?? formGroup?.hasError;
   const isSelected = (option: T) => option.value === value;
-  const selectedLabel = options.find(isSelected)?.label ?? '';
+  const selectedOption = options.find(isSelected);
+  const selectedLabel = selectedOption?.label ?? '';
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [editing, setEditing] = useState(false);
@@ -135,6 +136,7 @@ export function Autocomplete<T extends AutocompleteOption>(selection: Autocomple
           [selectStyles.isError]: hasError,
           [styles.error]: hasError,
           [selectStyles.isOpen]: open && !isDisabled,
+          [selectStyles.isFilled]: !!selectedOption,
         },
         className
       )}

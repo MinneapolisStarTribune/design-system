@@ -47,7 +47,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function ConfigurableSelect(args: Partial<SelectNativeProps>) {
-  const [value, setValue] = useState<string | undefined>(args.value);
+  const [value, setValue] = useState<string | null | undefined>(args.value);
 
   return (
     <FormGroup>
@@ -104,6 +104,22 @@ export const Configurable: Story = {
   },
   render: (args) => <ConfigurableSelect key={String(args.value ?? '')} {...args} />,
 };
+
+// Select is controlled, so each row needs local state for picks to stick
+function StatefulSelect({ value: initialValue, onChange, ...props }: SelectNativeProps) {
+  const [value, setValue] = useState(initialValue);
+
+  return (
+    <FormControl.Select
+      {...props}
+      value={value}
+      onChange={(next: string) => {
+        setValue(next);
+        onChange?.(next);
+      }}
+    />
+  );
+}
 
 type VariantRow = {
   title: string;
@@ -192,7 +208,7 @@ export const AllVariants: Story = {
           <SectionLabel>{title}</SectionLabel>
           <FormGroup>
             <FormGroup.Label optional={false}>Label</FormGroup.Label>
-            <FormControl.Select {...props} />
+            <StatefulSelect {...props} />
           </FormGroup>
         </View>
       ))}
