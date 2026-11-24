@@ -52,7 +52,7 @@
     grid-row: caption-start;
   }
 
-  :global(.form-group__caption[aria-hidden]) {
+  :global(.form-group__caption[data-empty]) {
     display: none;
   }
   

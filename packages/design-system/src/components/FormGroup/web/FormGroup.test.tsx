@@ -37,4 +37,61 @@ describe('FormGroup', () => {
     expect(screen.getByTestId('ctx-has-error')).toHaveTextContent('false');
     expect(screen.getByTestId('ctx-has-success')).toHaveTextContent('true');
   });
+
+  describe('empty slots', () => {
+    const getSlots = (container: HTMLElement) => ({
+      above: container.querySelector('.form-group__above'),
+      control: container.querySelector('.form-group__control'),
+      caption: container.querySelector('.form-group__caption'),
+    });
+
+    it('marks empty slots with data-empty and aria-hidden', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <input aria-label="Plain" />
+        </FormGroup>
+      );
+      const { above, control, caption } = getSlots(container);
+
+      [above, caption].forEach((el) => {
+        expect(el).toHaveAttribute('data-empty');
+        expect(el).toHaveAttribute('aria-hidden', 'true');
+      });
+      expect(control).not.toHaveAttribute('data-empty');
+      expect(above).not.toBeVisible();
+      expect(caption).not.toBeVisible();
+    });
+
+    it('does not mark populated slots as empty', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <FormGroup.Label>Field</FormGroup.Label>
+          <input aria-label="Plain" />
+          <FormGroup.Caption variant="info">Help</FormGroup.Caption>
+        </FormGroup>
+      );
+      const { above, control, caption } = getSlots(container);
+
+      [above, control, caption].forEach((el) => {
+        expect(el).not.toHaveAttribute('data-empty');
+        expect(el).not.toHaveAttribute('aria-hidden');
+      });
+    });
+
+    it('keeps populated slots visible when another library sets aria-hidden on them', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <FormGroup.Label>Field</FormGroup.Label>
+          <input aria-label="Plain" />
+          <FormGroup.Caption variant="info">Help</FormGroup.Caption>
+        </FormGroup>
+      );
+      const { above, caption } = getSlots(container);
+      above?.setAttribute('aria-hidden', 'true');
+      caption?.setAttribute('aria-hidden', 'true');
+
+      expect(above).toBeVisible();
+      expect(caption).toBeVisible();
+    });
+  });
 });

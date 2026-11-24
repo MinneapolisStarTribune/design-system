@@ -63,8 +63,9 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
    * CSS grid assigns children to tracks by DOM position, so a missing div would shift
    * every subsequent child onto the wrong track, breaking alignment across the whole row.
    *
-   * Empty slots are rendered as aria-hidden divs so they occupy the correct grid track
-   * without contributing layout height or being announced by assistive technology.
+   * Empty slots render as aria-hidden divs with data-empty so they keep their grid track
+   * without adding height or being announced. CSS hides on data-empty, not aria-hidden,
+   * because libraries such as floating-ui also set aria-hidden on populated slots.
    */
   const childrenArray = Children.toArray(children);
 
@@ -111,7 +112,7 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
     content != null ? (
       <div className={slotClass}>{content}</div>
     ) : (
-      <div className={slotClass} aria-hidden />
+      <div className={slotClass} aria-hidden data-empty />
     );
 
   return (

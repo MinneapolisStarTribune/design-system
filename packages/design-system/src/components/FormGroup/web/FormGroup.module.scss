@@ -9,7 +9,7 @@
   :global(.form-group__above) {
     margin-bottom: var(--spacing-8);
 
-    &:has(.description:not([aria-hidden])) {
+    &:has(.description) {
       margin-bottom: 0;
     }
   }
@@ -57,7 +57,7 @@
   }
 
   // Empty placeholder slots take no space and generate no gap
-  > [aria-hidden] {
+  > [data-empty] {
     display: none;
   }
 }

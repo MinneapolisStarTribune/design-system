@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { FormGroup } from './FormGroup';
 
 import { FormControl } from '@/components/FormControl/FormControl';
@@ -232,6 +233,12 @@ export const AllVariants: Story = {
     controls: { disable: true },
   },
   args: {} as any,
+  // Simulates floating-ui's markOthers, which sets aria-hidden on siblings of an open floating element.
+  play: async ({ canvas }) => {
+    const label = await canvas.findByText('Display name');
+    label.closest('.form-group__above')?.setAttribute('aria-hidden', 'true');
+    await expect(label).toBeVisible();
+  },
   render: () => {
     const variants = [
       {
@@ -302,6 +309,15 @@ export const AllVariants: Story = {
             <FormGroup.Label>Password</FormGroup.Label>
             <FormControl.TextInput type="password" placeholderText="Enter password" />
             <FormGroup.Caption variant="success">Account created successfully</FormGroup.Caption>
+          </FormGroup>
+        ),
+      },
+      {
+        label: 'Label with external aria-hidden',
+        render: () => (
+          <FormGroup>
+            <FormGroup.Label>Display name</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Enter display name" />
           </FormGroup>
         ),
       },
