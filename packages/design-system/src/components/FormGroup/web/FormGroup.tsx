@@ -65,6 +65,8 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
    *
    * Empty slots are rendered as aria-hidden divs so they occupy the correct grid track
    * without contributing layout height or being announced by assistive technology.
+   * They also carry data-empty, which CSS uses to hide them. Other libraries (e.g.
+   * floating-ui) add aria-hidden to populated slots, so aria-hidden cannot mean "empty".
    */
   const childrenArray = Children.toArray(children);
 
@@ -111,7 +113,7 @@ export const FormGroup: React.FC<FormGroupProps['Props']> & {
     content != null ? (
       <div className={slotClass}>{content}</div>
     ) : (
-      <div className={slotClass} aria-hidden />
+      <div className={slotClass} aria-hidden data-empty />
     );
 
   return (

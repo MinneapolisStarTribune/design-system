@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { FormGroup } from './FormGroup';
 
 import { FormControl } from '@/components/FormControl/FormControl';
@@ -335,5 +336,22 @@ export const AllVariants: Story = {
         ))}
       </div>
     );
+  },
+};
+
+/** Simulates floating-ui's markOthers, which sets aria-hidden on siblings of an open floating element. */
+export const LabelWithExternalAriaHidden: Story = {
+  args: {} as any,
+  render: () => (
+    <FormGroup>
+      <FormGroup.Label>Home Team</FormGroup.Label>
+      <FormControl.TextInput placeholderText="Search teams" />
+    </FormGroup>
+  ),
+  play: async ({ canvasElement, canvas }) => {
+    const above = canvasElement.querySelector('.form-group__above');
+    above?.setAttribute('aria-hidden', 'true');
+    await expect(above).not.toHaveAttribute('data-empty');
+    await expect(canvas.getByText('Home Team')).toBeVisible();
   },
 };

@@ -37,4 +37,57 @@ describe('FormGroup', () => {
     expect(screen.getByTestId('ctx-has-error')).toHaveTextContent('false');
     expect(screen.getByTestId('ctx-has-success')).toHaveTextContent('true');
   });
+
+  // CSS modules are not applied in jsdom, so these assert on attributes only.
+  describe('empty slots', () => {
+    const getSlots = (container: HTMLElement) => ({
+      above: container.querySelector('.form-group__above'),
+      control: container.querySelector('.form-group__control'),
+      caption: container.querySelector('.form-group__caption'),
+    });
+
+    it('marks empty slots with data-empty and aria-hidden', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <input aria-label="Plain" />
+        </FormGroup>
+      );
+      const { above, control, caption } = getSlots(container);
+
+      [above, caption].forEach((el) => {
+        expect(el).toHaveAttribute('data-empty');
+        expect(el).toHaveAttribute('aria-hidden', 'true');
+      });
+      expect(control).not.toHaveAttribute('data-empty');
+    });
+
+    it('does not mark populated slots as empty', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <FormGroup.Label>Field</FormGroup.Label>
+          <input aria-label="Plain" />
+          <FormGroup.Caption variant="info">Help</FormGroup.Caption>
+        </FormGroup>
+      );
+      const { above, control, caption } = getSlots(container);
+
+      [above, control, caption].forEach((el) => {
+        expect(el).not.toHaveAttribute('data-empty');
+        expect(el).not.toHaveAttribute('aria-hidden');
+      });
+    });
+
+    it('does not mark a populated slot as empty when another library sets aria-hidden on it', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <FormGroup.Label>Field</FormGroup.Label>
+          <input aria-label="Plain" />
+        </FormGroup>
+      );
+      const { above } = getSlots(container);
+      above?.setAttribute('aria-hidden', 'true');
+
+      expect(above).not.toHaveAttribute('data-empty');
+    });
+  });
 });
