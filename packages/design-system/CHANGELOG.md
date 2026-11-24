@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 4.5.1
+
+### Patch Changes
+
+- [#493](https://github.com/MinneapolisStarTribune/design-system/pull/493) [`e1ff0fd`](https://github.com/MinneapolisStarTribune/design-system/commit/e1ff0fdceee573410472b1014b661ee9178f02b0) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Datepicker opens the calendar from the text input without stealing focus, keeps it open on field clicks, and Escape closes only the calendar inside a Dialog. Line up Datepicker and Autocomplete chevrons with Select.
+
 ## 4.5.0
 
 ### Minor Changes
