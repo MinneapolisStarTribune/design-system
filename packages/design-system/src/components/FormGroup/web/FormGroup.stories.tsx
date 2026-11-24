@@ -235,7 +235,7 @@ export const AllVariants: Story = {
   args: {} as any,
   // Simulates floating-ui's markOthers, which sets aria-hidden on siblings of an open floating element.
   play: async ({ canvas }) => {
-    const label = await canvas.findByText('Home Team');
+    const label = await canvas.findByText('Display name');
     label.closest('.form-group__above')?.setAttribute('aria-hidden', 'true');
     await expect(label).toBeVisible();
   },
@@ -316,8 +316,8 @@ export const AllVariants: Story = {
         label: 'Label with external aria-hidden',
         render: () => (
           <FormGroup>
-            <FormGroup.Label>Home Team</FormGroup.Label>
-            <FormControl.TextInput placeholderText="Search teams" />
+            <FormGroup.Label>Display name</FormGroup.Label>
+            <FormControl.TextInput placeholderText="Enter display name" />
           </FormGroup>
         ),
       },

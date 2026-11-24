@@ -16,8 +16,8 @@ describe('FormGroup Accessibility', () => {
   it('keeps the control name and description when another library sets aria-hidden on label and caption slots', async () => {
     const { renderResult, checkA11y } = await renderAndCheckA11y(
       <FormGroup>
-        <FormGroup.Label>Home Team</FormGroup.Label>
-        <FormControl.TextInput placeholderText="Search teams" />
+        <FormGroup.Label>Display name</FormGroup.Label>
+        <FormControl.TextInput placeholderText="Enter display name" />
         <FormGroup.Caption variant="info">Pick one</FormGroup.Caption>
       </FormGroup>
     );
@@ -27,7 +27,7 @@ describe('FormGroup Accessibility', () => {
 
     await checkA11y();
     const input = screen.getByRole('textbox');
-    expect(input).toHaveAccessibleName('Home Team');
+    expect(input).toHaveAccessibleName('Display name');
     expect(input).toHaveAccessibleDescription('Pick one');
   });
 });
