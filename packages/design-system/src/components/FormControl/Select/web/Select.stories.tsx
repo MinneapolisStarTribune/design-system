@@ -16,6 +16,26 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
+// Select is controlled, so the grid needs local state for picks to stick
+const StatefulSelect = ({
+  value: initialValue,
+  onChange,
+  ...props
+}: Omit<SelectProps, 'id'> & { id?: string }) => {
+  const [value, setValue] = useState(initialValue);
+
+  return (
+    <FormControl.Select
+      {...props}
+      value={value}
+      onChange={(next: string) => {
+        setValue(next);
+        onChange?.(next);
+      }}
+    />
+  );
+};
+
 const OPTIONS = [
   { value: '1', label: 'Option-1' },
   { value: '2', label: 'Option-2' },
@@ -339,7 +359,7 @@ export const AllVariants: Story = {
           <SectionLabel>Size: Small</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} size="small" />
+            <StatefulSelect options={OPTIONS} size="small" />
           </FormGroup>
         </div>
 
@@ -347,7 +367,7 @@ export const AllVariants: Story = {
           <SectionLabel>Size: Medium</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} size="medium" />
+            <StatefulSelect options={OPTIONS} size="medium" />
           </FormGroup>
         </div>
 
@@ -355,7 +375,7 @@ export const AllVariants: Story = {
           <SectionLabel>Size: Large</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} size="large" />
+            <StatefulSelect options={OPTIONS} size="large" />
           </FormGroup>
         </div>
 
@@ -364,7 +384,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Pointy</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} />
+            <StatefulSelect options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -372,7 +392,7 @@ export const AllVariants: Story = {
           <SectionLabel>Radius: Rounded</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} rounded />
+            <StatefulSelect options={OPTIONS} rounded />
           </FormGroup>
         </div>
 
@@ -381,7 +401,7 @@ export const AllVariants: Story = {
           <SectionLabel>Icon</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} icon={<ClockIcon />} />
+            <StatefulSelect options={OPTIONS} icon={<ClockIcon />} />
           </FormGroup>
         </div>
 
@@ -389,7 +409,7 @@ export const AllVariants: Story = {
           <SectionLabel>Icon: Disabled</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} icon={<ClockIcon />} isDisabled />
+            <StatefulSelect options={OPTIONS} icon={<ClockIcon />} isDisabled />
           </FormGroup>
         </div>
 
@@ -398,7 +418,7 @@ export const AllVariants: Story = {
           <SectionLabel>Label: Default</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} />
+            <StatefulSelect options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -406,7 +426,7 @@ export const AllVariants: Story = {
           <SectionLabel>Label: Optional</SectionLabel>
           <FormGroup>
             <FormGroup.Label optional>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} />
+            <StatefulSelect options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -415,13 +435,13 @@ export const AllVariants: Story = {
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
             <FormGroup.Description>Description text here</FormGroup.Description>
-            <FormControl.Select options={OPTIONS} />
+            <StatefulSelect options={OPTIONS} />
           </FormGroup>
         </div>
 
         <div style={cellStyle}>
           <SectionLabel>No Label</SectionLabel>
-          <FormControl.Select options={OPTIONS} aria-label="No label select" />
+          <StatefulSelect options={OPTIONS} aria-label="No label select" />
         </div>
 
         {/* Placeholder */}
@@ -429,11 +449,7 @@ export const AllVariants: Story = {
           <SectionLabel>Placeholder: True</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select
-              options={OPTIONS}
-              placeholderText="Select an option"
-              showPlaceholder
-            />
+            <StatefulSelect options={OPTIONS} placeholderText="Select an option" showPlaceholder />
           </FormGroup>
         </div>
 
@@ -441,7 +457,7 @@ export const AllVariants: Story = {
           <SectionLabel>Placeholder: False</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} showPlaceholder={false} />
+            <StatefulSelect options={OPTIONS} showPlaceholder={false} />
           </FormGroup>
         </div>
 
@@ -450,7 +466,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Default</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} />
+            <StatefulSelect options={OPTIONS} />
           </FormGroup>
         </div>
 
@@ -458,7 +474,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Filled</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} value="1" />
+            <StatefulSelect options={OPTIONS} value="1" />
           </FormGroup>
         </div>
 
@@ -466,7 +482,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Error</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} isError />
+            <StatefulSelect options={OPTIONS} isError />
             <FormGroup.Caption variant="error">Error message</FormGroup.Caption>
           </FormGroup>
         </div>
@@ -475,7 +491,7 @@ export const AllVariants: Story = {
           <SectionLabel>State: Disabled</SectionLabel>
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
-            <FormControl.Select options={OPTIONS} isDisabled />
+            <StatefulSelect options={OPTIONS} isDisabled />
           </FormGroup>
         </div>
 
@@ -485,7 +501,7 @@ export const AllVariants: Story = {
           <FormGroup>
             <FormGroup.Label>Label</FormGroup.Label>
             {/* Small size checks option text stays 16px regardless of trigger size */}
-            <FormControl.Select options={OPTIONS} size="small" value="1" dataTestId="select-open" />
+            <StatefulSelect options={OPTIONS} size="small" value="1" dataTestId="select-open" />
           </FormGroup>
         </div>
       </div>

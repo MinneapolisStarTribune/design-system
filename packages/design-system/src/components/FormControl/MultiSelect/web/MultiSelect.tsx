@@ -234,6 +234,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
       [styles['is-error']]: hasError,
       [styles['is-success']]: hasSuccess,
       [styles['is-open']]: isOpen,
+      [styles['is-filled']]: isFilled,
     },
     className
   );

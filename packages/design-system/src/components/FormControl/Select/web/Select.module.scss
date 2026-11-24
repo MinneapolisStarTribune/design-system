@@ -26,8 +26,13 @@
     height: var(--spacing-input-lg);
   }
 
-  &:hover:not(.isDisabled):not(.isError):not(.isSuccess) {
+  &:hover:not(.isDisabled):not(.isError):not(.isSuccess):not(.isFilled) {
     border-color: var(--color-border-on-light-strong-02);
+  }
+
+  /* Matches the filled border on FieldSurface inputs */
+  &.isFilled {
+    border-color: var(--color-border-on-light-strong-01);
   }
 
   &.isOpen {

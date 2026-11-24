@@ -2,7 +2,7 @@
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  border: 1px solid var(--color-border-on-dark-strong-01);
+  border: 1px solid var(--color-border-on-light-subtle-02);
   border-radius: var(--radius-8);
   background: var(--color-background-light-default);
   transition:
@@ -26,8 +26,13 @@
     height: var(--spacing-input-lg);
   }
 
-  &:hover:not(.is-disabled):not(.is-error):not(.is-success) {
+  &:hover:not(.is-disabled):not(.is-error):not(.is-success):not(.is-filled) {
     border-color: var(--color-border-on-light-strong-02);
+  }
+
+  /* Matches the filled border on FieldSurface inputs */
+  &.is-filled {
+    border-color: var(--color-border-on-light-strong-01);
   }
 
   &.is-open,
@@ -37,7 +42,7 @@
   }
 
   &.is-error {
-    border-color: var(--color-red-600);
+    border-color: var(--color-border-state-attention-on-light);
   }
 
   &.is-success {

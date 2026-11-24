@@ -11,7 +11,7 @@ export interface MultiSelectOption {
 export interface MultiSelectProps extends BaseProps {
   id?: string;
   options: MultiSelectOption[];
-  value?: string[];
+  value?: string[] | null;
   onChange?: (values: string[]) => void;
   placeholderText?: string;
   size?: MultiSelectSize;

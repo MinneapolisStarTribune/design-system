@@ -190,6 +190,7 @@ export const Select: React.FC<SelectProps> = ({
       [styles.isDisabled]: isDisabled,
       [styles.isError]: hasError,
       [styles.isOpen]: isOpen,
+      [styles.isFilled]: isFilled,
     },
     className
   );
