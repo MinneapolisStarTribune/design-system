@@ -38,7 +38,6 @@ describe('FormGroup', () => {
     expect(screen.getByTestId('ctx-has-success')).toHaveTextContent('true');
   });
 
-  // CSS modules are not applied in jsdom, so these assert on attributes only.
   describe('empty slots', () => {
     const getSlots = (container: HTMLElement) => ({
       above: container.querySelector('.form-group__above'),
@@ -59,6 +58,8 @@ describe('FormGroup', () => {
         expect(el).toHaveAttribute('aria-hidden', 'true');
       });
       expect(control).not.toHaveAttribute('data-empty');
+      expect(above).not.toBeVisible();
+      expect(caption).not.toBeVisible();
     });
 
     it('does not mark populated slots as empty', () => {
@@ -75,6 +76,22 @@ describe('FormGroup', () => {
         expect(el).not.toHaveAttribute('data-empty');
         expect(el).not.toHaveAttribute('aria-hidden');
       });
+    });
+
+    it('keeps populated slots visible when another library sets aria-hidden on them', () => {
+      const { container } = renderWithProvider(
+        <FormGroup>
+          <FormGroup.Label>Field</FormGroup.Label>
+          <input aria-label="Plain" />
+          <FormGroup.Caption variant="info">Help</FormGroup.Caption>
+        </FormGroup>
+      );
+      const { above, caption } = getSlots(container);
+      above?.setAttribute('aria-hidden', 'true');
+      caption?.setAttribute('aria-hidden', 'true');
+
+      expect(above).toBeVisible();
+      expect(caption).toBeVisible();
     });
   });
 });
