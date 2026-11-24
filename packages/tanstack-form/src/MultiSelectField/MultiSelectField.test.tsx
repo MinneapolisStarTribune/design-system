@@ -28,6 +28,24 @@ const Fixture = ({ onSubmit = () => {} }: { onSubmit?: (value: unknown) => void 
   );
 };
 
+const NullableFixture = ({ onSubmit }: { onSubmit: (value: unknown) => void }) => {
+  const form = useForm({
+    defaultValues: { topics: null as string[] | null },
+    onSubmit: ({ value }) => onSubmit(value),
+  });
+
+  return (
+    <SubmitForm form={form}>
+      <form.Field name="topics">
+        {(field) => <MultiSelectField field={field} label="Topics" options={options} />}
+      </form.Field>
+      <button type="button" onClick={() => form.reset()}>
+        Reset
+      </button>
+    </SubmitForm>
+  );
+};
+
 describe('MultiSelectField', () => {
   it('binds the initial values and writes toggled options', async () => {
     const onSubmit = vi.fn();
@@ -54,5 +72,21 @@ describe('MultiSelectField', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Pick a topic');
     expect(trigger).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('reads a null value as no selection and resets back to it', async () => {
+    const onSubmit = vi.fn();
+    render(<NullableFixture onSubmit={onSubmit} />);
+
+    const trigger = screen.getByRole('combobox', { name: 'Topics' });
+    expect(trigger).toHaveTextContent('Select options');
+
+    await userEvent.click(trigger);
+    await userEvent.click(screen.getByRole('option', { name: 'Sports' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(onSubmit).toHaveBeenCalledWith({ topics: ['sports'] });
+
+    await userEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    expect(trigger).toHaveTextContent('Select options');
   });
 });

@@ -12,8 +12,8 @@ import {
 export interface MultiSelectFieldProps
   extends Omit<MultiSelectProps, 'value' | 'onChange' | 'error'>,
     FieldLabelProps {
-  /** The field from `form.Field`'s render prop. Must be a `string[]` field. */
-  field: BoundField<string[]>;
+  /** The field from `form.Field`'s render prop. Must be a `string[]` field (`null` reads as no selection). */
+  field: BoundField<string[] | null, string[]>;
   /** Runs after the field is updated. */
   onChange?: (values: string[]) => void;
 }
@@ -42,7 +42,7 @@ export const MultiSelectField = ({
       <FocusBoundary onLeave={field.handleBlur}>
         <MultiSelect
           {...selectProps}
-          value={field.state.value}
+          value={field.state.value ?? []}
           onChange={(values) => {
             field.handleChange(values);
             onChange?.(values);
