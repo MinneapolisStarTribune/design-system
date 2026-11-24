@@ -1,5 +1,14 @@
 # @minneapolisstartribune/design-system-tanstack-form
 
+## 5.0.0
+
+### Patch Changes
+
+- [#495](https://github.com/MinneapolisStarTribune/design-system/pull/495) [`1d8303c`](https://github.com/MinneapolisStarTribune/design-system/commit/1d8303c791523fd2105d415aedd6aca49126d2dd) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - MultiSelectField accepts `string[] | null` fields, reading `null` as no selection.
+
+- Updated dependencies [[`4b9387e`](https://github.com/MinneapolisStarTribune/design-system/commit/4b9387e890a7fc189ac7dcc1713d371c9731240b), [`c1b0553`](https://github.com/MinneapolisStarTribune/design-system/commit/c1b0553a815136a2660b1ca80dd23a207aef9ee8)]:
+  - @minneapolisstartribune/design-system@4.6.0
+
 ## 4.0.0
 
 ### Patch Changes

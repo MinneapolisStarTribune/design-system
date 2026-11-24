@@ -1,5 +1,15 @@
 # @minneapolisstartribune/design-system
 
+## 4.6.0
+
+### Minor Changes
+
+- [#495](https://github.com/MinneapolisStarTribune/design-system/pull/495) [`c1b0553`](https://github.com/MinneapolisStarTribune/design-system/commit/c1b0553a815136a2660b1ca80dd23a207aef9ee8) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Select, MultiSelect and Autocomplete get the same filled border as text inputs. MultiSelect also uses the light default border and attention token for errors. Select and MultiSelect `value` now accept `null` so a controlled field can be cleared back to the unfilled state.
+
+### Patch Changes
+
+- [#496](https://github.com/MinneapolisStarTribune/design-system/pull/496) [`4b9387e`](https://github.com/MinneapolisStarTribune/design-system/commit/4b9387e890a7fc189ac7dcc1713d371c9731240b) Thanks [@quynhngandao](https://github.com/quynhngandao)! - FormGroup labels and captions stay visible when another library, such as a floating dialog, sets `aria-hidden` on them. Empty slots are now hidden through `data-empty`.
+
 ## 4.5.1
 
 ### Patch Changes
