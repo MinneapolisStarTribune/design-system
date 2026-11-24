@@ -15,6 +15,10 @@ interface DatepickerRootProps extends DatepickerProps {
   calendarKey?: number;
   arrowStaticOffset?: number;
   footer?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** False leaves focus where it is when the calendar opens, e.g. in the field's text input. */
+  focusCalendar?: boolean;
 }
 
 /** Internal composition shared by Datepicker and the Today action example. */
@@ -30,10 +34,18 @@ export function DatepickerRoot({
   calendarKey,
   arrowStaticOffset,
   footer,
+  open: openProp,
+  onOpenChange,
+  focusCalendar = true,
 }: DatepickerRootProps) {
   useBrandValidation('Datepicker');
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
-  const [open, setOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const open = openProp ?? uncontrolledOpen;
+  const setOpen = (next: boolean) => {
+    if (openProp === undefined) setUncontrolledOpen(next);
+    onOpenChange?.(next);
+  };
   const descriptionId = useId();
   const initialFocus = useRef<HTMLElement | null>(null);
   const surface = useFloatingSurface({
@@ -42,6 +54,8 @@ export function DatepickerRoot({
     placement: fieldAnchor ? 'bottom-start' : 'bottom-end',
     hideArrow: !!fieldAnchor,
     matchAnchorWidth: !!fieldAnchor,
+    // Presses on the field (like its text input) stay with the calendar.
+    outsidePress: (event) => !fieldAnchor?.current?.contains(event.target as Node),
   });
   // Keep keyboard focus on the trigger while positioning the panel against the entire field.
   const { setPositionReference } = surface.context.refs;
@@ -89,7 +103,7 @@ export function DatepickerRoot({
         surface={surface}
         interactions={interactions}
         trigger={describedTrigger}
-        initialFocus={initialFocus}
+        initialFocus={focusCalendar ? initialFocus : -1}
         arrowStaticOffset={arrowStaticOffset}
         className={fieldAnchor ? `${styles.popover} ${styles.fieldPopover}` : styles.popover}
         containerClassName={styles.popoverContainer}

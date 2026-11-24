@@ -1,5 +1,17 @@
 # @minneapolisstartribune/design-system
 
+## 4.5.1
+
+### Patch Changes
+
+- [#493](https://github.com/MinneapolisStarTribune/design-system/pull/493) [`e1ff0fd`](https://github.com/MinneapolisStarTribune/design-system/commit/e1ff0fdceee573410472b1014b661ee9178f02b0) Thanks [@mauricio-rossi-strib](https://github.com/mauricio-rossi-strib)! - Datepicker opens the calendar from the text input without stealing focus, keeps it open on field clicks, and Escape closes only the calendar inside a Dialog. Line up Datepicker and Autocomplete chevrons with Select.
+
+## 4.5.0
+
+### Minor Changes
+
+- [#489](https://github.com/MinneapolisStarTribune/design-system/pull/489) [`cfa28a0`](https://github.com/MinneapolisStarTribune/design-system/commit/cfa28a00a572cd3d530edc6c10b24f4cf08a1db5) Thanks [@iivins-livefront-strib](https://github.com/iivins-livefront-strib)! - Add activeIndex prop (scrolls on mount and whenever it changes), wire onIndexChange, fix standard-mode orientation repositioning in ImageGallery
+
 ## 4.4.1
 
 ### Patch Changes

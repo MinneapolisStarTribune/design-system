@@ -21,6 +21,8 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-8);
+  // Pull the padded hit area into the trigger's padding so the chevron lines up with Select's.
+  margin-right: calc(-1 * var(--spacing-8));
   border: 0;
   background: transparent;
   cursor: pointer;
