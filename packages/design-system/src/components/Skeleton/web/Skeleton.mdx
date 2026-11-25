@@ -211,7 +211,7 @@ Skeletons are hidden from assistive technology by default (`aria-hidden="true"`)
 
 ### Animation
 
-The default shimmer animation (`animate={true}`) draws attention to in-progress loading without being distracting. The shimmer turns off on its own when the user sets `prefers-reduced-motion: reduce` (web) or enables Reduce Motion in the OS (native). Set `animate={false}` when a parent container already handles animation.
+The default shimmer animation (`animate={true}`) draws attention to in-progress loading without being distracting. Set `animate={false}` when a parent container already handles animation, or when rendering in a reduced-motion context.
 
 ## Composition examples
 
