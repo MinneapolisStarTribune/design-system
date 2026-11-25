@@ -18,7 +18,7 @@ export type SkeletonBaseProps = AccessibilityProps &
   Pick<BaseProps, 'dataTestId'> & {
     /** Shape of the placeholder. Defaults to `rectangle`. */
     variant?: SkeletonVariant;
-    /** Surface the skeleton sits on. `light` and `dark` use the same colors in every theme. Omit to follow the app theme. */
+    /** Surface the skeleton sits on. `light` and `dark` use fixed colors in every theme. Omit to follow the app theme. */
     surface?: SkeletonSurface;
     /** When true (default), runs the shimmer animation. Set false when a parent handles animation. */
     animate?: boolean;
@@ -43,4 +43,7 @@ export type SkeletonProps = SkeletonBaseProps &
   Pick<BaseProps, 'className' | 'style'> &
   Omit<HTMLAttributes<HTMLDivElement>, keyof SkeletonBaseProps | keyof BaseProps>;
 
-export type SkeletonNativeProps = NativeViewStylingProps<SkeletonBaseProps>;
+export type SkeletonNativeProps = Omit<NativeViewStylingProps<SkeletonBaseProps>, 'radius'> & {
+  /** Corner radius in pixels, or a percentage string such as `"50%"`. Other units are not supported on native. */
+  radius?: number | `${number}%`;
+};

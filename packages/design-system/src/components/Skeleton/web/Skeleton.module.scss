@@ -17,21 +17,20 @@
 }
 
 /*
- * Every rule sits in :where() so it has zero specificity. Consumer classes
- * (for example Tailwind utilities) override size, radius and color regardless of
- * stylesheet order. Override the gradient with --skeleton-from and --skeleton-to.
+ * Rules use :where() for zero specificity, so unlayered consumer classes override them.
+ * Override the gradient with --skeleton-from and --skeleton-to.
  */
 :where(.skeleton) {
   display: block;
   flex-shrink: 0;
   overflow: hidden;
 
-  /* These tokens change value with the app theme. */
+  /* Follows the app theme. */
   --skeleton-from: var(--color-background-light-gray-02);
   --skeleton-to: var(--color-background-light-gray-01);
 }
 
-/* These tokens keep the same value in every theme, for a surface that differs from the app theme. */
+/* Fixed in every theme, for a surface that differs from the app theme. */
 :where(.skeleton.surface-light) {
   --skeleton-from: var(--color-neutral-200);
   --skeleton-to: var(--color-neutral-100);

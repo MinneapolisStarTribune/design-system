@@ -7,7 +7,7 @@ export const createSkeletonStyles = (
   variant: SkeletonVariant,
   surface?: SkeletonSurface
 ) => {
-  // light and dark keep the same colors in every theme. No surface follows the theme.
+  // light and dark are fixed. With no surface, colors follow the theme.
   const palettes = {
     light: { from: theme.colorNeutral200, to: theme.colorNeutral100 },
     dark: { from: theme.colorBackgroundDarkGray02, to: theme.colorBackgroundDarkGray01 },

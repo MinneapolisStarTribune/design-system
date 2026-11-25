@@ -39,6 +39,20 @@ describe('Skeleton (native)', () => {
     expect(JSON.stringify(root.props.style)).toContain('#E3E5E8');
   });
 
+  it('keeps the shimmer off while the reduce motion lookup is pending', async () => {
+    jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockReturnValue(new Promise(() => {}));
+    const root = await renderSkeleton();
+    expect(root.children.length).toBe(0);
+  });
+
+  it('keeps the shimmer off when the reduce motion lookup fails', async () => {
+    jest
+      .spyOn(AccessibilityInfo, 'isReduceMotionEnabled')
+      .mockRejectedValue(new Error('no module'));
+    const root = await renderSkeleton();
+    expect(root.children.length).toBe(0);
+  });
+
   it('renders the shimmer when reduce motion is off', async () => {
     setReduceMotion(false);
     const root = await renderSkeleton();

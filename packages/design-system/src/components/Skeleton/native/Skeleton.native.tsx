@@ -24,14 +24,17 @@ export const Skeleton: React.FC<SkeletonNativeProps> = ({
   ...accessibilityProps
 }) => {
   const [elementWidth, setElementWidth] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(true);
   const [shimmerAnim] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     let mounted = true;
-    AccessibilityInfo.isReduceMotionEnabled().then((enabled) => {
-      if (mounted) setReduceMotion(enabled);
-    });
+    // Motion stays off until the lookup resolves, and if it fails.
+    AccessibilityInfo.isReduceMotionEnabled()
+      .then((enabled) => {
+        if (mounted) setReduceMotion(enabled);
+      })
+      .catch(() => {});
     const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduceMotion);
 
     return () => {

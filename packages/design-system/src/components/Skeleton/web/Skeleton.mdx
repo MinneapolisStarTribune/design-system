@@ -58,7 +58,7 @@ Two variants cover every shape. Do not add a variant per use case.
 
 ### Overriding styles (web)
 
-The component's styles have zero specificity, so a `className` from your app (for example Tailwind `h-4 w-24 rounded-full`) overrides size, radius and color without `!important`. Props set inline styles, so use either props or classes for one property. `style` wins over both.
+The component's styles have zero specificity, so an unlayered `className` from your app (for example `h-4 w-24 rounded-full`) overrides size, radius and color without `!important`. Classes in a cascade layer (like Tailwind v4 utilities) lose to it unless you import `components.css` into an earlier layer. Props set inline styles, so use either props or classes for one property. `style` wins over both.
 
 Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-to` custom properties, for example `className="[--skeleton-from:#eee] [--skeleton-to:#fff]"`.
 
@@ -123,7 +123,9 @@ Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-t
       <td>
         <code>200</code> (rectangle) / <code>64</code> (circle)
       </td>
-      <td>Overrides default width. Number = pixels; string = CSS values like <code>"70%"</code>.</td>
+      <td>
+        Overrides default width. Number = pixels; string = CSS values like <code>"70%"</code>.
+      </td>
     </tr>
     <tr>
       <td>
@@ -135,7 +137,9 @@ Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-t
       <td>
         <code>25</code> (rectangle) / <code>64</code> (circle)
       </td>
-      <td>Overrides default height. Number = pixels; string = CSS values like <code>"100%"</code>.</td>
+      <td>
+        Overrides default height. Number = pixels; string = CSS values like <code>"100%"</code>.
+      </td>
     </tr>
     <tr>
       <td>

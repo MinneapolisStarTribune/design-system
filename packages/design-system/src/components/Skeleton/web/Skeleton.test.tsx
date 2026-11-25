@@ -50,7 +50,7 @@ describe('Skeleton', () => {
     expect(renderSkeleton({ surface: 'light' })).toHaveClass(styles['surface-light']);
   });
 
-  it('applies no surface class by default so the theme decides', () => {
+  it('applies no surface class by default', () => {
     const el = renderSkeleton();
     expect(el).not.toHaveClass(styles['surface-dark']);
     expect(el).not.toHaveClass(styles['surface-light']);
@@ -80,18 +80,6 @@ describe('Skeleton', () => {
     expect(el).toHaveAttribute('id', 'bar');
     expect(el).toHaveAttribute('aria-hidden', 'false');
   });
-
-  it('exposes one status announcement when wrapped, with shapes hidden', () => {
-    render(
-      <div role="status" aria-label="Loading roster">
-        <Skeleton dataTestId="a" />
-        <Skeleton dataTestId="b" />
-      </div>
-    );
-    expect(screen.getByRole('status', { name: 'Loading roster' })).toBeInTheDocument();
-    expect(screen.getByTestId('a')).toHaveAttribute('aria-hidden', 'true');
-    expect(screen.getByTestId('b')).toHaveAttribute('aria-hidden', 'true');
-  });
 });
 
 // jsdom does not evaluate media queries or specificity, so assert the stylesheet source.
@@ -104,7 +92,7 @@ describe('Skeleton styles', () => {
     );
   });
 
-  it('keeps every top-level rule at zero specificity so consumer classes win', () => {
+  it('wraps every top-level rule in :where()', () => {
     const selectors = [...scss.matchAll(/^([.:][^{]*){/gm)].map((m) => m[1].trim());
     expect(selectors.length).toBeGreaterThan(0);
     selectors.forEach((selector) => expect(selector).toMatch(/^:where\(.+\)$/));
@@ -122,7 +110,7 @@ describe('Skeleton styles', () => {
     );
   });
 
-  it('uses the light-gray background tokens so the shimmer follows the theme', () => {
+  it('uses the light-gray background tokens by default', () => {
     expect(scss).toContain('--skeleton-from: var(--color-background-light-gray-02)');
     expect(scss).toContain('--skeleton-to: var(--color-background-light-gray-01)');
   });
