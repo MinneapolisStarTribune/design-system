@@ -13,6 +13,7 @@ import { createSkeletonStyles } from './Skeleton.styles';
 
 export const Skeleton: React.FC<SkeletonNativeProps> = ({
   variant = 'rectangle',
+  surface,
   animate = true,
   width,
   height,
@@ -68,7 +69,7 @@ export const Skeleton: React.FC<SkeletonNativeProps> = ({
     [shimmerAnim, elementWidth]
   );
 
-  const styles = useNativeStyles((theme) => createSkeletonStyles(theme, variant));
+  const styles = useNativeStyles((theme) => createSkeletonStyles(theme, variant, surface));
 
   const overrideStyle = resolveSkeletonDimensions(variant, width, height) as ViewStyle;
 

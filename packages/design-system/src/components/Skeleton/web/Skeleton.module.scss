@@ -26,9 +26,20 @@
   flex-shrink: 0;
   overflow: hidden;
 
-  /* Fixed hex palette (Figma light-gray-02 and light-gray-01) so the shimmer ignores app theme. */
-  --skeleton-from: #e3e5e8;
-  --skeleton-to: #f5f6f7;
+  /* These tokens change value with the app theme. */
+  --skeleton-from: var(--color-background-light-gray-02);
+  --skeleton-to: var(--color-background-light-gray-01);
+}
+
+/* These tokens keep the same value in every theme, for a surface that differs from the app theme. */
+:where(.skeleton.surface-light) {
+  --skeleton-from: var(--color-neutral-200);
+  --skeleton-to: var(--color-neutral-100);
+}
+
+:where(.skeleton.surface-dark) {
+  --skeleton-from: var(--color-background-dark-gray-02);
+  --skeleton-to: var(--color-background-dark-gray-01);
 }
 
 :where(.skeleton.variant-rectangle) {

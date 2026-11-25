@@ -1,15 +1,28 @@
 import { StyleSheet } from 'react-native';
 import type { NativeTheme } from '@/hooks/useNativeStyles';
-import type { SkeletonVariant } from '../Skeleton.types';
+import type { SkeletonSurface, SkeletonVariant } from '../Skeleton.types';
 
-export const createSkeletonStyles = (theme: NativeTheme, variant: SkeletonVariant) => {
+export const createSkeletonStyles = (
+  theme: NativeTheme,
+  variant: SkeletonVariant,
+  surface?: SkeletonSurface
+) => {
+  // light and dark keep the same colors in every theme. No surface follows the theme.
+  const palettes = {
+    light: { from: theme.colorNeutral200, to: theme.colorNeutral100 },
+    dark: { from: theme.colorBackgroundDarkGray02, to: theme.colorBackgroundDarkGray01 },
+  };
+  const { from, to } = (surface && palettes[surface]) ?? {
+    from: theme.colorBackgroundLightGray02,
+    to: theme.colorBackgroundLightGray01,
+  };
   const isCircle = variant === 'circle';
 
   return StyleSheet.create({
     root: {
       overflow: 'hidden',
       flexShrink: 0,
-      backgroundColor: theme.colorNeutral200,
+      backgroundColor: from,
       ...(isCircle
         ? {
             width: theme.spacing64,
@@ -27,7 +40,7 @@ export const createSkeletonStyles = (theme: NativeTheme, variant: SkeletonVarian
       top: 0,
       bottom: 0,
       width: '100%',
-      backgroundColor: theme.colorNeutral100,
+      backgroundColor: to,
       opacity: 0.8,
     },
   });

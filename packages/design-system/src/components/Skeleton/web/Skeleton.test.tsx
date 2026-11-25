@@ -42,6 +42,20 @@ describe('Skeleton', () => {
     expect(circle.style.height).toBe('32px');
   });
 
+  it('applies the dark surface class when surface is dark', () => {
+    expect(renderSkeleton({ surface: 'dark' })).toHaveClass(styles['surface-dark']);
+  });
+
+  it('applies the light surface class when surface is light', () => {
+    expect(renderSkeleton({ surface: 'light' })).toHaveClass(styles['surface-light']);
+  });
+
+  it('applies no surface class by default so the theme decides', () => {
+    const el = renderSkeleton();
+    expect(el).not.toHaveClass(styles['surface-dark']);
+    expect(el).not.toHaveClass(styles['surface-light']);
+  });
+
   it('sets borderRadius from radius', () => {
     expect(renderSkeleton({ radius: 12 })).toHaveStyle({ borderRadius: '12px' });
   });
@@ -96,8 +110,20 @@ describe('Skeleton styles', () => {
     selectors.forEach((selector) => expect(selector).toMatch(/^:where\(.+\)$/));
   });
 
-  it('uses the Figma placeholder palette', () => {
-    expect(scss).toContain('--skeleton-from: #e3e5e8');
-    expect(scss).toContain('--skeleton-to: #f5f6f7');
+  it('uses the dark-gray tokens for the dark surface', () => {
+    expect(scss).toMatch(
+      /:where\(\.skeleton\.surface-dark\)\s*{\s*--skeleton-from: var\(--color-background-dark-gray-02\);\s*--skeleton-to: var\(--color-background-dark-gray-01\);/
+    );
+  });
+
+  it('uses fixed neutral tokens for the light surface', () => {
+    expect(scss).toMatch(
+      /:where\(\.skeleton\.surface-light\)\s*{\s*--skeleton-from: var\(--color-neutral-200\);\s*--skeleton-to: var\(--color-neutral-100\);/
+    );
+  });
+
+  it('uses the light-gray background tokens so the shimmer follows the theme', () => {
+    expect(scss).toContain('--skeleton-from: var(--color-background-light-gray-02)');
+    expect(scss).toContain('--skeleton-to: var(--color-background-light-gray-01)');
   });
 });

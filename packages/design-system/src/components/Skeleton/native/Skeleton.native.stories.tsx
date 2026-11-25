@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-native';
-import { ScrollView, View } from 'react-native';
+import { useContext } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { UtilityLabel } from '@/components/index.native';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
+import { useNativeStyles } from '@/hooks/useNativeStyles';
 import {
   SKELETON_VARIANT_DEFAULTS,
   SKELETON_VARIANTS,
@@ -14,6 +17,37 @@ const SectionLabel = ({ children }: { children: string }) => (
     {children}
   </UtilityLabel>
 );
+
+const SurfaceExample = () => {
+  const isDarkTheme = useContext(DesignSystemContext)?.colorScheme === 'dark';
+  const surface = isDarkTheme ? 'light' : 'dark';
+  const styles = useNativeStyles((theme) =>
+    StyleSheet.create({
+      surface: {
+        backgroundColor: isDarkTheme ? theme.colorBaseWhite : theme.colorBackgroundDarkDefault,
+        padding: 16,
+        borderRadius: 8,
+        gap: 12,
+      },
+    })
+  );
+
+  return (
+    <View style={{ gap: 12 }}>
+      <SectionLabel>{`On ${surface} surface (inverse of the theme)`}</SectionLabel>
+      <View style={styles.surface}>
+        <Skeleton variant="rectangle" surface={surface} />
+        <View style={{ flexDirection: 'row', gap: 16 }}>
+          <Skeleton variant="circle" surface={surface} />
+          <View style={{ flex: 1, gap: 8 }}>
+            <Skeleton variant="rectangle" surface={surface} height={12} />
+            <Skeleton variant="rectangle" surface={surface} height={12} width="60%" />
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
 
 const getSkeletonDimensions = (
   variant: SkeletonNativeProps['variant'],
@@ -130,41 +164,7 @@ export const AllVariants: Story = {
           </View>
         </View>
 
-        <View style={{ gap: 12 }}>
-          <SectionLabel>On light surface</SectionLabel>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              borderWidth: 1,
-              borderColor: '#e3e5e8',
-              padding: 16,
-              borderRadius: 8,
-            }}
-          >
-            <Skeleton variant="rectangle" />
-          </View>
-        </View>
-
-        <View style={{ gap: 12 }}>
-          <SectionLabel>On dark surface</SectionLabel>
-          <View
-            style={{
-              backgroundColor: '#0d0d0d',
-              padding: 16,
-              borderRadius: 8,
-              gap: 12,
-            }}
-          >
-            <Skeleton variant="rectangle" />
-            <View style={{ flexDirection: 'row', gap: 16 }}>
-              <Skeleton variant="circle" />
-              <View style={{ flex: 1, gap: 8 }}>
-                <Skeleton variant="rectangle" height={12} />
-                <Skeleton variant="rectangle" height={12} width="60%" />
-              </View>
-            </View>
-          </View>
-        </View>
+        <SurfaceExample />
 
         <View style={{ gap: 12 }}>
           <SectionLabel>Article card placeholder</SectionLabel>

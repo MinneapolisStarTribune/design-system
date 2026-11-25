@@ -5,6 +5,9 @@ import type { NativeViewStylingProps } from '@/types/native-base-props';
 export const SKELETON_VARIANTS = ['circle', 'rectangle'] as const;
 export type SkeletonVariant = (typeof SKELETON_VARIANTS)[number];
 
+export const SKELETON_SURFACES = ['light', 'dark'] as const;
+export type SkeletonSurface = (typeof SKELETON_SURFACES)[number];
+
 export const SKELETON_VARIANT_DEFAULTS = {
   rectangle: { width: 200, height: 25 },
   circle: { width: 64, height: 64 },
@@ -15,6 +18,8 @@ export type SkeletonBaseProps = AccessibilityProps &
   Pick<BaseProps, 'dataTestId'> & {
     /** Shape of the placeholder. Defaults to `rectangle`. */
     variant?: SkeletonVariant;
+    /** Surface the skeleton sits on. `light` and `dark` use the same colors in every theme. Omit to follow the app theme. */
+    surface?: SkeletonSurface;
     /** When true (default), runs the shimmer animation. Set false when a parent handles animation. */
     animate?: boolean;
     /**

@@ -27,6 +27,18 @@ describe('Skeleton (native)', () => {
     expect(JSON.stringify(root.props.style)).toContain('"borderRadius":12');
   });
 
+  it('uses the dark palette for the dark surface', async () => {
+    setReduceMotion(false);
+    const root = await renderSkeleton({ surface: 'dark' });
+    expect(JSON.stringify(root.props.style)).toContain('#45474A');
+  });
+
+  it('uses the light palette for the light surface', async () => {
+    setReduceMotion(false);
+    const root = await renderSkeleton({ surface: 'light' });
+    expect(JSON.stringify(root.props.style)).toContain('#E3E5E8');
+  });
+
   it('renders the shimmer when reduce motion is off', async () => {
     setReduceMotion(false);
     const root = await renderSkeleton();

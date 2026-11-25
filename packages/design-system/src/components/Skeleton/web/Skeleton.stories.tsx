@@ -1,6 +1,12 @@
+import { useContext } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DesignSystemContext } from '@/providers/DesignSystemContext';
 import { UtilityLabel } from '@/components/Typography/Utility';
-import { SKELETON_VARIANT_DEFAULTS, SKELETON_VARIANTS } from '@/components/Skeleton/Skeleton.types';
+import {
+  SKELETON_SURFACES,
+  SKELETON_VARIANT_DEFAULTS,
+  SKELETON_VARIANTS,
+} from '@/components/Skeleton/Skeleton.types';
 import { resolveSkeletonDimensions } from '@/components/Skeleton/resolveSkeletonDimensions';
 import { Skeleton, type SkeletonProps } from './Skeleton';
 
@@ -11,6 +17,38 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     </UtilityLabel>
   </div>
 );
+
+const SurfaceExample = () => {
+  const isDarkTheme = useContext(DesignSystemContext)?.colorScheme === 'dark';
+  const surface = isDarkTheme ? 'light' : 'dark';
+
+  return (
+    <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <SectionLabel>On {surface} surface (inverse of the theme)</SectionLabel>
+      <div
+        style={{
+          backgroundColor: isDarkTheme
+            ? 'var(--color-base-white)'
+            : 'var(--color-background-dark-default)',
+          padding: 16,
+          borderRadius: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 12,
+        }}
+      >
+        <Skeleton variant="rectangle" surface={surface} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Skeleton variant="circle" surface={surface} />
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <Skeleton variant="rectangle" surface={surface} height={12} />
+            <Skeleton variant="rectangle" surface={surface} height={12} width="60%" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const getSkeletonDimensions = (
   variant: SkeletonProps['variant'],
@@ -45,6 +83,15 @@ const meta: Meta<SkeletonProps> = {
       table: {
         type: { summary: "'circle' | 'rectangle'" },
         defaultValue: { summary: "'rectangle'" },
+      },
+    },
+    surface: {
+      control: 'radio',
+      options: [...SKELETON_SURFACES],
+      description:
+        'Fixes the palette for a light or dark surface regardless of theme. Omit to follow the theme. Colors can still be overridden with `--skeleton-from` and `--skeleton-to`.',
+      table: {
+        type: { summary: "'light' | 'dark'" },
       },
     },
     animate: {
@@ -193,42 +240,7 @@ export const AllVariants: Story = {
           </div>
         </section>
 
-        <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <SectionLabel>On light surface</SectionLabel>
-          <div
-            style={{
-              backgroundColor: '#fff',
-              border: '1px solid #e3e5e8',
-              padding: 16,
-              borderRadius: 8,
-            }}
-          >
-            <Skeleton variant="rectangle" />
-          </div>
-        </section>
-
-        <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <SectionLabel>On dark surface</SectionLabel>
-          <div
-            style={{
-              backgroundColor: '#0d0d0d',
-              padding: 16,
-              borderRadius: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 12,
-            }}
-          >
-            <Skeleton variant="rectangle" />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-              <Skeleton variant="circle" />
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <Skeleton variant="rectangle" height={12} />
-                <Skeleton variant="rectangle" height={12} width="60%" />
-              </div>
-            </div>
-          </div>
-        </section>
+        <SurfaceExample />
 
         <section style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <SectionLabel>Article card placeholder</SectionLabel>

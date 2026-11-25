@@ -4,15 +4,17 @@ import classNames from 'classnames';
 import {
   SKELETON_VARIANTS,
   type SkeletonProps,
+  type SkeletonSurface,
   type SkeletonVariant,
 } from '@/components/Skeleton/Skeleton.types';
 import { resolveSkeletonDimensions } from '@/components/Skeleton/resolveSkeletonDimensions';
 import styles from './Skeleton.module.scss';
 
-export { SKELETON_VARIANTS, type SkeletonProps, type SkeletonVariant };
+export { SKELETON_VARIANTS, type SkeletonProps, type SkeletonSurface, type SkeletonVariant };
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   variant = 'rectangle',
+  surface,
   animate = true,
   width,
   height,
@@ -35,6 +37,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
       className={classNames(
         styles.skeleton,
         styles[`variant-${variant}`],
+        surface && styles[`surface-${surface}`],
         animate && styles.animate,
         className
       )}
