@@ -48,7 +48,7 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
 
 ### Shapes
 
-Two variants cover every shape. Do not add a variant per use case.
+Two variants cover the shapes below.
 
 - **Text bar:** rectangle with `width` and `height`, for example `width="60%" height={16}`.
 - **Avatar:** `variant="circle"` with `width`.
@@ -151,7 +151,7 @@ Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-t
       <td>
         <code>4</code> (rectangle) / full (circle)
       </td>
-      <td>Corner radius for rounded rectangles. Number = pixels; string = CSS values.</td>
+      <td>Corner radius for rounded rectangles. Number = pixels; string = CSS length or percentage.</td>
     </tr>
     <tr>
       <td>
@@ -200,7 +200,7 @@ Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-t
 
 ### Accessibility
 
-Skeletons are hidden from assistive technology by default (`aria-hidden="true"`). If the loading region needs to be announced, wrap the group in one `role="status"` container with an `aria-label` such as "Loading roster". Screen readers then announce a single message and skip the shapes:
+Skeletons are hidden from assistive technology by default (`aria-hidden="true"`). If the loading region needs to be announced, wrap it in a `role="status"` container with an appropriate `aria-label`:
 
 ```tsx
 <div role="status" aria-label="Loading article">

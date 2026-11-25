@@ -34,7 +34,8 @@ export type SkeletonBaseProps = AccessibilityProps &
     height?: number | string;
     /**
      * Corner radius for rounded rectangles such as chips, inputs and buttons.
-     * Number = pixels. Defaults to the variant radius (4px rectangle, full circle).
+     * Number = pixels. A string is a CSS length or percentage (web only). Defaults to the
+     * variant radius (4px rectangle, full circle).
      */
     radius?: number | string;
   };
@@ -44,6 +45,6 @@ export type SkeletonProps = SkeletonBaseProps &
   Omit<HTMLAttributes<HTMLDivElement>, keyof SkeletonBaseProps | keyof BaseProps>;
 
 export type SkeletonNativeProps = Omit<NativeViewStylingProps<SkeletonBaseProps>, 'radius'> & {
-  /** Corner radius in pixels, or a percentage string such as `"50%"`. Other units are not supported on native. */
+  /** Corner radius in density-independent pixels, or a percentage such as `"50%"`. */
   radius?: number | `${number}%`;
 };
