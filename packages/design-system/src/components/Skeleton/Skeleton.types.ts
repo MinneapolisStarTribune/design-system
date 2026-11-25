@@ -27,6 +27,11 @@ export type SkeletonBaseProps = AccessibilityProps &
      * For circles, only used when `width` is not set; both axes use the same value.
      */
     height?: number | string;
+    /**
+     * Corner radius for rounded rectangles such as chips, inputs and buttons.
+     * Number = pixels. Defaults to the variant radius (4px rectangle, full circle).
+     */
+    radius?: number | string;
   };
 
 export type SkeletonProps = SkeletonBaseProps &

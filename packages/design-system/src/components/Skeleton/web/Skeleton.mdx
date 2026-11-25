@@ -44,7 +44,23 @@ Each variant ships with fixed default dimensions. Override with `width` and `hei
 
 On web you can also use `className` for layout utilities (e.g. Tailwind `w-32 h-8`) when that fits your app.
 
-There are no preset size tokens (`small` / `medium` / `large`) and no `background` prop — the shimmer uses a **fixed neutral palette** (`#e3e5e8` → `#c8ccd0` on web) that stays the same on light and dark parent surfaces.
+There are no preset size tokens (`small` / `medium` / `large`) and no `background` prop. The shimmer uses a **fixed neutral palette** (`#e3e5e8` → `#f5f6f7` → `#e3e5e8` on web) that stays the same on light and dark parent surfaces.
+
+### Shapes
+
+Two variants cover every shape. Do not add a variant per use case.
+
+- **Text bar:** rectangle with `width` and `height`, for example `width="60%" height={16}`.
+- **Avatar:** `variant="circle"` with `width`.
+- **Chip, input, button:** rectangle with `radius`, for example `radius={16}` for a pill.
+- **Square (checkbox):** rectangle with equal `width` and `height`.
+- **Icon (kebab):** small circles or rectangles composed in your own layout.
+
+### Overriding styles (web)
+
+The component's styles have zero specificity, so a `className` from your app (for example Tailwind `h-4 w-24 rounded-full`) overrides size, radius and color without `!important`. Props set inline styles, so use either props or classes for one property. `style` wins over both.
+
+Change the gradient with the `--skeleton-from` and `--skeleton-to` custom properties, for example `className="[--skeleton-from:#eee] [--skeleton-to:#fff]"`.
 
 ### Props
 
@@ -108,6 +124,18 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
     </tr>
     <tr>
       <td>
+        <code>radius</code>
+      </td>
+      <td>
+        <code>number | string</code>
+      </td>
+      <td>
+        <code>4</code> (rectangle) / full (circle)
+      </td>
+      <td>Corner radius for rounded rectangles. Number = pixels; string = CSS values.</td>
+    </tr>
+    <tr>
+      <td>
         <code>className</code>
       </td>
       <td>
@@ -153,7 +181,7 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
 
 ### Accessibility
 
-Skeletons are hidden from assistive technology by default (`aria-hidden="true"`). If the loading region needs to be announced, wrap it in a `role="status"` container with an appropriate `aria-label`:
+Skeletons are hidden from assistive technology by default (`aria-hidden="true"`). If the loading region needs to be announced, wrap the group in one `role="status"` container with an `aria-label` such as "Loading roster". Screen readers then announce a single message and skip the shapes:
 
 ```tsx
 <div role="status" aria-label="Loading article">
@@ -164,7 +192,7 @@ Skeletons are hidden from assistive technology by default (`aria-hidden="true"`)
 
 ### Animation
 
-The default shimmer animation (`animate={true}`) draws attention to in-progress loading without being distracting. Set `animate={false}` when a parent container already handles animation, or when rendering in a reduced-motion context.
+The default shimmer animation (`animate={true}`) draws attention to in-progress loading without being distracting. The shimmer turns off on its own when the user sets `prefers-reduced-motion: reduce` (web) or enables Reduce Motion in the OS (native). Set `animate={false}` when a parent container already handles animation.
 
 ## Composition examples
 

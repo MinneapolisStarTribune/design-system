@@ -16,6 +16,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   animate = true,
   width,
   height,
+  radius,
   className,
   style,
   dataTestId,
@@ -23,8 +24,11 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   ...rest
 }) => {
   const dimensionStyle = resolveSkeletonDimensions(variant, width, height);
-  const hasDimensionStyle =
-    dimensionStyle.width !== undefined || dimensionStyle.height !== undefined;
+  const inlineStyle = {
+    ...dimensionStyle,
+    ...(radius !== undefined ? { borderRadius: radius } : {}),
+    ...style,
+  };
 
   return (
     <div
@@ -34,7 +38,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         animate && styles.animate,
         className
       )}
-      style={hasDimensionStyle ? { ...dimensionStyle, ...style } : style}
+      style={Object.keys(inlineStyle).length > 0 ? inlineStyle : undefined}
       aria-hidden={ariaHidden}
       data-testid={dataTestId}
       {...rest}

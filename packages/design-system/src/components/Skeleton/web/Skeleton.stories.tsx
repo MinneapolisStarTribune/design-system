@@ -73,6 +73,15 @@ const meta: Meta<SkeletonProps> = {
         defaultValue: { summary: '25 (rectangle) / 64 (circle)' },
       },
     },
+    radius: {
+      control: { type: 'number' },
+      description:
+        'Corner radius for rounded rectangles such as chips, inputs and buttons. Pass a number for pixels or a string for CSS values.',
+      table: {
+        type: { summary: 'number | string' },
+        defaultValue: { summary: '4 (rectangle) / full (circle)' },
+      },
+    },
   },
 };
 
@@ -90,6 +99,69 @@ export const Configurable: Story = {
     const { width, height } = getSkeletonDimensions(variant, args.width, args.height);
 
     return <Skeleton {...args} variant={variant} width={width} height={height} />;
+  },
+};
+
+export const Shapes: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: function ShapesRender() {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: 16 }}>
+        <section style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <SectionLabel>Text bars</SectionLabel>
+          <Skeleton width="60%" height={16} />
+          <Skeleton width="40%" height={12} />
+          <Skeleton width={72} height={14} />
+        </section>
+
+        <section>
+          <SectionLabel>Avatar circle</SectionLabel>
+          <Skeleton variant="circle" width={32} />
+        </section>
+
+        <section>
+          <SectionLabel>Rounded rectangles (chip, input, button)</SectionLabel>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Skeleton width={72} height={32} radius={16} />
+            <Skeleton width={240} height={40} radius={8} />
+            <Skeleton width={96} height={40} radius={20} />
+          </div>
+        </section>
+
+        <section>
+          <SectionLabel>Square (checkbox) and kebab icon</SectionLabel>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <Skeleton width={16} height={16} radius={4} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <Skeleton variant="circle" width={3} />
+              <Skeleton variant="circle" width={3} />
+              <Skeleton variant="circle" width={3} />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  },
+};
+
+export const LoadingStatus: Story = {
+  parameters: {
+    controls: { disable: true },
+  },
+  render: function LoadingStatusRender() {
+    return (
+      <div
+        role="status"
+        aria-label="Loading roster"
+        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 16 }}
+      >
+        <Skeleton variant="circle" width={32} />
+        <Skeleton width={160} height={14} />
+        <Skeleton width={48} height={14} />
+      </div>
+    );
   },
 };
 
