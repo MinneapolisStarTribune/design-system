@@ -1,5 +1,11 @@
 # @minneapolisstartribune/design-system
 
+## 4.7.0
+
+### Minor Changes
+
+- [#498](https://github.com/MinneapolisStarTribune/design-system/pull/498) [`3e377bc`](https://github.com/MinneapolisStarTribune/design-system/commit/3e377bc6deb8dc6cc92293ef9c67321261343ab7) Thanks [@quynhngandao](https://github.com/quynhngandao)! - Skeleton colors now follow the app theme. Adds `surface` (`light` or `dark`) and `radius` props, turns the shimmer off under `prefers-reduced-motion` (web and native), and updates the gradient angles. An unlayered `className` overrides size, radius and color without `!important`. Classes in a cascade layer lose to it unless `components.css` is imported into an earlier layer.
+
 ## 4.6.0
 
 ### Minor Changes
