@@ -19,7 +19,7 @@ A Skeleton renders a single inert block with two shape variants:
 1. **Rectangle** (`variant="rectangle"`) — defaults to 200px × 25px. Used for text lines, images, cards, and any block-level content.
 2. **Circle** (`variant="circle"`) — defaults to a 64px diameter (`aspect-ratio: 1 / 1`). Used for avatars and icon placeholders.
 
-Both shapes share the same fixed neutral shimmer palette and do not change appearance based on parent background or app theme.
+Both shapes share the same shimmer gradient and follow the app theme. Set `surface="light"` or `surface="dark"` when the skeleton sits on a surface that differs from the app theme, for example a dark card in a light theme.
 
 ## Usage guidelines
 
@@ -44,7 +44,23 @@ Each variant ships with fixed default dimensions. Override with `width` and `hei
 
 On web you can also use `className` for layout utilities (e.g. Tailwind `w-32 h-8`) when that fits your app.
 
-There are no preset size tokens (`small` / `medium` / `large`) and no `background` prop — the shimmer uses a **fixed neutral palette** (`#e3e5e8` → `#c8ccd0` on web) that stays the same on light and dark parent surfaces.
+There are no preset size tokens (`small` / `medium` / `large`) and no `background` prop. The shimmer runs `color.background.light-gray-02` → `light-gray-01` → `light-gray-02` and follows the app theme, so dark mode needs no extra prop. Override it on web with `--skeleton-from` and `--skeleton-to`.
+
+### Shapes
+
+Two variants cover the shapes below.
+
+- **Text bar:** rectangle with `width` and `height`, for example `width="60%" height={16}`.
+- **Avatar:** `variant="circle"` with `width`.
+- **Chip, input, button:** rectangle with `radius`, for example `radius={16}` for a pill.
+- **Square (checkbox):** rectangle with equal `width` and `height`.
+- **Icon (kebab):** small circles or rectangles composed in your own layout.
+
+### Overriding styles (web)
+
+The component's styles have zero specificity, so an unlayered `className` from your app (for example `h-4 w-24 rounded-full`) overrides size, radius and color without `!important`. Classes in a cascade layer (like Tailwind v4 utilities) lose to it unless you import `components.css` into an earlier layer. Props set inline styles, so use either props or classes for one property. `style` wins over both.
+
+Change the gradient (light or dark) with the `--skeleton-from` and `--skeleton-to` custom properties, for example `className="[--skeleton-from:#eee] [--skeleton-to:#fff]"`.
 
 ### Props
 
@@ -72,6 +88,21 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
     </tr>
     <tr>
       <td>
+        <code>surface</code>
+      </td>
+      <td>
+        <code>'light' | 'dark'</code>
+      </td>
+      <td>
+        <code>undefined</code>
+      </td>
+      <td>
+        Fixes the palette for a light or dark surface regardless of app theme. Omit to follow the
+        theme.
+      </td>
+    </tr>
+    <tr>
+      <td>
         <code>animate</code>
       </td>
       <td>
@@ -92,7 +123,9 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
       <td>
         <code>200</code> (rectangle) / <code>64</code> (circle)
       </td>
-      <td>Overrides default width. Number = pixels; string = CSS values like <code>"70%"</code>.</td>
+      <td>
+        Overrides default width. Number = pixels; string = CSS values like <code>"70%"</code>.
+      </td>
     </tr>
     <tr>
       <td>
@@ -104,7 +137,21 @@ There are no preset size tokens (`small` / `medium` / `large`) and no `backgroun
       <td>
         <code>25</code> (rectangle) / <code>64</code> (circle)
       </td>
-      <td>Overrides default height. Number = pixels; string = CSS values like <code>"100%"</code>.</td>
+      <td>
+        Overrides default height. Number = pixels; string = CSS values like <code>"100%"</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>radius</code>
+      </td>
+      <td>
+        <code>number | string</code>
+      </td>
+      <td>
+        <code>4</code> (rectangle) / full (circle)
+      </td>
+      <td>Corner radius for rounded rectangles. Number = pixels; string = CSS length or percentage.</td>
     </tr>
     <tr>
       <td>

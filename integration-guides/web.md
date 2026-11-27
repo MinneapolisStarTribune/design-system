@@ -61,6 +61,12 @@ function App() {
 
 The `brand` prop must match the CSS file brand; `forceColorScheme` must match the scheme. Fonts are loaded automatically by the provider.
 
+`components.css` has no cascade layer, so its styles beat layered ones such as Tailwind v4 utilities. If your app uses layers, import it into any layer declared before `utilities`:
+
+```css
+@import '@minneapolisstartribune/design-system/web/components.css' layer(components);
+```
+
 ## Datepicker
 
 `Datepicker` renders inline without `trigger`, or opens a nonmodal calendar popover from a

@@ -141,6 +141,7 @@ export {
   Skeleton,
   SKELETON_VARIANTS,
   type SkeletonProps,
+  type SkeletonSurface,
   type SkeletonVariant,
 } from './Skeleton/web/Skeleton';
 export * as ToggleGroup from './ToggleGroup/ToggleGroup';

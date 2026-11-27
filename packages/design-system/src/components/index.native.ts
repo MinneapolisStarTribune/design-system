@@ -106,6 +106,7 @@ export { Skeleton } from './Skeleton/native/Skeleton.native';
 export {
   SKELETON_VARIANTS,
   type SkeletonNativeProps,
+  type SkeletonSurface,
   type SkeletonVariant,
 } from './Skeleton/Skeleton.types';
 export { ToastNative } from './Toast/native/Toast.native';

@@ -16,50 +16,68 @@
   }
 }
 
-.skeleton {
+/*
+ * Rules use :where() for zero specificity, so unlayered consumer classes override them.
+ * Override the gradient with --skeleton-from and --skeleton-to.
+ */
+:where(.skeleton) {
   display: block;
   flex-shrink: 0;
   overflow: hidden;
 
-  /*
-   * Fixed hex palette (from neutral primitives) so the shimmer stays consistent
-   * regardless of app theme or parent surface color.
-   */
-  --skeleton-from: #e3e5e8;
-  --skeleton-to: #c8ccd0;
+  /* Follows the app theme. */
+  --skeleton-from: var(--color-background-light-gray-02);
+  --skeleton-to: var(--color-background-light-gray-01);
+}
 
-  &.variant-rectangle {
-    width: 200px;
-    height: 25px;
-    border-radius: var(--radius-4);
-    background: linear-gradient(
-      89deg,
-      var(--skeleton-from) 1.21%,
-      var(--skeleton-to) 50.09%,
-      var(--skeleton-from) 98.96%
-    );
-    background-size: 400% 100%;
+/* Fixed in every theme, for a surface that differs from the app theme. */
+:where(.skeleton.surface-light) {
+  --skeleton-from: var(--color-neutral-200);
+  --skeleton-to: var(--color-neutral-100);
+}
 
-    &.animate {
-      animation: skeletonShimmerH 1.5s ease-in-out infinite;
-    }
-  }
+:where(.skeleton.surface-dark) {
+  --skeleton-from: var(--color-background-dark-gray-02);
+  --skeleton-to: var(--color-background-dark-gray-01);
+}
 
-  &.variant-circle {
-    width: var(--spacing-64);
-    height: var(--spacing-64);
-    aspect-ratio: 1 / 1;
-    border-radius: var(--radius-full);
-    background: linear-gradient(
-      235deg,
-      var(--skeleton-from) 7.04%,
-      var(--skeleton-to) 51.62%,
-      var(--skeleton-from) 96.2%
-    );
-    background-size: 400% 400%;
+:where(.skeleton.variant-rectangle) {
+  width: 200px;
+  height: 25px;
+  border-radius: var(--radius-4);
+  background: linear-gradient(
+    89deg,
+    var(--skeleton-from) 1.21%,
+    var(--skeleton-to) 50.09%,
+    var(--skeleton-from) 98.96%
+  );
+  background-size: 400% 100%;
+}
 
-    &.animate {
-      animation: skeletonShimmerD 1.5s ease-in-out infinite;
-    }
+:where(.skeleton.variant-rectangle.animate) {
+  animation: skeletonShimmerH 1.5s ease-in-out infinite;
+}
+
+:where(.skeleton.variant-circle) {
+  width: var(--spacing-64);
+  height: var(--spacing-64);
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    235deg,
+    var(--skeleton-from) 7.04%,
+    var(--skeleton-to) 51.62%,
+    var(--skeleton-from) 96.2%
+  );
+  background-size: 400% 400%;
+}
+
+:where(.skeleton.variant-circle.animate) {
+  animation: skeletonShimmerD 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.skeleton.animate) {
+    animation: none;
   }
 }
